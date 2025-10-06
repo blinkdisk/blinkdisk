@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TODO: Replace this with a proper CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'wasm-unsafe-eval'; connect-src * blinkdiskapp: 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"
+    />
+    <title>BlinkDisk</title>
+    <link rel="stylesheet" href="/fonts/inter/inter.css" />
+  </head>
+  <body class="desktop">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "list": {
+    "back": "Go Back",
+    "settings": "Folder Settings",
+    "item": {
+      "files_one": "{{formatted}} File",
+      "files_other": "{{formatted}} Files"
+    },
+    "pending": {
+      "title": "New backup is pending",
+      "description": "Another backup is currently running. "
+    },
+    "running": {
+      "cancel": "Cancel Backup"
+    },
+    "paused": {
+      "title": "Resume paused backup",
+      "description": "You have paused a backup that isn't finished it yet.",
+      "button": "Resume Backup"
+    },
+    "empty": {
+      "default": {
+        "title": "No backups yet",
+        "description": "You haven't created any backups yet. Create one by pressing the button below.",
+        "button": "Backup Now"
+      },
+      "pending": {
+        "title": "Backup pending",
+        "description": "Another folder is currently being backed up. The initial backup for this folder is in the queue."
+      },
+      "initial": {
+        "title": "Running initial backup",
+        "description": "This is the initial backup of this folder, so it may take a while. BlinkDisk only uploads changed files after this, making all future backups much faster and lighter."
+      }
+    },
+    "backup": "Backup Now"
+  },
+  "progress": {
+    "default": {
+      "title": "Backup in progress",
+      "description": "{{percentage}} · {{completed}} / ~{{total}}"
+    },
+    "big": {
+      "title": "{{percentage}} complete",
+      "description": "{{completed}} / ~{{total}}"
+    }
+  }
+}

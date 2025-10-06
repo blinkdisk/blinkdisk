@@ -1,0 +1,44 @@
+{
+  "addFolder": "Add Folder",
+  "selectDevice": {
+    "empty": "Select device",
+    "external": "External"
+  },
+  "selectProfile": {
+    "empty": "Select profile",
+    "external": "External"
+  },
+  "selectVault": {
+    "empty": "Select vault",
+    "readOnly": "Read-only",
+    "addVault": "Add vault"
+  },
+  "accountMenu": {
+    "account": "Account",
+    "preferences": "Preferences",
+    "billing": "Billing",
+    "logout": "Sign out",
+    "addAccount": "Add Account"
+  },
+  "accountListMenu": {
+    "addAccount": "Add new Account"
+  },
+  "links": {
+    "home": "Home",
+    "settings": "Settings"
+  },
+  "folderList": {
+    "title": "Folders"
+  },
+  "storageAlert": {
+    "high": {
+      "title": "Storage is running low",
+      "description": "Please upgrade your storage to avoid backups from failing."
+    },
+    "full": {
+      "title": "Cloud storage is full",
+      "description": "Please upgrade your storage to continue using BlinkDisk."
+    },
+    "button": "Upgrade Storage"
+  }
+}

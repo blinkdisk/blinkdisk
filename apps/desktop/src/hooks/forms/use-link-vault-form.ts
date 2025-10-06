@@ -1,0 +1,53 @@
+import {
+  LinkVaultResponse,
+  useLinkVault,
+} from "@desktop/hooks/mutations/use-link-vault";
+import { UnlinkedVaultItem } from "@desktop/hooks/queries/use-unlinked-vaults";
+import { useProfile } from "@desktop/hooks/use-profile";
+import { useAppForm } from "@hooks/use-app-form";
+import { useAppTranslation } from "@hooks/use-app-translation";
+import { ProviderConfig } from "@schemas/providers";
+import { ZLinkVaultDetails } from "@schemas/vault";
+
+export function useLinkVaultForm({
+  vault,
+  password,
+  onSuccess,
+  config,
+}: {
+  vault: UnlinkedVaultItem | undefined;
+  password: string | undefined;
+  onSuccess?: (res: LinkVaultResponse) => void;
+  config?: ProviderConfig;
+}) {
+  const { t } = useAppTranslation("vault.providers");
+
+  const { profileId } = useProfile();
+
+  const { mutateAsync } = useLinkVault((res) => {
+    form.reset();
+    onSuccess?.(res);
+  });
+
+  const form = useAppForm({
+    defaultValues: {
+      name: vault ? vault.name || t(`${vault.provider}.name`) : "",
+    },
+    validators: {
+      onSubmit: ZLinkVaultDetails,
+    },
+    onSubmit: async ({ value }) =>
+      vault &&
+      password &&
+      profileId &&
+      (await mutateAsync({
+        profileId: profileId,
+        storageId: vault.storageId,
+        name: value.name,
+        password: password,
+        ...(config && { config }),
+      })),
+  });
+
+  return form;
+}

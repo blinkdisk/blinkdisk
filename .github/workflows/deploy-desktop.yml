@@ -1,0 +1,110 @@
+name: Deploy Desktop
+
+on:
+  push:
+    tags:
+      - v*
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Required by Makefile
+  UNIX_SHELL_ON_WINDOWS: true
+  # URLs
+  API_URL: https://api.blinkdisk.com
+  LANDING_URL: https://blinkdisk.com
+  CLOUD_URL: https://cloud.blinkdisk.com
+  POSTHOG_DESKTOP_KEY: ${{ secrets.POSTHOG_DESKTOP_KEY }}
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    name: Build
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install windows-specific packages
+        run: "choco install --no-progress -y make curl"
+        if: ${{ contains(matrix.os, 'windows') }}
+
+      - name: Set up go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: "apps/core/go.mod"
+          cache-dependency-path: |
+            apps/core/go.sum
+          check-latest: true
+
+      - name: Install macos certificates
+        run: make macos-certificates
+        working-directory: apps/core
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEYCHAIN: ${{ secrets.CSC_KEYCHAIN }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        if: ${{ contains(matrix.os, 'macos') }}
+
+      - name: Set up core
+        working-directory: apps/core
+        run: make -j4 ci-setup
+
+      - name: Build core
+        working-directory: apps/core
+        timeout-minutes: 40
+        run: make ci-build
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v5.0.0
+
+      - name: Set up node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+
+      - name: Run prebuild
+        working-directory: apps/electron
+        run: pnpm run prebuild
+
+      - name: Run windows build
+        working-directory: apps/electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: pnpm run build:windows
+
+      - name: Run linux build
+        working-directory: apps/electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: pnpm run build:linux
+
+      - name: Run macos build
+        working-directory: apps/electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_API_SECRET_KEY: ${{ secrets.APPLE_API_SECRET_KEY }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        if: ${{ contains(matrix.os, 'macos') }}
+        run: |
+          echo "$APPLE_API_SECRET_KEY" > /tmp/key.p8
+          APPLE_API_KEY="/tmp/key.p8" pnpm run build:macos

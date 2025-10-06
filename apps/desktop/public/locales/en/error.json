@@ -1,0 +1,68 @@
+{
+  "pages": {
+    "default": {
+      "title": "Something went wrong",
+      "description": "An unexpected error has occurred. Please try again later. If this error persists, please contact <0>support@blinkdisk.com</o>.",
+      "button": "Back to Home"
+    },
+    "not-found": {
+      "title": "404",
+      "description": "The page you are looking for does not exist. If this error persists, please contact <0>support@blinkdisk.com</0>.",
+      "button": "Back to Home"
+    }
+  },
+  "fallback": {
+    "title": "Something went wrong",
+    "description": "If this error persists, please contact support@blinkdisk.com"
+  },
+  "offline": {
+    "title": "You're offline",
+    "description": "Please check your internet connection and try again. BlinkDisk is not available while your device is offline."
+  },
+  "INTERNAL_SERVER_ERROR": {
+    "title": "Something went wrong",
+    "description": "An unexpected error has occurred. If this error persists, please contact support@blinkdisk.com."
+  },
+  "UNAUTHORIZED": {
+    "title": "You are not allowed to do this",
+    "description": "Please try to login again."
+  },
+  "USER_ALREADY_EXISTS": {
+    "title": "A user with this email already exists",
+    "description": "Please try to login instead."
+  },
+  "INVALID_EMAIL_OR_PASSWORD": {
+    "title": "Invalid email or password",
+    "description": "Please double check your email and password."
+  },
+  "INVALID_TOKEN": {
+    "title": "Invalid or expired code",
+    "description": "Please request a new code by logging in again."
+  },
+  "EMAIL_NOT_VERIFIED": {
+    "title": "The email is not verified yet",
+    "description": "Please enter the verification code that was sent to your email address below."
+  },
+  "INVALID_PASSWORD": {
+    "title": "The password is invalid",
+    "description": "Please double check the password you entered."
+  },
+  "CONFIG_REQUIRED": {
+    "title": "Required config is missing",
+    "description": "Please try linking the vault again."
+  },
+  "SUBSCRIPTION_EXISTS": {
+    "title": "You already have an active subscription",
+    "description": "Please try upgrading your subscription instead."
+  },
+  "PROFILE_NOT_FOUND": "Profile not found",
+  "VAULT_NOT_FOUND": "Vault not found",
+  "FOLDER_NOT_FOUND": "Folder not found",
+  "STORAGE_NOT_FOUND": "Storage not found",
+  "VAULT_ALREADY_LINKED": "A vault is already linked to this storage",
+  "PROVIDER_NOT_FOUND": "Provider not found",
+  "SPACE_NOT_FOUND": "Space not found",
+  "PRICE_NOT_FOUND": "Price not found",
+  "SUBSCRIPTION_NOT_FOUND": "Subscription not found",
+  "NOT_ALLOWED": "You are not allowed to do this"
+}

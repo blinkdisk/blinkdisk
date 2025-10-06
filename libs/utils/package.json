@@ -1,0 +1,25 @@
+{
+  "name": "@blinkdisk/utils",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@blinkdisk/eslint": "workspace:*",
+    "@blinkdisk/typescript": "workspace:*",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.13.9",
+    "eslint": "^9.22.0",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {
+    "@tsndr/cloudflare-worker-jwt": "^3.2.0",
+    "axios": "^1.9.0",
+    "clsx": "^2.1.1",
+    "nanoid": "^5.1.5",
+    "resend": "^4.1.2",
+    "tailwind-merge": "^3.0.2"
+  }
+}

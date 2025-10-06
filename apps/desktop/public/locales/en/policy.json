@@ -1,0 +1,115 @@
+{
+  "update": {
+    "success": {
+      "title": "Settings updated successfully",
+      "description": "Your policy settings have been updated."
+    }
+  },
+  "schedule": {
+    "title": "Backup Schedule",
+    "description": "Schedule automatic backups of your files.",
+    "trigger": {
+      "label": "Backup Trigger",
+      "items": {
+        "SCHEDULE": "Scheduled",
+        "MANUAL": "Manual Only"
+      }
+    },
+    "interval": {
+      "label": "Backup Interval",
+      "placeholder": "Select backup interval",
+      "items": {
+        "NONE": "None",
+        "10_MINUTES": "Every 10 minutes",
+        "15_MINUTES": "Every 15 minutes",
+        "20_MINUTES": "Every 20 minutes",
+        "30_MINUTES": "Every 30 minutes",
+        "1_HOUR": "Every hour",
+        "3_HOURS": "Every 3 hours",
+        "6_HOURS": "Every 6 hours",
+        "12_HOURS": "Every 12 hours",
+        "24_HOURS": "Every 24 hours"
+      }
+    },
+    "catchup": {
+      "label": "Catch up on missed backups"
+    },
+    "cron": {
+      "label": "Custom Schedule",
+      "add": "Add Custom Schedule"
+    },
+    "save": "Save"
+  },
+  "retention": {
+    "title": "Backup Retention",
+    "description": "Configure how long to keep backups.",
+    "latest": {
+      "label": "Latest Backups",
+      "description": "The number of latest backups to keep."
+    },
+    "hourly": {
+      "label": "Hourly Backups",
+      "description": "The number of hourly backups to keep."
+    },
+    "daily": {
+      "label": "Daily Backups",
+      "description": "The number of daily backups to keep."
+    },
+    "weekly": {
+      "label": "Weekly Backups",
+      "description": "The number of weekly backups to keep."
+    },
+    "monthly": {
+      "label": "Monthly Backups",
+      "description": "The number of monthly backups to keep."
+    },
+    "annual": {
+      "label": "Annual Backups",
+      "description": "The number of annual backups to keep."
+    },
+    "info": {
+      "title": "How backup retention works",
+      "description": "BlinkDisk keeps the number of latest backups you set for each time period. A backup is kept if it matches any rule, others are removed to save space."
+    },
+    "save": "Save"
+  },
+  "files": {
+    "title": "Excluded Files",
+    "description": "Exclude files and directories from backups.",
+    "denylist": {
+      "label": "Excluded Files and Directories",
+      "description": "Files, directories and extensions to exclude from backups.",
+      "type": {
+        "file": {
+          "label": "File",
+          "example": "file-name.ext"
+        },
+        "directory": {
+          "label": "Directory",
+          "example": "directory-name/"
+        },
+        "extension": {
+          "label": "Extension",
+          "example": "*.ext"
+        }
+      },
+      "add": "Add Exclusion"
+    },
+    "denyfiles": {
+      "label": "Exclusion Rule Files",
+      "description": "All filenames to files containing exclusion rules.",
+      "example": "ignore.txt",
+      "docs": "Open Docs",
+      "add": "Add Rule File"
+    },
+    "maxFileSize": {
+      "label": "Maximum File Size",
+      "description": "The maximum file size to include in backups."
+    },
+    "excludeCacheDirs": {
+      "label": "Exclude Cache Directories",
+      "description": "Exclude common cache directories in backups."
+    },
+    "save": "Save"
+  }
+}

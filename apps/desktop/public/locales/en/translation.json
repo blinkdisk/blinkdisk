@@ -1,0 +1,3 @@
+{
+  "comment": "For some reason the built electron app tries to load this file, so we need to have it here"
+}

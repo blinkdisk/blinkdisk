@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "envMode": "loose",
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL",
+    "LANDING_URL",
+    "POSTHOG_LANDING_KEY",
+    "POSTHOG_DESKTOP_KEY",
+    "LOGSNAG_PRIVATE_KEY",
+    "LOGSNAG_PUBLIC_KEY",
+    "CRON_SECRET",
+    "API_URL",
+    "CRON_SECRET",
+    "RESEND_API_KEY",
+    "RESEND_DOMAIN",
+    "DEV"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

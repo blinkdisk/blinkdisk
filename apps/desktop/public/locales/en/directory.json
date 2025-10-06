@@ -1,0 +1,110 @@
+{
+  "back": "Go Back",
+  "table": {
+    "name": "Name",
+    "size": "Size",
+    "modified": "Last Modified",
+    "symlink": {
+      "tooltip": "Symbolic link"
+    },
+    "search": {
+      "placeholder": "Search for files or folders..."
+    },
+    "empty": {
+      "title": "Empty folder",
+      "description": "This folder was empty at the time the backup was created. Add the missing files to the folder and create a new backup."
+    },
+    "emptySearch": {
+      "title": "No files found",
+      "description": "No files or folders matched your search query. Try a different query or add the missing files to the folder."
+    },
+    "mount": {
+      "active": {
+        "title": "Backup currently mounted",
+        "description": "Mounted at {{path}}"
+      },
+      "open": {
+        "windows": "Open in Explorer",
+        "macos": "Open in Finder",
+        "other": "Open in Files"
+      },
+      "stop": {
+        "button": "Stop Mount",
+        "error": {
+          "title": "Failed to stop mount",
+          "description": "The mount might still be in use. Try closing any applications that are using the mount."
+        }
+      }
+    },
+    "restore": {
+      "folder": "Restore Folder",
+      "selected_one": "Restore {{count}} Item",
+      "selected_other": "Restore {{count}} Items",
+      "single": {
+        "dialog": {
+          "title": "Select restore destination folder"
+        },
+        "success": {
+          "title": "Item is being restored",
+          "description": "The restoration of the item is in progress."
+        }
+      },
+      "multiple": {
+        "dialog": {
+          "title": "Select restore destination folder"
+        },
+        "success": {
+          "title": "Items are being restored",
+          "description": "The restoration of the items is in progress."
+        }
+      }
+    }
+  },
+  "restoreDialog": {
+    "title": "Restore Folder",
+    "description": "Restore a folder from a backup.",
+    "type": {
+      "label": "Restore Type",
+      "items": {
+        "ZIP": "ZIP Archive",
+        "UNPACKED": "Unpacked Files"
+      }
+    },
+    "filePath": {
+      "label": "ZIP File Path",
+      "placeholder": "Select destination file path",
+      "defaultFileName": "{{directory}}-{{date}}-Restore.zip"
+    },
+    "directoryPath": {
+      "label": "Destination Folder Path",
+      "placeholder": "Select destination folder path"
+    },
+    "compress": {
+      "label": "Compress ZIP File",
+      "description": "Reduces the size, but slows down the restore"
+    },
+    "warning": {
+      "title": "Files might be overwritten",
+      "description": "The selected folder is not empty. Existing files and folders could potentially be overwritten with the restored files. Consider creating a new empty folder instead."
+    },
+    "confirmed": {
+      "label": "I understand that files might be overwritten"
+    },
+    "submit": "Restore",
+    "success": {
+      "title": "Folder is being restored",
+      "description": "The folder is now being restored."
+    }
+  },
+  "restore": {
+    "title": "Restore in progress",
+    "description": {
+      "files_one": "Currently restoring {{files}} file",
+      "files_other": "Currently restoring {{files}} files",
+      "directories_one": "Currently restoring {{directories}} folder",
+      "directories_other": "Currently restoring {{directories}} folders",
+      "both": "Currently restoring {{files}} file(s) and {{directories}} folder(s)"
+    },
+    "openFolder": "Open Folder"
+  }
+}

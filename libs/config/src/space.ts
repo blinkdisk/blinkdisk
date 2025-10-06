@@ -1,0 +1,1 @@
+export const FREE_SPACE_AVAILABLE = 1000 * 1000 * 1000 * 15;

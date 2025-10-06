@@ -1,0 +1,427 @@
+{
+  "noVaults": {
+    "title": "Create your Vault",
+    "description": "You haven't created any vaults yet. Get started by pressing the button below.",
+    "button": "Add Vault"
+  },
+  "addDialog": {
+    "title": "Add vault",
+    "description": "Add a new vault to your profile.",
+    "folder": {
+      "existing": {
+        "title": "Link existing Vault",
+        "description": "Link this device and profile to an existing vault."
+      },
+      "new": {
+        "title": "Create new vault",
+        "description": "Create a new vault for this device and profile."
+      }
+    }
+  },
+  "linkDialog": {
+    "title": "Link existing vault",
+    "description": "Link this device and profile to an existing vault.",
+    "password": {
+      "password": {
+        "label": "Encryption Password",
+        "placeholder": "Enter vault encryption password"
+      },
+      "invalidError": {
+        "title": "Invalid password",
+        "description": "The password you entered is incorrect. Please try again."
+      },
+      "submit": "Continue"
+    },
+    "config": {
+      "submit": "Continue"
+    },
+    "details": {
+      "name": {
+        "label": "New Vault Name",
+        "placeholder": "Enter vault name"
+      },
+      "submit": "Link Vault"
+    },
+    "success": {
+      "title": "Successfully linked vault",
+      "description": "Your vault has been linked successfully."
+    }
+  },
+  "createDialog": {
+    "title": "Create new vault",
+    "description": "Create a new vault.",
+    "variant": {
+      "blinkdiskCloud": {
+        "features": {
+          "freeStorage": "{{freeSpace}} for Free",
+          "noSetup": "No setup required",
+          "cheaper": "80% cheaper than S3"
+        },
+        "button": "Continue"
+      },
+      "custom": {
+        "title": "Custom Storage Provider",
+        "features": {
+          "noFreeStorage": "No free storage",
+          "manualSetup": "Manual setup required"
+        },
+        "button": "Setup"
+      }
+    },
+    "providers": {
+      "search": {
+        "placeholder": "Search providers..."
+      }
+    },
+    "config": {
+      "submit": "Continue",
+      "info": {
+        "title": "End-to-end encrypted configuration",
+        "description": "Your configuration is encrypted with AES-256 using your encryption password and securely stored on our servers."
+      },
+      "validationError": {
+        "title": "Failed to create vault"
+      },
+      "existsError": {
+        "title": "Vault already exists",
+        "description": "This vault is already initialized. If this vault already exists in your account, please link it to this device or profile instead."
+      },
+      "notFoundError": {
+        "title": "Vault not found",
+        "description": "This vault hasn't been created yet. Please check your settings or create a new one instead."
+      },
+      "incorrectError": {
+        "title": "Different vault found",
+        "description": "Your configuration resolved to a different vault than selected. Please either change your configuration or link the other vault instead."
+      }
+    },
+    "details": {
+      "name": {
+        "label": "Vault Name",
+        "placeholder": "Enter vault name"
+      },
+      "password": {
+        "label": "Encryption Password",
+        "placeholder": "Enter vault encryption password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Encryption Password",
+        "placeholder": "Confirm vault encryption password"
+      },
+      "warning": {
+        "title": "Never forget this password",
+        "description": "We never store this password on our servers and there is no way to recover it. If you loose this password, you might not be able to restore your backups."
+      },
+      "submit": "Create Vault"
+    },
+    "success": {
+      "title": "Successfully created vault",
+      "description": "Your vault has been created successfully."
+    }
+  },
+  "passwordMissing": {
+    "title": "Unlock vault",
+    "description": "You need to enter the vault's encryption password in order to unlock the vault.",
+    "password": {
+      "label": "Encryption Password",
+      "placeholder": "Enter vault encryption password"
+    },
+    "invalidError": {
+      "title": "Invalid encryption password",
+      "description": "The encryption password you entered is incorrect."
+    },
+    "submit": "Continue"
+  },
+  "configMissing": {
+    "title": "Vault config required",
+    "description": "You need to configure this vault before using it."
+  },
+  "providers": {
+    "BLINKDISK_CLOUD": {
+      "name": "BlinkDisk Cloud"
+    },
+    "FILESYSTEM": {
+      "name": "Local Filesystem",
+      "description": "Use local vault device",
+      "fields": {
+        "path": {
+          "label": "Backup Destination Folder",
+          "placeholder": "Select destination folder",
+          "dialogTitle": "Select backup destination folder"
+        }
+      }
+    },
+    "NETWORK_ATTACHED_STORAGE": {
+      "name": "Network Attached Storage",
+      "description": "Connect to network vault",
+      "fields": {
+        "path": {
+          "label": "NAS Mount Path",
+          "placeholder": "Select NAS mount path",
+          "dialogTitle": "Select NAS mount path"
+        }
+      }
+    },
+    "AMAZON_S3": {
+      "name": "Amazon S3",
+      "description": "Store in AWS cloud",
+      "fields": {
+        "bucket": {
+          "label": "Bucket Name",
+          "placeholder": "Enter your S3 bucket name"
+        },
+        "endpoint": {
+          "label": "Endpoint URL",
+          "placeholder": "https://s3.amazonaws.com"
+        },
+        "region": {
+          "label": "Region",
+          "placeholder": "us-east-1"
+        },
+        "accessKeyId": {
+          "label": "Access Key ID",
+          "placeholder": "Enter your AWS access key ID"
+        },
+        "accessKeySecret": {
+          "label": "Secret Access Key",
+          "placeholder": "Enter your AWS secret access key"
+        },
+        "sessionToken": {
+          "label": "Session Token",
+          "placeholder": "Enter session token"
+        },
+        "prefix": {
+          "label": "Key Prefix",
+          "placeholder": "backup/"
+        },
+        "disableTls": {
+          "label": "Disable TLS"
+        },
+        "disableSsl": {
+          "label": "Disable SSL Verification"
+        }
+      }
+    },
+    "S3_COMPATIBLE": {
+      "name": "S3 Compatible Storage",
+      "description": "Use S3-compatible services",
+      "fields": {
+        "bucket": {
+          "label": "Bucket Name",
+          "placeholder": "Enter your S3 compatible bucket name"
+        },
+        "endpoint": {
+          "label": "Endpoint URL",
+          "placeholder": "your-s3-compatible-endpoint.com"
+        },
+        "region": {
+          "label": "Region",
+          "placeholder": "us-east-1"
+        },
+        "accessKeyId": {
+          "label": "Access Key ID",
+          "placeholder": "Enter your access key ID"
+        },
+        "accessKeySecret": {
+          "label": "Secret Access Key",
+          "placeholder": "Enter your secret access key"
+        },
+        "sessionToken": {
+          "label": "Session Token",
+          "placeholder": "Enter session token"
+        },
+        "prefix": {
+          "label": "Key Prefix",
+          "placeholder": "backup/"
+        },
+        "disableTls": {
+          "label": "Disable TLS"
+        },
+        "disableSsl": {
+          "label": "Disable SSL Verification"
+        }
+      }
+    },
+    "GOOGLE_CLOUD_STORAGE": {
+      "name": "Google Cloud Storage",
+      "description": "Store in Google cloud",
+      "fields": {
+        "bucket": {
+          "label": "Bucket Name",
+          "placeholder": "Enter your GCS bucket name"
+        },
+        "prefix": {
+          "label": "Key Prefix",
+          "placeholder": "backup/"
+        },
+        "credentials": {
+          "label": "Credentials JSON",
+          "placeholder": "Paste your service account JSON content"
+        }
+      }
+    },
+    "BACKBLAZE": {
+      "name": "Backblaze B2",
+      "description": "Store in Backblaze cloud",
+      "fields": {
+        "bucket": {
+          "label": "Bucket Name",
+          "placeholder": "Enter your B2 bucket name"
+        },
+        "keyId": {
+          "label": "Application Key ID",
+          "placeholder": "Enter your B2 application key ID"
+        },
+        "keySecret": {
+          "label": "Application Key",
+          "placeholder": "Enter your B2 application key"
+        },
+        "prefix": {
+          "label": "Key Prefix",
+          "placeholder": "backup/"
+        }
+      }
+    },
+    "AZURE_BLOB_STORAGE": {
+      "name": "Azure Blob Storage",
+      "description": "Store in Azure cloud",
+      "fields": {
+        "container": {
+          "label": "Container Name",
+          "placeholder": "Enter your Azure blob container name"
+        },
+        "account": {
+          "label": "Storage Account",
+          "placeholder": "Enter your Azure vault account name"
+        },
+        "key": {
+          "label": "Storage Key",
+          "placeholder": "Enter your Azure vault account key"
+        },
+        "domain": {
+          "label": "Storage Domain",
+          "placeholder": "blob.core.windows.net"
+        },
+        "prefix": {
+          "label": "Key Prefix",
+          "placeholder": "backup/"
+        },
+        "sasToken": {
+          "label": "SAS Token",
+          "placeholder": "Enter your SAS token"
+        }
+      }
+    },
+    "SFTP": {
+      "name": "SFTP",
+      "description": "Transfer via secure FTP",
+      "fields": {
+        "host": {
+          "label": "Host",
+          "placeholder": "Enter SFTP server hostname or IP address"
+        },
+        "user": {
+          "label": "Username",
+          "placeholder": "Enter SFTP username"
+        },
+        "port": {
+          "label": "Port",
+          "placeholder": "22"
+        },
+        "path": {
+          "label": "Remote Path",
+          "placeholder": "Enter remote directory path"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter SFTP password"
+        },
+        "privateKey": {
+          "label": "Private Key Data",
+          "placeholder": "Paste private key content"
+        },
+        "knownHosts": {
+          "label": "Known Hosts Data",
+          "placeholder": "Paste known_hosts content",
+          "warning": {
+            "title": "ECDSA format required",
+            "description": "The entry inside known_hosts currently must be in ecdsa-sha2-nistp256 format. You can run this command to retrieve it:"
+          }
+        }
+      }
+    },
+    "RCLONE": {
+      "name": "Rclone Remote",
+      "description": "Use any rclone remote",
+      "fields": {
+        "remotePath": {
+          "label": "Remote Path",
+          "placeholder": "Enter rclone remote path"
+        },
+        "rclonePath": {
+          "label": "Rclone Executable Path",
+          "placeholder": "Path to rclone executable"
+        }
+      }
+    },
+    "WEBDAV": {
+      "name": "WebDAV",
+      "description": "Store via WebDAV protocol",
+      "fields": {
+        "url": {
+          "label": "WebDAV URL",
+          "placeholder": "https://your-webdav-server.com/path"
+        },
+        "user": {
+          "label": "Username",
+          "placeholder": "Enter your WebDAV username"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your WebDAV password"
+        }
+      }
+    }
+  },
+  "home": {
+    "title": "Home",
+    "vault": "Vault",
+    "settings": "Settings",
+    "upgrade": "Upgrade Storage",
+    "folders": {
+      "title": "Folders",
+      "count_one": "{{count}} Folder backed up",
+      "count_other": "{{count}} Folders backed up",
+      "addFolder": "Add Folder",
+      "backupAll": "Backup All",
+      "empty": {
+        "title": "No folders added",
+        "description": "You haven't added any folders yet. Add one by pressing the button below."
+      }
+    },
+    "score": {
+      "category": "Excellent",
+      "description": "All your files were backed up without any errors or warnings."
+    },
+    "usedStorage": {
+      "title": "Cloud storage used",
+      "amount": "{{used}} of {{capacity}} used"
+    }
+  },
+  "update": {
+    "success": {
+      "title": "Successfully updated vault",
+      "description": "Your vault has been updated successfully."
+    }
+  },
+  "updateThrottle": {
+    "success": {
+      "title": "Successfully updated throttle",
+      "description": "Your throttle has been updated successfully."
+    }
+  },
+  "readOnly": {
+    "title": "Read-only vault",
+    "description": "You are viewing a vault from a different device or profile. You can't make changes to it."
+  }
+}

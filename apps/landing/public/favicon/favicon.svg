@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(1,0,0,1,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><svg width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_85_12)">
+<rect x="349.158" y="145.577" width="501.92" height="501.92" rx="89.5542" transform="rotate(45 349.158 145.577)" stroke="black" stroke-width="63" stroke-miterlimit="1" stroke-dasharray="104.91 104.91"></rect>
+<rect x="650.541" y="101.029" width="564.92" height="564.92" rx="121.054" transform="rotate(45 650.541 101.029)" fill="black"></rect>
+</g>
+<defs>
+<clipPath id="clip0_85_12">
+<rect width="1000" height="1000" fill="white"></rect>
+</clipPath>
+</defs>
+</svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(1,0,0,1,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><svg width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_85_7)">
+<rect x="349.158" y="145.577" width="501.92" height="501.92" rx="89.5542" transform="rotate(45 349.158 145.577)" stroke="white" stroke-width="63" stroke-miterlimit="1" stroke-dasharray="104.91 104.91"></rect>
+<rect x="650.541" y="101.029" width="564.92" height="564.92" rx="121.054" transform="rotate(45 650.541 101.029)" fill="white"></rect>
+</g>
+<defs>
+<clipPath id="clip0_85_7">
+<rect width="1000" height="1000" fill="white"></rect>
+</clipPath>
+</defs>
+</svg></svg></g></g></svg></g></svg>

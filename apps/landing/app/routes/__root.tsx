@@ -1,0 +1,139 @@
+import { useThemeListener } from "@hooks/use-theme-listener";
+import globals from "@styles/globals.css?url";
+import inter from "@styles/inter.css?url";
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+  useLocation,
+} from "@tanstack/react-router";
+import { SkeletonTheme } from "@ui/skeleton";
+import { Toaster } from "@ui/toast";
+import { PostHogProvider } from "posthog-js/react";
+import type { ReactNode } from "react";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Footer } from "../components/footer";
+import { Navigation } from "../components/navigation";
+
+export const Route = createRootRoute({
+  head: () => ({
+    meta: [
+      {
+        charSet: "utf-8",
+      },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
+      {
+        title: "BlinkDisk: Modern backups for absolutely everyone",
+      },
+      {
+        property: "description",
+        content:
+          "BlinkDisk is a modern desktop app that lets you back up all your important files. Just takes a few clicks, no tech skills needed.",
+      },
+      {
+        property: "og:title",
+        content: "BlinkDisk: Modern backups for absolutely everyone",
+      },
+      {
+        property: "og:description",
+        content:
+          "BlinkDisk is a modern desktop app that lets you back up all your important files. Just takes a few clicks, no tech skills needed.",
+      },
+      {
+        property: "og:image",
+        content: `${process.env.LANDING_URL}/brand/social.jpg`,
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:site_name",
+        content: "BlinkDisk",
+      },
+      {
+        name: "apple-mobile-web-app-title",
+        content: "BlinkDisk",
+      },
+    ],
+    links: [
+      { rel: "stylesheet", href: globals },
+      { rel: "stylesheet", href: inter },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon/favicon-96x96.png",
+        sizes: "96x96",
+      },
+      {
+        rel: "icon",
+        type: "image/svg+xml",
+        href: "/favicon/favicon.svg",
+      },
+      {
+        rel: "shortcut icon",
+        href: "/favicon/favicon.ico",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/favicon/apple-touch-icon.png",
+      },
+      {
+        rel: "manifest",
+        href: "/manifest.json",
+      },
+    ],
+  }),
+  component: RootComponent,
+});
+
+function RootComponent() {
+  useThemeListener();
+
+  const location = useLocation();
+
+  return (
+    <RootDocument>
+      <PostHogProvider
+        apiKey={process.env.POSTHOG_LANDING_KEY || ""}
+        options={{
+          api_host: "https://eu.i.posthog.com",
+          defaults: "2025-05-24",
+        }}
+      >
+        <SkeletonTheme>
+          {location.pathname.startsWith("/checkout") ? (
+            <Outlet />
+          ) : (
+            <>
+              <Toaster />
+              <Navigation />
+              <div className="bg-secondary m-2 rounded-3xl pb-14 sm:m-4">
+                <Outlet />
+              </div>
+              <Footer />
+            </>
+          )}
+        </SkeletonTheme>
+      </PostHogProvider>
+    </RootDocument>
+  );
+}
+
+function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  return (
+    <html>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="landing">
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}

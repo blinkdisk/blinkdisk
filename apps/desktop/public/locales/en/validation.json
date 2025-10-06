@@ -1,0 +1,15 @@
+{
+  "optional": "Optional",
+  "string_too_small": "{{field}} must be at least {{minimum}} characters",
+  "string_too_big": "{{field}} must be at most {{maximum}} characters",
+  "number_too_small": "{{field}} must be at least {{minimum}}",
+  "number_too_big": "{{field}} must be at most {{minimum}}",
+  "email_invalid_string": "{{field}} must be a valid email address",
+  "url_invalid_string": "{{field}} must be a valid URL",
+  "emoji_invalid_string": "{{field}} must be an emoji",
+  "custom_password_mismatch": "Passwords do not match",
+  "terms_required_custom": "You must agree to the ToS and Privacy Policy",
+  "plan_change_custom": "You must confirm this",
+  "invalid_zip_extension_custom": "{{field}} must end with .zip",
+  "restore_confirmation_required": "Please confirm that you understand the risks"
+}

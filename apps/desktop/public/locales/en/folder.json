@@ -1,0 +1,42 @@
+{
+  "createDialog": {
+    "title": "Add folder",
+    "description": "Create a new folder to backup your files.",
+    "name": {
+      "label": "Folder Name",
+      "placeholder": "Enter folder name"
+    },
+    "emoji": {
+      "button": "Change Emoji"
+    },
+    "path": {
+      "label": "Folder Path",
+      "placeholder": "Select folder path",
+      "title": "Select folder path"
+    },
+    "submit": "Add Folder",
+    "success": {
+      "title": "Successfully added folder",
+      "description": "The folder has been added to your vault."
+    },
+    "exceedingAlert": {
+      "title": "Not enough cloud storage",
+      "description": "This folder likely can’t be backed up because it would exceed your available BlinkDisk Cloud storage. To back it up, you’ll need to upgrade your BlinkDisk Cloud plan.",
+      "continue": "Add Anyway",
+      "upgrade": "Upgrade Storage"
+    }
+  },
+  "preview": {
+    "stats": "{{fileCount}} Files ⸱ {{size}}",
+    "backupPaused": "Backup paused",
+    "backupPending": "Backup pending",
+    "backupRunning": "Backup running",
+    "noBackups": "No backups yet"
+  },
+  "update": {
+    "success": {
+      "title": "Successfully updated folder",
+      "description": "Your folder has been updated successfully."
+    }
+  }
+}

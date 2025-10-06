@@ -1,0 +1,31 @@
+{
+  "name": "@blinkdisk/db",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:prod": "prisma migrate deploy",
+    "studio": "prisma studio"
+  },
+  "devDependencies": {
+    "@blinkdisk/eslint": "workspace:*",
+    "@blinkdisk/typescript": "workspace:*",
+    "@blinkdisk/utils": "workspace:*",
+    "@types/node": "^22.13.9",
+    "@types/pg": "^8.11.11",
+    "eslint": "^9.22.0",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
+    "kysely": "^0.27.6",
+    "kysely-neon": "^1.3.0",
+    "kysely-postgres-js": "^3.0.0",
+    "pg": "^8.14.1",
+    "postgres": "^3.4.0",
+    "prisma": "^6.5.0",
+    "prisma-kysely": "^1.8.0"
+  }
+}

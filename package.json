@@ -1,0 +1,33 @@
+{
+  "name": "@blinkdisk/root",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "dev": "dotenv -- turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "typecheck": "turbo run typecheck",
+    "db:migrate:dev": "dotenv -- pnpm --filter db migrate:dev",
+    "db:migrate:prod": "dotenv -- pnpm --filter db migrate:prod",
+    "db:studio": "dotenv -- pnpm --filter db studio",
+    "emails:studio": "dotenv -- pnpm --filter emails studio"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-prisma": "^5.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.4.4",
+    "typescript": "5.8.2"
+  },
+  "packageManager": "pnpm@8.15.6",
+  "engines": {
+    "node": ">=18"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.25.3"
+    }
+  }
+}

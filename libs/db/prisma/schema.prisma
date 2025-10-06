@@ -1,0 +1,255 @@
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../src"
+  fileName     = "schema.ts"
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id            String   @id @default(nanoid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  language      String?
+  timeZone      String?
+  polarId       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      Session[]
+  authMethods   AuthMethod[]
+  devices       Device[]
+  storages      Storage[]
+  profiles      Profile[]
+  vaults        Vault[]
+  configs       Config[]
+  folders       Folder[]
+  space         Space[]
+  subscriptions Subscription[]
+
+  @@index([email])
+}
+
+model Session {
+  id        String   @id @default(nanoid())
+  accountId String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
+}
+
+model AuthMethod {
+  id                    String    @id @default(nanoid())
+  accountId             String
+  authMethodId          String    @unique
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
+}
+
+model Verification {
+  id         String   @id @default(nanoid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+model Device {
+  id        String   @id @default(nanoid())
+  alias     String
+  hostName  String?
+  machineId String?
+  createdAt DateTime @default(now())
+  accountId String
+
+  account  Account   @relation(fields: [accountId], references: [id])
+  profiles Profile[]
+
+  @@index([machineId])
+}
+
+model Profile {
+  id        String   @id @default(nanoid())
+  alias     String
+  userName  String?
+  accountId String
+  deviceId  String
+  createdAt DateTime @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+  device  Device  @relation(fields: [deviceId], references: [id])
+
+  vaults  Vault[]
+  configs Config[]
+
+  @@index([userName])
+}
+
+enum StorageProvider {
+  BLINKDISK_CLOUD
+  FILESYSTEM
+  NETWORK_ATTACHED_STORAGE
+  AMAZON_S3
+  S3_COMPATIBLE
+  GOOGLE_CLOUD_STORAGE
+  BACKBLAZE
+  AZURE_BLOB_STORAGE
+  SFTP
+  RCLONE
+  WEBDAV
+}
+
+enum StorageStatus {
+  ACTIVE
+  DELETED
+}
+
+model Storage {
+  id           String          @id @default(nanoid())
+  status       StorageStatus
+  version      Int
+  provider     StorageProvider
+  accountId    String
+  configLevel  ConfigLevel
+  passwordHash String
+  options      Json
+  spaceId      String?
+  createdAt    DateTime        @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+  space   Space?  @relation(fields: [spaceId], references: [id])
+
+  vaults  Vault[]
+  configs Config[]
+}
+
+enum VaultStatus {
+  ACTIVE
+  DELETED
+}
+
+model Vault {
+  id        String      @id @default(nanoid())
+  status    VaultStatus
+  name      String
+  profileId String
+  storageId String
+  accountId String
+  createdAt DateTime    @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  storage Storage @relation(fields: [storageId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  folders Folder[]
+}
+
+enum ConfigLevel {
+  STORAGE
+  PROFILE
+}
+
+model Config {
+  id        String      @id @default(nanoid())
+  data      Json
+  level     ConfigLevel
+  profileId String?
+  storageId String
+  accountId String
+  createdAt DateTime    @default(now())
+
+  profile Profile? @relation(fields: [profileId], references: [id])
+  account Account  @relation(fields: [accountId], references: [id])
+  storage Storage  @relation(fields: [storageId], references: [id])
+
+  @@index([level])
+}
+
+model Folder {
+  id        String   @id @default(nanoid())
+  name      String
+  emoji     String
+  hash      String
+  vaultId   String
+  accountId String
+  createdAt DateTime @default(now())
+
+  vault   Vault   @relation(fields: [vaultId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  @@index([hash])
+}
+
+model Space {
+  id             String   @id @default(cuid())
+  capacity       BigInt
+  used           BigInt
+  accountId      String   @unique
+  subscriptionId String?
+  createdAt      DateTime @default(now())
+
+  account      Account       @relation(fields: [accountId], references: [id])
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  storages Storage[]
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum SubscriptionScheduledAction {
+  CANCEL
+  PAUSE
+  RESUME
+}
+
+model Subscription {
+  id                  String             @id @default(cuid())
+  status              SubscriptionStatus
+  priceId             String
+  planId              String
+  polarProductId      String
+  polarSubscriptionId String             @unique
+  polarCustomerId     String
+  accountId           String
+  canceledAt          DateTime?
+  endedAt             DateTime?
+  cleanupAt           DateTime?
+  createdAt           DateTime           @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+
+  spaces Space[]
+}

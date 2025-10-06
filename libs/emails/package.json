@@ -1,0 +1,24 @@
+{
+  "name": "@blinkdisk/emails",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "email dev --dir src/ --port 3001",
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@blinkdisk/eslint": "workspace:*",
+    "@blinkdisk/typescript": "workspace:*",
+    "@types/node": "^22.13.9",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "eslint": "^9.22.0",
+    "react-email": "^3.0.7",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.34",
+    "react": "^19.0.0"
+  }
+}

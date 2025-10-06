@@ -1,0 +1,90 @@
+{
+  "account": {
+    "title": "Account",
+    "description": "Update your account settings.",
+    "submit": "Update Account",
+    "logout": "Sign out",
+    "success": {
+      "title": "Account updated successfully",
+      "description": "You're account details have been updated."
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Change your application preferences.",
+    "submit": "Save Preferences",
+    "theme": {
+      "label": "Theme",
+      "description": "Select your theme preference.",
+      "items": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
+    },
+    "language": {
+      "label": "Language",
+      "description": "Select your language preference."
+    },
+    "success": {
+      "title": "Preferences changed successfully",
+      "description": "Your preferences have been changed."
+    }
+  },
+  "vault": {
+    "title": "Settings",
+    "home": "Home",
+    "general": {
+      "title": "General",
+      "description": "Configure general settings of this vault.",
+      "name": {
+        "label": "Vault Name",
+        "placeholder": "Enter vault name"
+      },
+      "save": "Save"
+    },
+    "config": {
+      "title": "Storage Config",
+      "description": "View the storage location of this vault."
+    },
+    "throttle": {
+      "title": "Network Throttle",
+      "description": "Throttle the network usage of this vault.",
+      "upload": {
+        "enabled": {
+          "label": "Limit upload bandwith"
+        },
+        "limit": {
+          "label": "Upload limit",
+          "description": "Limit the upload bandwith of this vault."
+        }
+      },
+      "download": {
+        "enabled": {
+          "label": "Limit download bandwith"
+        },
+        "limit": {
+          "label": "Download limit",
+          "description": "Limit the download bandwith of this vault."
+        }
+      },
+      "save": "Save"
+    }
+  },
+  "folder": {
+    "title": "Folder Settings",
+    "description": "Configure the folder settings.",
+    "general": {
+      "title": "General",
+      "description": "Configure general settings of this folder.",
+      "name": {
+        "label": "Folder Name",
+        "placeholder": "Enter folder name"
+      },
+      "emoji": {
+        "button": "Change Emoji"
+      },
+      "save": "Save"
+    }
+  }
+}

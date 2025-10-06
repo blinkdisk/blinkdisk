@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "api",
+  "main": "src/index.ts",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2025-08-22",
+  "observability": {
+    "enabled": true,
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "STORAGE",
+        "class_name": "Storage",
+        "script_name": "cloud",
+      },
+      {
+        "name": "SPACE",
+        "class_name": "Space",
+        "script_name": "cloud",
+      },
+    ],
+  },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "cb04a4b2f0cc49ea866f4804f7f6910f",
+      "localConnectionString": "postgresql://user:password@localhost:5432/blinkdisk",
+    },
+  ],
+  "unsafe": {
+    "bindings": [
+      {
+        "name": "RATE_LIMIT",
+        "type": "ratelimit",
+        "namespace_id": "1000",
+        "simple": {
+          "limit": 150,
+          "period": 60,
+        },
+      },
+    ],
+  },
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cloud",
+  "main": "src/index.ts",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2025-08-22",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "STORAGE",
+        "class_name": "Storage",
+      },
+      {
+        "name": "SPACE",
+        "class_name": "Space",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["Storage", "Space"],
+    },
+  ],
+  "env": {
+    "production": {
+      "triggers": {
+        "crons": ["0 0 * * *"],
+      },
+    },
+  },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "cb04a4b2f0cc49ea866f4804f7f6910f",
+      "localConnectionString": "postgresql://user:password@localhost:5432/blinkdisk",
+    },
+  ],
+  "unsafe": {
+    "bindings": [
+      {
+        "name": "RATE_LIMIT",
+        "type": "ratelimit",
+        "namespace_id": "2000",
+        "simple": {
+          "limit": 600,
+          "period": 60,
+        },
+      },
+    ],
+  },
+}

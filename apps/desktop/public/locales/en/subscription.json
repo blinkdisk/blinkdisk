@@ -1,0 +1,92 @@
+{
+  "upgradeDialog": {
+    "title": "Get more cloud storage",
+    "description": "All prices shown are exclusive of VAT.",
+    "period": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "badge": "Save ~25%"
+    },
+    "plan": {
+      "description": "Enjoy {{storageGB}} GB of cloud storage",
+      "originalAmount": "{{original}}/month",
+      "monthlyAmount": "{{monthlyAmount}}<0> /month</0> ",
+      "yearlySavings": "Save {{yearlySavings}} yearly",
+      "current": "Current",
+      "upgrade": "Upgrade to {{storageGB}} GB",
+      "downgrade": "Downgrade to {{storageGB}} GB",
+      "manage": "Manage subscription",
+      "periodChange": "Switch to {{period}} plan",
+      "downgradeNotPossible": "Downgrade not possible",
+      "period": {
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "contact": {
+        "back": "Go Back",
+        "title": "Looking for more storage?",
+        "description": "Feel free to contact us at cloud@blinkdisk.com for a quote.",
+        "button": "Contact Us"
+      }
+    },
+    "checkout": {
+      "toast": {
+        "title": "Checkout opened in browser",
+        "description": "We opened your checkout in your browser."
+      }
+    }
+  },
+  "pendingCheckoutDialog": {
+    "title": "Checkout in progress",
+    "description": "Please finish the checkout in your browser. Afterwards, press the button below to complete the payment.",
+    "open": "Open checkout",
+    "check": "Check status"
+  },
+  "subscriptionChangeDialog": {
+    "UPGRADE": {
+      "title": "Confirm plan upgrade",
+      "description": "You’re switching to a higher plan. Your subscription will be updated immediately, and you’ll unlock more storage right away.",
+      "info": "Since you’re upgrading mid-cycle, we’ll only charge you the difference for the rest of your current billing period.",
+      "submit": "Upgrade"
+    },
+    "DOWNGRADE": {
+      "title": "Confirm plan downgrade",
+      "description": "You’re moving to a lower plan. Your subscription will be adjusted immediately.",
+      "info": "Because you’re downgrading mid-cycle, the unused amount from your current plan will be credited toward your new plan.",
+      "submit": "Downgrade"
+    },
+    "PERIOD_CHANGE": {
+      "title": "Confirm billing period change",
+      "description": "You’re changing how often you’re billed. Your subscription will be updated right away with the new billing period.",
+      "info": "Because you’re switching the billing period mid-cycle, the unused amount from your current plan will be credited toward your new plan.",
+      "submit": "Change Billing Period"
+    },
+    "monthly": "{{amount}}<0> /month</0>",
+    "yearly": "{{amount}}<0j> /year</0>",
+    "confirmation": "I understand that I may be charged a prorated amount today and the new price afterwards."
+  },
+  "portal": {
+    "loading": {
+      "title": "Opening billing portal",
+      "description": "Please wait while we open your billing portal."
+    },
+    "success": {
+      "title": "Billing portal opened in browser",
+      "description": "We opened your billing portal in your browser."
+    },
+    "error": {
+      "title": "Failed to open billing portal",
+      "description": "Please try again later."
+    }
+  },
+  "planChangeToast": {
+    "START": {
+      "title": "Subscribed successfully",
+      "description": "Your subscription has been successfully started."
+    },
+    "CHANGE": {
+      "title": "Subscription changed successfully",
+      "description": "Your subscription has been successfully changed."
+    }
+  }
+}

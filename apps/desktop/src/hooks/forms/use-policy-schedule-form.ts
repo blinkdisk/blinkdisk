@@ -1,0 +1,48 @@
+import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-folder-policy";
+import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
+import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
+import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
+import { useAppForm } from "@hooks/use-app-form";
+import {
+  ZPolicyLevelType,
+  ZSchedulePolicy,
+  ZSchedulePolicyType,
+} from "@schemas/policy";
+import { useMemo } from "react";
+
+export function usePolicyScheduleForm(level: ZPolicyLevelType) {
+  const { data: vaultPolicy } = useVaultPolicy();
+  const { data: folderPolicy } = useFolderPolicy();
+
+  function reset() {
+    form.reset();
+  }
+
+  const { mutateAsync: mutateVault } = useUpdateVaultPolicy(reset);
+  const { mutateAsync: mutateFolder } = useUpdateFolderPolicy(reset);
+
+  const policy = useMemo(
+    () => (level === "FOLDER" ? folderPolicy : vaultPolicy),
+    [folderPolicy, vaultPolicy, level],
+  );
+
+  const mutate = useMemo(
+    () => (level === "FOLDER" ? mutateFolder : mutateVault),
+    [mutateFolder, mutateVault, level],
+  );
+
+  const form = useAppForm({
+    defaultValues: policy?.schedule as ZSchedulePolicyType,
+    validators: {
+      onSubmit: ZSchedulePolicy,
+    },
+    onSubmit: async ({ value }) =>
+      policy &&
+      (await mutate({
+        ...policy,
+        schedule: value,
+      })),
+  });
+
+  return form;
+}
