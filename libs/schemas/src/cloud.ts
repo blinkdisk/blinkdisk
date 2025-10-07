@@ -18,8 +18,8 @@ export const ZCloudPutBlob = ZCloudBase.merge(
 export const ZCloudGetBlob = ZCloudBase.merge(
   z.object({
     key: ZKey,
-    offset: z.number().int().min(0).optional(),
-    length: z.number().int().min(0).optional(),
+    offset: z.number().int().optional(),
+    length: z.number().int().optional(),
   }),
 );
 
