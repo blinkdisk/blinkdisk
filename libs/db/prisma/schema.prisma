@@ -29,7 +29,6 @@ model Account {
   profiles      Profile[]
   vaults        Vault[]
   configs       Config[]
-  folders       Folder[]
   space         Space[]
   subscriptions Subscription[]
 
@@ -168,8 +167,6 @@ model Vault {
   profile Profile @relation(fields: [profileId], references: [id])
   storage Storage @relation(fields: [storageId], references: [id])
   account Account @relation(fields: [accountId], references: [id])
-
-  folders Folder[]
 }
 
 enum ConfigLevel {
@@ -191,21 +188,6 @@ model Config {
   storage Storage  @relation(fields: [storageId], references: [id])
 
   @@index([level])
-}
-
-model Folder {
-  id        String   @id @default(nanoid())
-  name      String
-  emoji     String
-  hash      String
-  vaultId   String
-  accountId String
-  createdAt DateTime @default(now())
-
-  vault   Vault   @relation(fields: [vaultId], references: [id])
-  account Account @relation(fields: [accountId], references: [id])
-
-  @@index([hash])
 }
 
 model Space {
