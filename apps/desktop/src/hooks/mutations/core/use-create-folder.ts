@@ -5,22 +5,17 @@ import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
-import { trpc } from "@desktop/lib/trpc";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { tryCatch } from "@utils/try-catch";
 import { toast } from "sonner";
 
-export type CreateFolderResponse = Awaited<
-  ReturnType<typeof trpc.folder.create.mutate>
->;
-
 export function useCreateFolder({
   onSuccess,
   onError,
 }: {
-  onSuccess: (res: CreateFolderResponse) => void;
+  onSuccess: () => void;
   onError?: (error: any) => void;
 }) {
   const queryClient = useQueryClient();
@@ -80,7 +75,7 @@ export function useCreateFolder({
 
       showErrorToast(error);
     },
-    onSuccess: async (res) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: [accountId, "core", "folder", "list", vaultId],
       });
@@ -89,7 +84,7 @@ export function useCreateFolder({
         description: t("description"),
       });
 
-      onSuccess?.(res);
+      onSuccess?.();
     },
   });
 }

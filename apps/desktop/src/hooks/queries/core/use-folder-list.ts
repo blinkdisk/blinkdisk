@@ -84,7 +84,7 @@ export type CoreFolderItem = {
 };
 
 export function useFolderList() {
-  const { profileId, localProfileId } = useProfile();
+  const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { accountId } = useAccountId();
   const { vaultId } = useVaultId();
