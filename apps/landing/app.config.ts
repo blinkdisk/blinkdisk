@@ -21,6 +21,7 @@ export default defineConfig({
       tailwindcss(),
       env(
         {
+          LANDING_URL: undefined,
           LOGSNAG_PUBLIC_KEY: undefined,
           POSTHOG_LANDING_KEY: undefined,
         },
