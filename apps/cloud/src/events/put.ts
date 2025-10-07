@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Space } from "@cloud/classes/space";
 import { Storage } from "@cloud/classes/storage";
@@ -14,13 +14,6 @@ export async function putBlob(
   const { data: payload, error: parseError } = ZCloudPutBlob.safeParse(data);
   if (parseError || !payload)
     return { error: parseError.message || "Failed to validate payload" };
-
-  await durableObject.s3.send(
-    new DeleteObjectCommand({
-      Bucket: durableObject.bucket,
-      Key: `${durableObject.id}/${payload.key}`,
-    }),
-  );
 
   const { error, space: spaceStats } = await consumeSpace(
     storage,
