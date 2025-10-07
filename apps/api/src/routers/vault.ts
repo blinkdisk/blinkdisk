@@ -160,6 +160,8 @@ export const vaultRouter = router({
           "Vault.id",
           "Vault.name",
           "Vault.storageId",
+          "Vault.profileId",
+          "Profile.deviceId",
           "Storage.provider",
           "Storage.passwordHash",
           "Storage.configLevel",

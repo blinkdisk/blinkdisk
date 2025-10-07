@@ -30,11 +30,9 @@ export function useBackupAll() {
     },
     onError: showErrorToast,
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: [accountId, "core", "folder", "list", vaultId],
-        }),
-      ]);
+      await queryClient.invalidateQueries({
+        queryKey: [accountId, "core", "folder", "list", vaultId],
+      });
     },
   });
 }

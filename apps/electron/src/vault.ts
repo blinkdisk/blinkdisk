@@ -247,6 +247,8 @@ export class Vault {
     storageId: string;
     deviceId: string;
     profileId: string;
+    userPolicy: object;
+    globalPolicy: object;
   }) {
     const options = payload.vault.options;
 
@@ -266,6 +268,8 @@ export class Vault {
         method: "POST",
         path: "/api/v1/repo/create",
         data: {
+          globalPolicy: payload.globalPolicy,
+          userPolicy: payload.userPolicy,
           clientOptions: {
             description: payload.vault.name,
             username: payload.profileId,
@@ -303,7 +307,7 @@ export class Vault {
       });
 
       vault.stop();
-      return response as {};
+      return response as { error?: string };
     } catch (e) {
       vault.stop();
       return e as { code?: string; error?: string };
@@ -351,7 +355,15 @@ export class Vault {
       connected?: boolean;
     };
 
-    if (!status.connected) await this.connect();
+    if (!status.connected) {
+      const res = await this.connect();
+
+      if (res.error) {
+        this.status = "READY";
+        return;
+      }
+    }
+
     this.status = "RUNNING";
     this.resumeInitialBackups();
   }
@@ -422,7 +434,7 @@ export class Vault {
         })
       : null;
 
-    const res = await this.fetch({
+    return (await this.fetch({
       method: "POST",
       path: "/api/v1/repo/connect",
       data: {
@@ -447,9 +459,7 @@ export class Vault {
         },
         password,
       },
-    });
-
-    return res;
+    })) as { error?: string };
   }
 
   async fetch({

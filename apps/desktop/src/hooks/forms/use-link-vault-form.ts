@@ -3,6 +3,7 @@ import {
   useLinkVault,
 } from "@desktop/hooks/mutations/use-link-vault";
 import { UnlinkedVaultItem } from "@desktop/hooks/queries/use-unlinked-vaults";
+import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppForm } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -23,6 +24,7 @@ export function useLinkVaultForm({
   const { t } = useAppTranslation("vault.providers");
 
   const { profileId } = useProfile();
+  const { deviceId } = useDevice();
 
   const { mutateAsync } = useLinkVault((res) => {
     form.reset();
@@ -40,9 +42,13 @@ export function useLinkVaultForm({
       vault &&
       password &&
       profileId &&
+      deviceId &&
       (await mutateAsync({
+        deviceId: deviceId,
         profileId: profileId,
         storageId: vault.storageId,
+        fromProfileId: vault.profileId,
+        fromDeviceId: vault.deviceId,
         name: value.name,
         password: password,
         ...(config && { config }),

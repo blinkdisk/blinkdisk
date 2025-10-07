@@ -384,3 +384,65 @@ export function getFolderPolicyUpdates(
     "FOLDER",
   );
 }
+
+export const defaultPolicy: ZPolicyType = {
+  retention: {
+    latest: 10,
+    hourly: 48,
+    daily: 7,
+    weekly: 4,
+    monthly: 24,
+    annual: 3,
+    ignoreIdentical: false,
+  },
+  files: {
+    denyfiles: [
+      {
+        filename: ".blinkdiskignore",
+        level: "VAULT",
+      },
+    ],
+  },
+  errors: {
+    ignoreFile: false,
+    ignoreDirectory: false,
+    ignoreUnknown: true,
+  },
+  schedule: {
+    trigger: "SCHEDULE",
+    interval: String(60 * 60 * 24),
+    catchup: true,
+  },
+  compression: {
+    algorithm: "none",
+  },
+  metadata: {
+    algorithm: "zstd-fastest",
+  },
+  splitter: {},
+  scripts: {},
+  osSnapshots: {
+    volumeShadowCopy: {
+      enable: 0,
+    },
+  },
+  logging: {
+    directories: {
+      snapshotted: 5,
+      ignored: 5,
+    },
+    files: {
+      snapshotted: 0,
+      ignored: 5,
+      cache: {
+        hit: 0,
+        miss: 0,
+      },
+    },
+  },
+  upload: {
+    parallelBackups: 1,
+    parallelUploadMinSize: 2147483648,
+  },
+  ignoreParentPolicy: false,
+};

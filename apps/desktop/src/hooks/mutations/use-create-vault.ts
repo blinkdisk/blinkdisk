@@ -1,5 +1,6 @@
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { showErrorToast } from "@desktop/lib/error";
+import { convertPolicyToCore, defaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
@@ -50,11 +51,12 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
             config: variables.config,
             password: variables.password!,
           },
+          userPolicy: convertPolicyToCore(defaultPolicy, "VAULT"),
+          globalPolicy: convertPolicyToCore(defaultPolicy, "VAULT"),
         });
 
         // TODO: Show these errors in the UI
-        if ("error" in create && create.error)
-          throw new Error(create.error.toString());
+        if (create.error) throw new Error(create.error.toString());
       } catch (e) {
         try {
           await trpc.vault.delete.mutate({
@@ -72,10 +74,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         password: variables.password,
       });
 
+      // Make sure config & storage are fetched before vault
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: [accountId, "vault"],
-        }),
         queryClient.invalidateQueries({
           queryKey: [accountId, "storage"],
         }),
@@ -83,6 +83,10 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
           queryKey: [accountId, "config"],
         }),
       ]);
+
+      await queryClient.invalidateQueries({
+        queryKey: [accountId, "vault"],
+      });
 
       toast.success(t("title"), {
         description: t("description"),
