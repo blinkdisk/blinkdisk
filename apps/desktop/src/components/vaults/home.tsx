@@ -3,11 +3,11 @@ import { FolderList } from "@desktop/components/folders/list";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useBackupAll } from "@desktop/hooks/mutations/core/use-backup-all";
+import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
-import { FolderItem } from "@desktop/hooks/use-folder-list";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useTheme } from "@hooks/use-theme";
@@ -28,7 +28,7 @@ import { GaugeComponent } from "react-gauge-component";
 
 type VaultHomeProps = {
   vault?: VaultItem;
-  folders?: FolderItem[];
+  folders?: CoreFolderItem[];
 };
 
 export function VaultHome({ vault, folders }: VaultHomeProps) {

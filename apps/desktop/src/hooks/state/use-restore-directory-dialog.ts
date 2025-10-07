@@ -1,10 +1,10 @@
 import { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
-import { FolderItem } from "@desktop/hooks/use-folder-list";
+import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { atom, useAtom } from "jotai";
 
 type RestoreDirectoryDialogOptions = {
   directoryId: string;
-  folder: FolderItem | undefined;
+  folder: CoreFolderItem | undefined;
   backup: CoreBackupItem | undefined;
   path: { objectId: string; name: string }[] | undefined;
 };

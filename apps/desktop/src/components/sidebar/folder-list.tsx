@@ -1,6 +1,6 @@
 import { FolderPreview } from "@desktop/components/folders/preview";
+import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { FolderItem } from "@desktop/hooks/use-folder-list";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useParams } from "@tanstack/react-router";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@ui/sidebar";
 
 type SidebarFolderListProps = {
-  folders: FolderItem[] | undefined | null;
+  folders: CoreFolderItem[] | undefined | null;
 };
 
 export function SidebarFolderList({ folders }: SidebarFolderListProps) {
@@ -36,7 +36,7 @@ export function SidebarFolderList({ folders }: SidebarFolderListProps) {
 }
 
 type SidebarFolderProps = {
-  folder: FolderItem | undefined;
+  folder: CoreFolderItem | undefined;
 };
 
 function SidebarFolder({ folder }: SidebarFolderProps) {

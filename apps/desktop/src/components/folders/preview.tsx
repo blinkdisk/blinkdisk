@@ -1,5 +1,5 @@
 import { EmojiCard } from "@desktop/components/folders/emoji-card";
-import { FolderItem } from "@desktop/hooks/use-folder-list";
+import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { formatInt, formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { CircularProgress } from "@ui/circular-progress";
@@ -10,7 +10,7 @@ import { cn } from "@utils/class";
 import { CircleHelpIcon } from "lucide-react";
 
 type FolderPreviewProps = {
-  folder?: FolderItem;
+  folder?: CoreFolderItem;
   showInfo?: boolean;
   size?: "sm" | "default";
 };

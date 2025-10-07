@@ -1,12 +1,12 @@
 import { FolderPreview } from "@desktop/components/folders/preview";
-import { FolderItem } from "@desktop/hooks/use-folder-list";
+import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { Link } from "@tanstack/react-router";
 import { Skeleton } from "@ui/skeleton";
 import { ArrowRightIcon } from "lucide-react";
 
 type FolderListProps = {
-  folders: FolderItem[] | undefined | null;
+  folders: CoreFolderItem[] | undefined | null;
 };
 
 export function FolderList({ folders }: FolderListProps) {
@@ -23,7 +23,7 @@ export function FolderList({ folders }: FolderListProps) {
 }
 
 type FolderProps = {
-  folder: FolderItem | undefined;
+  folder: CoreFolderItem | undefined;
 };
 
 function Folder({ folder }: FolderProps) {
