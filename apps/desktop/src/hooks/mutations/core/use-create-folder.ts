@@ -6,7 +6,6 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { hashFolder } from "@desktop/lib/folder";
-import { trpc } from "@desktop/lib/trpc";
 import { vaultApi } from "@desktop/lib/vault";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -14,15 +13,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { tryCatch } from "@utils/try-catch";
 import { usePostHog } from "posthog-js/react";
 
-export type CreateFolderResponse = Awaited<
-  ReturnType<typeof trpc.folder.create.mutate>
->;
-
 export function useCreateFolder({
   onSuccess,
   onError,
 }: {
-  onSuccess: (res: CreateFolderResponse) => void;
+  onSuccess: () => void;
   onError?: (error: any) => void;
 }) {
   const posthog = usePostHog();
@@ -101,7 +96,7 @@ export function useCreateFolder({
         }),
       });
 
-      onSuccess?.(res);
+      onSuccess?.();
     },
   });
 }
