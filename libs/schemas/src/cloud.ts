@@ -11,15 +11,15 @@ export const ZCloudBase = z.object({
 export const ZCloudPutBlob = ZCloudBase.merge(
   z.object({
     key: ZKey,
-    size: z.number().min(0),
+    size: z.number().int().min(0),
   }),
 );
 
 export const ZCloudGetBlob = ZCloudBase.merge(
   z.object({
     key: ZKey,
-    offset: z.number().optional(),
-    length: z.number().optional(),
+    offset: z.number().int().min(0).optional(),
+    length: z.number().int().min(0).optional(),
   }),
 );
 
