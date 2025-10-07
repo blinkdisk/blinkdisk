@@ -16,7 +16,7 @@ export function FolderList({ folders }: FolderListProps) {
         ? (new Array(20).fill(undefined) as undefined[])
         : folders
       ).map((folder, index) => (
-        <Folder key={folder ? folder.hash : index} folder={folder} />
+        <Folder key={folder ? folder.id : index} folder={folder} />
       ))}
     </div>
   );

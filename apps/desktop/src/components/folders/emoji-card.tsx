@@ -5,12 +5,16 @@ import Twemoji from "react-twemoji";
 import { parse } from "twemoji-parser";
 
 export type EmojiCardProps = {
-  emoji: string;
+  emoji: string | undefined;
   size?: "lg" | "md" | "sm";
   className?: string;
 };
 
-export function EmojiCard({ emoji, className, size = "md" }: EmojiCardProps) {
+export function EmojiCard({
+  emoji = "📁",
+  className,
+  size = "md",
+}: EmojiCardProps) {
   const { data: emojiToColor } = useQuery({
     queryKey: ["emoji"],
     queryFn: async () => {

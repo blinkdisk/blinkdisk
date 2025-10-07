@@ -1,6 +1,6 @@
 import { EmojiCard } from "@desktop/components/folders/emoji-card";
 import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
-import { useCreateFolder } from "@desktop/hooks/mutations/use-create-folder";
+import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useStore } from "@hooks/use-app-form";

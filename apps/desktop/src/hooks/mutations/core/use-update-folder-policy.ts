@@ -46,9 +46,14 @@ export function useUpdateFolderPolicy(onSuccess?: () => void) {
     },
     onError: showErrorToast,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "policy", folder?.id],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [accountId, "core", "policy", folder?.id],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [accountId, "core", "folder", "list", vaultId],
+        }),
+      ]);
 
       toast.success(t("success.title"), {
         description: t("success.description"),

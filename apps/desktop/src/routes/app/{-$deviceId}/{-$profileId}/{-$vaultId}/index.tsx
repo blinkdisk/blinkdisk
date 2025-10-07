@@ -1,10 +1,12 @@
 import { VaultHome } from "@desktop/components/vaults/home";
+import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useFolderList } from "@desktop/hooks/use-folder-list";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/app/{-$deviceId}/{-$profileId}/{-$vaultId}/")({
+export const Route = createFileRoute(
+  "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/",
+)({
   component: RouteComponent,
 });
 

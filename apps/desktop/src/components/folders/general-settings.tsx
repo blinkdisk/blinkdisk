@@ -1,6 +1,6 @@
 import { EmojiCard } from "@desktop/components/folders/emoji-card";
 import { SettingsCategory } from "@desktop/components/policy/category";
-import { useUpdateFolderForm } from "@desktop/hooks/forms/use-update-folder-form";
+import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
@@ -12,7 +12,7 @@ export function FolderGeneralSettings() {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
 
-  const form = useUpdateFolderForm();
+  const form = usePolicyGeneralForm();
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const values = useStore(form.store, (state) => state.values);
   const disabledContext = useContext(FormDisabledContext);

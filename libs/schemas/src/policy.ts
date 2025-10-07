@@ -1,3 +1,4 @@
+import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 
 export const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);
@@ -168,7 +169,16 @@ export const ZIgnoreParentPolicy = z.boolean().optional();
 
 export type ZIgnoreParentPolicyType = z.infer<typeof ZIgnoreParentPolicy>;
 
+export const ZGeneralPolicyForm = z.object({
+  name: ZFolderName,
+  emoji: ZFolderEmoji,
+});
+
+export type ZGeneralPolicyFormType = z.infer<typeof ZGeneralPolicyForm>;
+
 export const ZPolicy = z.object({
+  name: z.string().optional(),
+  emoji: z.string().optional(),
   retention: ZRetentionPolicy,
   files: ZFilesPolicy,
   errors: ZErrorsPolicy,

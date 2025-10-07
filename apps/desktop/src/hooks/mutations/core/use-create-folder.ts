@@ -5,7 +5,6 @@ import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
-import { hashFolder } from "@desktop/lib/folder";
 import { trpc } from "@desktop/lib/trpc";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateFolderFormType } from "@schemas/folder";
@@ -57,16 +56,22 @@ export function useCreateFolder({
         }
       }
 
-      return await trpc.folder.create.mutate({
-        vaultId,
-        name: values.name,
-        emoji: values.emoji,
-        hash: await hashFolder({
-          deviceId,
-          profileId,
+      const response = await window.electron.vault.fetch({
+        vaultId: vaultId || "",
+        method: "POST",
+        path: "/api/v1/sources",
+        data: {
           path: values.path,
-        }),
+          createSnapshot: false,
+          policy: {
+            name: values.name,
+            emoji: values.emoji,
+          },
+        },
       });
+
+      if (response.error) throw new Error(response.error);
+      return response;
     },
     onError: (error) => {
       onError?.(error);
@@ -75,40 +80,10 @@ export function useCreateFolder({
 
       showErrorToast(error);
     },
-    onSuccess: async (res, values) => {
-      try {
-        const response = await window.electron.vault.fetch({
-          vaultId: vaultId || "",
-          method: "POST",
-          path: "/api/v1/sources",
-          data: {
-            path: values.path,
-            createSnapshot: false,
-            policy: {},
-          },
-        });
-
-        if (response.error) throw new Error(response.error);
-      } catch (e) {
-        try {
-          await trpc.folder.delete.mutate({
-            folderId: res?.id || "",
-          });
-        } catch (e) {
-          console.error("Failed to delete folder", e);
-        }
-
-        throw e;
-      }
-
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: [accountId, "folder", "list"],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: [accountId, "core", "folder", "list"],
-        }),
-      ]);
+    onSuccess: async (res) => {
+      await queryClient.invalidateQueries({
+        queryKey: [accountId, "core", "folder", "list", vaultId],
+      });
 
       toast.success(t("title"), {
         description: t("description"),

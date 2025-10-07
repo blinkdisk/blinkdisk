@@ -4,6 +4,8 @@ import { diff } from "deep-object-diff";
 import merge from "deepmerge";
 
 export type CorePolicy = {
+  name?: string;
+  emoji?: string;
   retention: {
     keepLatest?: number;
     keepHourly?: number;
@@ -122,6 +124,8 @@ export function convertPolicyFromCore(
   if (!policy) return null;
 
   return {
+    name: policy.name,
+    emoji: policy.emoji,
     retention: {
       latest: policy.retention?.keepLatest,
       hourly: policy.retention?.keepHourly,
@@ -247,6 +251,8 @@ export function convertPolicyToCore(
   level: ZPolicyLevelType,
 ) {
   const policyCore: CorePolicy = {
+    name: policy.name,
+    emoji: policy.emoji,
     retention: {
       keepLatest: policy.retention?.latest,
       keepHourly: policy.retention?.hourly,

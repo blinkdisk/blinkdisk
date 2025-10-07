@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit",
     "compile:dev": "node esbuild.config.mjs development",
     "compile:prod": "node esbuild.config.mjs production",
-    "prebuild": "pnpm build:frontend && pnpm compile:prod compile",
+    "prebuild": "pnpm build:frontend && tsc --noEmit && pnpm compile:prod compile",
     "build:frontend": "rm -rf frontend/ && cd ../.. && pnpm --filter desktop build && cp -r apps/desktop/dist apps/electron/frontend",
     "build:linux": "electron-builder -c electron.builder.ts --linux",
     "build:windows": "electron-builder -c electron.builder.ts --windows",

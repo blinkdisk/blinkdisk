@@ -52,7 +52,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
             password: variables.password!,
           },
           userPolicy: convertPolicyToCore(defaultPolicy, "VAULT"),
-          globalPolicy: convertPolicyToCore(defaultPolicy, "VAULT"),
+          globalPolicy: {},
         });
 
         // TODO: Show these errors in the UI

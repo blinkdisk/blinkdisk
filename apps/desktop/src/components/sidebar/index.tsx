@@ -7,8 +7,8 @@ import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
 import { SidebarSelects } from "@desktop/components/sidebar/selects";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
+import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
-import { useFolderList } from "@desktop/hooks/use-folder-list";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {

@@ -28,7 +28,7 @@ export function SidebarFolderList({ folders }: SidebarFolderListProps) {
           ? (new Array(3).fill(undefined) as undefined[])
           : folders
         ).map((folder, index) => (
-          <SidebarFolder key={folder ? folder.hash : index} folder={folder} />
+          <SidebarFolder key={folder ? folder.id : index} folder={folder} />
         ))}
       </div>
     </div>

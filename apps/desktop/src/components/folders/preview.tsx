@@ -26,10 +26,7 @@ export function FolderPreview({ folder, size, showInfo }: FolderPreviewProps) {
       )}
     >
       {folder ? (
-        <EmojiCard
-          emoji={folder.emoji || "📁"}
-          size={size === "sm" ? "sm" : "md"}
-        />
+        <EmojiCard emoji={folder.emoji} size={size === "sm" ? "sm" : "md"} />
       ) : (
         <Skeleton
           width={size === "sm" ? "2.25rem" : "2.75rem"}
@@ -45,7 +42,11 @@ export function FolderPreview({ folder, size, showInfo }: FolderPreviewProps) {
               size === "sm" && "text-sm",
             )}
           >
-            {folder ? folder.name || "Unknown" : <Skeleton width={100} />}
+            {folder ? (
+              folder.name || "Unnamed Folder"
+            ) : (
+              <Skeleton width={100} />
+            )}
           </h2>
           {folder && showInfo ? (
             <Tooltip>
