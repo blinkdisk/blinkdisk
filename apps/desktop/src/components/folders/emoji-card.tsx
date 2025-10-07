@@ -40,7 +40,9 @@ export function EmojiCard({ emoji, className, size = "md" }: EmojiCardProps) {
           borderColor: `rgba(${color}, 0.1)`,
         }}
         className={cn(
-          "flex items-center justify-center rounded-md border-2",
+          // The twemoji library seems to add an empty string for some emojis, which
+          // moves the emoji off-center. We use text-[0px] to make the text 0x0px.
+          "flex items-center justify-center rounded-md border-2 text-[0px]",
           size === "lg"
             ? "size-14 rounded-lg [&>div>img]:size-6"
             : size === "sm"

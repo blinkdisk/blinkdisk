@@ -38,5 +38,9 @@
       "title": "Successfully updated folder",
       "description": "Your folder has been updated successfully."
     }
+  },
+  "emojiPicker": {
+    "search": "Search emoji...",
+    "empty": "No emoji found."
   }
 }

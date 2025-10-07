@@ -1,5 +1,7 @@
 "use client";
 
+import { useAppTranslation } from "@hooks/use-app-translation";
+import { Input } from "@ui/input";
 import { Loader } from "@ui/loader";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
 import { Locale, EmojiPicker as Picker } from "frimousse";
@@ -48,7 +50,10 @@ export function EmojiPicker({
   children,
   onEmojiSelect,
 }: EmojiPickerProps) {
+  const { t } = useAppTranslation("folder.emojiPicker");
+
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   return (
     <>
@@ -62,12 +67,19 @@ export function EmojiPicker({
               supportedLocales.includes(locale) ? (locale as Locale) : "en"
             }
           >
+            <Picker.Search value={search} className="hidden" />
+            <Input
+              className="z-10 mx-2 mt-2 w-auto"
+              placeholder={t("search")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
             <Picker.Viewport className="outline-hidden relative flex-1">
               <Picker.Loading className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
                 <Loader />
               </Picker.Loading>
               <Picker.Empty className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
-                No emoji found.
+                {t("empty")}
               </Picker.Empty>
               <Picker.List
                 className="select-none pb-1.5"
@@ -87,7 +99,7 @@ export function EmojiPicker({
                   ),
                   Emoji: ({ emoji, ...props }) => (
                     <button
-                      className="flex size-8 items-center justify-center rounded-md text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
+                      className="flex items-start justify-center rounded-md p-1.5 text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
                       {...props}
                     >
                       <Twemoji
