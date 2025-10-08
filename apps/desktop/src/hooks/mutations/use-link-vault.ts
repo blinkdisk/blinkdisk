@@ -33,8 +33,10 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
         password: string;
         config?: object;
         deviceId: string;
-        fromProfileId: string;
-        fromDeviceId: string;
+        source: {
+          profileId: string;
+          deviceId: string;
+        };
       },
     ) => {
       const payload: ZLinkVaultType = {
@@ -82,8 +84,8 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
             method: "GET",
             path: "/api/v1/policy",
             search: {
-              userName: variables.fromProfileId,
-              host: variables.fromDeviceId,
+              userName: variables.source.profileId,
+              host: variables.source.deviceId,
             },
             data: convertPolicyToCore(defaultPolicy, "VAULT"),
           }) as Promise<CorePolicy & { error?: string }>,

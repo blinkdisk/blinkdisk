@@ -47,10 +47,12 @@ export function useLinkVaultForm({
         deviceId: deviceId,
         profileId: profileId,
         storageId: vault.storageId,
-        fromProfileId: vault.profileId,
-        fromDeviceId: vault.deviceId,
         name: value.name,
         password: password,
+        source: {
+          profileId: vault.profileId,
+          deviceId: vault.deviceId,
+        },
         ...(config && { config }),
       })),
   });
