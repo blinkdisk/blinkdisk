@@ -89,11 +89,16 @@ export class Storage extends DurableObject<Cloudflare.Env> {
     if (!data)
       return ws.send(JSON.stringify({ error: "Failed to parse message" }));
 
-    const { data: base, error } = ZCloudBase.safeParse(data);
-    if (error || !base)
+    const {
+      data: base,
+      error: parseError,
+      success: parseSuccess,
+    } = ZCloudBase.safeParse(data);
+
+    if (!parseSuccess)
       return ws.send(
         JSON.stringify({
-          error: error.message || "Failed to validate message",
+          error: parseError.message || "Failed to validate message",
         }),
       );
 

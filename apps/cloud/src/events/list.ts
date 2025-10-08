@@ -6,8 +6,13 @@ export async function listBlobs(
   durableObject: InstanceType<typeof Storage>,
   data: any,
 ) {
-  const { data: payload, error: parseError } = ZCloudListBlobs.safeParse(data);
-  if (parseError || !payload)
+  const {
+    data: payload,
+    error: parseError,
+    success,
+  } = ZCloudListBlobs.safeParse(data);
+
+  if (!success)
     return { error: parseError.message || "Failed to validate payload" };
 
   const res = await durableObject.s3.send(

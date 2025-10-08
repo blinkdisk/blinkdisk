@@ -11,8 +11,13 @@ export async function putBlob(
   storage: DurableObjectStorage,
   space: DurableObjectNamespace<Space>,
 ) {
-  const { data: payload, error: parseError } = ZCloudPutBlob.safeParse(data);
-  if (parseError || !payload)
+  const {
+    data: payload,
+    error: parseError,
+    success,
+  } = ZCloudPutBlob.safeParse(data);
+
+  if (!success)
     return { error: parseError.message || "Failed to validate payload" };
 
   const { error, space: spaceStats } = await consumeSpace(

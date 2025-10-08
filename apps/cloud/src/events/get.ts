@@ -13,8 +13,13 @@ export async function getBlob(
   data: any,
   storage: DurableObjectStorage,
 ) {
-  const { data: payload, error: parseError } = ZCloudGetBlob.safeParse(data);
-  if (parseError || !payload)
+  const {
+    data: payload,
+    error: parseError,
+    success,
+  } = ZCloudGetBlob.safeParse(data);
+
+  if (!success)
     return { error: parseError.message || "Failed to validate payload" };
 
   const fileCache = await getFileCache(storage, payload.key);

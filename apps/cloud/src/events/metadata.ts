@@ -6,9 +6,13 @@ export async function getMetadata(
   durableObject: InstanceType<typeof Storage>,
   data: any,
 ) {
-  const { data: payload, error: parseError } =
-    ZCloudGetMetadata.safeParse(data);
-  if (parseError || !payload)
+  const {
+    data: payload,
+    error: parseError,
+    success,
+  } = ZCloudGetMetadata.safeParse(data);
+
+  if (!success)
     return { error: parseError.message || "Failed to validate payload" };
 
   const res = await durableObject.s3.send(

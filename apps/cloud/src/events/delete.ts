@@ -10,8 +10,13 @@ export async function deleteBlob(
   storage: DurableObjectStorage,
   space: DurableObjectNamespace<Space>,
 ) {
-  const { data: payload, error: parseError } = ZCloudDeleteBlob.safeParse(data);
-  if (parseError || !payload)
+  const {
+    data: payload,
+    error: parseError,
+    success,
+  } = ZCloudDeleteBlob.safeParse(data);
+
+  if (!success)
     return { error: parseError.message || "Failed to validate payload" };
 
   await durableObject.s3.send(
