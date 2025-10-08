@@ -43,7 +43,7 @@ export function FolderPreview({ folder, size, showInfo }: FolderPreviewProps) {
             )}
           >
             {folder ? (
-              folder.name || "Unnamed Folder"
+              folder.name || folder.source.path
             ) : (
               <Skeleton width={100} />
             )}
