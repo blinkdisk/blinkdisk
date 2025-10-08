@@ -10,6 +10,7 @@ import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { tryCatch } from "@utils/try-catch";
+import { usePostHog } from "posthog-js/react";
 import { toast } from "sonner";
 
 export type CreateFolderResponse = Awaited<
@@ -23,6 +24,7 @@ export function useCreateFolder({
   onSuccess: (res: CreateFolderResponse) => void;
   onError?: (error: any) => void;
 }) {
+  const posthog = usePostHog();
   const queryClient = useQueryClient();
 
   const { t } = useAppTranslation("folder.createDialog.success");
@@ -81,6 +83,11 @@ export function useCreateFolder({
       showErrorToast(error);
     },
     onSuccess: async (res) => {
+      posthog.capture("folder_add", {
+        vaultId: res.vaultId,
+        folderId: res.id,
+      });
+
       await queryClient.invalidateQueries({
         queryKey: [accountId, "core", "folder", "list", vaultId],
       });
