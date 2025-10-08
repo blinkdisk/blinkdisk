@@ -28,3 +28,7 @@ Get started in minutes, no tech stills needed. BlinkDisk works out of the box, w
 ### 🌍 Cross-Platform
 
 Whether you're on macOS, Windows, or Linux, BlinkDisk keeps your files safe and synced seamlessly across all your machines.
+
+## Local Development
+
+For information on how to set up a local development environment, check out the [DEVELOPMENT.md](DEVELOPMENT.md) file.
