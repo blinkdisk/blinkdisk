@@ -31,7 +31,7 @@ export const storageRouter = router({
           {
             storageId: storage.id,
           },
-          ctx.env.JWT_PRIVATE_KEY,
+          ctx.env.CLOUD_JWT_PRIVATE_KEY,
         );
       }
 

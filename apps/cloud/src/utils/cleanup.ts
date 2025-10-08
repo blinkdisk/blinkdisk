@@ -113,11 +113,11 @@ export async function cleanup(
     .execute();
 
   const s3 = new S3Client({
-    region: env.S3_REGION,
-    endpoint: env.S3_ENDPOINT,
+    region: env.CLOUD_S3_REGION,
+    endpoint: env.CLOUD_S3_ENDPOINT,
     credentials: {
-      accessKeyId: env.S3_KEY_ID,
-      secretAccessKey: env.S3_KEY_SECRET,
+      accessKeyId: env.CLOUD_S3_KEY_ID,
+      secretAccessKey: env.CLOUD_S3_KEY_SECRET,
     },
   });
 
@@ -129,7 +129,7 @@ export async function cleanup(
     while (true) {
       const res = (await s3.send(
         new ListObjectsCommand({
-          Bucket: env.S3_BUCKET,
+          Bucket: env.CLOUD_S3_BUCKET,
           Prefix: `${storage.id}/`,
           MaxKeys: 1000,
           ...(marker && { Marker: marker }),
@@ -139,7 +139,7 @@ export async function cleanup(
       if (res.Contents?.length) {
         await s3.send(
           new DeleteObjectsCommand({
-            Bucket: env.S3_BUCKET,
+            Bucket: env.CLOUD_S3_BUCKET,
             Delete: {
               Objects: res.Contents.map((c) => ({
                 Key: c.Key,

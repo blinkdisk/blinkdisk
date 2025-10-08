@@ -101,7 +101,7 @@ export const vaultRouter = router({
           {
             storageId,
           },
-          ctx.env.JWT_PRIVATE_KEY,
+          ctx.env.CLOUD_JWT_PRIVATE_KEY,
         );
 
         const stub = (ctx.env.STORAGE as any).getByName(storageId);

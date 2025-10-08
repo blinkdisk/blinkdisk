@@ -18,16 +18,16 @@ export async function pickS3Endpoint(env: Cloudflare.Env) {
     withTimeout("https://www.cloudflare.com/cdn-cgi/trace"),
   );
 
-  if (!res) return env.S3_ENDPOINT;
+  if (!res) return env.CLOUD_S3_ENDPOINT;
 
   let colo = res.match(/^colo=(.+)/m)?.[1] as keyof typeof coloServerMapping;
-  if (!colo) return env.S3_ENDPOINT;
+  if (!colo) return env.CLOUD_S3_ENDPOINT;
 
   let server = coloServerMapping[colo];
-  if (!server) return env.S3_ENDPOINT;
+  if (!server) return env.CLOUD_S3_ENDPOINT;
 
-  const override = env[`S3_${server}_ENDPOINT`];
-  if (!override) return env.S3_ENDPOINT;
+  const override = env[`CLOUD_S3_ENDPOINT_${server}`];
+  if (!override) return env.CLOUD_S3_ENDPOINT;
 
   return override;
 }

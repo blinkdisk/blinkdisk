@@ -18,7 +18,7 @@ export default {
         return new Response("Missing Authorization header", { status: 401 });
 
       const token = header.replace("Bearer ", "");
-      const payload = await verifyServiceToken(token, env.JWT_PUBLIC_KEY);
+      const payload = await verifyServiceToken(token, env.CLOUD_JWT_PUBLIC_KEY);
       if (!payload) return new Response("Invalid token", { status: 401 });
 
       let stub = env.STORAGE.getByName(payload.storageId);

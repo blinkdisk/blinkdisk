@@ -33,7 +33,6 @@
     {
       "binding": "HYPERDRIVE",
       "id": "cb04a4b2f0cc49ea866f4804f7f6910f",
-      "localConnectionString": "postgresql://user:password@localhost:5432/blinkdisk",
     },
   ],
   "unsafe": {

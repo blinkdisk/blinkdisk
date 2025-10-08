@@ -2,10 +2,11 @@
   "name": "@blinkdisk/cloud",
   "type": "module",
   "scripts": {
-    "dev": "cp ../../.env .dev.vars && wrangler dev --port=4001 --inspector-port=4002 --persist-to=../../.wrangler",
+    "dev": "node env.js && wrangler dev --port=4001 --inspector-port=4002 --persist-to=../../.wrangler",
     "deploy": "tsc --noEmit && wrangler deploy --minify",
     "typecheck": "tsc --noEmit",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "typegen": "wrangler types --env-interface CloudflareBindings",
+    "env:update": "node env.js && pnpm run typegen"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.886.0",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
+    "dotenv": "^16.4.7",
     "wrangler": "^4.32.0"
   }
 }

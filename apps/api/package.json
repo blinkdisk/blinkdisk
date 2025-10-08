@@ -4,10 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "cp ../../.env .dev.vars && wrangler dev --port=4000 -c ./wrangler.jsonc -c ../cloud/wrangler.jsonc --persist-to=../../.wrangler",
-    "typecheck": "tsc --noEmit",
+    "dev": "node env.js && wrangler dev --port=4000 -c ./wrangler.jsonc -c ../cloud/wrangler.jsonc --persist-to=../../.wrangler",
     "deploy": "tsc --noEmit && wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "typecheck": "tsc --noEmit",
+    "typegen": "wrangler types --env-interface CloudflareBindings",
+    "env:update": "node env.js && pnpm run typegen"
   },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
@@ -16,6 +17,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.9",
+    "dotenv": "^16.4.7",
     "eslint": "^9.22.0",
     "typescript": "5.8.2",
     "wrangler": "^4.32.0"

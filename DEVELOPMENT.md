@@ -1,8 +1,6 @@
-# 🛠️ Building BlinkDisk
+# 🛠️ BlinkDisk Development Guide
 
 Welcome to the BlinkDisk development guide. This document will help you set up the project locally.
-
-## Option 1: Running BlinkDisk in Development Mode
 
 ### ✅ Prerequisites
 
@@ -12,7 +10,7 @@ Ensure the following tools are installed on your system:
 - **pnpm** `v8.15.7`
 - **Go** `v1.22.2`
 - **PostgreSQL** `v17.4` (available via docker-compose)
-- **GNU Make** `v4.3` (optional, but recommended)
+- **GNU Make** `v4.3`
 
 ### 🚀 Steps
 
@@ -56,9 +54,3 @@ Ensure the following tools are installed on your system:
    ```bash
    pnpm dev
    ```
-
----
-
-## Option 2: Building from Source (Desktop app)
-
-🚧 _This section is currently under construction. Instructions for building BlinkDisk from source will be added soon._

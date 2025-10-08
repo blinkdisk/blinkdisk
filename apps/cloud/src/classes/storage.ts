@@ -24,7 +24,7 @@ export class Storage extends DurableObject<Cloudflare.Env> {
     super(ctx, env);
 
     this.sessions = new Map();
-    this.bucket = env.S3_BUCKET;
+    this.bucket = env.CLOUD_S3_BUCKET;
     this.rateLimit = env.RATE_LIMIT;
 
     this.ctx.getWebSockets().forEach((ws) => {
@@ -39,11 +39,11 @@ export class Storage extends DurableObject<Cloudflare.Env> {
       const endpoint = await pickS3Endpoint(env);
 
       this.s3 = new S3Client({
-        region: env.S3_REGION,
+        region: env.CLOUD_S3_REGION,
         endpoint,
         credentials: {
-          accessKeyId: env.S3_KEY_ID,
-          secretAccessKey: env.S3_KEY_SECRET,
+          accessKeyId: env.CLOUD_S3_KEY_ID,
+          secretAccessKey: env.CLOUD_S3_KEY_SECRET,
         },
       });
 

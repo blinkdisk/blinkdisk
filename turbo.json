@@ -29,6 +29,9 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
+    "env:update": {
+      "dependsOn": ["^env:update"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
