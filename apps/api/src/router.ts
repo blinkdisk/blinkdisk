@@ -1,6 +1,5 @@
 import { configRouter } from "@api/routers/config";
 import { deviceRouter } from "@api/routers/device";
-import { folderRouter } from "@api/routers/folder";
 import { paymentRouter } from "@api/routers/payment";
 import { profileRouter } from "@api/routers/profile";
 import { storageRouter } from "@api/routers/storage";
@@ -13,7 +12,6 @@ export const appRouter = router({
   vault: vaultRouter,
   storage: storageRouter,
   config: configRouter,
-  folder: folderRouter,
   payment: paymentRouter,
 });
 
