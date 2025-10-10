@@ -87,19 +87,24 @@ function RouteComponent() {
         confettiNumber: 100,
       });
 
-      logsnag({
-        channel: "downloads",
-        title: "Download started",
-        description: `${file} just got downloaded.`,
-        icon: "⬇️",
-      });
+      const logged = window.localStorage.getItem("download.logged");
+      if (!logged) {
+        localStorage.setItem("download.logged", "true");
 
-      posthog.capture("download_started", {
-        file,
-        platform,
-        architecture,
-        extension,
-      });
+        logsnag({
+          channel: "downloads",
+          title: "Download started",
+          description: `${file} just got downloaded.`,
+          icon: "⬇️",
+        });
+
+        posthog.capture("download_started", {
+          file,
+          platform,
+          architecture,
+          extension,
+        });
+      }
     },
     [logsnag, platform, architecture, extension, posthog],
   );
