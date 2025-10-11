@@ -197,7 +197,10 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
                   <p className="muted text-muted-foreground mt-2 text-sm">
                     {vault && space ? (
                       t("usedStorage.amount", {
-                        used: formatSize(space.used),
+                        // Show 0B used if less than 20kb
+                        // Users were confused that there was already space used after
+                        // creating an empty vault. Usually a new vault takes around 8kb.
+                        used: formatSize(space.used < 20000 ? 0 : space.used),
                         capacity: formatSize(space.capacity),
                       })
                     ) : (
