@@ -36,12 +36,12 @@ export function useRegister() {
       return data;
     },
     onError: showErrorToast,
-    onSuccess: (_, variables) => {
+    onSuccess: async (_, variables) => {
       toast.success(t("success.title"), {
         description: t("success.description", { email: variables.email }),
       });
 
-      navigate({
+      await navigate({
         to: "/auth/magic",
       });
     },
