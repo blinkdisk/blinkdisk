@@ -1,14 +1,13 @@
 import { useIsMobile } from "@hooks/use-mobile";
 import { useTheme } from "@hooks/use-theme";
 import { GithubIcon } from "@landing/components/icons/github";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import { DownloadIcon } from "lucide-react";
 import logoDark from "../assets/brand/logo-dark.svg";
 import logoLight from "../assets/brand/logo-light.svg";
 
 export function Navigation() {
-  const navigate = useNavigate();
   const mobile = useIsMobile();
 
   const { dark } = useTheme();

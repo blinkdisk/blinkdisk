@@ -1,6 +1,6 @@
+import Legal from "@landing/components/legal";
 import { head } from "@landing/utils/head";
 import { createFileRoute } from "@tanstack/react-router";
-import Legal from "apps/landing/app/components/legal";
 
 export const Route = createFileRoute("/(legal)/privacy")({
   component: RouteComponent,

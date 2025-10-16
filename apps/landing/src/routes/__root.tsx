@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { useThemeListener } from "@hooks/use-theme-listener";
 import globals from "@styles/globals.css?url";
 import inter from "@styles/inter.css?url";
