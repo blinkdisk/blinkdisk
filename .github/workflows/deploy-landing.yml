@@ -32,12 +32,8 @@ jobs:
           LOGSNAG_PUBLIC_KEY: ${{ secrets.LOGSNAG_PUBLIC_KEY }}
         run: pnpm --filter landing build
 
-      - name: Install wrangler
-        run: npm install -g wrangler
-
       - name: Deploy project
-        working-directory: apps/landing
-        run: wrangler pages deploy --branch main
+        run: pnpm --filter landing deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
