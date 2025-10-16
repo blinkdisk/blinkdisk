@@ -30,10 +30,22 @@ export function head({
         property: "og:description",
         content: og?.description || description,
       },
+      {
+        property: "twitter:title",
+        content: og?.title || titleWithName,
+      },
+      {
+        property: "twitter:description",
+        content: og?.description || description,
+      },
       ...(og?.image
         ? [
             {
               property: "og:image",
+              content: `${process.env.LANDING_URL}${og.image}`,
+            },
+            {
+              property: "twitter:image",
               content: `${process.env.LANDING_URL}${og.image}`,
             },
           ]

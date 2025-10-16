@@ -17,6 +17,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Footer } from "../components/footer";
 import { Navigation } from "../components/navigation";
 
+const defaultTitle = "BlinkDisk: Modern backups for absolutely everyone";
+
+const defaultDescription =
+  "BlinkDisk is a modern desktop app that lets you back up all your important files. Just takes a few clicks, no tech skills needed.";
+
+const defaultImage = `${process.env.LANDING_URL}/brand/social.jpg`;
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -28,25 +35,23 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "BlinkDisk: Modern backups for absolutely everyone",
+        title: defaultTitle,
       },
       {
         property: "description",
-        content:
-          "BlinkDisk is a modern desktop app that lets you back up all your important files. Just takes a few clicks, no tech skills needed.",
+        content: defaultDescription,
       },
       {
         property: "og:title",
-        content: "BlinkDisk: Modern backups for absolutely everyone",
+        content: defaultTitle,
       },
       {
         property: "og:description",
-        content:
-          "BlinkDisk is a modern desktop app that lets you back up all your important files. Just takes a few clicks, no tech skills needed.",
+        content: defaultDescription,
       },
       {
         property: "og:image",
-        content: `${process.env.LANDING_URL}/brand/social.jpg`,
+        content: defaultImage,
       },
       {
         property: "og:type",
@@ -59,6 +64,26 @@ export const Route = createRootRoute({
       {
         name: "apple-mobile-web-app-title",
         content: "BlinkDisk",
+      },
+      {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+      {
+        name: "twitter:site",
+        content: "@blinkdisk",
+      },
+      {
+        name: "twitter:title",
+        content: defaultTitle,
+      },
+      {
+        name: "twitter:description",
+        content: defaultDescription,
+      },
+      {
+        name: "twitter:image",
+        content: defaultImage,
       },
     ],
     links: [
