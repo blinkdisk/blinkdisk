@@ -311,7 +311,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           )}
         >
           <p className="opacity-70">Your codebase, by the numbers.</p>
-          <p>{new URL(process.env.LANDING_URL || "").host}/code</p>
+          <p>
+            {new URL(process.env.LANDING_URL || "https://blinkdisk.com").host}
+            /code
+          </p>
         </div>
       </div>
     );
