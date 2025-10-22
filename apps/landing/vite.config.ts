@@ -27,6 +27,7 @@ export default defineConfig({
         LANDING_URL: undefined,
         LOGSNAG_PUBLIC_KEY: undefined,
         POSTHOG_LANDING_KEY: undefined,
+        CRISP_KEY: null,
       },
       {
         loadEnvFiles: false,

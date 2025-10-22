@@ -15,7 +15,8 @@
     "CRON_SECRET",
     "RESEND_API_KEY",
     "RESEND_DOMAIN",
-    "DEV"
+    "DEV",
+    "CRISP_KEY"
   ],
   "tasks": {
     "build": {

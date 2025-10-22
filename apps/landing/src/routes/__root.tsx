@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import { useThemeListener } from "@hooks/use-theme-listener";
+import { Chatbox } from "@landing/components/chatbox";
 import globals from "@styles/globals.css?url";
 import inter from "@styles/inter.css?url";
 import {
@@ -159,6 +160,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <body className="landing">
         {children}
         <Scripts />
+        <Chatbox />
       </body>
     </html>
   );

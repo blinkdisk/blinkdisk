@@ -411,6 +411,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^5.0.4
         version: 5.0.4(vite@7.1.10)
+      crisp-sdk-web:
+        specifier: ^1.0.26
+        version: 1.0.26
       dom-to-image:
         specifier: ^2.6.0
         version: 2.6.0
@@ -8806,6 +8809,10 @@ packages:
       buffer: 5.7.1
     dev: true
     optional: true
+
+  /crisp-sdk-web@1.0.26:
+    resolution: {integrity: sha512-MBK/+tCNJmt/l9ZYHb0cUUaaF02rCKeqLw1cruY/HU48tPOOnhUM0JdvuPaeq1d5VB2DCILY4rGYE4NeJbXvzg==}
+    dev: false
 
   /cross-dirname@0.1.0:
     resolution: {integrity: sha512-+R08/oI0nl3vfPcqftZRpytksBXDzOUveBq/NBVx0sUp1axwzPQrKinNx5yd5sxPu8j1wIy8AfnVQ+5eFdha6Q==}

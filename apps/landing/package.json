@@ -21,6 +21,7 @@
     "@tanstack/react-router": "^1.133.3",
     "@tanstack/react-start": "^1.133.5",
     "@vitejs/plugin-react": "^5.0.4",
+    "crisp-sdk-web": "^1.0.26",
     "dom-to-image": "^2.6.0",
     "dotenv": "^16.4.7",
     "framer-motion": "^12.5.0",
