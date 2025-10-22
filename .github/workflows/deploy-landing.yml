@@ -30,6 +30,7 @@ jobs:
           LANDING_URL: ${{ secrets.LANDING_URL }}
           POSTHOG_LANDING_KEY: ${{ secrets.POSTHOG_LANDING_KEY }}
           LOGSNAG_PUBLIC_KEY: ${{ secrets.LOGSNAG_PUBLIC_KEY }}
+          CRISP_KEY: ${{ secrets.CRISP_KEY }}
         run: pnpm --filter landing build
 
       - name: Deploy project
