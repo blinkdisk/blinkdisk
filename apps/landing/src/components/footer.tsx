@@ -11,7 +11,7 @@ export function Footer() {
       <Link to="/">
         <img
           src={dark ? logoDark : logoLight}
-          className="h-6 select-none sm:h-8"
+          className="sm:!h-7.5 h-6 select-none"
           draggable={false}
         />
       </Link>

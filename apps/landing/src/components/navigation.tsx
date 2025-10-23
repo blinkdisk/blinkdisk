@@ -151,7 +151,7 @@ export function Logo() {
     <Link to="/">
       <img
         src={dark ? logoDark : logoLight}
-        className="ml-1.5 h-5 select-none"
+        className="ml-1.5 h-5 select-none sm:!h-6"
         draggable={false}
       />
     </Link>
