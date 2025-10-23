@@ -37,7 +37,7 @@ function RouteComponent() {
   const [files, setFiles] = useState<CodeStatsFile[]>([]);
 
   return (
-    <div className="sm:pt-50 flex min-h-screen flex-col items-center py-12 sm:pb-20">
+    <div className="py-page flex min-h-screen flex-col items-center">
       <div className="mt-auto"></div>
       {!files.length ? (
         <CodeStatsForm setFiles={setFiles} setRepository={setRepository} />

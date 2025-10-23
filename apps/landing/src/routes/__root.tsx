@@ -139,9 +139,7 @@ function RootComponent() {
             <>
               <Toaster />
               <Navigation />
-              <div className="bg-secondary m-2 rounded-3xl pb-14 sm:m-4">
-                <Outlet />
-              </div>
+              <Outlet />
               <Footer />
             </>
           )}

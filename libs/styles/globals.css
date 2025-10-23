@@ -141,7 +141,9 @@
   ul {
     @apply list-none;
   }
+}
 
+@layer utilities {
   .link-primary {
     @apply text-primary transition-colors hover:opacity-80;
   }
@@ -216,4 +218,35 @@ input[type="number"] {
   -moz-transition: none !important;
   -webkit-transition: none !important;
   transition: none !important;
+}
+
+.w-content {
+  width: 90vw;
+
+  @media (min-width: 68rem) {
+    width: 64rem;
+  }
+}
+
+:root {
+  --page-padding-top: 6em;
+  --page-padding-bottom: 4rem;
+
+  @media (min-width: 64rem) {
+    --page-padding-top: 10rem;
+    --page-padding-bottom: 7.5rem;
+  }
+}
+
+.pt-page {
+  padding-top: var(--page-padding-top);
+}
+
+.pb-page {
+  padding-bottom: var(--page-padding-bottom);
+}
+
+.py-page {
+  padding-top: var(--page-padding-top);
+  padding-bottom: var(--page-padding-bottom);
 }

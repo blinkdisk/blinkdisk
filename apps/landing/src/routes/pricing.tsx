@@ -32,7 +32,7 @@ function RouteComponent() {
   );
 
   return (
-    <div className="flex min-h-screen flex-col items-center py-12 sm:pb-20 sm:pt-40">
+    <div className="py-page flex min-h-screen flex-col items-center">
       <div className="mt-auto"></div>
       <h2 className="text-center text-3xl font-bold tracking-tighter sm:text-[3rem] sm:leading-[3rem]">
         Cloud Storage Pricing

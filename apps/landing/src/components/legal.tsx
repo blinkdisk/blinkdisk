@@ -18,7 +18,7 @@ function childrenToId(children: React.ReactNode) {
 
 export default function Legal({ children }: LegalProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center pb-16 pt-48">
+    <div className="py-page flex min-h-screen flex-col items-center">
       <div className="mt-auto"></div>
       <article className="prose dark:prose-invert md:prose-md max-w-[90vw] md:!max-w-[40rem]">
         <Markdown

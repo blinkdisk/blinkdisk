@@ -19,7 +19,7 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col items-center py-12">
+      <div className="py-30 flex min-h-screen flex-col items-center">
         <div className="mt-auto"></div>
         <div className="flex max-w-[90vw] flex-col items-center">
           <div className="flex size-14 items-center justify-center rounded-xl border border-lime-500/30 bg-lime-500/10 text-lime-600 dark:text-lime-500 [&>svg]:size-6">

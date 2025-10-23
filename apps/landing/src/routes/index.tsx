@@ -3,6 +3,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+import { useIsMobile } from "@hooks/use-mobile";
 import { useTheme } from "@hooks/use-theme";
 import { GithubIcon } from "@landing/components/icons/github";
 import { createFileRoute } from "@tanstack/react-router";
@@ -37,12 +38,13 @@ function Home() {
 }
 
 function Hero() {
+  const mobile = useIsMobile();
   const { dark } = useTheme();
 
   return (
-    <div className="md:pt-50 pt-15 flex flex-col items-center justify-center">
-      <div className="flex max-w-[85vw] flex-col items-center text-center md:max-w-[42rem]">
-        <h1 className="mt-4 text-5xl font-bold leading-tight tracking-tight md:text-6xl">
+    <div className="pt-page flex flex-col items-center justify-center">
+      <div className="flex max-w-[90vw] flex-col items-center text-center md:max-w-[42rem]">
+        <h1 className="mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
           <SplitText>Backup takes minutes,</SplitText>
           <br className="hidden md:block" />
           <SplitText delay={0.2}>but regret lasts forever.</SplitText>
@@ -51,12 +53,12 @@ function Hero() {
           initial={{ opacity: 0, y: "2rem" }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25, delay: 0.5 }}
-          className="text-muted-foreground mt-4 mt-6 text-lg leading-relaxed md:text-xl"
+          className="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed"
         >
           BlinkDisk is a modern desktop app that lets you back up all your
           important files. Just takes a few clicks, no tech skills needed.
         </motion.p>
-        <div className="mt-12 flex items-center gap-3">
+        <div className="mt-8 flex items-center gap-3 sm:mt-12">
           <motion.div
             initial={{ opacity: 0, y: "2rem" }}
             animate={{ opacity: 1, y: 0 }}
@@ -66,7 +68,7 @@ function Hero() {
               as="a"
               href="https://github.com/blinkdisk/blinkdisk"
               target="_blank"
-              size="icon-xl"
+              size={mobile ? "icon-lg" : "icon-xl"}
               variant="outline"
             >
               <GithubIcon />
@@ -82,7 +84,7 @@ function Hero() {
               as="link"
               to="/download"
               className="w-full md:w-auto"
-              size="xl"
+              size={mobile ? "lg" : "xl"}
             >
               <DownloadIcon className="mr-1.5" />
               Download App
@@ -95,7 +97,7 @@ function Hero() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.25, delay: 1 }}
         src={`/screenshots/${dark ? "dark" : "light"}.png`}
-        className="border-background border-6 lg:rounded-4xl mt-24 w-[65rem] max-w-[90vw] rounded-xl shadow sm:rounded-2xl md:rounded-3xl"
+        className="border-background border-6 lg:rounded-4xl w-content mt-16 rounded-xl shadow sm:mt-20 sm:rounded-2xl md:rounded-3xl"
       />
     </div>
   );
@@ -148,8 +150,8 @@ const features = [
 
 function Bento() {
   return (
-    <section className="mb-24 mt-48 w-full">
-      <div className="mx-auto max-w-[80vw] lg:max-w-5xl">
+    <section id="features" className="mt-24 w-full sm:!mt-48">
+      <div className="w-content mx-auto">
         <motion.div
           className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-12"
           initial="hidden"
@@ -161,7 +163,7 @@ function Bento() {
             <motion.div
               key={index}
               className={cn(
-                `bg-background group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-8`,
+                `bg-card group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-8`,
                 index === 0 || index === 3 || index === 4
                   ? "md:col-span-7"
                   : "md:col-span-5",
@@ -242,70 +244,68 @@ export function Faq() {
       initial="hidden"
       whileInView="shown"
       viewport={{ once: true }}
-      className="mx-auto max-w-3xl px-6 py-20 sm:py-32"
+      className="md:!w-2xl w-content mx-auto my-24 px-6 sm:my-48"
     >
-      <div className="mx-auto max-w-4xl">
-        <div className="flex flex-col items-center text-center">
-          <motion.h2
+      <div className="flex flex-col items-center text-center">
+        <motion.h2
+          variants={{
+            hidden: { opacity: 0, y: "2rem" },
+            shown: { opacity: 1, y: "0rem" },
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="text-center text-3xl font-bold tracking-tighter sm:text-[3rem] sm:leading-[3rem]"
+        >
+          Questions & Answers
+        </motion.h2>
+      </div>
+      <dl className="mt-6 flex flex-col gap-2 sm:mt-16 sm:gap-4">
+        {faqs.map((faq, index) => (
+          <motion.div
+            key={faq.question}
             variants={{
-              hidden: { opacity: 0, y: "2rem" },
+              hidden: { opacity: 0, y: "1.5rem" },
               shown: { opacity: 1, y: "0rem" },
             }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="text-center text-3xl font-bold tracking-tighter sm:text-[3rem] sm:leading-[3rem]"
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+              delay: 0.2 + 0.1 * index,
+            }}
           >
-            Questions & Answers
-          </motion.h2>
-        </div>
-        <dl className="mt-6 flex flex-col gap-2 sm:mt-16 sm:gap-4">
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={faq.question}
-              variants={{
-                hidden: { opacity: 0, y: "1.5rem" },
-                shown: { opacity: 1, y: "0rem" },
-              }}
-              transition={{
-                duration: 0.3,
-                ease: "easeInOut",
-                delay: 0.2 + 0.1 * index,
-              }}
-            >
-              <Disclosure as="div" key={faq.question} className="pt-6">
-                {({ open }) => (
-                  <>
-                    <dt>
-                      <DisclosureButton className="text-foreground flex w-full cursor-pointer items-start justify-between text-left">
-                        <p className="text-sm font-medium leading-7 sm:text-base">
-                          {faq.question}
-                        </p>
-                        <div className="ml-6 flex h-7 items-center">
-                          {open ? (
-                            <MinusIcon
-                              className="h-6 w-6 stroke-[1]"
-                              aria-hidden="true"
-                            />
-                          ) : (
-                            <PlusIcon
-                              className="h-6 w-6 stroke-1"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </div>
-                      </DisclosureButton>
-                    </dt>
-                    <DisclosurePanel as="dd" className="mt-2 pr-12">
-                      <p className="text-foreground/80 [&_a]:text-primary text-sm leading-7 sm:text-base">
-                        <Markdown>{faq.answer}</Markdown>
+            <Disclosure as="div" key={faq.question} className="pt-6">
+              {({ open }) => (
+                <>
+                  <dt>
+                    <DisclosureButton className="text-foreground flex w-full cursor-pointer items-start justify-between text-left">
+                      <p className="text-sm font-medium leading-7 sm:text-base">
+                        {faq.question}
                       </p>
-                    </DisclosurePanel>
-                  </>
-                )}
-              </Disclosure>
-            </motion.div>
-          ))}
-        </dl>
-      </div>
+                      <div className="ml-6 flex h-7 items-center">
+                        {open ? (
+                          <MinusIcon
+                            className="h-6 w-6 stroke-[1]"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <PlusIcon
+                            className="h-6 w-6 stroke-1"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </div>
+                    </DisclosureButton>
+                  </dt>
+                  <DisclosurePanel as="dd" className="mt-2 pr-12">
+                    <p className="text-foreground/80 [&_a]:text-primary text-sm leading-7 sm:text-base">
+                      <Markdown>{faq.answer}</Markdown>
+                    </p>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
+          </motion.div>
+        ))}
+      </dl>
     </motion.section>
   );
 }

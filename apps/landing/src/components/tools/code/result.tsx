@@ -252,7 +252,7 @@ type CardProps = {
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ stats, repository, responsive }, ref) => {
     return (
-      <div ref={ref} className="bg-background flex w-full flex-col gap-4 p-6">
+      <div ref={ref} className="bg-secondary flex w-full flex-col gap-4 p-6">
         {repository ? (
           <div className="flex items-center gap-3">
             {repository.provider === "github" ? (
@@ -333,12 +333,7 @@ type StatProps = {
 
 function Stat({ icon, title, description, value, className }: StatProps) {
   return (
-    <div
-      className={cn(
-        "bg-foreground/5 border-foreground/10 rounded-xl border p-6",
-        className,
-      )}
-    >
+    <div className={cn("bg-card rounded-xl border p-6", className)}>
       <p className="text-lg leading-none tracking-tight [&>svg]:mr-1 [&>svg]:inline-block [&>svg]:size-4">
         {icon} {title}
       </p>

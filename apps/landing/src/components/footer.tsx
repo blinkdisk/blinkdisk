@@ -7,15 +7,15 @@ export function Footer() {
   const { dark } = useTheme();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-10 sm:p-12">
+    <div className="bg-secondary flex flex-col items-center justify-center gap-4 border-t p-10 sm:p-12">
       <Link to="/">
         <img
           src={dark ? logoDark : logoLight}
-          className="h-8 select-none"
+          className="h-6 select-none sm:h-8"
           draggable={false}
         />
       </Link>
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-muted-foreground text-center text-xs sm:text-sm">
         © {new Date().getUTCFullYear()} BlinkDisk, All Rights Reserved.
       </p>
       <div className="text-muted-foreground flex items-center gap-4 text-xs">
