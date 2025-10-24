@@ -43,11 +43,9 @@ function Hero() {
 
   return (
     <div className="pt-page flex flex-col items-center justify-center">
-      <div className="flex max-w-[90vw] flex-col items-center text-center md:max-w-[42rem]">
+      <div className="flex max-w-[90vw] flex-col items-center text-center md:max-w-[38rem]">
         <h1 className="mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
-          <SplitText>Backup takes minutes,</SplitText>
-          <br className="hidden md:block" />
-          <SplitText delay={0.2}>but regret lasts forever.</SplitText>
+          <SplitText>The easiest way to backup your files</SplitText>
         </h1>
         <motion.p
           initial={{ opacity: 0, y: "2rem" }}
