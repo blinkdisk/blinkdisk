@@ -95,7 +95,7 @@ function Hero() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.25, delay: 1 }}
         src={`/screenshots/${dark ? "dark" : "light"}.png`}
-        className="border-background border-6 lg:rounded-4xl w-content mt-16 rounded-xl shadow sm:mt-20 sm:rounded-2xl md:rounded-3xl"
+        className="lg:rounded-4xl w-content mt-16 rounded-xl border shadow sm:mt-20 sm:rounded-2xl md:rounded-3xl"
       />
     </div>
   );
