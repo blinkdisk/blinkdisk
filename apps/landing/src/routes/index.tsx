@@ -43,9 +43,11 @@ function Hero() {
 
   return (
     <div className="pt-page flex flex-col items-center justify-center">
-      <div className="flex max-w-[90vw] flex-col items-center text-center md:max-w-[38rem]">
+      <div className="flex max-w-[90vw] flex-col items-center text-center md:max-w-[36rem]">
         <h1 className="mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
-          <SplitText>The easiest way to backup your files</SplitText>
+          <SplitText>Backup your files</SplitText>
+          <br className="hidden sm:block" />
+          <SplitText delay={0.2}>without the hassle</SplitText>
         </h1>
         <motion.p
           initial={{ opacity: 0, y: "2rem" }}
@@ -53,8 +55,9 @@ function Hero() {
           transition={{ duration: 0.25, delay: 0.5 }}
           className="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed"
         >
-          BlinkDisk is a modern desktop app that lets you back up all your
-          important files. Just takes a few clicks, no tech skills needed.
+          BlinkDisk is a desktop application that lets you effortlessly backup
+          all your important files
+          <span className="hidden sm:inline"> with just a few clicks</span>.
         </motion.p>
         <div className="mt-8 flex items-center gap-3 sm:mt-12">
           <motion.div

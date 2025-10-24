@@ -18,10 +18,10 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Footer } from "../components/footer";
 import { Navigation } from "../components/navigation";
 
-const defaultTitle = "BlinkDisk: Modern backups for absolutely everyone";
+const defaultTitle = "BlinkDisk | Backup and secure your files";
 
 const defaultDescription =
-  "BlinkDisk is a modern desktop app that lets you back up all your important files. Just takes a few clicks, no tech skills needed.";
+  "BlinkDisk is a desktop application that lets you effortlessly backup all your important files with just a few clicks.";
 
 const defaultImage = `${process.env.LANDING_URL}/brand/social.jpg`;
 
