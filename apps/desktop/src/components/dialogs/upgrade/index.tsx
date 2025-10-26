@@ -1,4 +1,4 @@
-import { plans } from "@config/plans";
+import { BillingPeriod, Plan, plans } from "@config/plans";
 import { PendingCheckoutDialog } from "@desktop/components/dialogs/pending-checkout";
 import {
   PlanChangeAction,
@@ -10,6 +10,7 @@ import { useSubscription } from "@desktop/hooks/queries/use-subscription";
 import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
+import { usePlanPrices } from "@hooks/use-plan-prices";
 import { Badge } from "@ui/badge";
 import { Button } from "@ui/button";
 import {
@@ -24,8 +25,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
 const currency = "USD";
-
-type BillingPeriod = "YEARLY" | "MONTHLY";
 
 type Change = {
   priceId: string;
@@ -142,7 +141,7 @@ export function UpgradeDialog() {
 }
 
 type PlanProps = {
-  plan: (typeof plans)[number];
+  plan: Plan;
   period: BillingPeriod;
   currency: string;
   groupIndex?: number;
@@ -173,12 +172,10 @@ function Plan({
     onSuccess: ({ url }) => setPending(url),
   });
 
-  const price = useMemo(
-    () =>
-      plan.prices.find(
-        (price) => price.period === period && price.currency === currency,
-      ),
-    [plan, period, currency],
+  const { price, savings, monthlyAmount } = usePlanPrices(
+    plan,
+    period,
+    currency,
   );
 
   const action = useMemo(() => {
@@ -197,30 +194,6 @@ function Plan({
     const bytes = plan.storageGB * 1000 * 1000 * 1000;
     return space.used < bytes;
   }, [plan, action, space]);
-
-  const savings = useMemo(() => {
-    if (period === "MONTHLY" || !price) return null;
-
-    const monthlyPrice = plan.prices.find(
-      (price) => price.period === "MONTHLY" && price.currency === currency,
-    );
-
-    if (!monthlyPrice) return null;
-
-    const original = monthlyPrice.amount;
-    const yearly = original * 12 - price.amount;
-
-    return {
-      original,
-      yearly,
-    };
-  }, [price, period, currency, plan.prices]);
-
-  const monthlyAmount = useMemo(() => {
-    if (!price) return null;
-    if (period === "MONTHLY") return price.amount;
-    return price.amount / 12;
-  }, [price, period]);
 
   if (!price) return null;
   return (

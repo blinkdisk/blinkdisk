@@ -1,26 +1,127 @@
-import { plans } from "@config/plans";
+import { BillingPeriod, plans } from "@config/plans";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
+import { usePlanPrices } from "@hooks/use-plan-prices";
+import { useTheme } from "@hooks/use-theme";
+import { FilesystemIcon } from "@landing/components/icons/filesystem";
+import { NASIcon } from "@landing/components/icons/nas";
+import { S3CompatibleIcon } from "@landing/components/icons/s3-compatible";
+import { SftpIcon } from "@landing/components/icons/sftp";
+import { WebdavIcon } from "@landing/components/icons/webdav";
 import { head } from "@landing/utils/head";
 import { createFileRoute } from "@tanstack/react-router";
 import { Badge } from "@ui/badge";
 import { Button } from "@ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
-import { ArrowLeftIcon, MinusIcon, PlusIcon } from "lucide-react";
+import { cn } from "@utils/class";
+import { ArrowLeftIcon, CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import logoDark from "../assets/brand/logo-dark.svg";
+import logoLight from "../assets/brand/logo-light.svg";
 
 export const Route = createFileRoute("/pricing")({
   component: RouteComponent,
   head: head({
     title: "Pricing",
     description:
-      "The pricing for BlinkDisk Cloud, our managed cloud backup service.",
+      "The plans & pricing for BlinkDisk. All powerful backup features are free, and you only pay for the storage you use.",
   }),
 });
 
-type BillingPeriod = "YEARLY" | "MONTHLY";
+const features = [
+  {
+    title: "Unlimited Storages",
+    description:
+      "Create as many backup locations as you like. No limits, no extra cost.",
+  },
+  {
+    title: "Unlimited Devices",
+    description: "Back up every device you own under a single account.",
+  },
+  {
+    title: "Unlimited Backups",
+    description:
+      "Run automatic or manual backups as often as you want without restrictions.",
+  },
+  {
+    title: "End-to-End Encryption",
+    description:
+      "Your data is encrypted before it leaves your device, ensuring only you can access it.",
+  },
+  {
+    title: "Built-in Compression",
+    description:
+      "Save storage space with built-in intelligent file compression.",
+    hideOnMobile: true,
+  },
+  {
+    title: "Retention Settings",
+    description:
+      "Control how long old backups are kept and automatically prune old ones.",
+  },
+  {
+    title: "File Deduplication",
+    description:
+      "Identical files are stored only once, saving space across all backups and devices.",
+  },
+  {
+    title: "Scheduled Backups",
+    description:
+      "Set BlinkDisk to automatically back up your data on a schedule that fits your workflow.",
+  },
+  {
+    title: "Custom Storage",
+    description:
+      "Use your own cloud provider or self-hosted storage for full control and zero costs.",
+  },
+];
+
+const storageOptions = [
+  {
+    name: "Local Hard Drive",
+    description: "Store backups on your computer",
+    icon: FilesystemIcon,
+  },
+  {
+    name: "Network Attached Storage",
+    description: "Use your home or office NAS",
+    icon: NASIcon,
+  },
+  {
+    name: "S3 Compatible",
+    description: "Any S3-compatible service",
+    icon: S3CompatibleIcon,
+  },
+  {
+    name: "SFTP",
+    description: "Backup to secure SFTP server",
+    icon: SftpIcon,
+  },
+  {
+    name: "WebDAV",
+    description: "Use any WebDAV server",
+    icon: WebdavIcon,
+  },
+  {
+    name: "AWS S3",
+    description: "Reliable storage by AWS",
+    image: "aws-s3.svg",
+  },
+  {
+    name: "Google Cloud Storage",
+    description: "Google Cloud's storage solution",
+    image: "google-cloud-storage.svg",
+  },
+  {
+    name: "Azure Blob Storage",
+    description: "Azure’s cloud storage option",
+    image: "azure-blob-storage.svg",
+  },
+];
+
+const currency = "USD";
 
 function RouteComponent() {
-  const currency = "USD";
+  const { dark } = useTheme();
 
   const [groupIndex, setGroupIndex] = useState(0);
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
@@ -34,59 +135,134 @@ function RouteComponent() {
   return (
     <div className="py-page flex min-h-screen flex-col items-center">
       <div className="mt-auto"></div>
-      <h2 className="text-center text-3xl font-bold tracking-tighter sm:text-[3rem] sm:leading-[3rem]">
-        Cloud Storage Pricing
-      </h2>
-      <p className="text-muted-foreground mt-4 max-w-[80vw] text-center text-sm sm:max-w-lg sm:text-base">
-        BlinkDisk Cloud gives you secure, end-to-end-encrypted backups without
-        the hassle of setup. Simple, transparent pricing.
+      <h1 className="text-primary text-lg font-medium">Plans & Pricing</h1>
+      <p className="mt-2 max-w-[90vw] text-center text-3xl font-bold tracking-tight sm:text-4xl">
+        Get all features for free…
       </p>
-      <Tabs
-        value={period}
-        onValueChange={(to) => setPeriod(to as BillingPeriod)}
-        className="mt-6 sm:!mt-10"
-      >
-        <TabsList>
-          <TabsTrigger className="px-6" value="MONTHLY">
-            Monthly
-          </TabsTrigger>
-          <TabsTrigger className="px-3" value="YEARLY">
-            Yearly
-            <Badge variant="subtle">Save ~25%</Badge>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-      <div className="sm:!mt-18 mt-12 flex flex-row flex-wrap items-center justify-center gap-8">
-        <Plan
-          plan={{
-            id: "free",
-            storageGB: FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000,
-            prices: [],
-            free: true,
-          }}
-          period={period}
-          currency={currency}
-        />
-        {plans
-          .filter((plan) => !plan.group)
-          .map((plan) => (
+      <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm sm:max-w-md">
+        All features of BlinkDisk are free to use and you only pay for the
+        storage you use. Here’s a quick overview of some of the features.
+      </p>
+      <div className="mt-12 grid max-w-[90vw] grid-cols-2 gap-4 md:max-w-5xl md:grid-cols-3 md:gap-8">
+        {features.map((feature) => (
+          <div
+            key={feature.title}
+            className={cn("flex flex-col gap-3 md:flex-row", {
+              "hidden md:flex": feature.hideOnMobile,
+            })}
+          >
+            <CheckIcon className="text-primary mt-1 size-5 min-w-5" />
+            <div className="flex flex-col">
+              <p className="md:text-lg">{feature.title}</p>
+              <p className="text-muted-foreground mt-1 text-xs md:mt-0">
+                {feature.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <h2 className="mt-30 max-w-[90vw] text-center text-3xl font-bold tracking-tight sm:text-4xl">
+        …and only pay for storage.
+      </h2>
+      <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm sm:max-w-md">
+        We let you choose between BlinkDisk Cloud, our managed cloud backup
+        service, or a variety of custom storage providers.
+      </p>
+      <div className="w-content mt-12 flex flex-col items-start gap-20 lg:flex-row">
+        <div className="w-full lg:w-2/3">
+          <div className="flex flex-col items-center justify-between sm:flex-row">
+            <div className="flex items-center gap-3">
+              <img
+                src={dark ? logoDark : logoLight}
+                className="h-6 select-none"
+                draggable={false}
+              />
+              <Badge variant="muted" className="px-2 py-0.5 text-sm">
+                <span className="sr-only">Cloud</span>
+                Cloud
+              </Badge>
+            </div>
+            <Tabs
+              value={period}
+              onValueChange={(to) => setPeriod(to as BillingPeriod)}
+              className="mt-6 sm:mt-0"
+            >
+              <TabsList>
+                <TabsTrigger className="px-6" value="MONTHLY">
+                  Monthly
+                </TabsTrigger>
+                <TabsTrigger className="px-3" value="YEARLY">
+                  Yearly
+                  <Badge variant="subtle">Save ~25%</Badge>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="mt-8 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
             <Plan
-              key={plan.id}
-              plan={plan}
+              plan={{
+                id: "free",
+                storageGB: FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000,
+                prices: [],
+                free: true,
+              }}
               period={period}
               currency={currency}
             />
-          ))}
-        {groupPlan && (
-          <Plan
-            plan={groupPlan}
-            period={period}
-            currency={currency}
-            groupIndex={groupIndex}
-            setGroupIndex={setGroupIndex}
-            maxGroupIndex={groupPlans.length - 1}
-          />
-        )}
+            {plans
+              .filter((plan) => !plan.group)
+              .map((plan) => (
+                <Plan
+                  key={plan.id}
+                  plan={plan}
+                  period={period}
+                  currency={currency}
+                />
+              ))}
+            {groupPlan && (
+              <Plan
+                plan={groupPlan}
+                period={period}
+                currency={currency}
+                groupIndex={groupIndex}
+                setGroupIndex={setGroupIndex}
+                maxGroupIndex={groupPlans.length - 1}
+              />
+            )}
+          </div>
+        </div>
+        <div className="relative flex w-full flex-col items-center lg:w-1/3 lg:items-start">
+          <div className="border-foreground/20 absolute left-0 top-20 hidden h-[calc(100%-5rem)] -translate-x-10 border-l-2 border-dashed lg:block"></div>
+          <h3 className="text-center text-3xl font-bold sm:text-left">
+            Custom Storage
+          </h3>
+          <div className="mt-10 flex flex-col gap-3">
+            {storageOptions.map((storageOption) => (
+              <div
+                key={storageOption.name}
+                className="flex items-center justify-start gap-3"
+              >
+                {storageOption.icon ? (
+                  <storageOption.icon className="mx-1 size-5" />
+                ) : (
+                  <img
+                    src={`/images/providers/${storageOption.image}`}
+                    className="size-7 grayscale"
+                  />
+                )}
+                <div className="flex flex-col">
+                  <p className="text-sm">{storageOption.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {storageOption.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+            <p className="text-muted-foreground mt-2 text-center">
+              …and a lot more.
+            </p>
+          </div>
+        </div>
       </div>
       <div className="mb-auto"></div>
     </div>
@@ -112,41 +288,15 @@ function Plan({
 }: PlanProps) {
   const [contact, setContact] = useState(false);
 
-  const price = useMemo(
-    () =>
-      plan.prices.find(
-        (price) => price.period === period && price.currency === currency,
-      ),
-    [plan, period, currency],
+  const { price, savings, monthlyAmount } = usePlanPrices(
+    plan,
+    period,
+    currency,
   );
-
-  const savings = useMemo(() => {
-    if (period === "MONTHLY" || !price) return null;
-
-    const monthlyPrice = plan.prices.find(
-      (price) => price.period === "MONTHLY" && price.currency === currency,
-    );
-
-    if (!monthlyPrice) return null;
-
-    const original = monthlyPrice.amount;
-    const yearly = original * 12 - price.amount;
-
-    return {
-      original,
-      yearly,
-    };
-  }, [price, period, currency, plan.prices]);
-
-  const monthlyAmount = useMemo(() => {
-    if (!price) return null;
-    if (period === "MONTHLY") return price.amount;
-    return price.amount / 12;
-  }, [price, period]);
 
   if (!price && !plan.free) return null;
   return (
-    <div className="bg-card text-card-foreground h-70 relative flex w-[90%] flex-col justify-between rounded-xl border p-6 sm:!w-72">
+    <div className="bg-card text-card-foreground relative flex flex-col justify-between rounded-xl border p-6">
       <div className="flex flex-col">
         {!contact ? (
           <>
@@ -192,7 +342,7 @@ function Plan({
         )}
       </div>
       {!contact ? (
-        <div className="my-3 flex h-20 flex-col items-start justify-center">
+        <div className="mt-3 flex h-20 flex-col items-start justify-center">
           {savings ? (
             <p className="text-muted-foreground text-sm line-through">
               {savings.original?.toLocaleString(undefined, {
@@ -204,20 +354,16 @@ function Plan({
             </p>
           ) : null}
           <p className="text-2xl font-semibold">
-            {plan.free ? (
-              "100% Free"
-            ) : (
-              <>
-                {monthlyAmount?.toLocaleString(undefined, {
-                  style: "currency",
-                  minimumFractionDigits: 0,
-                  currency,
-                })}
-                <span key={1} className="text-sm font-normal">
-                  /month
-                </span>
-              </>
-            )}
+            <>
+              {(monthlyAmount || 0).toLocaleString(undefined, {
+                style: "currency",
+                minimumFractionDigits: 0,
+                currency,
+              })}
+              <span key={1} className="text-sm font-normal">
+                /month
+              </span>
+            </>
           </p>
           {savings ? (
             <p className="text-primary text-sm">
@@ -232,7 +378,7 @@ function Plan({
           ) : null}
         </div>
       ) : (
-        <div>
+        <div className="my-4">
           <p className="text-lg font-semibold tracking-tight">
             Looking for more storage?
           </p>
@@ -241,17 +387,14 @@ function Plan({
           </p>
         </div>
       )}
-      <div className="mt-2 [&>button]:w-full">
-        {contact ? (
-          <Button onClick={() => window.open("mailto:cloud@blinkdisk.com")}>
-            Contact Us
-          </Button>
-        ) : (
-          <Button as="link" to="/download" variant="outline" className="w-full">
-            Download
-          </Button>
-        )}
-      </div>
+      {contact ? (
+        <Button
+          onClick={() => window.open("mailto:cloud@blinkdisk.com")}
+          className="w-full"
+        >
+          Contact Us
+        </Button>
+      ) : null}
     </div>
   );
 }

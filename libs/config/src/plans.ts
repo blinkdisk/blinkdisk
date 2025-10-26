@@ -1,4 +1,24 @@
-export const plans = [
+export type BillingPeriod = "YEARLY" | "MONTHLY";
+
+export type PlanPrice = {
+  id: string;
+  polarId?: {
+    sandbox: string;
+    production: string;
+  };
+  amount: number;
+  period: BillingPeriod;
+  currency: "USD";
+};
+
+export type Plan = {
+  id: string;
+  storageGB: number;
+  prices: PlanPrice[];
+  group?: boolean;
+};
+
+export const plans: Plan[] = [
   {
     id: "cloud-200-gb",
     storageGB: 200,
@@ -321,4 +341,4 @@ export const plans = [
     ],
     group: true,
   },
-];
+] as const;
