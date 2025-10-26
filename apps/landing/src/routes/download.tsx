@@ -2,6 +2,8 @@ import { LinuxIcon } from "@landing/components/icons/linux";
 import { MacosIcon } from "@landing/components/icons/macos";
 import { WindowsIcon } from "@landing/components/icons/windows";
 import { SmartScreen } from "@landing/components/smartscreen";
+import { useCalendar } from "@landing/hooks/use-calendar";
+import { useClipboard } from "@landing/hooks/use-clipboard";
 import { useLogsnag } from "@landing/hooks/use-logsnag";
 import {
   Architecture,
@@ -12,11 +14,18 @@ import { head } from "@landing/utils/head";
 import { getPlatformFromOS, Platform } from "@landing/utils/platform";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
 import Confetti from "js-confetti";
-import { DownloadIcon } from "lucide-react";
+import { CalendarIcon, CopyIcon, DownloadIcon, ShareIcon } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { UAParser } from "ua-parser-js";
 
 export const Route = createFileRoute("/download")({
@@ -31,7 +40,10 @@ type Extension = "AppImage" | "deb" | "rpm";
 
 function RouteComponent() {
   const posthog = usePostHog();
+
   const { logsnag } = useLogsnag();
+  const { copy } = useClipboard();
+  const { addToCalendar } = useCalendar();
 
   const [platform, setPlatform] = useState<Platform | undefined>(undefined);
   const [architecture, setArchitecture] = useState<Architecture | undefined>(
@@ -48,6 +60,11 @@ function RouteComponent() {
     return { cpu, os };
   }, []);
 
+  const isMobile = useMemo(() => {
+    if (os === null) return false;
+    return os.name === "iOS" || os.name === "Android";
+  }, [os]);
+
   const detectedPlatform = useMemo(() => {
     if (os === null) return null;
     return getPlatformFromOS(os.name);
@@ -59,14 +76,22 @@ function RouteComponent() {
   }, [cpu]);
 
   const autoDownloadFile = useMemo(() => {
-    if (detectedPlatform === null || detectedArchitecture === null) return null;
+    if (
+      detectedPlatform === null ||
+      detectedArchitecture === null ||
+      isMobile === null
+    )
+      return null;
+
+    // Don't automatically download for mobile
+    if (isMobile) return null;
 
     if (detectedPlatform === "windows") return windows.exe;
     if (detectedPlatform === "macos") return mac.dmg;
 
     // Don't automatically download for Linux
     return null;
-  }, [detectedPlatform, detectedArchitecture]);
+  }, [isMobile, detectedPlatform, detectedArchitecture]);
 
   const selectedFile = useMemo(() => {
     if (!platform || !architecture) return null;
@@ -124,6 +149,26 @@ function RouteComponent() {
     onDownloadStart(autoDownloadFile);
   }, [onDownloadStart, autoDownloadFile]);
 
+  const remind = useCallback(
+    (type: "google" | "outlook" | "other") => {
+      const start = new Date();
+      start.setDate(start.getDate() + 1);
+
+      const end = start;
+      end.setHours(end.getHours() + 1);
+
+      addToCalendar({
+        title: "Download BlinkDisk on my desktop",
+        description:
+          "Download the BlinkDisk desktop app from https://blinkdisk.com/download",
+        start,
+        end,
+        type,
+      });
+    },
+    [addToCalendar],
+  );
+
   useEffect(() => {
     if (detectedPlatform) setPlatform(detectedPlatform);
   }, [detectedPlatform]);
@@ -167,6 +212,91 @@ function RouteComponent() {
           <p className="text-muted-foreground mt-2 max-w-80 text-center text-sm">
             If the automatic download didn’t match your device, you can pick the
             correct file below.
+          </p>
+        </>
+      ) : isMobile ? (
+        <>
+          <h1 className="max-w-[90vw] text-center text-4xl font-bold">
+            Download BlinkDisk on your desktop
+          </h1>
+          <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm">
+            We detected that you&apos;re on a mobile device, but BlinkDisk is
+            currently only available on desktop.
+          </p>
+
+          <div className="sm:w-sm mt-12 flex w-[80vw] flex-col items-center gap-4">
+            {"share" in navigator ? (
+              <Button
+                onClick={async () => {
+                  try {
+                    if (!navigator.share || !navigator.canShare)
+                      throw new Error("Share not supported");
+
+                    await navigator.share({
+                      url: window.location.href,
+                    });
+                  } catch {
+                    toast.error("Failed to share image", {
+                      description:
+                        "Please try to manually share this website instead.",
+                    });
+                  }
+                }}
+                className="w-full"
+              >
+                <ShareIcon />
+                Share
+              </Button>
+            ) : null}
+            <div className="flex w-full items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full">
+                    <CalendarIcon />
+                    Remind me
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => remind("google")}>
+                    Google Calendar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => remind("outlook")}>
+                    Outlook
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => remind("other")}>
+                    Other
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                onClick={async () => {
+                  const success = await copy(window.location.href);
+
+                  if (success)
+                    toast.success("Copied link to clipboard", {
+                      description:
+                        "You can now share this link with your desktop device.",
+                    });
+                  else
+                    toast.error("Failed to copy link to clipboard", {
+                      description: "Please try to copy it manually instead.",
+                    });
+                }}
+                variant="outline"
+                className="w-full"
+              >
+                <CopyIcon />
+                Copy link
+              </Button>
+            </div>
+          </div>
+
+          <h2 className="mt-30 text-center text-3xl font-bold sm:text-4xl">
+            Download anyway
+          </h2>
+          <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
+            If you want to download BlinkDisk anyway, please select the correct
+            file for your device below.
           </p>
         </>
       ) : (
@@ -246,7 +376,7 @@ function RouteComponent() {
             download
             onClick={() => onDownloadStart(selectedFile)}
             className="mt-4 w-full"
-            variant={autoDownloadFile ? "outline" : "default"}
+            variant={autoDownloadFile || isMobile ? "outline" : "default"}
           >
             <DownloadIcon />
             Download
