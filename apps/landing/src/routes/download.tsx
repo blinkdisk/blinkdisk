@@ -235,8 +235,12 @@ function RouteComponent() {
                     await navigator.share({
                       url: window.location.href,
                     });
-                  } catch {
-                    toast.error("Failed to share image", {
+
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  } catch (e: any) {
+                    if (e.toString().includes("AbortError")) return;
+
+                    toast.error("Failed to share link", {
                       description:
                         "Please try to manually share this website instead.",
                     });
