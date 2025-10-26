@@ -42,7 +42,7 @@ export async function polarWebhook(
       const plan = plans.find((plan) =>
         plan.prices.find(
           (p) =>
-            p.polarId[
+            p.polarId?.[
               c.env.POLAR_ENVIRONMENT === "sandbox" ? "sandbox" : "production"
             ] === subscription.productId,
         ),
@@ -50,7 +50,7 @@ export async function polarWebhook(
 
       const price = plan?.prices.find(
         (p) =>
-          p.polarId[
+          p.polarId?.[
             c.env.POLAR_ENVIRONMENT === "sandbox" ? "sandbox" : "production"
           ] === subscription.productId,
       );

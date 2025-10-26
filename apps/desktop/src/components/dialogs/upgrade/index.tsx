@@ -1,4 +1,4 @@
-import { BillingPeriod, Plan, plans } from "@config/plans";
+import { BillingPeriod, Plan as PlanType, plans } from "@config/plans";
 import { PendingCheckoutDialog } from "@desktop/components/dialogs/pending-checkout";
 import {
   PlanChangeAction,
@@ -141,7 +141,7 @@ export function UpgradeDialog() {
 }
 
 type PlanProps = {
-  plan: Plan;
+  plan: PlanType;
   period: BillingPeriod;
   currency: string;
   groupIndex?: number;

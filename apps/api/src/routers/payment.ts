@@ -26,7 +26,7 @@ export const paymentRouter = router({
       if (!plan) throw new CustomError("PRICE_NOT_FOUND");
 
       const price = plan.prices.find((p) => p.id === input.priceId);
-      if (!price) throw new CustomError("PRICE_NOT_FOUND");
+      if (!price || !price.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
       const account = await ctx.db
         .selectFrom("Account")
@@ -145,7 +145,7 @@ export const paymentRouter = router({
       if (!plan) throw new CustomError("PRICE_NOT_FOUND");
 
       const price = plan.prices.find((p) => p.id === input.priceId);
-      if (!price) throw new CustomError("PRICE_NOT_FOUND");
+      if (!price || !price.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
       const current = await getActiveSubscription(ctx.account?.id!, ctx.db)
         .select(["id", "priceId", "polarSubscriptionId"])
