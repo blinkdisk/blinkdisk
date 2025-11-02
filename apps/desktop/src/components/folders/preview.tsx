@@ -1,8 +1,8 @@
-import { EmojiCard } from "@desktop/components/folders/emoji-card";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { formatInt, formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { CircularProgress } from "@ui/circular-progress";
+import { EmojiCard } from "@ui/emoji-card";
 import { Loader } from "@ui/loader";
 import { Skeleton } from "@ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";

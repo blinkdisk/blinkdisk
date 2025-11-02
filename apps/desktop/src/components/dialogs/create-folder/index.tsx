@@ -1,4 +1,3 @@
-import { EmojiCard } from "@desktop/components/folders/emoji-card";
 import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
@@ -14,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@ui/dialog";
+import { EmojiCard } from "@ui/emoji-card";
 import { EmojiPicker } from "@ui/emoji-picker";
 import { CircleFadingArrowUpIcon, PlusIcon } from "lucide-react";
 import { useCallback, useState } from "react";

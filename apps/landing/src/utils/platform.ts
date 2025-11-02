@@ -1,6 +1,6 @@
 export type Platform = "macos" | "windows" | "linux";
 
-export function getPlatformFromOS(os: string | undefined): Platform {
+export function getPlatformFromOS(os: string | undefined): Platform | null {
   if (os === "macOS") return "macos";
 
   if (
@@ -35,5 +35,6 @@ export function getPlatformFromOS(os: string | undefined): Platform {
   )
     return "linux";
 
-  return "windows";
+  if (os?.includes("Windows")) return "windows";
+  return null;
 }

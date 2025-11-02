@@ -3,6 +3,7 @@ import { useThemeListener } from "@hooks/use-theme-listener";
 import { Chatbox } from "@landing/components/chatbox";
 import globals from "@styles/globals.css?url";
 import inter from "@styles/inter.css?url";
+import mono from "@styles/mono.css?url";
 import {
   createRootRoute,
   HeadContent,
@@ -90,6 +91,7 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: globals },
       { rel: "stylesheet", href: inter },
+      { rel: "stylesheet", href: mono },
       {
         rel: "icon",
         type: "image/png",

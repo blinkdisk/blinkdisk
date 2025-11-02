@@ -18,12 +18,12 @@ import logoLight from "../assets/brand/logo-light.svg";
 const links = [
   { href: "/pricing", label: "Pricing" },
   {
-    label: "Features",
-    href: "/#features",
+    label: "How it Works",
+    href: "/#solution",
   },
   {
-    label: "Q & A",
-    href: "/#faqs",
+    label: "Features",
+    href: "/#features",
   },
 ];
 

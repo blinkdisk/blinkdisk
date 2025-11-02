@@ -1,9 +1,9 @@
-import { EmojiCard } from "@desktop/components/folders/emoji-card";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
+import { EmojiCard } from "@ui/emoji-card";
 import { EmojiPicker } from "@ui/emoji-picker";
 import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";

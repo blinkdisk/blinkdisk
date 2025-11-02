@@ -5,13 +5,14 @@ import { SmartScreen } from "@landing/components/smartscreen";
 import { useCalendar } from "@landing/hooks/use-calendar";
 import { useClipboard } from "@landing/hooks/use-clipboard";
 import { useLogsnag } from "@landing/hooks/use-logsnag";
+import { usePlatform } from "@landing/hooks/use-platform";
 import {
   Architecture,
   getArchitectureFromCpu,
 } from "@landing/utils/architecture";
 import { getDownloadUrl, linux, mac, windows } from "@landing/utils/downloads";
 import { head } from "@landing/utils/head";
-import { getPlatformFromOS, Platform } from "@landing/utils/platform";
+import { Platform } from "@landing/utils/platform";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import {
@@ -26,7 +27,6 @@ import { CalendarIcon, CopyIcon, DownloadIcon, ShareIcon } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { UAParser } from "ua-parser-js";
 
 export const Route = createFileRoute("/download")({
   component: RouteComponent,
@@ -44,31 +44,13 @@ function RouteComponent() {
   const { logsnag } = useLogsnag();
   const { copy } = useClipboard();
   const { addToCalendar } = useCalendar();
+  const { platform: detectedPlatform, cpu, isMobile } = usePlatform();
 
   const [platform, setPlatform] = useState<Platform | undefined>(undefined);
   const [architecture, setArchitecture] = useState<Architecture | undefined>(
     undefined,
   );
   const [extension, setExtension] = useState<Extension | undefined>("AppImage");
-
-  const { cpu, os } = useMemo(() => {
-    if (typeof window === "undefined") return { cpu: null, os: null };
-
-    const userAgent = window.navigator.userAgent;
-    const { cpu, os } = UAParser(userAgent);
-
-    return { cpu, os };
-  }, []);
-
-  const isMobile = useMemo(() => {
-    if (os === null) return false;
-    return os.name === "iOS" || os.name === "Android";
-  }, [os]);
-
-  const detectedPlatform = useMemo(() => {
-    if (os === null) return null;
-    return getPlatformFromOS(os.name);
-  }, [os]);
 
   const detectedArchitecture = useMemo(() => {
     if (cpu === null) return null;
@@ -86,11 +68,12 @@ function RouteComponent() {
     // Don't automatically download for mobile
     if (isMobile) return null;
 
-    if (detectedPlatform === "windows") return windows.exe;
     if (detectedPlatform === "macos") return mac.dmg;
-
     // Don't automatically download for Linux
-    return null;
+    if (detectedPlatform === "linux") return null;
+
+    // Default to Windows
+    return windows.exe;
   }, [isMobile, detectedPlatform, detectedArchitecture]);
 
   const selectedFile = useMemo(() => {
@@ -171,6 +154,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (detectedPlatform) setPlatform(detectedPlatform);
+    else setPlatform("windows");
   }, [detectedPlatform]);
 
   useEffect(() => {

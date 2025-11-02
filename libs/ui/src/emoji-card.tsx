@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { emojiToHue } from "@config/emoji";
 import { cn } from "@utils/class";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Twemoji from "react-twemoji";
 import { parse } from "twemoji-parser";
 
@@ -10,29 +10,26 @@ export type EmojiCardProps = {
   className?: string;
 };
 
+const defaultColor = "0deg 0% 39%";
+
 export function EmojiCard({
   emoji = "📁",
   className,
   size = "md",
 }: EmojiCardProps) {
-  const { data: emojiToColor } = useQuery({
-    queryKey: ["emoji"],
-    queryFn: async () => {
-      return (await import("@desktop/lib/emoji")).emojiToColor as any;
-    },
-  });
+  useEffect(() => {}, []);
 
   const color = useMemo(() => {
-    if (!emojiToColor) return "100, 100, 100";
+    if (!emojiToHue) return defaultColor;
 
     const parsed = parse(emoji, {
       buildUrl: (code) => code,
     });
 
-    return parsed?.length && emojiToColor[parsed[0]?.url || ""]
-      ? emojiToColor[parsed[0]?.url || ""]
-      : "100, 100, 100";
-  }, [emojiToColor, emoji]);
+    return parsed?.length && emojiToHue[parsed[0]?.url || ""]
+      ? `${emojiToHue[parsed[0]?.url || ""]}deg 100% 60%`
+      : defaultColor;
+  }, [emoji]);
 
   return (
     <div
@@ -40,8 +37,8 @@ export function EmojiCard({
     >
       <div
         style={{
-          background: `rgba(${color}, 0.15)`,
-          borderColor: `rgba(${color}, 0.1)`,
+          background: `hsl(${color} / 0.15)`,
+          borderColor: `hsl(${color} / 0.1)`,
         }}
         className={cn(
           // The twemoji library seems to add an empty string for some emojis, which

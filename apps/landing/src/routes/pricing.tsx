@@ -77,7 +77,7 @@ const features = [
 
 const storageOptions = [
   {
-    name: "Local Hard Drive",
+    name: "Local Drives",
     description: "Store backups on your computer",
     icon: FilesystemIcon,
   },
@@ -104,7 +104,7 @@ const storageOptions = [
   {
     name: "AWS S3",
     description: "Reliable storage by AWS",
-    image: "aws-s3.svg",
+    image: "aws.svg",
   },
   {
     name: "Google Cloud Storage",
@@ -140,8 +140,8 @@ function RouteComponent() {
         Get all features for free…
       </p>
       <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm sm:max-w-md">
-        All features of BlinkDisk are free to use and you only pay for the
-        storage you use. Here’s a quick overview of some of the features.
+        All BlinkDisk features are completely free, you only pay for the storage
+        you use. Here’s a quick look at what’s included.
       </p>
       <div className="mt-12 grid max-w-[90vw] grid-cols-2 gap-4 md:max-w-5xl md:grid-cols-3 md:gap-8">
         {features.map((feature) => (
@@ -162,11 +162,11 @@ function RouteComponent() {
         ))}
       </div>
       <h2 className="mt-30 max-w-[90vw] text-center text-3xl font-bold tracking-tight sm:text-4xl">
-        …and only pay for storage.
+        …and backup anywhere.
       </h2>
       <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm sm:max-w-md">
-        We let you choose between BlinkDisk Cloud, our managed cloud backup
-        service, or a variety of custom storage providers.
+        We let you choose between BlinkDisk Cloud (our managed cloud backup
+        service) or a variety of custom storage providers.
       </p>
       <div className="w-content mt-12 flex flex-col items-start gap-20 lg:flex-row">
         <div className="w-full lg:w-2/3">
