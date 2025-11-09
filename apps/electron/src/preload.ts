@@ -25,6 +25,7 @@ import type {
   AccountStorageSchema,
   GlobalStorageSchema,
 } from "@electron/store";
+import type { UpdateStatus } from "@electron/updater";
 import type { getVault, Vault } from "@electron/vault";
 import {
   contextBridge,
@@ -39,6 +40,20 @@ import {
 
 ipcRenderer.setMaxListeners(240);
 
+function listener<Payload>(event: string) {
+  return (callback: (payload: Payload) => void) => {
+    function handler(_: IpcRendererEvent, payload: Payload) {
+      callback(payload);
+    }
+
+    ipcRenderer.on(event, handler);
+
+    return () => {
+      ipcRenderer.off(event, handler);
+    };
+  };
+}
+
 const api = {
   window: {
     reload: () => ipcRenderer.send("window.reload"),
@@ -51,29 +66,17 @@ const api = {
         | `accounts.${string}.${keyof AccountStorageSchema}`,
     ) => ipcRenderer.sendSync("store.get", key) as unknown,
     set: setStorage,
-    change: {
-      on: (callback: () => void) => ipcRenderer.on("store.change", callback),
-      off: (callback: () => void) => ipcRenderer.off("store.change", callback),
-    },
+    change: listener<void>("store.change"),
     clear: () => ipcRenderer.invoke("store.clear") as Promise<void>,
   },
   space: {
-    update: {
-      on: (
-        callback: (
-          e: IpcRendererEvent,
-          payload: {
-            vaultId: string;
-            space: {
-              used: number;
-              capacity: number;
-            };
-          },
-        ) => void,
-      ) => ipcRenderer.on("space.update", callback),
-      off: (callback: (...args: any) => void) =>
-        ipcRenderer.off("space.update", callback),
-    },
+    update: listener<{
+      vaultId: string;
+      space: {
+        used: number;
+        capacity: number;
+      };
+    }>("space.update"),
   },
   zoom: (level: number) => webFrame.setZoomFactor(level),
   os: {
@@ -190,17 +193,16 @@ const api = {
     },
   },
   deeplink: {
-    open: {
-      on: (
-        callback: (e: IpcRendererEvent, payload: { event: string }) => void,
-      ) => ipcRenderer.on("deeplink.open", callback),
-      off: (callback: (...args: any) => void) =>
-        ipcRenderer.off("deeplink.open", callback),
-    },
+    open: listener<{ event: string }>("deeplink.open"),
   },
   ssh: {
     keyscan: (form: Parameters<typeof sshKeyscan>[0]) =>
       ipcRenderer.invoke("ssh.keyscan", form) as ReturnType<typeof sshKeyscan>,
+  },
+  update: {
+    change: listener<UpdateStatus>("update.available"),
+    status: () => ipcRenderer.invoke("update.status") as Promise<UpdateStatus>,
+    install: () => ipcRenderer.invoke("update.install") as Promise<void>,
   },
 };
 

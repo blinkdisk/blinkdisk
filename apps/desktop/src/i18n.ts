@@ -33,6 +33,7 @@ i18n.loadNamespaces([
   "directory",
   "backup",
   "subscription",
+  "update",
 ]);
 
 export const dateLocales = {

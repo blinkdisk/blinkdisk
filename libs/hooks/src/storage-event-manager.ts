@@ -31,7 +31,7 @@ export class StorageEventManager {
         });
       };
 
-      window.electron!.store.change.on(callback);
+      window.electron!.store.change(callback);
     } else {
       const handleStorageChange = () => {
         StorageEventManager.subscribers.forEach((callback) => callback());

@@ -24,6 +24,7 @@ export function createWindow() {
   if (!app.isPackaged) window.webContents.openDevTools();
 
   window.setMenu(null);
+
   window.loadURL(
     app.isPackaged ? "blinkdiskapp://frontend" : "http://localhost:5173",
   );
@@ -31,7 +32,6 @@ export function createWindow() {
   window.webContents.setWindowOpenHandler(({ url: rawUrl }) => {
     const url = new URL(rawUrl);
 
-    console.log(rawUrl);
     if (
       url.protocol === "blinkdiskapp:" ||
       (url.hostname === "localhost" && url.port === "5173")
@@ -56,7 +56,9 @@ export function focusWindow() {
   if (window.isMinimized()) window.restore();
   window.focus();
 }
+
 export function sendWindow(channel: string, payload?: object) {
   if (!window || window.isDestroyed()) return;
+
   window.webContents.send(channel, payload);
 }
