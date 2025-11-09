@@ -2,11 +2,12 @@ import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/aler
 import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
 import { useSftpForm } from "@desktop/hooks/forms/providers/use-sftp-form";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
-import { useStore } from "@hooks/use-app-form";
+import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZSftpConfigType } from "@schemas/providers";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
-import { AlertTriangleIcon } from "lucide-react";
+import { Button } from "@ui/button";
+import { useCallback, useContext } from "react";
+import { toast } from "sonner";
 
 export type SftpFormProps = {
   action: VaultAction;
@@ -22,6 +23,7 @@ export function SftpForm({
   storageId,
 }: SftpFormProps) {
   const { t } = useAppTranslation("vault.providers.SFTP.fields");
+  const disabledContext = useContext(FormDisabledContext);
 
   const form = useSftpForm({
     action,
@@ -31,6 +33,19 @@ export function SftpForm({
   });
 
   const values = useStore(form.store, (store) => store.values);
+
+  const scan = useCallback(async () => {
+    const result = await window.electron.ssh.keyscan(values);
+
+    if (result.error)
+      return toast.error(t(`knownHosts.scan.error.${result.error}.title`), {
+        description: t(`knownHosts.scan.error.${result.error}.description`),
+      });
+
+    form.setFieldValue("knownHosts", result.output || "");
+
+    toast.success(t("knownHosts.scan.success"));
+  }, [values, form, t]);
 
   return (
     <form
@@ -81,37 +96,34 @@ export function SftpForm({
           />
         )}
       </form.AppField>
-
-      <form.AppField name="knownHosts">
+      <form.AppField name="privateKey">
         {(field) => (
           <field.Text
-            label={{ title: t("knownHosts.label"), required: true }}
-            placeholder={t("knownHosts.placeholder")}
+            label={{ title: t("privateKey.label") }}
+            placeholder={t("privateKey.placeholder")}
             as="textarea"
             className="min-h-24"
           />
         )}
       </form.AppField>
-      {action !== "UPDATE" ? (
-        <Alert variant="warn">
-          <AlertTitle>
-            <AlertTriangleIcon className="mb-0.5 mr-2 inline-block size-3.5" />
-            {t("knownHosts.warning.title")}
-          </AlertTitle>
-          <AlertDescription className="text-xs">
-            {t("knownHosts.warning.description")}
-            <code className="inline-block">{`ssh-keyscan -t ecdsa${values.port !== 22 ? ` -p ${values.port}` : ""} ${values.host || "[host]"}`}</code>
-          </AlertDescription>
-        </Alert>
-      ) : null}
-      <form.AppField name="privateKey">
+      <form.AppField name="knownHosts">
         {(field) => (
-          <field.Text
-            label={{ title: t("privateKey.label"), required: true }}
-            placeholder={t("privateKey.placeholder")}
-            as="textarea"
-            className="min-h-24"
-          />
+          <div className="flex flex-col gap-3">
+            <field.Text
+              label={{ title: t("knownHosts.label"), required: true }}
+              placeholder={t("knownHosts.placeholder")}
+              as="textarea"
+              className="min-h-24"
+            />
+            <Button
+              variant="outline"
+              disabled={disabledContext}
+              onClick={() => scan()}
+              type="button"
+            >
+              {t("knownHosts.scan.button")}
+            </Button>
+          </div>
         )}
       </form.AppField>
       <CreateVaultAlerts form={form} action={action} />

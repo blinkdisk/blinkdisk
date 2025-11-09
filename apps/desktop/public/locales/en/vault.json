@@ -341,11 +341,21 @@
           "placeholder": "Paste private key content"
         },
         "knownHosts": {
-          "label": "Known Hosts Data",
+          "label": "Known Hosts Entry",
           "placeholder": "Paste known_hosts content",
-          "warning": {
-            "title": "ECDSA format required",
-            "description": "The entry inside known_hosts currently must be in ecdsa-sha2-nistp256 format. You can run this command to retrieve it:"
+          "scan": {
+            "button": "Scan and fill",
+            "error": {
+              "KEYSCAN_NOT_INSTALLED": {
+                "title": "ssh-keyscan is not installed",
+                "description": "Please manually fill the known hosts field."
+              },
+              "SCAN_FAILED": {
+                "title": "Failed to scan with ssh-keyscan",
+                "description": "Please check your specified host and port."
+              }
+            },
+            "success": "Known hosts scanned successfully"
           }
         }
       }

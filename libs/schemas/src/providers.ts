@@ -73,7 +73,7 @@ export const ZSftpConfig = z.object({
   port: z.number().int().positive(),
   path: z.string().min(1).max(4096),
   password: z.string().max(128).optional(),
-  privateKey: z.string().min(1).max(10000),
+  privateKey: z.string().max(10000).optional(),
   knownHosts: z.string().min(1).max(10000),
 });
 
