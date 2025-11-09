@@ -137,7 +137,7 @@ importers:
         specifier: ^5.69.0
         version: 5.69.0(react@19.0.0)
       '@tanstack/react-router':
-        specifier: ^1.134.20
+        specifier: ^1.131.7
         version: 1.134.20(react-dom@19.0.0)(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.21.3
