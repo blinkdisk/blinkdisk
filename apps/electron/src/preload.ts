@@ -20,6 +20,7 @@ import {
   restoreMultiple,
   restoreSingle,
 } from "@electron/restore";
+import type { sshKeyscan } from "@electron/ssh";
 import type {
   AccountStorageSchema,
   GlobalStorageSchema,
@@ -196,6 +197,10 @@ const api = {
       off: (callback: (...args: any) => void) =>
         ipcRenderer.off("deeplink.open", callback),
     },
+  },
+  ssh: {
+    keyscan: (form: Parameters<typeof sshKeyscan>[0]) =>
+      ipcRenderer.invoke("ssh.keyscan", form) as ReturnType<typeof sshKeyscan>,
   },
 };
 
