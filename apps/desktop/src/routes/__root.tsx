@@ -1,6 +1,7 @@
 import { Devtools } from "@desktop/components/devtools";
 import { OfflineDialog } from "@desktop/components/offline-dialog";
-import { useDeeplinkOpen } from "@desktop/hooks/use-deeplink-open";
+import { Update } from "@desktop/components/update";
+import { useDeeplinkListener } from "@desktop/hooks/use-deeplink-listener";
 import { useShortcutListener } from "@desktop/hooks/use-shortcut-listener";
 import "@desktop/i18n";
 import { useThemeListener } from "@hooks/use-theme-listener";
@@ -22,7 +23,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   useThemeListener();
   useShortcutListener();
-  useDeeplinkOpen();
+  useDeeplinkListener();
 
   return (
     <SidebarProvider>
@@ -46,10 +47,12 @@ function RootComponent() {
         <PostHogErrorBoundary>
           <QueryClientProvider client={queryClient}>
             <SkeletonTheme>
-              <Outlet />
-              <Devtools />
-              <Toaster />
-              <OfflineDialog />
+              <Update>
+                <Outlet />
+                <Devtools />
+                <Toaster />
+                <OfflineDialog />
+              </Update>
             </SkeletonTheme>
           </QueryClientProvider>
         </PostHogErrorBoundary>

@@ -1,0 +1,11 @@
+{
+  "title": "There's a new update!",
+  "description": "A new version of BlinkDisk is available. Upgrade now to get the latest features and bug fixes.",
+  "restart": "Restart",
+  "downloading": "Downloading update...",
+  "error": {
+    "title": "Failed to update automatically",
+    "description": "An error occurred while trying to update. Please download the update manually using the button below."
+  },
+  "manual": "Download manually"
+}

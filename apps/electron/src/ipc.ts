@@ -21,6 +21,7 @@ import {
 import { openBrowser } from "@electron/shell";
 import { sshKeyscan } from "@electron/ssh";
 import { store } from "@electron/store";
+import { getUpdateStatus, installUpdate } from "@electron/updater";
 import { getVault, Vault } from "@electron/vault";
 import { window } from "@electron/window";
 import { app, dialog, ipcMain, shell } from "electron";
@@ -81,7 +82,7 @@ ipcMain.handle("config.cache", (_, payload) => setConfigCache(payload));
 ipcMain.handle("shell.open.file", (_, url) => shell.showItemInFolder(url));
 ipcMain.handle("shell.open.folder", (_, url) => shell.openPath(url));
 ipcMain.handle("shell.open.browser", (_, url) => openBrowser(url));
-
 ipcMain.handle("fs.folderSize", (_, path) => folderSize(path));
-
 ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
+ipcMain.handle("update.status", (_) => getUpdateStatus());
+ipcMain.handle("update.install", (_) => installUpdate());
