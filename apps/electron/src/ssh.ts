@@ -1,5 +1,5 @@
 import type { ZSftpConfigType } from "@schemas/providers";
-import { execFile } from "child_process";
+import { execFile, ExecFileException } from "child_process";
 
 export function sshKeyscan(form: ZSftpConfigType) {
   return new Promise<{ error?: string; output?: string }>((res) => {
@@ -13,9 +13,11 @@ export function sshKeyscan(form: ZSftpConfigType) {
         {
           timeout: 30_000,
           maxBuffer: 200 * 1024,
-          env: { PATH: process.env.PATH ?? "" },
+          env: {
+            PATH: (process.env as any).PATH ?? "",
+          } as any,
         },
-        (err, stdout, stderr) => {
+        (err: ExecFileException | null, stdout: string, stderr: string) => {
           if (err || stderr) return res({ error: "SCAN_FAILED" });
           res({ output: stdout });
         },

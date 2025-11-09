@@ -250,11 +250,3 @@ input[type="number"] {
   padding-top: var(--page-padding-top);
   padding-bottom: var(--page-padding-bottom);
 }
-
-body.landing:not(.dark) {
-  background-image: url("/images/noise-light.png");
-}
-
-body.landing.dark {
-  background-image: url("/images/noise-dark.png");
-}
