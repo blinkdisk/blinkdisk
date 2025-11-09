@@ -1,4 +1,5 @@
 import { Devtools } from "@desktop/components/devtools";
+import { DefaultErrorPage } from "@desktop/components/errors/default";
 import { OfflineDialog } from "@desktop/components/offline-dialog";
 import { Update } from "@desktop/components/update";
 import { useDeeplinkListener } from "@desktop/hooks/use-deeplink-listener";
@@ -44,7 +45,7 @@ function RootComponent() {
           },
         }}
       >
-        <PostHogErrorBoundary>
+        <PostHogErrorBoundary fallback={DefaultErrorPage}>
           <QueryClientProvider client={queryClient}>
             <SkeletonTheme>
               <Update>
