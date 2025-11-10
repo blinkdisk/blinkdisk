@@ -36,6 +36,7 @@ import {
   SaveDialogOptions,
   SaveDialogReturnValue,
   webFrame,
+  webUtils,
 } from "electron";
 
 ipcRenderer.setMaxListeners(240);
@@ -88,6 +89,8 @@ const api = {
   path: {
     basename: (path: string) =>
       ipcRenderer.invoke("path.basename", path) as Promise<string>,
+    dirname: (path: string) =>
+      ipcRenderer.invoke("path.dirname", path) as Promise<string>,
   },
   dialog: {
     open: (options: OpenDialogOptions) =>
@@ -112,6 +115,9 @@ const api = {
   fs: {
     folderSize: (path: string) =>
       ipcRenderer.invoke("fs.folderSize", path) as Promise<number>,
+    isDirectory: (path: string) =>
+      ipcRenderer.invoke("fs.isDirectory", path) as Promise<boolean>,
+    getPathFromFile: (file: File) => webUtils.getPathForFile(file),
   },
   vault: {
     validate: (payload: Parameters<typeof Vault.validate>[0]) =>

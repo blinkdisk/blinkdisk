@@ -16,11 +16,18 @@ import {
 import { EmojiCard } from "@ui/emoji-card";
 import { EmojiPicker } from "@ui/emoji-picker";
 import { CircleFadingArrowUpIcon, PlusIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function CreateFolderDialog() {
   const { t } = useAppTranslation("folder.createDialog");
-  const { isOpen, setIsOpen } = useCreateFolderDialog();
+
+  const {
+    isOpen,
+    setIsOpen,
+    defaultValues: dialogDefaultValues,
+    clearDefaultValues,
+  } = useCreateFolderDialog();
+
   const { openUpgradeDialog } = useUpgradeDialog();
   const { language } = useAppTranslation();
 
@@ -50,7 +57,23 @@ export function CreateFolderDialog() {
 
   const reset = useCallback(() => {
     form.reset();
-  }, [form]);
+    clearDefaultValues();
+  }, [form, clearDefaultValues]);
+
+  // Apply default values when dialog opens
+  useEffect(() => {
+    if (isOpen && dialogDefaultValues) {
+      if (dialogDefaultValues.path) {
+        form.setFieldValue("path", dialogDefaultValues.path);
+      }
+      if (dialogDefaultValues.name) {
+        form.setFieldValue("name", dialogDefaultValues.name);
+      }
+      if (dialogDefaultValues.emoji) {
+        form.setFieldValue("emoji", dialogDefaultValues.emoji);
+      }
+    }
+  }, [isOpen, dialogDefaultValues, form]);
 
   return (
     <>
