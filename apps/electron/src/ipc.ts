@@ -4,7 +4,7 @@ import {
   setVaultCache,
 } from "@electron/cache";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
-import { folderSize } from "@electron/fs";
+import { folderSize, isDirectory } from "@electron/fs";
 import {
   comparePassword,
   getPasswordCache,
@@ -27,7 +27,7 @@ import { window } from "@electron/window";
 import { app, dialog, ipcMain, shell } from "electron";
 import { machineIdSync } from "node-machine-id";
 import { hostname, platform, userInfo } from "node:os";
-import { basename, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 
 ipcMain.on("window.console", () => window?.webContents.toggleDevTools());
 ipcMain.on("window.reload", () => window?.reload());
@@ -39,6 +39,7 @@ ipcMain.handle("os.hostName", () => hostname());
 ipcMain.handle("os.userName", () => userInfo().username);
 ipcMain.handle("os.platform", () => platform());
 ipcMain.handle("path.basename", (_, path) => basename(path));
+ipcMain.handle("path.dirname", (_, path) => dirname(path));
 ipcMain.handle("dialog.open", (_, options) => dialog.showOpenDialog(options));
 ipcMain.handle("dialog.save", (_, { defaultFileName, ...options }) =>
   dialog.showSaveDialog({
@@ -83,6 +84,7 @@ ipcMain.handle("shell.open.file", (_, url) => shell.showItemInFolder(url));
 ipcMain.handle("shell.open.folder", (_, url) => shell.openPath(url));
 ipcMain.handle("shell.open.browser", (_, url) => openBrowser(url));
 ipcMain.handle("fs.folderSize", (_, path) => folderSize(path));
+ipcMain.handle("fs.isDirectory", (_, path) => isDirectory(path));
 ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
 ipcMain.handle("update.status", (_) => getUpdateStatus());
 ipcMain.handle("update.install", (_) => installUpdate());

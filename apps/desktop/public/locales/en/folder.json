@@ -36,5 +36,9 @@
   "emojiPicker": {
     "search": "Search emoji...",
     "empty": "No emoji found."
+  },
+  "dropzone": {
+    "title": "Drop folder to add",
+    "description": "Drop any files or folders to add it to your vault and start backing them up."
   }
 }

@@ -20,7 +20,10 @@ import { useCallback, useState } from "react";
 
 export function CreateFolderDialog() {
   const { t } = useAppTranslation("folder.createDialog");
-  const { isOpen, setIsOpen } = useCreateFolderDialog();
+
+  const { isOpen, setIsOpen, defaultValues, clearDefaultValues } =
+    useCreateFolderDialog();
+
   const { openUpgradeDialog } = useUpgradeDialog();
   const { language } = useAppTranslation();
 
@@ -41,6 +44,7 @@ export function CreateFolderDialog() {
   });
 
   const form = useCreateFolderForm({
+    defaultValues,
     onSubmit: async ({ value }) => {
       await mutateAsync(value);
     },
@@ -50,7 +54,8 @@ export function CreateFolderDialog() {
 
   const reset = useCallback(() => {
     form.reset();
-  }, [form]);
+    clearDefaultValues();
+  }, [form, clearDefaultValues]);
 
   return (
     <>

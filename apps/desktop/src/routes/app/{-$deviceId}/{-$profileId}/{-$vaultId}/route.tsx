@@ -1,5 +1,6 @@
 import { CreateFolderDialog } from "@desktop/components/dialogs/create-folder";
 import { UpgradeDialog } from "@desktop/components/dialogs/upgrade";
+import { FolderDropzone } from "@desktop/components/folders/dropzone";
 import { ConfigMissing } from "@desktop/components/vaults/config-missing";
 import { PasswordMissing } from "@desktop/components/vaults/password-missing";
 import { useVault } from "@desktop/hooks/queries/use-vault";
@@ -42,6 +43,7 @@ function RouteComponent() {
     <>
       <CreateFolderDialog />
       <UpgradeDialog />
+      <FolderDropzone />
       <Outlet />
     </>
   );
