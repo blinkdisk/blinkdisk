@@ -1,5 +1,5 @@
 import { openBrowser } from "@electron/shell";
-import { store } from "@electron/store";
+import { getTheme } from "@electron/theme";
 import { BrowserWindow, app } from "electron";
 
 import { join } from "path";
@@ -7,15 +7,13 @@ import { join } from "path";
 export let window: BrowserWindow | null = null;
 
 export function createWindow() {
-  const theme = store.get("preferences.theme");
-
   window = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 950,
     minHeight: 500,
     title: "BlinkDisk",
-    backgroundColor: theme == "light" ? "#ffffff" : "#222222",
+    backgroundColor: getTheme() == "light" ? "#ffffff" : "#222222",
     webPreferences: {
       preload: join(import.meta.dirname, "preload.js"),
     },
