@@ -27,9 +27,9 @@ export default defineConfig({
     env(
       {
         LANDING_URL: undefined,
-        LOGSNAG_PUBLIC_KEY: undefined,
-        POSTHOG_API_HOST: undefined,
-        POSTHOG_LANDING_KEY: undefined,
+        LOGSNAG_PUBLIC_KEY: null,
+        POSTHOG_API_HOST: null,
+        POSTHOG_LANDING_KEY: null,
         CRISP_KEY: null,
       },
       {

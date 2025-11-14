@@ -27,7 +27,7 @@ export default defineConfig({
       {
         API_URL: undefined,
         LANDING_URL: undefined,
-        POSTHOG_DESKTOP_KEY: undefined,
+        POSTHOG_DESKTOP_KEY: null,
       },
       {
         loadEnvFiles: false,
