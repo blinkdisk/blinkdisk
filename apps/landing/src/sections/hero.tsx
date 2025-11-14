@@ -13,6 +13,21 @@ export function Hero() {
   return (
     <div className="pt-page flex flex-col items-center justify-center pb-16 sm:pb-24">
       <div className="flex max-w-[90vw] flex-col items-center text-center md:max-w-[38rem]">
+        <a
+          href="https://findly.tools/blinkdisk?utm_source=blinkdisk"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src={
+              dark
+                ? "https://findly.tools/badges/findly-tools-badge-dark.svg"
+                : "https://findly.tools/badges/findly-tools-badge-light.svg"
+            }
+            alt="Featured on findly.tools"
+            width="150"
+          />
+        </a>
         <h1 className="mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
           <SplitText>Secure your files</SplitText>
           <br className="hidden sm:block" />
