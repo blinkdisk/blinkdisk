@@ -130,7 +130,8 @@ function RootComponent() {
       <PostHogProvider
         apiKey={process.env.POSTHOG_LANDING_KEY || ""}
         options={{
-          api_host: "https://eu.i.posthog.com",
+          api_host: process.env.POSTHOG_API_HOST || "https://eu.i.posthog.com",
+          ui_host: "https://eu.posthog.com",
           defaults: "2025-05-24",
         }}
       >
