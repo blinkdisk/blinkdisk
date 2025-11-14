@@ -27,11 +27,11 @@ jobs:
 
       - name: Build project
         env:
-          LANDING_URL: ${{ secrets.LANDING_URL }}
+          LANDING_URL: ${{ vars.LANDING_URL }}
           POSTHOG_API_HOST: ${{ vars.POSTHOG_API_HOST }}
-          POSTHOG_LANDING_KEY: ${{ secrets.POSTHOG_LANDING_KEY }}
-          LOGSNAG_PUBLIC_KEY: ${{ secrets.LOGSNAG_PUBLIC_KEY }}
-          CRISP_KEY: ${{ secrets.CRISP_KEY }}
+          POSTHOG_LANDING_KEY: ${{ vars.POSTHOG_LANDING_KEY }}
+          LOGSNAG_PUBLIC_KEY: ${{ vars.LOGSNAG_PUBLIC_KEY }}
+          CRISP_KEY: ${{ vars.CRISP_KEY }}
         run: pnpm --filter landing build
 
       - name: Deploy project

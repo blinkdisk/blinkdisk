@@ -12,11 +12,10 @@ concurrency:
 env:
   # Required by Makefile
   UNIX_SHELL_ON_WINDOWS: true
-  # URLs
-  API_URL: https://api.blinkdisk.com
-  LANDING_URL: https://blinkdisk.com
-  CLOUD_URL: https://cloud.blinkdisk.com
-  POSTHOG_DESKTOP_KEY: ${{ secrets.POSTHOG_DESKTOP_KEY }}
+  API_URL: ${{ vars.API_URL }}
+  LANDING_URL: ${{ vars.LANDING_URL }}
+  CLOUD_URL: ${{ vars.CLOUD_URL }}
+  POSTHOG_DESKTOP_KEY: ${{ vars.POSTHOG_DESKTOP_KEY }}
 
 jobs:
   build:
