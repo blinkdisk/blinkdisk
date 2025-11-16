@@ -116,6 +116,12 @@ export const Route = createRootRoute({
         href: "/manifest.json",
       },
     ],
+    scripts: [
+      {
+        src: "https://cdn.tinystats.net/scripts/capi.js",
+        async: true,
+      },
+    ],
   }),
   component: RootComponent,
 });
