@@ -25,7 +25,7 @@ export function Hero() {
           className="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed"
         >
           BlinkDisk is a desktop application that lets you effortlessly create
-          backup copies all your important files
+          backup copies of all your important files
           <span className="hidden sm:inline"> with just a few clicks</span>.
         </motion.p>
         <div className="mt-8 flex items-center gap-3 sm:mt-12">
