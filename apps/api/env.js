@@ -16,6 +16,8 @@ const whitelist = [
   "POLAR_TOKEN",
   "POLAR_WEBHOOK_SECRET",
   "POSTHOG_DESKTOP_KEY",
+  "ENDORSELY_ORGANIZATION_ID",
+  "ENDORSELY_PRIVATE_KEY",
 ];
 
 let env = "";

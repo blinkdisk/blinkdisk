@@ -229,12 +229,6 @@ enum SubscriptionStatus {
   CANCELED
 }
 
-enum SubscriptionScheduledAction {
-  CANCEL
-  PAUSE
-  RESUME
-}
-
 model Subscription {
   id                  String             @id @default(cuid())
   status              SubscriptionStatus
@@ -243,6 +237,7 @@ model Subscription {
   polarProductId      String
   polarSubscriptionId String             @unique
   polarCustomerId     String
+  affiliateId         String?
   accountId           String
   canceledAt          DateTime?
   endedAt             DateTime?

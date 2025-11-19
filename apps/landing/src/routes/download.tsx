@@ -6,6 +6,7 @@ import { useCalendar } from "@landing/hooks/use-calendar";
 import { useClipboard } from "@landing/hooks/use-clipboard";
 import { useLogsnag } from "@landing/hooks/use-logsnag";
 import { usePlatform } from "@landing/hooks/use-platform";
+import { trackAffiliateLeadFn } from "@landing/server/affiliate";
 import {
   Architecture,
   getArchitectureFromCpu,
@@ -14,6 +15,7 @@ import { getDownloadUrl, linux, mac, windows } from "@landing/utils/downloads";
 import { head } from "@landing/utils/head";
 import { Platform } from "@landing/utils/platform";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@ui/button";
 import {
   DropdownMenu,
@@ -36,10 +38,17 @@ export const Route = createFileRoute("/download")({
   }),
 });
 
+declare global {
+  interface Window {
+    endorsely_referral: string;
+  }
+}
+
 type Extension = "AppImage" | "deb" | "rpm";
 
 function RouteComponent() {
   const posthog = usePostHog();
+  const trackAffiliateLead = useServerFn(trackAffiliateLeadFn);
 
   const { logsnag } = useLogsnag();
   const { copy } = useClipboard();
@@ -97,6 +106,13 @@ function RouteComponent() {
 
       const logged = window.localStorage.getItem("download.logged");
       if (!logged) {
+        if (window.endorsely_referral)
+          trackAffiliateLead({
+            data: {
+              referralId: window.endorsely_referral,
+            },
+          });
+
         localStorage.setItem("download.logged", "true");
 
         logsnag({
@@ -114,7 +130,7 @@ function RouteComponent() {
         });
       }
     },
-    [logsnag, platform, architecture, extension, posthog],
+    [logsnag, platform, architecture, extension, posthog, trackAffiliateLead],
   );
 
   useEffect(() => {

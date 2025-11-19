@@ -31,6 +31,7 @@ jobs:
           POSTHOG_API_HOST: ${{ vars.POSTHOG_API_HOST }}
           POSTHOG_LANDING_KEY: ${{ vars.POSTHOG_LANDING_KEY }}
           LOGSNAG_PUBLIC_KEY: ${{ vars.LOGSNAG_PUBLIC_KEY }}
+          ENDORSELY_PUBLIC_KEY: ${{ vars.ENDORSELY_PUBLIC_KEY }}
           CRISP_KEY: ${{ vars.CRISP_KEY }}
         run: pnpm --filter landing build
 

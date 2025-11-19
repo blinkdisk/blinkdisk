@@ -121,6 +121,15 @@ export const Route = createRootRoute({
         src: "https://cdn.tinystats.net/scripts/capi.js",
         async: true,
       },
+      ...(process.env.ENDORSELY_PUBLIC_KEY
+        ? [
+            {
+              src: "https://assets.endorsely.com/endorsely.js",
+              "data-endorsely": process.env.ENDORSELY_PUBLIC_KEY,
+              async: true,
+            },
+          ]
+        : []),
     ],
   }),
   component: RootComponent,

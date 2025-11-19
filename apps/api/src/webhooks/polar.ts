@@ -2,6 +2,7 @@ import { HonoContextOptions } from "@api/index";
 import { posthog } from "@api/lib/posthog";
 import { plans } from "@config/plans";
 import { SubscriptionStatus } from "@db/enums";
+import { Order } from "@polar-sh/sdk/models/components/order.js";
 import { Subscription } from "@polar-sh/sdk/models/components/subscription";
 import {
   validateEvent,
@@ -10,6 +11,7 @@ import {
 import { formatSubscriptionEn } from "@utils/format";
 import { generateId } from "@utils/id";
 import { logsnag } from "@utils/logsnag";
+import axios from "axios";
 import { Context } from "hono";
 import { BlankInput } from "hono/types";
 
@@ -94,6 +96,11 @@ export async function polarWebhook(
             polarSubscriptionId: subscription.id,
             polarCustomerId: subscription.customerId,
             accountId,
+            ...(subscription.metadata?.affiliateId
+              ? {
+                  affiliateId: subscription.metadata?.affiliateId as string,
+                }
+              : {}),
           })
           .execute();
 
@@ -249,6 +256,50 @@ export async function polarWebhook(
         const stub = c.env.SPACE.getByName(space.id) as any;
         await stub.updateCapacity(capacity);
       }
+    } else if (event.type.startsWith("order.")) {
+      const order = event.data as Order;
+
+      if (event.type === "order.paid") {
+        const subscriptionId = order.subscriptionId;
+        if (!subscriptionId)
+          return c.json({ error: "Subscription id not found" }, 400);
+
+        const subscription = await db
+          .selectFrom("Subscription")
+          .innerJoin("Account", "Account.id", "Subscription.accountId")
+          .select([
+            "Subscription.id",
+            "Subscription.affiliateId",
+            "Subscription.accountId",
+            "Account.name",
+            "Account.email",
+          ])
+          .where("Subscription.polarSubscriptionId", "=", subscriptionId)
+          .executeTakeFirst();
+
+        if (!subscription)
+          return c.json({ error: "Subscription not found" }, 400);
+        if (!subscription.affiliateId)
+          return c.json({ message: "Affiliate id not found" }, 202);
+
+        await axios.post(
+          "https://app.endorsely.com/api/public/refer",
+          {
+            referralId: subscription.affiliateId,
+            email: subscription.email,
+            amount: order.netAmount,
+            name: subscription.name,
+            customerId: subscription.accountId,
+            organizationId: process.env.ENDORSELY_ORGANIZATION_ID,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.ENDORSELY_PRIVATE_KEY}`,
+            },
+          },
+        );
+      }
     }
 
     return c.json(
@@ -260,6 +311,9 @@ export async function polarWebhook(
   } catch (e) {
     if (e instanceof WebhookVerificationError)
       c.json({ error: "Invalid signature" }, 400);
+
+    console.error(e.response.data);
+
     return c.json({ error: "Internal server error" }, 500);
   }
 }

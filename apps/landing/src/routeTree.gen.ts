@@ -13,6 +13,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as DownloadRouteImport } from './routes/download'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout/success'
+import { Route as CheckoutRedirectRouteImport } from './routes/checkout/redirect'
 import { Route as toolsCodeRouteImport } from './routes/(tools)/code'
 import { Route as legalTermsRouteImport } from './routes/(legal)/terms'
 import { Route as legalRefundsRouteImport } from './routes/(legal)/refunds'
@@ -37,6 +38,11 @@ const IndexRoute = IndexRouteImport.update({
 const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   id: '/checkout/success',
   path: '/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRedirectRoute = CheckoutRedirectRouteImport.update({
+  id: '/checkout/redirect',
+  path: '/checkout/redirect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const toolsCodeRoute = toolsCodeRouteImport.update({
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/refunds': typeof legalRefundsRoute
   '/terms': typeof legalTermsRoute
   '/code': typeof toolsCodeRoute
+  '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/refunds': typeof legalRefundsRoute
   '/terms': typeof legalTermsRoute
   '/code': typeof toolsCodeRoute
+  '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/(legal)/refunds': typeof legalRefundsRoute
   '/(legal)/terms': typeof legalTermsRoute
   '/(tools)/code': typeof toolsCodeRoute
+  '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/refunds'
     | '/terms'
     | '/code'
+    | '/checkout/redirect'
     | '/checkout/success'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/refunds'
     | '/terms'
     | '/code'
+    | '/checkout/redirect'
     | '/checkout/success'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/(legal)/refunds'
     | '/(legal)/terms'
     | '/(tools)/code'
+    | '/checkout/redirect'
     | '/checkout/success'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   legalRefundsRoute: typeof legalRefundsRoute
   legalTermsRoute: typeof legalTermsRoute
   toolsCodeRoute: typeof toolsCodeRoute
+  CheckoutRedirectRoute: typeof CheckoutRedirectRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
 }
 
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout/success'
       fullPath: '/checkout/success'
       preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/redirect': {
+      id: '/checkout/redirect'
+      path: '/checkout/redirect'
+      fullPath: '/checkout/redirect'
+      preLoaderRoute: typeof CheckoutRedirectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(tools)/code': {
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   legalRefundsRoute: legalRefundsRoute,
   legalTermsRoute: legalTermsRoute,
   toolsCodeRoute: toolsCodeRoute,
+  CheckoutRedirectRoute: CheckoutRedirectRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
 }
 export const routeTree = rootRouteImport

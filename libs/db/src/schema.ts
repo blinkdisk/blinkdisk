@@ -112,6 +112,7 @@ export type Subscription = {
   polarProductId: string;
   polarSubscriptionId: string;
   polarCustomerId: string;
+  affiliateId: string | null;
   accountId: string;
   canceledAt: Timestamp | null;
   endedAt: Timestamp | null;

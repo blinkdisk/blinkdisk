@@ -30,6 +30,7 @@ export default defineConfig({
         LOGSNAG_PUBLIC_KEY: null,
         POSTHOG_API_HOST: null,
         POSTHOG_LANDING_KEY: null,
+        ENDORSELY_PUBLIC_KEY: null,
         CRISP_KEY: null,
       },
       {

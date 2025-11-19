@@ -36,10 +36,3 @@ export const SubscriptionStatus = {
 } as const;
 export type SubscriptionStatus =
   (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus];
-export const SubscriptionScheduledAction = {
-  CANCEL: "CANCEL",
-  PAUSE: "PAUSE",
-  RESUME: "RESUME",
-} as const;
-export type SubscriptionScheduledAction =
-  (typeof SubscriptionScheduledAction)[keyof typeof SubscriptionScheduledAction];

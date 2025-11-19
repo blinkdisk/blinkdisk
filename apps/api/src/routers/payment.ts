@@ -96,7 +96,7 @@ export const paymentRouter = router({
         })(),
       );
 
-      return { url: checkout.url };
+      return { id: checkout.id, url: checkout.url };
     }),
   getSubscription: authedProcedure.query(async ({ ctx }) => {
     const subscription = await getActiveSubscription(ctx.account?.id!, ctx.db)
