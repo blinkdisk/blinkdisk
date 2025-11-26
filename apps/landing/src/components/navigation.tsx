@@ -18,12 +18,14 @@ import logoLight from "../assets/brand/logo-light.svg";
 const links = [
   { href: "/pricing", label: "Pricing" },
   {
-    label: "How it Works",
-    href: "/#solution",
+    label: "GitHub",
+    href: "https://github.com/blinkdisk/blinkdisk",
+    target: "_blank",
   },
   {
-    label: "Features",
-    href: "/#features",
+    label: "Roadmap",
+    href: "https://github.com/orgs/blinkdisk/projects/2",
+    target: "_blank",
   },
 ];
 
@@ -183,6 +185,7 @@ export function Links() {
       key={link.href}
       to={link.href}
       className="text-foreground/80 hover:text-foreground transition-colors"
+      target={link.target}
     >
       {link.label}
     </Link>
