@@ -1,4 +1,4 @@
 [submodule "apps/core"]
 	path = apps/core
 	url = https://github.com/blinkdisk/core.git
-	branch = main
+	branch = renamed
