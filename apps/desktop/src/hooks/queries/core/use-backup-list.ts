@@ -34,14 +34,7 @@ export function useBackupList() {
   const { data: folder } = useFolder();
 
   return useQuery({
-    queryKey: [
-      accountId,
-      "core",
-      "backup",
-      "list",
-      folder?.source.path,
-      vaultId,
-    ],
+    queryKey: [accountId, "core", "backup", "list", vaultId, folder?.id],
     queryFn: async () => {
       const data = (await window.electron.vault.fetch({
         vaultId: vaultId!,

@@ -18,7 +18,6 @@ function AlertDialog({
       data-slot="alert-dialog"
       {...props}
       onOpenChange={(open) => {
-        console.log(open);
         onOpenChange?.(open);
 
         if (!open) {
@@ -147,7 +146,7 @@ function AlertDialogAction({
   size,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action> & {
-  variant?: "default" | "outline";
+  variant?: "default" | "outline" | "destructive";
   size?: "sm";
 }) {
   return (
