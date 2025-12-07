@@ -4,13 +4,29 @@ import { useBackupFolder } from "@desktop/hooks/mutations/core/use-backup-folder
 import { usePausedBackup } from "@desktop/hooks/queries/use-paused-backup";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@ui/dropdown-menu";
+
+import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
+import { Button } from "@ui/button";
 import { Loader } from "@ui/loader";
 import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
-import { ArrowRightIcon, FilesIcon, HardDrive, PlayIcon } from "lucide-react";
+import {
+  FileSearchIcon,
+  FilesIcon,
+  HardDrive,
+  MoreVerticalIcon,
+  PlayIcon,
+  TrashIcon,
+} from "lucide-react";
 import { useMemo } from "react";
 
 interface Backup {
@@ -163,7 +179,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 }
 
 const cardClassName =
-  "bg-card flex w-full flex-row items-center justify-between gap-2 rounded-2xl border p-5 focus-visible:ring-2 outline-none ring-ring";
+  "relative bg-card flex w-full flex-row items-center justify-between gap-2 rounded-2xl border p-5 focus-visible:ring-2 outline-none ring-ring";
 
 function FakeBackup() {
   const { t } = useAppTranslation("backup.list");
@@ -229,18 +245,21 @@ type BackupProps = {
 
 export function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
+  const { openDeleteBackupDialog } = useDeleteBackupDialog();
+
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
 
   return (
-    <Link
-      to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
-      params={(params) => ({
-        ...params,
-        backupId: backup?.id || "",
-        directoryId: backup && "rootID" in backup ? backup?.rootID : "",
-      })}
-      className={cn(cardClassName, "hover:bg-card-hover")}
-    >
+    <div role="link" className={cn(cardClassName, "hover:bg-card-hover")}>
+      <Link
+        to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
+        params={(params) => ({
+          ...params,
+          backupId: backup?.id || "",
+          directoryId: backup && "rootID" in backup ? backup?.rootID : "",
+        })}
+        className="absolute inset-0"
+      />
       <div className="flex flex-col">
         <p className="text-lg font-semibold">
           {backup ? formatDateTime(backup.startTime) : <Skeleton width={150} />}
@@ -278,11 +297,44 @@ export function Backup({ backup }: BackupProps) {
         </p>
         <div className="h-6 border-r" />
         {backup ? (
-          <ArrowRightIcon className="text-foreground/50 size-5" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon-sm" className="[&_svg]:size-5" variant="ghost">
+                <MoreVerticalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48" align="end">
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
+                  params={(params) => ({
+                    ...params,
+                    backupId: backup?.id || "",
+                    directoryId:
+                      backup && "rootID" in backup ? backup?.rootID : "",
+                  })}
+                >
+                  <FileSearchIcon />
+                  {t("dropdown.browse")}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  openDeleteBackupDialog({
+                    backupId: backup.id,
+                  })
+                }
+                variant="destructive"
+              >
+                <TrashIcon />
+                {t("dropdown.delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Skeleton width="1.25rem" height="1.25rem" />
         )}
       </div>
-    </Link>
+    </div>
   );
 }

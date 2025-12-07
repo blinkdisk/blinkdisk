@@ -4,7 +4,11 @@
     "settings": "Folder Settings",
     "item": {
       "files_one": "{{formatted}} File",
-      "files_other": "{{formatted}} Files"
+      "files_other": "{{formatted}} Files",
+      "dropdown": {
+        "browse": "Browse Files",
+        "delete": "Delete Backup"
+      }
     },
     "pending": {
       "title": "New backup is pending",
@@ -44,5 +48,15 @@
       "title": "{{percentage}} complete",
       "description": "{{completed}} / ~{{total}}"
     }
+  },
+  "deleteDialog": {
+    "title": "Delete Backup",
+    "description": "Are you sure you want to delete this backup? This action cannot be undone.",
+    "alert": {
+      "title": "Cleanup happens over time",
+      "description": "Storage space won’t be freed instantly. BlinkDisk cleans up unused data later to ensure reliability."
+    },
+    "cancel": "Cancel",
+    "continue": "Delete Backup"
   }
 }
