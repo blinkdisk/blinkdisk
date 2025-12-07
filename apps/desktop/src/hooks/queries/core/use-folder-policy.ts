@@ -8,13 +8,14 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertPolicyFromCore, mergeFolderPolicy } from "@desktop/lib/policy";
 import { useQuery } from "@tanstack/react-query";
 
-export function useFolderPolicy() {
+export function useFolderPolicy({ folderId }: { folderId?: string }) {
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { accountId } = useAccountId();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
-  const { data: folder } = useFolder();
+
+  const { data: folder } = useFolder(folderId);
   const { data: vaultPolicy } = useVaultPolicy();
 
   return useQuery({

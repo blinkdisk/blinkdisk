@@ -17,7 +17,7 @@ import {
 
 export function FolderSettingsDialog() {
   const { t } = useAppTranslation("settings.folder");
-  const { isOpen, setIsOpen } = useFolderSettingsDialog();
+  const { isOpen, setIsOpen, options } = useFolderSettingsDialog();
   const { readOnly } = useProfile();
 
   return (
@@ -36,10 +36,10 @@ export function FolderSettingsDialog() {
             </div>
           ) : null}
           <Accordion type="multiple" className="w-full">
-            <FolderGeneralSettings />
-            <ScheduleSettings level="FOLDER" />
-            <RetentionSettings level="FOLDER" />
-            <FilesSettings level="FOLDER" />
+            <FolderGeneralSettings folderId={options?.folderId} />
+            <ScheduleSettings level="FOLDER" folderId={options?.folderId} />
+            <RetentionSettings level="FOLDER" folderId={options?.folderId} />
+            <FilesSettings level="FOLDER" folderId={options?.folderId} />
           </Accordion>
         </FormDisabledContext.Provider>
       </DialogContent>

@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown";
+} from "@ui/dropdown-menu";
 import { UserPlusIcon } from "lucide-react";
 import { ReactNode } from "react";
 

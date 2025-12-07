@@ -59,15 +59,19 @@ function DropdownMenuGroup({
   );
 }
 
+export type DropdownMenuItemProps = React.ComponentProps<
+  typeof DropdownMenuPrimitive.Item
+> & {
+  inset?: boolean;
+  variant?: "default" | "destructive";
+};
+
 function DropdownMenuItem({
   className,
   inset,
   variant = "default",
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
-  inset?: boolean;
-  variant?: "default" | "destructive";
-}) {
+}: DropdownMenuItemProps) {
   return (
     <DropdownMenuPrimitive.Item
       data-slot="dropdown-menu-item"

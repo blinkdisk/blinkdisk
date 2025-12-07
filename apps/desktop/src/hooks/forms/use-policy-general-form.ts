@@ -3,10 +3,13 @@ import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZGeneralPolicyForm, ZGeneralPolicyFormType } from "@schemas/policy";
 
-export function usePolicyGeneralForm() {
-  const { data: policy } = useFolderPolicy();
+export function usePolicyGeneralForm({ folderId }: { folderId?: string }) {
+  const { data: policy } = useFolderPolicy({ folderId });
 
-  const { mutateAsync: mutate } = useUpdateFolderPolicy(() => form.reset());
+  const { mutateAsync: mutate } = useUpdateFolderPolicy({
+    folderId,
+    onSuccess: () => form.reset(),
+  });
 
   const form = useAppForm({
     defaultValues: {

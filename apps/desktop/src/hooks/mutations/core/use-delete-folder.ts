@@ -5,37 +5,41 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useBackupFolder() {
+export function useDeleteFolder({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();
 
-  const { vaultId } = useVaultId();
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { accountId } = useAccountId();
+  const { vaultId } = useVaultId();
 
   return useMutation({
-    mutationKey: ["folder", "backup"],
+    mutationKey: ["core", "folder", "delete"],
     mutationFn: async ({ path }: { path: string }) => {
-      if (!vaultId) return;
-
-      return await window.electron.vault.fetch({
-        vaultId,
+      const data = await window.electron.vault.fetch({
+        vaultId: vaultId!,
         method: "POST",
-        path: "/api/v1/sources/upload",
-        search: {
-          userName: profileId!,
-          host: deviceId!,
-          path: path,
+        path: "/api/v1/snapshots/delete",
+        data: {
+          source: {
+            path: path || "",
+            userName: profileId || "",
+            host: deviceId || "",
+          },
+          snapshotManifestIds: [],
+          deleteSourceAndPolicy: true,
         },
       });
+
+      return data;
     },
     onError: showErrorToast,
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: [accountId, "core", "folder", "list", vaultId],
-        }),
-      ]);
+      await queryClient.invalidateQueries({
+        queryKey: [accountId, "core", "folder", "list", vaultId],
+      });
+
+      onSuccess?.();
     },
   });
 }

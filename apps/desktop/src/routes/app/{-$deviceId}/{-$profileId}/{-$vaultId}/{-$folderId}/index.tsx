@@ -1,6 +1,5 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { BackupTimeline } from "@desktop/components/backups/timeline";
-import { FolderSettingsDialog } from "@desktop/components/dialogs/folder-settings";
 import { Empty } from "@desktop/components/empty";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
@@ -50,7 +49,6 @@ function RouteComponent() {
           : "overflow-hidden",
       )}
     >
-      <FolderSettingsDialog />
       <VaultTitlebar
         vault={vault}
         breadcrumbs={
@@ -80,12 +78,20 @@ function RouteComponent() {
         <div className="flex items-center gap-2">
           {backups !== null && backups !== undefined ? (
             <>
-              <Button variant="outline" onClick={openFolderSettings}>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  folder &&
+                  openFolderSettings({
+                    folderId: folder?.id,
+                  })
+                }
+              >
                 <SettingsIcon />
                 {t("settings")}
               </Button>
               <MutatingButton
-                onClick={() => backup()}
+                onClick={() => folder && backup({ path: folder.source.path })}
                 loading={
                   isBackupLoading ||
                   ["UPLOADING", "PENDING"].includes(folder?.status || "")
@@ -132,8 +138,9 @@ function RouteComponent() {
             description={t("empty.default.description")}
           >
             <MutatingButton
-              onClick={() => backup()}
+              onClick={() => folder && backup({ path: folder.source.path })}
               loading={isBackupLoading}
+              disabled={!folder}
               size="lg"
             >
               <CloudUploadIcon />

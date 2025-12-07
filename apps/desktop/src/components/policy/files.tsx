@@ -22,12 +22,13 @@ import { useContext } from "react";
 
 type FilesSettingsProps = {
   level: ZPolicyLevelType;
+  folderId?: string;
 };
 
-export function FilesSettings({ level }: FilesSettingsProps) {
+export function FilesSettings({ level, folderId }: FilesSettingsProps) {
   const { t } = useAppTranslation("policy.files");
 
-  const form = usePolicyFilesForm(level);
+  const form = usePolicyFilesForm({ level, folderId });
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -36,6 +37,7 @@ export function FilesSettings({ level }: FilesSettingsProps) {
       title={t("title")}
       description={t("description")}
       icon={<FileXIcon />}
+      folderId={folderId}
     >
       <form
         onSubmit={(e) => {

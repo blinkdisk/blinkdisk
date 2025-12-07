@@ -10,16 +10,30 @@ import {
 } from "@schemas/policy";
 import { useMemo } from "react";
 
-export function usePolicyFilesForm(level: ZPolicyLevelType) {
+export function usePolicyFilesForm({
+  level,
+  folderId,
+}: {
+  level: ZPolicyLevelType;
+  folderId?: string;
+}) {
   const { data: vaultPolicy } = useVaultPolicy();
-  const { data: folderPolicy } = useFolderPolicy();
+  const { data: folderPolicy } = useFolderPolicy({
+    folderId,
+  });
 
   function reset() {
     form.reset();
   }
 
-  const { mutateAsync: mutateVault } = useUpdateVaultPolicy(reset);
-  const { mutateAsync: mutateFolder } = useUpdateFolderPolicy(reset);
+  const { mutateAsync: mutateVault } = useUpdateVaultPolicy({
+    onSuccess: reset,
+  });
+
+  const { mutateAsync: mutateFolder } = useUpdateFolderPolicy({
+    folderId,
+    onSuccess: reset,
+  });
 
   const policy = useMemo(
     () => (level === "FOLDER" ? folderPolicy : vaultPolicy),

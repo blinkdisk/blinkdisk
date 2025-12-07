@@ -8,12 +8,13 @@ import { ArchiveIcon, InfoIcon } from "lucide-react";
 
 type RetentionSettingsProps = {
   level: ZPolicyLevelType;
+  folderId?: string;
 };
 
-export function RetentionSettings({ level }: RetentionSettingsProps) {
+export function RetentionSettings({ level, folderId }: RetentionSettingsProps) {
   const { t } = useAppTranslation("policy.retention");
 
-  const form = usePolicyRetentionForm(level);
+  const form = usePolicyRetentionForm({ level, folderId });
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -22,6 +23,7 @@ export function RetentionSettings({ level }: RetentionSettingsProps) {
       title={t("title")}
       description={t("description")}
       icon={<ArchiveIcon />}
+      folderId={folderId}
     >
       <form
         onSubmit={(e) => {

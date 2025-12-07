@@ -1,4 +1,6 @@
 import { CreateFolderDialog } from "@desktop/components/dialogs/create-folder";
+import { DeleteFolderDialog } from "@desktop/components/dialogs/delete-folder";
+import { FolderSettingsDialog } from "@desktop/components/dialogs/folder-settings";
 import { UpgradeDialog } from "@desktop/components/dialogs/upgrade";
 import { FolderDropzone } from "@desktop/components/folders/dropzone";
 import { ConfigMissing } from "@desktop/components/vaults/config-missing";
@@ -41,9 +43,14 @@ function RouteComponent() {
 
   return (
     <>
-      <CreateFolderDialog />
       <UpgradeDialog />
+
       <FolderDropzone />
+
+      <CreateFolderDialog />
+      <DeleteFolderDialog />
+      <FolderSettingsDialog />
+
       <Outlet />
     </>
   );

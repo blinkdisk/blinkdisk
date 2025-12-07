@@ -9,7 +9,11 @@ import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useUpdateVaultPolicy(onSuccess?: () => void) {
+export function useUpdateVaultPolicy({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
   const queryClient = useQueryClient();
 
   const { t } = useAppTranslation("policy.update");

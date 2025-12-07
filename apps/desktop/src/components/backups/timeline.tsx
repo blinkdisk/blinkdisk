@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 
+import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -224,7 +225,7 @@ function FakeBackup() {
           </div>
           <MutatingButton
             variant="outline"
-            onClick={() => backup()}
+            onClick={() => folder && backup({ path: folder.source.path })}
             loading={
               isBackupLoading ||
               ["UPLOADING", "PENDING"].includes(folder?.status || "")
@@ -318,7 +319,7 @@ export function Backup({ backup }: BackupProps) {
                   {t("dropdown.browse")}
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
+              <MutatingDropdownMenuItem
                 onClick={() =>
                   openDeleteBackupDialog({
                     backupId: backup.id,
@@ -328,7 +329,7 @@ export function Backup({ backup }: BackupProps) {
               >
                 <TrashIcon />
                 {t("dropdown.delete")}
-              </DropdownMenuItem>
+              </MutatingDropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
