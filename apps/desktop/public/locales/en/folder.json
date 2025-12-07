@@ -40,5 +40,25 @@
   "dropzone": {
     "title": "Drop folder to add",
     "description": "Drop any files or folders to add it to your vault and start backing them up."
+  },
+  "list": {
+    "item": {
+      "dropdown": {
+        "browse": "Browse Backups",
+        "backup": "Backup Folder",
+        "settings": "Folder Settings",
+        "delete": "Delete Folder"
+      }
+    }
+  },
+  "deleteDialog": {
+    "title": "Delete Folder",
+    "description": "Are you sure you want to delete this folder? This action cannot be undone.",
+    "alert": {
+      "title": "Cleanup happens over time",
+      "description": "Storage space won’t be freed instantly. BlinkDisk cleans up unused data later to ensure reliability."
+    },
+    "cancel": "Cancel",
+    "continue": "Delete Folder"
   }
 }

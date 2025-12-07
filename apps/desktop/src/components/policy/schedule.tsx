@@ -15,12 +15,13 @@ import { useContext } from "react";
 
 type ScheduleSettingsProps = {
   level: ZPolicyLevelType;
+  folderId?: string;
 };
 
-export function ScheduleSettings({ level }: ScheduleSettingsProps) {
+export function ScheduleSettings({ level, folderId }: ScheduleSettingsProps) {
   const { t } = useAppTranslation("policy.schedule");
 
-  const form = usePolicyScheduleForm(level);
+  const form = usePolicyScheduleForm({ level, folderId });
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const trigger = useStore(form.store, (state) => state.values.trigger);
 
@@ -30,6 +31,7 @@ export function ScheduleSettings({ level }: ScheduleSettingsProps) {
       title={t("title")}
       description={t("description")}
       icon={<ClockIcon />}
+      folderId={folderId}
     >
       <form
         onSubmit={(e) => {

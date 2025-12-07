@@ -14,6 +14,7 @@ type SettingsCategoryProps = {
   description: string;
   children: ReactNode;
   icon: ReactNode;
+  folderId?: string;
 };
 
 export function SettingsCategory({
@@ -22,8 +23,9 @@ export function SettingsCategory({
   description,
   children,
   icon,
+  folderId,
 }: SettingsCategoryProps) {
-  const changes = usePolicyChanges();
+  const changes = usePolicyChanges({ folderId });
 
   return (
     <AccordionItem value={id}>

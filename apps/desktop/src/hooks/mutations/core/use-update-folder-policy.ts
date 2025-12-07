@@ -11,7 +11,13 @@ import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useUpdateFolderPolicy(onSuccess?: () => void) {
+export function useUpdateFolderPolicy({
+  folderId,
+  onSuccess,
+}: {
+  folderId?: string;
+  onSuccess?: () => void;
+}) {
   const queryClient = useQueryClient();
 
   const { t } = useAppTranslation("policy.update");
@@ -20,7 +26,7 @@ export function useUpdateFolderPolicy(onSuccess?: () => void) {
   const { deviceId } = useDevice();
   const { vaultId } = useVaultId();
   const { data: vaultPolicy } = useVaultPolicy();
-  const { data: folder } = useFolder();
+  const { data: folder } = useFolder(folderId);
 
   return useMutation({
     mutationKey: ["core", "vault", folder?.id, "policy"],

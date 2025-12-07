@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown";
+} from "@ui/dropdown-menu";
 import {
   CogIcon,
   CreditCardIcon,

@@ -1,25 +1,25 @@
 import { atom, useAtom } from "jotai";
 
-type FolderSettingsDialogOptions = {
+type DeleteFolderDialogOptions = {
   folderId: string;
 };
 
 const isOpenAtom = atom(false);
-const optionsAtom = atom<FolderSettingsDialogOptions | null>(null);
+const optionsAtom = atom<DeleteFolderDialogOptions | null>(null);
 
-export function useFolderSettingsDialog() {
+export function useDeleteFolderDialog() {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
   const [options, setOptions] = useAtom(optionsAtom);
 
-  function openFolderSettings(options: FolderSettingsDialogOptions) {
-    setIsOpen(true);
+  function openDeleteFolderDialog(options: DeleteFolderDialogOptions) {
     setOptions(options);
+    setIsOpen(true);
   }
 
   return {
     isOpen,
     setIsOpen,
-    openFolderSettings,
+    openDeleteFolderDialog,
     options,
   };
 }

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./animate.css";
+@source "../../ui/src";
 @source "../ui/src";
 @source "../hooks/src";
 @plugin "@tailwindcss/typography";

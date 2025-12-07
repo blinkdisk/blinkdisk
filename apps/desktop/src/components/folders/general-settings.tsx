@@ -11,12 +11,18 @@ import { LabelContainer } from "@ui/label";
 import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function FolderGeneralSettings() {
+type FolderGeneralSettingsProps = {
+  folderId?: string;
+};
+
+export function FolderGeneralSettings({
+  folderId,
+}: FolderGeneralSettingsProps) {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
-  const { data: folder } = useFolder();
+  const { data: folder } = useFolder(folderId);
 
-  const form = usePolicyGeneralForm();
+  const form = usePolicyGeneralForm({ folderId });
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const values = useStore(form.store, (state) => state.values);
   const disabledContext = useContext(FormDisabledContext);
