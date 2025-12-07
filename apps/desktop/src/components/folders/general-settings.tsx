@@ -1,16 +1,20 @@
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
+import { useFolder } from "@desktop/hooks/use-folder";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { EmojiCard } from "@ui/emoji-card";
 import { EmojiPicker } from "@ui/emoji-picker";
+import { Input } from "@ui/input";
+import { LabelContainer } from "@ui/label";
 import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";
 
 export function FolderGeneralSettings() {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
+  const { data: folder } = useFolder();
 
   const form = usePolicyGeneralForm();
   const isDirty = useStore(form.store, (state) => state.isDirty);
@@ -57,6 +61,9 @@ export function FolderGeneralSettings() {
             />
           )}
         </form.AppField>
+        <LabelContainer title={t("path.label")}>
+          <Input value={folder?.source?.path} disabled />
+        </LabelContainer>
         <form.AppForm>
           <form.Submit disabled={!isDirty}>{t("save")}</form.Submit>
         </form.AppForm>

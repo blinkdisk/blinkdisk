@@ -5,17 +5,14 @@ import { CircularProgress } from "@ui/circular-progress";
 import { EmojiCard } from "@ui/emoji-card";
 import { Loader } from "@ui/loader";
 import { Skeleton } from "@ui/skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { cn } from "@utils/class";
-import { CircleHelpIcon } from "lucide-react";
 
 type FolderPreviewProps = {
   folder?: CoreFolderItem;
-  showInfo?: boolean;
   size?: "sm" | "default";
 };
 
-export function FolderPreview({ folder, size, showInfo }: FolderPreviewProps) {
+export function FolderPreview({ folder, size }: FolderPreviewProps) {
   const { t } = useAppTranslation("folder.preview");
 
   return (
@@ -48,14 +45,6 @@ export function FolderPreview({ folder, size, showInfo }: FolderPreviewProps) {
               <Skeleton width={100} />
             )}
           </h2>
-          {folder && showInfo ? (
-            <Tooltip>
-              <TooltipTrigger tabIndex={-1}>
-                <CircleHelpIcon className="size-4 opacity-50" />
-              </TooltipTrigger>
-              <TooltipContent>{folder.source.path}</TooltipContent>
-            </Tooltip>
-          ) : null}
           {folder && folder.status === "UPLOADING" ? (
             <CircularProgress
               value={100 * (folder?.upload?.progress || 0)}

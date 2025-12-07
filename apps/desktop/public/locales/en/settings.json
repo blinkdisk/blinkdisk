@@ -81,6 +81,9 @@
         "label": "Folder Name",
         "placeholder": "Enter folder name"
       },
+      "path": {
+        "label": "Folder Path"
+      },
       "emoji": {
         "button": "Change Emoji"
       },
