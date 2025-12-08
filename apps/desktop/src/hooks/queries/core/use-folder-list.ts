@@ -1,7 +1,7 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
 import { trpc } from "@desktop/lib/trpc";
@@ -87,12 +87,12 @@ export type CoreFolderItem = {
 export function useFolderList() {
   const { profileId, localProfileId } = useProfile();
   const { deviceId } = useDevice();
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: [accountId, "core", "folder", "list", vaultId],
+    queryKey: queryKeys.folder.list(vaultId),
     queryFn: async () => {
       const data = await window.electron.vault.fetch({
         vaultId: vaultId!,

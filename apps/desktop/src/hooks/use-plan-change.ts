@@ -1,5 +1,5 @@
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { queryClient } from "@desktop/routes/__root";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useCallback } from "react";
@@ -7,29 +7,41 @@ import { toast } from "sonner";
 
 export function usePlanChange() {
   const { t } = useAppTranslation("subscription.planChangeToast");
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { setIsOpen } = useUpgradeDialog();
 
   const onPlanChange = useCallback(
     async (type: "CHANGE" | "START" = "START") => {
       setIsOpen(false);
 
-      await queryClient.invalidateQueries({
-        predicate: (query) =>
-          (query.queryKey[0] === accountId &&
-            query.queryKey[1] === "vault" &&
-            query.queryKey[3] === "space") ||
-          (query.queryKey[0] === accountId &&
-            query.queryKey[1] === "subscription") ||
-          (query.queryKey[0] === accountId && query.queryKey[1] === "billing"),
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            const key = query.queryKey;
+
+            return (
+              Array.isArray(key) &&
+              key.length >= 4 &&
+              key[0] === queryKeys.vault.all[0] &&
+              key[1] === queryKeys.vault.all[1] &&
+              key[3] === "space"
+            );
+          },
+        }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.subscription.all,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.billing.all,
+        }),
+      ]);
 
       toast.success(t(`${type}.title`), {
         description: t(`${type}.description`),
         duration: 60000,
       });
     },
-    [setIsOpen, accountId, t],
+    [setIsOpen, queryKeys, t],
   );
 
   return { onPlanChange };

@@ -1,5 +1,5 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useFolderId } from "@desktop/hooks/use-folder-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { ZRestoreDirectoryType } from "@schemas/directory";
@@ -16,7 +16,7 @@ export function useRestoreDirectory({
 
   const { vaultId } = useVaultId();
   const { folderId } = useFolderId();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["account", "details"],
@@ -33,7 +33,7 @@ export function useRestoreDirectory({
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "restore", "list", folderId],
+        queryKey: queryKeys.folder.restores(folderId),
       });
 
       onSuccess?.();

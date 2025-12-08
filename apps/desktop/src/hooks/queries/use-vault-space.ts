@@ -1,14 +1,14 @@
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultSpace() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { data: vault } = useVault();
 
   return useQuery({
-    queryKey: [accountId, "vault", vault?.id, "space"],
+    queryKey: queryKeys.vault.space(vault?.id),
     queryFn: () => {
       if (!vault) return null;
 

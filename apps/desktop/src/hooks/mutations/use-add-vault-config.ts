@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
 import { ZAddConfigType } from "@schemas/config";
@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useAddVaultConfig(onSuccess?: () => void) {
   const queryClient = useQueryClient();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["config", "add"],
@@ -31,10 +31,10 @@ export function useAddVaultConfig(onSuccess?: () => void) {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: [accountId, "config"],
+          queryKey: queryKeys.config.all,
         }),
         queryClient.invalidateQueries({
-          queryKey: [accountId, "vault", "status"],
+          queryKey: queryKeys.vault.all,
         }),
       ]);
 

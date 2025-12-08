@@ -1,5 +1,5 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import {
   convertPolicyToCore,
@@ -20,7 +20,7 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { deviceId } = useDevice();
 
   return useMutation({
@@ -59,11 +59,11 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
 
       // Make sure config is fetched before vault
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "config"],
+        queryKey: queryKeys.config.all,
       });
 
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "vault"],
+        queryKey: queryKeys.vault.all,
       });
 
       for (let i = 0; i < 30; i++) {

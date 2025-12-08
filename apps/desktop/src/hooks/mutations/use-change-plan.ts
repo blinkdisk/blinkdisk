@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
 import { ZChangePlan } from "@schemas/payment";
@@ -10,7 +10,7 @@ type UseChangePlan = {
 
 export function useChangePlan({ onSuccess }: UseChangePlan = {}) {
   const queryClient = useQueryClient();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["payment", "plan", "change"],
@@ -22,7 +22,7 @@ export function useChangePlan({ onSuccess }: UseChangePlan = {}) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "subscription"],
+        queryKey: queryKeys.subscription.detail(),
       });
 
       onSuccess?.();

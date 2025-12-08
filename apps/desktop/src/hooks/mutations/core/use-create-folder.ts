@@ -1,8 +1,8 @@
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { hashFolder } from "@desktop/lib/folder";
@@ -31,7 +31,7 @@ export function useCreateFolder({
   const { vaultId } = useVaultId();
   const { deviceId } = useDevice();
   const { profileId } = useProfile();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   const { data: vault } = useVault();
   const { data: space } = useVaultSpace();
@@ -96,7 +96,7 @@ export function useCreateFolder({
       });
 
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "folder", "list", vaultId],
+        queryKey: queryKeys.folder.list(vaultId),
       });
 
       await navigate({

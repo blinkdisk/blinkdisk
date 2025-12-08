@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useUpdateVault(onSuccess: () => void) {
   const queryClient = useQueryClient();
   const { vaultId } = useVaultId();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["vault", vaultId, "name"],
@@ -33,10 +33,10 @@ export function useUpdateVault(onSuccess: () => void) {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: [accountId, "vault", vaultId],
+          queryKey: queryKeys.vault.detail(vaultId),
         }),
         queryClient.invalidateQueries({
-          queryKey: [accountId, "vault", "list"],
+          queryKey: queryKeys.vault.list(),
         }),
       ]);
 

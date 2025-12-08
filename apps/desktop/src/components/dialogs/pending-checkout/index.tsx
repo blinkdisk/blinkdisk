@@ -1,3 +1,4 @@
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,6 +22,7 @@ export function PendingCheckoutDialog({
   url,
 }: PendingCheckoutDialogProps) {
   const queryClient = useQueryClient();
+  const { queryKeys } = useQueryKey();
   const { t } = useAppTranslation("subscription.pendingCheckoutDialog");
   const { isFetching } = useSubscription();
 
@@ -44,7 +46,7 @@ export function PendingCheckoutDialog({
         <Button
           onClick={() =>
             queryClient.invalidateQueries({
-              predicate: (query) => query.queryKey[1] === "subscription",
+              queryKey: queryKeys.subscription.all,
             })
           }
           loading={isFetching}

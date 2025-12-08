@@ -1,15 +1,15 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useFolderId } from "@desktop/hooks/use-folder-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useRestoreList() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { folderId } = useFolderId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: [accountId, "restore", "list", folderId],
+    queryKey: queryKeys.folder.restores(folderId),
     queryFn: async () => {
       return await window.electron.vault.restore.list({
         folderId: folderId!,

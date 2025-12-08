@@ -1,6 +1,6 @@
 import { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useFolderId } from "@desktop/hooks/use-folder-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -13,7 +13,7 @@ export function useRestoreSingle() {
 
   const { vaultId } = useVaultId();
   const { folderId } = useFolderId();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["file", "restore"],
@@ -31,7 +31,7 @@ export function useRestoreSingle() {
     onSuccess: async (res) => {
       if (res === true) {
         await queryClient.invalidateQueries({
-          queryKey: [accountId, "restore", "list", folderId],
+          queryKey: queryKeys.folder.restores(folderId),
         });
       }
     },

@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
@@ -8,11 +8,11 @@ export type ConfigListItem = Awaited<
 >[number];
 
 export function useConfigList() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { localProfileId } = useProfile();
 
   return useQuery({
-    queryKey: [accountId, "config", "list", localProfileId],
+    queryKey: queryKeys.config.list(localProfileId),
     queryFn: () => {
       if (!localProfileId) return [];
       return trpc.config.list.query({ profileId: localProfileId });

@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -11,7 +11,7 @@ export function useBackupAll() {
   const { vaultId } = useVaultId();
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["vault", vaultId, "backup"],
@@ -31,7 +31,7 @@ export function useBackupAll() {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "folder", "list", vaultId],
+        queryKey: queryKeys.folder.list(vaultId),
       });
     },
   });

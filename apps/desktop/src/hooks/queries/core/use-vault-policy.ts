@@ -1,7 +1,7 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertPolicyFromCore, defaultPolicy } from "@desktop/lib/policy";
 import { useQuery } from "@tanstack/react-query";
@@ -9,12 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 export function useVaultPolicy() {
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: [accountId, "core", "policy", vaultId],
+    queryKey: queryKeys.policy.vault(vaultId),
     queryFn: async () => {
       if (!deviceId || !profileId || !vaultId) return null;
 

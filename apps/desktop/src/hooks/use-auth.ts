@@ -2,6 +2,7 @@ import { useCreateProfile } from "@desktop/hooks/mutations/use-create-profile";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { authClient } from "@desktop/lib/auth";
 import { useAppStorage } from "@hooks/use-app-storage";
 import { useQueryClient } from "@tanstack/react-query";
@@ -11,6 +12,7 @@ import { useCallback } from "react";
 export function useAuth() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { queryKeys } = useQueryKey();
 
   const [authenticated, setAuthenticated] = useAppStorage(
     "authenticated",
@@ -76,10 +78,10 @@ export function useAuth() {
       await setAccountId(session.user.id);
 
       await queryClient.invalidateQueries({
-        queryKey: ["account"],
+        queryKey: queryKeys.account.detail(),
       });
     },
-    [queryClient, setAccountId, createProfile],
+    [queryClient, setAccountId, createProfile, queryKeys],
   );
 
   const selectAccount = useCallback(

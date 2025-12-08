@@ -1,9 +1,9 @@
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertPolicyFromCore, mergeFolderPolicy } from "@desktop/lib/policy";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 export function useFolderPolicy({ folderId }: { folderId?: string }) {
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
@@ -19,7 +19,7 @@ export function useFolderPolicy({ folderId }: { folderId?: string }) {
   const { data: vaultPolicy } = useVaultPolicy();
 
   return useQuery({
-    queryKey: [accountId, "core", "policy", folder?.id],
+    queryKey: queryKeys.policy.folder(folder?.id),
     queryFn: async () => {
       if (!deviceId || !profileId || !vaultId || !folder || !vaultPolicy)
         return null;

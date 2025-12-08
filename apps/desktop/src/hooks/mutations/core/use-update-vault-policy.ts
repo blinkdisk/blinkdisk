@@ -1,6 +1,6 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore } from "@desktop/lib/policy";
@@ -16,7 +16,7 @@ export function useUpdateVaultPolicy({
 
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useMutation({
@@ -40,7 +40,7 @@ export function useUpdateVaultPolicy({
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "policy", vaultId],
+        queryKey: queryKeys.policy.vault(vaultId),
       });
 
       onSuccess?.();

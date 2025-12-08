@@ -5,6 +5,7 @@ config({
 });
 
 import tailwindcss from "@tailwindcss/vite";
+import { devtools } from "@tanstack/devtools-vite";
 import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -15,6 +16,7 @@ export default defineConfig({
   clearScreen: false,
   base: "./",
   plugins: [
+    devtools(),
     paths(),
     router({ target: "react", autoCodeSplitting: true }),
     react({

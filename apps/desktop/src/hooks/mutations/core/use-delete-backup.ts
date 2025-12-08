@@ -1,7 +1,7 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
   const { data: folder } = useFolder();
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useMutation({
@@ -38,7 +38,7 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "backup", "list", vaultId],
+        queryKey: queryKeys.backup.list(folder?.id),
       });
 
       onSuccess?.();
