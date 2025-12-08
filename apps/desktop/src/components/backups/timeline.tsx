@@ -1,7 +1,6 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { useBackupFolder } from "@desktop/hooks/mutations/core/use-backup-folder";
-import { usePausedBackup } from "@desktop/hooks/queries/use-paused-backup";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import {
@@ -17,10 +16,10 @@ import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@ui/button";
-import { Loader } from "@ui/loader";
 import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
 import {
+  CalendarClockIcon,
   FileSearchIcon,
   FilesIcon,
   HardDrive,
@@ -65,7 +64,6 @@ function formatDate(dateString: string): string {
 
 export function BackupTimeline({ backups }: BackupTimelineProps) {
   const { data: folder } = useFolder();
-  const { data: pausedBackup } = usePausedBackup();
 
   const groupedBackups = useMemo(() => {
     if (!backups)
@@ -87,7 +85,10 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 
     if (
       ["PENDING", "UPLOADING"].includes(folder?.status || "") ||
-      pausedBackup
+      (folder &&
+        folder.lastSnapshot &&
+        "incomplete" in folder.lastSnapshot &&
+        folder?.lastSnapshot?.incomplete === "checkpoint")
     ) {
       backupsWithFake.push({
         type: "FAKE",
@@ -116,7 +117,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
     });
 
     return sortedGroups;
-  }, [folder, backups, pausedBackup]);
+  }, [folder, backups]);
 
   return (
     <div className="relative">
@@ -197,13 +198,15 @@ function FakeBackup() {
     >
       {folder && folder.status === "PENDING" ? (
         <>
-          <div className="flex flex-col">
-            <p className="text-lg font-medium">{t("pending.title")}</p>
-            <p className="text-muted-foreground -mt-0.5 text-xs">
-              {t("pending.description")}
-            </p>
+          <div className="flex items-center gap-4">
+            <CalendarClockIcon className="text-muted-foreground size-6" />
+            <div className="flex flex-col">
+              <p className="font-medium">{t("pending.title")}</p>
+              <p className="text-muted-foreground text-xs">
+                {t("pending.description")}
+              </p>
+            </div>
           </div>
-          <Loader className="mr-3" />
         </>
       ) : folder && folder.status === "UPLOADING" ? (
         <>
@@ -213,12 +216,12 @@ function FakeBackup() {
             }}
             className="bg-foreground/5 dark:bg-foreground/10 absolute bottom-0 left-0 top-0 transition-all"
           ></div>
-          <BackupProgress upload={folder.upload} />
+          <BackupProgress upload={folder.upload} variant="descriptive" />
         </>
       ) : (
         <>
           <div className="flex flex-col">
-            <p className="text-lg font-medium">{t("paused.title")}</p>
+            <p className="font-medium">{t("paused.title")}</p>
             <p className="text-muted-foreground -mt-0.5 text-xs">
               {t("paused.description")}
             </p>

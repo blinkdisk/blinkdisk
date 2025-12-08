@@ -1,3 +1,4 @@
+import { BackupProgress } from "@desktop/components/backups/progress";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
 import { useBackupFolder } from "@desktop/hooks/mutations/core/use-backup-folder";
@@ -67,14 +68,20 @@ function Folder({ folder }: FolderProps) {
         })}
         className="absolute inset-0"
       />
-      <FolderPreview folder={folder} />
+      <FolderPreview folder={folder} progress={false} />
       <div className="flex items-center gap-3">
-        {folder && !folder.lastSnapshot ? null : (
-          <p className="text-muted-foreground whitespace-nowrap text-sm">
-            {folder ? formattedTime : <Skeleton width={100} />}
-          </p>
-        )}
-        <div className="h-6 border-r" />
+        {folder && (folder.lastSnapshot || folder.status === "UPLOADING") ? (
+          <>
+            {folder.status === "UPLOADING" ? (
+              <BackupProgress upload={folder.upload} size="sm" />
+            ) : (
+              <p className="text-muted-foreground whitespace-nowrap text-sm">
+                {folder ? formattedTime : <Skeleton width={100} />}
+              </p>
+            )}
+            <div className="h-6 border-r" />
+          </>
+        ) : null}
         {folder ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

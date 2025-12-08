@@ -40,13 +40,19 @@
     "backup": "Backup Now"
   },
   "progress": {
-    "default": {
+    "descriptive": {
       "title": "Backup in progress",
-      "description": "{{percentage}} · {{completed}} / ~{{total}}"
+      "description": {
+        "total": "{{percentage}} · {{completed}} / {{total}}",
+        "fallback": "{{percentage}} · {{completed}}"
+      }
     },
-    "big": {
+    "default": {
       "title": "{{percentage}} complete",
-      "description": "{{completed}} / ~{{total}}"
+      "description": {
+        "total": "{{completed}} / {{total}}",
+        "fallback": "{{completed}} processed"
+      }
     }
   },
   "deleteDialog": {

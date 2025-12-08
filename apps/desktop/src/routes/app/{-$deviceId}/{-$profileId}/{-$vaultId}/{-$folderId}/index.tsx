@@ -121,7 +121,7 @@ function RouteComponent() {
               {t("empty.initial.description")}
             </p>
             <div className="mt-10">
-              <BackupProgress upload={folder.upload} variant="big" />
+              <BackupProgress upload={folder.upload} />
             </div>
             <div className="mb-auto"></div>
           </div>
