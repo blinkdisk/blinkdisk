@@ -41,10 +41,6 @@
         "placeholder": "Enter vault name"
       },
       "submit": "Link Vault"
-    },
-    "success": {
-      "title": "Successfully linked vault",
-      "description": "Your vault has been linked successfully."
     }
   },
   "createDialog": {
@@ -113,10 +109,6 @@
         "description": "We never store this password on our servers and there is no way to recover it. If you loose this password, you might not be able to restore your backups."
       },
       "submit": "Create Vault"
-    },
-    "success": {
-      "title": "Successfully created vault",
-      "description": "Your vault has been created successfully."
     }
   },
   "passwordMissing": {
@@ -354,8 +346,7 @@
                 "title": "Failed to scan with ssh-keyscan",
                 "description": "Please check your specified host and port."
               }
-            },
-            "success": "Known hosts scanned successfully"
+            }
           }
         }
       }
@@ -416,18 +407,6 @@
     "usedStorage": {
       "title": "Cloud storage used",
       "amount": "{{used}} of {{capacity}} used"
-    }
-  },
-  "update": {
-    "success": {
-      "title": "Successfully updated vault",
-      "description": "Your vault has been updated successfully."
-    }
-  },
-  "updateThrottle": {
-    "success": {
-      "title": "Successfully updated throttle",
-      "description": "Your throttle has been updated successfully."
     }
   },
   "readOnly": {

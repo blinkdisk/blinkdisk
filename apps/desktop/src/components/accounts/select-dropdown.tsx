@@ -44,7 +44,7 @@ export function AccountSelectDropdown({
                 onClick={() =>
                   account &&
                   account.user.id !== accountId &&
-                  selectAccount(account.session.token, account.user.email)
+                  selectAccount(account.session.token)
                 }
               >
                 <AccountPreview account={account} />

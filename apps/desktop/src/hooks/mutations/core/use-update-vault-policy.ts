@@ -4,10 +4,8 @@ import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore } from "@desktop/lib/policy";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export function useUpdateVaultPolicy({
   onSuccess,
@@ -16,7 +14,6 @@ export function useUpdateVaultPolicy({
 }) {
   const queryClient = useQueryClient();
 
-  const { t } = useAppTranslation("policy.update");
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { accountId } = useAccountId();
@@ -44,10 +41,6 @@ export function useUpdateVaultPolicy({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: [accountId, "core", "policy", vaultId],
-      });
-
-      toast.success(t("success.title"), {
-        description: t("success.description"),
       });
 
       onSuccess?.();

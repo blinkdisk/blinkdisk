@@ -78,9 +78,6 @@ export function PreferencesSettingsDialog() {
               />
             )}
           </form.AppField>
-          <form.AppForm>
-            <form.Submit>{t("submit")}</form.Submit>
-          </form.AppForm>
         </form>
       </DialogContent>
     </Dialog>

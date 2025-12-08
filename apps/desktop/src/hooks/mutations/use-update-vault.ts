@@ -2,14 +2,11 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZUpdateVaultFormType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export function useUpdateVault(onSuccess: () => void) {
   const queryClient = useQueryClient();
-  const { t } = useAppTranslation("vault.update");
   const { vaultId } = useVaultId();
   const { accountId } = useAccountId();
 
@@ -42,10 +39,6 @@ export function useUpdateVault(onSuccess: () => void) {
           queryKey: [accountId, "vault", "list"],
         }),
       ]);
-
-      toast.success(t("success.title"), {
-        description: t("success.description"),
-      });
 
       onSuccess?.();
     },

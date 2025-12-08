@@ -17,6 +17,11 @@ export function useUpdatePreferencesForm() {
     validators: {
       onSubmit: ZUpdatePreferences,
     },
+    listeners: {
+      onChange: ({ formApi }) => {
+        if (formApi.state.isValid) formApi.handleSubmit();
+      },
+    },
     onSubmit: async ({ value }) => await mutateAsync(value),
   });
 

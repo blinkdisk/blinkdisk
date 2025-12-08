@@ -15,10 +15,6 @@
       "title": "Select folder path"
     },
     "submit": "Add Folder",
-    "success": {
-      "title": "Successfully added folder",
-      "description": "The folder has been added to your vault."
-    },
     "exceedingAlert": {
       "title": "Not enough cloud storage",
       "description": "This folder likely can’t be backed up because it would exceed your available BlinkDisk Cloud storage. To back it up, you’ll need to upgrade your BlinkDisk Cloud plan.",

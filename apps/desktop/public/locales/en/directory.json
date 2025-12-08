@@ -43,19 +43,11 @@
       "single": {
         "dialog": {
           "title": "Select restore destination folder"
-        },
-        "success": {
-          "title": "Item is being restored",
-          "description": "The restoration of the item is in progress."
         }
       },
       "multiple": {
         "dialog": {
           "title": "Select restore destination folder"
-        },
-        "success": {
-          "title": "Items are being restored",
-          "description": "The restoration of the items is in progress."
         }
       }
     }
@@ -90,11 +82,7 @@
     "confirmed": {
       "label": "I understand that files might be overwritten"
     },
-    "submit": "Restore",
-    "success": {
-      "title": "Folder is being restored",
-      "description": "The folder is now being restored."
-    }
+    "submit": "Restore"
   },
   "restore": {
     "title": "Restore in progress",

@@ -4,17 +4,13 @@ import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { authClient } from "@desktop/lib/auth";
 import { useAppStorage } from "@hooks/use-app-storage";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
-import { toast } from "sonner";
 
 export function useAuth() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const { t } = useAppTranslation("auth");
 
   const [authenticated, setAuthenticated] = useAppStorage(
     "authenticated",
@@ -87,37 +83,18 @@ export function useAuth() {
   );
 
   const selectAccount = useCallback(
-    async (sessionToken: string, email: string) => {
-      const promise = async () => {
-        const { data, error } = await authClient.multiSession.setActive({
-          sessionToken,
-        });
-
-        if (error || !data) throw error;
-
-        navigate({ to: "/app/loading" });
-        await accountChanged(data);
-        navigate({ to: "/app" });
-      };
-
-      toast.promise(promise(), {
-        loading: t("switch.toast.loading.title"),
-        description: t("switch.toast.loading.description"),
-        success: () => ({
-          message: t("switch.toast.success.title"),
-          description: t("switch.toast.success.description", {
-            email: email,
-          }),
-        }),
-        error: () => ({
-          message: t("switch.toast.error.title"),
-          description: t("switch.toast.error.description", {
-            email: email,
-          }),
-        }),
+    async (sessionToken: string) => {
+      const { data, error } = await authClient.multiSession.setActive({
+        sessionToken,
       });
+
+      if (error || !data) throw error;
+
+      navigate({ to: "/app/loading" });
+      await accountChanged(data);
+      navigate({ to: "/app" });
     },
-    [accountChanged, navigate, t],
+    [accountChanged, navigate],
   );
 
   const logout = useCallback(async () => {
@@ -137,10 +114,7 @@ export function useAuth() {
     );
 
     if (remainingSessions?.length && remainingSessions[0]) {
-      selectAccount(
-        remainingSessions[0].session.token,
-        remainingSessions[0].user.email,
-      );
+      selectAccount(remainingSessions[0].session.token);
     } else {
       setAuthenticated(false);
       navigate({ to: "/auth/login" });

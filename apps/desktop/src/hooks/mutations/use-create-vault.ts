@@ -6,7 +6,6 @@ import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
 import { ZCreateVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export type CreateVaultResponse = Awaited<
   ReturnType<typeof trpc.vault.create.mutate>
@@ -86,10 +85,6 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
       await queryClient.invalidateQueries({
         queryKey: [accountId, "vault"],
-      });
-
-      toast.success(t("title"), {
-        description: t("description"),
       });
 
       onSuccess?.(res);

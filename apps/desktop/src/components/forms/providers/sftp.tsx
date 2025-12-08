@@ -5,9 +5,11 @@ import { VaultAction } from "@desktop/hooks/use-config-validation";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZSftpConfigType } from "@schemas/providers";
+import { useMutation } from "@tanstack/react-query";
+import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
-import { useCallback, useContext } from "react";
-import { toast } from "sonner";
+import { TriangleAlertIcon } from "lucide-react";
+import { useContext } from "react";
 
 export type SftpFormProps = {
   action: VaultAction;
@@ -34,18 +36,18 @@ export function SftpForm({
 
   const values = useStore(form.store, (store) => store.values);
 
-  const scan = useCallback(async () => {
-    const result = await window.electron.ssh.keyscan(values);
+  const {
+    mutateAsync: scan,
+    error,
+    isPending,
+  } = useMutation({
+    mutationFn: async () => {
+      const result = await window.electron.ssh.keyscan(values);
+      if (result.error) throw result.error;
 
-    if (result.error)
-      return toast.error(t(`knownHosts.scan.error.${result.error}.title`), {
-        description: t(`knownHosts.scan.error.${result.error}.description`),
-      });
-
-    form.setFieldValue("knownHosts", result.output || "");
-
-    toast.success(t("knownHosts.scan.success"));
-  }, [values, form, t]);
+      form.setFieldValue("knownHosts", result.output || "");
+    },
+  });
 
   return (
     <form
@@ -115,10 +117,22 @@ export function SftpForm({
               as="textarea"
               className="min-h-24"
             />
+            {error ? (
+              <Alert variant="destructive">
+                <TriangleAlertIcon />
+                <AlertTitle>
+                  {t(`knownHosts.scan.error.${error}.title`)}
+                </AlertTitle>
+                <AlertDescription>
+                  {t(`knownHosts.scan.error.${error}.description`)}
+                </AlertDescription>
+              </Alert>
+            ) : null}
             <Button
               variant="outline"
               disabled={disabledContext}
               onClick={() => scan()}
+              loading={isPending}
               type="button"
             >
               {t("knownHosts.scan.button")}

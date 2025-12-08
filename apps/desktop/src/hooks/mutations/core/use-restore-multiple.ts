@@ -6,7 +6,6 @@ import { showErrorToast } from "@desktop/lib/error";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { toast } from "sonner";
 
 export function useRestoreMultiple(items: DirectoryItem[] | undefined) {
   const queryClient = useQueryClient();
@@ -38,10 +37,6 @@ export function useRestoreMultiple(items: DirectoryItem[] | undefined) {
         await queryClient.invalidateQueries({
           queryKey: [accountId, "restore", "list", folderId],
         });
-
-      toast.success(t("success.title"), {
-        description: t("success.description"),
-      });
     },
   });
 }
