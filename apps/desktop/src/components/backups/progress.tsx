@@ -2,16 +2,19 @@ import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { CircularProgress } from "@ui/circular-progress";
+import { cn } from "@utils/class";
 import { useMemo } from "react";
 
 interface BackupProgressProps {
   upload: Required<CoreFolderItem["upload"]>;
-  variant?: "big" | "default";
+  variant?: "descriptive" | "default";
+  size?: "sm" | "default";
 }
 
 export function BackupProgress({
   upload,
   variant = "default",
+  size = "default",
 }: BackupProgressProps) {
   const { t } = useAppTranslation("backup.progress");
 
@@ -21,7 +24,9 @@ export function BackupProgress({
         (upload?.cachedBytes || 0) + (upload?.hashedBytes || 0),
         { round: 1 },
       ),
-      total: formatSize(upload?.estimatedBytes || 0, { round: 1 }),
+      total: upload?.estimatedBytes
+        ? formatSize(upload?.estimatedBytes || 0, { round: 1 })
+        : "",
       percentage: (upload?.progress || 0).toLocaleString(undefined, {
         style: "percent",
       }),
@@ -36,10 +41,20 @@ export function BackupProgress({
         strokeWidth={4}
         progressClassName="opacity-60 dark:opacity-70"
       />
-      <div className="flex flex-col gap-0.5">
-        <p className="font-medium">{t(`${variant}.title`, numbers)}</p>
-        <p className="text-muted-foreground text-xs">
-          {t(`${variant}.description`, numbers)}
+      <div className={cn("flex flex-col", size !== "sm" && "gap-0.5")}>
+        <p
+          className={cn(
+            "whitespace-nowrap font-medium",
+            size === "sm" && "text-sm",
+          )}
+        >
+          {t(`${variant}.title`, numbers)}
+        </p>
+        <p className="text-muted-foreground whitespace-nowrap text-xs">
+          {t(
+            `${variant}.description.${numbers.total ? "total" : "fallback"}`,
+            numbers,
+          )}
         </p>
       </div>
     </div>

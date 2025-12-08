@@ -3,6 +3,7 @@ import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useParams } from "@tanstack/react-router";
+import { CircularProgress } from "@ui/circular-progress";
 import {
   SidebarGroupLabel,
   SidebarMenuButton,
@@ -57,8 +58,17 @@ function SidebarFolder({ folder }: SidebarFolderProps) {
             ...params,
             folderId: folder?.id || "",
           })}
+          className="flex items-center justify-between"
         >
           <FolderPreview folder={folder} size="sm" />
+          {folder && folder.status === "UPLOADING" ? (
+            <CircularProgress
+              value={100 * (folder?.upload?.progress || 0)}
+              size={25}
+              strokeWidth={4}
+              progressClassName="opacity-60 dark:opacity-70"
+            />
+          ) : null}
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>

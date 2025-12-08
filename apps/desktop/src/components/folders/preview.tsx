@@ -1,9 +1,7 @@
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { formatInt, formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { CircularProgress } from "@ui/circular-progress";
 import { EmojiCard } from "@ui/emoji-card";
-import { Loader } from "@ui/loader";
 import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
 
@@ -45,17 +43,6 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
               <Skeleton width={100} />
             )}
           </h2>
-          {folder && folder.status === "UPLOADING" ? (
-            <CircularProgress
-              value={100 * (folder?.upload?.progress || 0)}
-              size={15}
-              strokeWidth={3}
-              containerClassName="mb-0.5"
-              progressClassName="opacity-60 dark:opacity-70"
-            />
-          ) : folder && folder.status === "PENDING" ? (
-            <Loader size={size === "sm" ? 0.8 : 1} className="mb-0.5" />
-          ) : null}
         </div>
         <p
           className={cn(
