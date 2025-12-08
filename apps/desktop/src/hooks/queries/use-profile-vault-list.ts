@@ -1,5 +1,5 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,11 +8,11 @@ export type ProfileVaultListItem = Awaited<
 >[number];
 
 export function useProfileVaultList() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { profileId } = useProfile();
 
   return useQuery({
-    queryKey: [accountId, "vault", "list", profileId],
+    queryKey: queryKeys.vault.listByProfile(profileId),
     queryFn: () => {
       return trpc.vault.list.query({
         profileId: profileId!,

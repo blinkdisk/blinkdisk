@@ -1,12 +1,12 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
 export function useBilling() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
 
   return useQuery({
-    queryKey: [accountId, "billing"],
+    queryKey: queryKeys.billing.detail(),
     queryFn: () => {
       return trpc.payment.billing.query();
     },

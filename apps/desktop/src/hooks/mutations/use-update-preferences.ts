@@ -1,3 +1,4 @@
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import i18n from "@desktop/i18n";
 import { authClient } from "@desktop/lib/auth";
 import { showErrorToast } from "@desktop/lib/error";
@@ -8,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useUpdatePreferences(onSuccess: () => void) {
   const { setTheme } = useTheme();
   const queryClient = useQueryClient();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["user", "preferences"],
@@ -25,7 +27,7 @@ export function useUpdatePreferences(onSuccess: () => void) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["account"],
+        queryKey: queryKeys.account.detail(),
       });
 
       onSuccess?.();

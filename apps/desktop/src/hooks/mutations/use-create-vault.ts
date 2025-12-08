@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore, defaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
@@ -13,7 +13,7 @@ export type CreateVaultResponse = Awaited<
 export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
 
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["vault", "create"],
@@ -74,15 +74,15 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       // Make sure config & storage are fetched before vault
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: [accountId, "storage"],
+          queryKey: queryKeys.storage.all,
         }),
         queryClient.invalidateQueries({
-          queryKey: [accountId, "config"],
+          queryKey: queryKeys.config.all,
         }),
       ]);
 
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "vault"],
+        queryKey: queryKeys.vault.all,
       });
 
       onSuccess?.(res);

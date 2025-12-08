@@ -1,8 +1,8 @@
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { getFolderPolicyUpdates } from "@desktop/lib/policy";
@@ -18,7 +18,7 @@ export function useUpdateFolderPolicy({
 }) {
   const queryClient = useQueryClient();
 
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { vaultId } = useVaultId();
@@ -51,10 +51,10 @@ export function useUpdateFolderPolicy({
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: [accountId, "core", "policy", folder?.id],
+          queryKey: queryKeys.policy.folder(folder?.id),
         }),
         queryClient.invalidateQueries({
-          queryKey: [accountId, "core", "folder", "list", vaultId],
+          queryKey: queryKeys.folder.list(vaultId),
         }),
       ]);
 

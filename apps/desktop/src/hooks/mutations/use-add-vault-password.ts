@@ -1,11 +1,11 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { ZVaultPasswordFormType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useAddVaultPassword(onSuccess: () => void) {
   const queryClient = useQueryClient();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["vault", "password", "add"],
@@ -20,7 +20,7 @@ export function useAddVaultPassword(onSuccess: () => void) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "vault", "status"],
+        queryKey: queryKeys.vault.all,
       });
 
       onSuccess?.();

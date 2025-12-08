@@ -1,6 +1,6 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useDirectoryId } from "@desktop/hooks/use-directory-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useQuery } from "@tanstack/react-query";
 
@@ -46,13 +46,13 @@ export type DirectoryItem = {
 };
 
 export function useDirectory() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { directoryId } = useDirectoryId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: [accountId, "core", "directory", directoryId],
+    queryKey: queryKeys.directory.detail(directoryId),
     queryFn: async () => {
       const data = (await window.electron.vault.fetch({
         vaultId: vaultId!,

@@ -1,8 +1,11 @@
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useDirectoryEmpty(directoryPath: string | undefined) {
+  const { queryKeys } = useQueryKey();
+
   return useQuery({
-    queryKey: ["directory", "empty", directoryPath],
+    queryKey: queryKeys.directory.empty(directoryPath),
     queryFn: async () => {
       if (!directoryPath) return false;
 

@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 import { useDevice } from "../use-device";
@@ -8,11 +8,11 @@ export type DeviceProfileItem = Awaited<
 >[number];
 
 export function useDeviceProfileList() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { deviceId } = useDevice();
 
   return useQuery({
-    queryKey: [accountId, "profile", "list", deviceId],
+    queryKey: queryKeys.device.profiles(deviceId),
     queryFn: async () => {
       return trpc.profile.list.query({ deviceId });
     },

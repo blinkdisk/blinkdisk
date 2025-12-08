@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { EncryptedConfig } from "@electron/encryption";
 import { ProviderConfig } from "@schemas/providers";
 import { useQuery } from "@tanstack/react-query";
@@ -10,10 +10,10 @@ export function useVaultConfig(
   },
   password?: string | null,
 ) {
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useQuery({
-    queryKey: [accountId, "vault", vault?.id, "config", password],
+    queryKey: queryKeys.vault.config(vault?.id, password),
     queryFn: async () => {
       if (!vault || !password || !vault.config) return null;
 

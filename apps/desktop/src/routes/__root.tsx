@@ -47,10 +47,10 @@ function RootComponent() {
       >
         <PostHogErrorBoundary fallback={DefaultErrorPage}>
           <QueryClientProvider client={queryClient}>
+            <Devtools />
             <SkeletonTheme>
               <Update>
                 <Outlet />
-                <Devtools />
                 <Toaster />
                 <OfflineDialog />
               </Update>

@@ -1,5 +1,5 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useBackup } from "@desktop/hooks/use-backup";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -11,7 +11,7 @@ export function useStopMount() {
   const { t } = useAppTranslation("directory.table.mount.stop.error");
 
   const { vaultId } = useVaultId();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { data: backup } = useBackup();
 
   return useMutation({
@@ -33,7 +33,7 @@ export function useStopMount() {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "mount", backup?.rootID],
+        queryKey: queryKeys.directory.mount(backup?.rootID),
       });
     },
   });

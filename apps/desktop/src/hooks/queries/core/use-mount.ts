@@ -1,6 +1,6 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useBackup } from "@desktop/hooks/use-backup";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useQuery } from "@tanstack/react-query";
 
@@ -10,13 +10,13 @@ export type CoreMountItem = {
 };
 
 export function useMount() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
   const { running } = useVaultStatus();
   const { vaultId } = useVaultId();
   const { data: backup } = useBackup();
 
   return useQuery({
-    queryKey: [accountId, "core", "mount", backup?.rootID],
+    queryKey: queryKeys.directory.mount(backup?.rootID),
     queryFn: async () => {
       const data = (await window.electron.vault.fetch({
         vaultId: vaultId!,

@@ -1,6 +1,6 @@
 import { CoreMountItem, useMount } from "@desktop/hooks/queries/core/use-mount";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useBackup } from "@desktop/hooks/use-backup";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ export function useStartMount() {
   const queryClient = useQueryClient();
 
   const { vaultId } = useVaultId();
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { data: backup } = useBackup();
   const { data: mount } = useMount();
   const { path } = useSearch({ strict: false });
@@ -46,7 +46,7 @@ export function useStartMount() {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "mount", backup?.rootID],
+        queryKey: queryKeys.directory.mount(backup?.rootID),
       });
     },
   });

@@ -1,3 +1,4 @@
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { authClient } from "@desktop/lib/auth";
 import { showErrorToast } from "@desktop/lib/error";
 import { ZUpdateUserType } from "@schemas/settings";
@@ -5,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateAccount(onSuccess: () => void) {
   const queryClient = useQueryClient();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["account", "details"],
@@ -22,7 +24,7 @@ export function useUpdateAccount(onSuccess: () => void) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["account"],
+        queryKey: queryKeys.account.detail(),
       });
 
       onSuccess?.();

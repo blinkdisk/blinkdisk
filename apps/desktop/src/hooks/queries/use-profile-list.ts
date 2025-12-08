@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
@@ -7,10 +7,10 @@ export type ProfileItem = Awaited<
 >[number];
 
 export function useProfileList() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
 
   return useQuery({
-    queryKey: [accountId, "profile", "list"],
+    queryKey: queryKeys.profile.list(),
     queryFn: async () => {
       return trpc.profile.list.query({});
     },

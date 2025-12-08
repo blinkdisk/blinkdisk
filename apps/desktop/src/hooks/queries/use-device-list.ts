@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
@@ -7,10 +7,10 @@ export type DeviceItem = Awaited<
 >[number];
 
 export function useDeviceList() {
-  const { accountId } = useAccountId();
+  const { queryKeys, accountId } = useQueryKey();
 
   return useQuery({
-    queryKey: [accountId, "device", "list"],
+    queryKey: queryKeys.device.list(),
     queryFn: async () => {
       return trpc.device.list.query();
     },

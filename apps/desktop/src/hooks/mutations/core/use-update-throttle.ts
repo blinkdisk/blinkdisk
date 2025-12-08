@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertThrottleToCore } from "@desktop/lib/throttle";
@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useUpdateThrottle(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
-  const { accountId } = useAccountId();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useMutation({
@@ -26,7 +26,7 @@ export function useUpdateThrottle(onSuccess?: () => void) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [accountId, "core", "throttle", vaultId],
+        queryKey: queryKeys.vault.throttle(vaultId),
       });
 
       onSuccess?.();
