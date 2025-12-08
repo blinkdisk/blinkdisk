@@ -3,14 +3,12 @@ import { useAuth } from "@desktop/hooks/use-auth";
 import i18n from "@desktop/i18n";
 import { authClient } from "@desktop/lib/auth";
 import { showErrorToast } from "@desktop/lib/error";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZMagicCodeType } from "@schemas/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
 
 export function useMagicCode() {
-  const { t } = useAppTranslation("auth.magic");
   const { setAuthenticated, accountChanged } = useAuth();
 
   const navigate = useNavigate();

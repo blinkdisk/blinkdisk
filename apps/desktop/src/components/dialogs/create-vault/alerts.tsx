@@ -4,20 +4,22 @@ import { VaultExistsError } from "@desktop/components/errors/vault-exists";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import type { FormApi } from "@tanstack/react-form";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { InfoIcon } from "lucide-react";
 
 type CreateVaultAlertsProps = {
   // TODO: Find a better way to type this
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: FormApi<any, any, any, any, any, any, any, any, any, any>;
+  form: any;
   action: VaultAction;
 };
 
 export function CreateVaultAlerts({ form, action }: CreateVaultAlertsProps) {
   const { t } = useAppTranslation("vault.createDialog.config.info");
-  const errors = useStore(form.store, (store) => store.errorMap);
+
+  // TODO: Find a better way to type this
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const errors = useStore<any>(form.store, (store) => store.errorMap);
 
   if (action === "UPDATE") return null;
   if (

@@ -7,7 +7,6 @@ import {
   defaultPolicy,
 } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZLinkVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -23,7 +22,6 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
 
   const { accountId } = useAccountId();
   const { deviceId } = useDevice();
-  const { t } = useAppTranslation("vault.linkDialog.success");
 
   return useMutation({
     mutationKey: ["vault", "link"],

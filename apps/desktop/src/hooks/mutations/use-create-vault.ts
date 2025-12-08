@@ -2,7 +2,6 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore, defaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
 import { ZCreateVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +14,6 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
 
   const { accountId } = useAccountId();
-  const { t } = useAppTranslation("vault.createDialog.success");
 
   return useMutation({
     mutationKey: ["vault", "create"],
