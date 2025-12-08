@@ -68,7 +68,7 @@ function Folder({ folder }: FolderProps) {
         })}
         className="absolute inset-0"
       />
-      <FolderPreview folder={folder} progress={false} />
+      <FolderPreview folder={folder} />
       <div className="flex items-center gap-3">
         {folder && (folder.lastSnapshot || folder.status === "UPLOADING") ? (
           <>
