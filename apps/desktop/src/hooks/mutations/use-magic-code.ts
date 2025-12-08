@@ -8,7 +8,6 @@ import { ZMagicCodeType } from "@schemas/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
-import { toast } from "sonner";
 
 export function useMagicCode() {
   const { t } = useAppTranslation("auth.magic");
@@ -49,14 +48,7 @@ export function useMagicCode() {
       setAuthenticated(true);
 
       await accountChanged();
-
-      toast.success(t("success.title"), {
-        description: t("success.description", {
-          email: res.user.email,
-        }),
-      });
-
-      navigate({ to: "/" });
+      await navigate({ to: "/" });
     },
   });
 }

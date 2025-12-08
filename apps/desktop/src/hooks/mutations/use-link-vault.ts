@@ -12,7 +12,6 @@ import { ZLinkVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { tryCatch } from "@utils/try-catch";
-import { toast } from "sonner";
 
 export type LinkVaultResponse = Awaited<
   ReturnType<typeof trpc.vault.link.mutate>
@@ -109,10 +108,6 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
 
         break;
       }
-
-      toast.success(t("title"), {
-        description: t("description"),
-      });
 
       await navigate({
         to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",

@@ -1,6 +1,7 @@
 import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
 import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
+import { useStore } from "@tanstack/react-form";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,7 @@ export function AccountSettingsDialog() {
   const { isOpen, setIsOpen } = useAccountSettingsDialog();
 
   const form = useUpdateAccountForm();
+  const isDirty = useStore(form.store, () => form.state.isDirty);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -57,7 +59,7 @@ export function AccountSettingsDialog() {
             )}
           </form.AppField>
           <form.AppForm>
-            <form.Submit>{t("submit")}</form.Submit>
+            <form.Submit disabled={!isDirty}>{t("submit")}</form.Submit>
           </form.AppForm>
         </form>
       </DialogContent>

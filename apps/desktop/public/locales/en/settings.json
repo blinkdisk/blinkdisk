@@ -3,16 +3,11 @@
     "title": "Account",
     "description": "Update your account settings.",
     "submit": "Update Account",
-    "logout": "Sign out",
-    "success": {
-      "title": "Account updated successfully",
-      "description": "You're account details have been updated."
-    }
+    "logout": "Sign out"
   },
   "preferences": {
     "title": "Preferences",
     "description": "Change your application preferences.",
-    "submit": "Save Preferences",
     "theme": {
       "label": "Theme",
       "description": "Select your theme preference.",
@@ -25,10 +20,6 @@
     "language": {
       "label": "Language",
       "description": "Select your language preference."
-    },
-    "success": {
-      "title": "Preferences changed successfully",
-      "description": "Your preferences have been changed."
     }
   },
   "vault": {

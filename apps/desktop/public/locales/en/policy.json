@@ -1,10 +1,4 @@
 {
-  "update": {
-    "success": {
-      "title": "Settings updated successfully",
-      "description": "Your policy settings have been updated."
-    }
-  },
   "schedule": {
     "title": "Backup Schedule",
     "description": "Schedule automatic backups of your files.",

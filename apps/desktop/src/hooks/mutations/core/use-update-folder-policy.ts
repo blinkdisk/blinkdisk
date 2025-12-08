@@ -6,10 +6,8 @@ import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { getFolderPolicyUpdates } from "@desktop/lib/policy";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export function useUpdateFolderPolicy({
   folderId,
@@ -20,7 +18,6 @@ export function useUpdateFolderPolicy({
 }) {
   const queryClient = useQueryClient();
 
-  const { t } = useAppTranslation("policy.update");
   const { accountId } = useAccountId();
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
@@ -60,10 +57,6 @@ export function useUpdateFolderPolicy({
           queryKey: [accountId, "core", "folder", "list", vaultId],
         }),
       ]);
-
-      toast.success(t("success.title"), {
-        description: t("success.description"),
-      });
 
       onSuccess?.();
     },

@@ -5,13 +5,13 @@ import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
+import { hashFolder } from "@desktop/lib/folder";
 import { trpc } from "@desktop/lib/trpc";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { tryCatch } from "@utils/try-catch";
 import { usePostHog } from "posthog-js/react";
-import { toast } from "sonner";
 
 export type CreateFolderResponse = Awaited<
   ReturnType<typeof trpc.folder.create.mutate>
@@ -25,9 +25,8 @@ export function useCreateFolder({
   onError?: (error: any) => void;
 }) {
   const posthog = usePostHog();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const { t } = useAppTranslation("folder.createDialog.success");
 
   const { vaultId } = useVaultId();
   const { deviceId } = useDevice();
@@ -40,7 +39,8 @@ export function useCreateFolder({
   return useMutation({
     mutationKey: ["folder", "create"],
     mutationFn: async (values: ZCreateFolderFormType & { force?: boolean }) => {
-      if (!vaultId || !deviceId || !profileId) return;
+      if (!vaultId || !deviceId || !profileId)
+        throw new Error("Missing fields");
 
       if (
         !values.force &&
@@ -73,7 +73,14 @@ export function useCreateFolder({
       });
 
       if (response.error) throw new Error(response.error);
-      return response;
+
+      const id = await hashFolder({
+        deviceId,
+        profileId,
+        path: values.path,
+      });
+
+      return { id, vaultId };
     },
     onError: (error) => {
       onError?.(error);
@@ -92,8 +99,12 @@ export function useCreateFolder({
         queryKey: [accountId, "core", "folder", "list", vaultId],
       });
 
-      toast.success(t("title"), {
-        description: t("description"),
+      await navigate({
+        to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}",
+        params: (params) => ({
+          ...params,
+          folderId: res.id,
+        }),
       });
 
       onSuccess?.(res);
