@@ -2,6 +2,7 @@ import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useDirectoryId } from "@desktop/hooks/use-directory-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type CoreDirectoryItem = {
@@ -54,15 +55,25 @@ export function useDirectory() {
   return useQuery({
     queryKey: queryKeys.directory.detail(directoryId),
     queryFn: async () => {
-      const data = (await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "GET",
-        path: `/api/v1/objects/${directoryId}`,
-      })) as { entries: CoreDirectoryItem[] };
+      const res = await vaultApi(vaultId).get<{
+        stream: string;
+        summary: {
+          size: number;
+          files: number;
+          symlinks: number;
+          dirs: number;
+          maxTime: string;
+          numFailed: number;
+        };
+        entries: CoreDirectoryItem[];
+        error?: string;
+      }>(`/api/v1/objects/${directoryId}`);
 
-      if (!data.entries) return [];
+      if (res.status !== 200) throw new Error(res.data.error);
 
-      return data.entries.map(
+      if (!res.data.entries) return [];
+
+      return res.data.entries.map(
         (entry) =>
           ({
             id: `${entry.obj}:${entry.name}`,

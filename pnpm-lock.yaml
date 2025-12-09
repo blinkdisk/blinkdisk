@@ -235,6 +235,9 @@ importers:
       usehooks-ts:
         specifier: ^3.1.1
         version: 3.1.1(react@19.0.0)
+      xior:
+        specifier: 0.8.2-alpha.1
+        version: 0.8.2-alpha.1
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -15259,6 +15262,11 @@ packages:
   /tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
+  /tiny-lru@11.4.5:
+    resolution: {integrity: sha512-hkcz3FjNJfKXjV4mjQ1OrXSLAehg8Hw+cEZclOVT+5c/cWQWImQ9wolzTjth+dmmDe++p3bme3fTxz6Q4Etsqw==}
+    engines: {node: '>=12'}
+    dev: false
+
   /tiny-typed-emitter@2.1.0:
     resolution: {integrity: sha512-qVtvMxeXbVej0cQWKqVSSAHmKZEHAvxdF8HEUBFWts8h+xEo5m/lEiPakuyZ3BnCBjOD8i24kzNOiOLLgsSxhA==}
     dev: false
@@ -16404,6 +16412,12 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  /xior@0.8.2-alpha.1:
+    resolution: {integrity: sha512-EQk5obhT7yzjdQ3aHFpA4XmvhxOyUSoD7l7EJAamLqp01VdmJMVICg7qXZNtLmgA9XYJwK8U9yVy5A/mryxEGA==}
+    dependencies:
+      tiny-lru: 11.4.5
     dev: false
 
   /xmlbuilder2@3.1.1:

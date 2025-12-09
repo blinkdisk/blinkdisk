@@ -479,8 +479,35 @@ export class Vault {
     filePath?: string;
     raw?: boolean;
   }) {
-    const stringifiedData = data && JSON.stringify(data);
+    const searchString = search
+      ? `?${new URLSearchParams(search).toString()}`
+      : "";
 
+    return await this.fetchRaw({
+      path: `${path}${searchString}`,
+      data: JSON.stringify(data),
+      method,
+      variant,
+      filePath,
+      raw,
+    });
+  }
+
+  async fetchRaw({
+    method,
+    path,
+    data,
+    variant = "renderer",
+    filePath,
+    raw,
+  }: {
+    method: "GET" | "POST" | "PUT" | "DELETE";
+    path: string;
+    data?: any;
+    variant?: "main" | "renderer";
+    filePath?: string;
+    raw?: boolean;
+  }) {
     return await new Promise((res, rej) => {
       const req = https.request(
         {
@@ -488,11 +515,11 @@ export class Vault {
           host: "127.0.0.1",
           port: parseInt(new URL(this.serverAddress!).port).toString(),
           method,
-          path: `${path}${search ? "?" : ""}${new URLSearchParams(search).toString() || ""}`,
+          path,
           headers: {
-            ...(stringifiedData && {
+            ...(data && {
               "Content-Type": "application/json",
-              "Content-Length": Buffer.byteLength(stringifiedData),
+              "Content-Length": Buffer.byteLength(data),
             }),
             Authorization: `Basic ${Buffer.from(
               variant === "renderer"
@@ -561,7 +588,7 @@ export class Vault {
         },
       );
 
-      if (stringifiedData) req.write(stringifiedData);
+      if (data) req.write(data);
 
       req.on("error", (e) => {
         rej(e);

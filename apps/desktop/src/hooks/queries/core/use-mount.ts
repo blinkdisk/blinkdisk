@@ -2,6 +2,7 @@ import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useBackup } from "@desktop/hooks/use-backup";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type CoreMountItem = {
@@ -18,14 +19,14 @@ export function useMount() {
   return useQuery({
     queryKey: queryKeys.directory.mount(backup?.rootID),
     queryFn: async () => {
-      const data = (await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "GET",
-        path: `/api/v1/mounts/${backup?.rootID}`,
-      })) as CoreMountItem | { code: "NOT_FOUND" };
+      const res = await vaultApi(vaultId).get<
+        (CoreMountItem | { code: "NOT_FOUND" }) & { error?: string }
+      >(`/api/v1/mounts/${backup?.rootID}`);
 
-      if ("code" in data && data.code == "NOT_FOUND") return null;
-      return data as CoreMountItem;
+      if (res.status !== 200) throw new Error(res.data.error);
+
+      if ("code" in res.data && res.data.code == "NOT_FOUND") return null;
+      return res.data as CoreMountItem;
     },
     enabled: !!accountId && !!vaultId && !!backup && running,
   });

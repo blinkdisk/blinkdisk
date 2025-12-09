@@ -4,6 +4,7 @@ import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type CoreBackupItem = {
@@ -36,19 +37,23 @@ export function useBackupList() {
   return useQuery({
     queryKey: queryKeys.backup.list(folder?.id),
     queryFn: async () => {
-      const data = (await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "GET",
-        path: "/api/v1/snapshots",
-        search: {
+      const res = await vaultApi(vaultId).get<{
+        snapshots: CoreBackupItem[];
+        unfilteredCount: number;
+        uniqueCount: number;
+        error?: string;
+      }>("/api/v1/snapshots", {
+        params: {
           path: folder?.source.path || "",
           userName: profileId || "",
           host: deviceId || "",
           all: "1",
         },
-      })) as { snapshots: CoreBackupItem[] };
+      });
 
-      return data.snapshots.reverse();
+      if (res.status !== 200) throw new Error(res.data.error);
+
+      return res.data.snapshots.reverse();
     },
     refetchInterval: 1000,
     enabled: !!accountId && !!vaultId && !!folder && running,
