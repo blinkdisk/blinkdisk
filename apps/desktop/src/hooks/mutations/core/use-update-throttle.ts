@@ -15,12 +15,10 @@ export function useUpdateThrottle(onSuccess?: () => void) {
   return useMutation({
     mutationKey: ["core", "vault", vaultId, "policy"],
     mutationFn: async (values: ZVaultThrottleType) => {
-      const res = await vaultApi(vaultId).put(
+      await vaultApi(vaultId).put(
         "/api/v1/repo/throttle",
         convertThrottleToCore(values),
       );
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {

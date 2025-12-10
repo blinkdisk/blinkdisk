@@ -29,21 +29,15 @@ export function useFolderPolicy({ folderId }: { folderId?: string }) {
       if (!deviceId || !profileId || !vaultId || !folder || !vaultPolicy)
         return null;
 
-      const res = await vaultApi(vaultId).get<CorePolicy & { error?: string }>(
-        "/api/v1/policy",
-        {
-          params: {
-            userName: profileId,
-            host: deviceId,
-            path: folder.source.path,
-          },
+      const res = await vaultApi(vaultId).get<CorePolicy>("/api/v1/policy", {
+        params: {
+          userName: profileId,
+          host: deviceId,
+          path: folder.source.path,
         },
-      );
-
-      if (res.status !== 200) throw new Error(res.data.error);
+      });
 
       if (!res.data) return null;
-      if (res.data.error) throw new Error(res.data.error);
 
       const folderPolicy = convertPolicyFromCore(res.data, "FOLDER");
       if (!folderPolicy) return null;

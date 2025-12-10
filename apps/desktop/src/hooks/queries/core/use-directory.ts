@@ -69,8 +69,6 @@ export function useDirectory() {
         error?: string;
       }>(`/api/v1/objects/${directoryId}`);
 
-      if (res.status !== 200) throw new Error(res.data.error);
-
       if (!res.data.entries) return [];
 
       return res.data.entries.map(

@@ -19,7 +19,7 @@ export function useBackupFolder() {
     mutationFn: async ({ path }: { path: string }) => {
       if (!vaultId) return;
 
-      const res = await vaultApi(vaultId).post(
+      await vaultApi(vaultId).post(
         "/api/v1/sources/upload",
         {},
         {
@@ -30,8 +30,6 @@ export function useBackupFolder() {
           },
         },
       );
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {

@@ -105,8 +105,6 @@ export function useFolderList() {
         },
       });
 
-      if (res.status !== 200) throw new Error(res.data.error);
-
       const folders: CoreFolderItem[] = [];
 
       for (const folder of res.data.sources) {

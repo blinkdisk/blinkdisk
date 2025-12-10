@@ -20,10 +20,8 @@ export function useMount() {
     queryKey: queryKeys.directory.mount(backup?.rootID),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<
-        (CoreMountItem | { code: "NOT_FOUND" }) & { error?: string }
+        CoreMountItem | { code: "NOT_FOUND" }
       >(`/api/v1/mounts/${backup?.rootID}`);
-
-      if (res.status !== 200) throw new Error(res.data.error);
 
       if ("code" in res.data && res.data.code == "NOT_FOUND") return null;
       return res.data as CoreMountItem;

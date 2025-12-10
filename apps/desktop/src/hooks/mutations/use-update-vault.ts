@@ -14,14 +14,9 @@ export function useUpdateVault(onSuccess: () => void) {
   return useMutation({
     mutationKey: ["vault", vaultId, "name"],
     mutationFn: async (values: ZUpdateVaultFormType) => {
-      const res = await vaultApi(vaultId).post<{ error?: string }>(
-        "/api/v1/repo/description",
-        {
-          description: values.name,
-        },
-      );
-
-      if (res.data.error) throw new Error(res.data.error);
+      await vaultApi(vaultId).post("/api/v1/repo/description", {
+        description: values.name,
+      });
 
       const data = await trpc.vault.update.mutate({
         vaultId: vaultId!,

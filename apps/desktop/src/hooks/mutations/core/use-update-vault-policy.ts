@@ -25,7 +25,7 @@ export function useUpdateVaultPolicy({
     mutationFn: async (values: ZPolicyType) => {
       if (!profileId || !deviceId || !vaultId) return;
 
-      const res = await vaultApi(vaultId).put(
+      await vaultApi(vaultId).put(
         "/api/v1/policy",
         convertPolicyToCore(values, "VAULT"),
         {
@@ -35,8 +35,6 @@ export function useUpdateVaultPolicy({
           },
         },
       );
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {

@@ -51,8 +51,6 @@ export function useBackupList() {
         },
       });
 
-      if (res.status !== 200) throw new Error(res.data.error);
-
       return res.data.snapshots.reverse();
     },
     refetchInterval: 1000,

@@ -19,7 +19,7 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
   return useMutation({
     mutationKey: ["core", "backup", "delete"],
     mutationFn: async ({ backupId }: { backupId: string }) => {
-      const res = await vaultApi(vaultId).post("/api/v1/snapshots/delete", {
+      await vaultApi(vaultId).post("/api/v1/snapshots/delete", {
         source: {
           path: folder?.source.path || "",
           userName: profileId || "",
@@ -28,8 +28,6 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
         snapshotManifestIds: [backupId],
         deleteSourceAndPolicy: false,
       });
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {

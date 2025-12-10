@@ -22,15 +22,12 @@ export function useStopMount() {
 
       const res = await vaultApi(vaultId).delete<{
         code?: "INTERNAL";
-        error?: string;
       }>(`/api/v1/mounts/${backup?.rootID}`);
 
       if (res.data.code === "INTERNAL")
         return toast.error(t("title"), {
           description: t("description"),
         });
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {

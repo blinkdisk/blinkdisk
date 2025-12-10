@@ -23,13 +23,12 @@ export function useStartMount() {
 
       let newMount = mount;
       if (!newMount) {
-        const res = await vaultApi(vaultId).post<
-          CoreMountItem & { error?: string }
-        >("/api/v1/mounts", {
-          root: backup?.rootID,
-        });
-
-        if (res.data.error) throw new Error(res.data.error);
+        const res = await vaultApi(vaultId).post<CoreMountItem>(
+          "/api/v1/mounts",
+          {
+            root: backup?.rootID,
+          },
+        );
 
         newMount = res.data;
       }

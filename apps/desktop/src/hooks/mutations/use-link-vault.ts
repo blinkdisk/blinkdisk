@@ -77,19 +77,16 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
 
         const api = vaultApi(res.vaultId);
 
-        const policy = await api.get<CorePolicy & { error?: string }>(
-          "/api/v1/policy",
-          {
-            params: {
-              userName: variables.source.profileId,
-              host: variables.source.deviceId,
-            },
+        const policy = await api.get<CorePolicy>("/api/v1/policy", {
+          params: {
+            userName: variables.source.profileId,
+            host: variables.source.deviceId,
           },
-        );
+        });
 
         await api.put(
           "/api/v1/policy",
-          policy.data && !policy.data.error
+          policy.data
             ? policy.data
             : convertPolicyToCore(defaultPolicy, "VAULT"),
           {

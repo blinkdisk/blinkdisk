@@ -17,7 +17,7 @@ export function useDeleteFolder({ onSuccess }: { onSuccess?: () => void }) {
   return useMutation({
     mutationKey: ["core", "folder", "delete"],
     mutationFn: async ({ path }: { path: string }) => {
-      const res = await vaultApi(vaultId).post("/api/v1/snapshots/delete", {
+      await vaultApi(vaultId).post("/api/v1/snapshots/delete", {
         source: {
           path: path || "",
           userName: profileId || "",
@@ -26,8 +26,6 @@ export function useDeleteFolder({ onSuccess }: { onSuccess?: () => void }) {
         snapshotManifestIds: [],
         deleteSourceAndPolicy: true,
       });
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {

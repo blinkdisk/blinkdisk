@@ -15,14 +15,11 @@ export function useVaultThrottle() {
     queryFn: async () => {
       if (!vaultId) return null;
 
-      const res = await vaultApi(vaultId).get<
-        CoreThrottle & { error?: string }
-      >("/api/v1/repo/throttle");
-
-      if (res.status !== 200) throw new Error(res.data.error);
+      const res = await vaultApi(vaultId).get<CoreThrottle>(
+        "/api/v1/repo/throttle",
+      );
 
       if (!res.data) return null;
-      if (res.data.error) throw new Error(res.data.error);
 
       return convertThrottleFromCore(res.data);
     },

@@ -59,7 +59,7 @@ export function useCreateFolder({
         }
       }
 
-      const res = await vaultApi(vaultId).post("/api/v1/sources", {
+      await vaultApi(vaultId).post("/api/v1/sources", {
         path: values.path,
         createSnapshot: false,
         policy: {
@@ -67,8 +67,6 @@ export function useCreateFolder({
           emoji: values.emoji,
         },
       });
-
-      if (res.data.error) throw new Error(res.data.error);
 
       const id = await hashFolder({
         deviceId,

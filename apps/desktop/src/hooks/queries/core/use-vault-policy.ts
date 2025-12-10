@@ -23,26 +23,18 @@ export function useVaultPolicy() {
     queryFn: async () => {
       if (!deviceId || !profileId || !vaultId) return null;
 
-      const res = await vaultApi(vaultId).get<
-        CorePolicy & { error?: string; code?: string }
-      >("/api/v1/policy", {
-        params: {
-          userName: profileId,
-          host: deviceId,
+      const res = await vaultApi(vaultId).get<CorePolicy & { code?: string }>(
+        "/api/v1/policy",
+        {
+          params: {
+            userName: profileId,
+            host: deviceId,
+          },
         },
-      });
+      );
 
       if (!res.data) return null;
-
-      if (res.data.error || res.data.code) {
-        if (res.data.code === "NOT_FOUND") {
-          // Used for backwards compatibility for the first couple of vaults created,
-          // and in case the policy copy on vault link fails.
-          return defaultPolicy;
-        }
-
-        throw new Error(res.data.error);
-      }
+      if (res.data.code === "NOT_FOUND") return defaultPolicy;
 
       return convertPolicyFromCore(res.data, "VAULT");
     },

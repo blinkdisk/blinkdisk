@@ -34,15 +34,13 @@ export function useUpdateFolderPolicy({
 
       const update = getFolderPolicyUpdates(vaultPolicy, values);
 
-      const res = await vaultApi(vaultId).put("/api/v1/policy", update, {
+      await vaultApi(vaultId).put("/api/v1/policy", update, {
         params: {
           userName: profileId,
           host: deviceId,
           path: folder.source.path,
         },
       });
-
-      if (res.data.error) throw new Error(res.data.error);
     },
     onError: showErrorToast,
     onSuccess: async () => {
