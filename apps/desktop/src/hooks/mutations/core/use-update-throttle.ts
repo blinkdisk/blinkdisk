@@ -2,6 +2,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertThrottleToCore } from "@desktop/lib/throttle";
+import { vaultApi } from "@desktop/lib/vault";
 import { ZVaultThrottleType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -14,14 +15,10 @@ export function useUpdateThrottle(onSuccess?: () => void) {
   return useMutation({
     mutationKey: ["core", "vault", vaultId, "policy"],
     mutationFn: async (values: ZVaultThrottleType) => {
-      const data = await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "PUT",
-        path: "/api/v1/repo/throttle",
-        data: convertThrottleToCore(values),
-      });
-
-      return data;
+      await vaultApi(vaultId).put(
+        "/api/v1/repo/throttle",
+        convertThrottleToCore(values),
+      );
     },
     onError: showErrorToast,
     onSuccess: async () => {

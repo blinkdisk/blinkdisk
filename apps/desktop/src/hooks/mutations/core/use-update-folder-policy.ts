@@ -6,6 +6,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { getFolderPolicyUpdates } from "@desktop/lib/policy";
+import { vaultApi } from "@desktop/lib/vault";
 import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -33,19 +34,13 @@ export function useUpdateFolderPolicy({
 
       const update = getFolderPolicyUpdates(vaultPolicy, values);
 
-      const data = await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "PUT",
-        path: "/api/v1/policy",
-        data: update,
-        search: {
+      await vaultApi(vaultId).put("/api/v1/policy", update, {
+        params: {
           userName: profileId,
           host: deviceId,
           path: folder.source.path,
         },
       });
-
-      return data;
     },
     onError: showErrorToast,
     onSuccess: async () => {

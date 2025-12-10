@@ -7,6 +7,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { hashFolder } from "@desktop/lib/folder";
 import { trpc } from "@desktop/lib/trpc";
+import { vaultApi } from "@desktop/lib/vault";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -58,21 +59,14 @@ export function useCreateFolder({
         }
       }
 
-      const response = await window.electron.vault.fetch({
-        vaultId: vaultId || "",
-        method: "POST",
-        path: "/api/v1/sources",
-        data: {
-          path: values.path,
-          createSnapshot: false,
-          policy: {
-            name: values.name,
-            emoji: values.emoji,
-          },
+      await vaultApi(vaultId).post("/api/v1/sources", {
+        path: values.path,
+        createSnapshot: false,
+        policy: {
+          name: values.name,
+          emoji: values.emoji,
         },
       });
-
-      if (response.error) throw new Error(response.error);
 
       const id = await hashFolder({
         deviceId,

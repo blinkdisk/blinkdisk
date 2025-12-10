@@ -1,3 +1,4 @@
+import { getVault } from "@electron/vault";
 import { app, net, protocol } from "electron";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -14,8 +15,9 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 export function registerProtocol() {
-  protocol.handle("blinkdiskapp", (req) => {
+  protocol.handle("blinkdiskapp", async (req) => {
     const { host, pathname, search } = new URL(req.url);
+
     if (host === "frontend") {
       const baseDir = !app.isPackaged
         ? path.join(import.meta.dirname, "..", "frontend")
@@ -46,10 +48,38 @@ export function registerProtocol() {
         `${process.env.API_URL}${pathname}${search ? search : ""}`,
         req,
       );
+    } else if (host.startsWith("vault")) {
+      const vaultId = req.headers.get("vault-id") || "";
+      const vault = getVault({ vaultId });
+
+      if (!vault) return new Response("Vault not found", { status: 404 });
+
+      try {
+        const data = req.body ? await new Response(req.body).text() : null;
+
+        const res = (await vault.fetchRaw({
+          method: req.method as "GET" | "POST" | "PUT" | "DELETE",
+          path: `${pathname}${search}`,
+          data,
+        })) as any;
+
+        return new Response(JSON.stringify(res), {
+          status: 200,
+          headers: {
+            "content-type": "application/json",
+          },
+        });
+      } catch (e: any) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 400,
+          headers: {
+            "content-type": "application/json",
+          },
+        });
+      }
     } else {
       return new Response("Host not found", {
-        status: 400,
-        headers: { "content-type": "text/html" },
+        status: 404,
       });
     }
   });

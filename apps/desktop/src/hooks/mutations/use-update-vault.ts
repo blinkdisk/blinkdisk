@@ -2,6 +2,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
+import { vaultApi } from "@desktop/lib/vault";
 import { ZUpdateVaultFormType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -13,13 +14,8 @@ export function useUpdateVault(onSuccess: () => void) {
   return useMutation({
     mutationKey: ["vault", vaultId, "name"],
     mutationFn: async (values: ZUpdateVaultFormType) => {
-      await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "POST",
-        path: "/api/v1/repo/description",
-        data: {
-          description: values.name,
-        },
+      await vaultApi(vaultId).post("/api/v1/repo/description", {
+        description: values.name,
       });
 
       const data = await trpc.vault.update.mutate({

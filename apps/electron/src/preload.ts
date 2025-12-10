@@ -140,10 +140,6 @@ const api = {
       ipcRenderer.invoke("vault.status", payload) as Promise<
         InstanceType<typeof Vault>["status"]
       >,
-    fetch: (
-      payload: Parameters<typeof getVault>[0] &
-        Parameters<InstanceType<typeof Vault>["fetch"]>[0],
-    ) => ipcRenderer.invoke("vault.fetch", payload) as any,
     config: {
       encrypt: (payload: Parameters<typeof encryptVaultConfig>[0]) =>
         ipcRenderer.invoke("vault.config.encrypt", payload),

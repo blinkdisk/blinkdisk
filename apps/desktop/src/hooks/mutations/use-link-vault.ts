@@ -7,10 +7,10 @@ import {
   defaultPolicy,
 } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
+import { vaultApi } from "@desktop/lib/vault";
 import { ZLinkVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { tryCatch } from "@utils/try-catch";
 
 export type LinkVaultResponse = Awaited<
   ReturnType<typeof trpc.vault.link.mutate>
@@ -75,33 +75,26 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
 
         if (status !== "RUNNING") continue;
 
-        const [policy] = await tryCatch(
-          window.electron.vault.fetch({
-            vaultId: res.vaultId,
-            method: "GET",
-            path: "/api/v1/policy",
-            search: {
-              userName: variables.source.profileId,
-              host: variables.source.deviceId,
-            },
-            data: convertPolicyToCore(defaultPolicy, "VAULT"),
-          }) as Promise<CorePolicy & { error?: string }>,
-        );
+        const api = vaultApi(res.vaultId);
 
-        await tryCatch(
-          window.electron.vault.fetch({
-            vaultId: res.vaultId,
-            method: "PUT",
-            path: "/api/v1/policy",
-            search: {
+        const policy = await api.get<CorePolicy>("/api/v1/policy", {
+          params: {
+            userName: variables.source.profileId,
+            host: variables.source.deviceId,
+          },
+        });
+
+        await api.put(
+          "/api/v1/policy",
+          policy.data
+            ? policy.data
+            : convertPolicyToCore(defaultPolicy, "VAULT"),
+          {
+            params: {
               userName: variables.profileId,
               host: variables.deviceId,
             },
-            data:
-              policy && !policy.error
-                ? policy
-                : convertPolicyToCore(defaultPolicy, "VAULT"),
-          }),
+          },
         );
 
         break;

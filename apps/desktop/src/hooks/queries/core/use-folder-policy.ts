@@ -5,7 +5,12 @@ import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { convertPolicyFromCore, mergeFolderPolicy } from "@desktop/lib/policy";
+import {
+  convertPolicyFromCore,
+  CorePolicy,
+  mergeFolderPolicy,
+} from "@desktop/lib/policy";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export function useFolderPolicy({ folderId }: { folderId?: string }) {
@@ -24,26 +29,21 @@ export function useFolderPolicy({ folderId }: { folderId?: string }) {
       if (!deviceId || !profileId || !vaultId || !folder || !vaultPolicy)
         return null;
 
-      const data = await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "GET",
-        path: "/api/v1/policy",
-        search: {
+      const res = await vaultApi(vaultId).get<CorePolicy>("/api/v1/policy", {
+        params: {
           userName: profileId,
           host: deviceId,
           path: folder.source.path,
         },
       });
 
-      if (!data) return null;
-      if (data.error) throw new Error(data.error);
+      if (!res.data) return null;
 
-      const folderPolicy = convertPolicyFromCore(data, "FOLDER");
+      const folderPolicy = convertPolicyFromCore(res.data, "FOLDER");
       if (!folderPolicy) return null;
 
       return mergeFolderPolicy(folderPolicy, vaultPolicy);
     },
-    refetchInterval: 1000,
     enabled: !!accountId && !!vaultId && !!folder && !!vaultPolicy && running,
   });
 }

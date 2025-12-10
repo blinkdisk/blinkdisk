@@ -5,6 +5,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
 import { trpc } from "@desktop/lib/trpc";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING";
@@ -94,11 +95,11 @@ export function useFolderList() {
   return useQuery({
     queryKey: queryKeys.folder.list(vaultId),
     queryFn: async () => {
-      const data = await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "GET",
-        path: "/api/v1/sources",
-        search: {
+      const res = await vaultApi(vaultId).get<{
+        sources: CoreFolderItem[];
+        error?: string;
+      }>("/api/v1/sources", {
+        params: {
           host: deviceId || "",
           userName: profileId || "",
         },
@@ -106,7 +107,7 @@ export function useFolderList() {
 
       const folders: CoreFolderItem[] = [];
 
-      for (const folder of data.sources) {
+      for (const folder of res.data.sources) {
         if (folder.status === "UPLOADING" && folder.upload) {
           folder.upload.progress = !folder.upload.estimatedBytes
             ? 0
@@ -149,32 +150,35 @@ export function useFolderList() {
               folders[folderIndex].emoji = oldFolder.emoji;
             }
 
-            const policy = await window.electron.vault.fetch({
-              vaultId: vaultId!,
-              method: "GET",
-              path: "/api/v1/policy",
-              search: {
+            const policy = await vaultApi(vaultId).get<{
+              name: string;
+              emoji: string;
+              error?: string;
+            }>("/api/v1/policy", {
+              params: {
                 userName: folder.source.userName,
                 host: folder.source.host,
                 path: folder.source.path,
               },
             });
 
-            await window.electron.vault.fetch({
-              vaultId: vaultId!,
-              method: "PUT",
-              path: "/api/v1/policy",
-              search: {
-                userName: folder.source.userName,
-                host: folder.source.host,
-                path: folder.source.path,
-              },
-              data: {
-                ...policy,
+            await vaultApi(vaultId).put<{
+              error?: string;
+            }>(
+              "/api/v1/policy",
+              {
+                ...policy.data,
                 name: oldFolder.name,
                 emoji: oldFolder.emoji,
               },
-            });
+              {
+                params: {
+                  userName: folder.source.userName,
+                  host: folder.source.host,
+                  path: folder.source.path,
+                },
+              },
+            );
           }
         } catch (e) {
           console.warn("Failed to migrate folders", e);

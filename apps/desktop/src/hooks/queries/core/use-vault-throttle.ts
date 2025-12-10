@@ -1,7 +1,8 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { convertThrottleFromCore } from "@desktop/lib/throttle";
+import { convertThrottleFromCore, CoreThrottle } from "@desktop/lib/throttle";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultThrottle() {
@@ -14,18 +15,14 @@ export function useVaultThrottle() {
     queryFn: async () => {
       if (!vaultId) return null;
 
-      const data = await window.electron.vault.fetch({
-        vaultId: vaultId!,
-        method: "GET",
-        path: "/api/v1/repo/throttle",
-      });
+      const res = await vaultApi(vaultId).get<CoreThrottle>(
+        "/api/v1/repo/throttle",
+      );
 
-      if (!data) return null;
-      if (data.error) throw new Error(data.error);
+      if (!res.data) return null;
 
-      return convertThrottleFromCore(data);
+      return convertThrottleFromCore(res.data);
     },
-    refetchInterval: 1000,
     enabled: !!accountId && !!vaultId && running,
   });
 }

@@ -54,9 +54,6 @@ ipcMain.handle("vault.validate", (_, config) => Vault.validate(config));
 ipcMain.handle("vault.create", (_, config) => Vault.create(config));
 ipcMain.handle("vault.activate", (_, payload) => getVault(payload)?.activate());
 ipcMain.handle("vault.status", (_, payload) => getVault(payload)?.status);
-ipcMain.handle("vault.fetch", (_, payload) => {
-  return getVault(payload)?.fetch(payload);
-});
 ipcMain.handle("vault.restore.single", (_, payload) => restoreSingle(payload));
 ipcMain.handle("vault.restore.multiple", (_, payload) =>
   restoreMultiple(payload),
