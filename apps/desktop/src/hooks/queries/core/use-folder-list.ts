@@ -5,7 +5,6 @@ import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
-import { trpc } from "@desktop/lib/trpc";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
@@ -92,7 +91,7 @@ export type CoreFolderItem = {
 };
 
 export function useFolderList() {
-  const { profileId, localProfileId } = useProfile();
+  const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
@@ -131,64 +130,6 @@ export function useFolderList() {
           ...folder,
           id,
         });
-      }
-
-      const canMigrate = profileId === localProfileId;
-      const migrationRequired = folders.some((folder) => !folder.name);
-      if (canMigrate && migrationRequired) {
-        try {
-          const oldFolders = await trpc.folder.list.query({
-            vaultId: vaultId!,
-          });
-
-          for (const oldFolder of oldFolders) {
-            const folderIndex = folders.findIndex(
-              (folder) => folder.id === oldFolder.hash,
-            );
-
-            if (folderIndex === -1) continue;
-
-            const folder = folders[folderIndex];
-            if (!folder || folder.name) continue;
-
-            if (folders[folderIndex]) {
-              folders[folderIndex].name = oldFolder.name;
-              folders[folderIndex].emoji = oldFolder.emoji;
-            }
-
-            const policy = await vaultApi(vaultId).get<{
-              name: string;
-              emoji: string;
-              error?: string;
-            }>("/api/v1/policy", {
-              params: {
-                userName: folder.source.userName,
-                host: folder.source.host,
-                path: folder.source.path,
-              },
-            });
-
-            await vaultApi(vaultId).put<{
-              error?: string;
-            }>(
-              "/api/v1/policy",
-              {
-                ...policy.data,
-                name: oldFolder.name,
-                emoji: oldFolder.emoji,
-              },
-              {
-                params: {
-                  userName: folder.source.userName,
-                  host: folder.source.host,
-                  path: folder.source.path,
-                },
-              },
-            );
-          }
-        } catch (e) {
-          console.warn("Failed to migrate folders", e);
-        }
       }
 
       return folders;

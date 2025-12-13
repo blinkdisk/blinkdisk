@@ -57,15 +57,6 @@ export type Device = {
   createdAt: Generated<Timestamp>;
   accountId: string;
 };
-export type Folder = {
-  id: Generated<string>;
-  name: string;
-  emoji: string;
-  hash: string;
-  vaultId: string;
-  accountId: string;
-  createdAt: Generated<Timestamp>;
-};
 export type Profile = {
   id: Generated<string>;
   alias: string;
@@ -141,7 +132,6 @@ export type DB = {
   AuthMethod: AuthMethod;
   Config: Config;
   Device: Device;
-  Folder: Folder;
   Profile: Profile;
   Session: Session;
   Space: Space;
