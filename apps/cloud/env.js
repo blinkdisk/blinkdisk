@@ -7,8 +7,6 @@ config({
 
 const whitelist = [
   "LOGSNAG_PRIVATE_KEY",
-  "RESEND_API_KEY",
-  "RESEND_DOMAIN",
   "CLOUD_JWT_PUBLIC_KEY",
   "CLOUD_S3_ENDPOINT",
   "CLOUD_S3_ENDPOINT_AMS",
@@ -19,6 +17,11 @@ const whitelist = [
   "CLOUD_S3_BUCKET",
   "CLOUD_S3_KEY_ID",
   "CLOUD_S3_KEY_SECRET",
+  "EMAIL_DOMAIN",
+  "EMAIL_PROVIDER",
+  "SMTP_URL",
+  "PLUNK_URL",
+  "PLUNK_SECRET_KEY",
 ];
 
 let env = "";

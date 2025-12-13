@@ -7,8 +7,6 @@ config({
 
 const whitelist = [
   "LANDING_URL",
-  "RESEND_API_KEY",
-  "RESEND_DOMAIN",
   "BETTER_AUTH_SECRET",
   "CLOUD_JWT_PRIVATE_KEY",
   "LOGSNAG_PRIVATE_KEY",
@@ -18,6 +16,11 @@ const whitelist = [
   "POSTHOG_DESKTOP_KEY",
   "ENDORSELY_ORGANIZATION_ID",
   "ENDORSELY_PRIVATE_KEY",
+  "EMAIL_PROVIDER",
+  "EMAIL_DOMAIN",
+  "SMTP_URL",
+  "PLUNK_URL",
+  "PLUNK_SECRET_KEY",
 ];
 
 let env = "";

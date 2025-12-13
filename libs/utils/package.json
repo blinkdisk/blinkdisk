@@ -11,15 +11,18 @@
     "@blinkdisk/typescript": "workspace:*",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.13.9",
+    "@types/nodemailer": "^7.0.4",
     "eslint": "^9.22.0",
     "typescript": "5.8.2"
   },
   "dependencies": {
+    "@plunk/node": "^3.0.3",
+    "@react-email/render": "^2.0.0",
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
     "nanoid": "^5.1.5",
-    "resend": "^4.1.2",
+    "nodemailer": "^7.0.11",
     "tailwind-merge": "^3.0.2"
   }
 }

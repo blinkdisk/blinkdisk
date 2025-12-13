@@ -19,10 +19,12 @@
     "CRON_SECRET",
     "API_URL",
     "CRON_SECRET",
-    "RESEND_API_KEY",
-    "RESEND_DOMAIN",
     "DEV",
-    "CRISP_KEY"
+    "CRISP_KEY",
+    "EMAIL_PROVIDER",
+    "SMTP_URL",
+    "PLUNK_URL",
+    "PLUNK_SECRET_KEY"
   ],
   "tasks": {
     "build": {

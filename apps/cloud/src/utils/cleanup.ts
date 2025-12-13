@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
 import { Database } from "@db/index";
-import { getEmailOptions, sendBatchEmails } from "@utils/email";
+import { sendEmail } from "@utils/email";
 
 export async function sendCleanupEmails(db: Database, scheduledTime: number) {
   const start = new Date(scheduledTime);
@@ -25,7 +25,6 @@ export async function sendCleanupEmails(db: Database, scheduledTime: number) {
     .where("Subscription.cleanupAt", "<", end)
     .execute();
 
-  const emails: ReturnType<typeof getEmailOptions>[] = [];
   for (const subscription of subscriptions) {
     const daysLeft = subscription.cleanupAt
       ? Math.round(
@@ -34,14 +33,10 @@ export async function sendCleanupEmails(db: Database, scheduledTime: number) {
         )
       : 0;
 
-    emails.push(
-      getEmailOptions("cleanup", subscription, {
-        daysLeft,
-      }),
-    );
+    await sendEmail("cleanup", subscription, {
+      daysLeft,
+    });
   }
-
-  await sendBatchEmails(emails);
 }
 
 export async function cleanup(
