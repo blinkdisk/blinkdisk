@@ -5,7 +5,7 @@ import { FolderPreview } from "@desktop/components/folders/preview";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
-import { useBackupFolder } from "@desktop/hooks/mutations/core/use-backup-folder";
+import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
@@ -37,8 +37,8 @@ function RouteComponent() {
   const { data: folder } = useFolder();
   const { data: vault } = useVault();
   const { openFolderSettings } = useFolderSettingsDialog();
-  const { mutate: backup, isPending: isBackupLoading } = useBackupFolder();
   const { data: backups } = useCompletedBackupList();
+  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
 
   return (
     <div
@@ -91,9 +91,11 @@ function RouteComponent() {
                 {t("settings")}
               </Button>
               <MutatingButton
-                onClick={() => folder && backup({ path: folder.source.path })}
+                onClick={() =>
+                  folder && startBackup({ path: folder.source.path })
+                }
                 loading={
-                  isBackupLoading ||
+                  isStartingBackup ||
                   ["UPLOADING", "PENDING"].includes(folder?.status || "")
                 }
               >
@@ -138,8 +140,10 @@ function RouteComponent() {
             description={t("empty.default.description")}
           >
             <MutatingButton
-              onClick={() => folder && backup({ path: folder.source.path })}
-              loading={isBackupLoading}
+              onClick={() =>
+                folder && startBackup({ path: folder.source.path })
+              }
+              loading={isStartingBackup}
               disabled={!folder}
               size="lg"
             >

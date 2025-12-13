@@ -1,6 +1,5 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
-import { useBackupFolder } from "@desktop/hooks/mutations/core/use-backup-folder";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import {
@@ -11,6 +10,7 @@ import {
 } from "@ui/dropdown-menu";
 
 import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
+import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -187,7 +187,7 @@ function FakeBackup() {
   const { t } = useAppTranslation("backup.list");
   const { data: folder } = useFolder();
 
-  const { mutate: backup, isPending: isBackupLoading } = useBackupFolder();
+  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
 
   return (
     <div
@@ -228,9 +228,9 @@ function FakeBackup() {
           </div>
           <MutatingButton
             variant="outline"
-            onClick={() => folder && backup({ path: folder.source.path })}
+            onClick={() => folder && startBackup({ path: folder.source.path })}
             loading={
-              isBackupLoading ||
+              isStartingBackup ||
               ["UPLOADING", "PENDING"].includes(folder?.status || "")
             }
           >

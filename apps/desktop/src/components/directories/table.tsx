@@ -2,9 +2,8 @@ import { DirectoryMount } from "@desktop/components/directories/mount";
 import { DirectoryNameCell } from "@desktop/components/directories/name";
 import { DirectoryItemRow } from "@desktop/components/directories/row";
 import { Empty } from "@desktop/components/empty";
-import { useRestoreMultiple } from "@desktop/hooks/mutations/core/use-restore-multiple";
-import { useRestoreSingle } from "@desktop/hooks/mutations/core/use-restore-single";
 import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { DirectoryItem as DirectoryItemType } from "@desktop/hooks/queries/core/use-directory";
 import { usePlatform } from "@desktop/hooks/queries/use-platform";
 import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
@@ -171,10 +170,8 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
       .filter(Boolean) as Item[];
   }, [selection, items]);
 
-  const { mutate: restoreMultiple, isPending: isMultiRestorePending } =
-    useRestoreMultiple(selectedFiles);
-  const { mutate: restoreSingle, isPending: isSingleRestorePending } =
-    useRestoreSingle();
+  const { mutate: startRestore, isPending: isStartingRestore } =
+    useStartRestore();
 
   return (
     <>
@@ -224,10 +221,16 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
                       backup,
                     })
                   : selectedFiles.length === 1 && selectedFiles[0]
-                    ? restoreSingle(selectedFiles[0])
-                    : restoreMultiple()
+                    ? startRestore({
+                        variant: "single",
+                        item: selectedFiles[0],
+                      })
+                    : startRestore({
+                        variant: "multiple",
+                        items: selectedFiles,
+                      })
               }
-              loading={isMultiRestorePending || isSingleRestorePending}
+              loading={isStartingRestore}
             >
               <CloudDownloadIcon />
               {t("restore.selected", {

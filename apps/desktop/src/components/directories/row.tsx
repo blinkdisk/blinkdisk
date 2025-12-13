@@ -1,5 +1,5 @@
 import { Item } from "@desktop/components/directories/table";
-import { useRestoreSingle } from "@desktop/hooks/mutations/core/use-restore-single";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useNavigate } from "@tanstack/react-router";
 import { flexRender, Row } from "@tanstack/react-table";
 import { VirtualItem } from "@tanstack/react-virtual";
@@ -18,7 +18,8 @@ export function DirectoryItemRow({
   reset,
 }: DirectoryItemRowProps) {
   const navigate = useNavigate();
-  const { mutate: restore, isPending } = useRestoreSingle();
+  const { mutate: startRestore, isPending: isStartingRestore } =
+    useStartRestore();
 
   if (!row) return null;
   return (
@@ -42,7 +43,7 @@ export function DirectoryItemRow({
               ],
             }),
           });
-        } else restore(row.original);
+        } else startRestore({ variant: "single", item: row.original });
       }}
       style={{
         transform: `translateY(${virtualRow.start}px)`,
@@ -66,7 +67,7 @@ export function DirectoryItemRow({
         >
           {flexRender(cell.column.columnDef.cell, {
             ...cell.getContext(),
-            isPending,
+            isPending: isStartingRestore,
           })}
         </TableCell>
       ))}

@@ -1,7 +1,7 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
-import { useBackupFolder } from "@desktop/hooks/mutations/core/use-backup-folder";
+import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
@@ -51,7 +51,7 @@ function Folder({ folder }: FolderProps) {
   const { t } = useAppTranslation("folder.list.item");
   const formattedTime = useRelativeTime(folder?.lastSnapshot?.startTime);
 
-  const { mutate: backup } = useBackupFolder();
+  const { mutate: startBackup } = useStartBackup();
   const { openFolderSettings } = useFolderSettingsDialog();
   const { openDeleteFolderDialog } = useDeleteFolderDialog();
 
@@ -105,7 +105,7 @@ function Folder({ folder }: FolderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <MutatingDropdownMenuItem
-                  onClick={() => backup({ path: folder.source.path })}
+                  onClick={() => startBackup({ path: folder.source.path })}
                 >
                   <CloudUploadIcon />
                   {t("dropdown.backup")}

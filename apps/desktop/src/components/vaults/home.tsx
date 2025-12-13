@@ -2,7 +2,7 @@ import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
-import { useBackupAll } from "@desktop/hooks/mutations/core/use-backup-all";
+import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
@@ -37,7 +37,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
   const { dark } = useTheme();
   const { openCreateFolder } = useCreateFolderDialog();
   const { openUpgradeDialog } = useUpgradeDialog();
-  const { mutate: backupAll, isPending: isBackupAllLoading } = useBackupAll();
+  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
   const { data: space } = useVaultSpace();
 
   const storagePercentage = useMemo(() => {
@@ -238,8 +238,8 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
                 </MutatingButton>
                 {folders.length > 0 ? (
                   <MutatingButton
-                    onClick={() => backupAll()}
-                    loading={isBackupAllLoading || isAnyBackupRunning}
+                    onClick={() => startBackup({})}
+                    loading={isStartingBackup || isAnyBackupRunning}
                   >
                     <CloudUploadIcon />
                     {t("folders.backupAll")}

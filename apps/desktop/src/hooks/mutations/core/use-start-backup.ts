@@ -6,7 +6,7 @@ import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useBackupAll() {
+export function useStartBackup() {
   const queryClient = useQueryClient();
 
   const { vaultId } = useVaultId();
@@ -16,7 +16,7 @@ export function useBackupAll() {
 
   return useMutation({
     mutationKey: ["vault", vaultId, "backup"],
-    mutationFn: async () => {
+    mutationFn: async (options: { path?: string }) => {
       if (!vaultId) return;
 
       await vaultApi(vaultId).post(
@@ -26,6 +26,7 @@ export function useBackupAll() {
           params: {
             userName: profileId!,
             host: deviceId!,
+            ...(options && options.path && { path: options.path }),
           },
         },
       );

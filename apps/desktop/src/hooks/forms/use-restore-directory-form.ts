@@ -1,4 +1,4 @@
-import { useRestoreDirectory } from "@desktop/hooks/mutations/core/use-restore-directory";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZRestoreDirectory, ZRestoreDirectoryType } from "@schemas/directory";
 
@@ -9,8 +9,7 @@ export function useRestoreDirectoryForm({
   objectId: string | undefined;
   onSuccess?: () => void;
 }) {
-  const { mutateAsync } = useRestoreDirectory({
-    objectId,
+  const { mutateAsync: startRestore } = useStartRestore({
     onSuccess: () => {
       form.reset();
       onSuccess?.();
@@ -40,7 +39,9 @@ export function useRestoreDirectoryForm({
         }
       },
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: ({ value }) =>
+      objectId &&
+      startRestore({ variant: "directory", values: value, objectId }),
   });
 
   return form;
