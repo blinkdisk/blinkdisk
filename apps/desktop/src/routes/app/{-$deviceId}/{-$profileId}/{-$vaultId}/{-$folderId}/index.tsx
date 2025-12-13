@@ -5,6 +5,7 @@ import { FolderPreview } from "@desktop/components/folders/preview";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
+import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
 import { useVault } from "@desktop/hooks/queries/use-vault";
@@ -22,6 +23,7 @@ import {
   CloudUploadIcon,
   ListPlusIcon,
   SettingsIcon,
+  SquareIcon,
 } from "lucide-react";
 import animation from "/animations/backup.lottie?url";
 
@@ -38,7 +40,10 @@ function RouteComponent() {
   const { data: vault } = useVault();
   const { openFolderSettings } = useFolderSettingsDialog();
   const { data: backups } = useCompletedBackupList();
+
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
+  const { mutate: cancelBackup, isPending: isCancellingBackup } =
+    useCancelBackup();
 
   return (
     <div
@@ -90,18 +95,32 @@ function RouteComponent() {
                 <SettingsIcon />
                 {t("settings")}
               </Button>
-              <MutatingButton
-                onClick={() =>
-                  folder && startBackup({ path: folder.source.path })
-                }
-                loading={
-                  isStartingBackup ||
-                  ["UPLOADING", "PENDING"].includes(folder?.status || "")
-                }
-              >
-                <CloudUploadIcon />
-                {t("backup")}
-              </MutatingButton>
+              {folder && folder.status === "UPLOADING" ? (
+                <MutatingButton
+                  variant="outline"
+                  onClick={() =>
+                    folder.currentTask &&
+                    cancelBackup({ taskId: folder.currentTask })
+                  }
+                  loading={
+                    isCancellingBackup ||
+                    folder?.currentTaskStatus === "CANCELING"
+                  }
+                >
+                  <SquareIcon />
+                  {t("cancel")}
+                </MutatingButton>
+              ) : (
+                <MutatingButton
+                  onClick={() =>
+                    folder && startBackup({ path: folder.source.path })
+                  }
+                  loading={isStartingBackup || folder?.status === "PENDING"}
+                >
+                  <CloudUploadIcon />
+                  {t("backup")}
+                </MutatingButton>
+              )}
             </>
           ) : (
             <>
@@ -112,7 +131,14 @@ function RouteComponent() {
         </div>
       </div>
       {backups !== null && backups !== undefined && backups.length === 0 ? (
-        folder?.status === "UPLOADING" ? (
+        folder?.status === "UPLOADING" &&
+        folder.currentTaskStatus == "CANCELING" ? (
+          <Empty
+            icon={<SquareIcon />}
+            title={t("empty.canceling.title")}
+            description={t("empty.canceling.description")}
+          />
+        ) : folder?.status === "UPLOADING" ? (
           <div className="flex h-full w-full flex-col items-center justify-center">
             <div className="mt-auto"></div>
             <DotLottieReact src={animation} autoplay loop className="h-34" />

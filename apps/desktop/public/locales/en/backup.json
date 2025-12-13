@@ -14,9 +14,6 @@
       "title": "New backup is pending",
       "description": "Another backup is currently running. "
     },
-    "running": {
-      "cancel": "Cancel Backup"
-    },
     "paused": {
       "title": "Resume paused backup",
       "description": "You have paused a backup that isn't finished it yet.",
@@ -35,9 +32,14 @@
       "initial": {
         "title": "Running initial backup",
         "description": "This is the initial backup of this folder, so it may take a while. BlinkDisk only uploads changed files after this, making all future backups much faster and lighter."
+      },
+      "canceling": {
+        "title": "Canceling backup",
+        "description": "This backup is currently being canceled. The cancelation can take a while."
       }
     },
-    "backup": "Backup Now"
+    "cancel": "Cancel Backup",
+    "backup": "Backup Folder"
   },
   "progress": {
     "descriptive": {

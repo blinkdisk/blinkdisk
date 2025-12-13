@@ -27,6 +27,8 @@
     "backupPaused": "Backup paused",
     "backupPending": "Backup pending",
     "backupRunning": "Backup running",
+    "backupCanceling": "Backup canceling",
+    "backupCanceled": "Backup canceled",
     "noBackups": "No backups yet"
   },
   "emojiPicker": {
@@ -42,6 +44,7 @@
       "dropdown": {
         "browse": "Browse Backups",
         "backup": "Backup Folder",
+        "cancel": "Cancel Backup",
         "settings": "Folder Settings",
         "delete": "Delete Folder"
       }

@@ -1,6 +1,7 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
+import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
@@ -23,8 +24,10 @@ import {
   FolderSearchIcon,
   MoreVerticalIcon,
   SettingsIcon,
+  SquareIcon,
   TrashIcon,
 } from "lucide-react";
+import { useMemo } from "react";
 
 type FolderListProps = {
   folders: CoreFolderItem[] | undefined | null;
@@ -52,8 +55,22 @@ function Folder({ folder }: FolderProps) {
   const formattedTime = useRelativeTime(folder?.lastSnapshot?.startTime);
 
   const { mutate: startBackup } = useStartBackup();
+  const { mutate: cancelBackup } = useCancelBackup();
   const { openFolderSettings } = useFolderSettingsDialog();
   const { openDeleteFolderDialog } = useDeleteFolderDialog();
+
+  const showProgress = useMemo(
+    () =>
+      folder &&
+      folder.status === "UPLOADING" &&
+      folder.currentTaskStatus !== "CANCELING",
+    [folder],
+  );
+
+  const showStartTime = useMemo(
+    () => folder && folder.lastSnapshot && !folder.lastSnapshot.incomplete,
+    [folder],
+  );
 
   return (
     <div
@@ -70,15 +87,15 @@ function Folder({ folder }: FolderProps) {
       />
       <FolderPreview folder={folder} />
       <div className="flex items-center gap-3">
-        {folder && (folder.lastSnapshot || folder.status === "UPLOADING") ? (
+        {showStartTime || showProgress ? (
           <>
-            {folder.status === "UPLOADING" ? (
+            {showProgress && folder ? (
               <BackupProgress upload={folder.upload} size="sm" />
-            ) : (
+            ) : showStartTime ? (
               <p className="text-muted-foreground whitespace-nowrap text-sm">
                 {folder ? formattedTime : <Skeleton width={100} />}
               </p>
-            )}
+            ) : null}
             <div className="h-6 border-r" />
           </>
         ) : null}
@@ -104,12 +121,22 @@ function Folder({ folder }: FolderProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <MutatingDropdownMenuItem
-                  onClick={() => startBackup({ path: folder.source.path })}
-                >
-                  <CloudUploadIcon />
-                  {t("dropdown.backup")}
-                </MutatingDropdownMenuItem>
+                {folder.status === "UPLOADING" &&
+                folder.currentTaskStatus !== "CANCELING" ? (
+                  <MutatingDropdownMenuItem
+                    onClick={() => cancelBackup({ taskId: folder.currentTask })}
+                  >
+                    <SquareIcon />
+                    {t("dropdown.cancel")}
+                  </MutatingDropdownMenuItem>
+                ) : folder.status === "IDLE" ? (
+                  <MutatingDropdownMenuItem
+                    onClick={() => startBackup({ path: folder.source.path })}
+                  >
+                    <CloudUploadIcon />
+                    {t("dropdown.backup")}
+                  </MutatingDropdownMenuItem>
+                ) : null}
                 <DropdownMenuItem
                   onClick={() => openFolderSettings({ folderId: folder.id })}
                 >
