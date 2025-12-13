@@ -7,12 +7,17 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
+export type CoreBackupIncompleteReason =
+  | "checkpoint"
+  | "canceled"
+  | "limit reached";
+
 export type CoreBackupItem = {
   id: string;
   description: string;
   startTime: string;
   endTime: string;
-  incomplete?: "checkpoint";
+  incomplete?: CoreBackupIncompleteReason;
   summary: {
     size: number;
     files: number;

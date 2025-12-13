@@ -1,3 +1,4 @@
+import { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
@@ -25,8 +26,7 @@ export type CoreFolderItem = {
   };
   lastSnapshot?: {
     id: string;
-    hash: string;
-    incomplete?: "checkpoint";
+    incomplete?: CoreBackupIncompleteReason;
     folder: {
       host: string;
       userName: string;
@@ -83,6 +83,12 @@ export type CoreFolderItem = {
     progress: number;
   };
   currentTask: string;
+  currentTaskStatus:
+    | "RUNNING"
+    | "CANCELING"
+    | "CANCELED"
+    | "SUCCESS"
+    | "FAILED";
 };
 
 export function useFolderList() {

@@ -61,7 +61,9 @@ function SidebarFolder({ folder }: SidebarFolderProps) {
           className="flex items-center justify-between"
         >
           <FolderPreview folder={folder} size="sm" />
-          {folder && folder.status === "UPLOADING" ? (
+          {folder &&
+          folder.status === "UPLOADING" &&
+          folder.currentTaskStatus !== "CANCELING" ? (
             <CircularProgress
               value={100 * (folder?.upload?.progress || 0)}
               size={25}
