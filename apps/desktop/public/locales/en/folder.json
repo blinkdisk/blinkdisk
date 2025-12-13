@@ -3,27 +3,27 @@
     "title": "Add folder",
     "description": "Create a new folder to backup your files.",
     "name": {
-      "label": "Folder Name",
+      "label": "Folder name",
       "placeholder": "Enter folder name"
     },
     "emoji": {
-      "button": "Change Emoji"
+      "button": "Change emoji"
     },
     "path": {
-      "label": "Folder Path",
+      "label": "Folder path",
       "placeholder": "Select folder path",
       "title": "Select folder path"
     },
-    "submit": "Add Folder",
+    "submit": "Add folder",
     "exceedingAlert": {
       "title": "Not enough cloud storage",
       "description": "This folder likely can’t be backed up because it would exceed your available BlinkDisk Cloud storage. To back it up, you’ll need to upgrade your BlinkDisk Cloud plan.",
-      "continue": "Add Anyway",
-      "upgrade": "Upgrade Storage"
+      "continue": "Add anyway",
+      "upgrade": "Upgrade storage"
     }
   },
   "preview": {
-    "stats": "{{fileCount}} Files ⸱ {{size}}",
+    "stats": "{{fileCount}} files ⸱ {{size}}",
     "backupPaused": "Backup paused",
     "backupPending": "Backup pending",
     "backupRunning": "Backup running",
@@ -42,22 +42,22 @@
   "list": {
     "item": {
       "dropdown": {
-        "browse": "Browse Backups",
-        "backup": "Backup Folder",
-        "cancel": "Cancel Backup",
-        "settings": "Folder Settings",
-        "delete": "Delete Folder"
+        "browse": "Browse backups",
+        "backup": "Backup folder",
+        "cancel": "Cancel backup",
+        "settings": "Folder settings",
+        "delete": "Delete folder"
       }
     }
   },
   "deleteDialog": {
-    "title": "Delete Folder",
+    "title": "Delete folder",
     "description": "Are you sure you want to delete this folder? This action cannot be undone.",
     "alert": {
       "title": "Cleanup happens over time",
       "description": "Storage space won’t be freed instantly. BlinkDisk cleans up unused data later to ensure reliability."
     },
     "cancel": "Cancel",
-    "continue": "Delete Folder"
+    "continue": "Delete folder"
   }
 }

@@ -1,15 +1,15 @@
 {
   "noVaults": {
-    "title": "Create your Vault",
+    "title": "Create your vault",
     "description": "You haven't created any vaults yet. Get started by pressing the button below.",
-    "button": "Add Vault"
+    "button": "Add vault"
   },
   "addDialog": {
     "title": "Add vault",
     "description": "Add a new vault to your profile.",
     "folder": {
       "existing": {
-        "title": "Link existing Vault",
+        "title": "Link existing vault",
         "description": "Link this device and profile to an existing vault."
       },
       "new": {
@@ -23,7 +23,7 @@
     "description": "Link this device and profile to an existing vault.",
     "password": {
       "password": {
-        "label": "Encryption Password",
+        "label": "Encryption password",
         "placeholder": "Enter vault encryption password"
       },
       "invalidError": {
@@ -37,10 +37,10 @@
     },
     "details": {
       "name": {
-        "label": "New Vault Name",
+        "label": "New vault name",
         "placeholder": "Enter vault name"
       },
-      "submit": "Link Vault"
+      "submit": "Link vault"
     }
   },
   "createDialog": {
@@ -49,14 +49,14 @@
     "variant": {
       "blinkdiskCloud": {
         "features": {
-          "freeStorage": "{{freeSpace}} for Free",
+          "freeStorage": "{{freeSpace}} for free",
           "noSetup": "No setup required",
           "cheaper": "80% cheaper than S3"
         },
         "button": "Continue"
       },
       "custom": {
-        "title": "Custom Storage Provider",
+        "title": "Custom storage provider",
         "features": {
           "noFreeStorage": "No free storage",
           "manualSetup": "Manual setup required"
@@ -93,22 +93,22 @@
     },
     "details": {
       "name": {
-        "label": "Vault Name",
+        "label": "Vault name",
         "placeholder": "Enter vault name"
       },
       "password": {
-        "label": "Encryption Password",
+        "label": "Encryption password",
         "placeholder": "Enter vault encryption password"
       },
       "confirmPassword": {
-        "label": "Confirm Encryption Password",
+        "label": "Confirm encryption password",
         "placeholder": "Confirm vault encryption password"
       },
       "warning": {
         "title": "Never forget this password",
         "description": "We never store this password on our servers and there is no way to recover it. If you loose this password, you might not be able to restore your backups."
       },
-      "submit": "Create Vault"
+      "submit": "Create vault"
     }
   },
   "passwordMissing": {
@@ -133,22 +133,22 @@
       "name": "BlinkDisk Cloud"
     },
     "FILESYSTEM": {
-      "name": "Local Filesystem",
+      "name": "Local filesystem",
       "description": "Use local vault device",
       "fields": {
         "path": {
-          "label": "Backup Destination Folder",
+          "label": "Backup destination folder",
           "placeholder": "Select destination folder",
           "dialogTitle": "Select backup destination folder"
         }
       }
     },
     "NETWORK_ATTACHED_STORAGE": {
-      "name": "Network Attached Storage",
+      "name": "Network attached storage",
       "description": "Connect to network vault",
       "fields": {
         "path": {
-          "label": "NAS Mount Path",
+          "label": "NAS mount path",
           "placeholder": "Select NAS mount path",
           "dialogTitle": "Select NAS mount path"
         }
@@ -159,7 +159,7 @@
       "description": "Store in AWS cloud",
       "fields": {
         "bucket": {
-          "label": "Bucket Name",
+          "label": "Bucket name",
           "placeholder": "Enter your S3 bucket name"
         },
         "endpoint": {
@@ -171,19 +171,19 @@
           "placeholder": "us-east-1"
         },
         "accessKeyId": {
-          "label": "Access Key ID",
+          "label": "Access key ID",
           "placeholder": "Enter your AWS access key ID"
         },
         "accessKeySecret": {
-          "label": "Secret Access Key",
+          "label": "Secret access key",
           "placeholder": "Enter your AWS secret access key"
         },
         "sessionToken": {
-          "label": "Session Token",
+          "label": "Session token",
           "placeholder": "Enter session token"
         },
         "prefix": {
-          "label": "Key Prefix",
+          "label": "Key prefix",
           "placeholder": "backup/"
         },
         "disableTls": {
@@ -195,11 +195,11 @@
       }
     },
     "S3_COMPATIBLE": {
-      "name": "S3 Compatible Storage",
+      "name": "S3 compatible storage",
       "description": "Use S3-compatible services",
       "fields": {
         "bucket": {
-          "label": "Bucket Name",
+          "label": "Bucket name",
           "placeholder": "Enter your S3 compatible bucket name"
         },
         "endpoint": {
@@ -211,19 +211,19 @@
           "placeholder": "us-east-1"
         },
         "accessKeyId": {
-          "label": "Access Key ID",
+          "label": "Access key ID",
           "placeholder": "Enter your access key ID"
         },
         "accessKeySecret": {
-          "label": "Secret Access Key",
+          "label": "Secret access key",
           "placeholder": "Enter your secret access key"
         },
         "sessionToken": {
-          "label": "Session Token",
+          "label": "Session token",
           "placeholder": "Enter session token"
         },
         "prefix": {
-          "label": "Key Prefix",
+          "label": "Key prefix",
           "placeholder": "backup/"
         },
         "disableTls": {
@@ -239,11 +239,11 @@
       "description": "Store in Google cloud",
       "fields": {
         "bucket": {
-          "label": "Bucket Name",
+          "label": "Bucket name",
           "placeholder": "Enter your GCS bucket name"
         },
         "prefix": {
-          "label": "Key Prefix",
+          "label": "Key prefix",
           "placeholder": "backup/"
         },
         "credentials": {
@@ -257,19 +257,19 @@
       "description": "Store in Backblaze cloud",
       "fields": {
         "bucket": {
-          "label": "Bucket Name",
+          "label": "Bucket name",
           "placeholder": "Enter your B2 bucket name"
         },
         "keyId": {
-          "label": "Application Key ID",
+          "label": "Application key ID",
           "placeholder": "Enter your B2 application key ID"
         },
         "keySecret": {
-          "label": "Application Key",
+          "label": "Application key",
           "placeholder": "Enter your B2 application key"
         },
         "prefix": {
-          "label": "Key Prefix",
+          "label": "Key prefix",
           "placeholder": "backup/"
         }
       }
@@ -279,27 +279,27 @@
       "description": "Store in Azure cloud",
       "fields": {
         "container": {
-          "label": "Container Name",
+          "label": "Container name",
           "placeholder": "Enter your Azure blob container name"
         },
         "account": {
-          "label": "Storage Account",
+          "label": "Storage account",
           "placeholder": "Enter your Azure vault account name"
         },
         "key": {
-          "label": "Storage Key",
+          "label": "Storage key",
           "placeholder": "Enter your Azure vault account key"
         },
         "domain": {
-          "label": "Storage Domain",
+          "label": "Storage domain",
           "placeholder": "blob.core.windows.net"
         },
         "prefix": {
-          "label": "Key Prefix",
+          "label": "Key prefix",
           "placeholder": "backup/"
         },
         "sasToken": {
-          "label": "SAS Token",
+          "label": "SAS token",
           "placeholder": "Enter your SAS token"
         }
       }
@@ -321,7 +321,7 @@
           "placeholder": "22"
         },
         "path": {
-          "label": "Remote Path",
+          "label": "Remote path",
           "placeholder": "Enter remote directory path"
         },
         "password": {
@@ -329,11 +329,11 @@
           "placeholder": "Enter SFTP password"
         },
         "privateKey": {
-          "label": "Private Key Data",
+          "label": "Private key data",
           "placeholder": "Paste private key content"
         },
         "knownHosts": {
-          "label": "Known Hosts Entry",
+          "label": "Known hosts entry",
           "placeholder": "Paste known_hosts content",
           "scan": {
             "button": "Scan and fill",
@@ -352,15 +352,15 @@
       }
     },
     "RCLONE": {
-      "name": "Rclone Remote",
+      "name": "Rclone remote",
       "description": "Use any rclone remote",
       "fields": {
         "remotePath": {
-          "label": "Remote Path",
+          "label": "Remote path",
           "placeholder": "Enter rclone remote path"
         },
         "rclonePath": {
-          "label": "Rclone Executable Path",
+          "label": "Rclone executable path",
           "placeholder": "Path to rclone executable"
         }
       }
@@ -388,13 +388,13 @@
     "title": "Home",
     "vault": "Vault",
     "settings": "Settings",
-    "upgrade": "Upgrade Storage",
+    "upgrade": "Upgrade storage",
     "folders": {
       "title": "Folders",
-      "count_one": "{{count}} Folder backed up",
-      "count_other": "{{count}} Folders backed up",
-      "addFolder": "Add Folder",
-      "backupAll": "Backup All",
+      "count_one": "{{count}} folder backed up",
+      "count_other": "{{count}} folders backed up",
+      "addFolder": "Add folder",
+      "backupAll": "Backup all",
       "empty": {
         "title": "No folders added",
         "description": "You haven't added any folders yet. Add one by pressing the button below."

@@ -1,13 +1,13 @@
 {
   "list": {
-    "back": "Go Back",
-    "settings": "Folder Settings",
+    "back": "Go back",
+    "settings": "Folder settings",
     "item": {
-      "files_one": "{{formatted}} File",
-      "files_other": "{{formatted}} Files",
+      "files_one": "{{formatted}} file",
+      "files_other": "{{formatted}} files",
       "dropdown": {
-        "browse": "Browse Files",
-        "delete": "Delete Backup"
+        "browse": "Browse files",
+        "delete": "Delete backup"
       }
     },
     "pending": {
@@ -17,13 +17,13 @@
     "paused": {
       "title": "Resume paused backup",
       "description": "You have paused a backup that isn't finished it yet.",
-      "button": "Resume Backup"
+      "button": "Resume backup"
     },
     "empty": {
       "default": {
         "title": "No backups yet",
         "description": "You haven't created any backups yet. Create one by pressing the button below.",
-        "button": "Backup Now"
+        "button": "Backup now"
       },
       "pending": {
         "title": "Backup pending",
@@ -38,8 +38,8 @@
         "description": "This backup is currently being canceled. The cancelation can take a while."
       }
     },
-    "cancel": "Cancel Backup",
-    "backup": "Backup Folder"
+    "cancel": "Cancel backup",
+    "backup": "Backup folder"
   },
   "progress": {
     "descriptive": {
@@ -58,13 +58,13 @@
     }
   },
   "deleteDialog": {
-    "title": "Delete Backup",
+    "title": "Delete backup",
     "description": "Are you sure you want to delete this backup? This action cannot be undone.",
     "alert": {
       "title": "Cleanup happens over time",
       "description": "Storage space won’t be freed instantly. BlinkDisk cleans up unused data later to ensure reliability."
     },
     "cancel": "Cancel",
-    "continue": "Delete Backup"
+    "continue": "Delete backup"
   }
 }

@@ -23,10 +23,10 @@
         "yearly": "Yearly"
       },
       "contact": {
-        "back": "Go Back",
+        "back": "Go back",
         "title": "Looking for more storage?",
         "description": "Feel free to contact us at cloud@blinkdisk.com for a quote.",
-        "button": "Contact Us"
+        "button": "Contact us"
       }
     },
     "checkout": {
@@ -59,7 +59,7 @@
       "title": "Confirm billing period change",
       "description": "You’re changing how often you’re billed. Your subscription will be updated right away with the new billing period.",
       "info": "Because you’re switching the billing period mid-cycle, the unused amount from your current plan will be credited toward your new plan.",
-      "submit": "Change Billing Period"
+      "submit": "Change billing period"
     },
     "monthly": "{{amount}}<0> /month</0>",
     "yearly": "{{amount}}<0j> /year</0>",

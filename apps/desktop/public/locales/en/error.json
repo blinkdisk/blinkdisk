@@ -3,12 +3,12 @@
     "default": {
       "title": "Something went wrong",
       "description": "An unexpected error has occurred. Please try again later. If this error persists, please contact <0>support@blinkdisk.com</o>.",
-      "button": "Back to Home"
+      "button": "Back to home"
     },
     "not-found": {
       "title": "404",
       "description": "The page you are looking for does not exist. If this error persists, please contact <0>support@blinkdisk.com</0>.",
-      "button": "Back to Home"
+      "button": "Back to home"
     }
   },
   "fallback": {

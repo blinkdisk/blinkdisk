@@ -1,5 +1,5 @@
 {
-  "addFolder": "Add Folder",
+  "addFolder": "Add folder",
   "selectDevice": {
     "empty": "Select device",
     "external": "External"
@@ -18,10 +18,10 @@
     "preferences": "Preferences",
     "billing": "Billing",
     "logout": "Sign out",
-    "addAccount": "Add Account"
+    "addAccount": "Add account"
   },
   "accountListMenu": {
-    "addAccount": "Add new Account"
+    "addAccount": "Add new account"
   },
   "links": {
     "home": "Home",
@@ -39,6 +39,6 @@
       "title": "Cloud storage is full",
       "description": "Please upgrade your storage to continue using BlinkDisk."
     },
-    "button": "Upgrade Storage"
+    "button": "Upgrade storage"
   }
 }

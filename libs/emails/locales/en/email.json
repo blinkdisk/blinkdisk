@@ -1,21 +1,21 @@
 {
   "magic": {
-    "subject": "Your BlinkDisk Sign-In Code",
-    "title": "Sign-In to BlinkDisk",
+    "subject": "Your BlinkDisk sign-in code",
+    "title": "Sign in to BlinkDisk",
     "preview": "Here's your BlinkDisk magic sign-in code.",
     "body": "You requested a magic sign-in code for BlinkDisk. To finish signing in, please copy the code below and paste it into the BlinkDisk desktop app:",
     "expiration": "This code will expire in one hour. If you did not request a new code, you may safely ignore this email."
   },
   "storageThreshold": {
-    "subject": "{{percentage}}% of BlinkDisk Cloud Storage used ",
-    "title": "BlinkDisk Cloud Storage is running low",
+    "subject": "{{percentage}}% of BlinkDisk Cloud storage used ",
+    "title": "BlinkDisk Cloud storage is running low",
     "preview": "Your BlinkDisk Cloud storage is {{percentage}}% full.",
     "body": "Your BlinkDisk Cloud storage is currently {{percentage}}% full. We recommend taking action to free up space or upgrade your plan to avoid backup interruption.",
     "warning": "⚠️ You're using {{percentage}}% of your available storage space. Consider upgrading your plan."
   },
   "storageFull": {
-    "subject": "BlinkDisk Cloud Storage Full",
-    "title": "BlinkDisk Cloud Storage Full",
+    "subject": "BlinkDisk Cloud storage full",
+    "title": "BlinkDisk Cloud storage full",
     "preview": "Your BlinkDisk Cloud storage is completely full and new files will not be backed up.",
     "body": "Your BlinkDisk Cloud storage is completely full. No new files will be backed up until you free up space or upgrade your plan.",
     "urgent": "🚨 Your storage is completely full! New files cannot be backed up and you may lose data if your device fails.",

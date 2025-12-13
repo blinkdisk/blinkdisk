@@ -2,7 +2,7 @@
   "account": {
     "title": "Account",
     "description": "Update your account settings.",
-    "submit": "Update Account",
+    "submit": "Update account",
     "logout": "Sign out"
   },
   "preferences": {
@@ -29,17 +29,17 @@
       "title": "General",
       "description": "Configure general settings of this vault.",
       "name": {
-        "label": "Vault Name",
+        "label": "Vault name",
         "placeholder": "Enter vault name"
       },
       "save": "Save"
     },
     "config": {
-      "title": "Storage Config",
+      "title": "Storage config",
       "description": "View the storage location of this vault."
     },
     "throttle": {
-      "title": "Network Throttle",
+      "title": "Network throttle",
       "description": "Throttle the network usage of this vault.",
       "upload": {
         "enabled": {
@@ -63,20 +63,20 @@
     }
   },
   "folder": {
-    "title": "Folder Settings",
+    "title": "Folder settings",
     "description": "Configure the folder settings.",
     "general": {
       "title": "General",
       "description": "Configure general settings of this folder.",
       "name": {
-        "label": "Folder Name",
+        "label": "Folder name",
         "placeholder": "Enter folder name"
       },
       "path": {
-        "label": "Folder Path"
+        "label": "Folder path"
       },
       "emoji": {
-        "button": "Change Emoji"
+        "button": "Change emoji"
       },
       "save": "Save"
     }

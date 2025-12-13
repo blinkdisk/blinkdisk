@@ -1,16 +1,16 @@
 {
   "schedule": {
-    "title": "Backup Schedule",
+    "title": "Backup schedule",
     "description": "Schedule automatic backups of your files.",
     "trigger": {
-      "label": "Backup Trigger",
+      "label": "Backup trigger",
       "items": {
         "SCHEDULE": "Scheduled",
-        "MANUAL": "Manual Only"
+        "MANUAL": "Manual only"
       }
     },
     "interval": {
-      "label": "Backup Interval",
+      "label": "Backup interval",
       "placeholder": "Select backup interval",
       "items": {
         "NONE": "None",
@@ -29,36 +29,36 @@
       "label": "Catch up on missed backups"
     },
     "cron": {
-      "label": "Custom Schedule",
-      "add": "Add Custom Schedule"
+      "label": "Custom schedule",
+      "add": "Add custom schedule"
     },
     "save": "Save"
   },
   "retention": {
-    "title": "Backup Retention",
+    "title": "Backup retention",
     "description": "Configure how long to keep backups.",
     "latest": {
-      "label": "Latest Backups",
+      "label": "Latest backups",
       "description": "The number of latest backups to keep."
     },
     "hourly": {
-      "label": "Hourly Backups",
+      "label": "Hourly backups",
       "description": "The number of hourly backups to keep."
     },
     "daily": {
-      "label": "Daily Backups",
+      "label": "Daily backups",
       "description": "The number of daily backups to keep."
     },
     "weekly": {
-      "label": "Weekly Backups",
+      "label": "Weekly backups",
       "description": "The number of weekly backups to keep."
     },
     "monthly": {
-      "label": "Monthly Backups",
+      "label": "Monthly backups",
       "description": "The number of monthly backups to keep."
     },
     "annual": {
-      "label": "Annual Backups",
+      "label": "Annual backups",
       "description": "The number of annual backups to keep."
     },
     "info": {
@@ -68,10 +68,10 @@
     "save": "Save"
   },
   "files": {
-    "title": "Excluded Files",
+    "title": "Excluded files",
     "description": "Exclude files and directories from backups.",
     "denylist": {
-      "label": "Excluded Files and Directories",
+      "label": "Excluded files and directories",
       "description": "Files, directories and extensions to exclude from backups.",
       "type": {
         "file": {
@@ -87,21 +87,21 @@
           "example": "*.ext"
         }
       },
-      "add": "Add Exclusion"
+      "add": "Add exclusion"
     },
     "denyfiles": {
-      "label": "Exclusion Rule Files",
+      "label": "Exclusion rule files",
       "description": "All filenames to files containing exclusion rules.",
       "example": "ignore.txt",
-      "docs": "Open Docs",
-      "add": "Add Rule File"
+      "docs": "Open docs",
+      "add": "Add rule file"
     },
     "maxFileSize": {
-      "label": "Maximum File Size",
+      "label": "Maximum file size",
       "description": "The maximum file size to include in backups."
     },
     "excludeCacheDirs": {
-      "label": "Exclude Cache Directories",
+      "label": "Exclude cache directories",
       "description": "Exclude common cache directories in backups."
     },
     "save": "Save"

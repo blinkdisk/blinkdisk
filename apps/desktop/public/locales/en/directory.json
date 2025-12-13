@@ -1,9 +1,9 @@
 {
-  "back": "Go Back",
+  "back": "Go back",
   "table": {
     "name": "Name",
     "size": "Size",
-    "modified": "Last Modified",
+    "modified": "Last modified",
     "symlink": {
       "tooltip": "Symbolic link"
     },
@@ -26,10 +26,10 @@
       "open": {
         "windows": "Open in Explorer",
         "macos": "Open in Finder",
-        "other": "Open in Files"
+        "other": "Open in files"
       },
       "stop": {
-        "button": "Stop Mount",
+        "button": "Stop mount",
         "error": {
           "title": "Failed to stop mount",
           "description": "The mount might still be in use. Try closing any applications that are using the mount."
@@ -37,9 +37,9 @@
       }
     },
     "restore": {
-      "folder": "Restore Folder",
-      "selected_one": "Restore {{count}} Item",
-      "selected_other": "Restore {{count}} Items",
+      "folder": "Restore folder",
+      "selected_one": "Restore {{count}} item",
+      "selected_other": "Restore {{count}} items",
       "single": {
         "dialog": {
           "title": "Select restore destination folder"
@@ -53,26 +53,26 @@
     }
   },
   "restoreDialog": {
-    "title": "Restore Folder",
+    "title": "Restore folder",
     "description": "Restore a folder from a backup.",
     "type": {
-      "label": "Restore Type",
+      "label": "Restore type",
       "items": {
-        "ZIP": "ZIP Archive",
-        "UNPACKED": "Unpacked Files"
+        "ZIP": "ZIP archive",
+        "UNPACKED": "Unpacked files"
       }
     },
     "filePath": {
-      "label": "ZIP File Path",
+      "label": "ZIP file path",
       "placeholder": "Select destination file path",
       "defaultFileName": "{{directory}}-{{date}}-Restore.zip"
     },
     "directoryPath": {
-      "label": "Destination Folder Path",
+      "label": "Destination folder path",
       "placeholder": "Select destination folder path"
     },
     "compress": {
-      "label": "Compress ZIP File",
+      "label": "Compress ZIP file",
       "description": "Reduces the size, but slows down the restore"
     },
     "warning": {
@@ -93,6 +93,6 @@
       "directories_other": "Currently restoring {{directories}} folders",
       "both": "Currently restoring {{files}} file(s) and {{directories}} folder(s)"
     },
-    "openFolder": "Open Folder"
+    "openFolder": "Open folder"
   }
 }
