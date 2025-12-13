@@ -365,7 +365,6 @@ export class Vault {
     }
 
     this.status = "RUNNING";
-    this.resumeInitialBackups();
   }
 
   boot() {
@@ -683,76 +682,6 @@ export class Vault {
     this.serverAddress = undefined;
 
     this.status = "READY";
-  }
-
-  async resumeInitialBackups() {
-    if (this.readOnly) return;
-
-    try {
-      const sources = (await this.fetch({
-        method: "GET",
-        path: "/api/v1/sources",
-        search: {
-          host: this.deviceId!,
-          userName: this.profileId!,
-        },
-      })) as {
-        sources: {
-          source: {
-            path: string;
-          };
-          status: string;
-          lastSnapshot?: {
-            incomplete?: "checkpoint";
-          };
-        }[];
-      };
-
-      for (const source of sources.sources) {
-        if (
-          // Backup already running or pending
-          source.status !== "IDLE" ||
-          // No backup started yet
-          !source.lastSnapshot ||
-          // Last backup is complete
-          !source.lastSnapshot?.incomplete
-        )
-          continue;
-
-        const backups = (await this.fetch({
-          method: "GET",
-          path: "/api/v1/snapshots",
-          search: {
-            path: source.source.path!,
-            userName: this.profileId!,
-            host: this.deviceId!,
-            all: "1",
-          },
-        })) as {
-          snapshots: {
-            incomplete?: "checkpoint";
-          }[];
-        };
-
-        const completedBackup = backups.snapshots.find(
-          (backup) => !backup.incomplete,
-        );
-
-        if (completedBackup) continue;
-
-        await this.fetch({
-          method: "POST",
-          path: "/api/v1/sources/upload",
-          search: {
-            userName: this.profileId!,
-            host: this.deviceId!,
-            path: source.source.path,
-          },
-        });
-      }
-    } catch (e) {
-      this.log("Failed to resume initial backups:" + e);
-    }
   }
 }
 
