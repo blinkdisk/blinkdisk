@@ -1,6 +1,6 @@
 import { useIsMobile } from "@hooks/use-mobile";
-import { useTheme } from "@hooks/use-theme";
 import { GithubIcon } from "@landing/components/icons/github";
+import { useTheme } from "@landing/hooks/use-theme";
 import { Link, useRouter } from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import { cn } from "@utils/class";

@@ -62,7 +62,7 @@ const api = {
   },
   store: {
     get: (
-      key:
+      key?:
         | keyof GlobalStorageSchema
         | `accounts.${string}.${keyof AccountStorageSchema}`,
     ) => ipcRenderer.sendSync("store.get", key) as unknown,

@@ -1,5 +1,29 @@
-import { useTheme } from "@hooks/use-theme";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import { useLocalStorage, useMediaQuery } from "usehooks-ts";
+
+export type Theme = "system" | "dark" | "light";
+
+export function useTheme() {
+  const [theme, setTheme] = useLocalStorage<Theme>(
+    "preferences.theme",
+    "system",
+  );
+
+  const media = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const shownTheme = useMemo(() => {
+    if (theme !== "system") return theme;
+    return media ? "dark" : "light";
+  }, [theme, media]);
+
+  return {
+    dark: shownTheme === "dark",
+    light: shownTheme === "light",
+    shownTheme,
+    theme,
+    setTheme,
+  };
+}
 
 export function useThemeListener() {
   const { dark, theme, setTheme } = useTheme();

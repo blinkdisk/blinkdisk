@@ -1,16 +1,8 @@
-import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-folder-policy";
-import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
+import { PolicyContext } from "@desktop/hooks/use-policy-context";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZGeneralPolicyForm, ZGeneralPolicyFormType } from "@schemas/policy";
 
-export function usePolicyGeneralForm({ folderId }: { folderId?: string }) {
-  const { data: policy } = useFolderPolicy({ folderId });
-
-  const { mutateAsync: mutate } = useUpdateFolderPolicy({
-    folderId,
-    onSuccess: () => form.reset(),
-  });
-
+export function usePolicyGeneralForm({ policy, mutate }: PolicyContext) {
   const form = useAppForm({
     defaultValues: {
       name: policy?.name,
@@ -21,10 +13,15 @@ export function usePolicyGeneralForm({ folderId }: { folderId?: string }) {
     },
     onSubmit: async ({ value }) =>
       policy &&
-      (await mutate({
-        ...policy,
-        ...value,
-      })),
+      (await mutate(
+        {
+          ...policy,
+          ...value,
+        },
+        {
+          onSuccess: () => form.reset(),
+        },
+      )),
   });
 
   return form;

@@ -16,10 +16,10 @@ import { LabelContainer } from "@ui/label";
 import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function ScheduleSettings(props: PolicyCategoryProps) {
+export function ScheduleSettings({ context }: PolicyCategoryProps) {
   const { t } = useAppTranslation("policy.schedule");
 
-  const form = usePolicyScheduleForm(props);
+  const form = usePolicyScheduleForm(context);
 
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const trigger = useStore(form.store, (state) => state.values.trigger);
@@ -30,8 +30,7 @@ export function ScheduleSettings(props: PolicyCategoryProps) {
       title={t("title")}
       description={t("description")}
       icon={<ClockIcon />}
-      folderId={props.folderId}
-      mock={props.mock}
+      context={context}
     >
       <form
         onSubmit={(e) => {
@@ -115,7 +114,7 @@ export function ScheduleSettings(props: PolicyCategoryProps) {
                 <CronEditor
                   form={form}
                   label={t("cron.label")}
-                  level={props.level}
+                  level={context.level}
                 />
               )}
             </form.AppField>

@@ -2,10 +2,11 @@ import { Devtools } from "@desktop/components/devtools";
 import { DefaultErrorPage } from "@desktop/components/errors/default";
 import { OfflineDialog } from "@desktop/components/offline-dialog";
 import { Update } from "@desktop/components/update";
+import { useStorageListener } from "@desktop/hooks/use-app-storage";
 import { useDeeplinkListener } from "@desktop/hooks/use-deeplink-listener";
 import { useShortcutListener } from "@desktop/hooks/use-shortcut-listener";
+import { useTheme, useThemeListener } from "@desktop/hooks/use-theme";
 import "@desktop/i18n";
-import { useThemeListener } from "@hooks/use-theme-listener";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { SidebarProvider } from "@ui/sidebar";
@@ -25,6 +26,9 @@ function RootComponent() {
   useThemeListener();
   useShortcutListener();
   useDeeplinkListener();
+  useStorageListener();
+
+  const { dark } = useTheme();
 
   return (
     <SidebarProvider>
@@ -48,10 +52,10 @@ function RootComponent() {
         <PostHogErrorBoundary fallback={DefaultErrorPage}>
           <QueryClientProvider client={queryClient}>
             <Devtools />
-            <SkeletonTheme>
+            <SkeletonTheme dark={dark}>
               <Update>
                 <Outlet />
-                <Toaster />
+                <Toaster dark={dark} />
                 <OfflineDialog />
               </Update>
             </SkeletonTheme>

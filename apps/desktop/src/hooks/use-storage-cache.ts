@@ -1,6 +1,6 @@
 import { useStorageList } from "@desktop/hooks/queries/use-storage-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
-import { useAppStorage } from "@hooks/use-app-storage";
+import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useEffect } from "react";
 
 export function useStorageCache() {

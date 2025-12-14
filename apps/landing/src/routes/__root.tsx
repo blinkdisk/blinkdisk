@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-import { useThemeListener } from "@hooks/use-theme-listener";
 import { Chatbox } from "@landing/components/chatbox";
+import { useTheme, useThemeListener } from "@landing/hooks/use-theme";
 import globals from "@styles/globals.css?url";
 import inter from "@styles/inter.css?url";
 import mono from "@styles/mono.css?url";
@@ -138,6 +138,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   useThemeListener();
 
+  const { dark } = useTheme();
   const location = useLocation();
 
   return (
@@ -150,12 +151,12 @@ function RootComponent() {
           defaults: "2025-05-24",
         }}
       >
-        <SkeletonTheme>
+        <SkeletonTheme dark={dark}>
           {location.pathname.startsWith("/checkout") ? (
             <Outlet />
           ) : (
             <>
-              <Toaster />
+              <Toaster dark={dark} />
               <Navigation />
               <Outlet />
               <Footer />

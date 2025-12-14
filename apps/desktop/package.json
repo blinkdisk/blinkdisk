@@ -21,6 +21,7 @@
     "@tanstack/react-query": "^5.69.0",
     "@tanstack/react-query-devtools": "5.69.0",
     "@tanstack/react-router": "1.131.7",
+    "@tanstack/react-store": "^0.8.0",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.12",
     "@trpc/client": "^10.45.2",

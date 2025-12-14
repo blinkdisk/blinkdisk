@@ -1,4 +1,4 @@
-import { useTheme } from "@hooks/use-theme";
+import { useTheme } from "@desktop/hooks/use-theme";
 import { cn } from "@utils/class";
 import logoDark from "/brand/logo-dark.svg";
 import logoLight from "/brand/logo-light.svg";

@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "@hooks/use-theme";
 import {
   CircleCheckIcon,
   CircleXIcon,
@@ -11,12 +10,9 @@ import { Toaster as Sonner } from "sonner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
-const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
-
+const Toaster = ({ ...props }: ToasterProps & { dark: boolean }) => {
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
       className="toaster group"
       duration={5000}
       style={{ fontFamily: "inherit" }}
@@ -37,6 +33,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         error: <CircleXIcon className="size-6 !pr-2 text-red-500" />,
         warning: <TriangleAlert className="size-6 !pr-2 text-amber-600" />,
       }}
+      theme={props.theme === "dark" ? "dark" : "light"}
       {...props}
     />
   );

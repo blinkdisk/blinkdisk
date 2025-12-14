@@ -1,12 +1,12 @@
 import { BillingPeriod, plans } from "@config/plans";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
 import { usePlanPrices } from "@hooks/use-plan-prices";
-import { useTheme } from "@hooks/use-theme";
 import { FilesystemIcon } from "@landing/components/icons/filesystem";
 import { NASIcon } from "@landing/components/icons/nas";
 import { S3CompatibleIcon } from "@landing/components/icons/s3-compatible";
 import { SftpIcon } from "@landing/components/icons/sftp";
 import { WebdavIcon } from "@landing/components/icons/webdav";
+import { useTheme } from "@landing/hooks/use-theme";
 import { head } from "@landing/utils/head";
 import { createFileRoute } from "@tanstack/react-router";
 import { Badge } from "@ui/badge";

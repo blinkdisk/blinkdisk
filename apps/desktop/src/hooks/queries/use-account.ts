@@ -1,6 +1,6 @@
+import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { authClient } from "@desktop/lib/auth";
-import { useAppStorage } from "@hooks/use-app-storage";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 

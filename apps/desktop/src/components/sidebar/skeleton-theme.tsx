@@ -1,4 +1,4 @@
-import { useTheme } from "@hooks/use-theme";
+import { useTheme } from "@desktop/hooks/use-theme";
 import { SkeletonTheme } from "@ui/skeleton";
 
 export type SidebarSkeletonThemeProps = {
@@ -6,10 +6,10 @@ export type SidebarSkeletonThemeProps = {
 };
 
 export function SidebarSkeletonTheme({ children }: SidebarSkeletonThemeProps) {
-  const { light } = useTheme();
+  const { dark } = useTheme();
 
   return (
-    <SkeletonTheme baseColor={light ? "#d4d4d4" : undefined}>
+    <SkeletonTheme baseColor={dark ? undefined : "#d4d4d4"} dark={dark}>
       {children}
     </SkeletonTheme>
   );

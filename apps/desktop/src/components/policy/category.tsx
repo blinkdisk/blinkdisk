@@ -1,6 +1,7 @@
 import { usePolicyChanges } from "@desktop/hooks/use-policy-changes";
+import { PolicyContext } from "@desktop/hooks/use-policy-context";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZPolicyLevelType, ZPolicyType } from "@schemas/policy";
+import { ZPolicyType } from "@schemas/policy";
 import {
   AccordionContent,
   AccordionItem,
@@ -10,9 +11,7 @@ import { Badge } from "@ui/badge";
 import { ReactNode } from "react";
 
 export type PolicyCategoryProps = {
-  level: ZPolicyLevelType;
-  folderId?: string;
-  mock?: boolean;
+  context: PolicyContext;
 };
 
 type SettingsCategoryProps = {
@@ -21,8 +20,7 @@ type SettingsCategoryProps = {
   description: string;
   children: ReactNode;
   icon: ReactNode;
-  folderId?: string;
-  mock?: boolean;
+  context?: PolicyContext;
 };
 
 export function SettingsCategory({
@@ -31,10 +29,9 @@ export function SettingsCategory({
   description,
   children,
   icon,
-  folderId,
-  mock,
+  context,
 }: SettingsCategoryProps) {
-  const changes = usePolicyChanges({ folderId, mock });
+  const changes = usePolicyChanges(context);
   const { t } = useAppTranslation("settings.folder");
 
   return (

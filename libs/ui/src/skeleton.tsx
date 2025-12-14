@@ -1,4 +1,3 @@
-import { useTheme } from "@hooks/use-theme";
 import SkeletonComponent, {
   SkeletonTheme as SkeletonThemeComponent,
 } from "react-loading-skeleton";
@@ -9,15 +8,15 @@ type SkeletonThemeProps = {
   children: React.ReactNode;
   baseColor?: string;
   highlightColor?: string;
+  dark?: boolean;
 };
 
 function SkeletonTheme({
   children,
   baseColor,
   highlightColor,
+  dark,
 }: SkeletonThemeProps) {
-  const { dark } = useTheme();
-
   return (
     <SkeletonThemeComponent
       baseColor={baseColor ? baseColor : dark ? "#2b2b2b" : "#d6d6d6"}

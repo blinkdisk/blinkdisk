@@ -8,10 +8,10 @@ import { useAppTranslation } from "@hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { ArchiveIcon, InfoIcon } from "lucide-react";
 
-export function RetentionSettings(props: PolicyCategoryProps) {
+export function RetentionSettings({ context }: PolicyCategoryProps) {
   const { t } = useAppTranslation("policy.retention");
 
-  const form = usePolicyRetentionForm(props);
+  const form = usePolicyRetentionForm(context);
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -20,8 +20,7 @@ export function RetentionSettings(props: PolicyCategoryProps) {
       title={t("title")}
       description={t("description")}
       icon={<ArchiveIcon />}
-      folderId={props.folderId}
-      mock={props.mock}
+      context={context}
     >
       <form
         onSubmit={(e) => {

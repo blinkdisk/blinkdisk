@@ -12,7 +12,7 @@ export function useUpdateVaultPolicy({
   onSuccess,
 }: {
   onSuccess?: () => void;
-}) {
+} = {}) {
   const queryClient = useQueryClient();
 
   const { profileId } = useProfile();

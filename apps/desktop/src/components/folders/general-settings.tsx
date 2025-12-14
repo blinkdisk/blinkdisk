@@ -1,4 +1,7 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
+import {
+  PolicyCategoryProps,
+  SettingsCategory,
+} from "@desktop/components/policy/category";
 import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
@@ -11,18 +14,15 @@ import { LabelContainer } from "@ui/label";
 import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";
 
-type FolderGeneralSettingsProps = {
-  folderId?: string;
-};
-
 export function FolderGeneralSettings({
   folderId,
-}: FolderGeneralSettingsProps) {
+  context,
+}: PolicyCategoryProps & { folderId?: string }) {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
   const { data: folder } = useFolder(folderId);
 
-  const form = usePolicyGeneralForm({ folderId });
+  const form = usePolicyGeneralForm(context);
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const values = useStore(form.store, (state) => state.values);
   const disabledContext = useContext(FormDisabledContext);
@@ -34,46 +34,48 @@ export function FolderGeneralSettings({
       description={t("description")}
       icon={<SettingsIcon />}
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(e);
-        }}
-        className="flex flex-col gap-4"
-      >
-        <div className="flex flex-row items-center justify-center gap-3">
-          <EmojiPicker
-            locale={language}
-            onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
-          >
-            <button disabled={disabledContext}>
-              <EmojiCard emoji={values.emoji} size="lg" />
-            </button>
-          </EmojiPicker>
-          <EmojiPicker
-            locale={language}
-            onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
-          >
-            <Button disabled={disabledContext} variant="outline">
-              {t("emoji.button")}
-            </Button>
-          </EmojiPicker>
-        </div>
-        <form.AppField name="name">
-          {(field) => (
-            <field.Text
-              label={{ title: t("name.label"), required: true }}
-              placeholder={t("name.placeholder")}
-            />
-          )}
-        </form.AppField>
-        <LabelContainer title={t("path.label")}>
-          <Input value={folder?.source?.path} disabled />
-        </LabelContainer>
-        <form.AppForm>
-          <form.Submit disabled={!isDirty}>{t("save")}</form.Submit>
-        </form.AppForm>
-      </form>
+      <div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit(e);
+          }}
+          className="flex flex-col gap-4"
+        >
+          <div className="flex flex-row items-center justify-center gap-3">
+            <EmojiPicker
+              locale={language}
+              onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
+            >
+              <button disabled={disabledContext}>
+                <EmojiCard emoji={values.emoji} size="lg" />
+              </button>
+            </EmojiPicker>
+            <EmojiPicker
+              locale={language}
+              onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
+            >
+              <Button disabled={disabledContext} variant="outline">
+                {t("emoji.button")}
+              </Button>
+            </EmojiPicker>
+          </div>
+          <form.AppField name="name">
+            {(field) => (
+              <field.Text
+                label={{ title: t("name.label"), required: true }}
+                placeholder={t("name.placeholder")}
+              />
+            )}
+          </form.AppField>
+          <LabelContainer title={t("path.label")}>
+            <Input value={folder?.source?.path} disabled />
+          </LabelContainer>
+          <form.AppForm>
+            <form.Submit disabled={!isDirty}>{t("save")}</form.Submit>
+          </form.AppForm>
+        </form>
+      </div>
     </SettingsCategory>
   );
 }

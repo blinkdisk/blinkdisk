@@ -23,10 +23,10 @@ import {
 import { FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function FilesSettings(props: PolicyCategoryProps) {
+export function FilesSettings({ context }: PolicyCategoryProps) {
   const { t } = useAppTranslation("policy.files");
 
-  const form = usePolicyFilesForm(props);
+  const form = usePolicyFilesForm(context);
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -35,8 +35,7 @@ export function FilesSettings(props: PolicyCategoryProps) {
       title={t("title")}
       description={t("description")}
       icon={<FileXIcon />}
-      folderId={props.folderId}
-      mock={props.mock}
+      context={context}
     >
       <form
         onSubmit={(e) => {
@@ -51,7 +50,7 @@ export function FilesSettings(props: PolicyCategoryProps) {
               form={form}
               label={t("denylist.label")}
               description={t("denylist.description")}
-              level={props.level}
+              level={context.level}
             />
           )}
         </form.AppField>
@@ -61,7 +60,7 @@ export function FilesSettings(props: PolicyCategoryProps) {
               form={form}
               label={t("denyfiles.label")}
               description={t("denyfiles.description")}
-              level={props.level}
+              level={context.level}
             />
           )}
         </form.AppField>

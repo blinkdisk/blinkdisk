@@ -3,6 +3,7 @@ import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
+import { usePolicyContext } from "@desktop/hooks/use-policy-context";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { Accordion } from "@ui/accordion";
@@ -31,12 +32,17 @@ export function CreateFolderSettings({
     onSuccess,
   });
 
+  const context = usePolicyContext({
+    level: "FOLDER",
+    mock: true,
+  });
+
   return (
     <>
       <Accordion type="multiple" className="mt-2 w-full">
-        <ScheduleSettings level="FOLDER" mock />
-        <RetentionSettings level="FOLDER" mock />
-        <FilesSettings level="FOLDER" mock />
+        <ScheduleSettings context={context} />
+        <RetentionSettings context={context} />
+        <FilesSettings context={context} />
       </Accordion>
       <Button
         onClick={() => mutateAsync({ ...values })}

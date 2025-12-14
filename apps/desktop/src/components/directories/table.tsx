@@ -10,9 +10,9 @@ import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-dire
 import { useBackup } from "@desktop/hooks/use-backup";
 import { useDirectoryId } from "@desktop/hooks/use-directory-id";
 import { useFolder } from "@desktop/hooks/use-folder";
+import { useTheme } from "@desktop/hooks/use-theme";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { useTheme } from "@hooks/use-theme";
 import {
   ColumnFiltersState,
   createColumnHelper,

@@ -1,4 +1,4 @@
-import { useTheme } from "@hooks/use-theme";
+import { useTheme } from "@landing/hooks/use-theme";
 import { Link } from "@tanstack/react-router";
 import logoDark from "../assets/brand/logo-dark.svg";
 import logoLight from "../assets/brand/logo-light.svg";

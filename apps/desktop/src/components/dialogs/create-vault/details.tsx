@@ -1,8 +1,8 @@
 import { ProviderType } from "@config/providers";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
+import { useTheme } from "@desktop/hooks/use-theme";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { useTheme } from "@hooks/use-theme";
 import { ProviderConfig } from "@schemas/providers";
 import { useNavigate } from "@tanstack/react-router";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";

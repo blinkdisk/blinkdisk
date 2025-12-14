@@ -154,6 +154,9 @@ importers:
       '@tanstack/react-router':
         specifier: 1.131.7
         version: 1.131.7(react-dom@19.0.0)(react@19.0.0)
+      '@tanstack/react-store':
+        specifier: ^0.8.0
+        version: 0.8.0(react-dom@19.0.0)(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.0.0)(react@19.0.0)
@@ -489,6 +492,9 @@ importers:
       unenv:
         specifier: ^1.10.0
         version: 1.10.0
+      usehooks-ts:
+        specifier: ^3.1.1
+        version: 3.1.1(react@19.0.0)
       vite:
         specifier: ^7.1.10
         version: 7.1.10(@types/node@22.13.10)

@@ -4,6 +4,7 @@ import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { ReadOnlyAlert } from "@desktop/components/vaults/readonly-alert";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
+import { usePolicyContext } from "@desktop/hooks/use-policy-context";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { FormDisabledContext } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -20,6 +21,11 @@ export function FolderSettingsDialog() {
   const { isOpen, setIsOpen, options } = useFolderSettingsDialog();
   const { readOnly } = useProfile();
 
+  const context = usePolicyContext({
+    level: "FOLDER",
+    folderId: options?.folderId,
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="w-140 max-h-[90vh] overflow-y-auto">
@@ -35,10 +41,13 @@ export function FolderSettingsDialog() {
           ) : null}
           <FormDisabledContext.Provider value={readOnly}>
             <Accordion type="multiple" className="w-full">
-              <FolderGeneralSettings folderId={options?.folderId} />
-              <ScheduleSettings level="FOLDER" folderId={options?.folderId} />
-              <RetentionSettings level="FOLDER" folderId={options?.folderId} />
-              <FilesSettings level="FOLDER" folderId={options?.folderId} />
+              <FolderGeneralSettings
+                folderId={options?.folderId}
+                context={context}
+              />
+              <ScheduleSettings context={context} />
+              <RetentionSettings context={context} />
+              <FilesSettings context={context} />
             </Accordion>
           </FormDisabledContext.Provider>
         </div>

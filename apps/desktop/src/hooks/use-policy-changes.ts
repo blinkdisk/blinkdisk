@@ -1,23 +1,14 @@
-import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
-import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
+import { PolicyContext } from "@desktop/hooks/use-policy-context";
 import { getFolderPolicyChanges } from "@desktop/lib/policy";
 import { useMemo } from "react";
 
-export function usePolicyChanges({
-  folderId,
-  mock,
-}: {
-  folderId?: string;
-  mock?: boolean;
-}) {
-  const { data: vaultPolicy } = useVaultPolicy();
-  const { data: folderPolicy } = useFolderPolicy({ folderId, mock });
-
+export function usePolicyChanges(context?: PolicyContext) {
   return useMemo(
     () =>
-      vaultPolicy &&
-      folderPolicy &&
-      getFolderPolicyChanges(vaultPolicy, folderPolicy),
-    [vaultPolicy, folderPolicy],
+      context &&
+      context.vaultPolicy &&
+      context.folderPolicy &&
+      getFolderPolicyChanges(context.vaultPolicy, context.folderPolicy),
+    [context],
   );
 }
