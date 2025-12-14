@@ -95,7 +95,11 @@ export function useQueryKey() {
       policy: {
         all: [accountId, "policy"],
         vault: (vaultId?: string) => [...keys.policy.all, vaultId],
-        folder: (folderId?: string) => [...keys.policy.all, folderId],
+        folder: (folderId?: string, mock?: boolean) => [
+          ...keys.policy.all,
+          ...(mock ? ["mock"] : []),
+          folderId,
+        ],
       },
     };
 

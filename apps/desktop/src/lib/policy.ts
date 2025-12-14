@@ -352,7 +352,7 @@ export function convertPolicyToCore(
 }
 
 export function mergeFolderPolicy(
-  folderPolicy: ZPolicyType,
+  folderPolicy: Partial<ZPolicyType>,
   vaultPolicy: ZPolicyType,
 ) {
   // Delete all undefined properties
@@ -384,11 +384,11 @@ export function getFolderPolicyChanges(
 export function getFolderPolicyUpdates(
   vaultPolicy: ZPolicyType,
   folderPolicy: ZPolicyType,
+  convertToCore?: boolean,
 ) {
-  return convertPolicyToCore(
-    getFolderPolicyChanges(vaultPolicy, folderPolicy),
-    "FOLDER",
-  );
+  const updates = getFolderPolicyChanges(vaultPolicy, folderPolicy);
+  if (convertToCore === false) return updates;
+  return convertPolicyToCore(updates, "FOLDER");
 }
 
 export const defaultPolicy: ZPolicyType = {
@@ -451,4 +451,18 @@ export const defaultPolicy: ZPolicyType = {
     parallelUploadMinSize: 2147483648,
   },
   ignoreParentPolicy: false,
+};
+
+export const emptyCorePolicy: CorePolicy = {
+  retention: {},
+  files: {},
+  errorHandling: {},
+  scheduling: {},
+  compression: {},
+  metadataCompression: {},
+  splitter: {},
+  actions: {},
+  osSnapshots: {},
+  logging: {},
+  upload: {},
 };

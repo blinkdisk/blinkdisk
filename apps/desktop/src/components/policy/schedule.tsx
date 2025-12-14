@@ -1,5 +1,8 @@
 import { Cron } from "@desktop/components/cron";
-import { SettingsCategory } from "@desktop/components/policy/category";
+import {
+  PolicyCategoryProps,
+  SettingsCategory,
+} from "@desktop/components/policy/category";
 import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
 import {
   FormDisabledContext,
@@ -13,15 +16,11 @@ import { LabelContainer } from "@ui/label";
 import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-type ScheduleSettingsProps = {
-  level: ZPolicyLevelType;
-  folderId?: string;
-};
-
-export function ScheduleSettings({ level, folderId }: ScheduleSettingsProps) {
+export function ScheduleSettings(props: PolicyCategoryProps) {
   const { t } = useAppTranslation("policy.schedule");
 
-  const form = usePolicyScheduleForm({ level, folderId });
+  const form = usePolicyScheduleForm(props);
+
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const trigger = useStore(form.store, (state) => state.values.trigger);
 
@@ -31,7 +30,8 @@ export function ScheduleSettings({ level, folderId }: ScheduleSettingsProps) {
       title={t("title")}
       description={t("description")}
       icon={<ClockIcon />}
-      folderId={folderId}
+      folderId={props.folderId}
+      mock={props.mock}
     >
       <form
         onSubmit={(e) => {
@@ -112,7 +112,11 @@ export function ScheduleSettings({ level, folderId }: ScheduleSettingsProps) {
             </form.AppField>
             <form.AppField name="cron" mode="array">
               {() => (
-                <CronEditor form={form} label={t("cron.label")} level={level} />
+                <CronEditor
+                  form={form}
+                  label={t("cron.label")}
+                  level={props.level}
+                />
               )}
             </form.AppField>
           </>

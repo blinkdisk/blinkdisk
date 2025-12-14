@@ -8,12 +8,25 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
   convertPolicyFromCore,
   CorePolicy,
+  emptyCorePolicy,
   mergeFolderPolicy,
 } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export function useFolderPolicy({ folderId }: { folderId?: string }) {
+declare global {
+  interface Window {
+    folderMockPolicy?: CorePolicy;
+  }
+}
+
+export function useFolderPolicy({
+  folderId,
+  mock,
+}: {
+  folderId?: string;
+  mock?: boolean;
+}) {
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
   const { queryKeys, accountId } = useQueryKey();
@@ -24,10 +37,21 @@ export function useFolderPolicy({ folderId }: { folderId?: string }) {
   const { data: vaultPolicy } = useVaultPolicy();
 
   return useQuery({
-    queryKey: queryKeys.policy.folder(folder?.id),
+    queryKey: queryKeys.policy.folder(folderId, mock),
     queryFn: async () => {
-      if (!deviceId || !profileId || !vaultId || !folder || !vaultPolicy)
-        return null;
+      if (!deviceId || !profileId || !vaultId || !vaultPolicy) return null;
+
+      if (mock) {
+        const converted = convertPolicyFromCore(
+          window.folderMockPolicy || emptyCorePolicy,
+          "FOLDER",
+        );
+
+        if (!converted) return null;
+        return mergeFolderPolicy(converted, vaultPolicy);
+      }
+
+      if (!folder) return null;
 
       const res = await vaultApi(vaultId).get<CorePolicy>("/api/v1/policy", {
         params: {
@@ -44,6 +68,11 @@ export function useFolderPolicy({ folderId }: { folderId?: string }) {
 
       return mergeFolderPolicy(folderPolicy, vaultPolicy);
     },
-    enabled: !!accountId && !!vaultId && !!folder && !!vaultPolicy && running,
+    enabled:
+      !!accountId &&
+      !!vaultId &&
+      !!vaultPolicy &&
+      running &&
+      (!!folder || mock),
   });
 }
