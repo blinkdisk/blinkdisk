@@ -22,26 +22,26 @@ export function FolderSettingsDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="w-140 max-h-[90vh] overflow-y-auto p-4">
-        <div className="p-4">
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription className="sr-only">
-            {t("description")}
-          </DialogDescription>
-        </div>
-        <FormDisabledContext.Provider value={readOnly}>
+      <DialogContent className="w-140 max-h-[90vh] overflow-y-auto">
+        <DialogTitle>{t("title")}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {t("description")}
+        </DialogDescription>
+        <div className="mt-4">
           {readOnly ? (
             <div className="px-4 py-2">
               <ReadOnlyAlert />
             </div>
           ) : null}
-          <Accordion type="multiple" className="w-full">
-            <FolderGeneralSettings folderId={options?.folderId} />
-            <ScheduleSettings level="FOLDER" folderId={options?.folderId} />
-            <RetentionSettings level="FOLDER" folderId={options?.folderId} />
-            <FilesSettings level="FOLDER" folderId={options?.folderId} />
-          </Accordion>
-        </FormDisabledContext.Provider>
+          <FormDisabledContext.Provider value={readOnly}>
+            <Accordion type="multiple" className="w-full">
+              <FolderGeneralSettings folderId={options?.folderId} />
+              <ScheduleSettings level="FOLDER" folderId={options?.folderId} />
+              <RetentionSettings level="FOLDER" folderId={options?.folderId} />
+              <FilesSettings level="FOLDER" folderId={options?.folderId} />
+            </Accordion>
+          </FormDisabledContext.Provider>
+        </div>
       </DialogContent>
     </Dialog>
   );

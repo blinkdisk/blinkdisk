@@ -1,4 +1,7 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
+import {
+  PolicyCategoryProps,
+  SettingsCategory,
+} from "@desktop/components/policy/category";
 import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
 import {
   FormDisabledContext,
@@ -20,15 +23,10 @@ import {
 import { FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-type FilesSettingsProps = {
-  level: ZPolicyLevelType;
-  folderId?: string;
-};
-
-export function FilesSettings({ level, folderId }: FilesSettingsProps) {
+export function FilesSettings(props: PolicyCategoryProps) {
   const { t } = useAppTranslation("policy.files");
 
-  const form = usePolicyFilesForm({ level, folderId });
+  const form = usePolicyFilesForm(props);
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -37,7 +35,8 @@ export function FilesSettings({ level, folderId }: FilesSettingsProps) {
       title={t("title")}
       description={t("description")}
       icon={<FileXIcon />}
-      folderId={folderId}
+      folderId={props.folderId}
+      mock={props.mock}
     >
       <form
         onSubmit={(e) => {
@@ -52,7 +51,7 @@ export function FilesSettings({ level, folderId }: FilesSettingsProps) {
               form={form}
               label={t("denylist.label")}
               description={t("denylist.description")}
-              level={level}
+              level={props.level}
             />
           )}
         </form.AppField>
@@ -62,7 +61,7 @@ export function FilesSettings({ level, folderId }: FilesSettingsProps) {
               form={form}
               label={t("denyfiles.label")}
               description={t("denyfiles.description")}
-              level={level}
+              level={props.level}
             />
           )}
         </form.AppField>

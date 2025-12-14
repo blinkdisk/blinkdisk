@@ -1,24 +1,19 @@
+import { PolicyCategoryProps } from "@desktop/components/policy/category";
 import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-folder-policy";
 import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
 import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useAppForm } from "@hooks/use-app-form";
-import {
-  ZPolicyLevelType,
-  ZSchedulePolicy,
-  ZSchedulePolicyType,
-} from "@schemas/policy";
+import { ZSchedulePolicy, ZSchedulePolicyType } from "@schemas/policy";
 import { useMemo } from "react";
 
 export function usePolicyScheduleForm({
   level,
   folderId,
-}: {
-  level: ZPolicyLevelType;
-  folderId?: string;
-}) {
+  mock,
+}: PolicyCategoryProps) {
   const { data: vaultPolicy } = useVaultPolicy();
-  const { data: folderPolicy } = useFolderPolicy({ folderId });
+  const { data: folderPolicy } = useFolderPolicy({ folderId, mock });
 
   function reset() {
     form.reset();
@@ -29,6 +24,7 @@ export function usePolicyScheduleForm({
   });
 
   const { mutateAsync: mutateFolder } = useUpdateFolderPolicy({
+    mock,
     folderId,
     onSuccess: reset,
   });

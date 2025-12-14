@@ -14,6 +14,7 @@
       "placeholder": "Select folder path",
       "title": "Select folder path"
     },
+    "continue": "Continue",
     "submit": "Add folder",
     "exceedingAlert": {
       "title": "Not enough cloud storage",

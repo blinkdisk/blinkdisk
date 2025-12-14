@@ -3,9 +3,15 @@ import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { getFolderPolicyChanges } from "@desktop/lib/policy";
 import { useMemo } from "react";
 
-export function usePolicyChanges({ folderId }: { folderId?: string }) {
+export function usePolicyChanges({
+  folderId,
+  mock,
+}: {
+  folderId?: string;
+  mock?: boolean;
+}) {
   const { data: vaultPolicy } = useVaultPolicy();
-  const { data: folderPolicy } = useFolderPolicy({ folderId });
+  const { data: folderPolicy } = useFolderPolicy({ folderId, mock });
 
   return useMemo(
     () =>

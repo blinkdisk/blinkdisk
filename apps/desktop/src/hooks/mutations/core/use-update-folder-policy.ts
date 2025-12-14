@@ -13,9 +13,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useUpdateFolderPolicy({
   folderId,
   onSuccess,
+  mock,
 }: {
   folderId?: string;
   onSuccess?: () => void;
+  mock?: boolean;
 }) {
   const queryClient = useQueryClient();
 
@@ -29,29 +31,43 @@ export function useUpdateFolderPolicy({
   return useMutation({
     mutationKey: ["core", "vault", folder?.id, "policy"],
     mutationFn: async (values: ZPolicyType) => {
-      if (!deviceId || !profileId || !vaultId || !folder || !vaultPolicy)
-        return;
+      if (!deviceId || !profileId || !vaultId || !vaultPolicy) return;
 
-      const update = getFolderPolicyUpdates(vaultPolicy, values);
+      if (mock) {
+        // eslint-disable-next-line
+        window.folderMockPolicy = getFolderPolicyUpdates(vaultPolicy, values);
+      } else {
+        if (!folder) throw new Error("Folder not found, but mock is false");
 
-      await vaultApi(vaultId).put("/api/v1/policy", update, {
-        params: {
-          userName: profileId,
-          host: deviceId,
-          path: folder.source.path,
-        },
-      });
+        await vaultApi(vaultId).put(
+          "/api/v1/policy",
+          getFolderPolicyUpdates(vaultPolicy, values),
+          {
+            params: {
+              userName: profileId,
+              host: deviceId,
+              path: folder.source.path,
+            },
+          },
+        );
+      }
     },
     onError: showErrorToast,
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.policy.folder(folder?.id),
-        }),
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId),
-        }),
-      ]);
+      if (mock) {
+        await queryClient.invalidateQueries({
+          queryKey: queryKeys.policy.folder(folder?.id, true),
+        });
+      } else {
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.policy.folder(folder?.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.folder.list(vaultId),
+          }),
+        ]);
+      }
 
       onSuccess?.();
     },

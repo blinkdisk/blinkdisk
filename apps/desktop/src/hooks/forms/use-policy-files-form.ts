@@ -1,25 +1,21 @@
+import { PolicyCategoryProps } from "@desktop/components/policy/category";
 import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-folder-policy";
 import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
 import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useAppForm } from "@hooks/use-app-form";
-import {
-  ZFilesPolicy,
-  ZFilesPolicyType,
-  ZPolicyLevelType,
-} from "@schemas/policy";
+import { ZFilesPolicy, ZFilesPolicyType } from "@schemas/policy";
 import { useMemo } from "react";
 
 export function usePolicyFilesForm({
   level,
   folderId,
-}: {
-  level: ZPolicyLevelType;
-  folderId?: string;
-}) {
+  mock,
+}: PolicyCategoryProps) {
   const { data: vaultPolicy } = useVaultPolicy();
   const { data: folderPolicy } = useFolderPolicy({
     folderId,
+    mock,
   });
 
   function reset() {
@@ -31,6 +27,7 @@ export function usePolicyFilesForm({
   });
 
   const { mutateAsync: mutateFolder } = useUpdateFolderPolicy({
+    mock,
     folderId,
     onSuccess: reset,
   });

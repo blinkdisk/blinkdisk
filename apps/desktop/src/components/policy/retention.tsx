@@ -1,20 +1,17 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
+import {
+  PolicyCategoryProps,
+  SettingsCategory,
+} from "@desktop/components/policy/category";
 import { usePolicyRetentionForm } from "@desktop/hooks/forms/use-policy-retention-form";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZPolicyLevelType } from "@schemas/policy";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { ArchiveIcon, InfoIcon } from "lucide-react";
 
-type RetentionSettingsProps = {
-  level: ZPolicyLevelType;
-  folderId?: string;
-};
-
-export function RetentionSettings({ level, folderId }: RetentionSettingsProps) {
+export function RetentionSettings(props: PolicyCategoryProps) {
   const { t } = useAppTranslation("policy.retention");
 
-  const form = usePolicyRetentionForm({ level, folderId });
+  const form = usePolicyRetentionForm(props);
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -23,7 +20,8 @@ export function RetentionSettings({ level, folderId }: RetentionSettingsProps) {
       title={t("title")}
       description={t("description")}
       icon={<ArchiveIcon />}
-      folderId={folderId}
+      folderId={props.folderId}
+      mock={props.mock}
     >
       <form
         onSubmit={(e) => {

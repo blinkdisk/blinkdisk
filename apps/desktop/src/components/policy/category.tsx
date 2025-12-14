@@ -1,5 +1,6 @@
 import { usePolicyChanges } from "@desktop/hooks/use-policy-changes";
-import { ZPolicyType } from "@schemas/policy";
+import { useAppTranslation } from "@hooks/use-app-translation";
+import { ZPolicyLevelType, ZPolicyType } from "@schemas/policy";
 import {
   AccordionContent,
   AccordionItem,
@@ -8,6 +9,12 @@ import {
 import { Badge } from "@ui/badge";
 import { ReactNode } from "react";
 
+export type PolicyCategoryProps = {
+  level: ZPolicyLevelType;
+  folderId?: string;
+  mock?: boolean;
+};
+
 type SettingsCategoryProps = {
   id: keyof ZPolicyType | string;
   title: string;
@@ -15,6 +22,7 @@ type SettingsCategoryProps = {
   children: ReactNode;
   icon: ReactNode;
   folderId?: string;
+  mock?: boolean;
 };
 
 export function SettingsCategory({
@@ -24,8 +32,10 @@ export function SettingsCategory({
   children,
   icon,
   folderId,
+  mock,
 }: SettingsCategoryProps) {
-  const changes = usePolicyChanges({ folderId });
+  const changes = usePolicyChanges({ folderId, mock });
+  const { t } = useAppTranslation("settings.folder");
 
   return (
     <AccordionItem value={id}>
@@ -38,7 +48,7 @@ export function SettingsCategory({
             <div className="flex items-center gap-1.5">
               <h2 className="text-lg font-semibold">{title}</h2>
               {changes && id in changes && changes[id as keyof ZPolicyType] ? (
-                <Badge variant="subtle">Modified</Badge>
+                <Badge variant="subtle">{t("modified")}</Badge>
               ) : null}
             </div>
             <p className="text-muted-foreground text-xs font-normal">

@@ -58,6 +58,7 @@ export function useCreateFolder({
         path: values.path,
         createSnapshot: false,
         policy: {
+          ...(window.folderMockPolicy || {}),
           name: values.name,
           emoji: values.emoji,
         },
