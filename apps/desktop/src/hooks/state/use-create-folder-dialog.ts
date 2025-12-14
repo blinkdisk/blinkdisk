@@ -1,31 +1,44 @@
 import { ZCreateFolderFormType } from "@schemas/folder";
-import { atom, useAtom } from "jotai";
+import { Store, useStore } from "@tanstack/react-store";
+import { useCallback } from "react";
 
-const createFolderAtom = atom(false);
-const defaultValuesAtom = atom<Partial<ZCreateFolderFormType> | null>(null);
+const store = new Store<{
+  isOpen: boolean;
+  defaultValues: Partial<ZCreateFolderFormType> | null;
+}>({
+  isOpen: false,
+  defaultValues: null,
+});
 
 export function useCreateFolderDialog() {
-  const [isOpen, setIsOpen] = useAtom(createFolderAtom);
-  const [defaultValues, setDefaultValues] = useAtom(defaultValuesAtom);
+  const { isOpen, defaultValues } = useStore(store);
+
+  const setIsOpen = useCallback((to: boolean) => {
+    store.setState((state) => ({
+      ...state,
+      isOpen: to,
+    }));
+  }, []);
 
   function openCreateFolder(values?: Partial<ZCreateFolderFormType>) {
-    if (values) {
-      setDefaultValues(values);
-    } else {
-      setDefaultValues(null);
-    }
-    setIsOpen(true);
+    store.setState({
+      isOpen: true,
+      defaultValues: values || null,
+    });
   }
 
   function clearDefaultValues() {
-    setDefaultValues(null);
+    store.setState((state) => ({
+      ...state,
+      defaultValues: null,
+    }));
   }
 
   return {
     isOpen,
     setIsOpen,
-    openCreateFolder,
     defaultValues,
+    openCreateFolder,
     clearDefaultValues,
   };
 }

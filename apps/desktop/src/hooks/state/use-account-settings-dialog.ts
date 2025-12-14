@@ -1,12 +1,17 @@
-import { atom, useAtom } from "jotai";
+import { Store, useStore } from "@tanstack/react-store";
+import { useCallback } from "react";
 
-const accountSettingsAtom = atom(false);
+const store = new Store(false);
 
 export function useAccountSettingsDialog() {
-  const [isOpen, setIsOpen] = useAtom(accountSettingsAtom);
+  const isOpen = useStore(store);
+
+  const setIsOpen = useCallback((to: boolean) => {
+    store.setState(to);
+  }, []);
 
   function openAccountSettings() {
-    setIsOpen(true);
+    store.setState(true);
   }
 
   return {

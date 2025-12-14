@@ -1,17 +1,22 @@
-import { atom, useAtom } from "jotai";
+import { Store, useStore } from "@tanstack/react-store";
 import { usePostHog } from "posthog-js/react";
+import { useCallback } from "react";
 
-const upgradeAtom = atom(false);
+const store = new Store(false);
 
 export function useUpgradeDialog() {
   const posthog = usePostHog();
 
-  const [isOpen, setIsOpen] = useAtom(upgradeAtom);
+  const isOpen = useStore(store);
+
+  const setIsOpen = useCallback((to: boolean) => {
+    store.setState(to);
+  }, []);
 
   function openUpgradeDialog() {
     posthog.capture("upgrade_show");
 
-    setIsOpen(true);
+    store.setState(true);
   }
 
   return {

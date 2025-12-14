@@ -1,6 +1,7 @@
 import { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { atom, useAtom } from "jotai";
+import { Store, useStore } from "@tanstack/react-store";
+import { useCallback } from "react";
 
 type RestoreDirectoryDialogOptions = {
   directoryId: string;
@@ -9,16 +10,29 @@ type RestoreDirectoryDialogOptions = {
   path: { objectId: string; name: string }[] | undefined;
 };
 
-const isOpenAtom = atom(false);
-const optionsAtom = atom<RestoreDirectoryDialogOptions | null>(null);
+const store = new Store<{
+  isOpen: boolean;
+  options: RestoreDirectoryDialogOptions | null;
+}>({
+  isOpen: false,
+  options: null,
+});
 
 export function useRestoreDirectoryDialog() {
-  const [isOpen, setIsOpen] = useAtom(isOpenAtom);
-  const [options, setOptions] = useAtom(optionsAtom);
+  const { isOpen, options } = useStore(store);
+
+  const setIsOpen = useCallback((to: boolean) => {
+    store.setState((state) => ({
+      ...state,
+      isOpen: to,
+    }));
+  }, []);
 
   function openRestoreDirectory(options: RestoreDirectoryDialogOptions) {
-    setOptions(options);
-    setIsOpen(true);
+    store.setState({
+      isOpen: true,
+      options,
+    });
   }
 
   return {

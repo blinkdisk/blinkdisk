@@ -1,19 +1,33 @@
-import { atom, useAtom } from "jotai";
+import { Store, useStore } from "@tanstack/react-store";
+import { useCallback } from "react";
 
 type DeleteFolderDialogOptions = {
   folderId: string;
 };
 
-const isOpenAtom = atom(false);
-const optionsAtom = atom<DeleteFolderDialogOptions | null>(null);
+const store = new Store<{
+  isOpen: boolean;
+  options: DeleteFolderDialogOptions | null;
+}>({
+  isOpen: false,
+  options: null,
+});
 
 export function useDeleteFolderDialog() {
-  const [isOpen, setIsOpen] = useAtom(isOpenAtom);
-  const [options, setOptions] = useAtom(optionsAtom);
+  const { isOpen, options } = useStore(store);
+
+  const setIsOpen = useCallback((to: boolean) => {
+    store.setState((state) => ({
+      ...state,
+      isOpen: to,
+    }));
+  }, []);
 
   function openDeleteFolderDialog(options: DeleteFolderDialogOptions) {
-    setOptions(options);
-    setIsOpen(true);
+    store.setState({
+      isOpen: true,
+      options,
+    });
   }
 
   return {

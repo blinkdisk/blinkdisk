@@ -1,12 +1,17 @@
-import { atom, useAtom } from "jotai";
+import { Store, useStore } from "@tanstack/react-store";
+import { useCallback } from "react";
 
-const preferencesSettingsAtom = atom(false);
+const store = new Store(false);
 
 export function usePreferencesSettingsDialog() {
-  const [isOpen, setIsOpen] = useAtom(preferencesSettingsAtom);
+  const isOpen = useStore(store);
+
+  const setIsOpen = useCallback((to: boolean) => {
+    store.setState(to);
+  }, []);
 
   function openPreferencesSettings() {
-    setIsOpen(true);
+    store.setState(true);
   }
 
   return {
