@@ -91,6 +91,12 @@ export function useQueryKey() {
           folderId,
           "restores",
         ],
+        size: (vaultId?: string, taskId?: string | null) => [
+          ...keys.folder.all,
+          vaultId,
+          "size",
+          taskId,
+        ],
       },
       policy: {
         all: [accountId, "policy"],

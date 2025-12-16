@@ -34,7 +34,12 @@ export function useCreateFolder({
 
   return useMutation({
     mutationKey: ["folder", "create"],
-    mutationFn: async (values: ZCreateFolderFormType & { force?: boolean }) => {
+    mutationFn: async (
+      values: ZCreateFolderFormType & {
+        force?: boolean;
+        size: number | null;
+      },
+    ) => {
       if (!vaultId || !deviceId || !profileId)
         throw new Error("Missing fields");
 
@@ -44,11 +49,17 @@ export function useCreateFolder({
         vault &&
         vault.provider === "BLINKDISK_CLOUD"
       ) {
-        const [size] = await tryCatch(
-          async () => await window.electron.fs.folderSize(values.path),
-        );
+        let size = values.size;
 
-        if (size) {
+        if (size === null) {
+          const [res] = await tryCatch(
+            async () => await window.electron.fs.folderSize(values.path),
+          );
+
+          if (res) size = res;
+        }
+
+        if (size !== null) {
           const available = space.capacity - space.used;
           if (size > available) throw new Error("FOLDER_TOO_LARGE");
         }

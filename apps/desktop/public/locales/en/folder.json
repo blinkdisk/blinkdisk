@@ -21,6 +21,16 @@
       "description": "This folder likely can’t be backed up because it would exceed your available BlinkDisk Cloud storage. To back it up, you’ll need to upgrade your BlinkDisk Cloud plan.",
       "continue": "Add anyway",
       "upgrade": "Upgrade storage"
+    },
+    "size": {
+      "title": "Calculate folder size",
+      "description": "Estimate the size of this folder.",
+      "button": "Calculate",
+      "running": "Analyzing folder...",
+      "starting": "Starting estimation...",
+      "error": "Failed to estimate folder size",
+      "included": "Included files:",
+      "excluded": "Excluded files:"
     }
   },
   "preview": {
