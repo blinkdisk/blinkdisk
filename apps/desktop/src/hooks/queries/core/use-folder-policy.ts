@@ -8,8 +8,8 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
   convertPolicyFromCore,
   CorePolicy,
-  emptyCorePolicy,
-  mergeFolderPolicy,
+  emptyPolicy,
+  getDefinedFields,
 } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
@@ -25,7 +25,9 @@ export function useFolderPolicy({
   mock,
 }: {
   folderId?: string;
-  mock?: boolean;
+  mock?: {
+    path: string;
+  };
 }) {
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
@@ -37,42 +39,52 @@ export function useFolderPolicy({
   const { data: vaultPolicy } = useVaultPolicy();
 
   return useQuery({
-    queryKey: queryKeys.policy.folder(folderId, mock),
+    queryKey: queryKeys.policy.folder(mock ? "mock" : folderId),
     queryFn: async () => {
       if (!deviceId || !profileId || !vaultId || !vaultPolicy) return null;
 
-      if (mock) {
-        const converted = convertPolicyFromCore(
-          window.folderMockPolicy || emptyCorePolicy,
-          "FOLDER",
-        );
-
-        if (!converted) return null;
-        return mergeFolderPolicy(converted, vaultPolicy);
-      }
-
-      if (!folder) return null;
-
-      const res = await vaultApi(vaultId).get<CorePolicy>("/api/v1/policy", {
-        params: {
-          userName: profileId,
-          host: deviceId,
-          path: folder.source.path,
+      const res = await vaultApi(vaultId).post<{
+        defined: CorePolicy;
+        effective: CorePolicy;
+      }>(
+        "/api/v1/policy/resolve",
+        {
+          ...(mock ? { updates: window.folderMockPolicy || {} } : {}),
+          numUpcomingSnapshotTimes: 0,
         },
-      });
+        {
+          params: {
+            userName: profileId,
+            host: deviceId,
+            path: mock ? mock.path : folder ? folder.source.path : "unknown",
+          },
+        },
+      );
 
       if (!res.data) return null;
 
-      const folderPolicy = convertPolicyFromCore(res.data, "FOLDER");
-      if (!folderPolicy) return null;
+      const defined = mock
+        ? window.folderMockPolicy
+          ? convertPolicyFromCore(window.folderMockPolicy)
+          : emptyPolicy
+        : convertPolicyFromCore(res.data.defined);
 
-      return mergeFolderPolicy(folderPolicy, vaultPolicy);
+      if (!defined) return null;
+
+      const effective = convertPolicyFromCore(res.data.effective);
+      const definedFields = getDefinedFields(defined);
+
+      return {
+        defined,
+        effective,
+        definedFields,
+      };
     },
     enabled:
       !!accountId &&
       !!vaultId &&
       !!vaultPolicy &&
       running &&
-      (!!folder || mock),
+      (!!folder || !!mock),
   });
 }

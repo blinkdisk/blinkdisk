@@ -1,7 +1,5 @@
 import { fromBytes, toBytes } from "@desktop/lib/filesize";
-import { ZPolicyLevelType, ZPolicyType } from "@schemas/policy";
-import { diff } from "deep-object-diff";
-import merge from "deepmerge";
+import { ZPolicyType } from "@schemas/policy";
 
 export type CorePolicy = {
   name?: string;
@@ -117,10 +115,7 @@ export type CorePolicy = {
   noParent?: boolean;
 };
 
-export function convertPolicyFromCore(
-  policy: CorePolicy,
-  level: ZPolicyLevelType,
-): ZPolicyType | null {
+export function convertPolicyFromCore(policy: CorePolicy): ZPolicyType | null {
   if (!policy) return null;
 
   return {
@@ -138,12 +133,10 @@ export function convertPolicyFromCore(
     files: {
       denylist: policy.files.ignore?.map((expression) => ({
         expression,
-        level,
       })),
       ignoreParentDenylist: policy.files.noParentIgnore,
       denyfiles: policy.files.ignoreDotFiles?.map((filename) => ({
         filename,
-        level,
       })),
       ignoreParentDenyfiles: policy.files.noParentDotFiles,
       excludeCacheDirs: policy.files.ignoreCacheDirs,
@@ -164,37 +157,26 @@ export function convertPolicyFromCore(
           ? policy.scheduling.manual
             ? "MANUAL"
             : "SCHEDULE"
-          : level === "VAULT"
-            ? "SCHEDULE"
-            : policy.scheduling.cron?.length ||
-                policy.scheduling.intervalSeconds ||
-                policy.scheduling.timeOfDay?.length
-              ? "SCHEDULE"
-              : undefined,
+          : undefined,
       interval: policy.scheduling.intervalSeconds
         ? policy.scheduling.intervalSeconds.toString()
-        : level === "VAULT"
-          ? "NONE"
-          : undefined,
+        : undefined,
       times: policy.scheduling.timeOfDay
         ?.map(({ hour, min }) =>
           hour && min
             ? {
                 hour,
                 minute: min,
-                level,
               }
             : null,
         )
         .filter(Boolean) as {
         hour: number;
         minute: number;
-        level: ZPolicyLevelType;
       }[],
       cron: policy.scheduling.cron?.map((expression, index) => ({
-        id: `${level}-${index}-${expression}`,
+        id: `${index}-${expression}`,
         expression,
-        level,
       })),
       catchup: policy.scheduling.runMissed,
     },
@@ -246,10 +228,7 @@ export function convertPolicyFromCore(
   } satisfies ZPolicyType;
 }
 
-export function convertPolicyToCore(
-  policy: ZPolicyType,
-  level: ZPolicyLevelType,
-) {
+export function convertPolicyToCore(policy: ZPolicyType) {
   const policyCore: CorePolicy = {
     name: policy.name,
     emoji: policy.emoji,
@@ -263,9 +242,13 @@ export function convertPolicyToCore(
       ignoreIdenticalSnapshots: policy.retention?.ignoreIdentical,
     },
     files: {
-      ignore: policy.files?.denylist?.map(({ expression }) => expression),
+      ignore: policy.files?.denylist
+        ?.filter(Boolean)
+        ?.map(({ expression }) => expression),
       noParentIgnore: policy.files?.ignoreParentDenylist,
-      ignoreDotFiles: policy.files?.denyfiles?.map(({ filename }) => filename),
+      ignoreDotFiles: policy.files?.denyfiles
+        ?.filter(Boolean)
+        ?.map(({ filename }) => filename),
       noParentDotFiles: policy.files?.ignoreParentDenyfiles,
       ignoreCacheDirs: policy.files?.excludeCacheDirs,
       maxFileSize:
@@ -280,7 +263,12 @@ export function convertPolicyToCore(
       ignoreUnknownTypes: policy.errors?.ignoreUnknown,
     },
     scheduling: {
-      manual: policy.schedule?.trigger === "MANUAL" ? true : undefined,
+      manual:
+        policy.schedule?.trigger === "MANUAL"
+          ? true
+          : policy.schedule?.trigger === "SCHEDULE"
+            ? false
+            : undefined,
       ...(policy.schedule?.trigger !== "MANUAL" && {
         ...(policy.schedule?.interval !== "NONE" &&
           policy.schedule?.interval && {
@@ -347,51 +335,33 @@ export function convertPolicyToCore(
     noParent: policy.ignoreParentPolicy,
   } satisfies CorePolicy;
 
-  if (level === "FOLDER") return JSON.parse(JSON.stringify(policyCore));
   return policyCore;
 }
 
-export function mergeFolderPolicy(
-  folderPolicy: Partial<ZPolicyType>,
-  vaultPolicy: ZPolicyType,
-) {
-  // Delete all undefined properties
-  folderPolicy = JSON.parse(JSON.stringify(folderPolicy));
-
-  return merge(vaultPolicy, folderPolicy, {});
+export function pickDefinedFields<T extends object>(
+  policy: T,
+  definedFields: string[],
+): Partial<T> {
+  const ret = {} as Partial<T>;
+  for (const key of definedFields) {
+    ret[key as keyof T] = policy[key as keyof T];
+  }
+  return ret;
 }
 
-export function getFolderPolicyChanges(
-  vaultPolicy: ZPolicyType,
-  folderPolicy: ZPolicyType,
-) {
-  const changes = diff(vaultPolicy, folderPolicy) as ZPolicyType;
+export function getDefinedFields(policy: ZPolicyType) {
+  function definedFields(obj: any): string[] {
+    return Object.keys(obj).filter((key) => obj[key] !== undefined);
+  }
 
-  if (changes.schedule?.times)
-    changes.schedule.times = Object.values(changes.schedule.times);
-  if (changes.schedule?.cron)
-    changes.schedule.cron = Object.values(changes.schedule.cron);
-  if (changes.files?.denylist)
-    changes.files.denylist = Object.values(changes.files?.denylist || {});
-  if (changes.files?.denyfiles)
-    changes.files.denyfiles = Object.values(changes.files?.denyfiles || {});
-  if (changes.files?.maxFileSize !== undefined)
-    changes.files.maxFileSize = folderPolicy.files.maxFileSize;
-
-  return changes;
+  return {
+    schedule: definedFields(policy.schedule),
+    retention: definedFields(policy.retention),
+    files: definedFields(policy.files),
+  };
 }
 
-export function getFolderPolicyUpdates(
-  vaultPolicy: ZPolicyType,
-  folderPolicy: ZPolicyType,
-  convertToCore?: boolean,
-) {
-  const updates = getFolderPolicyChanges(vaultPolicy, folderPolicy);
-  if (convertToCore === false) return updates;
-  return convertPolicyToCore(updates, "FOLDER");
-}
-
-export const defaultPolicy: ZPolicyType = {
+export const defaultVaultPolicy: ZPolicyType = {
   retention: {
     latest: 10,
     hourly: 48,
@@ -405,9 +375,9 @@ export const defaultPolicy: ZPolicyType = {
     denyfiles: [
       {
         filename: ".blinkdiskignore",
-        level: "VAULT",
       },
     ],
+    excludeCacheDirs: false,
   },
   errors: {
     ignoreFile: false,
@@ -453,16 +423,17 @@ export const defaultPolicy: ZPolicyType = {
   ignoreParentPolicy: false,
 };
 
-export const emptyCorePolicy: CorePolicy = {
+export const emptyPolicy: ZPolicyType = {
+  name: undefined,
+  emoji: undefined,
   retention: {},
   files: {},
-  errorHandling: {},
-  scheduling: {},
+  errors: {},
+  schedule: {},
   compression: {},
-  metadataCompression: {},
-  splitter: {},
-  actions: {},
-  osSnapshots: {},
-  logging: {},
+  metadata: {},
+  scripts: {},
   upload: {},
+  osSnapshots: { volumeShadowCopy: {} },
+  logging: { files: { cache: {} }, directories: {} },
 };

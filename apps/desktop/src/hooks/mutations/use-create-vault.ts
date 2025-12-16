@@ -1,6 +1,6 @@
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
-import { convertPolicyToCore, defaultPolicy } from "@desktop/lib/policy";
+import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { ZCreateVaultType } from "@schemas/vault";
@@ -48,7 +48,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
             config: variables.config,
             password: variables.password!,
           },
-          userPolicy: convertPolicyToCore(defaultPolicy, "VAULT"),
+          userPolicy: convertPolicyToCore(defaultVaultPolicy),
           globalPolicy: {},
         });
 

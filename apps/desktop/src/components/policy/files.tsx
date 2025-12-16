@@ -1,7 +1,5 @@
-import {
-  PolicyCategoryProps,
-  SettingsCategory,
-} from "@desktop/components/policy/category";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
 import {
   FormDisabledContext,
@@ -9,7 +7,6 @@ import {
   useStore,
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZPolicyLevelType } from "@schemas/policy";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
 import { LabelContainer } from "@ui/label";
@@ -23,10 +20,10 @@ import {
 import { FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function FilesSettings({ context }: PolicyCategoryProps) {
+export function FilesSettings() {
   const { t } = useAppTranslation("policy.files");
 
-  const form = usePolicyFilesForm(context);
+  const form = usePolicyFilesForm();
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
@@ -35,7 +32,6 @@ export function FilesSettings({ context }: PolicyCategoryProps) {
       title={t("title")}
       description={t("description")}
       icon={<FileXIcon />}
-      context={context}
     >
       <form
         onSubmit={(e) => {
@@ -46,42 +42,48 @@ export function FilesSettings({ context }: PolicyCategoryProps) {
       >
         <form.AppField name="denylist">
           {() => (
-            <DenylistEditor
-              form={form}
-              label={t("denylist.label")}
-              description={t("denylist.description")}
-              level={context.level}
-            />
+            <PolicyField>
+              <DenylistEditor
+                form={form}
+                label={t("denylist.label")}
+                description={t("denylist.description")}
+              />
+            </PolicyField>
           )}
         </form.AppField>
         <form.AppField name="denyfiles">
           {() => (
-            <DenyfilesEditor
-              form={form}
-              label={t("denyfiles.label")}
-              description={t("denyfiles.description")}
-              level={context.level}
-            />
+            <PolicyField>
+              <DenyfilesEditor
+                form={form}
+                label={t("denyfiles.label")}
+                description={t("denyfiles.description")}
+              />
+            </PolicyField>
           )}
         </form.AppField>
         <form.AppField name="maxFileSize">
           {(field) => (
-            <field.Filesize
-              label={{
-                title: t("maxFileSize.label"),
-                description: t("maxFileSize.description"),
-              }}
-            />
+            <PolicyField>
+              <field.Filesize
+                label={{
+                  title: t("maxFileSize.label"),
+                  description: t("maxFileSize.description"),
+                }}
+              />
+            </PolicyField>
           )}
         </form.AppField>
         <form.AppField name="excludeCacheDirs">
           {(field) => (
-            <field.Switch
-              label={{
-                title: t("excludeCacheDirs.label"),
-                description: t("excludeCacheDirs.description"),
-              }}
-            />
+            <PolicyField>
+              <field.Switch
+                label={{
+                  title: t("excludeCacheDirs.label"),
+                  description: t("excludeCacheDirs.description"),
+                }}
+              />
+            </PolicyField>
           )}
         </form.AppField>
         <form.AppForm>
@@ -98,21 +100,14 @@ type DenylistEditorProps = {
   form: ReturnType<typeof usePolicyFilesForm>;
   label: string;
   description: string;
-  level: ZPolicyLevelType;
 };
 
-function DenylistEditor({
-  label,
-  description,
-  form,
-  level,
-}: DenylistEditorProps) {
+function DenylistEditor({ label, description, form }: DenylistEditorProps) {
   const { t } = useAppTranslation("policy.files");
 
   const field = useFieldContext<
     | {
         expression: string;
-        level: ZPolicyLevelType;
       }[]
     | undefined
   >();
@@ -124,7 +119,7 @@ function DenylistEditor({
     <LabelContainer title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
-          {value.map((value, index) => (
+          {value.map((_, index) => (
             <form.Field key={index} name={`denylist[${index}].expression`}>
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">
@@ -141,7 +136,7 @@ function DenylistEditor({
                         t(`denylist.type.${to.toLowerCase()}.example`),
                       );
                     }}
-                    disabled={disabledContext || value.level !== level}
+                    disabled={disabledContext}
                   >
                     <SelectTrigger className="w-fit gap-1">
                       <SelectValue placeholder="" />
@@ -161,14 +156,14 @@ function DenylistEditor({
                   <Input
                     value={subField.state.value as string}
                     onChange={(e) => subField.handleChange(e.target.value)}
-                    disabled={disabledContext || value.level !== level}
+                    disabled={disabledContext}
                   />
                   <Button
                     variant="outline"
                     type="button"
                     size="icon"
                     className="shrink-0"
-                    disabled={disabledContext || value.level !== level}
+                    disabled={disabledContext}
                     onClick={() => {
                       field.removeValue(index);
                     }}
@@ -188,7 +183,6 @@ function DenylistEditor({
         onClick={() => {
           field.pushValue({
             expression: t("denylist.type.file.example"),
-            level,
           });
         }}
       >
@@ -203,21 +197,14 @@ type DenyfilesEditorProps = {
   form: ReturnType<typeof usePolicyFilesForm>;
   label: string;
   description: string;
-  level: ZPolicyLevelType;
 };
 
-function DenyfilesEditor({
-  label,
-  description,
-  form,
-  level,
-}: DenyfilesEditorProps) {
+function DenyfilesEditor({ label, description, form }: DenyfilesEditorProps) {
   const { t } = useAppTranslation("policy.files");
 
   const field = useFieldContext<
     | {
         filename: string;
-        level: ZPolicyLevelType;
       }[]
     | undefined
   >();
@@ -244,21 +231,21 @@ function DenyfilesEditor({
     >
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
-          {value.map((value, index) => (
+          {value.map((_, index) => (
             <form.Field key={index} name={`denyfiles[${index}].filename`}>
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">
                   <Input
                     value={subField.state.value as string}
                     onChange={(e) => subField.handleChange(e.target.value)}
-                    disabled={disabledContext || value.level !== level}
+                    disabled={disabledContext}
                   />
                   <Button
                     variant="outline"
                     type="button"
                     size="icon"
                     className="shrink-0"
-                    disabled={disabledContext || value.level !== level}
+                    disabled={disabledContext}
                     onClick={() => {
                       field.removeValue(index);
                     }}
@@ -278,7 +265,6 @@ function DenyfilesEditor({
         onClick={() => {
           field.pushValue({
             filename: t("denyfiles.example"),
-            level,
           });
         }}
       >

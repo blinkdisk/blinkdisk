@@ -1,9 +1,9 @@
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
+import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
-import { usePolicyContext } from "@desktop/hooks/use-policy-context";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateFolderFormType } from "@schemas/folder";
 import { Accordion } from "@ui/accordion";
@@ -32,18 +32,15 @@ export function CreateFolderSettings({
     onSuccess,
   });
 
-  const context = usePolicyContext({
-    level: "FOLDER",
-    mock: true,
-  });
-
   return (
     <>
-      <Accordion type="multiple" className="mt-2 w-full">
-        <ScheduleSettings context={context} />
-        <RetentionSettings context={context} />
-        <FilesSettings context={context} />
-      </Accordion>
+      <PolicyContextProvider level="FOLDER" mock={{ path: values.path }}>
+        <Accordion type="multiple" className="mt-2 w-full">
+          <ScheduleSettings />
+          <RetentionSettings />
+          <FilesSettings />
+        </Accordion>
+      </PolicyContextProvider>
       <Button
         onClick={() => mutateAsync({ ...values })}
         loading={isPending}

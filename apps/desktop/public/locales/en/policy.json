@@ -91,14 +91,14 @@
     },
     "denyfiles": {
       "label": "Exclusion rule files",
-      "description": "All filenames to files containing exclusion rules.",
+      "description": "All filenames containing exclusion rules.",
       "example": "ignore.txt",
       "docs": "Open docs",
       "add": "Add rule file"
     },
     "maxFileSize": {
       "label": "Maximum file size",
-      "description": "The maximum file size to include in backups."
+      "description": "Maximum file size to include in backups."
     },
     "excludeCacheDirs": {
       "label": "Exclude cache directories",

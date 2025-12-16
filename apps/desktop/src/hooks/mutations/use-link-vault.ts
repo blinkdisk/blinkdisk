@@ -4,7 +4,7 @@ import { showErrorToast } from "@desktop/lib/error";
 import {
   convertPolicyToCore,
   CorePolicy,
-  defaultPolicy,
+  defaultVaultPolicy,
 } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
 import { vaultApi } from "@desktop/lib/vault";
@@ -86,9 +86,7 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
 
         await api.put(
           "/api/v1/policy",
-          policy.data
-            ? policy.data
-            : convertPolicyToCore(defaultPolicy, "VAULT"),
+          policy.data ? policy.data : convertPolicyToCore(defaultVaultPolicy),
           {
             params: {
               userName: variables.profileId,

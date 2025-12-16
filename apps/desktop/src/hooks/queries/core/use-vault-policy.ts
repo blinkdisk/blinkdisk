@@ -6,7 +6,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
   convertPolicyFromCore,
   CorePolicy,
-  defaultPolicy,
+  defaultVaultPolicy,
 } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
@@ -34,9 +34,20 @@ export function useVaultPolicy() {
       );
 
       if (!res.data) return null;
-      if (res.data.code === "NOT_FOUND") return defaultPolicy;
 
-      return convertPolicyFromCore(res.data, "VAULT");
+      if (res.data.code === "NOT_FOUND")
+        return {
+          defined: defaultVaultPolicy,
+          effective: defaultVaultPolicy,
+        };
+
+      const policy = convertPolicyFromCore(res.data);
+      if (!policy) return null;
+
+      return {
+        defined: policy,
+        effective: policy,
+      };
     },
     enabled: !!accountId && !!vaultId && running,
   });

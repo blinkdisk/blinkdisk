@@ -1,20 +1,42 @@
-import { PolicyContext } from "@desktop/hooks/use-policy-context";
+import { PolicyContext } from "@desktop/components/policy/context";
+import { pickDefinedFields } from "@desktop/lib/policy";
 import { useAppForm } from "@hooks/use-app-form";
-import { ZSchedulePolicy, ZSchedulePolicyType } from "@schemas/policy";
+import {
+  ZPolicyType,
+  ZSchedulePolicy,
+  ZSchedulePolicyType,
+} from "@schemas/policy";
+import { useContext } from "react";
 
-export function usePolicyScheduleForm({ policy, mutate }: PolicyContext) {
+export function usePolicyScheduleForm() {
+  const { mutate, policy, definedFields, onChange, level } =
+    useContext(PolicyContext);
+
   const form = useAppForm({
-    defaultValues: policy?.schedule as ZSchedulePolicyType,
+    defaultValues: {
+      ...policy?.effective?.schedule,
+      interval: policy?.effective?.schedule?.interval || "NONE",
+      definedFields: definedFields?.schedule,
+    } as ZSchedulePolicyType & {
+      definedFields?: string[];
+    },
     validators: {
       onSubmit: ZSchedulePolicy,
     },
+    listeners: {
+      onChange,
+    },
     onSubmit: async ({ value }) =>
       policy &&
+      value &&
       (await mutate(
         {
-          ...policy,
-          schedule: value,
-        },
+          ...policy.defined,
+          schedule:
+            level === "FOLDER"
+              ? pickDefinedFields(value, value.definedFields || [])
+              : value,
+        } satisfies ZPolicyType,
         {
           onSuccess: () => form.reset(),
         },

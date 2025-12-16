@@ -1,10 +1,10 @@
 import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
+import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { ReadOnlyAlert } from "@desktop/components/vaults/readonly-alert";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
-import { usePolicyContext } from "@desktop/hooks/use-policy-context";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { FormDisabledContext } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -21,14 +21,9 @@ export function FolderSettingsDialog() {
   const { isOpen, setIsOpen, options } = useFolderSettingsDialog();
   const { readOnly } = useProfile();
 
-  const context = usePolicyContext({
-    level: "FOLDER",
-    folderId: options?.folderId,
-  });
-
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="w-140 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-135 max-h-[90vh] overflow-y-auto">
         <DialogTitle>{t("title")}</DialogTitle>
         <DialogDescription className="sr-only">
           {t("description")}
@@ -40,15 +35,14 @@ export function FolderSettingsDialog() {
             </div>
           ) : null}
           <FormDisabledContext.Provider value={readOnly}>
-            <Accordion type="multiple" className="w-full">
-              <FolderGeneralSettings
-                folderId={options?.folderId}
-                context={context}
-              />
-              <ScheduleSettings context={context} />
-              <RetentionSettings context={context} />
-              <FilesSettings context={context} />
-            </Accordion>
+            <PolicyContextProvider level="FOLDER" folderId={options?.folderId}>
+              <Accordion type="multiple" className="w-full">
+                <FolderGeneralSettings />
+                <ScheduleSettings />
+                <RetentionSettings />
+                <FilesSettings />
+              </Accordion>
+            </PolicyContextProvider>
           </FormDisabledContext.Provider>
         </div>
       </DialogContent>

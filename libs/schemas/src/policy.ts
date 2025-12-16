@@ -25,15 +25,9 @@ const ZFileSize = z.object({
 export type ZFileSizeType = z.infer<typeof ZFileSize>;
 
 export const ZFilesPolicy = z.object({
-  denylist: z
-    .object({ expression: z.string(), level: ZPolicyLevel })
-    .array()
-    .optional(),
+  denylist: z.object({ expression: z.string() }).array().optional(),
   ignoreParentDenylist: z.boolean().optional(),
-  denyfiles: z
-    .object({ filename: z.string(), level: ZPolicyLevel })
-    .array()
-    .optional(),
+  denyfiles: z.object({ filename: z.string() }).array().optional(),
   ignoreParentDenyfiles: z.boolean().optional(),
   excludeCacheDirs: z.boolean().optional(),
   maxFileSize: ZFileSize.optional(),
@@ -57,7 +51,6 @@ export const ZSchedulePolicy = z.object({
     .object({
       hour: z.number().int().positive().optional(),
       minute: z.number().int().positive().optional(),
-      level: ZPolicyLevel,
     })
     .array()
     .optional(),
@@ -65,7 +58,6 @@ export const ZSchedulePolicy = z.object({
     .object({
       id: z.string(),
       expression: z.string(),
-      level: ZPolicyLevel,
     })
     .array()
     .optional(),

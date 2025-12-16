@@ -48,7 +48,7 @@ export function CreateFolderDialog() {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
-        <DialogContent className="w-120 block max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-135 block max-h-[80vh] overflow-y-auto">
           <div className="flex items-center gap-3">
             {step !== "GENERAL" ? (
               <Button

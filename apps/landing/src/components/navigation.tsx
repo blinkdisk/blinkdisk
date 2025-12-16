@@ -54,7 +54,6 @@ export function Navigation() {
 
   useEffect(() => {
     return router.subscribe("onBeforeNavigate", () => {
-      console.log("onBeforeNavigate");
       setOpen(false);
     });
   }, [router]);

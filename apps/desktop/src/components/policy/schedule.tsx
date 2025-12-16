@@ -1,8 +1,6 @@
 import { Cron } from "@desktop/components/cron";
-import {
-  PolicyCategoryProps,
-  SettingsCategory,
-} from "@desktop/components/policy/category";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
 import {
   FormDisabledContext,
@@ -10,16 +8,15 @@ import {
   useStore,
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZPolicyLevelType } from "@schemas/policy";
 import { Button } from "@ui/button";
 import { LabelContainer } from "@ui/label";
 import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function ScheduleSettings({ context }: PolicyCategoryProps) {
+export function ScheduleSettings() {
   const { t } = useAppTranslation("policy.schedule");
 
-  const form = usePolicyScheduleForm(context);
+  const form = usePolicyScheduleForm();
 
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const trigger = useStore(form.store, (state) => state.values.trigger);
@@ -30,7 +27,6 @@ export function ScheduleSettings({ context }: PolicyCategoryProps) {
       title={t("title")}
       description={t("description")}
       icon={<ClockIcon />}
-      context={context}
     >
       <form
         onSubmit={(e) => {
@@ -41,81 +37,83 @@ export function ScheduleSettings({ context }: PolicyCategoryProps) {
       >
         <form.AppField name="trigger">
           {(field) => (
-            <field.Tabs
-              label={{ title: t("trigger.label") }}
-              className="w-full"
-              items={[
-                {
-                  value: "SCHEDULE",
-                  label: t("trigger.items.SCHEDULE"),
-                },
-                {
-                  value: "MANUAL",
-                  label: t("trigger.items.MANUAL"),
-                },
-              ]}
-            />
+            <PolicyField>
+              <field.Tabs
+                label={{ title: t("trigger.label") }}
+                className="w-full"
+                items={[
+                  {
+                    value: "SCHEDULE",
+                    label: t("trigger.items.SCHEDULE"),
+                  },
+                  {
+                    value: "MANUAL",
+                    label: t("trigger.items.MANUAL"),
+                  },
+                ]}
+              />
+            </PolicyField>
           )}
         </form.AppField>
         {trigger === "SCHEDULE" ? (
           <>
             <form.AppField name="interval">
               {(field) => (
-                <field.Select
-                  label={{ title: t("interval.label") }}
-                  placeholder={t("interval.placeholder")}
-                  items={[
-                    {
-                      value: "NONE",
-                      label: t("interval.items.NONE"),
-                    },
-                    {
-                      value: String(60 * 10),
-                      label: t("interval.items.10_MINUTES"),
-                    },
-                    {
-                      value: String(60 * 15),
-                      label: t("interval.items.15_MINUTES"),
-                    },
-                    {
-                      value: String(60 * 20),
-                      label: t("interval.items.20_MINUTES"),
-                    },
-                    {
-                      value: String(60 * 30),
-                      label: t("interval.items.30_MINUTES"),
-                    },
-                    {
-                      value: String(60 * 60),
-                      label: t("interval.items.1_HOUR"),
-                    },
-                    {
-                      value: String(60 * 60 * 3),
-                      label: t("interval.items.3_HOURS"),
-                    },
-                    {
-                      value: String(60 * 60 * 6),
-                      label: t("interval.items.6_HOURS"),
-                    },
-                    {
-                      value: String(60 * 60 * 12),
-                      label: t("interval.items.12_HOURS"),
-                    },
-                    {
-                      value: String(60 * 60 * 24),
-                      label: t("interval.items.24_HOURS"),
-                    },
-                  ]}
-                />
+                <PolicyField>
+                  <field.Select
+                    label={{ title: t("interval.label") }}
+                    placeholder={t("interval.placeholder")}
+                    items={[
+                      {
+                        value: "NONE",
+                        label: t("interval.items.NONE"),
+                      },
+                      {
+                        value: String(60 * 10),
+                        label: t("interval.items.10_MINUTES"),
+                      },
+                      {
+                        value: String(60 * 15),
+                        label: t("interval.items.15_MINUTES"),
+                      },
+                      {
+                        value: String(60 * 20),
+                        label: t("interval.items.20_MINUTES"),
+                      },
+                      {
+                        value: String(60 * 30),
+                        label: t("interval.items.30_MINUTES"),
+                      },
+                      {
+                        value: String(60 * 60),
+                        label: t("interval.items.1_HOUR"),
+                      },
+                      {
+                        value: String(60 * 60 * 3),
+                        label: t("interval.items.3_HOURS"),
+                      },
+                      {
+                        value: String(60 * 60 * 6),
+                        label: t("interval.items.6_HOURS"),
+                      },
+                      {
+                        value: String(60 * 60 * 12),
+                        label: t("interval.items.12_HOURS"),
+                      },
+                      {
+                        value: String(60 * 60 * 24),
+                        label: t("interval.items.24_HOURS"),
+                      },
+                    ]}
+                  />
+                </PolicyField>
               )}
             </form.AppField>
             <form.AppField name="cron" mode="array">
               {() => (
-                <CronEditor
-                  form={form}
-                  label={t("cron.label")}
-                  level={context.level}
-                />
+                <PolicyField>
+                  <CronEditor form={form} label={t("cron.label")} />
+                </PolicyField>
               )}
             </form.AppField>
           </>
@@ -133,16 +131,15 @@ export function ScheduleSettings({ context }: PolicyCategoryProps) {
 type CronEditorProps = {
   form: ReturnType<typeof usePolicyScheduleForm>;
   label: string;
-  level: ZPolicyLevelType;
 };
 
-function CronEditor({ label, form, level }: CronEditorProps) {
+function CronEditor({ label, form }: CronEditorProps) {
   const { t } = useAppTranslation("policy.schedule");
 
   const disabledContext = useContext(FormDisabledContext);
 
   const field = useFieldContext<
-    { id: string; expression: string; level: ZPolicyLevelType }[] | undefined
+    { id: string; expression: string }[] | undefined
   >();
 
   const value = useStore(field.store, (state) => state.value);
@@ -156,7 +153,7 @@ function CronEditor({ label, form, level }: CronEditorProps) {
               {(subField) => (
                 <div className="flex w-full flex-col gap-3">
                   {index !== 0 ? <hr className="w-full" /> : null}
-                  <div className="flex w-full items-start justify-between gap-2">
+                  <div className="flex w-full items-center justify-between gap-2">
                     <Cron
                       value={cron.expression}
                       setValue={(to) => {
@@ -164,7 +161,6 @@ function CronEditor({ label, form, level }: CronEditorProps) {
                         if (current && current.expression === to) return;
                         subField.handleChange(to);
                       }}
-                      readOnly={cron.level !== level}
                       disabled={disabledContext}
                     />
                     <Button
@@ -175,7 +171,7 @@ function CronEditor({ label, form, level }: CronEditorProps) {
                       onClick={() => {
                         field.removeValue(index);
                       }}
-                      disabled={disabledContext || cron.level !== level}
+                      disabled={disabledContext}
                     >
                       <TrashIcon />
                     </Button>
@@ -193,7 +189,6 @@ function CronEditor({ label, form, level }: CronEditorProps) {
           field.pushValue({
             id: Math.random().toString(16),
             expression: "0 0 * * *",
-            level,
           });
         }}
         disabled={disabledContext}

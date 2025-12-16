@@ -1,18 +1,10 @@
-import { usePolicyChanges } from "@desktop/hooks/use-policy-changes";
-import { PolicyContext } from "@desktop/hooks/use-policy-context";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZPolicyType } from "@schemas/policy";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@ui/accordion";
-import { Badge } from "@ui/badge";
 import { ReactNode } from "react";
-
-export type PolicyCategoryProps = {
-  context: PolicyContext;
-};
 
 type SettingsCategoryProps = {
   id: keyof ZPolicyType | string;
@@ -20,7 +12,6 @@ type SettingsCategoryProps = {
   description: string;
   children: ReactNode;
   icon: ReactNode;
-  context?: PolicyContext;
 };
 
 export function SettingsCategory({
@@ -29,11 +20,7 @@ export function SettingsCategory({
   description,
   children,
   icon,
-  context,
 }: SettingsCategoryProps) {
-  const changes = usePolicyChanges(context);
-  const { t } = useAppTranslation("settings.folder");
-
   return (
     <AccordionItem value={id}>
       <AccordionTrigger className="items-center">
@@ -44,9 +31,6 @@ export function SettingsCategory({
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <h2 className="text-lg font-semibold">{title}</h2>
-              {changes && id in changes && changes[id as keyof ZPolicyType] ? (
-                <Badge variant="subtle">{t("modified")}</Badge>
-              ) : null}
             </div>
             <p className="text-muted-foreground text-xs font-normal">
               {description}
@@ -54,7 +38,7 @@ export function SettingsCategory({
           </div>
         </div>
       </AccordionTrigger>
-      <AccordionContent className="pt-2">{children}</AccordionContent>
+      <AccordionContent className="m-1 pt-2">{children}</AccordionContent>
     </AccordionItem>
   );
 }

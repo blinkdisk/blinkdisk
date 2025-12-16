@@ -87,7 +87,7 @@ const LabelContainer = React.forwardRef<
                     </Label>
                   ) : null}
                   {description ? (
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-muted-foreground mt-0.5 text-xs">
                       {description}
                     </p>
                   ) : null}

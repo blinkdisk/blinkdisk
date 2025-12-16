@@ -1,7 +1,5 @@
-import {
-  PolicyCategoryProps,
-  SettingsCategory,
-} from "@desktop/components/policy/category";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyContext } from "@desktop/components/policy/context";
 import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
@@ -14,15 +12,13 @@ import { LabelContainer } from "@ui/label";
 import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function FolderGeneralSettings({
-  folderId,
-  context,
-}: PolicyCategoryProps & { folderId?: string }) {
+export function FolderGeneralSettings() {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
+  const { folderId } = useContext(PolicyContext);
   const { data: folder } = useFolder(folderId);
 
-  const form = usePolicyGeneralForm(context);
+  const form = usePolicyGeneralForm();
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const values = useStore(form.store, (state) => state.values);
   const disabledContext = useContext(FormDisabledContext);

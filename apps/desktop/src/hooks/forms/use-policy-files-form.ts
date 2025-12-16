@@ -1,19 +1,36 @@
-import { PolicyContext } from "@desktop/hooks/use-policy-context";
+import { PolicyContext } from "@desktop/components/policy/context";
+import { pickDefinedFields } from "@desktop/lib/policy";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZFilesPolicy, ZFilesPolicyType } from "@schemas/policy";
+import { useContext } from "react";
 
-export function usePolicyFilesForm({ policy, mutate }: PolicyContext) {
+export function usePolicyFilesForm() {
+  const { mutate, policy, definedFields, onChange, level } =
+    useContext(PolicyContext);
+
   const form = useAppForm({
-    defaultValues: policy?.files as ZFilesPolicyType,
+    defaultValues: {
+      ...policy?.effective?.files,
+      excludeCacheDirs: policy?.effective?.files?.excludeCacheDirs || false,
+      definedFields: definedFields?.files,
+    } as ZFilesPolicyType & {
+      definedFields?: string[];
+    },
     validators: {
       onSubmit: ZFilesPolicy,
+    },
+    listeners: {
+      onChange,
     },
     onSubmit: async ({ value }) =>
       policy &&
       (await mutate(
         {
-          ...policy,
-          files: value,
+          ...policy.defined,
+          files:
+            level === "FOLDER"
+              ? pickDefinedFields(value, value.definedFields || [])
+              : value,
         },
         {
           onSuccess: () => form.reset(),

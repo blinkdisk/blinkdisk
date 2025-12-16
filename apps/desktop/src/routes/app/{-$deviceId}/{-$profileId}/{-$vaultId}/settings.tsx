@@ -1,3 +1,4 @@
+import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
@@ -7,7 +8,6 @@ import { VaultGeneralSettings } from "@desktop/components/vaults/settings/genera
 import { VaultThrottleSettings } from "@desktop/components/vaults/settings/throttle";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { usePolicyContext } from "@desktop/hooks/use-policy-context";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { FormDisabledContext } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -27,8 +27,6 @@ function RouteComponent() {
   const { t } = useAppTranslation("settings.vault");
   const { data: vault } = useVault();
   const { readOnly } = useProfile();
-
-  const context = usePolicyContext({ level: "VAULT" });
 
   return (
     <div className="flex min-h-full flex-col overflow-x-hidden p-6">
@@ -65,14 +63,16 @@ function RouteComponent() {
           <div className="p-4">
             <ReadOnlyAlert />
           </div>
-          <Accordion type="multiple">
-            <VaultGeneralSettings />
-            <VaultConfigSettings />
-            <ScheduleSettings context={context} />
-            <RetentionSettings context={context} />
-            <FilesSettings context={context} />
-            <VaultThrottleSettings />
-          </Accordion>
+          <PolicyContextProvider level="VAULT">
+            <Accordion type="multiple">
+              <VaultGeneralSettings />
+              <VaultConfigSettings />
+              <ScheduleSettings />
+              <RetentionSettings />
+              <FilesSettings />
+              <VaultThrottleSettings />
+            </Accordion>
+          </PolicyContextProvider>
         </div>
       </FormDisabledContext.Provider>
       <div className="mb-auto"></div>

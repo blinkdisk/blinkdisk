@@ -27,7 +27,7 @@ export function useUpdateVaultPolicy({
 
       await vaultApi(vaultId).put(
         "/api/v1/policy",
-        convertPolicyToCore(values, "VAULT"),
+        convertPolicyToCore(values),
         {
           params: {
             userName: profileId,
@@ -38,9 +38,16 @@ export function useUpdateVaultPolicy({
     },
     onError: showErrorToast,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.policy.vault(vaultId),
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.policy.vault(vaultId),
+        }),
+        // Folders depend on the vault policy,
+        // so we need to invalidate them as well.
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.policy.folders(),
+        }),
+      ]);
 
       onSuccess?.();
     },

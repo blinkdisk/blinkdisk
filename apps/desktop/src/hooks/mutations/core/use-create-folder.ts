@@ -85,9 +85,15 @@ export function useCreateFolder({
         folderId: res.id,
       });
 
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.list(vaultId),
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.folder.list(vaultId),
+        }),
+        // Policies can be nested inside folders.
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.policy.folders(),
+        }),
+      ]);
 
       await navigate({
         to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}",

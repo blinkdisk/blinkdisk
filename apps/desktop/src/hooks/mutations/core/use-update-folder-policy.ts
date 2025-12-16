@@ -5,7 +5,7 @@ import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
-import { getFolderPolicyUpdates } from "@desktop/lib/policy";
+import { convertPolicyToCore } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +17,7 @@ export function useUpdateFolderPolicy({
 }: {
   folderId?: string;
   onSuccess?: () => void;
-  mock?: boolean;
+  mock?: { path: string };
 }) {
   const queryClient = useQueryClient();
 
@@ -33,36 +33,39 @@ export function useUpdateFolderPolicy({
     mutationFn: async (values: ZPolicyType) => {
       if (!deviceId || !profileId || !vaultId || !vaultPolicy) return;
 
+      const policy = convertPolicyToCore(values);
+
       if (mock) {
         // eslint-disable-next-line
-        window.folderMockPolicy = getFolderPolicyUpdates(vaultPolicy, values);
+        window.folderMockPolicy = policy;
       } else {
-        if (!folder) throw new Error("Folder not found, but mock is false");
+        if (!folder) throw new Error("Folder not found, but mock is undefined");
 
-        await vaultApi(vaultId).put(
-          "/api/v1/policy",
-          getFolderPolicyUpdates(vaultPolicy, values),
-          {
-            params: {
-              userName: profileId,
-              host: deviceId,
-              path: folder.source.path,
-            },
+        await vaultApi(vaultId).put("/api/v1/policy", policy, {
+          params: {
+            userName: profileId,
+            host: deviceId,
+            path: folder.source.path,
           },
-        );
+        });
       }
     },
     onError: showErrorToast,
     onSuccess: async () => {
       if (mock) {
         await queryClient.invalidateQueries({
-          queryKey: queryKeys.policy.folder(folder?.id, true),
+          queryKey: queryKeys.policy.folder("mock"),
         });
       } else {
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: queryKeys.policy.folder(folder?.id),
           }),
+          // Policies can be nested inside folders.
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.policy.folders(),
+          }),
+          // Name and emoji might have changed.
           queryClient.invalidateQueries({
             queryKey: queryKeys.folder.list(vaultId),
           }),
