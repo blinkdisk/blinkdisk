@@ -1,4 +1,5 @@
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
+import { FolderSize } from "@desktop/components/dialogs/create-folder/size";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
@@ -21,6 +22,7 @@ export function CreateFolderSettings({
 }: CreateFolderSettingsProps) {
   const { t } = useAppTranslation("folder.createDialog");
 
+  const [size, setSize] = useState<number | null>(null);
   const [alertShown, setAlertShown] = useState(false);
 
   const { mutateAsync, isPending } = useCreateFolder({
@@ -40,9 +42,10 @@ export function CreateFolderSettings({
           <RetentionSettings />
           <FilesSettings />
         </Accordion>
+        <FolderSize path={values.path} setSize={setSize} />
       </PolicyContextProvider>
       <Button
-        onClick={() => mutateAsync({ ...values })}
+        onClick={() => mutateAsync({ ...values, size })}
         loading={isPending}
         className="mt-4 w-full"
       >
@@ -53,7 +56,7 @@ export function CreateFolderSettings({
         open={alertShown}
         setOpen={setAlertShown}
         loading={isPending}
-        submit={() => mutateAsync({ ...values, force: true })}
+        submit={() => mutateAsync({ ...values, force: true, size })}
       />
     </>
   );
