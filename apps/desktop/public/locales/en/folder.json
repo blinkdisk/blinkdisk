@@ -26,8 +26,6 @@
       "title": "Calculate folder size",
       "description": "Estimate the size of this folder.",
       "button": "Calculate",
-      "running": "Analyzing folder...",
-      "starting": "Starting estimation...",
       "error": "Failed to estimate folder size",
       "included": "Included files:",
       "excluded": "Excluded files:"
