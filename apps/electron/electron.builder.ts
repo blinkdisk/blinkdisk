@@ -12,7 +12,7 @@ export default {
   publish: {
     provider: "github",
     vPrefixedTagName: true,
-    releaseType: "release",
+    releaseType: "draft",
   },
   extraResources: [
     {

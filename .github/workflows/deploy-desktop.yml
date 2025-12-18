@@ -107,3 +107,15 @@ jobs:
         run: |
           echo "$APPLE_API_SECRET_KEY" > /tmp/key.p8
           APPLE_API_KEY="/tmp/key.p8" pnpm run build:macos
+
+  publish-release:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit ${{ github.ref_name }} --draft=false
