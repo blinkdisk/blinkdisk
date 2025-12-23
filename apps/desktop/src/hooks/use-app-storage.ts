@@ -18,9 +18,11 @@ export function useAppStorage<K extends keyof GlobalStorageSchema>(
   key: K,
   defaultValue?: GlobalStorageSchema[K],
 ) {
-  const state = useStore(store, (state) =>
-    key === null ? null : key.split(".").reduce((o, i) => o[i], state),
-  );
+  const state = useStore(store, (state) => {
+    if (!key) return undefined;
+
+    return key.split(".").reduce((o, i) => (o ? o[i] : undefined), state);
+  });
 
   async function setValue(value: GlobalStorageSchema[K]) {
     await window.electron.store.set(key, value);
