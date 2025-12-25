@@ -371,7 +371,6 @@ export class Vault {
     return new Promise<void>((res) => {
       this.signingKey = generateId();
       this.sessionCookie = generateId();
-      this.csrfToken = generateCSRFToken(this.sessionCookie!, this.signingKey!);
 
       const args = [
         "server",
@@ -508,6 +507,12 @@ export class Vault {
     raw?: boolean;
   }) {
     return await new Promise((res, rej) => {
+      if (!this.csrfToken)
+        this.csrfToken = generateCSRFToken(
+          this.sessionCookie!,
+          this.signingKey!,
+        );
+
       const req = https.request(
         {
           ca: [this.serverCertificate!],
