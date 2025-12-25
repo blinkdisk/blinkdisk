@@ -15,6 +15,7 @@ export function usePolicyScheduleForm() {
   const form = useAppForm({
     defaultValues: {
       ...policy?.effective?.schedule,
+      trigger: policy?.effective?.schedule?.trigger || "SCHEDULE",
       interval: policy?.effective?.schedule?.interval || "NONE",
       definedFields: definedFields?.schedule,
     } as ZSchedulePolicyType & {
