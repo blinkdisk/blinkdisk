@@ -25,7 +25,7 @@
     "kysely-postgres-js": "^3.0.0",
     "pg": "^8.14.1",
     "postgres": "^3.4.0",
-    "prisma": "^6.5.0",
+    "prisma": "^6.6.0",
     "prisma-kysely": "^1.8.0"
   }
 }
