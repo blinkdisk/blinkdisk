@@ -113,9 +113,7 @@ export function CodeStatsForm({
         setLoading(true);
 
         const res = await fetch(
-          provider === "gitlab"
-            ? `https://corsproxy.io/?url=${encodeURIComponent(`https://${host}/api/v4/projects/${encodeURIComponent(`${username}/${repository}`)}/repository/archive.zip`)}`
-            : `https://corsproxy.io/?url=https://api.github.com/repos/${username}/${repository}/zipball`,
+          `https://git-proxy.blinkdisk.com/${provider}/${provider === "gitlab" ? `${host}/` : ""}${username}/${repository}`,
         );
 
         if (res.status !== 200) {
