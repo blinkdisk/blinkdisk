@@ -35,24 +35,24 @@ export function FilesSettings() {
         }}
         className="flex flex-col gap-4"
       >
-        <form.AppField name="denylist">
+        <form.AppField name="exclusions">
           {() => (
             <PolicyField>
-              <DenylistEditor
+              <ExclusionsEditor
                 form={form}
-                label={t("denylist.label")}
-                description={t("denylist.description")}
+                label={t("exclusions.label")}
+                description={t("exclusions.description")}
               />
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="denyfiles">
+        <form.AppField name="exclusionRuleFiles">
           {() => (
             <PolicyField>
-              <DenyfilesEditor
+              <ExclusionRuleFilesEditor
                 form={form}
-                label={t("denyfiles.label")}
-                description={t("denyfiles.description")}
+                label={t("exclusionRuleFiles.label")}
+                description={t("exclusionRuleFiles.description")}
               />
             </PolicyField>
           )}
@@ -91,19 +91,19 @@ export function FilesSettings() {
   );
 }
 
-type DenylistEditorProps = {
+type ExclusionsEditorProps = {
   form: ReturnType<typeof usePolicyFilesForm>;
   label: string;
   description: string;
 };
 
-function DenylistEditor({ label, description, form }: DenylistEditorProps) {
+function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
   const { t } = useAppTranslation("policy.files");
   const { openEditExclusionDialog } = useEditExclusionDialog();
 
   const field = useFieldContext<
     | {
-        expression: string;
+        rule: string;
       }[]
     | undefined
   >();
@@ -116,7 +116,7 @@ function DenylistEditor({ label, description, form }: DenylistEditorProps) {
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
-            <form.Field key={index} name={`denylist[${index}].expression`}>
+            <form.Field key={index} name={`exclusions[${index}].rule`}>
               {(subField) => (
                 <div className="flex items-center justify-between gap-2">
                   <ExclusionPreview rule={subField.state.value as string} />
@@ -166,14 +166,14 @@ function DenylistEditor({ label, description, form }: DenylistEditorProps) {
             initialValue: "",
             onSave: (rule) => {
               field.pushValue({
-                expression: rule,
+                rule,
               });
             },
           });
         }}
       >
         <PlusIcon />
-        {t("denylist.add")}
+        {t("exclusions.add")}
       </Button>
     </LabelContainer>
   );
@@ -184,7 +184,7 @@ type ExclusionPreviewProps = {
 };
 
 function ExclusionPreview({ rule }: ExclusionPreviewProps) {
-  const { t } = useAppTranslation("policy.files.denylist.preview");
+  const { t } = useAppTranslation("policy.files.exclusions.preview");
   const parsed = useMemo(() => parseExclusionRule(rule), [rule]);
 
   return (
@@ -207,13 +207,13 @@ function ExclusionPreview({ rule }: ExclusionPreviewProps) {
   );
 }
 
-type DenyfilesEditorProps = {
+type ExclusionRuleFilesEditorProps = {
   form: ReturnType<typeof usePolicyFilesForm>;
   label: string;
   description: string;
 };
 
-function DenyfilesEditor({ label, description, form }: DenyfilesEditorProps) {
+function ExclusionRuleFilesEditor({ label, description, form }: ExclusionRuleFilesEditorProps) {
   const { t } = useAppTranslation("policy.files");
 
   const field = useFieldContext<
@@ -238,7 +238,7 @@ function DenyfilesEditor({ label, description, form }: DenyfilesEditorProps) {
             target="_blank"
             rel="noreferrer"
           >
-            {t("denyfiles.docs")}
+            {t("exclusionRuleFiles.docs")}
           </a>
         </>
       }
@@ -246,7 +246,7 @@ function DenyfilesEditor({ label, description, form }: DenyfilesEditorProps) {
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
-            <form.Field key={index} name={`denyfiles[${index}].filename`}>
+            <form.Field key={index} name={`exclusionRuleFiles[${index}].filename`}>
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">
                   <Input
@@ -278,12 +278,12 @@ function DenyfilesEditor({ label, description, form }: DenyfilesEditorProps) {
         disabled={disabledContext}
         onClick={() => {
           field.pushValue({
-            filename: t("denyfiles.example"),
+            filename: t("exclusionRuleFiles.example"),
           });
         }}
       >
         <PlusIcon />
-        {t("denyfiles.add")}
+        {t("exclusionRuleFiles.add")}
       </Button>
     </LabelContainer>
   );

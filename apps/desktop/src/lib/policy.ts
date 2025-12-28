@@ -131,14 +131,14 @@ export function convertPolicyFromCore(policy: CorePolicy): ZPolicyType | null {
       ignoreIdentical: policy.retention?.ignoreIdenticalSnapshots,
     },
     files: {
-      denylist: policy.files.ignore?.map((expression) => ({
-        expression,
+      exclusions: policy.files.ignore?.map((rule) => ({
+        rule,
       })),
-      ignoreParentDenylist: policy.files.noParentIgnore,
-      denyfiles: policy.files.ignoreDotFiles?.map((filename) => ({
+      ignoreParentExclusions: policy.files.noParentIgnore,
+      exclusionRuleFiles: policy.files.ignoreDotFiles?.map((filename) => ({
         filename,
       })),
-      ignoreParentDenyfiles: policy.files.noParentDotFiles,
+      ignoreParentExclusionRuleFiles: policy.files.noParentDotFiles,
       excludeCacheDirs: policy.files.ignoreCacheDirs,
       maxFileSize:
         policy.files.maxFileSize !== undefined
@@ -242,14 +242,14 @@ export function convertPolicyToCore(policy: ZPolicyType) {
       ignoreIdenticalSnapshots: policy.retention?.ignoreIdentical,
     },
     files: {
-      ignore: policy.files?.denylist
+      ignore: policy.files?.exclusions
         ?.filter(Boolean)
-        ?.map(({ expression }) => expression),
-      noParentIgnore: policy.files?.ignoreParentDenylist,
-      ignoreDotFiles: policy.files?.denyfiles
+        ?.map(({ rule }) => rule),
+      noParentIgnore: policy.files?.ignoreParentExclusions,
+      ignoreDotFiles: policy.files?.exclusionRuleFiles
         ?.filter(Boolean)
         ?.map(({ filename }) => filename),
-      noParentDotFiles: policy.files?.ignoreParentDenyfiles,
+      noParentDotFiles: policy.files?.ignoreParentExclusionRuleFiles,
       ignoreCacheDirs: policy.files?.excludeCacheDirs,
       maxFileSize:
         policy.files?.maxFileSize !== undefined
@@ -372,7 +372,7 @@ export const defaultVaultPolicy: ZPolicyType = {
     ignoreIdentical: false,
   },
   files: {
-    denyfiles: [
+    exclusionRuleFiles: [
       {
         filename: ".blinkdiskignore",
       },

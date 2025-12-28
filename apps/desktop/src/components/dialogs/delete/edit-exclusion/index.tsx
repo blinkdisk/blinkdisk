@@ -11,7 +11,7 @@ import {
 } from "@ui/dialog";
 
 export function EditExclusionDialog() {
-  const { t } = useAppTranslation("policy.files.denylist.dialog");
+  const { t } = useAppTranslation("policy.files.exclusions.dialog");
   const { isOpen, setIsOpen, options } = useEditExclusionDialog();
 
   const form = useEditExclusionForm(options?.initialValue, (rule) => {

@@ -70,7 +70,7 @@
   "files": {
     "title": "Excluded files",
     "description": "Exclude files and directories from backups.",
-    "denylist": {
+    "exclusions": {
       "label": "Excluded files and directories",
       "description": "Files, directories and extensions to exclude from backups.",
       "add": "Add exclusion",
@@ -114,7 +114,7 @@
         }
       }
     },
-    "denyfiles": {
+    "exclusionRuleFiles": {
       "label": "Exclusion rule files",
       "description": "All filenames containing exclusion rules.",
       "example": "ignore.txt",

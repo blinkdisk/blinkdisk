@@ -25,10 +25,10 @@ const ZFileSize = z.object({
 export type ZFileSizeType = z.infer<typeof ZFileSize>;
 
 export const ZFilesPolicy = z.object({
-  denylist: z.object({ expression: z.string() }).array().optional(),
-  ignoreParentDenylist: z.boolean().optional(),
-  denyfiles: z.object({ filename: z.string() }).array().optional(),
-  ignoreParentDenyfiles: z.boolean().optional(),
+  exclusions: z.object({ rule: z.string() }).array().optional(),
+  ignoreParentExclusions: z.boolean().optional(),
+  exclusionRuleFiles: z.object({ filename: z.string() }).array().optional(),
+  ignoreParentExclusionRuleFiles: z.boolean().optional(),
   excludeCacheDirs: z.boolean().optional(),
   maxFileSize: ZFileSize.optional(),
   singleFileSystem: z.boolean().optional(),
