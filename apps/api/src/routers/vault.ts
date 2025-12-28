@@ -101,7 +101,8 @@ export const vaultRouter = router({
           {
             storageId,
           },
-          ctx.env.CLOUD_JWT_PRIVATE_KEY,
+          // The dotenv parser somtimes leaves a trailing backslash
+          ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
         );
 
         const stub = (ctx.env.STORAGE as any).getByName(storageId);
