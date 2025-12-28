@@ -1,6 +1,8 @@
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
+import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
+import { parseExclusionRule } from "@desktop/lib/exclusion";
 import {
   FormDisabledContext,
   useFieldContext,
@@ -10,15 +12,8 @@ import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
 import { LabelContainer } from "@ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/select";
-import { FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
-import { useContext } from "react";
+import { EditIcon, FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { useContext, useMemo } from "react";
 
 export function FilesSettings() {
   const { t } = useAppTranslation("policy.files");
@@ -104,6 +99,7 @@ type DenylistEditorProps = {
 
 function DenylistEditor({ label, description, form }: DenylistEditorProps) {
   const { t } = useAppTranslation("policy.files");
+  const { openEditExclusionDialog } = useEditExclusionDialog();
 
   const field = useFieldContext<
     | {
@@ -122,54 +118,39 @@ function DenylistEditor({ label, description, form }: DenylistEditorProps) {
           {value.map((_, index) => (
             <form.Field key={index} name={`denylist[${index}].expression`}>
               {(subField) => (
-                <div className="flex w-full items-start justify-between gap-2">
-                  <Select
-                    value={
-                      (subField.state.value as string).startsWith("*.")
-                        ? "EXTENSION"
-                        : (subField.state.value as string).endsWith("/")
-                          ? "DIRECTORY"
-                          : "FILE"
-                    }
-                    onValueChange={(to) => {
-                      subField.handleChange(
-                        t(`denylist.type.${to.toLowerCase()}.example`),
-                      );
-                    }}
-                    disabled={disabledContext}
-                  >
-                    <SelectTrigger className="w-fit gap-1">
-                      <SelectValue placeholder="" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="EXTENSION">
-                        {t("denylist.type.extension.label")}
-                      </SelectItem>
-                      <SelectItem value="DIRECTORY">
-                        {t("denylist.type.directory.label")}
-                      </SelectItem>
-                      <SelectItem value="FILE">
-                        {t("denylist.type.file.label")}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    value={subField.state.value as string}
-                    onChange={(e) => subField.handleChange(e.target.value)}
-                    disabled={disabledContext}
-                  />
-                  <Button
-                    variant="outline"
-                    type="button"
-                    size="icon"
-                    className="shrink-0"
-                    disabled={disabledContext}
-                    onClick={() => {
-                      field.removeValue(index);
-                    }}
-                  >
-                    <TrashIcon />
-                  </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <ExclusionPreview rule={subField.state.value as string} />
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      type="button"
+                      size="icon-sm"
+                      className="shrink-0"
+                      disabled={disabledContext}
+                      onClick={() => {
+                        openEditExclusionDialog({
+                          initialValue: subField.state.value as string,
+                          onSave: (rule) => {
+                            subField.handleChange(rule);
+                          },
+                        });
+                      }}
+                    >
+                      <EditIcon />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      type="button"
+                      size="icon-sm"
+                      className="shrink-0"
+                      disabled={disabledContext}
+                      onClick={() => {
+                        field.removeValue(index);
+                      }}
+                    >
+                      <TrashIcon />
+                    </Button>
+                  </div>
                 </div>
               )}
             </form.Field>
@@ -181,8 +162,13 @@ function DenylistEditor({ label, description, form }: DenylistEditorProps) {
         type="button"
         disabled={disabledContext}
         onClick={() => {
-          field.pushValue({
-            expression: t("denylist.type.file.example"),
+          openEditExclusionDialog({
+            initialValue: "",
+            onSave: (rule) => {
+              field.pushValue({
+                expression: rule,
+              });
+            },
           });
         }}
       >
@@ -190,6 +176,34 @@ function DenylistEditor({ label, description, form }: DenylistEditorProps) {
         {t("denylist.add")}
       </Button>
     </LabelContainer>
+  );
+}
+
+type ExclusionPreviewProps = {
+  rule: string;
+};
+
+function ExclusionPreview({ rule }: ExclusionPreviewProps) {
+  const { t } = useAppTranslation("policy.files.denylist.preview");
+  const parsed = useMemo(() => parseExclusionRule(rule), [rule]);
+
+  return (
+    <div className="flex flex-col">
+      {parsed.type === "EXTENSION" ? (
+        <>
+          <p className="text-muted-foreground text-xs">{t("extension")}</p>
+          <p className="font-medium">{parsed.extension}</p>
+        </>
+      ) : (
+        <>
+          <p className="text-muted-foreground text-xs">
+            {parsed.foldersOnly ? t("name.foldersOnly") : t("name.both")}{" "}
+            {t("matchType." + parsed.matchType)}
+          </p>
+          <p className="font-medium">{parsed.pattern}</p>
+        </>
+      )}
+    </div>
   );
 }
 

@@ -73,21 +73,46 @@
     "denylist": {
       "label": "Excluded files and directories",
       "description": "Files, directories and extensions to exclude from backups.",
-      "type": {
-        "file": {
-          "label": "File",
-          "example": "file-name.ext"
+      "add": "Add exclusion",
+      "example": "ignored-file.txt",
+      "dialog": {
+        "title": "Edit exclusion rule",
+        "description": "Configure the exclusion rule pattern.",
+        "type": {
+          "label": "Exclude",
+          "name": "Files and folders",
+          "extension": "File extension"
         },
-        "directory": {
-          "label": "Directory",
-          "example": "directory-name/"
+        "matchType": {
+          "exact": "is exactly",
+          "startsWith": "starts with",
+          "endsWith": "ends with",
+          "contains": "contains"
+        },
+        "pattern": {
+          "label": "where name",
+          "placeholder": "Name match pattern"
         },
         "extension": {
-          "label": "Extension",
-          "example": "*.ext"
-        }
+          "label": "where file extension is",
+          "placeholder": "Enter file extension (e.g., pdf, jpg or docx)"
+        },
+        "foldersOnly": "Only exclude folders",
+        "save": "Save"
       },
-      "add": "Add exclusion"
+      "preview": {
+        "extension": "File extension",
+        "name": {
+          "both": "Name",
+          "foldersOnly": "Folder name"
+        },
+        "matchType": {
+          "EXACT": "is exactly",
+          "STARTS_WITH": "starts with",
+          "ENDS_WITH": "ends with",
+          "CONTAINS": "contains"
+        }
+      }
     },
     "denyfiles": {
       "label": "Exclusion rule files",

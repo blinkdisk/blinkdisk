@@ -186,3 +186,18 @@ export const ZPolicy = z.object({
 });
 
 export type ZPolicyType = z.infer<typeof ZPolicy>;
+
+export const ZExclusionForm = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("NAME"),
+    matchType: z.enum(["EXACT", "STARTS_WITH", "ENDS_WITH", "CONTAINS"]),
+    pattern: z.string().min(1),
+    foldersOnly: z.boolean(),
+  }),
+  z.object({
+    type: z.literal("EXTENSION"),
+    extension: z.string().min(1),
+  }),
+]);
+
+export type ZExclusionFormType = z.infer<typeof ZExclusionForm>;
