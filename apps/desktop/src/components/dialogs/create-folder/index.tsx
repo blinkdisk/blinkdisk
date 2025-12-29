@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@ui/dialog";
+import { cn } from "@utils/class";
 import { ArrowLeftIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
@@ -48,7 +49,12 @@ export function CreateFolderDialog() {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
-        <DialogContent className="max-w-135 block max-h-[80vh] overflow-y-auto">
+        <DialogContent
+          className={cn(
+            "block max-h-[80vh] overflow-y-auto",
+            step === "GENERAL" ? "max-w-115" : "max-w-140",
+          )}
+        >
           <div className="flex items-center gap-3">
             {step !== "GENERAL" ? (
               <Button
