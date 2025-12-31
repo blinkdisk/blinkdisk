@@ -1,4 +1,4 @@
-import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
+import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
@@ -10,7 +10,7 @@ export function SidebarStorageAlert() {
   const { t } = useAppTranslation("sidebar.storageAlert");
 
   const { openUpgradeDialog } = useUpgradeDialog();
-  const { data: space } = useVaultSpace();
+  const { data: space } = useSpace();
 
   const percentage = useMemo(() => {
     if (!space) return 0;

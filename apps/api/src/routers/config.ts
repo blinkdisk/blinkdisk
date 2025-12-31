@@ -9,14 +9,23 @@ export const configRouter = router({
   list: authedProcedure.input(ZListConfigs).query(async ({ input, ctx }) => {
     let configs = await ctx.db
       .selectFrom("Config")
-      .select(["id", "level", "data", "storageId", "accountId", "profileId"])
-      .where("accountId", "=", ctx.account?.id!)
+      .innerJoin("Storage", "Storage.id", "Config.storageId")
+      .select([
+        "Config.id",
+        "Config.level",
+        "Config.data",
+        "Config.storageId",
+        "Config.accountId",
+        "Config.profileId",
+      ])
+      .where("Storage.status", "=", "ACTIVE")
+      .where("Config.accountId", "=", ctx.account?.id!)
       .where(({ or, and, eb }) =>
         or([
-          eb("level", "=", "STORAGE"),
+          eb("Config.level", "=", "STORAGE"),
           and([
-            eb("level", "=", "PROFILE"),
-            eb("profileId", "=", input.profileId),
+            eb("Config.level", "=", "PROFILE"),
+            eb("Config.profileId", "=", input.profileId),
           ]),
         ]),
       )

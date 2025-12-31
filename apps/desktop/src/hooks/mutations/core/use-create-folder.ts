@@ -1,5 +1,5 @@
+import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
 import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -30,7 +30,7 @@ export function useCreateFolder({
   const { queryKeys } = useQueryKey();
 
   const { data: vault } = useVault();
-  const { data: space } = useVaultSpace();
+  const { data: space } = useSpace();
 
   return useMutation({
     mutationKey: ["folder", "create"],

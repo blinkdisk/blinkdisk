@@ -412,5 +412,19 @@
   "readOnly": {
     "title": "Read-only vault",
     "description": "You are viewing a vault from a different device or profile. You can't make changes to it."
+  },
+  "deleteDialog": {
+    "title": "Delete vault",
+    "description": "Are you sure you want to delete this vault? This action cannot be undone.",
+    "storageAlert": {
+      "title": "Backup files won't be deleted",
+      "description": "Your vault will be removed from BlinkDisk, but your backup files will be kept in your custom storage."
+    },
+    "linkedAlert": {
+      "title": "Linked vaults won't be affected",
+      "description": "All vaults linked to the same storage as this vault won't be deleted and will keep working."
+    },
+    "cancel": "Cancel",
+    "continue": "Delete vault"
   }
 }

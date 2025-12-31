@@ -2,7 +2,7 @@ import { CustomError } from "@api/lib/error";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { ZStorageOptionsType } from "@schemas/shared/storage";
-import { ZHardDeleteStorage } from "@schemas/storage";
+import { ZHardDeleteStorage, ZSoftDeleteStorage } from "@schemas/storage";
 import { generateServiceToken } from "@utils/token";
 
 export const storageRouter = router({
@@ -56,26 +56,62 @@ export const storageRouter = router({
     .mutation(async ({ input, ctx }) => {
       const storage = await ctx.db
         .selectFrom("Storage")
-        .select(["id"])
+        .select(["id", "provider"])
         .where("accountId", "=", ctx.account?.id!)
         .where("id", "=", input.storageId)
         .executeTakeFirst();
 
       if (!storage) throw new CustomError("STORAGE_NOT_FOUND");
 
-      await ctx.db
-        .deleteFrom("Vault")
-        .where("storageId", "=", input.storageId)
-        .execute();
+      await Promise.all([
+        ctx.db
+          .deleteFrom("Vault")
+          .where("storageId", "=", input.storageId)
+          .execute(),
+        ctx.db
+          .deleteFrom("Config")
+          .where("storageId", "=", input.storageId)
+          .execute(),
+        ctx.db
+          .deleteFrom("Storage")
+          .where("id", "=", input.storageId)
+          .execute(),
+      ]);
 
-      await ctx.db
-        .deleteFrom("Config")
-        .where("storageId", "=", input.storageId)
-        .execute();
+      if (storage.provider === "BLINKDISK_CLOUD") {
+        const stub = ctx.env.STORAGE.getByName(input.storageId);
+        await (stub as any).delete(input.storageId, true);
+      }
+    }),
+  deleteSoft: authedProcedure
+    .input(ZSoftDeleteStorage)
+    .mutation(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .innerJoin("Storage", "Storage.id", "Vault.storageId")
+        .select(["Vault.storageId", "Storage.provider"])
+        .where("Vault.accountId", "=", ctx.account?.id!)
+        .where("Vault.id", "=", input.vaultId)
+        .executeTakeFirst();
 
-      await ctx.db
-        .deleteFrom("Storage")
-        .where("id", "=", input.storageId)
-        .execute();
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      await Promise.all([
+        ctx.db
+          .updateTable("Vault")
+          .set({ status: "DELETED" })
+          .where("storageId", "=", vault.storageId)
+          .execute(),
+        ctx.db
+          .updateTable("Storage")
+          .set({ status: "DELETED" })
+          .where("id", "=", vault.storageId)
+          .execute(),
+      ]);
+
+      if (vault.provider === "BLINKDISK_CLOUD") {
+        const stub = ctx.env.STORAGE.getByName(vault.storageId);
+        await (stub as any).delete(vault.storageId, true);
+      }
     }),
 });

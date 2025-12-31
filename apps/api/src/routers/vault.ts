@@ -12,7 +12,6 @@ import {
   ZListUnlinkedVaults,
   ZListVaults,
   ZUpdateVault,
-  ZVaultSpace,
 } from "@schemas/vault";
 import { generateId } from "@utils/id";
 import { logsnag } from "@utils/logsnag";
@@ -368,14 +367,11 @@ export const vaultRouter = router({
 
       return vault;
     }),
-  space: authedProcedure.input(ZVaultSpace).query(async ({ input, ctx }) => {
+  space: authedProcedure.query(async ({ ctx }) => {
     const space = await ctx.db
-      .selectFrom("Vault")
-      .innerJoin("Storage", "Storage.id", "Vault.storageId")
-      .innerJoin("Space", "Space.id", "Storage.spaceId")
-      .select(["Space.id", "Space.capacity"])
-      .where("Vault.accountId", "=", ctx.account?.id!)
-      .where("Vault.id", "=", input.vaultId)
+      .selectFrom("Space")
+      .select(["id", "capacity"])
+      .where("Space.accountId", "=", ctx.account?.id!)
       .executeTakeFirst();
 
     if (!space) throw new CustomError("SPACE_NOT_FOUND");

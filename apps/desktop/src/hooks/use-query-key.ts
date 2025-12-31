@@ -11,11 +11,11 @@ export function useQueryKey() {
         list: () => [...keys.account.all, "list"],
         detail: () => [...keys.account.all],
       },
+      space: [accountId, "space"],
       vault: {
         all: [accountId, "vault"],
         list: () => [...keys.vault.all, "list"],
         detail: (vaultId?: string) => [...keys.vault.all, vaultId],
-        space: (vaultId?: string) => [...keys.vault.all, vaultId, "space"],
         status: (vaultId?: string) => [...keys.vault.all, vaultId, "status"],
         config: (vaultId?: string, password?: string | null) => [
           ...keys.vault.all,

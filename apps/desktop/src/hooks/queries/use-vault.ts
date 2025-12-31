@@ -5,17 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 
 export type VaultItem = Awaited<ReturnType<typeof trpc.vault.get.query>>;
 
-export function useVault() {
+export function useVault(vaultId?: string) {
   const { queryKeys, accountId } = useQueryKey();
-  const { vaultId } = useVaultId();
+  const { vaultId: defaultVaultId } = useVaultId();
 
   return useQuery({
     queryKey: queryKeys.vault.detail(vaultId),
     queryFn: () => {
       return trpc.vault.get.query({
-        vaultId: vaultId!,
+        vaultId: vaultId || defaultVaultId || "",
       });
     },
-    enabled: !!accountId && !!vaultId,
+    enabled: !!accountId && !!(vaultId || defaultVaultId),
   });
 }

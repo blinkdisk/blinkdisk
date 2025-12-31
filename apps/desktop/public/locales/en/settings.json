@@ -32,7 +32,12 @@
         "label": "Vault name",
         "placeholder": "Enter vault name"
       },
-      "save": "Save"
+      "save": "Save",
+      "delete": {
+        "title": "Delete this vault",
+        "description": "Remove this vault and its data.",
+        "button": "Delete vault"
+      }
     },
     "config": {
       "title": "Storage config",

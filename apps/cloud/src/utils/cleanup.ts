@@ -1,9 +1,3 @@
-import {
-  DeleteObjectsCommand,
-  ListObjectsCommand,
-  ListObjectsCommandOutput,
-  S3Client,
-} from "@aws-sdk/client-s3";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
 import { Database } from "@db/index";
 import { sendEmail } from "@utils/email";
@@ -107,46 +101,8 @@ export async function cleanup(
     .where("status", "=", "ACTIVE")
     .execute();
 
-  const s3 = new S3Client({
-    region: env.CLOUD_S3_REGION,
-    endpoint: env.CLOUD_S3_ENDPOINT,
-    credentials: {
-      accessKeyId: env.CLOUD_S3_KEY_ID,
-      secretAccessKey: env.CLOUD_S3_KEY_SECRET,
-    },
-  });
-
   for (const storage of storages) {
     const stub = env.STORAGE.getByName(storage.id);
-    await stub.setDeleted();
-
-    let marker: string | null = null;
-    while (true) {
-      const res = (await s3.send(
-        new ListObjectsCommand({
-          Bucket: env.CLOUD_S3_BUCKET,
-          Prefix: `${storage.id}/`,
-          MaxKeys: 1000,
-          ...(marker && { Marker: marker }),
-        }),
-      )) as ListObjectsCommandOutput;
-
-      if (res.Contents?.length) {
-        await s3.send(
-          new DeleteObjectsCommand({
-            Bucket: env.CLOUD_S3_BUCKET,
-            Delete: {
-              Objects: res.Contents.map((c) => ({
-                Key: c.Key,
-              })),
-            },
-          }),
-        );
-      }
-
-      if (res.IsTruncated && res.Contents?.length)
-        marker = res.Contents.at(-1)?.Key || null;
-      else break;
-    }
+    await stub.delete(storage.id, false);
   }
 }

@@ -5,3 +5,9 @@ export const ZHardDeleteStorage = z.object({
 });
 
 export type ZHardDeleteStorageType = z.infer<typeof ZHardDeleteStorage>;
+
+export const ZSoftDeleteStorage = z.object({
+  vaultId: z.string(),
+});
+
+export type ZSoftDeleteStorageType = z.infer<typeof ZSoftDeleteStorage>;
