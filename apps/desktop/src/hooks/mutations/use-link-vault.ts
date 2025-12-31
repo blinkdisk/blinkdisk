@@ -58,7 +58,7 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
       });
 
       // First just invalidate the list,
-      // we will invalide the rest later.
+      // we will invalidate the rest later.
       // Otherwise this breaks the add vault popup.
       await queryClient.invalidateQueries({
         queryKey: queryKeys.vault.list(),
