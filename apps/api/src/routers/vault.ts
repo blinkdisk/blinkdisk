@@ -218,6 +218,7 @@ export const vaultRouter = router({
         .select(["id"])
         .where("storageId", "=", vault.storageId)
         .where("id", "!=", vault.id)
+        .where("status", "=", "ACTIVE")
         .execute();
 
       return vaults;
