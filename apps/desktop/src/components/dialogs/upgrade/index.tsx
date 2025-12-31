@@ -6,8 +6,8 @@ import {
 } from "@desktop/components/dialogs/plan-change";
 import { useCheckout } from "@desktop/hooks/mutations/use-checkout";
 import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-portal";
+import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
-import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { usePlanPrices } from "@hooks/use-plan-prices";
@@ -165,7 +165,7 @@ function Plan({
   const [contact, setContact] = useState(false);
 
   const { data: subscription } = useSubscription();
-  const { data: space } = useVaultSpace();
+  const { data: space } = useSpace();
   const { mutate: manage, isPending: isManagePending } = useOpenBillingPortal();
 
   const { mutate: checkout, isPending: isCheckoutPending } = useCheckout({

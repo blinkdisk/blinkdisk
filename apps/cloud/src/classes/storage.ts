@@ -1,4 +1,9 @@
-import { S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectsCommand,
+  ListObjectsCommand,
+  ListObjectsCommandOutput,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { deleteBlob } from "@cloud/events/delete";
 import { getBlob } from "@cloud/events/get";
 import { listBlobs } from "@cloud/events/list";
@@ -16,8 +21,6 @@ export class Storage extends DurableObject<Cloudflare.Env> {
   bucket: string;
   rateLimit: RateLimit;
   sessions: Map<WebSocket, { [key: string]: string }>;
-
-  // @ts-expect-error initialized in the constructor
   s3: S3Client;
 
   constructor(ctx: DurableObjectState, env: Cloudflare.Env) {
@@ -35,9 +38,20 @@ export class Storage extends DurableObject<Cloudflare.Env> {
       }
     });
 
+    // Initialize once with the default endpoint
+    this.s3 = new S3Client({
+      region: env.CLOUD_S3_REGION,
+      endpoint: env.CLOUD_S3_ENDPOINT,
+      credentials: {
+        accessKeyId: env.CLOUD_S3_KEY_ID,
+        secretAccessKey: env.CLOUD_S3_KEY_SECRET,
+      },
+    });
+
     this.ctx.blockConcurrencyWhile(async () => {
       const endpoint = await pickS3Endpoint(env);
 
+      // Update the client with the new endpoint
       this.s3 = new S3Client({
         region: env.CLOUD_S3_REGION,
         endpoint,
@@ -155,8 +169,50 @@ export class Storage extends DurableObject<Cloudflare.Env> {
     this.sessions.delete(ws);
   }
 
-  async setDeleted() {
-    await this.ctx.storage.put("deleted", true);
+  async delete(storageId: string, updateSpace: boolean) {
+    let marker: string | null = null;
+    while (true) {
+      const res = (await this.s3.send(
+        new ListObjectsCommand({
+          Bucket: this.bucket,
+          Prefix: `${storageId}/`,
+          MaxKeys: 1000,
+          ...(marker && { Marker: marker }),
+        }),
+      )) as ListObjectsCommandOutput;
+
+      if (res.Contents?.length) {
+        await this.s3.send(
+          new DeleteObjectsCommand({
+            Bucket: this.bucket,
+            Delete: {
+              Objects: res.Contents.map((c) => ({
+                Key: c.Key,
+              })),
+            },
+          }),
+        );
+      }
+
+      if (res.IsTruncated && res.Contents?.length)
+        marker = res.Contents.at(-1)?.Key || null;
+      else break;
+    }
+
+    if (updateSpace) {
+      const spaceId = await this.ctx.storage.get<string>("spaceId");
+      const currentBytes =
+        (await this.ctx.storage.get<number>("currentBytes")) || 0;
+
+      if (spaceId && currentBytes) {
+        const stub = this.env.SPACE.getByName(spaceId);
+        await stub.substract(currentBytes);
+      }
+    }
+
+    // Delete this durable object itself
+    await this.ctx.storage.deleteAlarm();
+    await this.ctx.storage.deleteAll();
   }
 
   async alarm() {

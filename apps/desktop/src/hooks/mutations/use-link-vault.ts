@@ -1,4 +1,3 @@
-import { useDevice } from "@desktop/hooks/use-device";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import {
@@ -10,7 +9,6 @@ import { trpc } from "@desktop/lib/trpc";
 import { vaultApi } from "@desktop/lib/vault";
 import { ZLinkVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 
 export type LinkVaultResponse = Awaited<
   ReturnType<typeof trpc.vault.link.mutate>
@@ -18,10 +16,7 @@ export type LinkVaultResponse = Awaited<
 
 export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
   const { queryKeys } = useQueryKey();
-  const { deviceId } = useDevice();
 
   return useMutation({
     mutationKey: ["vault", "link"],
@@ -62,8 +57,11 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
         queryKey: queryKeys.config.all,
       });
 
+      // First just invalidate the list,
+      // we will invalidate the rest later.
+      // Otherwise this breaks the add vault popup.
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.vault.all,
+        queryKey: queryKeys.vault.list(),
       });
 
       for (let i = 0; i < 30; i++) {
@@ -98,13 +96,8 @@ export function useLinkVault(onSuccess?: (res: LinkVaultResponse) => void) {
         break;
       }
 
-      await navigate({
-        to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",
-        params: {
-          profileId: variables.profileId,
-          deviceId,
-          vaultId: res.vaultId,
-        },
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.vault.all,
       });
 
       onSuccess?.(res);

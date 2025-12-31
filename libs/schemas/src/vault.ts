@@ -28,6 +28,10 @@ export const ZListUnlinkedVaults = z.object({
   profileId: z.string(),
 });
 
+export const ZListLinkedVaults = z.object({
+  vaultId: z.string(),
+});
+
 export const ZLinkVault = z.object({
   profileId: z.string(),
   storageId: z.string().min(1),
@@ -48,12 +52,6 @@ export const ZCheckName = z.object({
 });
 
 export type ZCheckNameType = z.infer<typeof ZCheckName>;
-
-export const ZDeleteVault = z.object({
-  vaultId: z.string(),
-});
-
-export type ZDeleteVaultType = z.infer<typeof ZDeleteVault>;
 
 export const ZListVaults = z.object({
   profileId: z.string().optional(),
@@ -91,12 +89,6 @@ export const ZUpdateVault = ZUpdateVaultForm.extend({
 
 export type ZUpdateVaultType = z.infer<typeof ZUpdateVaultForm>;
 
-export const ZVaultSpace = z.object({
-  vaultId: z.string(),
-});
-
-export type ZVaultSpaceType = z.infer<typeof ZVaultSpace>;
-
 export const ZBandwith = z.object({
   value: z.number().optional(),
   unit: z.enum(["bps", "Kbps", "Mbps", "Gbps"]),
@@ -116,3 +108,9 @@ export const ZVaultThrottle = z.object({
 });
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
+
+export const ZUnlinkVault = z.object({
+  vaultId: z.string(),
+});
+
+export type ZSoftUnlinkVaultType = z.infer<typeof ZUnlinkVault>;

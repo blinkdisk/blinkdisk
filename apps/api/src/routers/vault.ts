@@ -7,13 +7,13 @@ import { defaultStorageOptions, LATEST_STORAGE_VERSION } from "@config/storage";
 import type { EncryptedConfig } from "@electron/encryption";
 import {
   ZCreateVault,
-  ZDeleteVault,
   ZGetVault,
   ZLinkVault,
+  ZListLinkedVaults,
   ZListUnlinkedVaults,
   ZListVaults,
+  ZUnlinkVault,
   ZUpdateVault,
-  ZVaultSpace,
 } from "@schemas/vault";
 import { generateId } from "@utils/id";
 import { logsnag } from "@utils/logsnag";
@@ -189,6 +189,7 @@ export const vaultRouter = router({
             .innerJoin("Vault", (join) =>
               join
                 .onRef("Vault.storageId", "=", "Storage.id")
+                .on("Vault.status", "=", "ACTIVE")
                 .on("Vault.profileId", "=", input.profileId),
             )
             .select("Storage.id")
@@ -199,6 +200,28 @@ export const vaultRouter = router({
       return vaults as (Omit<(typeof vaults)[number], "config"> & {
         config: EncryptedConfig | null;
       })[];
+    }),
+  listLinked: authedProcedure
+    .input(ZListLinkedVaults)
+    .query(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .select(["id", "storageId"])
+        .where("accountId", "=", ctx.account?.id!)
+        .where("id", "=", input.vaultId)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      const vaults = await ctx.db
+        .selectFrom("Vault")
+        .select(["id"])
+        .where("storageId", "=", vault.storageId)
+        .where("id", "!=", vault.id)
+        .where("status", "=", "ACTIVE")
+        .execute();
+
+      return vaults;
     }),
   link: authedProcedure.input(ZLinkVault).mutation(async ({ input, ctx }) => {
     const storage = await ctx.db
@@ -226,6 +249,7 @@ export const vaultRouter = router({
       .select(["id"])
       .where("profileId", "=", input.profileId)
       .where("storageId", "=", input.storageId)
+      .where("status", "=", "ACTIVE")
       .executeTakeFirst();
 
     if (vault) throw new CustomError("VAULT_ALREADY_LINKED");
@@ -288,41 +312,6 @@ export const vaultRouter = router({
       provider: storage.provider,
     };
   }),
-  delete: authedProcedure
-    .input(ZDeleteVault)
-    .mutation(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["id", "storageId"])
-        .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.vaultId)
-        .executeTakeFirst();
-
-      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
-
-      await ctx.db
-        .deleteFrom("Vault")
-        .where("id", "=", input.vaultId)
-        .execute();
-
-      const vaults = await ctx.db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("storageId", "=", vault.storageId)
-        .execute();
-
-      if (!vaults.length) {
-        await ctx.db
-          .deleteFrom("Config")
-          .where("storageId", "=", vault.storageId)
-          .execute();
-
-        await ctx.db
-          .deleteFrom("Storage")
-          .where("id", "=", vault.storageId)
-          .execute();
-      }
-    }),
   list: authedProcedure.input(ZListVaults).query(async ({ input, ctx }) => {
     let query = ctx.db
       .selectFrom("Vault")
@@ -351,10 +340,12 @@ export const vaultRouter = router({
     const vault = await ctx.db
       .selectFrom("Vault")
       .innerJoin("Storage", "Storage.id", "Vault.storageId")
+      .innerJoin("Profile", "Profile.id", "Vault.profileId")
       .select(({ selectFrom }) => [
         "Vault.id",
         "Vault.name",
         "Vault.storageId",
+        "Profile.deviceId",
         "Vault.profileId",
         "Storage.provider",
         "Storage.passwordHash",
@@ -404,14 +395,11 @@ export const vaultRouter = router({
 
       return vault;
     }),
-  space: authedProcedure.input(ZVaultSpace).query(async ({ input, ctx }) => {
+  space: authedProcedure.query(async ({ ctx }) => {
     const space = await ctx.db
-      .selectFrom("Vault")
-      .innerJoin("Storage", "Storage.id", "Vault.storageId")
-      .innerJoin("Space", "Space.id", "Storage.spaceId")
-      .select(["Space.id", "Space.capacity"])
-      .where("Vault.accountId", "=", ctx.account?.id!)
-      .where("Vault.id", "=", input.vaultId)
+      .selectFrom("Space")
+      .select(["id", "capacity"])
+      .where("Space.accountId", "=", ctx.account?.id!)
       .executeTakeFirst();
 
     if (!space) throw new CustomError("SPACE_NOT_FOUND");
@@ -424,4 +412,44 @@ export const vaultRouter = router({
       capacity: parseInt(space.capacity),
     };
   }),
+  unlink: authedProcedure
+    .input(ZUnlinkVault)
+    .mutation(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .innerJoin("Storage", "Storage.id", "Vault.storageId")
+        .select(["Vault.id", "Vault.name", "Storage.provider"])
+        .where("Vault.id", "=", input.vaultId)
+        .where("Vault.accountId", "=", ctx.account?.id!)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      await ctx.db
+        .updateTable("Vault")
+        .set({ status: "DELETED" })
+        .where("id", "=", vault.id)
+        .execute();
+
+      ctx.waitUntil(
+        (async () => {
+          await logsnag({
+            icon: "🖇️",
+            title: "Vault unlinked",
+            description: `(${vault.provider}) ${vault.name} just got unlinked by ${ctx.account?.email}.`,
+            channel: "vaults",
+          });
+
+          await posthog({
+            distinctId: ctx.account?.id!,
+            event: "vault_unlink",
+            properties: {
+              provider: vault.provider,
+              name: vault.name,
+              vaultId: vault.id,
+            },
+          });
+        })(),
+      );
+    }),
 });

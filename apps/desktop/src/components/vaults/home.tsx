@@ -4,8 +4,8 @@ import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import { useSpace } from "@desktop/hooks/queries/use-space";
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
-import { useVaultSpace } from "@desktop/hooks/queries/use-vault-space";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useTheme } from "@desktop/hooks/use-theme";
@@ -38,7 +38,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
   const { openCreateFolder } = useCreateFolderDialog();
   const { openUpgradeDialog } = useUpgradeDialog();
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
-  const { data: space } = useVaultSpace();
+  const { data: space } = useSpace();
 
   const storagePercentage = useMemo(() => {
     if (!space) return null;

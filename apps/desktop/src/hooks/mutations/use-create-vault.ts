@@ -56,8 +56,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         if (create.error) throw new Error(create.error.toString());
       } catch (e) {
         try {
-          await trpc.vault.delete.mutate({
-            vaultId: res.vault.id,
+          await trpc.storage.deleteHard.mutate({
+            storageId: res.storageId,
           });
         } catch (e) {
           console.error("Failed to delete vault", e);
