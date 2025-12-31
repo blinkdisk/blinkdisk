@@ -1,4 +1,6 @@
 import { useDeleteVault } from "@desktop/hooks/mutations/use-delete-vault";
+import { useUnlinkVault } from "@desktop/hooks/mutations/use-unlink-vault";
+import { useLinkedVaults } from "@desktop/hooks/queries/use-linked-vaults";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -14,6 +16,7 @@ import {
   DialogTitle,
 } from "@ui/dialog";
 import { InfoIcon } from "lucide-react";
+import { useCallback, useMemo } from "react";
 
 export function DeleteVaultDialog() {
   const navigate = useNavigate();
@@ -23,15 +26,32 @@ export function DeleteVaultDialog() {
   const { isOpen, setIsOpen, options } = useDeleteVaultDialog();
 
   const { data: vault } = useVault(options?.vaultId);
+  const { data: linked } = useLinkedVaults(options?.vaultId);
 
-  const { mutateAsync, isPending } = useDeleteVault({
-    onSuccess: async () => {
-      setIsOpen(false);
+  const action = useMemo(
+    () =>
+      linked === undefined || linked === null
+        ? null
+        : linked.length === 0
+          ? ("DELETE" as const)
+          : ("UNLINK" as const),
+    [linked],
+  );
 
-      await navigate({
-        to: "/app/{-$deviceId}/{-$profileId}",
-      });
-    },
+  const onSuccess = useCallback(async () => {
+    setIsOpen(false);
+
+    await navigate({
+      to: "/app/{-$deviceId}/{-$profileId}",
+    });
+  }, [navigate, setIsOpen]);
+
+  const { mutate: mutateDelete, isPending: isDeletePending } = useDeleteVault({
+    onSuccess,
+  });
+
+  const { mutate: mutateUnlink, isPending: isUnlinkPending } = useUnlinkVault({
+    onSuccess,
   });
 
   return (
@@ -42,7 +62,9 @@ export function DeleteVaultDialog() {
             <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>{t("description")}</DialogDescription>
           </DialogHeader>
-          {vault && vault.provider !== "BLINKDISK_CLOUD" ? (
+          {action === "DELETE" &&
+          vault &&
+          vault.provider !== "BLINKDISK_CLOUD" ? (
             <Alert className="mt-4 w-full">
               <InfoIcon />
               <AlertTitle>{t("storageAlert.title")}</AlertTitle>
@@ -51,8 +73,7 @@ export function DeleteVaultDialog() {
               </AlertDescription>
             </Alert>
           ) : null}
-          {/*
-            TODO: Implement deleting linked vaults
+          {action === "UNLINK" ? (
             <Alert className="mt-4 w-full">
               <InfoIcon />
               <AlertTitle>{t("linkedAlert.title")}</AlertTitle>
@@ -60,15 +81,20 @@ export function DeleteVaultDialog() {
                 {t("linkedAlert.description")}
               </AlertDescription>
             </Alert>
-          */}
+          ) : null}
           <DialogFooter className="mt-6">
             <Button onClick={() => setIsOpen(false)} variant="outline">
               {t("cancel")}
             </Button>
             <Button
-              loading={isPending}
+              loading={isDeletePending || isUnlinkPending}
+              disabled={!action}
               onClick={() =>
-                options && mutateAsync({ vaultId: options.vaultId })
+                action === "DELETE" && options
+                  ? mutateDelete({ vaultId: options.vaultId })
+                  : action === "UNLINK" && options
+                    ? mutateUnlink({ vaultId: options.vaultId })
+                    : null
               }
               variant="destructive"
             >

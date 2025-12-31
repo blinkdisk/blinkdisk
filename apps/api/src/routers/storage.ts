@@ -1,8 +1,10 @@
 import { CustomError } from "@api/lib/error";
+import { posthog } from "@api/lib/posthog";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { ZStorageOptionsType } from "@schemas/shared/storage";
 import { ZHardDeleteStorage, ZSoftDeleteStorage } from "@schemas/storage";
+import { logsnag } from "@utils/logsnag";
 import { generateServiceToken } from "@utils/token";
 
 export const storageRouter = router({
@@ -89,7 +91,12 @@ export const storageRouter = router({
       const vault = await ctx.db
         .selectFrom("Vault")
         .innerJoin("Storage", "Storage.id", "Vault.storageId")
-        .select(["Vault.storageId", "Storage.provider"])
+        .select([
+          "Vault.id",
+          "Vault.storageId",
+          "Storage.provider",
+          "Vault.name",
+        ])
         .where("Vault.accountId", "=", ctx.account?.id!)
         .where("Vault.id", "=", input.vaultId)
         .executeTakeFirst();
@@ -108,6 +115,27 @@ export const storageRouter = router({
           .where("id", "=", vault.storageId)
           .execute(),
       ]);
+
+      ctx.waitUntil(
+        (async () => {
+          await logsnag({
+            icon: "🗑",
+            title: "Vault deleted",
+            description: `(${vault.provider}) ${vault.name} just got deleted by ${ctx.account?.email}.`,
+            channel: "vaults",
+          });
+
+          await posthog({
+            distinctId: ctx.account?.id!,
+            event: "vault_delete",
+            properties: {
+              provider: vault.provider,
+              name: vault.name,
+              vaultId: vault.id,
+            },
+          });
+        })(),
+      );
 
       if (vault.provider === "BLINKDISK_CLOUD") {
         const stub = ctx.env.STORAGE.getByName(vault.storageId);

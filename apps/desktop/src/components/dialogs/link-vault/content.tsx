@@ -110,9 +110,7 @@ export function LinkVaultDialogContent({
             config={config}
             vault={vault}
             password={password}
-            onSubmit={() => {
-              onSubmit?.();
-            }}
+            onSubmit={onSubmit}
           />
         ) : null}
       </div>

@@ -9,8 +9,10 @@ import {
   ZCreateVault,
   ZGetVault,
   ZLinkVault,
+  ZListLinkedVaults,
   ZListUnlinkedVaults,
   ZListVaults,
+  ZUnlinkVault,
   ZUpdateVault,
 } from "@schemas/vault";
 import { generateId } from "@utils/id";
@@ -187,6 +189,7 @@ export const vaultRouter = router({
             .innerJoin("Vault", (join) =>
               join
                 .onRef("Vault.storageId", "=", "Storage.id")
+                .on("Vault.status", "=", "ACTIVE")
                 .on("Vault.profileId", "=", input.profileId),
             )
             .select("Storage.id")
@@ -197,6 +200,27 @@ export const vaultRouter = router({
       return vaults as (Omit<(typeof vaults)[number], "config"> & {
         config: EncryptedConfig | null;
       })[];
+    }),
+  listLinked: authedProcedure
+    .input(ZListLinkedVaults)
+    .query(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .select(["id", "storageId"])
+        .where("accountId", "=", ctx.account?.id!)
+        .where("id", "=", input.vaultId)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      const vaults = await ctx.db
+        .selectFrom("Vault")
+        .select(["id"])
+        .where("storageId", "=", vault.storageId)
+        .where("id", "!=", vault.id)
+        .execute();
+
+      return vaults;
     }),
   link: authedProcedure.input(ZLinkVault).mutation(async ({ input, ctx }) => {
     const storage = await ctx.db
@@ -224,6 +248,7 @@ export const vaultRouter = router({
       .select(["id"])
       .where("profileId", "=", input.profileId)
       .where("storageId", "=", input.storageId)
+      .where("status", "=", "ACTIVE")
       .executeTakeFirst();
 
     if (vault) throw new CustomError("VAULT_ALREADY_LINKED");
@@ -314,10 +339,12 @@ export const vaultRouter = router({
     const vault = await ctx.db
       .selectFrom("Vault")
       .innerJoin("Storage", "Storage.id", "Vault.storageId")
+      .innerJoin("Profile", "Profile.id", "Vault.profileId")
       .select(({ selectFrom }) => [
         "Vault.id",
         "Vault.name",
         "Vault.storageId",
+        "Profile.deviceId",
         "Vault.profileId",
         "Storage.provider",
         "Storage.passwordHash",
@@ -384,4 +411,44 @@ export const vaultRouter = router({
       capacity: parseInt(space.capacity),
     };
   }),
+  unlink: authedProcedure
+    .input(ZUnlinkVault)
+    .mutation(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .innerJoin("Storage", "Storage.id", "Vault.storageId")
+        .select(["Vault.id", "Vault.name", "Storage.provider"])
+        .where("Vault.id", "=", input.vaultId)
+        .where("Vault.accountId", "=", ctx.account?.id!)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      await ctx.db
+        .updateTable("Vault")
+        .set({ status: "DELETED" })
+        .where("id", "=", vault.id)
+        .execute();
+
+      ctx.waitUntil(
+        (async () => {
+          await logsnag({
+            icon: "🖇️",
+            title: "Vault unlinked",
+            description: `(${vault.provider}) ${vault.name} just got unlinked by ${ctx.account?.email}.`,
+            channel: "vaults",
+          });
+
+          await posthog({
+            distinctId: ctx.account?.id!,
+            event: "vault_unlink",
+            properties: {
+              provider: vault.provider,
+              name: vault.name,
+              vaultId: vault.id,
+            },
+          });
+        })(),
+      );
+    }),
 });

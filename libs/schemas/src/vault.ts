@@ -28,6 +28,10 @@ export const ZListUnlinkedVaults = z.object({
   profileId: z.string(),
 });
 
+export const ZListLinkedVaults = z.object({
+  vaultId: z.string(),
+});
+
 export const ZLinkVault = z.object({
   profileId: z.string(),
   storageId: z.string().min(1),
@@ -104,3 +108,9 @@ export const ZVaultThrottle = z.object({
 });
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
+
+export const ZUnlinkVault = z.object({
+  vaultId: z.string(),
+});
+
+export type ZSoftUnlinkVaultType = z.infer<typeof ZUnlinkVault>;

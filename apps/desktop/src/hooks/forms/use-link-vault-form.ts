@@ -9,6 +9,7 @@ import { useAppForm } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
 import { ZLinkVaultDetails } from "@schemas/vault";
+import { useNavigate } from "@tanstack/react-router";
 
 export function useLinkVaultForm({
   vault,
@@ -22,12 +23,23 @@ export function useLinkVaultForm({
   config?: ProviderConfig;
 }) {
   const { t } = useAppTranslation("vault.providers");
+  const navigate = useNavigate();
 
   const { profileId } = useProfile();
   const { deviceId } = useDevice();
 
-  const { mutateAsync } = useLinkVault((res) => {
+  const { mutateAsync } = useLinkVault(async (res) => {
     form.reset();
+
+    await navigate({
+      to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",
+      params: {
+        profileId,
+        deviceId,
+        vaultId: res.vaultId,
+      },
+    });
+
     onSuccess?.(res);
   });
 

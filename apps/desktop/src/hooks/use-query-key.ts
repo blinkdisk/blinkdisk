@@ -38,6 +38,7 @@ export function useQueryKey() {
           "unlinked",
           profileId,
         ],
+        linked: (vaultId?: string) => [...keys.vault.all, vaultId, "linked"],
         throttle: (vaultId?: string) => [
           ...keys.vault.all,
           vaultId,
