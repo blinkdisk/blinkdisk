@@ -7,7 +7,6 @@ import { defaultStorageOptions, LATEST_STORAGE_VERSION } from "@config/storage";
 import type { EncryptedConfig } from "@electron/encryption";
 import {
   ZCreateVault,
-  ZDeleteVault,
   ZGetVault,
   ZLinkVault,
   ZListUnlinkedVaults,
@@ -288,41 +287,6 @@ export const vaultRouter = router({
       provider: storage.provider,
     };
   }),
-  delete: authedProcedure
-    .input(ZDeleteVault)
-    .mutation(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["id", "storageId"])
-        .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.vaultId)
-        .executeTakeFirst();
-
-      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
-
-      await ctx.db
-        .deleteFrom("Vault")
-        .where("id", "=", input.vaultId)
-        .execute();
-
-      const vaults = await ctx.db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("storageId", "=", vault.storageId)
-        .execute();
-
-      if (!vaults.length) {
-        await ctx.db
-          .deleteFrom("Config")
-          .where("storageId", "=", vault.storageId)
-          .execute();
-
-        await ctx.db
-          .deleteFrom("Storage")
-          .where("id", "=", vault.storageId)
-          .execute();
-      }
-    }),
   list: authedProcedure.input(ZListVaults).query(async ({ input, ctx }) => {
     let query = ctx.db
       .selectFrom("Vault")

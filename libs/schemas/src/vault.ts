@@ -49,12 +49,6 @@ export const ZCheckName = z.object({
 
 export type ZCheckNameType = z.infer<typeof ZCheckName>;
 
-export const ZDeleteVault = z.object({
-  vaultId: z.string(),
-});
-
-export type ZDeleteVaultType = z.infer<typeof ZDeleteVault>;
-
 export const ZListVaults = z.object({
   profileId: z.string().optional(),
 });

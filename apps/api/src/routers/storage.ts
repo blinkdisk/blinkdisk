@@ -1,6 +1,8 @@
+import { CustomError } from "@api/lib/error";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { ZStorageOptionsType } from "@schemas/shared/storage";
+import { ZHardDeleteStorage } from "@schemas/storage";
 import { generateServiceToken } from "@utils/token";
 
 export const storageRouter = router({
@@ -49,4 +51,31 @@ export const storageRouter = router({
       options: ZStorageOptionsType;
     })[];
   }),
+  deleteHard: authedProcedure
+    .input(ZHardDeleteStorage)
+    .mutation(async ({ input, ctx }) => {
+      const storage = await ctx.db
+        .selectFrom("Storage")
+        .select(["id"])
+        .where("accountId", "=", ctx.account?.id!)
+        .where("id", "=", input.storageId)
+        .executeTakeFirst();
+
+      if (!storage) throw new CustomError("STORAGE_NOT_FOUND");
+
+      await ctx.db
+        .deleteFrom("Vault")
+        .where("storageId", "=", input.storageId)
+        .execute();
+
+      await ctx.db
+        .deleteFrom("Config")
+        .where("storageId", "=", input.storageId)
+        .execute();
+
+      await ctx.db
+        .deleteFrom("Storage")
+        .where("id", "=", input.storageId)
+        .execute();
+    }),
 });
