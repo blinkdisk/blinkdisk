@@ -4,7 +4,12 @@ import { useAppTranslation } from "@hooks/use-app-translation";
 import { Input } from "@ui/input";
 import { Loader } from "@ui/loader";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
-import { Locale, EmojiPicker as Picker } from "frimousse";
+import {
+  EmojiPickerListCategoryHeaderProps,
+  EmojiPickerListEmojiProps,
+  Locale,
+  EmojiPicker as Picker,
+} from "frimousse";
 import { useState } from "react";
 import Twemoji from "react-twemoji";
 
@@ -84,7 +89,10 @@ export function EmojiPicker({
               <Picker.List
                 className="select-none pb-1.5"
                 components={{
-                  CategoryHeader: ({ category, ...props }) => (
+                  CategoryHeader: ({
+                    category,
+                    ...props
+                  }: EmojiPickerListCategoryHeaderProps) => (
                     <div
                       className="bg-white px-3 pb-1.5 pt-3 text-xs font-medium text-neutral-600 dark:bg-neutral-900 dark:text-neutral-400"
                       {...props}
@@ -97,7 +105,7 @@ export function EmojiPicker({
                       {children}
                     </div>
                   ),
-                  Emoji: ({ emoji, ...props }) => (
+                  Emoji: (props: EmojiPickerListEmojiProps) => (
                     <button
                       className="flex items-start justify-center rounded-md p-1.5 text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
                       {...props}
@@ -107,7 +115,7 @@ export function EmojiPicker({
                           className: "size-5",
                         }}
                       >
-                        {emoji.emoji}
+                        {props.emoji.emoji}
                       </Twemoji>
                     </button>
                   ),

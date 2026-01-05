@@ -28,12 +28,8 @@ export function Cron(props: CronProps) {
   });
 
   const {
-    clearButton = true,
-    clearButtonProps = {},
-    clearButtonAction = "fill-with-every",
     value = "",
     setValue,
-    displayError = true,
     onError,
     className,
     defaultPeriod = "day",

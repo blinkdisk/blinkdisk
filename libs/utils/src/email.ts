@@ -78,6 +78,7 @@ export async function getEmailOptions<Key extends keyof typeof templates>(
   const html = await pretty(
     await render(
       templates[template].component({
+        // eslint-disable-next-line
         ...((props || {}) as any),
         locale: account.language || "en",
         locales,

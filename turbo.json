@@ -22,6 +22,7 @@
     "DEV",
     "CRISP_KEY",
     "EMAIL_PROVIDER",
+    "EMAIL_DOMAIN",
     "SMTP_URL",
     "PLUNK_URL",
     "PLUNK_SECRET_KEY"

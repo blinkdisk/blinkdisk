@@ -61,7 +61,7 @@ const Path = React.forwardRef<
 
       setLoading(false);
       field.handleBlur();
-    }, [field, setLoading, title, type]);
+    }, [field, defaultFileName, mode, setLoading, title, type]);
 
     const clearValue = useCallback(() => {
       field.handleChange("");

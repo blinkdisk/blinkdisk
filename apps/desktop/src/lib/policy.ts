@@ -67,7 +67,8 @@ export type CorePolicy = {
   metadataCompression: {
     compressorName?: "zstd-fastest";
   };
-  splitter: {};
+  // Seems to be always empty?
+  splitter: object;
   actions: {
     beforeFolder?: {
       script?: string;

@@ -16,7 +16,7 @@ export function Hero() {
         <h1 className="mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
           <SplitText>Secure your files</SplitText>
           <br className="hidden sm:block" />
-          <SplitText delay={0.2}>before it's too late</SplitText>
+          <SplitText delay={0.2}>before it&apos;s too late</SplitText>
         </h1>
         <motion.p
           initial={{ opacity: 0, y: "2rem" }}
