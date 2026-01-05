@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@plunk/node": "^3.0.3",
-    "@react-email/render": "^2.0.0",
+    "@react-email/render": "^2.0.1",
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
