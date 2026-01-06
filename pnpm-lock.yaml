@@ -37,13 +37,13 @@ importers:
     dependencies:
       '@hono/trpc-server':
         specifier: ^0.4.0
-        version: 0.4.0(@trpc/server@10.45.2)(hono@4.10.3)
+        version: 0.4.0(@trpc/server@10.45.3)(hono@4.10.3)
       '@polar-sh/sdk':
         specifier: ^0.35.4
         version: 0.35.4
       '@trpc/server':
-        specifier: ^10.45.2
-        version: 10.45.2
+        specifier: ^10.45.3
+        version: 10.45.3
       axios:
         specifier: ^1.13.2
         version: 1.13.2
@@ -3335,14 +3335,14 @@ packages:
     resolution: {integrity: sha512-lhqDEAvWixy3bZ+UOYbPwUbBkwBq5C1LAJ/xPC8Oi+lL54oyakv/npbA0aU2hgCsx/1NUd4IBvV03+aUBWxerw==}
     dev: false
 
-  /@hono/trpc-server@0.4.0(@trpc/server@10.45.2)(hono@4.10.3):
+  /@hono/trpc-server@0.4.0(@trpc/server@10.45.3)(hono@4.10.3):
     resolution: {integrity: sha512-LGlJfCmNIGMwcknZEIYdujVMs9OkNVazhpOhaz3kTWOXvNL660VOHpvvktosCiJrajyBY1RtIJKQ+IKaQvNuSg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@trpc/server': ^10.10.0 || >11.0.0-rc
       hono: '>=4.*'
     dependencies:
-      '@trpc/server': 10.45.2
+      '@trpc/server': 10.45.3
       hono: 4.10.3
     dev: false
 
@@ -7682,6 +7682,10 @@ packages:
 
   /@trpc/server@10.45.2:
     resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
+    dev: false
+
+  /@trpc/server@10.45.3:
+    resolution: {integrity: sha512-CVZM42FdGwqYQxV7vSRwb//AF8REfV60S/fUnwx7xqCnnSDus0FW/UuAOW4eQJ30RQlOPy4MYU8B3dbTAx85Ew==}
     dev: false
 
   /@tsndr/cloudflare-worker-jwt@3.2.0:
@@ -15656,6 +15660,7 @@ packages:
   /slice-ansi@3.0.0:
     resolution: {integrity: sha512-pSyv7bSTC7ig9Dcgbw9AuRNUb5k5V6oDudjZoMBSr13qpLBG7tB+zgCkARjq7xIUgdz5P1Qe8u+rSGdouOOIyQ==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dependencies:
       ansi-styles: 4.3.0
       astral-regex: 2.0.0
