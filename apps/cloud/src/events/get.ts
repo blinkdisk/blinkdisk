@@ -56,7 +56,7 @@ export async function getBlob(
     return { error: "DOWNLOAD_LIMIT_REACHED" };
   }
 
-  await storage.put("downloadedBytes", oldDownloadedBytes);
+  await storage.put("downloadedBytes", newDownloadedBytes);
 
   const url = await getSignedUrl(
     durableObject.s3,
