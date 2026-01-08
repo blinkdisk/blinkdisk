@@ -7,9 +7,8 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 import type {
   ConfigLevel,
-  StorageProvider,
-  StorageStatus,
   SubscriptionStatus,
+  VaultProvider,
   VaultStatus,
 } from "./enums";
 
@@ -45,7 +44,7 @@ export type Config = {
   data: unknown;
   level: ConfigLevel;
   profileId: string | null;
-  storageId: string;
+  vaultId: string;
   accountId: string;
   createdAt: Generated<Timestamp>;
 };
@@ -83,18 +82,6 @@ export type Space = {
   subscriptionId: string | null;
   createdAt: Generated<Timestamp>;
 };
-export type Storage = {
-  id: Generated<string>;
-  status: StorageStatus;
-  version: number;
-  provider: StorageProvider;
-  accountId: string;
-  configLevel: ConfigLevel;
-  passwordHash: string;
-  options: unknown;
-  spaceId: string | null;
-  createdAt: Generated<Timestamp>;
-};
 export type Subscription = {
   id: string;
   status: SubscriptionStatus;
@@ -114,9 +101,13 @@ export type Vault = {
   id: Generated<string>;
   status: VaultStatus;
   name: string;
-  profileId: string;
-  storageId: string;
+  version: number;
+  provider: VaultProvider;
   accountId: string;
+  configLevel: ConfigLevel;
+  passwordHash: string;
+  options: unknown;
+  spaceId: string | null;
   createdAt: Generated<Timestamp>;
 };
 export type Verification = {
@@ -135,7 +126,6 @@ export type DB = {
   Profile: Profile;
   Session: Session;
   Space: Space;
-  Storage: Storage;
   Subscription: Subscription;
   Vault: Vault;
   Verification: Verification;

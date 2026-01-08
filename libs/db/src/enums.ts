@@ -1,4 +1,4 @@
-export const StorageProvider = {
+export const VaultProvider = {
   BLINKDISK_CLOUD: "BLINKDISK_CLOUD",
   FILESYSTEM: "FILESYSTEM",
   NETWORK_ATTACHED_STORAGE: "NETWORK_ATTACHED_STORAGE",
@@ -11,20 +11,14 @@ export const StorageProvider = {
   RCLONE: "RCLONE",
   WEBDAV: "WEBDAV",
 } as const;
-export type StorageProvider =
-  (typeof StorageProvider)[keyof typeof StorageProvider];
-export const StorageStatus = {
-  ACTIVE: "ACTIVE",
-  DELETED: "DELETED",
-} as const;
-export type StorageStatus = (typeof StorageStatus)[keyof typeof StorageStatus];
+export type VaultProvider = (typeof VaultProvider)[keyof typeof VaultProvider];
 export const VaultStatus = {
   ACTIVE: "ACTIVE",
   DELETED: "DELETED",
 } as const;
 export type VaultStatus = (typeof VaultStatus)[keyof typeof VaultStatus];
 export const ConfigLevel = {
-  STORAGE: "STORAGE",
+  VAULT: "VAULT",
   PROFILE: "PROFILE",
 } as const;
 export type ConfigLevel = (typeof ConfigLevel)[keyof typeof ConfigLevel];

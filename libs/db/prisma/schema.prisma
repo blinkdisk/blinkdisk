@@ -25,9 +25,8 @@ model Account {
   sessions      Session[]
   authMethods   AuthMethod[]
   devices       Device[]
-  storages      Storage[]
-  profiles      Profile[]
   vaults        Vault[]
+  profiles      Profile[]
   configs       Config[]
   space         Space[]
   subscriptions Subscription[]
@@ -106,13 +105,12 @@ model Profile {
   account Account @relation(fields: [accountId], references: [id])
   device  Device  @relation(fields: [deviceId], references: [id])
 
-  vaults  Vault[]
   configs Config[]
 
   @@index([userName])
 }
 
-enum StorageProvider {
+enum VaultProvider {
   BLINKDISK_CLOUD
   FILESYSTEM
   NETWORK_ATTACHED_STORAGE
@@ -126,51 +124,32 @@ enum StorageProvider {
   WEBDAV
 }
 
-enum StorageStatus {
-  ACTIVE
-  DELETED
-}
-
-model Storage {
-  id           String          @id @default(nanoid())
-  status       StorageStatus
-  version      Int
-  provider     StorageProvider
-  accountId    String
-  configLevel  ConfigLevel
-  passwordHash String
-  options      Json
-  spaceId      String?
-  createdAt    DateTime        @default(now())
-
-  account Account @relation(fields: [accountId], references: [id])
-  space   Space?  @relation(fields: [spaceId], references: [id])
-
-  vaults  Vault[]
-  configs Config[]
-}
-
 enum VaultStatus {
   ACTIVE
   DELETED
 }
 
 model Vault {
-  id        String      @id @default(nanoid())
-  status    VaultStatus
-  name      String
-  profileId String
-  storageId String
-  accountId String
-  createdAt DateTime    @default(now())
+  id           String        @id @default(nanoid())
+  status       VaultStatus
+  name         String
+  version      Int
+  provider     VaultProvider
+  accountId    String
+  configLevel  ConfigLevel
+  passwordHash String
+  options      Json
+  spaceId      String?
+  createdAt    DateTime      @default(now())
 
-  profile Profile @relation(fields: [profileId], references: [id])
-  storage Storage @relation(fields: [storageId], references: [id])
   account Account @relation(fields: [accountId], references: [id])
+  space   Space?  @relation(fields: [spaceId], references: [id])
+
+  configs Config[]
 }
 
 enum ConfigLevel {
-  STORAGE
+  VAULT
   PROFILE
 }
 
@@ -179,13 +158,13 @@ model Config {
   data      Json
   level     ConfigLevel
   profileId String?
-  storageId String
+  vaultId   String
   accountId String
   createdAt DateTime    @default(now())
 
   profile Profile? @relation(fields: [profileId], references: [id])
   account Account  @relation(fields: [accountId], references: [id])
-  storage Storage  @relation(fields: [storageId], references: [id])
+  vault   Vault    @relation(fields: [vaultId], references: [id])
 
   @@index([level])
 }
@@ -201,7 +180,7 @@ model Space {
   account      Account       @relation(fields: [accountId], references: [id])
   subscription Subscription? @relation(fields: [subscriptionId], references: [id])
 
-  storages Storage[]
+  vaults Vault[]
 }
 
 enum SubscriptionStatus {
