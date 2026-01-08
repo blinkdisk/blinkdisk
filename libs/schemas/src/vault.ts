@@ -24,29 +24,6 @@ export const ZCreateVaultDetails = z.object({
 
 export type ZCreateVaultDetailsType = z.infer<typeof ZCreateVaultDetails>;
 
-export const ZListUnlinkedVaults = z.object({
-  profileId: z.string(),
-});
-
-export const ZListLinkedVaults = z.object({
-  vaultId: z.string(),
-});
-
-export const ZLinkVault = z.object({
-  profileId: z.string(),
-  storageId: z.string().min(1),
-  name: ZVaultName,
-  config: ZVaultEncryptedConfig.optional(),
-});
-
-export const ZLinkVaultDetails = z.object({
-  name: ZVaultName,
-});
-
-export type ZLinkVaultDetailsType = z.infer<typeof ZLinkVaultDetails>;
-
-export type ZLinkVaultType = z.infer<typeof ZLinkVault>;
-
 export const ZCheckName = z.object({
   name: ZVaultName,
 });
@@ -64,12 +41,6 @@ export const ZGetVault = z.object({
 });
 
 export type ZGetVaultType = z.infer<typeof ZGetVault>;
-
-export const ZLinkVaultPassword = z.object({
-  password: ZVaultPassword,
-});
-
-export type ZLinkVaultPasswordType = z.infer<typeof ZLinkVaultPassword>;
 
 export const ZVaultPasswordForm = z.object({
   password: ZVaultPassword,
@@ -108,9 +79,3 @@ export const ZVaultThrottle = z.object({
 });
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
-
-export const ZUnlinkVault = z.object({
-  vaultId: z.string(),
-});
-
-export type ZSoftUnlinkVaultType = z.infer<typeof ZUnlinkVault>;

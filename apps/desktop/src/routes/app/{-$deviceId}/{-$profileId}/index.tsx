@@ -2,7 +2,7 @@ import { Empty } from "@desktop/components/empty";
 import { VaultHome } from "@desktop/components/vaults/home";
 import { MutatingButton } from "@desktop/components/vaults/mutating-button";
 import { useProfileVaultList } from "@desktop/hooks/queries/use-profile-vault-list";
-import { useAddVaultDialog } from "@desktop/hooks/state/use-add-vault-dialog";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { createFileRoute } from "@tanstack/react-router";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/app/{-$deviceId}/{-$profileId}/")({
 function RouteComponent() {
   const { t } = useAppTranslation("vault");
   const { accountId } = useAccountId();
-  const { openAddVault } = useAddVaultDialog();
+  const { openCreateVault } = useCreateVaultDialog();
   const { data: vaults, isPending } = useProfileVaultList();
 
   const navigate = Route.useNavigate();
@@ -50,7 +50,7 @@ function RouteComponent() {
         description={t("noVaults.description")}
         icon={<CloudAlertIcon />}
       >
-        <MutatingButton onClick={openAddVault} size="lg">
+        <MutatingButton onClick={openCreateVault} size="lg">
           <PlusIcon />
           {t("noVaults.button")}
         </MutatingButton>

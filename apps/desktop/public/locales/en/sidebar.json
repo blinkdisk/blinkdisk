@@ -11,7 +11,7 @@
   "selectVault": {
     "empty": "Select vault",
     "readOnly": "Read-only",
-    "addVault": "Add vault"
+    "createVault": "Create vault"
   },
   "accountMenu": {
     "account": "Account",

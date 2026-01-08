@@ -1,4 +1,4 @@
-import { AddVaultDialog } from "@desktop/components/dialogs/add-vault/";
+import { CreateVaultDialog } from "@desktop/components/dialogs/create-vault";
 import { SettingsDialogs } from "@desktop/components/dialogs/settings";
 import { Sidebar } from "@desktop/components/sidebar";
 import { SidebarInset } from "@ui/sidebar";
@@ -13,7 +13,7 @@ export function Layout({ children }: LayoutProps) {
     <>
       <Sidebar />
       <SettingsDialogs />
-      <AddVaultDialog />
+      <CreateVaultDialog />
       <SidebarInset className="!overflow-hidden">{children}</SidebarInset>
     </>
   );

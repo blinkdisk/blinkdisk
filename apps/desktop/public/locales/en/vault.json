@@ -4,45 +4,6 @@
     "description": "You haven't created any vaults yet. Get started by pressing the button below.",
     "button": "Add vault"
   },
-  "addDialog": {
-    "title": "Add vault",
-    "description": "Add a new vault to your profile.",
-    "folder": {
-      "existing": {
-        "title": "Link existing vault",
-        "description": "Link this device and profile to an existing vault."
-      },
-      "new": {
-        "title": "Create new vault",
-        "description": "Create a new vault for this device and profile."
-      }
-    }
-  },
-  "linkDialog": {
-    "title": "Link existing vault",
-    "description": "Link this device and profile to an existing vault.",
-    "password": {
-      "password": {
-        "label": "Encryption password",
-        "placeholder": "Enter vault encryption password"
-      },
-      "invalidError": {
-        "title": "Invalid password",
-        "description": "The password you entered is incorrect. Please try again."
-      },
-      "submit": "Continue"
-    },
-    "config": {
-      "submit": "Continue"
-    },
-    "details": {
-      "name": {
-        "label": "New vault name",
-        "placeholder": "Enter vault name"
-      },
-      "submit": "Link vault"
-    }
-  },
   "createDialog": {
     "title": "Create new vault",
     "description": "Create a new vault.",
@@ -80,15 +41,11 @@
       },
       "existsError": {
         "title": "Vault already exists",
-        "description": "This vault is already initialized. If this vault already exists in your account, please link it to this device or profile instead."
+        "description": "This vault is already connected to your account."
       },
       "notFoundError": {
         "title": "Vault not found",
         "description": "This vault hasn't been created yet. Please check your settings or create a new one instead."
-      },
-      "incorrectError": {
-        "title": "Different vault found",
-        "description": "Your configuration resolved to a different vault than selected. Please either change your configuration or link the other vault instead."
       }
     },
     "details": {
@@ -419,10 +376,6 @@
     "storageAlert": {
       "title": "Backup files won't be deleted",
       "description": "Your vault will be removed from BlinkDisk, but your backup files will be kept in your custom storage."
-    },
-    "linkedAlert": {
-      "title": "Linked vaults won't be affected",
-      "description": "All vaults linked to the same storage as this vault won't be deleted and will keep working."
     },
     "cancel": "Cancel",
     "continue": "Delete vault"

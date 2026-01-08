@@ -1,6 +1,6 @@
 import { ReadOnlyTooltip } from "@desktop/components/vaults/readonly-tooltip";
 import { useProfileVaultList } from "@desktop/hooks/queries/use-profile-vault-list";
-import { useAddVaultDialog } from "@desktop/hooks/state/use-add-vault-dialog";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -28,13 +28,13 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
   const { data: vaults } = useProfileVaultList();
   const { vaultId, changeVault } = useVaultId();
 
-  const { openAddVault } = useAddVaultDialog();
+  const { openCreateVault } = useCreateVaultDialog();
 
   return (
     <Select
       value={vaultId}
       onValueChange={(value) =>
-        value === "ADD" ? openAddVault() : changeVault(value)
+        value === "ADD" ? openCreateVault() : changeVault(value)
       }
     >
       <SelectTrigger
@@ -66,7 +66,7 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
           <ReadOnlyTooltip>
             <SelectItem disabled={readOnly} className="relative" value="ADD">
               <PlusIcon className="absolute left-2 top-1/2 size-4 -translate-y-1/2" />
-              {t("addVault")}
+              {t("createVault")}
             </SelectItem>
           </ReadOnlyTooltip>
         </SelectGroup>

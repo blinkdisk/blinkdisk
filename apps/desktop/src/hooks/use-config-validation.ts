@@ -2,7 +2,7 @@ import { ProviderType } from "@config/providers";
 import { ProviderConfig } from "@schemas/providers";
 import { useCallback } from "react";
 
-export type VaultAction = "CREATE" | "LINK" | "UPDATE";
+export type VaultAction = "CREATE" | "CONNECT" | "UPDATE";
 
 export function useConfigValidation(
   providerType: ProviderType,
@@ -21,7 +21,7 @@ export function useConfigValidation(
       // Repository is not initialized yet, success.
       if (result.code === "NOT_INITIALIZED") {
         if (action === "CREATE") return;
-        if (action === "LINK")
+        if (action === "CONNECT")
           return {
             code: "STORAGE_NOT_FOUND",
           };
@@ -41,7 +41,7 @@ export function useConfigValidation(
         };
 
       if (
-        action === "LINK" &&
+        action === "CONNECT" &&
         storageId &&
         result.uniqueID &&
         atob(result.uniqueID) !== storageId

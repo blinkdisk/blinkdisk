@@ -35,7 +35,7 @@ export function ConfigMissing({ vault }: ConfigMissingProps) {
         <div className="mt-12 w-full">
           {Form && (
             <Form
-              action="LINK"
+              action="CONNECT"
               storageId={vault?.storageId}
               onSubmit={(config) =>
                 config &&

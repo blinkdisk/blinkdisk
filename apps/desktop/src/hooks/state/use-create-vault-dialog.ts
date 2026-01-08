@@ -3,20 +3,20 @@ import { useCallback } from "react";
 
 const store = new Store(false);
 
-export function useAddVaultDialog() {
+export function useCreateVaultDialog() {
   const isOpen = useStore(store);
 
   const setIsOpen = useCallback((to: boolean) => {
     store.setState(to);
   }, []);
 
-  function openAddVault() {
+  function openCreateVault() {
     store.setState(true);
   }
 
   return {
     isOpen,
     setIsOpen,
-    openAddVault,
+    openCreateVault,
   };
 }
