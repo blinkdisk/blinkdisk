@@ -88,7 +88,24 @@ export const store = new Store({
         delete account.profileId;
         delete account.deviceId;
 
+        if (
+          account.lastUsedVaultId &&
+          account.lastUsedVaultId.startsWith("strg_")
+        )
+          account.lastUsedVaultId = account.lastUsedVaultId.replace(
+            /^strg_/,
+            "vlt_",
+          );
+
         store.set(`accounts.${id}`, account);
+      });
+
+      const passwords = store.get("passwords") || {};
+      store.set("passwords", {});
+
+      Object.entries(passwords).forEach(([id, password]) => {
+        if (id.startsWith("strg_")) id = id.replace(/^strg_/, "vlt_");
+        store.set(`passwords.${id}`, password);
       });
 
       store.delete("storages");

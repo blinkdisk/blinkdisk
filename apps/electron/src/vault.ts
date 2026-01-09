@@ -364,7 +364,9 @@ export class Vault {
           this.serverAddress &&
           this.serverPassword &&
           this.serverControlPassword &&
-          this.serverPassword
+          this.serverPassword &&
+          this.serverCertificate &&
+          this.serverCertificateHash
         ) {
           res();
         }

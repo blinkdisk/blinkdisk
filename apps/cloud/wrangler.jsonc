@@ -23,12 +23,7 @@
     },
     {
       "tag": "v2",
-      "renamed_classes": [
-        {
-          "from": "Storage",
-          "to": "Vault",
-        },
-      ],
+      "new_sqlite_classes": ["Vault"],
     },
   ],
   "env": {
