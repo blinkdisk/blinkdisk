@@ -25,7 +25,13 @@ export default {
       );
       if (!payload) return new Response("Invalid token", { status: 401 });
 
-      let stub = env.VAULT.getByName(payload.vaultId);
+      let vaultId = payload.vaultId;
+
+      // Update legacy ids with "strg" prefix
+      if (vaultId.startsWith("strg_"))
+        vaultId = vaultId.replace(/^strg_/, "vlt_");
+
+      let stub = env.VAULT.getByName(vaultId);
       return stub.fetch(request);
     }
 

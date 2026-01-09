@@ -18,7 +18,6 @@ export function useConfigValidation(
         config: value as ProviderConfig,
       });
 
-      // Repository is not initialized yet, success.
       if (result.code === "NOT_INITIALIZED") {
         if (action === "CREATE") return;
         if (action === "CONNECT")
@@ -45,10 +44,17 @@ export function useConfigValidation(
         vaultId &&
         result.uniqueID &&
         atob(result.uniqueID) !== vaultId
-      )
-        return {
-          code: "INCORRECT_VAULT_FOUND",
-        };
+      ) {
+        const storedId = atob(result.uniqueID);
+
+        // Update legacy ids with "strg" prefix
+        if (storedId.startsWith("strg_")) storedId.replace(/^strg_/, "vlt_");
+
+        if (storedId !== vaultId)
+          return {
+            code: "INCORRECT_VAULT_FOUND",
+          };
+      }
     },
     [action, vaultId, providerType],
   );

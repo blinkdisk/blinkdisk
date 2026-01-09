@@ -46,5 +46,11 @@ export function getVaultId(headers: Headers) {
   const data = jwt.decode<JWTPayload>(token);
 
   if (!data?.payload) return null;
-  return data.payload.vaultId;
+
+  let vaultId = data.payload.vaultId;
+
+  // Update legacy ids with "strg" prefix
+  if (vaultId.startsWith("strg_")) vaultId = vaultId.replace(/^strg_/, "vlt_");
+
+  return vaultId;
 }
