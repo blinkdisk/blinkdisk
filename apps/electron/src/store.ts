@@ -94,7 +94,6 @@ export const store = new Store({
       store.delete("storages");
       store.delete("configs");
       store.delete("vaults");
-      console.log("Running migration", store);
     },
   },
 });

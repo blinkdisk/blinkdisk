@@ -44,7 +44,7 @@ export function SidebarSelects() {
         return section === "HOSTNAME" ? (
           <SidebarHostNameSelect key="HOSTNAME" className={className} />
         ) : section === "USERNAME" ? (
-          <SidebarUserNameSelect key="PROFILES" className={className} />
+          <SidebarUserNameSelect key="USERNAME" className={className} />
         ) : section === "VAULTS" ? (
           <SidebarVaultSelect key="VAULTS" className={className} />
         ) : null;

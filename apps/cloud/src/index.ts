@@ -20,7 +20,7 @@ export default {
       const token = header.replace("Bearer ", "");
       const payload = await verifyServiceToken(
         token,
-        // The dotenv parser somtimes leaves a trailing backslash
+        // The dotenv parser sometimes leaves a trailing backslash
         env.CLOUD_JWT_PUBLIC_KEY.replace(/\\+$/gm, ""),
       );
       if (!payload) return new Response("Invalid token", { status: 401 });

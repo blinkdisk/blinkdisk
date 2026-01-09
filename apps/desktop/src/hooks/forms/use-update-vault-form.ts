@@ -5,7 +5,6 @@ import { ZUpdateVaultForm } from "@schemas/vault";
 
 export function useUpdateVaultForm() {
   const { data: vault } = useVault();
-  console.log("Name", vault?.name);
   const { mutateAsync } = useUpdateVault(() => form.reset());
 
   const form = useAppForm({

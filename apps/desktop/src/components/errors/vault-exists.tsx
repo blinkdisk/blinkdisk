@@ -14,12 +14,12 @@ export function VaultExistsError({ code }: VaultExistsErrorProps) {
       <AlertTitle>
         <AlertTriangleIcon className="mb-0.5 mr-2 inline-block size-3.5" />
         {t(
-          `vault:createDialog.config.${code === "STORAGE_ALREADY_EXISTS" ? "existsError" : "notFoundError"}.title`,
+          `vault:createDialog.config.${code === "VAULT_ALREADY_EXISTS" ? "existsError" : "notFoundError"}.title`,
         )}
       </AlertTitle>
       <AlertDescription className="text-xs">
         {t(
-          `vault:createDialog.config.${code === "STORAGE_ALREADY_EXISTS" ? "existsError" : "notFoundError"}.description`,
+          `vault:createDialog.config.${code === "VAULT_ALREADY_EXISTS" ? "existsError" : "notFoundError"}.description`,
         )}
       </AlertDescription>
     </Alert>
