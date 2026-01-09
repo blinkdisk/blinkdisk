@@ -1,16 +1,15 @@
 {
   "addFolder": "Add folder",
-  "selectDevice": {
+  "selectHostName": {
     "empty": "Select device",
-    "external": "External"
+    "remote": "Remote"
   },
-  "selectProfile": {
+  "selectUserName": {
     "empty": "Select profile",
-    "external": "External"
+    "remote": "Remote"
   },
   "selectVault": {
     "empty": "Select vault",
-    "readOnly": "Read-only",
     "createVault": "Create vault"
   },
   "accountMenu": {

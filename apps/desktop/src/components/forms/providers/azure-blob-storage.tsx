@@ -9,14 +9,14 @@ export type AzureBlobStorageFormProps = {
   action: VaultAction;
   config?: ZAzureBlobStorageConfigType;
   onSubmit: (config: ZAzureBlobStorageConfigType) => void;
-  storageId?: string;
+  vaultId?: string;
 };
 
 export function AzureBlobStorageForm({
   action,
   config,
   onSubmit,
-  storageId,
+  vaultId,
 }: AzureBlobStorageFormProps) {
   const { t } = useAppTranslation("vault.providers.AZURE_BLOB_STORAGE.fields");
 
@@ -24,7 +24,7 @@ export function AzureBlobStorageForm({
     action,
     config,
     onSubmit,
-    storageId,
+    vaultId,
   });
 
   return (

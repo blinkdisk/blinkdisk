@@ -1,4 +1,3 @@
-import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -10,8 +9,7 @@ export function useStartBackup() {
   const queryClient = useQueryClient();
 
   const { vaultId } = useVaultId();
-  const { profileId } = useProfile();
-  const { deviceId } = useDevice();
+  const { profileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
 
   return useMutation({
@@ -24,8 +22,7 @@ export function useStartBackup() {
         {},
         {
           params: {
-            userName: profileId!,
-            host: deviceId!,
+            ...profileFilter,
             ...(options && options.path && { path: options.path }),
           },
         },
@@ -34,7 +31,7 @@ export function useStartBackup() {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.list(vaultId),
+        queryKey: queryKeys.folder.list(vaultId, profileFilter),
       });
     },
   });

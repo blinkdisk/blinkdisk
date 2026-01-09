@@ -46,6 +46,10 @@
       "notFoundError": {
         "title": "Vault not found",
         "description": "This vault hasn't been created yet. Please check your settings or create a new one instead."
+      },
+      "incorrectError": {
+        "title": "Different vault found",
+        "description": "Your configuration resolved to a different vault than selected."
       }
     },
     "details": {
@@ -366,9 +370,9 @@
       "amount": "{{used}} of {{capacity}} used"
     }
   },
-  "readOnly": {
-    "title": "Read-only vault",
-    "description": "You are viewing a vault from a different device or profile. You can't make changes to it."
+  "remoteTooltip": {
+    "title": "Remote profile",
+    "description": "You are viewing a vault from a different device or profile. You can't perform this action."
   },
   "deleteDialog": {
     "title": "Delete vault",

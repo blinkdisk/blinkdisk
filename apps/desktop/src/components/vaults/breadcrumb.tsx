@@ -33,7 +33,7 @@ export function VaultBreadcrumb({ vault, breadcrumbs }: VaultBreadcrumbProps) {
         <BreadcrumbItem>
           <BreadcrumbLink className="text-base" asChild>
             {vault ? (
-              <Link to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}">
+              <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
                 {vault.name}
               </Link>
             ) : (

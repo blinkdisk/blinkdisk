@@ -38,7 +38,7 @@ const s3Base = {
 export const providers: Provider[] = [
   {
     type: "BLINKDISK_CLOUD",
-    level: "STORAGE",
+    level: "VAULT",
     coreType: "bdc",
     hidden: true,
   },
@@ -54,22 +54,22 @@ export const providers: Provider[] = [
   },
   {
     type: "GOOGLE_CLOUD_STORAGE",
-    level: "STORAGE",
+    level: "VAULT",
     coreType: "gcs",
   },
   {
     type: "AMAZON_S3",
-    level: "STORAGE",
+    level: "VAULT",
     ...s3Base,
   },
   {
     type: "S3_COMPATIBLE",
-    level: "STORAGE",
+    level: "VAULT",
     ...s3Base,
   },
   {
     type: "BACKBLAZE",
-    level: "STORAGE",
+    level: "VAULT",
     coreType: "b2",
     coreMapping: {
       keySecret: "key",
@@ -77,7 +77,7 @@ export const providers: Provider[] = [
   },
   {
     type: "AZURE_BLOB_STORAGE",
-    level: "STORAGE",
+    level: "VAULT",
     coreType: "azureBlob",
     coreMapping: {
       account: "storageAccount",
@@ -87,7 +87,7 @@ export const providers: Provider[] = [
   },
   {
     type: "SFTP",
-    level: "STORAGE",
+    level: "VAULT",
     coreType: "sftp",
     coreMapping: {
       user: "username",
@@ -105,7 +105,7 @@ export const providers: Provider[] = [
   },
   {
     type: "WEBDAV",
-    level: "STORAGE",
+    level: "VAULT",
     coreType: "webdav",
     coreMapping: {
       user: "username",

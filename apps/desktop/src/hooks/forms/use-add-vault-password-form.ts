@@ -4,11 +4,11 @@ import { ZVaultPasswordForm } from "@schemas/vault";
 
 export function useAddVaultPasswordForm({
   passwordHash,
-  storageId,
+  vaultId,
   onSuccess,
 }: {
   passwordHash: string | undefined;
-  storageId: string | undefined;
+  vaultId: string | undefined;
   onSuccess?: () => void;
 }) {
   const { mutateAsync } = useAddVaultPassword(() => {
@@ -37,7 +37,7 @@ export function useAddVaultPasswordForm({
       },
     },
     onSubmit: async ({ value }) =>
-      storageId && (await mutateAsync({ ...value, storageId })),
+      vaultId && (await mutateAsync({ ...value, vaultId })),
   });
 
   return form;

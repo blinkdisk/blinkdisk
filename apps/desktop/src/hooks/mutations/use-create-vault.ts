@@ -1,3 +1,4 @@
+import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
@@ -14,16 +15,22 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
+  const { localUserName, localHostName } = useProfile();
 
   return useMutation({
     mutationKey: ["vault", "create"],
     mutationFn: async (
-      values: Omit<ZCreateVaultType, "config" | "passwordHash"> & {
+      values: Omit<
+        ZCreateVaultType,
+        "config" | "passwordHash" | "userName" | "hostName"
+      > & {
         password: string;
         config: ProviderConfig;
       },
     ) => {
-      const payload: ZCreateVaultType & { password?: string } = {
+      const payload: Omit<ZCreateVaultType, "userName" | "hostName"> & {
+        password?: string;
+      } = {
         ...values,
         passwordHash: await window.electron.vault.password.hash({
           password: values.password,
@@ -36,7 +43,11 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
       delete payload.password;
 
-      return await trpc.vault.create.mutate(payload);
+      return await trpc.vault.create.mutate({
+        ...payload,
+        userName: localUserName,
+        hostName: localHostName,
+      });
     },
     onError: showErrorToast,
     onSuccess: async (res, variables) => {
@@ -56,8 +67,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         if (create.error) throw new Error(create.error.toString());
       } catch (e) {
         try {
-          await trpc.storage.deleteHard.mutate({
-            storageId: res.storageId,
+          await trpc.vault.deleteHard.mutate({
+            vaultId: res.vault.id,
           });
         } catch (e) {
           console.error("Failed to delete vault", e);
@@ -67,15 +78,12 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       }
 
       await window.electron.vault.password.set({
-        storageId: res.storageId,
+        vaultId: res.vault.id,
         password: variables.password,
       });
 
-      // Make sure config & storage are fetched before vault
+      // Make sure configs are fetched before vault
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.storage.all,
-        }),
         queryClient.invalidateQueries({
           queryKey: queryKeys.config.all,
         }),

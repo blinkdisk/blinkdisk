@@ -1,4 +1,5 @@
 import { useDeleteVault } from "@desktop/hooks/mutations/use-delete-vault";
+import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useNavigate } from "@tanstack/react-router";
@@ -22,11 +23,13 @@ export function DeleteVaultDialog() {
 
   const { isOpen, setIsOpen, options } = useDeleteVaultDialog();
 
+  const { data: vault } = useVault(options?.vaultId);
+
   const onSuccess = useCallback(async () => {
     setIsOpen(false);
 
     await navigate({
-      to: "/app/{-$deviceId}/{-$profileId}",
+      to: "/app",
     });
   }, [navigate, setIsOpen]);
 
@@ -42,13 +45,15 @@ export function DeleteVaultDialog() {
             <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>{t("description")}</DialogDescription>
           </DialogHeader>
-          <Alert className="mt-4 w-full">
-            <InfoIcon />
-            <AlertTitle>{t("storageAlert.title")}</AlertTitle>
-            <AlertDescription className="text-xs">
-              {t("storageAlert.description")}
-            </AlertDescription>
-          </Alert>
+          {vault && vault.provider !== "BLINKDISK_CLOUD" ? (
+            <Alert className="mt-4 w-full">
+              <InfoIcon />
+              <AlertTitle>{t("storageAlert.title")}</AlertTitle>
+              <AlertDescription className="text-xs">
+                {t("storageAlert.description")}
+              </AlertDescription>
+            </Alert>
+          ) : null}
           <DialogFooter className="mt-6">
             <Button onClick={() => setIsOpen(false)} variant="outline">
               {t("cancel")}

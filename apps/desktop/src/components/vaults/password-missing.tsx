@@ -14,7 +14,7 @@ export function PasswordMissing({ vault }: PasswordMissingProps) {
 
   const form = useAddVaultPasswordForm({
     passwordHash: vault?.passwordHash,
-    storageId: vault?.storageId,
+    vaultId: vault?.id,
   });
 
   const errors = useStore(form.store, (store) => store.errorMap);

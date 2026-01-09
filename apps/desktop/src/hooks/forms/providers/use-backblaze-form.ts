@@ -9,14 +9,14 @@ export function useBackblazeForm({
   action,
   config,
   onSubmit,
-  storageId,
+  vaultId,
 }: {
   action: VaultAction;
   config?: ZBackblazeConfigType;
   onSubmit: (value: ZBackblazeConfigType) => void;
-  storageId?: string;
+  vaultId?: string;
 }) {
-  const { onSubmitAsync } = useConfigValidation("BACKBLAZE", action, storageId);
+  const { onSubmitAsync } = useConfigValidation("BACKBLAZE", action, vaultId);
 
   return useAppForm({
     defaultValues: {

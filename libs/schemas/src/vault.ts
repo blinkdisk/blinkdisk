@@ -7,11 +7,12 @@ import {
 import { z } from "zod";
 
 export const ZCreateVault = z.object({
-  profileId: z.string(),
   name: ZVaultName,
   provider: ZProviderType,
   passwordHash: z.string().min(1).max(500),
   config: ZVaultEncryptedConfig,
+  userName: z.string(),
+  hostName: z.string(),
 });
 
 export type ZCreateVaultType = z.infer<typeof ZCreateVault>;
@@ -29,12 +30,6 @@ export const ZCheckName = z.object({
 });
 
 export type ZCheckNameType = z.infer<typeof ZCheckName>;
-
-export const ZListVaults = z.object({
-  profileId: z.string().optional(),
-});
-
-export type ZListVaultsType = z.infer<typeof ZListVaults>;
 
 export const ZGetVault = z.object({
   vaultId: z.string(),
@@ -79,3 +74,15 @@ export const ZVaultThrottle = z.object({
 });
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
+
+export const ZHardDeleteVault = z.object({
+  vaultId: z.string(),
+});
+
+export type ZHardDeleteVaultType = z.infer<typeof ZHardDeleteVault>;
+
+export const ZSoftDeleteVault = z.object({
+  vaultId: z.string(),
+});
+
+export type ZSoftDeleteVaultType = z.infer<typeof ZSoftDeleteVault>;

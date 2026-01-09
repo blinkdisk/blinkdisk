@@ -1,7 +1,6 @@
 import { providerForms } from "@desktop/components/forms/providers";
 import { useAddVaultConfig } from "@desktop/hooks/mutations/use-add-vault-config";
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { SettingsIcon } from "lucide-react";
 import { useMemo } from "react";
@@ -12,7 +11,6 @@ interface ConfigMissingProps {
 
 export function ConfigMissing({ vault }: ConfigMissingProps) {
   const { t } = useAppTranslation("vault.configMissing");
-  const { localProfileId } = useProfile();
 
   const { mutateAsync: addVaultConfig } = useAddVaultConfig();
 
@@ -36,15 +34,13 @@ export function ConfigMissing({ vault }: ConfigMissingProps) {
           {Form && (
             <Form
               action="CONNECT"
-              storageId={vault?.storageId}
+              vaultId={vault?.id}
               onSubmit={(config) =>
                 config &&
-                localProfileId &&
                 vault &&
                 addVaultConfig({
                   config,
-                  profileId: localProfileId,
-                  storageId: vault?.storageId,
+                  vaultId: vault?.id,
                 })
               }
             />

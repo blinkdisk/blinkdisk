@@ -30,7 +30,7 @@ export function CreateVaultDetails({
     providerType,
     onSuccess: async (res) => {
       await navigate({
-        to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",
+        to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
         params: (params) => ({
           ...params,
           vaultId: res.vault.id,

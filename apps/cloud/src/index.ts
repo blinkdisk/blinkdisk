@@ -25,7 +25,7 @@ export default {
       );
       if (!payload) return new Response("Invalid token", { status: 401 });
 
-      let stub = env.STORAGE.getByName(payload.storageId);
+      let stub = env.VAULT.getByName(payload.vaultId);
       return stub.fetch(request);
     }
 
@@ -45,4 +45,4 @@ export default {
 };
 
 export { Space } from "@cloud/classes/space";
-export { Storage } from "@cloud/classes/storage";
+export { Vault } from "@cloud/classes/vault";

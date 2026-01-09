@@ -12,17 +12,17 @@ export function useAzureBlobStorageForm({
   action,
   config,
   onSubmit,
-  storageId,
+  vaultId,
 }: {
   action: VaultAction;
   config?: ZAzureBlobStorageConfigType;
   onSubmit: (value: ZAzureBlobStorageConfigType) => void;
-  storageId?: string;
+  vaultId?: string;
 }) {
   const { onSubmitAsync } = useConfigValidation(
     "AZURE_BLOB_STORAGE",
     action,
-    storageId,
+    vaultId,
   );
 
   return useAppForm({

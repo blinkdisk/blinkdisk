@@ -25,20 +25,20 @@ export function CreateVaultAlerts({ form, action }: CreateVaultAlertsProps) {
   if (
     errors &&
     errors.onSubmit &&
-    errors.onSubmit.code === "STORAGE_VALIDATION_FAILED"
+    errors.onSubmit.code === "VAULT_VALIDATION_FAILED"
   )
     return <ConfigValidationError message={errors.onSubmit.message} />;
   if (
     errors &&
     errors.onSubmit &&
-    errors.onSubmit.code === "INCORRECT_STORAGE_FOUND"
+    errors.onSubmit.code === "INCORRECT_VAULT_FOUND"
   )
     return <IncorrectVaultError />;
   if (
     errors &&
     errors.onSubmit &&
-    (errors.onSubmit.code === "STORAGE_ALREADY_EXISTS" ||
-      errors.onSubmit.code === "STORAGE_NOT_FOUND")
+    (errors.onSubmit.code === "VAULT_ALREADY_EXISTS" ||
+      errors.onSubmit.code === "VAULT_NOT_FOUND")
   )
     return <VaultExistsError code={errors.onSubmit.code} />;
 

@@ -9,14 +9,14 @@ export type RcloneFormProps = {
   action: VaultAction;
   config?: ZRcloneConfigType;
   onSubmit: (config: ZRcloneConfigType) => void;
-  storageId?: string;
+  vaultId?: string;
 };
 
 export function RcloneForm({
   action,
   config,
   onSubmit,
-  storageId,
+  vaultId,
 }: RcloneFormProps) {
   const { t } = useAppTranslation("vault.providers.RCLONE.fields");
 
@@ -24,7 +24,7 @@ export function RcloneForm({
     action,
     config,
     onSubmit,
-    storageId,
+    vaultId,
   });
 
   return (

@@ -1,6 +1,6 @@
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { Storage } from "@cloud/index";
+import { Vault } from "@cloud/classes/vault";
 import { getFileCache } from "@cloud/utils/space";
 import { ZCloudGetBlob } from "@schemas/cloud";
 import { logsnag } from "@utils/logsnag";
@@ -9,7 +9,7 @@ import { logsnag } from "@utils/logsnag";
 const MINIMUM_EGRESS_LIMIT = 1000 * 1000 * 1000;
 
 export async function getBlob(
-  durableObject: InstanceType<typeof Storage>,
+  durableObject: InstanceType<typeof Vault>,
   data: any,
   storage: DurableObjectStorage,
 ) {

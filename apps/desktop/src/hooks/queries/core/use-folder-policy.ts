@@ -1,6 +1,5 @@
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useDevice } from "@desktop/hooks/use-device";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -29,8 +28,7 @@ export function useFolderPolicy({
     path: string;
   };
 }) {
-  const { profileId } = useProfile();
-  const { deviceId } = useDevice();
+  const { profileFilter } = useProfile();
   const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
@@ -41,7 +39,7 @@ export function useFolderPolicy({
   return useQuery({
     queryKey: queryKeys.policy.folder(mock ? "mock" : folderId),
     queryFn: async () => {
-      if (!deviceId || !profileId || !vaultId || !vaultPolicy) return null;
+      if (!profileFilter || !vaultId || !vaultPolicy) return null;
 
       const res = await vaultApi(vaultId).post<{
         defined: CorePolicy;
@@ -54,8 +52,7 @@ export function useFolderPolicy({
         },
         {
           params: {
-            userName: profileId,
-            host: deviceId,
+            ...profileFilter,
             path: mock ? mock.path : folder ? folder.source.path : "unknown",
           },
         },

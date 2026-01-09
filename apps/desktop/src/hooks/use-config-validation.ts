@@ -7,7 +7,7 @@ export type VaultAction = "CREATE" | "CONNECT" | "UPDATE";
 export function useConfigValidation(
   providerType: ProviderType,
   action: VaultAction,
-  storageId?: string,
+  vaultId?: string,
 ) {
   const onSubmitAsync = useCallback(
     async ({ value }: { value: object }) => {
@@ -23,13 +23,13 @@ export function useConfigValidation(
         if (action === "CREATE") return;
         if (action === "CONNECT")
           return {
-            code: "STORAGE_NOT_FOUND",
+            code: "VAULT_NOT_FOUND",
           };
       }
 
       if (result.error)
         return {
-          code: "STORAGE_VALIDATION_FAILED",
+          code: "VAULT_VALIDATION_FAILED",
           message: result.code
             ? `[${result.code}] ${result.error}`
             : result.error,
@@ -37,20 +37,20 @@ export function useConfigValidation(
 
       if (action === "CREATE")
         return {
-          code: "STORAGE_ALREADY_EXISTS",
+          code: "VAULT_ALREADY_EXISTS",
         };
 
       if (
         action === "CONNECT" &&
-        storageId &&
+        vaultId &&
         result.uniqueID &&
-        atob(result.uniqueID) !== storageId
+        atob(result.uniqueID) !== vaultId
       )
         return {
-          code: "INCORRECT_STORAGE_FOUND",
+          code: "INCORRECT_VAULT_FOUND",
         };
     },
-    [action, storageId, providerType],
+    [action, vaultId, providerType],
   );
 
   return { onSubmitAsync };

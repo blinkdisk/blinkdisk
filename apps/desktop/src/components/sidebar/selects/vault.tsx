@@ -1,10 +1,9 @@
-import { ReadOnlyTooltip } from "@desktop/components/vaults/readonly-tooltip";
-import { useProfileVaultList } from "@desktop/hooks/queries/use-profile-vault-list";
+import { RemoteTooltip } from "@desktop/components/vaults/remote-tooltip";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { Badge } from "@ui/badge";
 import {
   Select,
   SelectContent,
@@ -24,8 +23,8 @@ type SidebarVaultSelectProps = {
 export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
   const { t } = useAppTranslation("sidebar.selectVault");
 
-  const { readOnly, localProfileId } = useProfile();
-  const { data: vaults } = useProfileVaultList();
+  const { remote } = useProfile();
+  const { data: vaults } = useVaultList();
   const { vaultId, changeVault } = useVaultId();
 
   const { openCreateVault } = useCreateVaultDialog();
@@ -53,22 +52,17 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
           {vaults?.map((vault) => (
             <SelectItem key={vault.id} value={vault.id}>
               {vault.name}
-              {localProfileId && vault.profileId !== localProfileId ? (
-                <Badge variant="subtle" className="ml-1.5">
-                  {t("readOnly")}
-                </Badge>
-              ) : null}
             </SelectItem>
           ))}
         </SelectGroup>
         <SelectSeparator className="bg-border" />
         <SelectGroup>
-          <ReadOnlyTooltip>
-            <SelectItem disabled={readOnly} className="relative" value="ADD">
+          <RemoteTooltip>
+            <SelectItem disabled={remote} className="relative" value="ADD">
               <PlusIcon className="absolute left-2 top-1/2 size-4 -translate-y-1/2" />
               {t("createVault")}
             </SelectItem>
-          </ReadOnlyTooltip>
+          </RemoteTooltip>
         </SelectGroup>
       </SelectContent>
     </Select>

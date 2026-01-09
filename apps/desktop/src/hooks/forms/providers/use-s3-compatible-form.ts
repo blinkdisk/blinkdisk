@@ -12,17 +12,17 @@ export function useS3CompatibleForm({
   action,
   config,
   onSubmit,
-  storageId,
+  vaultId,
 }: {
   action: VaultAction;
   config?: ZS3CompatibleConfigType;
   onSubmit: (value: ZS3CompatibleConfigType) => void;
-  storageId?: string;
+  vaultId?: string;
 }) {
   const { onSubmitAsync } = useConfigValidation(
     "S3_COMPATIBLE",
     action,
-    storageId,
+    vaultId,
   );
 
   return useAppForm({

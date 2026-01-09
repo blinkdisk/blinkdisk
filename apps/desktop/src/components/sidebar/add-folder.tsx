@@ -1,4 +1,4 @@
-import { MutatingButton } from "@desktop/components/vaults/mutating-button";
+import { LocalButton } from "@desktop/components/vaults/local-button";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -21,14 +21,14 @@ export function SidebarAddFolder() {
   if (status === "RUNNING")
     return (
       <SidebarMenuItem>
-        <MutatingButton
+        <LocalButton
           className="bg-sidebar-muted border-sidebar-border w-full"
           variant="outline"
           onClick={openCreateFolder}
         >
           <PlusIcon />
           <span>{t("addFolder")}</span>
-        </MutatingButton>
+        </LocalButton>
       </SidebarMenuItem>
     );
 }

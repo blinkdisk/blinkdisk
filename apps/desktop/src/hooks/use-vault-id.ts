@@ -8,11 +8,10 @@ export function useVaultId() {
   const changeVault = useCallback(
     (id: string) => {
       navigate({
-        to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",
-        params: (params) => ({
-          ...params,
+        to: "/app/{-$vaultId}",
+        params: {
           vaultId: id,
-        }),
+        },
       });
     },
     [navigate],

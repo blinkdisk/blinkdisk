@@ -11,3 +11,53 @@ export const ZVaultEncryptedConfig = z.object({
 export type ZVaultEncryptedConfigType = z.infer<typeof ZVaultEncryptedConfig>;
 
 export const ZVaultPassword = z.string().min(1).max(128);
+
+export const ZVaultOptions = z.object({
+  version: z.literal(2),
+  encryption: z.enum([
+    "AES256-GCM-HMAC-SHA256",
+    "CHACHA20-POLY1305-HMAC-SHA256",
+  ]),
+  hash: z.enum([
+    "BLAKE2B-256-128",
+    "BLAKE2B-256",
+    "BLAKE2S-128",
+    "BLAKE2S-256",
+    "BLAKE3-256",
+    "BLAKE3-256-128",
+    "HMAC-SHA224",
+    "HMAC-SHA256",
+    "HMAC-SHA256-128",
+    "HMAC-SHA3-224",
+    "HMAC-SHA3-256",
+  ]),
+  splitter: z.enum([
+    "DYNAMIC-4M-BUZHASH",
+    "DYNAMIC",
+    "DYNAMIC-128K-BUZHASH",
+    "DYNAMIC-128K-RABINKARP",
+    "DYNAMIC-1M-BUZHASH",
+    "DYNAMIC-1M-RABINKARP",
+    "DYNAMIC-256K-BUZHASH",
+    "DYNAMIC-256K-RABINKARP",
+    "DYNAMIC-2M-BUZHASH",
+    "DYNAMIC-2M-RABINKARP",
+    "DYNAMIC-4M-RABINKARP",
+    "DYNAMIC-512K-BUZHASH",
+    "DYNAMIC-512K-RABINKARP",
+    "DYNAMIC-8M-BUZHASH",
+    "DYNAMIC-8M-RABINKARP",
+    "FIXED",
+    "FIXED-128K",
+    "FIXED-1M",
+    "FIXED-256K",
+    "FIXED-2M",
+    "FIXED-4M",
+    "FIXED-512K",
+    "FIXED-8M",
+  ]),
+  errorCorrectionAlgorithm: z.literal("REED-SOLOMON-CRC32"),
+  errorCorrectionOverhead: z.number().min(0).max(100),
+});
+
+export type ZVaultOptionsType = z.infer<typeof ZVaultOptions>;

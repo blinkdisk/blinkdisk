@@ -8,19 +8,19 @@ import { Vault } from "@electron/vault";
 import crypto from "node:crypto";
 
 export function setPasswordCache({
-  storageId,
+  vaultId,
   password,
 }: {
-  storageId: string;
+  vaultId: string;
   password: string;
 }) {
   const encrypted = encryptString(password);
-  store.set(`passwords.${storageId}`, encrypted);
+  store.set(`passwords.${vaultId}`, encrypted);
   Vault.onCacheChanged();
 }
 
-export function getPasswordCache({ storageId }: { storageId: string }) {
-  const encrypted = store.get(`passwords.${storageId}`) as
+export function getPasswordCache({ vaultId }: { vaultId: string }) {
+  const encrypted = store.get(`passwords.${vaultId}`) as
     | EncryptedString
     | null
     | undefined;

@@ -1,4 +1,3 @@
-import { useAccountStorage } from "@desktop/hooks/use-account-storage";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
 
@@ -8,32 +7,65 @@ declare global {
   }
 }
 
+const localHostName = window.electron.os.hostName();
+const localUserName = window.electron.os.userName();
+
+export type ProfileFilter = {
+  host: string;
+  userName: string;
+} | null;
+
 export function useProfile() {
   const navigate = useNavigate();
 
-  const [localProfileId] = useAccountStorage("profileId");
-  const { deviceId, profileId } = useParams({ strict: false });
+  const { userName, hostName } = useParams({ strict: false });
 
-  const changeProfile = useCallback(
-    (profileId: string | undefined, deviceIdOverride?: string) => {
-      if (profileId)
+  const changeUserName = useCallback(
+    (userName: string | undefined, hostNameOverride?: string) => {
+      if (userName)
         navigate({
-          to: "/app/{-$deviceId}/{-$profileId}",
-          params: { deviceId: deviceIdOverride || deviceId || "-", profileId },
+          to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
+          params: { hostName: hostNameOverride || hostName, userName },
         });
       else
         navigate({
-          to: "/app/{-$deviceId}",
-          params: { deviceId: deviceIdOverride || deviceId || "-" },
+          to: "/app/{-$vaultId}/{-$hostName}",
+          params: { hostName: hostNameOverride || hostName },
         });
     },
-    [deviceId, navigate],
+    [navigate, hostName],
   );
 
-  const readOnly = useMemo(
-    () => (profileId && localProfileId ? profileId !== localProfileId : false),
-    [profileId, localProfileId],
+  const changeHostName = useCallback(
+    (hostName: string) => {
+      navigate({
+        to: "/app/{-$vaultId}/{-$hostName}",
+        params: { hostName: hostName },
+      });
+    },
+    [navigate],
   );
 
-  return { profileId, changeProfile, localProfileId, readOnly };
+  const remote = useMemo(
+    () =>
+      (!!userName && userName !== localUserName) ||
+      (!!hostName && hostName !== localHostName),
+    [userName, hostName],
+  );
+
+  const profileFilter = useMemo(() => {
+    if (!userName || !hostName) return null;
+    return { userName, host: hostName };
+  }, [userName, hostName]);
+
+  return {
+    userName,
+    hostName,
+    localUserName,
+    localHostName,
+    changeUserName,
+    changeHostName,
+    profileFilter,
+    remote,
+  };
 }

@@ -1,12 +1,12 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Space } from "@cloud/classes/space";
-import { Storage } from "@cloud/classes/storage";
+import { Vault } from "@cloud/classes/vault";
 import { consumeSpace } from "@cloud/utils/space";
 import { ZCloudPutBlob } from "@schemas/cloud";
 
 export async function putBlob(
-  durableObject: InstanceType<typeof Storage>,
+  durableObject: InstanceType<typeof Vault>,
   data: any,
   storage: DurableObjectStorage,
   space: DurableObjectNamespace<Space>,

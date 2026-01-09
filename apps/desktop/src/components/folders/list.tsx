@@ -1,6 +1,6 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { FolderPreview } from "@desktop/components/folders/preview";
-import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
+import { LocalDropdownMenuItem } from "@desktop/components/vaults/local-dropdown-item";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
@@ -78,7 +78,7 @@ function Folder({ folder }: FolderProps) {
       className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none focus-visible:ring-2"
     >
       <Link
-        to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}"
+        to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
         params={(params) => ({
           ...params,
           folderId: folder?.id || "",
@@ -109,7 +109,7 @@ function Folder({ folder }: FolderProps) {
             <DropdownMenuContent className="w-48" align="end">
               <DropdownMenuItem asChild>
                 <Link
-                  to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}"
+                  to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
                   params={(params) => ({
                     ...params,
                     folderId: folder?.id || "",
@@ -123,19 +123,19 @@ function Folder({ folder }: FolderProps) {
               <DropdownMenuGroup>
                 {folder.status === "UPLOADING" &&
                 folder.currentTaskStatus !== "CANCELING" ? (
-                  <MutatingDropdownMenuItem
+                  <LocalDropdownMenuItem
                     onClick={() => cancelBackup({ taskId: folder.currentTask })}
                   >
                     <SquareIcon />
                     {t("dropdown.cancel")}
-                  </MutatingDropdownMenuItem>
+                  </LocalDropdownMenuItem>
                 ) : folder.status === "IDLE" ? (
-                  <MutatingDropdownMenuItem
+                  <LocalDropdownMenuItem
                     onClick={() => startBackup({ path: folder.source.path })}
                   >
                     <CloudUploadIcon />
                     {t("dropdown.backup")}
-                  </MutatingDropdownMenuItem>
+                  </LocalDropdownMenuItem>
                 ) : null}
                 <DropdownMenuItem
                   onClick={() => openFolderSettings({ folderId: folder.id })}
@@ -145,13 +145,13 @@ function Folder({ folder }: FolderProps) {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <MutatingDropdownMenuItem
+              <DropdownMenuItem
                 onClick={() => openDeleteFolderDialog({ folderId: folder.id })}
                 variant="destructive"
               >
                 <TrashIcon />
                 {t("dropdown.delete")}
-              </MutatingDropdownMenuItem>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (

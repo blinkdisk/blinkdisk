@@ -1,6 +1,6 @@
 import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
-import { MutatingButton } from "@desktop/components/vaults/mutating-button";
+import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
@@ -89,7 +89,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             ) : (
               <Button
                 as="link"
-                href="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings"
+                href="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings"
                 variant="outline"
                 size="sm"
               >
@@ -232,18 +232,18 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
           <div className="flex items-center gap-3">
             {folders !== undefined ? (
               <>
-                <MutatingButton onClick={openCreateFolder} variant="outline">
+                <LocalButton onClick={openCreateFolder} variant="outline">
                   <PlusIcon />
                   {t("folders.addFolder")}
-                </MutatingButton>
+                </LocalButton>
                 {folders.length > 0 ? (
-                  <MutatingButton
+                  <LocalButton
                     onClick={() => startBackup({})}
                     loading={isStartingBackup || isAnyBackupRunning}
                   >
                     <CloudUploadIcon />
                     {t("folders.backupAll")}
-                  </MutatingButton>
+                  </LocalButton>
                 ) : null}
               </>
             ) : (
@@ -260,10 +260,10 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             title={t("folders.empty.title")}
             description={t("folders.empty.description")}
           >
-            <MutatingButton onClick={openCreateFolder} size="lg">
+            <LocalButton onClick={openCreateFolder} size="lg">
               <PlusIcon />
               {t("folders.addFolder")}
-            </MutatingButton>
+            </LocalButton>
           </Empty>
         ) : (
           <FolderList folders={folders} />

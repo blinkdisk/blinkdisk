@@ -1,9 +1,9 @@
 import { HeadObjectCommand } from "@aws-sdk/client-s3";
-import { Storage } from "@cloud/index";
+import { Vault } from "@cloud/classes/vault";
 import { ZCloudGetMetadata } from "@schemas/cloud";
 
 export async function getMetadata(
-  durableObject: InstanceType<typeof Storage>,
+  durableObject: InstanceType<typeof Vault>,
   data: any,
 ) {
   const {

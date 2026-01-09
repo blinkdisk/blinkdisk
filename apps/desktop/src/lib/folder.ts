@@ -1,13 +1,13 @@
 export async function hashFolder({
-  deviceId,
-  profileId,
+  hostName,
+  userName,
   path,
 }: {
-  deviceId: string;
-  profileId: string;
+  hostName: string;
+  userName: string;
   path: string;
 }) {
-  const payload = `${profileId}@${deviceId}:${path}`;
+  const payload = `${hostName}@${userName}:${path}`;
 
   const enc = new TextEncoder();
   const hash = await crypto.subtle.digest("SHA-1", enc.encode(payload));

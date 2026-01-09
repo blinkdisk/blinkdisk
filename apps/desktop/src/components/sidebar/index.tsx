@@ -27,7 +27,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { data: session } = useAccount();
   const { data: folders } = useFolderList();
 
-  const { deviceId, profileId, vaultId } = useParams({ strict: false });
+  const { vaultId, hostName, userName } = useParams({ strict: false });
 
   const { t } = useAppTranslation("sidebar.links");
 
@@ -55,11 +55,11 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 <SidebarMenuButton
                   className="px-3"
                   isActive={
-                    pathname === `/app/${deviceId}/${profileId}/${vaultId}`
+                    pathname === `/app/${vaultId}/${hostName}/${userName}`
                   }
                   asChild
                 >
-                  <Link to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}">
+                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
                     <HomeIcon />
                     {t("home")}
                   </Link>
@@ -70,11 +70,11 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={
                     pathname ===
-                    `/app/${deviceId}/${profileId}/${vaultId}/settings`
+                    `/app/${vaultId}/${hostName}/${userName}/settings`
                   }
                   asChild
                 >
-                  <Link to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings">
+                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings">
                     <SettingsIcon />
                     {t("settings")}
                   </Link>

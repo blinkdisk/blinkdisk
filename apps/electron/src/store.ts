@@ -2,7 +2,7 @@ import { ProviderType } from "@config/providers";
 import { ConfigLevel } from "@db/enums";
 import { EncryptedConfig, EncryptedString } from "@electron/encryption";
 import { sendWindow } from "@electron/window";
-import { ZStorageOptionsType } from "@schemas/shared/storage";
+import { ZVaultOptionsType } from "@schemas/shared/vault";
 import Store from "electron-store";
 
 export type GlobalStorageType = {
@@ -11,23 +11,15 @@ export type GlobalStorageType = {
   preferences: {
     theme: "system" | "dark" | "light";
   };
-  storages: {
-    [id: string]: {
-      version: number;
-      configLevel: ConfigLevel;
-      provider: ProviderType;
-      accountId: string;
-      options: ZStorageOptionsType;
-      token?: EncryptedString;
-    };
-  };
   vaults: {
     [id: string]: {
       name: string;
       accountId: string;
-      profileId: string;
-      deviceId: string;
-      storageId: string;
+      configLevel: ConfigLevel;
+      options: ZVaultOptionsType;
+      token?: EncryptedString;
+      version: number;
+      provider: ProviderType;
     };
   };
   configs: {
@@ -35,8 +27,9 @@ export type GlobalStorageType = {
       level: ConfigLevel;
       data: EncryptedConfig;
       accountId: string;
-      storageId: string;
-      profileId?: string | null;
+      vaultId: string;
+      userName?: string | null;
+      hostName?: string | null;
     };
   };
   passwords: {
@@ -46,8 +39,6 @@ export type GlobalStorageType = {
 
 export type AccountStorageType = {
   active: boolean;
-  deviceId: string;
-  profileId: string;
   lastUsedVaultId?: string | null;
 };
 
@@ -88,7 +79,25 @@ export type AccountStorageSchema = UnionToIntersection<
   DotNotation<AccountStorageType>
 >;
 
-export const store = new Store();
+export const store = new Store({
+  migrations: {
+    ">0.7.0": (store) => {
+      const accounts = store.get("accounts") || {};
+
+      Object.entries(accounts).forEach(([id, account]) => {
+        delete account.profileId;
+        delete account.deviceId;
+
+        store.set(`accounts.${id}`, account);
+      });
+
+      store.delete("storages");
+      store.delete("configs");
+      store.delete("vaults");
+      console.log("Running migration", store);
+    },
+  },
+});
 
 store.onDidAnyChange(() => {
   sendWindow("store.change");

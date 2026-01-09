@@ -1,35 +1,37 @@
-import { SidebarDeviceSelect } from "@desktop/components/sidebar/selects/device";
-import { SidebarProfileSelect } from "@desktop/components/sidebar/selects/profile";
+import { SidebarHostNameSelect } from "@desktop/components/sidebar/selects/hostName";
+import { SidebarUserNameSelect } from "@desktop/components/sidebar/selects/userName";
 import { SidebarVaultSelect } from "@desktop/components/sidebar/selects/vault";
-import { useDeviceList } from "@desktop/hooks/queries/use-device-list";
-import { useDeviceProfileList } from "@desktop/hooks/queries/use-device-profile-list";
-import { useProfileVaultList } from "@desktop/hooks/queries/use-profile-vault-list";
+import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import { useParams } from "@tanstack/react-router";
 import { SidebarMenuItem } from "@ui/sidebar";
 import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
 import { useMemo } from "react";
 
 export function SidebarSelects() {
-  const { data: devices, isPending: isDevicesPending } = useDeviceList();
-  const { data: profiles, isPending: isProfilesPending } =
-    useDeviceProfileList();
-  const { data: vaults, isPending: isVaultsPending } = useProfileVaultList();
+  const { data: vaults, isPending: isVaultsPending } = useVaultList();
+  const { data: profiles } = useVaultProfiles();
+
+  const { hostName } = useParams({ strict: false });
+
+  const userNames = useMemo(
+    () => profiles?.find((profile) => profile.hostName === hostName)?.userNames,
+    [profiles, hostName],
+  );
 
   const sections = useMemo(() => {
     return [
-      ...((devices?.length || 0) > 1 ? ["DEVICES"] : []),
-      ...((profiles?.length || 0) > 1 ? ["PROFILES"] : []),
       // Only one vault is required to show the dropdown,
       // to be able to add a new vault from there.
       ...((vaults?.length || 0) > 0 ? ["VAULTS"] : []),
+      ...((profiles?.length || 0) > 1 ? ["HOSTNAME"] : []),
+      ...((userNames?.length || 0) > 1 ? ["USERNAME"] : []),
     ];
-  }, [devices, profiles, vaults]);
+  }, [profiles, vaults, userNames]);
 
-  const isPending = useMemo(() => {
-    return isDevicesPending || isProfilesPending || isVaultsPending;
-  }, [isDevicesPending, isProfilesPending, isVaultsPending]);
-
-  if (isPending) return <Skeleton className="mt-8 h-11 w-full !rounded-lg" />;
+  if (isVaultsPending)
+    return <Skeleton className="mt-8 h-11 w-full !rounded-lg" />;
   if (!sections.length) return null;
   return (
     <SidebarMenuItem className="mt-8 flex w-full flex-col">
@@ -39,10 +41,10 @@ export function SidebarSelects() {
           index < sections.length - 1 && "rounded-b-none border-b-0",
         );
 
-        return section === "DEVICES" ? (
-          <SidebarDeviceSelect key="DEVICES" className={className} />
-        ) : section === "PROFILES" ? (
-          <SidebarProfileSelect key="PROFILES" className={className} />
+        return section === "HOSTNAME" ? (
+          <SidebarHostNameSelect key="HOSTNAME" className={className} />
+        ) : section === "USERNAME" ? (
+          <SidebarUserNameSelect key="PROFILES" className={className} />
         ) : section === "VAULTS" ? (
           <SidebarVaultSelect key="VAULTS" className={className} />
         ) : null;

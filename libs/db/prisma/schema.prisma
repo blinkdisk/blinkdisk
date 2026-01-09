@@ -24,9 +24,9 @@ model Account {
 
   sessions      Session[]
   authMethods   AuthMethod[]
-  devices       Device[]
   vaults        Vault[]
-  profiles      Profile[]
+  devices       LegacyDevice[]
+  profiles      LegacyProfile[]
   configs       Config[]
   space         Space[]
   subscriptions Subscription[]
@@ -80,7 +80,7 @@ model Verification {
   @@index([identifier])
 }
 
-model Device {
+model LegacyDevice {
   id        String   @id @default(nanoid())
   alias     String
   hostName  String?
@@ -88,13 +88,13 @@ model Device {
   createdAt DateTime @default(now())
   accountId String
 
-  account  Account   @relation(fields: [accountId], references: [id])
-  profiles Profile[]
+  account  Account         @relation(fields: [accountId], references: [id])
+  profiles LegacyProfile[]
 
   @@index([machineId])
 }
 
-model Profile {
+model LegacyProfile {
   id        String   @id @default(nanoid())
   alias     String
   userName  String?
@@ -102,10 +102,8 @@ model Profile {
   deviceId  String
   createdAt DateTime @default(now())
 
-  account Account @relation(fields: [accountId], references: [id])
-  device  Device  @relation(fields: [deviceId], references: [id])
-
-  configs Config[]
+  account Account      @relation(fields: [accountId], references: [id])
+  device  LegacyDevice @relation(fields: [deviceId], references: [id])
 
   @@index([userName])
 }
@@ -157,14 +155,14 @@ model Config {
   id        String      @id @default(nanoid())
   data      Json
   level     ConfigLevel
-  profileId String?
+  userName  String?
+  hostName  String?
   vaultId   String
   accountId String
   createdAt DateTime    @default(now())
 
-  profile Profile? @relation(fields: [profileId], references: [id])
-  account Account  @relation(fields: [accountId], references: [id])
-  vault   Vault    @relation(fields: [vaultId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+  vault   Vault   @relation(fields: [vaultId], references: [id])
 
   @@index([level])
 }

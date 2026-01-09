@@ -1,6 +1,5 @@
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -25,8 +24,7 @@ export function useCreateFolder({
   const queryClient = useQueryClient();
 
   const { vaultId } = useVaultId();
-  const { deviceId } = useDevice();
-  const { profileId } = useProfile();
+  const { profileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
 
   const { data: vault } = useVault();
@@ -40,8 +38,7 @@ export function useCreateFolder({
         size: number | null;
       },
     ) => {
-      if (!vaultId || !deviceId || !profileId)
-        throw new Error("Missing fields");
+      if (!vaultId || !profileFilter) throw new Error("Missing fields");
 
       if (
         !values.force &&
@@ -76,8 +73,8 @@ export function useCreateFolder({
       });
 
       const id = await hashFolder({
-        deviceId,
-        profileId,
+        hostName: profileFilter.host,
+        userName: profileFilter.userName,
         path: values.path,
       });
 
@@ -98,7 +95,7 @@ export function useCreateFolder({
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId),
+          queryKey: queryKeys.folder.list(vaultId, profileFilter),
         }),
         // Policies can be nested inside folders.
         queryClient.invalidateQueries({
@@ -107,7 +104,7 @@ export function useCreateFolder({
       ]);
 
       await navigate({
-        to: "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}",
+        to: "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
           folderId: res.id,

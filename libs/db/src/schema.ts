@@ -43,12 +43,13 @@ export type Config = {
   id: Generated<string>;
   data: unknown;
   level: ConfigLevel;
-  profileId: string | null;
+  userName: string | null;
+  hostName: string | null;
   vaultId: string;
   accountId: string;
   createdAt: Generated<Timestamp>;
 };
-export type Device = {
+export type LegacyDevice = {
   id: Generated<string>;
   alias: string;
   hostName: string | null;
@@ -56,7 +57,7 @@ export type Device = {
   createdAt: Generated<Timestamp>;
   accountId: string;
 };
-export type Profile = {
+export type LegacyProfile = {
   id: Generated<string>;
   alias: string;
   userName: string | null;
@@ -122,8 +123,8 @@ export type DB = {
   Account: Account;
   AuthMethod: AuthMethod;
   Config: Config;
-  Device: Device;
-  Profile: Profile;
+  LegacyDevice: LegacyDevice;
+  LegacyProfile: LegacyProfile;
   Session: Session;
   Space: Space;
   Subscription: Subscription;

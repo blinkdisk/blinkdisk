@@ -6,10 +6,6 @@ import {
 } from "@electron/store";
 import { Vault } from "@electron/vault";
 
-export type StorageCacheWithId = GlobalStorageSchema["storages"][string] & {
-  id: string;
-};
-
 export type VaultCacheWithId = GlobalStorageSchema["vaults"][string] & {
   id: string;
 };
@@ -27,7 +23,7 @@ export function setVaultCache({
   vaults,
 }: {
   accountId: string;
-  vaults: VaultCacheWithId[];
+  vaults: (Omit<VaultCacheWithId, "token"> & { token?: string | null })[];
 }) {
   const cachedVaults = store.get("vaults") || {};
   const otherVaults = Object.entries(cachedVaults)
@@ -42,7 +38,12 @@ export function setVaultCache({
     )
     .filter((vault) => vault.accountId !== accountId);
 
-  otherVaults.push(...vaults);
+  otherVaults.push(
+    ...vaults.map((vault) => ({
+      ...vault,
+      token: vault.token ? encryptString(vault.token) : undefined,
+    })),
+  );
 
   store.set(
     "vaults",
@@ -86,57 +87,6 @@ export function getAccountCache() {
     id,
     ...account,
   })) as AccountCacheWithId[];
-}
-
-export function setStorageCache({
-  accountId,
-  storages,
-}: {
-  accountId: string;
-  storages: (Omit<StorageCacheWithId, "token"> & { token?: string | null })[];
-}) {
-  const cachedStorages = store.get("storages") || {};
-  const otherStorages = Object.entries(cachedStorages)
-    .map(
-      ([id, storage]) =>
-        ({
-          id,
-          ...storage,
-        }) as GlobalStorageSchema["storages"][string] & {
-          id: string;
-        },
-    )
-    .filter((storage) => storage.accountId !== accountId);
-
-  otherStorages.push(
-    ...storages.map((storage) => ({
-      ...storage,
-      token: storage.token ? encryptString(storage.token) : undefined,
-    })),
-  );
-
-  store.set(
-    "storages",
-    otherStorages.reduce(
-      (acc, storage) => {
-        const { id, ...rest } = storage;
-        acc[id] = rest;
-        return acc;
-      },
-      {} as GlobalStorageSchema["storages"],
-    ),
-  );
-
-  Vault.onCacheChanged();
-}
-
-export function getStorageCache() {
-  const storages = store.get("storages") || {};
-
-  return Object.entries(storages).map(([id, storage]) => ({
-    id,
-    ...storage,
-  })) as StorageCacheWithId[];
 }
 
 export function setConfigCache({

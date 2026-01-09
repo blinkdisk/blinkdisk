@@ -9,18 +9,14 @@ export function useFilesystemForm({
   action,
   config,
   onSubmit,
-  storageId,
+  vaultId,
 }: {
   action: VaultAction;
   config?: ZFilesystemConfigType;
   onSubmit: (value: ZFilesystemConfigType) => void;
-  storageId?: string;
+  vaultId?: string;
 }) {
-  const { onSubmitAsync } = useConfigValidation(
-    "FILESYSTEM",
-    action,
-    storageId,
-  );
+  const { onSubmitAsync } = useConfigValidation("FILESYSTEM", action, vaultId);
 
   return useAppForm({
     defaultValues: {

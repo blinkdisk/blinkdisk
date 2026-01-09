@@ -1,11 +1,11 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { Space } from "@cloud/classes/space";
-import { Storage } from "@cloud/index";
+import { Vault } from "@cloud/classes/vault";
 import { consumeSpace } from "@cloud/utils/space";
 import { ZCloudDeleteBlob } from "@schemas/cloud";
 
 export async function deleteBlob(
-  durableObject: InstanceType<typeof Storage>,
+  durableObject: InstanceType<typeof Vault>,
   data: any,
   storage: DurableObjectStorage,
   space: DurableObjectNamespace<Space>,

@@ -1,9 +1,7 @@
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
-export function useVaultPassword(
-  vault?: { id: string; storageId: string } | null,
-) {
+export function useVaultPassword(vault?: { id: string } | null) {
   const { queryKeys } = useQueryKey();
 
   return useQuery({
@@ -12,7 +10,7 @@ export function useVaultPassword(
       if (!vault) return null;
 
       return await window.electron.vault.password.get({
-        storageId: vault.storageId,
+        vaultId: vault.id,
       });
     },
     enabled: !!vault,

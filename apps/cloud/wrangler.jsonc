@@ -7,8 +7,8 @@
   "durable_objects": {
     "bindings": [
       {
-        "name": "STORAGE",
-        "class_name": "Storage",
+        "name": "VAULT",
+        "class_name": "Vault",
       },
       {
         "name": "SPACE",
@@ -20,6 +20,15 @@
     {
       "tag": "v1",
       "new_sqlite_classes": ["Storage", "Space"],
+    },
+    {
+      "tag": "v2",
+      "renamed_classes": [
+        {
+          "from": "Storage",
+          "to": "Vault",
+        },
+      ],
     },
   ],
   "env": {
