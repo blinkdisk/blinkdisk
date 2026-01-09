@@ -14,12 +14,20 @@
         "name": "SPACE",
         "class_name": "Space",
       },
+      {
+        "name": "VAULT",
+        "class_name": "Vault",
+      },
     ],
   },
   "migrations": [
     {
       "tag": "v1",
       "new_sqlite_classes": ["Storage", "Space"],
+    },
+    {
+      "tag": "v2",
+      "new_sqlite_classes": ["Vault"],
     },
   ],
   "env": {
