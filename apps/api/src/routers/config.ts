@@ -47,7 +47,11 @@ export const configRouter = router({
       .executeTakeFirst();
 
     if (existing) {
-      await ctx.db.updateTable("Config").set({ data: input.config }).execute();
+      await ctx.db
+        .updateTable("Config")
+        .set({ data: input.config })
+        .where("id", "=", existing.id)
+        .execute();
     } else {
       const vault = await ctx.db
         .selectFrom("Vault")
