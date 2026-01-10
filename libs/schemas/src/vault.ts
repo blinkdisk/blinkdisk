@@ -1,3 +1,4 @@
+import { LATEST_VAULT_VERSION } from "@config/vault";
 import { ZProviderType } from "@schemas/providers";
 import {
   ZVaultEncryptedConfig,
@@ -86,3 +87,10 @@ export const ZSoftDeleteVault = z.object({
 });
 
 export type ZSoftDeleteVaultType = z.infer<typeof ZSoftDeleteVault>;
+
+export const ZUpdateVaultVersion = z.object({
+  vaultId: z.string(),
+  version: z.number().min(1).max(LATEST_VAULT_VERSION),
+});
+
+export type ZUpdateVaultVersionType = z.infer<typeof ZUpdateVaultVersion>;

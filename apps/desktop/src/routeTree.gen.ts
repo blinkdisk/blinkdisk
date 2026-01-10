@@ -18,6 +18,7 @@ import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthMagicImport } from './routes/auth/magic'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AppMigrateImport } from './routes/app/migrate'
 import { Route as AppLoadingImport } from './routes/app/loading'
 import { Route as AppVaultIdRouteImport } from './routes/app/{-$vaultId}/route'
 import { Route as AppVaultIdIndexImport } from './routes/app/{-$vaultId}/index'
@@ -72,6 +73,12 @@ const AuthLoginRoute = AuthLoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AppMigrateRoute = AppMigrateImport.update({
+  id: '/migrate',
+  path: '/migrate',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 const AppLoadingRoute = AppLoadingImport.update({
@@ -185,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/loading'
       fullPath: '/app/loading'
       preLoaderRoute: typeof AppLoadingImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/app/migrate': {
+      id: '/app/migrate'
+      path: '/migrate'
+      fullPath: '/app/migrate'
+      preLoaderRoute: typeof AppMigrateImport
       parentRoute: typeof AppRouteImport
     }
     '/auth/login': {
@@ -356,12 +370,14 @@ const AppVaultIdRouteRouteWithChildren = AppVaultIdRouteRoute._addFileChildren(
 interface AppRouteRouteChildren {
   AppVaultIdRouteRoute: typeof AppVaultIdRouteRouteWithChildren
   AppLoadingRoute: typeof AppLoadingRoute
+  AppMigrateRoute: typeof AppMigrateRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppVaultIdRouteRoute: AppVaultIdRouteRouteWithChildren,
   AppLoadingRoute: AppLoadingRoute,
+  AppMigrateRoute: AppMigrateRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -391,6 +407,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/{-$vaultId}': typeof AppVaultIdRouteRouteWithChildren
   '/app/loading': typeof AppLoadingRoute
+  '/app/migrate': typeof AppMigrateRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
@@ -410,6 +427,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/loading': typeof AppLoadingRoute
+  '/app/migrate': typeof AppMigrateRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
@@ -429,6 +447,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/{-$vaultId}': typeof AppVaultIdRouteRouteWithChildren
   '/app/loading': typeof AppLoadingRoute
+  '/app/migrate': typeof AppMigrateRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
@@ -452,6 +471,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app/{-$vaultId}'
     | '/app/loading'
+    | '/app/migrate'
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
@@ -470,6 +490,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/app/loading'
+    | '/app/migrate'
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
@@ -487,6 +508,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app/{-$vaultId}'
     | '/app/loading'
+    | '/app/migrate'
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
@@ -538,6 +560,7 @@ export const routeTree = rootRoute
       "children": [
         "/app/{-$vaultId}",
         "/app/loading",
+        "/app/migrate",
         "/app/"
       ]
     },
@@ -560,6 +583,10 @@ export const routeTree = rootRoute
     },
     "/app/loading": {
       "filePath": "app/loading.tsx",
+      "parent": "/app"
+    },
+    "/app/migrate": {
+      "filePath": "app/migrate.tsx",
       "parent": "/app"
     },
     "/auth/login": {

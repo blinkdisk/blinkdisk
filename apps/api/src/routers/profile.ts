@@ -14,7 +14,7 @@ export const profileRouter = router({
             .selectFrom("LegacyProfile")
             .select(["LegacyProfile.id", "LegacyProfile.userName"])
             .whereRef("LegacyProfile.deviceId", "=", "LegacyDevice.id"),
-        ).as("profiles"),
+        ).as("userNames"),
       ])
       .where("accountId", "=", ctx.account?.id!)
       .execute();

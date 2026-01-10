@@ -26,7 +26,11 @@ export function SidebarHostNameSelect({
   const { data: profiles } = useVaultProfiles();
 
   return (
-    <Select value={hostName} onValueChange={changeHostName}>
+    <Select
+      // The fallback prevents it from being uncontrolled
+      value={hostName || "-"}
+      onValueChange={changeHostName}
+    >
       <SelectTrigger
         className={cn(
           "bg-sidebar-muted border-sidebar-border focus:z-10",

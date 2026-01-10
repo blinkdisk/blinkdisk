@@ -48,10 +48,6 @@ export function useQueryKey() {
         all: [accountId, "subscription"],
         detail: () => [...keys.subscription.all],
       },
-      profile: {
-        all: [accountId, "profile"],
-        listLegacy: () => [...keys.profile.all, "list-legacy"],
-      },
       config: {
         all: [accountId, "config"],
         list: (hostName?: string, userName?: string) => [

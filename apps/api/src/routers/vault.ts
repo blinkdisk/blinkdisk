@@ -11,6 +11,7 @@ import {
   ZHardDeleteVault,
   ZSoftDeleteVault,
   ZUpdateVault,
+  ZUpdateVaultVersion,
 } from "@schemas/vault";
 import { generateId } from "@utils/id";
 import { logsnag } from "@utils/logsnag";
@@ -290,5 +291,27 @@ export const vaultRouter = router({
         const stub = ctx.env.VAULT.getByName(vault.id);
         await (stub as any).delete(vault.id, true);
       }
+    }),
+  updateVersion: authedProcedure
+    .input(ZUpdateVaultVersion)
+    .mutation(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .select(["id"])
+        .where("id", "=", input.vaultId)
+        .where("accountId", "=", ctx.account?.id!)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      await ctx.db
+        .updateTable("Vault")
+        .set({
+          version: input.version,
+        })
+        .where("id", "=", vault.id)
+        .execute();
+
+      return vault;
     }),
 });

@@ -9,4 +9,4 @@ export const defaultVaultOptions: ZVaultOptionsType = {
   errorCorrectionOverhead: 0,
 };
 
-export const LATEST_VAULT_VERSION = 1;
+export const LATEST_VAULT_VERSION = 2;

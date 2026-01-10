@@ -6,7 +6,6 @@ import {
   getConfigCache,
   getVaultCache,
 } from "@electron/cache";
-import { generateCSRFToken } from "@electron/csrf";
 import {
   decryptString,
   decryptVaultConfig,
@@ -56,7 +55,6 @@ export class Vault {
   cookies?: CookieJar = new CookieJar();
   signingKey?: string;
   sessionCookie?: string;
-  csrfToken?: string;
 
   static vaults: Vault[] = [];
   static validationVault?: Vault;
@@ -325,7 +323,6 @@ export class Vault {
     return new Promise<void>((res) => {
       this.signingKey = generateId();
       this.sessionCookie = generateId();
-      this.csrfToken = generateCSRFToken(this.sessionCookie!, this.signingKey!);
 
       const args = [
         "server",
@@ -342,6 +339,10 @@ export class Vault {
         `--auth-cookie-signing-key=${this.signingKey}`,
         "--shutdown-on-stdin",
         "--address=127.0.0.1:0",
+        // CSRF tokens should only be required if the server
+        // is hosted publicly. Cookies are only stored in this
+        // class, so no csrf should be possible.
+        "--disable-csrf-token-checks",
         "--config-file",
         resolve(globalConfigDirectory(), `${this.id}.config`),
       ];
@@ -482,7 +483,6 @@ export class Vault {
             ).toString("base64")}`,
             ...(variant === "renderer"
               ? {
-                  "X-BlinkDisk-Csrf-Token": this.csrfToken,
                   cookie:
                     this.cookies?.getCookieStringSync(this.serverAddress!) ||
                     "",

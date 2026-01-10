@@ -31,7 +31,11 @@ export function SidebarUserNameSelect({
   );
 
   return (
-    <Select value={userName} onValueChange={changeUserName}>
+    <Select
+      // The fallback prevents it from being uncontrolled
+      value={userName || "-"}
+      onValueChange={changeUserName}
+    >
       <SelectTrigger
         className={cn(
           "bg-sidebar-muted border-sidebar-border focus:z-10",
