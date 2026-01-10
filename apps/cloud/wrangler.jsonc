@@ -25,6 +25,10 @@
       "tag": "v2",
       "new_sqlite_classes": ["Vault"],
     },
+    {
+      "tag": "v3",
+      "deleted_classes": ["Storage"],
+    },
   ],
   "env": {
     "production": {
