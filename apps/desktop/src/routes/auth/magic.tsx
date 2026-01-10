@@ -1,10 +1,11 @@
 import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
+import { Button } from "@ui/button";
 import { Slot } from "@ui/input-otp";
-import { AlertTriangleIcon } from "lucide-react";
+import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
 import { Trans } from "react-i18next";
 
 export const Route = createFileRoute("/auth/magic")({
@@ -13,12 +14,25 @@ export const Route = createFileRoute("/auth/magic")({
 
 function RouteComponent() {
   const { t } = useAppTranslation("auth.magic");
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
 
   const form = useMagicCodeForm();
   const errors = useStore(form.store, (state) => state.errorMap);
 
   return (
     <div className="flex max-w-[21rem] flex-col gap-y-8">
+      {canGoBack && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="fixed right-10 top-10"
+          onClick={() => router.history.back()}
+        >
+          <ArrowLeftIcon />
+          Go back
+        </Button>
+      )}
       <div className="flex flex-col gap-y-3 text-center">
         <h1 className="text-4xl font-extrabold">{t("title")}</h1>
         <div className="text-muted-foreground text-center text-sm">
