@@ -100,13 +100,13 @@ export type Subscription = {
 };
 export type Vault = {
   id: Generated<string>;
+  coreId: string;
   status: VaultStatus;
   name: string;
   version: number;
   provider: VaultProvider;
   accountId: string;
   configLevel: ConfigLevel;
-  passwordHash: string;
   options: unknown;
   spaceId: string | null;
   createdAt: Generated<Timestamp>;

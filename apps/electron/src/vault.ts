@@ -29,6 +29,7 @@ import { Cookie, CookieJar } from "tough-cookie";
 
 export type VaultStatus =
   | "PASSWORD_MISSING"
+  | "PASSWORD_INVALID"
   | "CONFIG_MISSING"
   | "READY"
   | "STARTING"
@@ -128,7 +129,10 @@ export class Vault {
 
         existingVault.name = vault.name;
 
-        if (existingVault.status === "PASSWORD_MISSING" && password)
+        if (
+          existingVault.status === "PASSWORD_MISSING" ||
+          (existingVault.status === "PASSWORD_INVALID" && password)
+        )
           existingVault.status = "READY";
         else if (existingVault.status === "CONFIG_MISSING" && config)
           existingVault.status = "READY";
@@ -138,9 +142,15 @@ export class Vault {
 
         if (existingVault.status === "READY") existingVault.start();
       } else {
-        const decryptedToken = vault.token
-          ? decryptString(vault.token, null)
-          : null;
+        let decryptedToken: string | null = null;
+        let invalidPassword = false;
+        try {
+          decryptedToken = vault.token
+            ? decryptString(vault.token, null)
+            : null;
+        } catch {
+          invalidPassword = true;
+        }
 
         const vaultInstance = new Vault({
           id: vault.id,
@@ -149,11 +159,13 @@ export class Vault {
           token: decryptedToken,
           provider: vault.provider,
           config,
-          status: !password
-            ? "PASSWORD_MISSING"
-            : !config
-              ? "CONFIG_MISSING"
-              : "READY",
+          status: invalidPassword
+            ? "PASSWORD_INVALID"
+            : !password
+              ? "PASSWORD_MISSING"
+              : !config
+                ? "CONFIG_MISSING"
+                : "READY",
         });
 
         this.vaults.push(vaultInstance);
@@ -168,7 +180,11 @@ export class Vault {
     );
   }
 
-  static async validate(vault: { type: ProviderType; config: ProviderConfig }) {
+  static async validate(vault: {
+    type: ProviderType;
+    config: ProviderConfig;
+    password?: string;
+  }) {
     if (!Vault.validationVault) {
       this.validationVault = new Vault({
         id: "temporary",
@@ -188,6 +204,7 @@ export class Vault {
           type: this.mapProviderType(vault.type),
           config: this.mapConfigFields(vault.type, vault.config),
         },
+        ...(vault.password && { password: vault.password }),
       },
     })) as { code?: string; error?: string; uniqueID?: string };
   }
@@ -307,14 +324,7 @@ export class Vault {
       connected?: boolean;
     };
 
-    if (!status.connected) {
-      const res = await this.connect();
-
-      if (res.error) {
-        this.status = "READY";
-        return;
-      }
-    }
+    if (!status.connected) await this.connect();
 
     this.status = "RUNNING";
   }
@@ -383,12 +393,18 @@ export class Vault {
       throw new Error("PASSWORD_MISSING");
     }
 
-    const decryptedConfig = this.config
-      ? await decryptVaultConfig({
-          password,
-          encrypted: this.config,
-        })
-      : null;
+    let decryptedConfig: object | null = null;
+    try {
+      decryptedConfig = this.config
+        ? await decryptVaultConfig({
+            password,
+            encrypted: this.config,
+          })
+        : null;
+    } catch {
+      this.invalidPassword();
+      throw new Error("INVALID_PASSWORD");
+    }
 
     return (await this.fetch({
       method: "POST",
@@ -614,9 +630,16 @@ export class Vault {
         //   break;
 
         default:
-          this.log(data);
+          if (data.includes("invalid repository password")) {
+            this.invalidPassword();
+          } else this.log(data);
       }
     }
+  }
+
+  invalidPassword() {
+    this.stop();
+    this.status = "PASSWORD_INVALID";
   }
 
   stop() {

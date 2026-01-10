@@ -15,10 +15,10 @@ export type SftpFormProps = {
   action: VaultAction;
   config?: ZSftpConfigType;
   onSubmit: (config: ZSftpConfigType) => void;
-  vaultId?: string;
+  coreId?: string;
 };
 
-export function SftpForm({ action, config, onSubmit, vaultId }: SftpFormProps) {
+export function SftpForm({ action, config, onSubmit, coreId }: SftpFormProps) {
   const { t } = useAppTranslation("vault.providers.SFTP.fields");
   const disabledContext = useContext(FormDisabledContext);
 
@@ -26,7 +26,7 @@ export function SftpForm({ action, config, onSubmit, vaultId }: SftpFormProps) {
     action,
     config,
     onSubmit,
-    vaultId,
+    coreId,
   });
 
   const values = useStore(form.store, (store) => store.values);

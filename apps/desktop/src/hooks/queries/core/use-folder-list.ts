@@ -7,7 +7,7 @@ import { hashFolder } from "@desktop/lib/folder";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING";
+export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";
 
 export type CoreFolderItem = {
   id: string;

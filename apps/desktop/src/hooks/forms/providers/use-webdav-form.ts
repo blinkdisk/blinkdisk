@@ -9,14 +9,14 @@ export function useWebDavForm({
   action,
   config,
   onSubmit,
-  vaultId,
+  coreId,
 }: {
   action: VaultAction;
   config?: ZWebDavConfigType;
   onSubmit: (value: ZWebDavConfigType) => void;
-  vaultId?: string;
+  coreId?: string;
 }) {
-  const { onSubmitAsync } = useConfigValidation("WEBDAV", action, vaultId);
+  const { onSubmitAsync } = useConfigValidation("WEBDAV", action, coreId);
 
   return useAppForm({
     defaultValues: {

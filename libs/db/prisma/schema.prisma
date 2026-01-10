@@ -129,13 +129,13 @@ enum VaultStatus {
 
 model Vault {
   id           String        @id @default(nanoid())
+  coreId       String
   status       VaultStatus
   name         String
   version      Int
   provider     VaultProvider
   accountId    String
   configLevel  ConfigLevel
-  passwordHash String
   options      Json
   spaceId      String?
   createdAt    DateTime      @default(now())

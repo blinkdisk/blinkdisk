@@ -19,9 +19,7 @@ export function ProviderSubmitButton({
   return (
     <form.AppForm>
       <form.Submit className="mt-2">
-        {action === "CREATE"
-          ? t("createDialog.config.submit")
-          : t("linkDialog.config.submit")}
+        {t("createDialog.config.submit")}
       </form.Submit>
     </form.AppForm>
   );

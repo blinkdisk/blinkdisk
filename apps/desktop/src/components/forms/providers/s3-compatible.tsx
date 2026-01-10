@@ -9,14 +9,14 @@ export type S3CompatibleFormProps = {
   action: VaultAction;
   config?: ZS3CompatibleConfigType;
   onSubmit: (config: ZS3CompatibleConfigType) => void;
-  vaultId?: string;
+  coreId?: string;
 };
 
 export function S3CompatibleForm({
   action,
   config,
   onSubmit,
-  vaultId,
+  coreId,
 }: S3CompatibleFormProps) {
   const { t } = useAppTranslation("vault.providers.S3_COMPATIBLE.fields");
 
@@ -24,7 +24,7 @@ export function S3CompatibleForm({
     action,
     config,
     onSubmit,
-    vaultId,
+    coreId,
   });
 
   return (

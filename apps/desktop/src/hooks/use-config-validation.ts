@@ -1,4 +1,5 @@
 import { ProviderType } from "@config/providers";
+import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { useCallback } from "react";
 
@@ -7,7 +8,7 @@ export type VaultAction = "CREATE" | "CONNECT" | "UPDATE";
 export function useConfigValidation(
   providerType: ProviderType,
   action: VaultAction,
-  vaultId?: string,
+  coreId?: string,
 ) {
   const onSubmitAsync = useCallback(
     async ({ value }: { value: object }) => {
@@ -34,29 +35,27 @@ export function useConfigValidation(
             : result.error,
         };
 
-      if (action === "CREATE")
+      const storedId = atob(result.uniqueID || "");
+
+      if (action === "CONNECT" && storedId !== coreId)
         return {
-          code: "VAULT_ALREADY_EXISTS",
+          code: "INCORRECT_VAULT_FOUND",
         };
 
-      if (
-        action === "CONNECT" &&
-        vaultId &&
-        result.uniqueID &&
-        atob(result.uniqueID) !== vaultId
-      ) {
-        const storedId = atob(result.uniqueID);
+      if (action === "CREATE") {
+        const vaults = await trpc.vault.list.query();
 
-        // Update legacy ids with "strg" prefix
-        if (storedId.startsWith("strg_")) storedId.replace(/^strg_/, "vlt_");
-
-        if (storedId !== vaultId)
+        const existing = vaults.find((v) => v.coreId === storedId);
+        if (existing)
           return {
-            code: "INCORRECT_VAULT_FOUND",
+            code: "VAULT_ALREADY_EXISTS",
+            name: existing.name,
           };
+
+        return undefined;
       }
     },
-    [action, vaultId, providerType],
+    [action, coreId, providerType],
   );
 
   return { onSubmitAsync };

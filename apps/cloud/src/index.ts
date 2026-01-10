@@ -25,7 +25,9 @@ export default {
       );
       if (!payload) return new Response("Invalid token", { status: 401 });
 
-      let vaultId = payload.vaultId;
+      let vaultId = payload.vaultId || payload.storageId;
+      if (!vaultId)
+        return new Response("Missing vaultId in token", { status: 401 });
 
       // Update legacy ids with "strg" prefix
       if (vaultId.startsWith("strg_"))

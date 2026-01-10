@@ -37,10 +37,9 @@ export function CreateVaultAlerts({ form, action }: CreateVaultAlertsProps) {
   if (
     errors &&
     errors.onSubmit &&
-    (errors.onSubmit.code === "VAULT_ALREADY_EXISTS" ||
-      errors.onSubmit.code === "VAULT_NOT_FOUND")
+    errors.onSubmit.code === "VAULT_ALREADY_EXISTS"
   )
-    return <VaultExistsError code={errors.onSubmit.code} />;
+    return <VaultExistsError name={errors.onSubmit.name} />;
 
   return (
     <Alert variant="info">

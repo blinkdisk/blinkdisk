@@ -22,11 +22,19 @@ export const configRouter = router({
       .where(({ or, and, eb }) =>
         or([
           eb("Config.level", "=", "VAULT"),
-          and([
-            eb("Config.level", "=", "PROFILE"),
-            eb("Config.userName", "=", input.userName),
-            eb("Config.hostName", "=", input.hostName),
-          ]),
+          ...(input.userName || input.hostName
+            ? [
+                and([
+                  eb("Config.level", "=", "PROFILE"),
+                  ...(input.userName
+                    ? [eb("Config.userName", "=", input.userName)]
+                    : []),
+                  ...(input.hostName
+                    ? [eb("Config.hostName", "=", input.hostName)]
+                    : []),
+                ]),
+              ]
+            : [eb("Config.level", "=", "PROFILE")]),
         ]),
       )
       .execute();

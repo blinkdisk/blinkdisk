@@ -34,7 +34,7 @@ export function ConfigMissing({ vault }: ConfigMissingProps) {
           {Form && (
             <Form
               action="CONNECT"
-              vaultId={vault?.id}
+              coreId={vault?.coreId}
               onSubmit={(config) =>
                 config &&
                 vault &&

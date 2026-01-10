@@ -9,14 +9,14 @@ export type WebDavFormProps = {
   action: VaultAction;
   config?: ZWebDavConfigType;
   onSubmit: (config: ZWebDavConfigType) => void;
-  vaultId?: string;
+  coreId?: string;
 };
 
 export function WebDavForm({
   action,
   config,
   onSubmit,
-  vaultId,
+  coreId,
 }: WebDavFormProps) {
   const { t } = useAppTranslation("vault.providers.WEBDAV.fields");
 
@@ -24,7 +24,7 @@ export function WebDavForm({
     action,
     config,
     onSubmit,
-    vaultId,
+    coreId,
   });
 
   return (

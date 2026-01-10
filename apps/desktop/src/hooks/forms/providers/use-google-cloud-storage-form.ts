@@ -12,17 +12,17 @@ export function useGoogleCloudStorageForm({
   action,
   config,
   onSubmit,
-  vaultId,
+  coreId,
 }: {
   action: VaultAction;
   config?: ZGoogleCloudStorageConfigType;
   onSubmit: (value: ZGoogleCloudStorageConfigType) => void;
-  vaultId?: string;
+  coreId?: string;
 }) {
   const { onSubmitAsync } = useConfigValidation(
     "GOOGLE_CLOUD_STORAGE",
     action,
-    vaultId,
+    coreId,
   );
 
   return useAppForm({

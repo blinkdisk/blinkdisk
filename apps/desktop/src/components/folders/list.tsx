@@ -129,7 +129,7 @@ function Folder({ folder }: FolderProps) {
                     <SquareIcon />
                     {t("dropdown.cancel")}
                   </LocalDropdownMenuItem>
-                ) : folder.status === "IDLE" ? (
+                ) : ["IDLE", "REMOTE"].includes(folder.status) ? (
                   <LocalDropdownMenuItem
                     onClick={() => startBackup({ path: folder.source.path })}
                   >

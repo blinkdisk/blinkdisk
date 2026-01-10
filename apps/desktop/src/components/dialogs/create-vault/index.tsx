@@ -94,7 +94,10 @@ export function CreateVaultDialog() {
         ) : step === "DETAILS" ? (
           <CreateVaultDetails
             providerType={provider}
-            onSubmit={close}
+            onSubmit={() => {
+              close();
+              setTimeout(reset, 100);
+            }}
             config={config}
           />
         ) : null}

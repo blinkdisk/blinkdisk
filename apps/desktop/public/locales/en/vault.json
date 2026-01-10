@@ -41,15 +41,11 @@
       },
       "existsError": {
         "title": "Vault already exists",
-        "description": "This vault is already connected to your account."
-      },
-      "notFoundError": {
-        "title": "Vault not found",
-        "description": "This vault hasn't been created yet. Please check your settings or create a new one instead."
+        "description": "This vault is already connected to your account under the name \"{{name}}\"."
       },
       "incorrectError": {
         "title": "Different vault found",
-        "description": "Your configuration resolved to a different vault than selected."
+        "description": "Your configuration resolved to a different vault. Please double check your settings."
       }
     },
     "details": {
@@ -372,7 +368,7 @@
   },
   "remoteTooltip": {
     "title": "Remote profile",
-    "description": "You are viewing a vault from a different device or profile. You can't perform this action."
+    "description": "You are viewing a vault from a different profile or device. You can't perform this action."
   },
   "deleteDialog": {
     "title": "Delete vault",

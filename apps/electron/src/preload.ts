@@ -3,12 +3,7 @@ import type {
   decryptVaultConfig,
   encryptVaultConfig,
 } from "@electron/encryption";
-import type {
-  comparePassword,
-  getPasswordCache,
-  hashPassword,
-  setPasswordCache,
-} from "@electron/password";
+import type { getPasswordCache, setPasswordCache } from "@electron/password";
 import {
   checkEmpty,
   listRestores,
@@ -141,14 +136,6 @@ const api = {
       get: (payload: Parameters<typeof getPasswordCache>[0]) =>
         ipcRenderer.invoke("vault.password.get", payload) as Promise<
           ReturnType<typeof getPasswordCache>
-        >,
-      hash: (payload: Parameters<typeof hashPassword>[0]) =>
-        ipcRenderer.invoke("vault.password.hash", payload) as Promise<
-          ReturnType<typeof hashPassword>
-        >,
-      compare: (payload: Parameters<typeof comparePassword>[0]) =>
-        ipcRenderer.invoke("vault.password.compare", payload) as Promise<
-          ReturnType<typeof comparePassword>
         >,
     },
     restore: {

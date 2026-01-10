@@ -1,5 +1,6 @@
 import { ProviderType } from "@config/providers";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
+import { useProfile } from "@desktop/hooks/use-profile";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -22,6 +23,7 @@ export function CreateVaultDetails({
 }: CreateVaultDetailsProps) {
   const { t } = useAppTranslation("vault.createDialog.details");
   const { dark } = useTheme();
+  const { localUserName, localHostName } = useProfile();
 
   const navigate = useNavigate();
 
@@ -31,10 +33,11 @@ export function CreateVaultDetails({
     onSuccess: async (res) => {
       await navigate({
         to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
-        params: (params) => ({
-          ...params,
+        params: {
           vaultId: res.vault.id,
-        }),
+          hostName: localHostName,
+          userName: localUserName,
+        },
       });
 
       onSubmit?.();

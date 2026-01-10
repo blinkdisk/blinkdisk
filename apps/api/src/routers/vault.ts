@@ -22,6 +22,17 @@ export const vaultRouter = router({
   create: authedProcedure
     .input(ZCreateVault)
     .mutation(async ({ input, ctx }) => {
+      if (input.coreId) {
+        const existing = await ctx.db
+          .selectFrom("Vault")
+          .select(["id"])
+          .where("coreId", "=", input.coreId)
+          .where("accountId", "=", input.coreId)
+          .executeTakeFirst();
+
+        if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
+      }
+
       const vaultId = generateId("Vault");
 
       const provider = providers.find((p) => p.type === input.provider);
@@ -45,13 +56,13 @@ export const vaultRouter = router({
         .insertInto("Vault")
         .values({
           id: vaultId,
+          coreId: input.coreId || vaultId,
           status: "ACTIVE",
           name: input.name,
           version: LATEST_VAULT_VERSION,
           provider: input.provider,
           accountId: ctx.account?.id!,
           configLevel: provider.level,
-          passwordHash: input.passwordHash,
           options,
           ...(spaceId && { spaceId }),
         })
@@ -123,16 +134,17 @@ export const vaultRouter = router({
     let query = ctx.db
       .selectFrom("Vault")
       .select([
-        "Vault.id",
-        "Vault.name",
-        "Vault.accountId",
-        "Vault.options",
-        "Vault.provider",
-        "Vault.configLevel",
-        "Vault.version",
+        "id",
+        "coreId",
+        "name",
+        "accountId",
+        "options",
+        "provider",
+        "configLevel",
+        "version",
       ])
-      .where("Vault.status", "=", "ACTIVE")
-      .where("Vault.accountId", "=", ctx.account?.id!);
+      .where("status", "=", "ACTIVE")
+      .where("accountId", "=", ctx.account?.id!);
 
     const vaults = await query.execute();
 
@@ -170,14 +182,14 @@ export const vaultRouter = router({
     const vault = await ctx.db
       .selectFrom("Vault")
       .select([
-        "Vault.id",
-        "Vault.name",
-        "Vault.provider",
-        "Vault.passwordHash",
-        "Vault.configLevel",
+        "id",
+        "coreId",
+        "name",
+        "provider",
+        "configLevel",
       ])
-      .where("Vault.accountId", "=", ctx.account?.id!)
-      .where("Vault.id", "=", input.vaultId)
+      .where("accountId", "=", ctx.account?.id!)
+      .where("id", "=", input.vaultId)
       .executeTakeFirst();
 
     if (!vault) throw new CustomError("VAULT_NOT_FOUND");

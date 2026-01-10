@@ -2,6 +2,8 @@ import jwt from "@tsndr/cloudflare-worker-jwt";
 
 type JWTPayload = {
   vaultId: string;
+  // Legacy field
+  storageId?: string;
 };
 
 const options = {
@@ -47,7 +49,8 @@ export function getVaultId(headers: Headers) {
 
   if (!data?.payload) return null;
 
-  let vaultId = data.payload.vaultId;
+  let vaultId = data.payload.vaultId || data.payload.storageId;
+  if (!vaultId) return null;
 
   // Update legacy ids with "strg" prefix
   if (vaultId.startsWith("strg_")) vaultId = vaultId.replace(/^strg_/, "vlt_");

@@ -8,9 +8,9 @@ import {
 import { z } from "zod";
 
 export const ZCreateVault = z.object({
+  coreId: z.string().min(1).max(244).optional(),
   name: ZVaultName,
   provider: ZProviderType,
-  passwordHash: z.string().min(1).max(500),
   config: ZVaultEncryptedConfig,
   userName: z.string(),
   hostName: z.string(),

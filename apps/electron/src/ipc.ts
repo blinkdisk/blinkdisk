@@ -1,12 +1,7 @@
 import { setConfigCache, setVaultCache } from "@electron/cache";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
-import {
-  comparePassword,
-  getPasswordCache,
-  hashPassword,
-  setPasswordCache,
-} from "@electron/password";
+import { getPasswordCache, setPasswordCache } from "@electron/password";
 import { getHostName, getUserName } from "@electron/profile";
 import {
   checkEmpty,
@@ -66,10 +61,6 @@ ipcMain.handle("vault.config.decrypt", (_, payload) =>
 );
 ipcMain.handle("vault.password.set", (_, payload) => setPasswordCache(payload));
 ipcMain.handle("vault.password.get", (_, payload) => getPasswordCache(payload));
-ipcMain.handle("vault.password.hash", (_, payload) => hashPassword(payload));
-ipcMain.handle("vault.password.compare", (_, payload) =>
-  comparePassword(payload),
-);
 ipcMain.handle("config.cache", (_, payload) => setConfigCache(payload));
 ipcMain.handle("shell.open.file", (_, url) => shell.showItemInFolder(url));
 ipcMain.handle("shell.open.folder", (_, url) => shell.openPath(url));
