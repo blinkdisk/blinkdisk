@@ -27,7 +27,7 @@ export const vaultRouter = router({
           .selectFrom("Vault")
           .select(["id"])
           .where("coreId", "=", input.coreId)
-          .where("accountId", "=", input.coreId)
+          .where("accountId", "=", ctx.account?.id!)
           .executeTakeFirst();
 
         if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
