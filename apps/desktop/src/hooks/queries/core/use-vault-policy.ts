@@ -4,6 +4,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
   convertPolicyFromCore,
+  convertPolicyToCore,
   CorePolicy,
   defaultVaultPolicy,
 } from "@desktop/lib/policy";
@@ -30,11 +31,22 @@ export function useVaultPolicy() {
 
       if (!res.data) return null;
 
-      if (res.data.code === "NOT_FOUND")
+      if (res.data.code === "NOT_FOUND") {
+        // Create the vault policy in
+        // case it doesn't exist yet
+        await vaultApi(vaultId).put(
+          "/api/v1/policy",
+          convertPolicyToCore(defaultVaultPolicy),
+          {
+            params: profileFilter,
+          },
+        );
+
         return {
           defined: defaultVaultPolicy,
           effective: defaultVaultPolicy,
         };
+      }
 
       const policy = convertPolicyFromCore(res.data);
       if (!policy) return null;
