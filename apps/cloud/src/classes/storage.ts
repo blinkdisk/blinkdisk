@@ -220,12 +220,4 @@ export class Storage extends DurableObject<Cloudflare.Env> {
     await this.ctx.storage.delete("downloadedBytesReported");
     await scheduleStorageAlarm(this.ctx.storage);
   }
-
-  async backup() {
-    const storage = await this.ctx.storage.list();
-
-    return {
-      storage: Object.fromEntries(storage),
-    };
-  }
 }

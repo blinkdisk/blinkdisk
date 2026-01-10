@@ -46,4 +46,3 @@ export default {
 
 export { Space } from "@cloud/classes/space";
 export { Storage } from "@cloud/classes/storage";
-export { Vault } from "@cloud/classes/vault";
