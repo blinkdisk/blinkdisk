@@ -10,10 +10,10 @@ export function useAddVaultPassword(onSuccess: () => void) {
   return useMutation({
     mutationKey: ["vault", "password", "add"],
     mutationFn: async (
-      values: ZVaultPasswordFormType & { storageId: string },
+      values: ZVaultPasswordFormType & { vaultId: string },
     ) => {
       return await window.electron.vault.password.set({
-        storageId: values.storageId,
+        vaultId: values.vaultId,
         password: values.password,
       });
     },

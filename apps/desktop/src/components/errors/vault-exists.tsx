@@ -3,24 +3,20 @@ import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { AlertTriangleIcon } from "lucide-react";
 
 type VaultExistsErrorProps = {
-  code?: string;
+  name?: string;
 };
 
-export function VaultExistsError({ code }: VaultExistsErrorProps) {
+export function VaultExistsError({ name }: VaultExistsErrorProps) {
   const { t } = useAppTranslation("vault.createDialog.config.existsError");
 
   return (
     <Alert variant="destructive">
       <AlertTitle>
         <AlertTriangleIcon className="mb-0.5 mr-2 inline-block size-3.5" />
-        {t(
-          `vault:createDialog.config.${code === "STORAGE_ALREADY_EXISTS" ? "existsError" : "notFoundError"}.title`,
-        )}
+        {t("title")}
       </AlertTitle>
       <AlertDescription className="text-xs">
-        {t(
-          `vault:createDialog.config.${code === "STORAGE_ALREADY_EXISTS" ? "existsError" : "notFoundError"}.description`,
-        )}
+        {t("description", { name: name || "Unknown" })}
       </AlertDescription>
     </Alert>
   );

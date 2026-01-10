@@ -1,5 +1,4 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useDevice } from "@desktop/hooks/use-device";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -32,8 +31,7 @@ export type CoreBackupItem = {
 };
 
 export function useBackupList() {
-  const { profileId } = useProfile();
-  const { deviceId } = useDevice();
+  const { profileFilter } = useProfile();
   const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
@@ -49,9 +47,8 @@ export function useBackupList() {
         error?: string;
       }>("/api/v1/snapshots", {
         params: {
+          ...profileFilter,
           path: folder?.source.path || "",
-          userName: profileId || "",
-          host: deviceId || "",
           all: "1",
         },
       });

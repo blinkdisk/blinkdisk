@@ -9,14 +9,14 @@ export type AmazonS3FormProps = {
   action: VaultAction;
   config?: ZAmazonS3ConfigType;
   onSubmit: (config: ZAmazonS3ConfigType) => void;
-  storageId?: string;
+  coreId?: string;
 };
 
 export function AmazonS3Form({
   action,
   config,
   onSubmit,
-  storageId,
+  coreId,
 }: AmazonS3FormProps) {
   const { t } = useAppTranslation("vault.providers.AMAZON_S3.fields");
 
@@ -24,7 +24,7 @@ export function AmazonS3Form({
     action,
     config,
     onSubmit,
-    storageId,
+    coreId,
   });
 
   return (

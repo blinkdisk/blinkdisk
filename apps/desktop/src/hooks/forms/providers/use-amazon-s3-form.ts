@@ -9,14 +9,14 @@ export function useAmazonS3Form({
   action,
   config,
   onSubmit,
-  storageId,
+  coreId,
 }: {
   action: VaultAction;
   config?: ZAmazonS3ConfigType;
   onSubmit: (value: ZAmazonS3ConfigType) => void;
-  storageId?: string;
+  coreId?: string;
 }) {
-  const { onSubmitAsync } = useConfigValidation("AMAZON_S3", action, storageId);
+  const { onSubmitAsync } = useConfigValidation("AMAZON_S3", action, coreId);
 
   return useAppForm({
     defaultValues: {

@@ -47,19 +47,16 @@
     "title": "The password is invalid",
     "description": "Please double check the password you entered."
   },
-  "CONFIG_REQUIRED": {
-    "title": "Required config is missing",
-    "description": "Please try linking the vault again."
-  },
   "SUBSCRIPTION_EXISTS": {
     "title": "You already have an active subscription",
     "description": "Please try upgrading your subscription instead."
   },
-  "PROFILE_NOT_FOUND": "Profile not found",
+  "VAULT_ALREADY_EXISTS": {
+    "title": "Vault already exists",
+    "description": "This vault already exists in your account."
+  },
   "VAULT_NOT_FOUND": "Vault not found",
   "FOLDER_NOT_FOUND": "Folder not found",
-  "STORAGE_NOT_FOUND": "Storage not found",
-  "VAULT_ALREADY_LINKED": "A vault is already linked to this storage",
   "PROVIDER_NOT_FOUND": "Provider not found",
   "SPACE_NOT_FOUND": "Space not found",
   "PRICE_NOT_FOUND": "Price not found",

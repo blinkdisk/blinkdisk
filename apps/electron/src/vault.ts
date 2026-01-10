@@ -1,13 +1,11 @@
 import { providers, ProviderType } from "@config/providers";
-import { LATEST_STORAGE_VERSION } from "@config/storage";
+import { LATEST_VAULT_VERSION } from "@config/vault";
 import {
   deleteVaultFromCache,
   getAccountCache,
   getConfigCache,
-  getStorageCache,
   getVaultCache,
 } from "@electron/cache";
-import { generateCSRFToken } from "@electron/csrf";
 import {
   decryptString,
   decryptVaultConfig,
@@ -16,9 +14,10 @@ import {
 import { log } from "@electron/log";
 import { getPasswordCache } from "@electron/password";
 import { corePath, globalConfigDirectory } from "@electron/path";
+import { getHostName, getUserName } from "@electron/profile";
 import { sendWindow } from "@electron/window";
 import { ProviderConfig } from "@schemas/providers";
-import { ZStorageOptionsType } from "@schemas/shared/storage";
+import { ZVaultOptionsType } from "@schemas/shared/vault";
 import { generateId } from "@utils/id";
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { app } from "electron";
@@ -30,6 +29,7 @@ import { Cookie, CookieJar } from "tough-cookie";
 
 export type VaultStatus =
   | "PASSWORD_MISSING"
+  | "PASSWORD_INVALID"
   | "CONFIG_MISSING"
   | "READY"
   | "STARTING"
@@ -40,16 +40,11 @@ export class Vault {
   name: string;
   version: number;
 
-  readOnly: boolean;
   status: VaultStatus;
-  active: boolean = false;
 
   provider?: ProviderType;
   token?: string;
   config?: EncryptedConfig | null;
-  profileId?: string;
-  deviceId?: string;
-  storageId?: string;
 
   process?: ChildProcessWithoutNullStreams;
   serverPassword?: string;
@@ -61,7 +56,6 @@ export class Vault {
   cookies?: CookieJar = new CookieJar();
   signingKey?: string;
   sessionCookie?: string;
-  csrfToken?: string;
 
   static vaults: Vault[] = [];
   static validationVault?: Vault;
@@ -71,38 +65,26 @@ export class Vault {
     name,
     version,
     status,
-    readOnly,
     provider,
     token,
     config,
-    profileId,
-    deviceId,
-    storageId,
   }: {
     id: string;
     name: string;
     version: number;
     status: VaultStatus;
-    readOnly: boolean;
     provider?: ProviderType;
     token?: string | null;
     config?: EncryptedConfig | null;
-    profileId?: string;
-    deviceId?: string;
-    storageId?: string;
   }) {
     this.id = id;
     this.name = name;
     this.version = version;
     this.status = status;
-    this.readOnly = readOnly;
 
     if (token) this.token = token;
     if (provider) this.provider = provider;
     if (config) this.config = config;
-    if (profileId) this.profileId = profileId;
-    if (deviceId) this.deviceId = deviceId;
-    if (storageId) this.storageId = storageId;
   }
 
   static initAll() {
@@ -112,7 +94,6 @@ export class Vault {
   static async onCacheChanged() {
     const vaults = getVaultCache();
     const accounts = getAccountCache();
-    const storages = getStorageCache();
     const configs = getConfigCache();
 
     const activeVaultIds: string[] = [];
@@ -132,24 +113,15 @@ export class Vault {
         continue;
       }
 
-      const storage = storages.find(
-        (storage) => storage.id === vault.storageId,
-      );
-
-      if (!storage) {
-        log.info(`Storage ${vault.storageId} not found, skipping.`);
-        continue;
-      }
-
       const config = configs.find((config) =>
-        storage.configLevel === "STORAGE"
-          ? config.level === "STORAGE" && config.storageId === storage.id
-          : config.level === "PROFILE" &&
-            config.profileId === account.profileId &&
-            config.storageId === storage.id,
+        vault.configLevel === "VAULT"
+          ? config.level === "VAULT" && config.vaultId === vault.id
+          : // The cached configs are already filtered by the current
+            // userName and hostName, no need to check it here again.
+            config.level === "PROFILE" && config.vaultId === vault.id,
       )?.data;
 
-      const password = getPasswordCache({ storageId: vault.storageId });
+      const password = getPasswordCache({ vaultId: vault.id });
       const existingVault = this.vaults.find((v) => vault.id === v.id);
 
       if (existingVault) {
@@ -157,7 +129,10 @@ export class Vault {
 
         existingVault.name = vault.name;
 
-        if (existingVault.status === "PASSWORD_MISSING" && password)
+        if (
+          existingVault.status === "PASSWORD_MISSING" ||
+          (existingVault.status === "PASSWORD_INVALID" && password)
+        )
           existingVault.status = "READY";
         else if (existingVault.status === "CONFIG_MISSING" && config)
           existingVault.status = "READY";
@@ -165,42 +140,38 @@ export class Vault {
         if (!password) existingVault.status = "PASSWORD_MISSING";
         else if (!config) existingVault.status = "CONFIG_MISSING";
 
-        if (
-          existingVault.status === "READY" &&
-          (!existingVault.readOnly || existingVault.active)
-        )
-          existingVault.start();
+        if (existingVault.status === "READY") existingVault.start();
       } else {
-        const readOnly =
-          account.deviceId !== vault.deviceId ||
-          account.profileId !== vault.profileId;
-
-        const decryptedToken = storage.token
-          ? decryptString(storage.token, null)
-          : null;
+        let decryptedToken: string | null = null;
+        let invalidPassword = false;
+        try {
+          decryptedToken = vault.token
+            ? decryptString(vault.token, null)
+            : null;
+        } catch {
+          invalidPassword = true;
+        }
 
         const vaultInstance = new Vault({
           id: vault.id,
-          version: storage.version,
+          version: vault.version,
           name: vault.name,
           token: decryptedToken,
-          profileId: vault.profileId,
-          deviceId: vault.deviceId,
-          storageId: vault.storageId,
-          provider: storage.provider,
-          readOnly,
+          provider: vault.provider,
           config,
-          status: !password
-            ? "PASSWORD_MISSING"
-            : !config
-              ? "CONFIG_MISSING"
-              : "READY",
+          status: invalidPassword
+            ? "PASSWORD_INVALID"
+            : !password
+              ? "PASSWORD_MISSING"
+              : !config
+                ? "CONFIG_MISSING"
+                : "READY",
         });
 
         this.vaults.push(vaultInstance);
         activeVaultIds.push(vault.id);
 
-        if (!readOnly) vaultInstance.start();
+        vaultInstance.start();
       }
     }
 
@@ -209,14 +180,17 @@ export class Vault {
     );
   }
 
-  static async validate(vault: { type: ProviderType; config: ProviderConfig }) {
+  static async validate(vault: {
+    type: ProviderType;
+    config: ProviderConfig;
+    password?: string;
+  }) {
     if (!Vault.validationVault) {
       this.validationVault = new Vault({
         id: "temporary",
         name: "Temporary Vault",
-        version: LATEST_STORAGE_VERSION,
+        version: LATEST_VAULT_VERSION,
         status: "READY",
-        readOnly: false,
       });
 
       await this.validationVault.boot();
@@ -230,6 +204,7 @@ export class Vault {
           type: this.mapProviderType(vault.type),
           config: this.mapConfigFields(vault.type, vault.config),
         },
+        ...(vault.password && { password: vault.password }),
       },
     })) as { code?: string; error?: string; uniqueID?: string };
   }
@@ -240,13 +215,10 @@ export class Vault {
       name: string;
       provider: ProviderType;
       config: ProviderConfig;
-      options: ZStorageOptionsType;
+      options: ZVaultOptionsType;
       password: string;
       token?: string | null;
     };
-    storageId: string;
-    deviceId: string;
-    profileId: string;
     userPolicy: object;
     globalPolicy: object;
   }) {
@@ -257,8 +229,7 @@ export class Vault {
       name: payload.vault.name,
       token: payload.vault.token,
       status: "READY",
-      readOnly: false,
-      version: LATEST_STORAGE_VERSION,
+      version: LATEST_VAULT_VERSION,
     });
 
     await vault.boot();
@@ -272,11 +243,9 @@ export class Vault {
           userPolicy: payload.userPolicy,
           clientOptions: {
             description: payload.vault.name,
-            username: payload.profileId,
-            hostname: payload.deviceId,
           },
           options: {
-            uniqueId: btoa(payload.storageId),
+            uniqueId: btoa(payload.vault.id),
             blockFormat: {
               version: options.version,
               ecc: options.errorCorrectionAlgorithm,
@@ -355,14 +324,7 @@ export class Vault {
       connected?: boolean;
     };
 
-    if (!status.connected) {
-      const res = await this.connect();
-
-      if (res.error) {
-        this.status = "READY";
-        return;
-      }
-    }
+    if (!status.connected) await this.connect();
 
     this.status = "RUNNING";
   }
@@ -387,6 +349,10 @@ export class Vault {
         `--auth-cookie-signing-key=${this.signingKey}`,
         "--shutdown-on-stdin",
         "--address=127.0.0.1:0",
+        // CSRF tokens should only be required if the server
+        // is hosted publicly. Cookies are only stored in this
+        // class, so no csrf should be possible.
+        "--disable-csrf-token-checks",
         "--config-file",
         resolve(globalConfigDirectory(), `${this.id}.config`),
       ];
@@ -409,7 +375,9 @@ export class Vault {
           this.serverAddress &&
           this.serverPassword &&
           this.serverControlPassword &&
-          this.serverPassword
+          this.serverPassword &&
+          this.serverCertificate &&
+          this.serverCertificateHash
         ) {
           res();
         }
@@ -418,19 +386,25 @@ export class Vault {
   }
 
   async connect() {
-    const password = getPasswordCache({ storageId: this.storageId! });
+    const password = getPasswordCache({ vaultId: this.id! });
 
     if (!password) {
       this.status = "PASSWORD_MISSING";
       throw new Error("PASSWORD_MISSING");
     }
 
-    const decryptedConfig = this.config
-      ? await decryptVaultConfig({
-          password,
-          encrypted: this.config,
-        })
-      : null;
+    let decryptedConfig: object | null = null;
+    try {
+      decryptedConfig = this.config
+        ? await decryptVaultConfig({
+            password,
+            encrypted: this.config,
+          })
+        : null;
+    } catch {
+      this.invalidPassword();
+      throw new Error("INVALID_PASSWORD");
+    }
 
     return (await this.fetch({
       method: "POST",
@@ -438,9 +412,8 @@ export class Vault {
       data: {
         clientOptions: {
           description: this.name,
-          username: this.profileId,
-          hostname: this.deviceId,
-          readonly: this.readOnly,
+          username: getUserName(),
+          hostname: getHostName(),
         },
         storage: {
           type: Vault.mapProviderType(this.provider!),
@@ -507,12 +480,6 @@ export class Vault {
     raw?: boolean;
   }) {
     return await new Promise((res, rej) => {
-      if (!this.csrfToken)
-        this.csrfToken = generateCSRFToken(
-          this.sessionCookie!,
-          this.signingKey!,
-        );
-
       const req = https.request(
         {
           ca: [this.serverCertificate!],
@@ -532,7 +499,6 @@ export class Vault {
             ).toString("base64")}`,
             ...(variant === "renderer"
               ? {
-                  "X-BlinkDisk-Csrf-Token": this.csrfToken,
                   cookie:
                     this.cookies?.getCookieStringSync(this.serverAddress!) ||
                     "",
@@ -647,7 +613,7 @@ export class Vault {
           });
           break;
 
-        case "BDC STORAGE DELETED":
+        case "BDC VAULT DELETED":
           deleteVaultFromCache(this.id);
           this.stop();
           break;
@@ -664,14 +630,16 @@ export class Vault {
         //   break;
 
         default:
-          this.log(data);
+          if (data.includes("invalid repository password")) {
+            this.invalidPassword();
+          } else this.log(data);
       }
     }
   }
 
-  activate() {
-    this.active = true;
-    this.start();
+  invalidPassword() {
+    this.stop();
+    this.status = "PASSWORD_INVALID";
   }
 
   stop() {

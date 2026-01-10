@@ -1,5 +1,4 @@
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
-import { useDevice } from "@desktop/hooks/use-device";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -22,8 +21,7 @@ export function useUpdateFolderPolicy({
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
-  const { profileId } = useProfile();
-  const { deviceId } = useDevice();
+  const { profileFilter } = useProfile();
   const { vaultId } = useVaultId();
   const { data: vaultPolicy } = useVaultPolicy();
   const { data: folder } = useFolder(folderId);
@@ -31,7 +29,7 @@ export function useUpdateFolderPolicy({
   return useMutation({
     mutationKey: ["core", "vault", folder?.id, "policy"],
     mutationFn: async (values: ZPolicyType) => {
-      if (!deviceId || !profileId || !vaultId || !vaultPolicy) return;
+      if (!vaultId || !vaultPolicy || !profileFilter) return;
 
       const policy = convertPolicyToCore(values);
 
@@ -43,8 +41,7 @@ export function useUpdateFolderPolicy({
 
         await vaultApi(vaultId).put("/api/v1/policy", policy, {
           params: {
-            userName: profileId,
-            host: deviceId,
+            ...profileFilter,
             path: folder.source.path,
           },
         });
@@ -67,7 +64,7 @@ export function useUpdateFolderPolicy({
           }),
           // Name and emoji might have changed.
           queryClient.invalidateQueries({
-            queryKey: queryKeys.folder.list(vaultId),
+            queryKey: queryKeys.folder.list(vaultId, profileFilter),
           }),
         ]);
       }

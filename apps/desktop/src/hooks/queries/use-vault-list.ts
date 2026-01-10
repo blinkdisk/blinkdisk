@@ -12,7 +12,7 @@ export function useVaultList() {
   return useQuery({
     queryKey: queryKeys.vault.list(),
     queryFn: () => {
-      return trpc.vault.list.query({});
+      return trpc.vault.list.query();
     },
     enabled: !!accountId,
   });

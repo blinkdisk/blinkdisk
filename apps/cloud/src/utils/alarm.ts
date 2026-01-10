@@ -1,4 +1,4 @@
-export async function scheduleStorageAlarm(storage: DurableObjectStorage) {
+export async function scheduleVaultAlarm(storage: DurableObjectStorage) {
   const date = new Date();
   date.setDate(date.getDate() + 30);
   await storage.setAlarm(date.getTime());

@@ -10,7 +10,7 @@ export function useVault(vaultId?: string) {
   const { vaultId: defaultVaultId } = useVaultId();
 
   return useQuery({
-    queryKey: queryKeys.vault.detail(vaultId),
+    queryKey: queryKeys.vault.detail(vaultId || defaultVaultId),
     queryFn: () => {
       return trpc.vault.get.query({
         vaultId: vaultId || defaultVaultId || "",

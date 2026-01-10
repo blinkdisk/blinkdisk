@@ -30,8 +30,8 @@
     "electron-updater": "^6.6.2",
     "get-folder-size": "^5.0.0",
     "nanoid": "3",
-    "node-machine-id": "^1.1.12",
     "p-limit": "^7.1.0",
+    "slugify": "^1.6.6",
     "tough-cookie": "^5.1.2"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@ const prefixes = {
   Queue: "que",
   Device: "dev",
   Profile: "prf",
-  Storage: "strg",
+  // Old vaults might also be prefixed with "strg"
   Vault: "vlt",
   Config: "cfg",
   Folder: "fld",

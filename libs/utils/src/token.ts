@@ -1,7 +1,9 @@
 import jwt from "@tsndr/cloudflare-worker-jwt";
 
 type JWTPayload = {
-  storageId: string;
+  vaultId: string;
+  // Legacy field
+  storageId?: string;
 };
 
 const options = {
@@ -38,7 +40,7 @@ export async function verifyServiceToken(token: string, publicKey: string) {
   return data.payload;
 }
 
-export function getStorageId(headers: Headers) {
+export function getVaultId(headers: Headers) {
   const header = headers.get("Authorization");
   if (!header) return null;
 
@@ -46,5 +48,12 @@ export function getStorageId(headers: Headers) {
   const data = jwt.decode<JWTPayload>(token);
 
   if (!data?.payload) return null;
-  return data.payload.storageId;
+
+  let vaultId = data.payload.vaultId || data.payload.storageId;
+  if (!vaultId) return null;
+
+  // Update legacy ids with "strg" prefix
+  if (vaultId.startsWith("strg_")) vaultId = vaultId.replace(/^strg_/, "vlt_");
+
+  return vaultId;
 }

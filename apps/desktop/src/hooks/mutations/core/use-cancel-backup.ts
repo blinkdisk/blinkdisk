@@ -1,3 +1,4 @@
+import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
@@ -7,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useCancelBackup() {
   const queryClient = useQueryClient();
 
+  const { profileFilter } = useProfile();
   const { vaultId } = useVaultId();
   const { queryKeys } = useQueryKey();
 
@@ -23,7 +25,7 @@ export function useCancelBackup() {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.list(vaultId),
+        queryKey: queryKeys.folder.list(vaultId, profileFilter),
       });
     },
   });

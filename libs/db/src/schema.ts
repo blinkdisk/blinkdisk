@@ -7,9 +7,8 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 import type {
   ConfigLevel,
-  StorageProvider,
-  StorageStatus,
   SubscriptionStatus,
+  VaultProvider,
   VaultStatus,
 } from "./enums";
 
@@ -44,12 +43,13 @@ export type Config = {
   id: Generated<string>;
   data: unknown;
   level: ConfigLevel;
-  profileId: string | null;
-  storageId: string;
+  userName: string | null;
+  hostName: string | null;
+  vaultId: string;
   accountId: string;
   createdAt: Generated<Timestamp>;
 };
-export type Device = {
+export type LegacyDevice = {
   id: Generated<string>;
   alias: string;
   hostName: string | null;
@@ -57,7 +57,7 @@ export type Device = {
   createdAt: Generated<Timestamp>;
   accountId: string;
 };
-export type Profile = {
+export type LegacyProfile = {
   id: Generated<string>;
   alias: string;
   userName: string | null;
@@ -83,18 +83,6 @@ export type Space = {
   subscriptionId: string | null;
   createdAt: Generated<Timestamp>;
 };
-export type Storage = {
-  id: Generated<string>;
-  status: StorageStatus;
-  version: number;
-  provider: StorageProvider;
-  accountId: string;
-  configLevel: ConfigLevel;
-  passwordHash: string;
-  options: unknown;
-  spaceId: string | null;
-  createdAt: Generated<Timestamp>;
-};
 export type Subscription = {
   id: string;
   status: SubscriptionStatus;
@@ -112,11 +100,15 @@ export type Subscription = {
 };
 export type Vault = {
   id: Generated<string>;
+  coreId: string;
   status: VaultStatus;
   name: string;
-  profileId: string;
-  storageId: string;
+  version: number;
+  provider: VaultProvider;
   accountId: string;
+  configLevel: ConfigLevel;
+  options: unknown;
+  spaceId: string | null;
   createdAt: Generated<Timestamp>;
 };
 export type Verification = {
@@ -131,11 +123,10 @@ export type DB = {
   Account: Account;
   AuthMethod: AuthMethod;
   Config: Config;
-  Device: Device;
-  Profile: Profile;
+  LegacyDevice: LegacyDevice;
+  LegacyProfile: LegacyProfile;
   Session: Session;
   Space: Space;
-  Storage: Storage;
   Subscription: Subscription;
   Vault: Vault;
   Verification: Verification;

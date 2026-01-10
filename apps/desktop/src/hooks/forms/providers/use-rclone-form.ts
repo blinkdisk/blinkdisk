@@ -9,14 +9,14 @@ export function useRcloneForm({
   action,
   config,
   onSubmit,
-  storageId,
+  coreId,
 }: {
   action: VaultAction;
   config?: ZRcloneConfigType;
   onSubmit: (value: ZRcloneConfigType) => void;
-  storageId?: string;
+  coreId?: string;
 }) {
-  const { onSubmitAsync } = useConfigValidation("RCLONE", action, storageId);
+  const { onSubmitAsync } = useConfigValidation("RCLONE", action, coreId);
 
   return useAppForm({
     defaultValues: {

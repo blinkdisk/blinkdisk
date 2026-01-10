@@ -1,20 +1,19 @@
 import { useAddVaultPasswordForm } from "@desktop/hooks/forms/use-add-vault-password-form";
-import { VaultItem } from "@desktop/hooks/queries/use-vault";
-import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
+import { useStore } from "@tanstack/react-store";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { AlertTriangleIcon, LockIcon } from "lucide-react";
 
 interface PasswordMissingProps {
-  vault: VaultItem;
+  vaultId: string;
+  status: "PASSWORD_MISSING" | "PASSWORD_INVALID";
 }
 
-export function PasswordMissing({ vault }: PasswordMissingProps) {
+export function PasswordMissing({ status, vaultId }: PasswordMissingProps) {
   const { t } = useAppTranslation("vault.passwordMissing");
 
   const form = useAddVaultPasswordForm({
-    passwordHash: vault?.passwordHash,
-    storageId: vault?.storageId,
+    vaultId,
   });
 
   const errors = useStore(form.store, (store) => store.errorMap);
@@ -45,9 +44,8 @@ export function PasswordMissing({ vault }: PasswordMissingProps) {
               />
             )}
           </form.AppField>
-          {errors &&
-          errors.onSubmit &&
-          errors.onSubmit.code === "INVALID_PASSWORD" ? (
+          {status === "PASSWORD_INVALID" ||
+          errors?.onSubmit?.code === "INVALID_PASSWORD" ? (
             <Alert variant="destructive">
               <AlertTitle>
                 <AlertTriangleIcon className="mb-0.5 mr-2 inline-block size-3.5" />

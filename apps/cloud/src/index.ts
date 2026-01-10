@@ -20,12 +20,20 @@ export default {
       const token = header.replace("Bearer ", "");
       const payload = await verifyServiceToken(
         token,
-        // The dotenv parser somtimes leaves a trailing backslash
+        // The dotenv parser sometimes leaves a trailing backslash
         env.CLOUD_JWT_PUBLIC_KEY.replace(/\\+$/gm, ""),
       );
       if (!payload) return new Response("Invalid token", { status: 401 });
 
-      let stub = env.STORAGE.getByName(payload.storageId);
+      let vaultId = payload.vaultId || payload.storageId;
+      if (!vaultId)
+        return new Response("Missing vaultId in token", { status: 401 });
+
+      // Update legacy ids with "strg" prefix
+      if (vaultId.startsWith("strg_"))
+        vaultId = vaultId.replace(/^strg_/, "vlt_");
+
+      let stub = env.VAULT.getByName(vaultId);
       return stub.fetch(request);
     }
 
@@ -45,4 +53,4 @@ export default {
 };
 
 export { Space } from "@cloud/classes/space";
-export { Storage } from "@cloud/classes/storage";
+export { Vault } from "@cloud/classes/vault";

@@ -1,6 +1,5 @@
 import { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -8,7 +7,7 @@ import { hashFolder } from "@desktop/lib/folder";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING";
+export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";
 
 export type CoreFolderItem = {
   id: string;
@@ -91,23 +90,21 @@ export type CoreFolderItem = {
 };
 
 export function useFolderList() {
-  const { profileId } = useProfile();
-  const { deviceId } = useDevice();
+  const { profileFilter } = useProfile();
   const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: queryKeys.folder.list(vaultId),
+    queryKey: queryKeys.folder.list(vaultId, profileFilter),
     queryFn: async () => {
+      if (!profileFilter) return null;
+
       const res = await vaultApi(vaultId).get<{
         sources: CoreFolderItem[];
         error?: string;
       }>("/api/v1/sources", {
-        params: {
-          host: deviceId || "",
-          userName: profileId || "",
-        },
+        params: profileFilter,
       });
 
       const folders: CoreFolderItem[] = [];
@@ -121,8 +118,8 @@ export function useFolderList() {
         }
 
         const id = await hashFolder({
-          deviceId: folder.source.host,
-          profileId: folder.source.userName,
+          hostName: folder.source.host,
+          userName: folder.source.userName,
           path: folder.source.path,
         });
 
@@ -135,6 +132,6 @@ export function useFolderList() {
       return folders;
     },
     refetchInterval: 1000,
-    enabled: !!accountId && !!vaultId && running,
+    enabled: !!accountId && !!vaultId && !!profileFilter && running,
   });
 }

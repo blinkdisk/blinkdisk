@@ -18,8 +18,7 @@ export function useConfigCache() {
         level: config.level,
         data: config.data,
         accountId: config.accountId,
-        storageId: config.storageId,
-        profileId: config.profileId,
+        vaultId: config.vaultId,
       })),
     });
   }, [accountId, configs, isLoading, setVaults]);

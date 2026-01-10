@@ -1,3 +1,4 @@
+import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
@@ -14,20 +15,37 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
+  const { localUserName, localHostName } = useProfile();
 
   return useMutation({
     mutationKey: ["vault", "create"],
     mutationFn: async (
-      values: Omit<ZCreateVaultType, "config" | "passwordHash"> & {
+      values: Omit<
+        ZCreateVaultType,
+        "config" | "userName" | "hostName" | "coreId"
+      > & {
         password: string;
         config: ProviderConfig;
       },
     ) => {
-      const payload: ZCreateVaultType & { password?: string } = {
+      const validation = await window.electron.vault.validate({
+        type: values.provider,
+        config: values.config,
+        password: values.password,
+      });
+
+      if (validation.code === "INVALID_PASSWORD")
+        throw { code: "INVALID_PASSWORD" };
+
+      const payload: Omit<ZCreateVaultType, "userName" | "hostName"> & {
+        password?: string;
+      } = {
         ...values,
-        passwordHash: await window.electron.vault.password.hash({
-          password: values.password,
-        }),
+        ...(validation.uniqueID
+          ? {
+              coreId: atob(validation.uniqueID || ""),
+            }
+          : {}),
         config: await window.electron.vault.config.encrypt({
           password: values.password,
           config: values.config,
@@ -36,46 +54,54 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
       delete payload.password;
 
-      return await trpc.vault.create.mutate(payload);
+      const res = await trpc.vault.create.mutate({
+        ...payload,
+        userName: localUserName,
+        hostName: localHostName,
+      });
+
+      return {
+        ...res,
+        initialized: !!validation.uniqueID,
+      };
     },
     onError: showErrorToast,
     onSuccess: async (res, variables) => {
-      try {
-        const create = await window.electron.vault.create({
-          ...res,
-          vault: {
-            ...res.vault,
-            config: variables.config,
-            password: variables.password!,
-          },
-          userPolicy: convertPolicyToCore(defaultVaultPolicy),
-          globalPolicy: {},
-        });
-
-        // TODO: Show these errors in the UI
-        if (create.error) throw new Error(create.error.toString());
-      } catch (e) {
+      if (!res.initialized) {
         try {
-          await trpc.storage.deleteHard.mutate({
-            storageId: res.storageId,
+          const create = await window.electron.vault.create({
+            ...res,
+            vault: {
+              ...res.vault,
+              config: variables.config,
+              password: variables.password!,
+            },
+            userPolicy: convertPolicyToCore(defaultVaultPolicy),
+            globalPolicy: {},
           });
-        } catch (e) {
-          console.error("Failed to delete vault", e);
-        }
 
-        throw e;
+          // TODO: Show these errors in the UI
+          if (create.error) throw new Error(create.error.toString());
+        } catch (e) {
+          try {
+            await trpc.vault.deleteHard.mutate({
+              vaultId: res.vault.id,
+            });
+          } catch (e) {
+            console.error("Failed to delete vault", e);
+          }
+
+          throw e;
+        }
       }
 
       await window.electron.vault.password.set({
-        storageId: res.storageId,
+        vaultId: res.vault.id,
         password: variables.password,
       });
 
-      // Make sure config & storage are fetched before vault
+      // Make sure configs are fetched before vault
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.storage.all,
-        }),
         queryClient.invalidateQueries({
           queryKey: queryKeys.config.all,
         }),

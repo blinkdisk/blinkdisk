@@ -18,16 +18,18 @@ import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthMagicImport } from './routes/auth/magic'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AppMigrateImport } from './routes/app/migrate'
 import { Route as AppLoadingImport } from './routes/app/loading'
-import { Route as AppDeviceIdIndexImport } from './routes/app/{-$deviceId}/index'
-import { Route as AppDeviceIdProfileIdIndexImport } from './routes/app/{-$deviceId}/{-$profileId}/index'
-import { Route as AppDeviceIdProfileIdVaultIdRouteImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/route'
-import { Route as AppDeviceIdProfileIdVaultIdIndexImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/index'
-import { Route as AppDeviceIdProfileIdVaultIdSettingsImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings'
-import { Route as AppDeviceIdProfileIdVaultIdFolderIdRouteImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/route'
-import { Route as AppDeviceIdProfileIdVaultIdFolderIdIndexImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/index'
-import { Route as AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/route'
-import { Route as AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexImport } from './routes/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/index'
+import { Route as AppVaultIdRouteImport } from './routes/app/{-$vaultId}/route'
+import { Route as AppVaultIdIndexImport } from './routes/app/{-$vaultId}/index'
+import { Route as AppVaultIdHostNameIndexImport } from './routes/app/{-$vaultId}/{-$hostName}/index'
+import { Route as AppVaultIdHostNameUserNameRouteImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/route'
+import { Route as AppVaultIdHostNameUserNameIndexImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/index'
+import { Route as AppVaultIdHostNameUserNameSettingsImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/settings'
+import { Route as AppVaultIdHostNameUserNameFolderIdRouteImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/route'
+import { Route as AppVaultIdHostNameUserNameFolderIdIndexImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/index'
+import { Route as AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/route'
+import { Route as AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexImport } from './routes/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/index'
 
 // Create/Update Routes
 
@@ -73,72 +75,84 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
+const AppMigrateRoute = AppMigrateImport.update({
+  id: '/migrate',
+  path: '/migrate',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
 const AppLoadingRoute = AppLoadingImport.update({
   id: '/loading',
   path: '/loading',
   getParentRoute: () => AppRouteRoute,
 } as any)
 
-const AppDeviceIdIndexRoute = AppDeviceIdIndexImport.update({
-  id: '/{-$deviceId}/',
-  path: '/{-$deviceId}/',
+const AppVaultIdRouteRoute = AppVaultIdRouteImport.update({
+  id: '/{-$vaultId}',
+  path: '/{-$vaultId}',
   getParentRoute: () => AppRouteRoute,
 } as any)
 
-const AppDeviceIdProfileIdIndexRoute = AppDeviceIdProfileIdIndexImport.update({
-  id: '/{-$deviceId}/{-$profileId}/',
-  path: '/{-$deviceId}/{-$profileId}/',
-  getParentRoute: () => AppRouteRoute,
+const AppVaultIdIndexRoute = AppVaultIdIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppVaultIdRouteRoute,
 } as any)
 
-const AppDeviceIdProfileIdVaultIdRouteRoute =
-  AppDeviceIdProfileIdVaultIdRouteImport.update({
-    id: '/{-$deviceId}/{-$profileId}/{-$vaultId}',
-    path: '/{-$deviceId}/{-$profileId}/{-$vaultId}',
-    getParentRoute: () => AppRouteRoute,
+const AppVaultIdHostNameIndexRoute = AppVaultIdHostNameIndexImport.update({
+  id: '/{-$hostName}/',
+  path: '/{-$hostName}/',
+  getParentRoute: () => AppVaultIdRouteRoute,
+} as any)
+
+const AppVaultIdHostNameUserNameRouteRoute =
+  AppVaultIdHostNameUserNameRouteImport.update({
+    id: '/{-$hostName}/{-$userName}',
+    path: '/{-$hostName}/{-$userName}',
+    getParentRoute: () => AppVaultIdRouteRoute,
   } as any)
 
-const AppDeviceIdProfileIdVaultIdIndexRoute =
-  AppDeviceIdProfileIdVaultIdIndexImport.update({
+const AppVaultIdHostNameUserNameIndexRoute =
+  AppVaultIdHostNameUserNameIndexImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AppDeviceIdProfileIdVaultIdRouteRoute,
+    getParentRoute: () => AppVaultIdHostNameUserNameRouteRoute,
   } as any)
 
-const AppDeviceIdProfileIdVaultIdSettingsRoute =
-  AppDeviceIdProfileIdVaultIdSettingsImport.update({
+const AppVaultIdHostNameUserNameSettingsRoute =
+  AppVaultIdHostNameUserNameSettingsImport.update({
     id: '/settings',
     path: '/settings',
-    getParentRoute: () => AppDeviceIdProfileIdVaultIdRouteRoute,
+    getParentRoute: () => AppVaultIdHostNameUserNameRouteRoute,
   } as any)
 
-const AppDeviceIdProfileIdVaultIdFolderIdRouteRoute =
-  AppDeviceIdProfileIdVaultIdFolderIdRouteImport.update({
+const AppVaultIdHostNameUserNameFolderIdRouteRoute =
+  AppVaultIdHostNameUserNameFolderIdRouteImport.update({
     id: '/{-$folderId}',
     path: '/{-$folderId}',
-    getParentRoute: () => AppDeviceIdProfileIdVaultIdRouteRoute,
+    getParentRoute: () => AppVaultIdHostNameUserNameRouteRoute,
   } as any)
 
-const AppDeviceIdProfileIdVaultIdFolderIdIndexRoute =
-  AppDeviceIdProfileIdVaultIdFolderIdIndexImport.update({
+const AppVaultIdHostNameUserNameFolderIdIndexRoute =
+  AppVaultIdHostNameUserNameFolderIdIndexImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AppDeviceIdProfileIdVaultIdFolderIdRouteRoute,
+    getParentRoute: () => AppVaultIdHostNameUserNameFolderIdRouteRoute,
   } as any)
 
-const AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute =
-  AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteImport.update({
+const AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRoute =
+  AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteImport.update({
     id: '/{-$backupId}/{-$directoryId}',
     path: '/{-$backupId}/{-$directoryId}',
-    getParentRoute: () => AppDeviceIdProfileIdVaultIdFolderIdRouteRoute,
+    getParentRoute: () => AppVaultIdHostNameUserNameFolderIdRouteRoute,
   } as any)
 
-const AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute =
-  AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexImport.update({
+const AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute =
+  AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexImport.update({
     id: '/',
     path: '/',
     getParentRoute: () =>
-      AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute,
+      AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -166,11 +180,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
+    '/app/{-$vaultId}': {
+      id: '/app/{-$vaultId}'
+      path: '/{-$vaultId}'
+      fullPath: '/app/{-$vaultId}'
+      preLoaderRoute: typeof AppVaultIdRouteImport
+      parentRoute: typeof AppRouteImport
+    }
     '/app/loading': {
       id: '/app/loading'
       path: '/loading'
       fullPath: '/app/loading'
       preLoaderRoute: typeof AppLoadingImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/app/migrate': {
+      id: '/app/migrate'
+      path: '/migrate'
+      fullPath: '/app/migrate'
+      preLoaderRoute: typeof AppMigrateImport
       parentRoute: typeof AppRouteImport
     }
     '/auth/login': {
@@ -201,143 +229,156 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppRouteImport
     }
-    '/app/{-$deviceId}/': {
-      id: '/app/{-$deviceId}/'
-      path: '/{-$deviceId}'
-      fullPath: '/app/{-$deviceId}'
-      preLoaderRoute: typeof AppDeviceIdIndexImport
-      parentRoute: typeof AppRouteImport
+    '/app/{-$vaultId}/': {
+      id: '/app/{-$vaultId}/'
+      path: '/'
+      fullPath: '/app/{-$vaultId}/'
+      preLoaderRoute: typeof AppVaultIdIndexImport
+      parentRoute: typeof AppVaultIdRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}'
-      path: '/{-$deviceId}/{-$profileId}/{-$vaultId}'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdRouteImport
-      parentRoute: typeof AppRouteImport
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}'
+      path: '/{-$hostName}/{-$userName}'
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameRouteImport
+      parentRoute: typeof AppVaultIdRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/': {
-      id: '/app/{-$deviceId}/{-$profileId}/'
-      path: '/{-$deviceId}/{-$profileId}'
-      fullPath: '/app/{-$deviceId}/{-$profileId}'
-      preLoaderRoute: typeof AppDeviceIdProfileIdIndexImport
-      parentRoute: typeof AppRouteImport
+    '/app/{-$vaultId}/{-$hostName}/': {
+      id: '/app/{-$vaultId}/{-$hostName}/'
+      path: '/{-$hostName}'
+      fullPath: '/app/{-$vaultId}/{-$hostName}'
+      preLoaderRoute: typeof AppVaultIdHostNameIndexImport
+      parentRoute: typeof AppVaultIdRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}'
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}'
       path: '/{-$folderId}'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdRouteImport
-      parentRoute: typeof AppDeviceIdProfileIdVaultIdRouteImport
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameFolderIdRouteImport
+      parentRoute: typeof AppVaultIdHostNameUserNameRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings'
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings'
       path: '/settings'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdSettingsImport
-      parentRoute: typeof AppDeviceIdProfileIdVaultIdRouteImport
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameSettingsImport
+      parentRoute: typeof AppVaultIdHostNameUserNameRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/'
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}/': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}/'
       path: '/'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdIndexImport
-      parentRoute: typeof AppDeviceIdProfileIdVaultIdRouteImport
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}/'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameIndexImport
+      parentRoute: typeof AppVaultIdHostNameUserNameRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/'
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/'
       path: '/'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdIndexImport
-      parentRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdRouteImport
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameFolderIdIndexImport
+      parentRoute: typeof AppVaultIdHostNameUserNameFolderIdRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}'
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}'
       path: '/{-$backupId}/{-$directoryId}'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteImport
-      parentRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdRouteImport
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteImport
+      parentRoute: typeof AppVaultIdHostNameUserNameFolderIdRouteImport
     }
-    '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/': {
-      id: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/'
+    '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/': {
+      id: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/'
       path: '/'
-      fullPath: '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/'
-      preLoaderRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexImport
-      parentRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteImport
+      fullPath: '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/'
+      preLoaderRoute: typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexImport
+      parentRoute: typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren {
-  AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+interface AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteChildren {
+  AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute: typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute
 }
 
-const AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren: AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren =
+const AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteChildren: AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteChildren =
   {
-    AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute:
-      AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute,
+    AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute:
+      AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute,
   }
 
-const AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren =
-  AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute._addFileChildren(
-    AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren,
+const AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteWithChildren =
+  AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRoute._addFileChildren(
+    AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteChildren,
   )
 
-interface AppDeviceIdProfileIdVaultIdFolderIdRouteRouteChildren {
-  AppDeviceIdProfileIdVaultIdFolderIdIndexRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdIndexRoute
-  AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren
+interface AppVaultIdHostNameUserNameFolderIdRouteRouteChildren {
+  AppVaultIdHostNameUserNameFolderIdIndexRoute: typeof AppVaultIdHostNameUserNameFolderIdIndexRoute
+  AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRoute: typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteWithChildren
 }
 
-const AppDeviceIdProfileIdVaultIdFolderIdRouteRouteChildren: AppDeviceIdProfileIdVaultIdFolderIdRouteRouteChildren =
+const AppVaultIdHostNameUserNameFolderIdRouteRouteChildren: AppVaultIdHostNameUserNameFolderIdRouteRouteChildren =
   {
-    AppDeviceIdProfileIdVaultIdFolderIdIndexRoute:
-      AppDeviceIdProfileIdVaultIdFolderIdIndexRoute,
-    AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute:
-      AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren,
+    AppVaultIdHostNameUserNameFolderIdIndexRoute:
+      AppVaultIdHostNameUserNameFolderIdIndexRoute,
+    AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRoute:
+      AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteWithChildren,
   }
 
-const AppDeviceIdProfileIdVaultIdFolderIdRouteRouteWithChildren =
-  AppDeviceIdProfileIdVaultIdFolderIdRouteRoute._addFileChildren(
-    AppDeviceIdProfileIdVaultIdFolderIdRouteRouteChildren,
+const AppVaultIdHostNameUserNameFolderIdRouteRouteWithChildren =
+  AppVaultIdHostNameUserNameFolderIdRouteRoute._addFileChildren(
+    AppVaultIdHostNameUserNameFolderIdRouteRouteChildren,
   )
 
-interface AppDeviceIdProfileIdVaultIdRouteRouteChildren {
-  AppDeviceIdProfileIdVaultIdFolderIdRouteRoute: typeof AppDeviceIdProfileIdVaultIdFolderIdRouteRouteWithChildren
-  AppDeviceIdProfileIdVaultIdSettingsRoute: typeof AppDeviceIdProfileIdVaultIdSettingsRoute
-  AppDeviceIdProfileIdVaultIdIndexRoute: typeof AppDeviceIdProfileIdVaultIdIndexRoute
+interface AppVaultIdHostNameUserNameRouteRouteChildren {
+  AppVaultIdHostNameUserNameFolderIdRouteRoute: typeof AppVaultIdHostNameUserNameFolderIdRouteRouteWithChildren
+  AppVaultIdHostNameUserNameSettingsRoute: typeof AppVaultIdHostNameUserNameSettingsRoute
+  AppVaultIdHostNameUserNameIndexRoute: typeof AppVaultIdHostNameUserNameIndexRoute
 }
 
-const AppDeviceIdProfileIdVaultIdRouteRouteChildren: AppDeviceIdProfileIdVaultIdRouteRouteChildren =
+const AppVaultIdHostNameUserNameRouteRouteChildren: AppVaultIdHostNameUserNameRouteRouteChildren =
   {
-    AppDeviceIdProfileIdVaultIdFolderIdRouteRoute:
-      AppDeviceIdProfileIdVaultIdFolderIdRouteRouteWithChildren,
-    AppDeviceIdProfileIdVaultIdSettingsRoute:
-      AppDeviceIdProfileIdVaultIdSettingsRoute,
-    AppDeviceIdProfileIdVaultIdIndexRoute:
-      AppDeviceIdProfileIdVaultIdIndexRoute,
+    AppVaultIdHostNameUserNameFolderIdRouteRoute:
+      AppVaultIdHostNameUserNameFolderIdRouteRouteWithChildren,
+    AppVaultIdHostNameUserNameSettingsRoute:
+      AppVaultIdHostNameUserNameSettingsRoute,
+    AppVaultIdHostNameUserNameIndexRoute: AppVaultIdHostNameUserNameIndexRoute,
   }
 
-const AppDeviceIdProfileIdVaultIdRouteRouteWithChildren =
-  AppDeviceIdProfileIdVaultIdRouteRoute._addFileChildren(
-    AppDeviceIdProfileIdVaultIdRouteRouteChildren,
+const AppVaultIdHostNameUserNameRouteRouteWithChildren =
+  AppVaultIdHostNameUserNameRouteRoute._addFileChildren(
+    AppVaultIdHostNameUserNameRouteRouteChildren,
   )
+
+interface AppVaultIdRouteRouteChildren {
+  AppVaultIdIndexRoute: typeof AppVaultIdIndexRoute
+  AppVaultIdHostNameUserNameRouteRoute: typeof AppVaultIdHostNameUserNameRouteRouteWithChildren
+  AppVaultIdHostNameIndexRoute: typeof AppVaultIdHostNameIndexRoute
+}
+
+const AppVaultIdRouteRouteChildren: AppVaultIdRouteRouteChildren = {
+  AppVaultIdIndexRoute: AppVaultIdIndexRoute,
+  AppVaultIdHostNameUserNameRouteRoute:
+    AppVaultIdHostNameUserNameRouteRouteWithChildren,
+  AppVaultIdHostNameIndexRoute: AppVaultIdHostNameIndexRoute,
+}
+
+const AppVaultIdRouteRouteWithChildren = AppVaultIdRouteRoute._addFileChildren(
+  AppVaultIdRouteRouteChildren,
+)
 
 interface AppRouteRouteChildren {
+  AppVaultIdRouteRoute: typeof AppVaultIdRouteRouteWithChildren
   AppLoadingRoute: typeof AppLoadingRoute
+  AppMigrateRoute: typeof AppMigrateRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppDeviceIdIndexRoute: typeof AppDeviceIdIndexRoute
-  AppDeviceIdProfileIdVaultIdRouteRoute: typeof AppDeviceIdProfileIdVaultIdRouteRouteWithChildren
-  AppDeviceIdProfileIdIndexRoute: typeof AppDeviceIdProfileIdIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppVaultIdRouteRoute: AppVaultIdRouteRouteWithChildren,
   AppLoadingRoute: AppLoadingRoute,
+  AppMigrateRoute: AppMigrateRoute,
   AppIndexRoute: AppIndexRoute,
-  AppDeviceIdIndexRoute: AppDeviceIdIndexRoute,
-  AppDeviceIdProfileIdVaultIdRouteRoute:
-    AppDeviceIdProfileIdVaultIdRouteRouteWithChildren,
-  AppDeviceIdProfileIdIndexRoute: AppDeviceIdProfileIdIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -364,36 +405,39 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/app/{-$vaultId}': typeof AppVaultIdRouteRouteWithChildren
   '/app/loading': typeof AppLoadingRoute
+  '/app/migrate': typeof AppMigrateRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/': typeof AppIndexRoute
-  '/app/{-$deviceId}': typeof AppDeviceIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}': typeof AppDeviceIdProfileIdVaultIdRouteRouteWithChildren
-  '/app/{-$deviceId}/{-$profileId}': typeof AppDeviceIdProfileIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}': typeof AppDeviceIdProfileIdVaultIdFolderIdRouteRouteWithChildren
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings': typeof AppDeviceIdProfileIdVaultIdSettingsRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/': typeof AppDeviceIdProfileIdVaultIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/': typeof AppDeviceIdProfileIdVaultIdFolderIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}': typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/': typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+  '/app/{-$vaultId}/': typeof AppVaultIdIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}': typeof AppVaultIdHostNameUserNameRouteRouteWithChildren
+  '/app/{-$vaultId}/{-$hostName}': typeof AppVaultIdHostNameIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}': typeof AppVaultIdHostNameUserNameFolderIdRouteRouteWithChildren
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings': typeof AppVaultIdHostNameUserNameSettingsRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/': typeof AppVaultIdHostNameUserNameIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/': typeof AppVaultIdHostNameUserNameFolderIdIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}': typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteWithChildren
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/': typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/loading': typeof AppLoadingRoute
+  '/app/migrate': typeof AppMigrateRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app': typeof AppIndexRoute
-  '/app/{-$deviceId}': typeof AppDeviceIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}': typeof AppDeviceIdProfileIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings': typeof AppDeviceIdProfileIdVaultIdSettingsRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}': typeof AppDeviceIdProfileIdVaultIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}': typeof AppDeviceIdProfileIdVaultIdFolderIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}': typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+  '/app/{-$vaultId}': typeof AppVaultIdIndexRoute
+  '/app/{-$vaultId}/{-$hostName}': typeof AppVaultIdHostNameIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings': typeof AppVaultIdHostNameUserNameSettingsRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}': typeof AppVaultIdHostNameUserNameIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}': typeof AppVaultIdHostNameUserNameFolderIdIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}': typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -401,20 +445,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/app/{-$vaultId}': typeof AppVaultIdRouteRouteWithChildren
   '/app/loading': typeof AppLoadingRoute
+  '/app/migrate': typeof AppMigrateRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/': typeof AppIndexRoute
-  '/app/{-$deviceId}/': typeof AppDeviceIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}': typeof AppDeviceIdProfileIdVaultIdRouteRouteWithChildren
-  '/app/{-$deviceId}/{-$profileId}/': typeof AppDeviceIdProfileIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}': typeof AppDeviceIdProfileIdVaultIdFolderIdRouteRouteWithChildren
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings': typeof AppDeviceIdProfileIdVaultIdSettingsRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/': typeof AppDeviceIdProfileIdVaultIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/': typeof AppDeviceIdProfileIdVaultIdFolderIdIndexRoute
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}': typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren
-  '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/': typeof AppDeviceIdProfileIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+  '/app/{-$vaultId}/': typeof AppVaultIdIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}': typeof AppVaultIdHostNameUserNameRouteRouteWithChildren
+  '/app/{-$vaultId}/{-$hostName}/': typeof AppVaultIdHostNameIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}': typeof AppVaultIdHostNameUserNameFolderIdRouteRouteWithChildren
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings': typeof AppVaultIdHostNameUserNameSettingsRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/': typeof AppVaultIdHostNameUserNameIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/': typeof AppVaultIdHostNameUserNameFolderIdIndexRoute
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}': typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRouteRouteWithChildren
+  '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/': typeof AppVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -423,54 +469,59 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/app/{-$vaultId}'
     | '/app/loading'
+    | '/app/migrate'
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
     | '/app/'
-    | '/app/{-$deviceId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}'
-    | '/app/{-$deviceId}/{-$profileId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/'
+    | '/app/{-$vaultId}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}'
+    | '/app/{-$vaultId}/{-$hostName}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/app/loading'
+    | '/app/migrate'
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
     | '/app'
-    | '/app/{-$deviceId}'
-    | '/app/{-$deviceId}/{-$profileId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}'
+    | '/app/{-$vaultId}'
+    | '/app/{-$vaultId}/{-$hostName}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/auth'
+    | '/app/{-$vaultId}'
     | '/app/loading'
+    | '/app/migrate'
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
     | '/app/'
-    | '/app/{-$deviceId}/'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}'
-    | '/app/{-$deviceId}/{-$profileId}/'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}'
-    | '/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/'
+    | '/app/{-$vaultId}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}'
+    | '/app/{-$vaultId}/{-$hostName}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/settings'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}'
+    | '/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/'
   fileRoutesById: FileRoutesById
 }
 
@@ -507,11 +558,10 @@ export const routeTree = rootRoute
     "/app": {
       "filePath": "app/route.tsx",
       "children": [
+        "/app/{-$vaultId}",
         "/app/loading",
-        "/app/",
-        "/app/{-$deviceId}/",
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",
-        "/app/{-$deviceId}/{-$profileId}/"
+        "/app/migrate",
+        "/app/"
       ]
     },
     "/auth": {
@@ -522,8 +572,21 @@ export const routeTree = rootRoute
         "/auth/register"
       ]
     },
+    "/app/{-$vaultId}": {
+      "filePath": "app/{-$vaultId}/route.tsx",
+      "parent": "/app",
+      "children": [
+        "/app/{-$vaultId}/",
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}",
+        "/app/{-$vaultId}/{-$hostName}/"
+      ]
+    },
     "/app/loading": {
       "filePath": "app/loading.tsx",
+      "parent": "/app"
+    },
+    "/app/migrate": {
+      "filePath": "app/migrate.tsx",
       "parent": "/app"
     },
     "/auth/login": {
@@ -542,53 +605,53 @@ export const routeTree = rootRoute
       "filePath": "app/index.tsx",
       "parent": "/app"
     },
-    "/app/{-$deviceId}/": {
-      "filePath": "app/{-$deviceId}/index.tsx",
-      "parent": "/app"
+    "/app/{-$vaultId}/": {
+      "filePath": "app/{-$vaultId}/index.tsx",
+      "parent": "/app/{-$vaultId}"
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/route.tsx",
-      "parent": "/app",
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/route.tsx",
+      "parent": "/app/{-$vaultId}",
       "children": [
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}",
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings",
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/"
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}/settings",
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}/"
       ]
     },
-    "/app/{-$deviceId}/{-$profileId}/": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/index.tsx",
-      "parent": "/app"
+    "/app/{-$vaultId}/{-$hostName}/": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/index.tsx",
+      "parent": "/app/{-$vaultId}"
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/route.tsx",
-      "parent": "/app/{-$deviceId}/{-$profileId}/{-$vaultId}",
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/route.tsx",
+      "parent": "/app/{-$vaultId}/{-$hostName}/{-$userName}",
       "children": [
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/",
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
       ]
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/settings.tsx",
-      "parent": "/app/{-$deviceId}/{-$profileId}/{-$vaultId}"
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}/settings": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/settings.tsx",
+      "parent": "/app/{-$vaultId}/{-$hostName}/{-$userName}"
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/index.tsx",
-      "parent": "/app/{-$deviceId}/{-$profileId}/{-$vaultId}"
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}/": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/index.tsx",
+      "parent": "/app/{-$vaultId}/{-$hostName}/{-$userName}"
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/index.tsx",
-      "parent": "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}"
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/index.tsx",
+      "parent": "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/route.tsx",
-      "parent": "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}",
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/route.tsx",
+      "parent": "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
       "children": [
-        "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/"
+        "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/"
       ]
     },
-    "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/": {
-      "filePath": "app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}/index.tsx",
-      "parent": "/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
+    "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/": {
+      "filePath": "app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/index.tsx",
+      "parent": "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
     }
   }
 }

@@ -3,17 +3,15 @@ import { posthog } from "@api/lib/posthog";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { providers } from "@config/providers";
-import { defaultStorageOptions, LATEST_STORAGE_VERSION } from "@config/storage";
-import type { EncryptedConfig } from "@electron/encryption";
+import { defaultVaultOptions, LATEST_VAULT_VERSION } from "@config/vault";
+import { ZVaultOptionsType } from "@schemas/shared/vault";
 import {
   ZCreateVault,
   ZGetVault,
-  ZLinkVault,
-  ZListLinkedVaults,
-  ZListUnlinkedVaults,
-  ZListVaults,
-  ZUnlinkVault,
+  ZHardDeleteVault,
+  ZSoftDeleteVault,
   ZUpdateVault,
+  ZUpdateVaultVersion,
 } from "@schemas/vault";
 import { generateId } from "@utils/id";
 import { logsnag } from "@utils/logsnag";
@@ -24,21 +22,23 @@ export const vaultRouter = router({
   create: authedProcedure
     .input(ZCreateVault)
     .mutation(async ({ input, ctx }) => {
-      const storageId = generateId("Storage");
+      if (input.coreId) {
+        const existing = await ctx.db
+          .selectFrom("Vault")
+          .select(["id"])
+          .where("coreId", "=", input.coreId)
+          .where("accountId", "=", ctx.account?.id!)
+          .executeTakeFirst();
 
-      const profile = await ctx.db
-        .selectFrom("Profile")
-        .select(["id", "deviceId"])
-        .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.profileId)
-        .executeTakeFirst();
+        if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
+      }
 
-      if (!profile) throw new CustomError("PROFILE_NOT_FOUND");
+      const vaultId = generateId("Vault");
 
       const provider = providers.find((p) => p.type === input.provider);
       if (!provider) throw new CustomError("PROVIDER_NOT_FOUND");
 
-      const options = defaultStorageOptions;
+      const options = defaultVaultOptions;
 
       let spaceId: string | null = null;
       if (input.provider === "BLINKDISK_CLOUD") {
@@ -53,31 +53,18 @@ export const vaultRouter = router({
       }
 
       await ctx.db
-        .insertInto("Storage")
-        .values({
-          id: storageId,
-          status: "ACTIVE",
-          version: LATEST_STORAGE_VERSION,
-          provider: input.provider,
-          accountId: ctx.account?.id!,
-          configLevel: provider.level,
-          passwordHash: input.passwordHash,
-          options,
-          ...(spaceId && { spaceId }),
-        })
-        .execute();
-
-      const vaultId = generateId("Vault");
-
-      await ctx.db
         .insertInto("Vault")
         .values({
           id: vaultId,
+          coreId: input.coreId || vaultId,
           status: "ACTIVE",
           name: input.name,
-          profileId: input.profileId,
-          storageId: storageId,
+          version: LATEST_VAULT_VERSION,
+          provider: input.provider,
           accountId: ctx.account?.id!,
+          configLevel: provider.level,
+          options,
+          ...(spaceId && { spaceId }),
         })
         .execute();
 
@@ -89,9 +76,12 @@ export const vaultRouter = router({
           id: configId,
           level: provider.level,
           data: removeEmptyStrings(input.config),
-          storageId: storageId,
           accountId: ctx.account?.id!,
-          ...(provider.level === "PROFILE" && { profileId: input.profileId }),
+          vaultId,
+          ...(provider.level === "PROFILE" && {
+            userName: input.userName,
+            hostName: input.hostName,
+          }),
         })
         .execute();
 
@@ -99,13 +89,13 @@ export const vaultRouter = router({
       if (input.provider === "BLINKDISK_CLOUD" && spaceId) {
         token = await generateServiceToken(
           {
-            storageId,
+            vaultId,
           },
           // The dotenv parser somtimes leaves a trailing backslash
           ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
         );
 
-        const stub = (ctx.env.STORAGE as any).getByName(storageId);
+        const stub = (ctx.env.VAULT as any).getByName(vaultId);
         await stub.init(spaceId);
       }
 
@@ -124,7 +114,6 @@ export const vaultRouter = router({
             properties: {
               provider: input.provider,
               name: input.name,
-              storageId,
               vaultId,
             },
           });
@@ -139,239 +128,73 @@ export const vaultRouter = router({
           options,
           ...(token && { token }),
         },
-        storageId: storageId,
-        deviceId: profile.deviceId,
-        profileId: input.profileId,
       };
     }),
-  listUnlinked: authedProcedure
-    .input(ZListUnlinkedVaults)
-    .query(async ({ input, ctx }) => {
-      const vaults = await ctx.db
-        .selectFrom("Vault")
-        .innerJoin("Storage", "Storage.id", "Vault.storageId")
-        .innerJoin("Profile", "Profile.id", "Vault.profileId")
-        .innerJoin("Device", "Device.id", "Profile.deviceId")
-        .leftJoin("Config", (join) =>
-          join
-            .onRef("Config.storageId", "=", "Vault.storageId")
-            .onRef("Vault.profileId", "=", "Config.profileId"),
-        )
-        .select(({ selectFrom }) => [
-          "Vault.id",
-          "Vault.name",
-          "Vault.storageId",
-          "Vault.profileId",
-          "Profile.deviceId",
-          "Storage.provider",
-          "Storage.passwordHash",
-          "Storage.configLevel",
-          "Device.alias as deviceAlias",
-          "Profile.alias as profileAlias",
-          selectFrom("Config")
-            .whereRef("Config.storageId", "=", "Vault.storageId")
-            .where(({ or, and, eb }) =>
-              or([
-                eb("Config.level", "=", "STORAGE"),
-                and([
-                  eb("Config.level", "=", "PROFILE"),
-                  eb("Config.profileId", "=", input.profileId),
-                ]),
-              ]),
-            )
-            .select("Config.data")
-            .as("config"),
-        ])
-        .where("Vault.status", "=", "ACTIVE")
-        .where("Vault.accountId", "=", ctx.account?.id!)
-        .where("Vault.storageId", "not in", ({ selectFrom }) =>
-          selectFrom("Storage")
-            .innerJoin("Vault", (join) =>
-              join
-                .onRef("Vault.storageId", "=", "Storage.id")
-                .on("Vault.status", "=", "ACTIVE")
-                .on("Vault.profileId", "=", input.profileId),
-            )
-            .select("Storage.id")
-            .where("Storage.accountId", "=", ctx.account?.id!),
-        )
-        .execute();
-
-      return vaults as (Omit<(typeof vaults)[number], "config"> & {
-        config: EncryptedConfig | null;
-      })[];
-    }),
-  listLinked: authedProcedure
-    .input(ZListLinkedVaults)
-    .query(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["id", "storageId"])
-        .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.vaultId)
-        .executeTakeFirst();
-
-      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
-
-      const vaults = await ctx.db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("storageId", "=", vault.storageId)
-        .where("id", "!=", vault.id)
-        .where("status", "=", "ACTIVE")
-        .execute();
-
-      return vaults;
-    }),
-  link: authedProcedure.input(ZLinkVault).mutation(async ({ input, ctx }) => {
-    const storage = await ctx.db
-      .selectFrom("Storage")
-      .select(["id", "provider", "configLevel"])
-      .where("accountId", "=", ctx.account?.id!)
-      .where("id", "=", input.storageId)
-      .executeTakeFirst();
-
-    if (!storage) throw new CustomError("STORAGE_NOT_FOUND");
-    if (storage.configLevel === "PROFILE" && !input.config)
-      throw new CustomError("CONFIG_REQUIRED");
-
-    const profile = await ctx.db
-      .selectFrom("Profile")
-      .select(["id"])
-      .where("accountId", "=", ctx.account?.id!)
-      .where("id", "=", input.profileId)
-      .executeTakeFirst();
-
-    if (!profile) throw new CustomError("PROFILE_NOT_FOUND");
-
-    const vault = await ctx.db
-      .selectFrom("Vault")
-      .select(["id"])
-      .where("profileId", "=", input.profileId)
-      .where("storageId", "=", input.storageId)
-      .where("status", "=", "ACTIVE")
-      .executeTakeFirst();
-
-    if (vault) throw new CustomError("VAULT_ALREADY_LINKED");
-
-    const vaultId = generateId("Vault");
-
-    await ctx.db
-      .insertInto("Vault")
-      .values({
-        id: vaultId,
-        status: "ACTIVE",
-        name: input.name,
-        profileId: input.profileId,
-        storageId: input.storageId,
-        accountId: ctx.account?.id!,
-      })
-      .execute();
-
-    const configId = generateId("Config");
-
-    if (storage.configLevel === "PROFILE") {
-      await ctx.db
-        .insertInto("Config")
-        .values({
-          id: configId,
-          level: "PROFILE",
-          data: removeEmptyStrings(input.config),
-          profileId: input.profileId,
-          storageId: input.storageId,
-          accountId: ctx.account?.id!,
-        })
-        .execute();
-    }
-
-    ctx.waitUntil(
-      (async () => {
-        await logsnag({
-          icon: "🔗",
-          title: "Vault linked",
-          description: `(${storage.provider}) ${input.name} just got linked by ${ctx.account?.email}.`,
-          channel: "vaults",
-        });
-
-        await posthog({
-          distinctId: ctx.account?.id!,
-          event: "vault_link",
-          properties: {
-            provider: storage.provider,
-            name: input.name,
-            storageId: storage.id,
-            vaultId,
-          },
-        });
-      })(),
-    );
-
-    return {
-      vaultId,
-      storageId: storage.id,
-      provider: storage.provider,
-    };
-  }),
-  list: authedProcedure.input(ZListVaults).query(async ({ input, ctx }) => {
+  list: authedProcedure.query(async ({ ctx }) => {
     let query = ctx.db
       .selectFrom("Vault")
-      .innerJoin("Profile", "Profile.id", "Vault.profileId")
-      .innerJoin("Storage", "Storage.id", "Vault.storageId")
       .select([
-        "Vault.id",
-        "Vault.name",
-        "Vault.storageId",
-        "Vault.profileId",
-        "Vault.accountId",
-        "Profile.deviceId",
-        "Storage.options",
-        "Storage.provider",
+        "id",
+        "coreId",
+        "name",
+        "accountId",
+        "options",
+        "provider",
+        "configLevel",
+        "version",
       ])
-      .where("Vault.status", "=", "ACTIVE")
-      .where("Vault.accountId", "=", ctx.account?.id!);
-
-    if (input.profileId)
-      query = query.where("Vault.profileId", "=", input.profileId);
+      .where("status", "=", "ACTIVE")
+      .where("accountId", "=", ctx.account?.id!);
 
     const vaults = await query.execute();
-    return vaults;
+
+    const vaultsWithToken: ((typeof vaults)[number] & {
+      token: string | null;
+    })[] = [];
+
+    for (const vault of vaults) {
+      let token: string | null = null;
+
+      if (vault.provider === "BLINKDISK_CLOUD") {
+        token = await generateServiceToken(
+          {
+            vaultId: vault.id,
+          },
+          // The dotenv parser somtimes leaves a trailing backslash
+          ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
+        );
+      }
+
+      vaultsWithToken.push({
+        ...vault,
+        token,
+      });
+    }
+
+    return vaultsWithToken as (Omit<
+      (typeof vaultsWithToken)[number],
+      "options"
+    > & {
+      options: ZVaultOptionsType;
+    })[];
   }),
   get: authedProcedure.input(ZGetVault).query(async ({ input, ctx }) => {
     const vault = await ctx.db
       .selectFrom("Vault")
-      .innerJoin("Storage", "Storage.id", "Vault.storageId")
-      .innerJoin("Profile", "Profile.id", "Vault.profileId")
-      .select(({ selectFrom }) => [
-        "Vault.id",
-        "Vault.name",
-        "Vault.storageId",
-        "Profile.deviceId",
-        "Vault.profileId",
-        "Storage.provider",
-        "Storage.passwordHash",
-        selectFrom("Config")
-          .whereRef("Config.storageId", "=", "Vault.storageId")
-          .where(({ or, and, eb, ref }) =>
-            or([
-              eb("Config.level", "=", "STORAGE"),
-              and([
-                eb("Config.level", "=", "PROFILE"),
-                eb("Config.profileId", "=", ref("Vault.profileId")),
-              ]),
-            ]),
-          )
-          .select("Config.data")
-          .as("config"),
+      .select([
+        "id",
+        "coreId",
+        "name",
+        "provider",
+        "configLevel",
       ])
-      .where("Vault.accountId", "=", ctx.account?.id!)
-      .where("Vault.id", "=", input.vaultId)
+      .where("accountId", "=", ctx.account?.id!)
+      .where("id", "=", input.vaultId)
       .executeTakeFirst();
 
     if (!vault) throw new CustomError("VAULT_NOT_FOUND");
 
-    return vault as Omit<typeof vault, "config"> & {
-      config: EncryptedConfig | null;
-    };
+    return vault;
   }),
   update: authedProcedure
     .input(ZUpdateVault)
@@ -412,15 +235,39 @@ export const vaultRouter = router({
       capacity: parseInt(space.capacity),
     };
   }),
-  unlink: authedProcedure
-    .input(ZUnlinkVault)
+  deleteHard: authedProcedure
+    .input(ZHardDeleteVault)
     .mutation(async ({ input, ctx }) => {
       const vault = await ctx.db
         .selectFrom("Vault")
-        .innerJoin("Storage", "Storage.id", "Vault.storageId")
-        .select(["Vault.id", "Vault.name", "Storage.provider"])
-        .where("Vault.id", "=", input.vaultId)
+        .select(["id", "provider"])
+        .where("accountId", "=", ctx.account?.id!)
+        .where("id", "=", input.vaultId)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      await Promise.all([
+        ctx.db.deleteFrom("Vault").where("id", "=", input.vaultId).execute(),
+        ctx.db
+          .deleteFrom("Config")
+          .where("vaultId", "=", input.vaultId)
+          .execute(),
+      ]);
+
+      if (vault.provider === "BLINKDISK_CLOUD") {
+        const stub = ctx.env.VAULT.getByName(input.vaultId);
+        await (stub as any).delete(input.vaultId, true);
+      }
+    }),
+  deleteSoft: authedProcedure
+    .input(ZSoftDeleteVault)
+    .mutation(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .select(["Vault.id", "Vault.provider", "Vault.name"])
         .where("Vault.accountId", "=", ctx.account?.id!)
+        .where("Vault.id", "=", input.vaultId)
         .executeTakeFirst();
 
       if (!vault) throw new CustomError("VAULT_NOT_FOUND");
@@ -434,15 +281,15 @@ export const vaultRouter = router({
       ctx.waitUntil(
         (async () => {
           await logsnag({
-            icon: "🖇️",
-            title: "Vault unlinked",
-            description: `(${vault.provider}) ${vault.name} just got unlinked by ${ctx.account?.email}.`,
+            icon: "🗑",
+            title: "Vault deleted",
+            description: `(${vault.provider}) ${vault.name} just got deleted by ${ctx.account?.email}.`,
             channel: "vaults",
           });
 
           await posthog({
             distinctId: ctx.account?.id!,
-            event: "vault_unlink",
+            event: "vault_delete",
             properties: {
               provider: vault.provider,
               name: vault.name,
@@ -451,5 +298,32 @@ export const vaultRouter = router({
           });
         })(),
       );
+
+      if (vault.provider === "BLINKDISK_CLOUD") {
+        const stub = ctx.env.VAULT.getByName(vault.id);
+        await (stub as any).delete(vault.id, true);
+      }
+    }),
+  updateVersion: authedProcedure
+    .input(ZUpdateVaultVersion)
+    .mutation(async ({ input, ctx }) => {
+      const vault = await ctx.db
+        .selectFrom("Vault")
+        .select(["id"])
+        .where("id", "=", input.vaultId)
+        .where("accountId", "=", ctx.account?.id!)
+        .executeTakeFirst();
+
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      await ctx.db
+        .updateTable("Vault")
+        .set({
+          version: input.version,
+        })
+        .where("id", "=", vault.id)
+        .execute();
+
+      return vault;
     }),
 });

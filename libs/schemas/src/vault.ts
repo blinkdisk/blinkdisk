@@ -1,3 +1,4 @@
+import { LATEST_VAULT_VERSION } from "@config/vault";
 import { ZProviderType } from "@schemas/providers";
 import {
   ZVaultEncryptedConfig,
@@ -7,11 +8,12 @@ import {
 import { z } from "zod";
 
 export const ZCreateVault = z.object({
-  profileId: z.string(),
+  coreId: z.string().min(1).max(244).optional(),
   name: ZVaultName,
   provider: ZProviderType,
-  passwordHash: z.string().min(1).max(500),
   config: ZVaultEncryptedConfig,
+  userName: z.string(),
+  hostName: z.string(),
 });
 
 export type ZCreateVaultType = z.infer<typeof ZCreateVault>;
@@ -24,52 +26,17 @@ export const ZCreateVaultDetails = z.object({
 
 export type ZCreateVaultDetailsType = z.infer<typeof ZCreateVaultDetails>;
 
-export const ZListUnlinkedVaults = z.object({
-  profileId: z.string(),
-});
-
-export const ZListLinkedVaults = z.object({
-  vaultId: z.string(),
-});
-
-export const ZLinkVault = z.object({
-  profileId: z.string(),
-  storageId: z.string().min(1),
-  name: ZVaultName,
-  config: ZVaultEncryptedConfig.optional(),
-});
-
-export const ZLinkVaultDetails = z.object({
-  name: ZVaultName,
-});
-
-export type ZLinkVaultDetailsType = z.infer<typeof ZLinkVaultDetails>;
-
-export type ZLinkVaultType = z.infer<typeof ZLinkVault>;
-
 export const ZCheckName = z.object({
   name: ZVaultName,
 });
 
 export type ZCheckNameType = z.infer<typeof ZCheckName>;
 
-export const ZListVaults = z.object({
-  profileId: z.string().optional(),
-});
-
-export type ZListVaultsType = z.infer<typeof ZListVaults>;
-
 export const ZGetVault = z.object({
   vaultId: z.string(),
 });
 
 export type ZGetVaultType = z.infer<typeof ZGetVault>;
-
-export const ZLinkVaultPassword = z.object({
-  password: ZVaultPassword,
-});
-
-export type ZLinkVaultPasswordType = z.infer<typeof ZLinkVaultPassword>;
 
 export const ZVaultPasswordForm = z.object({
   password: ZVaultPassword,
@@ -109,8 +76,21 @@ export const ZVaultThrottle = z.object({
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
 
-export const ZUnlinkVault = z.object({
+export const ZHardDeleteVault = z.object({
   vaultId: z.string(),
 });
 
-export type ZSoftUnlinkVaultType = z.infer<typeof ZUnlinkVault>;
+export type ZHardDeleteVaultType = z.infer<typeof ZHardDeleteVault>;
+
+export const ZSoftDeleteVault = z.object({
+  vaultId: z.string(),
+});
+
+export type ZSoftDeleteVaultType = z.infer<typeof ZSoftDeleteVault>;
+
+export const ZUpdateVaultVersion = z.object({
+  vaultId: z.string(),
+  version: z.number().min(1).max(LATEST_VAULT_VERSION),
+});
+
+export type ZUpdateVaultVersionType = z.infer<typeof ZUpdateVaultVersion>;

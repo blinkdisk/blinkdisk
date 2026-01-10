@@ -1,10 +1,10 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useDevice } from "@desktop/hooks/use-device";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
   convertPolicyFromCore,
+  convertPolicyToCore,
   CorePolicy,
   defaultVaultPolicy,
 } from "@desktop/lib/policy";
@@ -12,34 +12,41 @@ import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultPolicy() {
-  const { profileId } = useProfile();
-  const { deviceId } = useDevice();
+  const { profileFilter } = useProfile();
   const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: queryKeys.policy.vault(vaultId),
+    queryKey: queryKeys.policy.vault(vaultId, profileFilter),
     queryFn: async () => {
-      if (!deviceId || !profileId || !vaultId) return null;
+      if (!profileFilter) return null;
 
       const res = await vaultApi(vaultId).get<CorePolicy & { code?: string }>(
         "/api/v1/policy",
         {
-          params: {
-            userName: profileId,
-            host: deviceId,
-          },
+          params: profileFilter,
         },
       );
 
       if (!res.data) return null;
 
-      if (res.data.code === "NOT_FOUND")
+      if (res.data.code === "NOT_FOUND") {
+        // Create the vault policy in
+        // case it doesn't exist yet
+        await vaultApi(vaultId).put(
+          "/api/v1/policy",
+          convertPolicyToCore(defaultVaultPolicy),
+          {
+            params: profileFilter,
+          },
+        );
+
         return {
           defined: defaultVaultPolicy,
           effective: defaultVaultPolicy,
         };
+      }
 
       const policy = convertPolicyFromCore(res.data);
       if (!policy) return null;
@@ -49,6 +56,6 @@ export function useVaultPolicy() {
         effective: policy,
       };
     },
-    enabled: !!accountId && !!vaultId && running,
+    enabled: !!accountId && !!vaultId && !!profileFilter && running,
   });
 }

@@ -2,14 +2,16 @@ import { ZVaultEncryptedConfig } from "@schemas/shared/vault";
 import { z } from "zod";
 
 export const ZListConfigs = z.object({
-  profileId: z.string(),
+  userName: z.string().optional(),
+  hostName: z.string().optional(),
 });
 
 export type ZListConfigsType = z.infer<typeof ZListConfigs>;
 
 export const ZAddConfig = z.object({
-  profileId: z.string(),
-  storageId: z.string(),
+  userName: z.string(),
+  hostName: z.string(),
+  vaultId: z.string(),
   config: ZVaultEncryptedConfig,
 });
 

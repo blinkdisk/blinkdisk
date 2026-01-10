@@ -1,18 +1,9 @@
-import type {
-  setConfigCache,
-  setStorageCache,
-  setVaultCache,
-} from "@electron/cache";
+import type { setConfigCache, setVaultCache } from "@electron/cache";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
 } from "@electron/encryption";
-import type {
-  comparePassword,
-  getPasswordCache,
-  hashPassword,
-  setPasswordCache,
-} from "@electron/password";
+import type { getPasswordCache, setPasswordCache } from "@electron/password";
 import {
   checkEmpty,
   listRestores,
@@ -81,10 +72,9 @@ const api = {
   },
   zoom: (level: number) => webFrame.setZoomFactor(level),
   os: {
-    machineId: () => ipcRenderer.invoke("os.machineId") as Promise<string>,
-    hostName: () => ipcRenderer.invoke("os.hostName") as Promise<string>,
-    userName: () => ipcRenderer.invoke("os.userName") as Promise<string>,
-    platform: () => ipcRenderer.invoke("os.platform") as Promise<string>,
+    hostName: () => ipcRenderer.sendSync("os.hostName") as string,
+    userName: () => ipcRenderer.sendSync("os.userName") as string,
+    platform: () => ipcRenderer.sendSync("os.platform") as string,
   },
   path: {
     basename: (path: string) =>
@@ -103,10 +93,6 @@ const api = {
         "dialog.save",
         options,
       ) as Promise<SaveDialogReturnValue>,
-  },
-  storage: {
-    cache: (payload: Parameters<typeof setStorageCache>[0]) =>
-      ipcRenderer.invoke("storage.cache", payload),
   },
   config: {
     cache: (payload: Parameters<typeof setConfigCache>[0]) =>
@@ -132,10 +118,6 @@ const api = {
       ipcRenderer.invoke("vault.cache", payload) as Promise<
         ReturnType<typeof setVaultCache>
       >,
-    activate: (payload: Parameters<typeof getVault>[0]) =>
-      ipcRenderer.invoke("vault.activate", payload) as Promise<
-        ReturnType<InstanceType<typeof Vault>["activate"]>
-      >,
     status: (payload: Parameters<typeof getVault>[0]) =>
       ipcRenderer.invoke("vault.status", payload) as Promise<
         InstanceType<typeof Vault>["status"]
@@ -154,14 +136,6 @@ const api = {
       get: (payload: Parameters<typeof getPasswordCache>[0]) =>
         ipcRenderer.invoke("vault.password.get", payload) as Promise<
           ReturnType<typeof getPasswordCache>
-        >,
-      hash: (payload: Parameters<typeof hashPassword>[0]) =>
-        ipcRenderer.invoke("vault.password.hash", payload) as Promise<
-          ReturnType<typeof hashPassword>
-        >,
-      compare: (payload: Parameters<typeof comparePassword>[0]) =>
-        ipcRenderer.invoke("vault.password.compare", payload) as Promise<
-          ReturnType<typeof comparePassword>
         >,
     },
     restore: {

@@ -9,17 +9,17 @@ export function useNetworkAttachedStorageForm({
   action,
   config,
   onSubmit,
-  storageId,
+  coreId,
 }: {
   action: VaultAction;
   config?: ZFilesystemConfigType;
   onSubmit: (value: ZFilesystemConfigType) => void;
-  storageId?: string;
+  coreId?: string;
 }) {
   const { onSubmitAsync } = useConfigValidation(
     "NETWORK_ATTACHED_STORAGE",
     action,
-    storageId,
+    coreId,
   );
 
   return useAppForm({

@@ -9,24 +9,32 @@ export const configRouter = router({
   list: authedProcedure.input(ZListConfigs).query(async ({ input, ctx }) => {
     let configs = await ctx.db
       .selectFrom("Config")
-      .innerJoin("Storage", "Storage.id", "Config.storageId")
+      .innerJoin("Vault", "Vault.id", "Config.vaultId")
       .select([
         "Config.id",
         "Config.level",
         "Config.data",
-        "Config.storageId",
+        "Config.vaultId",
         "Config.accountId",
-        "Config.profileId",
       ])
-      .where("Storage.status", "=", "ACTIVE")
+      .where("Vault.status", "=", "ACTIVE")
       .where("Config.accountId", "=", ctx.account?.id!)
       .where(({ or, and, eb }) =>
         or([
-          eb("Config.level", "=", "STORAGE"),
-          and([
-            eb("Config.level", "=", "PROFILE"),
-            eb("Config.profileId", "=", input.profileId),
-          ]),
+          eb("Config.level", "=", "VAULT"),
+          ...(input.userName || input.hostName
+            ? [
+                and([
+                  eb("Config.level", "=", "PROFILE"),
+                  ...(input.userName
+                    ? [eb("Config.userName", "=", input.userName)]
+                    : []),
+                  ...(input.hostName
+                    ? [eb("Config.hostName", "=", input.hostName)]
+                    : []),
+                ]),
+              ]
+            : [eb("Config.level", "=", "PROFILE")]),
         ]),
       )
       .execute();
@@ -40,31 +48,27 @@ export const configRouter = router({
       .selectFrom("Config")
       .select(["id"])
       .where("level", "=", "PROFILE")
-      .where("profileId", "=", input.profileId)
-      .where("storageId", "=", input.storageId)
+      .where("userName", "=", input.userName)
+      .where("hostName", "=", input.hostName)
+      .where("vaultId", "=", input.vaultId)
       .where("accountId", "=", ctx.account?.id!)
       .executeTakeFirst();
 
     if (existing) {
-      await ctx.db.updateTable("Config").set({ data: input.config }).execute();
+      await ctx.db
+        .updateTable("Config")
+        .set({ data: input.config })
+        .where("id", "=", existing.id)
+        .execute();
     } else {
-      const storage = await ctx.db
-        .selectFrom("Storage")
+      const vault = await ctx.db
+        .selectFrom("Vault")
         .select(["id"])
         .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.storageId)
+        .where("id", "=", input.vaultId)
         .executeTakeFirst();
 
-      if (!storage) throw new CustomError("STORAGE_NOT_FOUND");
-
-      const profile = await ctx.db
-        .selectFrom("Profile")
-        .select(["id"])
-        .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.profileId)
-        .executeTakeFirst();
-
-      if (!profile) throw new CustomError("PROFILE_NOT_FOUND");
+      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
 
       await ctx.db
         .insertInto("Config")
@@ -72,9 +76,10 @@ export const configRouter = router({
           id: generateId("Config"),
           level: "PROFILE",
           data: input.config,
-          profileId: input.profileId,
-          storageId: input.storageId,
+          vaultId: input.vaultId,
           accountId: ctx.account?.id!,
+          userName: input.userName,
+          hostName: input.hostName,
         })
         .execute();
     }

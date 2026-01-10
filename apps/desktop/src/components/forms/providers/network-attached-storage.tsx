@@ -9,14 +9,14 @@ export type NetworkAttachedStorageFormProps = {
   action: VaultAction;
   config?: ZFilesystemConfigType;
   onSubmit: (config: ZFilesystemConfigType) => void;
-  storageId?: string;
+  coreId?: string;
 };
 
 export function NetworkAttachedStorageForm({
   action,
   config,
   onSubmit,
-  storageId,
+  coreId,
 }: NetworkAttachedStorageFormProps) {
   const { t } = useAppTranslation(
     "vault.providers.NETWORK_ATTACHED_STORAGE.fields",
@@ -26,7 +26,7 @@ export function NetworkAttachedStorageForm({
     action,
     config,
     onSubmit,
-    storageId,
+    coreId,
   });
 
   return (

@@ -1,4 +1,3 @@
-import { useCreateProfile } from "@desktop/hooks/mutations/use-create-profile";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
@@ -20,7 +19,6 @@ export function useAuth() {
   );
 
   const { setAccountId } = useAccountId();
-  const { mutateAsync: createProfile } = useCreateProfile();
 
   const { data: accounts } = useAccountList({
     enabled: authenticated,
@@ -44,32 +42,6 @@ export function useAuth() {
         session = data;
       }
 
-      const deviceId = await window.electron.store.get(
-        `accounts.${session?.user.id}.deviceId`,
-      );
-
-      const profileId = await window.electron.store.get(
-        `accounts.${session?.user.id}.profileId`,
-      );
-
-      if (!deviceId || !profileId) {
-        const res = await createProfile({
-          hostName: await window.electron.os.hostName(),
-          machineId: await window.electron.os.machineId(),
-          userName: await window.electron.os.userName(),
-        });
-
-        await window.electron.store.set(
-          `accounts.${session?.user.id}.deviceId`,
-          res.deviceId,
-        );
-
-        await window.electron.store.set(
-          `accounts.${session?.user.id}.profileId`,
-          res.profileId,
-        );
-      }
-
       await window.electron.store.set(
         `accounts.${session?.user.id}.active`,
         true,
@@ -81,7 +53,7 @@ export function useAuth() {
         queryKey: queryKeys.account.detail(),
       });
     },
-    [queryClient, setAccountId, createProfile, queryKeys],
+    [queryClient, setAccountId, queryKeys],
   );
 
   const selectAccount = useCallback(

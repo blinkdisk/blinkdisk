@@ -53,7 +53,7 @@ function SidebarFolder({ folder }: SidebarFolderProps) {
         isActive={folder && folderId === folder?.id}
       >
         <Link
-          to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}"
+          to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
           params={(params) => ({
             ...params,
             folderId: folder?.id || "",

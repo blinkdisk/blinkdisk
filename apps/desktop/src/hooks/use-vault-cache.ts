@@ -17,9 +17,11 @@ export function useVaultCache() {
         id: vault.id,
         name: vault.name,
         accountId: vault.accountId,
-        profileId: vault.profileId,
-        deviceId: vault.deviceId,
-        storageId: vault.storageId,
+        configLevel: vault.configLevel,
+        options: vault.options,
+        version: vault.version,
+        provider: vault.provider,
+        ...(vault.token && { token: vault.token }),
       })),
     });
   }, [accountId, vaults, isLoading, setVaults]);

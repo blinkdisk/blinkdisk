@@ -10,8 +10,8 @@
   "durable_objects": {
     "bindings": [
       {
-        "name": "STORAGE",
-        "class_name": "Storage",
+        "name": "VAULT",
+        "class_name": "Vault",
         "script_name": "cloud",
       },
       {

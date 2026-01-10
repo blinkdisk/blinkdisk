@@ -1,13 +1,14 @@
 import { ProviderType } from "@config/providers";
+import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { useCallback } from "react";
 
-export type VaultAction = "CREATE" | "LINK" | "UPDATE";
+export type VaultAction = "CREATE" | "CONNECT" | "UPDATE";
 
 export function useConfigValidation(
   providerType: ProviderType,
   action: VaultAction,
-  storageId?: string,
+  coreId?: string,
 ) {
   const onSubmitAsync = useCallback(
     async ({ value }: { value: object }) => {
@@ -18,39 +19,43 @@ export function useConfigValidation(
         config: value as ProviderConfig,
       });
 
-      // Repository is not initialized yet, success.
       if (result.code === "NOT_INITIALIZED") {
         if (action === "CREATE") return;
-        if (action === "LINK")
+        if (action === "CONNECT")
           return {
-            code: "STORAGE_NOT_FOUND",
+            code: "VAULT_NOT_FOUND",
           };
       }
 
       if (result.error)
         return {
-          code: "STORAGE_VALIDATION_FAILED",
+          code: "VAULT_VALIDATION_FAILED",
           message: result.code
             ? `[${result.code}] ${result.error}`
             : result.error,
         };
 
-      if (action === "CREATE")
+      const storedId = atob(result.uniqueID || "");
+
+      if (action === "CONNECT" && storedId !== coreId)
         return {
-          code: "STORAGE_ALREADY_EXISTS",
+          code: "INCORRECT_VAULT_FOUND",
         };
 
-      if (
-        action === "LINK" &&
-        storageId &&
-        result.uniqueID &&
-        atob(result.uniqueID) !== storageId
-      )
-        return {
-          code: "INCORRECT_STORAGE_FOUND",
-        };
+      if (action === "CREATE") {
+        const vaults = await trpc.vault.list.query();
+
+        const existing = vaults.find((v) => v.coreId === storedId);
+        if (existing)
+          return {
+            code: "VAULT_ALREADY_EXISTS",
+            name: existing.name,
+          };
+
+        return undefined;
+      }
     },
-    [action, storageId, providerType],
+    [action, coreId, providerType],
   );
 
   return { onSubmitAsync };

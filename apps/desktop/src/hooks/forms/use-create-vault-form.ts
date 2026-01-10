@@ -3,7 +3,6 @@ import {
   CreateVaultResponse,
   useCreateVault,
 } from "@desktop/hooks/mutations/use-create-vault";
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppForm } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
@@ -19,8 +18,6 @@ export function useCreateVaultForm({
   config?: ProviderConfig;
 }) {
   const { t } = useAppTranslation("vault.providers");
-
-  const { profileId } = useProfile();
 
   const { mutateAsync } = useCreateVault((res) => {
     form.reset();
@@ -38,9 +35,7 @@ export function useCreateVaultForm({
     },
     onSubmit: async ({ value }) =>
       providerType &&
-      profileId &&
       (await mutateAsync({
-        profileId: profileId,
         name: value.name,
         provider: providerType,
         config: config || {},

@@ -1,5 +1,5 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
-import { MutatingButton } from "@desktop/components/vaults/mutating-button";
+import { LocalButton } from "@desktop/components/vaults/local-button";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import {
@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 
-import { MutatingDropdownMenuItem } from "@desktop/components/vaults/mutating-dropdown-item";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { formatSize } from "@desktop/lib/number";
@@ -226,7 +225,7 @@ function FakeBackup() {
               {t("paused.description")}
             </p>
           </div>
-          <MutatingButton
+          <LocalButton
             variant="outline"
             onClick={() => folder && startBackup({ path: folder.source.path })}
             loading={
@@ -236,7 +235,7 @@ function FakeBackup() {
           >
             <PlayIcon />
             {t("paused.button")}
-          </MutatingButton>
+          </LocalButton>
         </>
       )}
     </div>
@@ -256,7 +255,7 @@ export function Backup({ backup }: BackupProps) {
   return (
     <div role="link" className={cn(cardClassName, "hover:bg-card-hover")}>
       <Link
-        to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
+        to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
         params={(params) => ({
           ...params,
           backupId: backup?.id || "",
@@ -310,7 +309,7 @@ export function Backup({ backup }: BackupProps) {
             <DropdownMenuContent className="w-48" align="end">
               <DropdownMenuItem asChild>
                 <Link
-                  to="/app/{-$deviceId}/{-$profileId}/{-$vaultId}/{-$folderId}/{-$backupId}/{-$directoryId}"
+                  to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
                   params={(params) => ({
                     ...params,
                     backupId: backup?.id || "",
@@ -322,7 +321,7 @@ export function Backup({ backup }: BackupProps) {
                   {t("dropdown.browse")}
                 </Link>
               </DropdownMenuItem>
-              <MutatingDropdownMenuItem
+              <DropdownMenuItem
                 onClick={() =>
                   openDeleteBackupDialog({
                     backupId: backup.id,
@@ -332,7 +331,7 @@ export function Backup({ backup }: BackupProps) {
               >
                 <TrashIcon />
                 {t("dropdown.delete")}
-              </MutatingDropdownMenuItem>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (

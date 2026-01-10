@@ -51,8 +51,8 @@ export async function cleanup(
 
   if (!spaces.length) return;
 
-  const storages = await db
-    .selectFrom("Storage")
+  const vaults = await db
+    .selectFrom("Vault")
     .select(["id"])
     .where("provider", "=", "BLINKDISK_CLOUD")
     .where(
@@ -63,7 +63,7 @@ export async function cleanup(
     .where("status", "=", "ACTIVE")
     .execute();
 
-  if (!storages.length) return;
+  if (!vaults.length) return;
 
   for (const space of spaces) {
     const stub = env.SPACE.getByName(space.id);
@@ -81,28 +81,17 @@ export async function cleanup(
     .execute();
 
   await db
-    .updateTable("Storage")
+    .updateTable("Vault")
     .set({ status: "DELETED" })
     .where(
       "id",
       "in",
-      storages.map((s) => s.id),
+      vaults.map((s) => s.id),
     )
     .execute();
 
-  await db
-    .updateTable("Vault")
-    .set({ status: "DELETED" })
-    .where(
-      "storageId",
-      "in",
-      storages.map((storage) => storage.id),
-    )
-    .where("status", "=", "ACTIVE")
-    .execute();
-
-  for (const storage of storages) {
-    const stub = env.STORAGE.getByName(storage.id);
-    await stub.delete(storage.id, false);
+  for (const vault of vaults) {
+    const stub = env.VAULT.getByName(vault.id);
+    await stub.delete(vault.id, false);
   }
 }

@@ -9,14 +9,14 @@ export function useSftpForm({
   action,
   config,
   onSubmit,
-  storageId,
+  coreId,
 }: {
   action: VaultAction;
   config?: ZSftpConfigType;
   onSubmit: (value: ZSftpConfigType) => void;
-  storageId?: string;
+  coreId?: string;
 }) {
-  const { onSubmitAsync } = useConfigValidation("SFTP", action, storageId);
+  const { onSubmitAsync } = useConfigValidation("SFTP", action, coreId);
 
   return useAppForm({
     defaultValues: {
