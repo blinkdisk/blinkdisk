@@ -22,7 +22,7 @@ export function useAddVaultPasswordForm({
     validators: {
       onSubmit: ZVaultPasswordForm,
       onSubmitAsync: async ({ value }) => {
-        // We to check the password is valid at this point to prevent
+        // We need to check the password is valid at this point to prevent
         // the config from being encrypted with a different password.
 
         const configs = await trpc.config.list.query({});
