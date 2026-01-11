@@ -1,4 +1,3 @@
-import { CustomError } from "@utils/error";
 import { posthog } from "@api/lib/posthog";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
@@ -7,13 +6,12 @@ import { defaultVaultOptions, LATEST_VAULT_VERSION } from "@config/vault";
 import { ZVaultOptionsType } from "@schemas/shared/vault";
 import {
   ZCreateVault,
+  ZDeleteVault,
   ZGetVault,
-  ZHardDeleteVault,
-  ZSoftDeleteVault,
   ZUpdateVault,
-  ZUpdateVaultVersion,
 } from "@schemas/vault";
-import { generateId } from "@utils/id";
+import { CustomError } from "@utils/error";
+import { generateId, verifyId } from "@utils/id";
 import { logsnag } from "@utils/logsnag";
 import { removeEmptyStrings } from "@utils/object";
 import { generateServiceToken } from "@utils/token";
@@ -33,7 +31,16 @@ export const vaultRouter = router({
         if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
       }
 
-      const vaultId = generateId("Vault");
+      const vaultId = input.id;
+      if (!verifyId(input.id)) throw new CustomError("INVALID_ID");
+
+      const existing = await ctx.db
+        .selectFrom("Vault")
+        .select(["id"])
+        .where("id", "=", input.id)
+        .executeTakeFirst();
+
+      if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
 
       const provider = providers.find((p) => p.type === input.provider);
       if (!provider) throw new CustomError("PROVIDER_NOT_FOUND");
@@ -181,13 +188,7 @@ export const vaultRouter = router({
   get: authedProcedure.input(ZGetVault).query(async ({ input, ctx }) => {
     const vault = await ctx.db
       .selectFrom("Vault")
-      .select([
-        "id",
-        "coreId",
-        "name",
-        "provider",
-        "configLevel",
-      ])
+      .select(["id", "coreId", "name", "provider", "configLevel"])
       .where("accountId", "=", ctx.account?.id!)
       .where("id", "=", input.vaultId)
       .executeTakeFirst();
@@ -211,7 +212,8 @@ export const vaultRouter = router({
       await ctx.db
         .updateTable("Vault")
         .set({
-          name: input.name,
+          ...(input.name && { name: input.name }),
+          ...(input.version && { version: input.version }),
         })
         .where("id", "=", vault.id)
         .execute();
@@ -235,33 +237,8 @@ export const vaultRouter = router({
       capacity: parseInt(space.capacity),
     };
   }),
-  deleteHard: authedProcedure
-    .input(ZHardDeleteVault)
-    .mutation(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["id", "provider"])
-        .where("accountId", "=", ctx.account?.id!)
-        .where("id", "=", input.vaultId)
-        .executeTakeFirst();
-
-      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
-
-      await Promise.all([
-        ctx.db.deleteFrom("Vault").where("id", "=", input.vaultId).execute(),
-        ctx.db
-          .deleteFrom("Config")
-          .where("vaultId", "=", input.vaultId)
-          .execute(),
-      ]);
-
-      if (vault.provider === "BLINKDISK_CLOUD") {
-        const stub = ctx.env.VAULT.getByName(input.vaultId);
-        await (stub as any).delete(input.vaultId, true);
-      }
-    }),
-  deleteSoft: authedProcedure
-    .input(ZSoftDeleteVault)
+  delete: authedProcedure
+    .input(ZDeleteVault)
     .mutation(async ({ input, ctx }) => {
       const vault = await ctx.db
         .selectFrom("Vault")
@@ -303,27 +280,5 @@ export const vaultRouter = router({
         const stub = ctx.env.VAULT.getByName(vault.id);
         await (stub as any).delete(vault.id, true);
       }
-    }),
-  updateVersion: authedProcedure
-    .input(ZUpdateVaultVersion)
-    .mutation(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("id", "=", input.vaultId)
-        .where("accountId", "=", ctx.account?.id!)
-        .executeTakeFirst();
-
-      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
-
-      await ctx.db
-        .updateTable("Vault")
-        .set({
-          version: input.version,
-        })
-        .where("id", "=", vault.id)
-        .execute();
-
-      return vault;
     }),
 });

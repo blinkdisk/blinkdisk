@@ -1,3 +1,4 @@
+import { defaultVaultOptions } from "@config/vault";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
@@ -6,10 +7,11 @@ import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { ZCreateVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { generateId } from "@utils/id";
 
-export type CreateVaultResponse = Awaited<
-  ReturnType<typeof trpc.vault.create.mutate>
->;
+export type CreateVaultResponse = {
+  vaultId: string;
+};
 
 export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
@@ -20,10 +22,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   return useMutation({
     mutationKey: ["vault", "create"],
     mutationFn: async (
-      values: Omit<
-        ZCreateVaultType,
-        "config" | "userName" | "hostName" | "coreId"
-      > & {
+      values: Pick<ZCreateVaultType, "name" | "provider"> & {
         password: string;
         config: ProviderConfig;
       },
@@ -37,75 +36,70 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       if (validation.code === "INVALID_PASSWORD")
         throw { code: "INVALID_PASSWORD" };
 
-      const payload: Omit<ZCreateVaultType, "userName" | "hostName"> & {
-        password?: string;
-      } = {
-        ...values,
+      const encryptedConfig = await window.electron.vault.config.encrypt({
+        password: values.password,
+        config: values.config,
+      });
+
+      const vaultId = generateId("Vault");
+
+      const createOptions = {
+        id: vaultId,
+        name: values.name,
+        provider: values.provider,
+        config: encryptedConfig,
+        userName: localUserName,
+        hostName: localHostName,
         ...(validation.uniqueID
           ? {
               coreId: atob(validation.uniqueID || ""),
             }
           : {}),
-        config: await window.electron.vault.config.encrypt({
-          password: values.password,
-          config: values.config,
-        }),
       };
 
-      delete payload.password;
-
-      const res = await trpc.vault.create.mutate({
-        ...payload,
-        userName: localUserName,
-        hostName: localHostName,
-      });
-
-      return {
-        ...res,
-        initialized: !!validation.uniqueID,
-      };
-    },
-    onError: showErrorToast,
-    onSuccess: async (res, variables) => {
-      if (!res.initialized) {
-        try {
-          const create = await window.electron.vault.create({
-            ...res,
-            vault: {
-              ...res.vault,
-              config: variables.config,
-              password: variables.password!,
-            },
-            userPolicy: convertPolicyToCore(defaultVaultPolicy),
-            globalPolicy: {},
-          });
-
-          // TODO: Show these errors in the UI
-          if (create.error) throw new Error(create.error.toString());
-        } catch (e) {
-          try {
-            await trpc.vault.deleteHard.mutate({
-              vaultId: res.vault.id,
-            });
-          } catch (e) {
-            console.error("Failed to delete vault", e);
-          }
-
-          throw e;
+      let created = false;
+      if (!validation.uniqueID) {
+        let token: string | null | undefined = null;
+        if (values.provider === "BLINKDISK_CLOUD") {
+          // For BlinkDisk Cloud, we need to create the vault in the API
+          // first to get the token and initialize the durable object.
+          const res = await trpc.vault.create.mutate(createOptions);
+          token = res.vault.token;
+          created = true;
         }
+
+        const res = await window.electron.vault.create({
+          vault: {
+            id: vaultId,
+            name: values.name,
+            provider: values.provider,
+            config: values.config,
+            options: defaultVaultOptions,
+            password: values.password,
+            ...(token ? { token } : {}),
+          },
+          userPolicy: convertPolicyToCore(defaultVaultPolicy),
+          globalPolicy: {},
+        });
+
+        if (res.error) throw new Error(res.error.toString());
       }
 
+      // Vault not created yet, create it (for all but BlinkDisk Cloud)
+      if (!created) await trpc.vault.create.mutate(createOptions);
+
       await window.electron.vault.password.set({
-        vaultId: res.vault.id,
-        password: variables.password,
+        vaultId,
+        password: values.password,
       });
 
-      // Make sure configs are fetched before vault
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.config.all,
-        }),
-      ]);
+      return { vaultId };
+    },
+    onError: showErrorToast,
+    onSuccess: async (res) => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.config.all,
+      });
 
       await queryClient.invalidateQueries({
         queryKey: queryKeys.vault.all,

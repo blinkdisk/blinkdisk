@@ -9,7 +9,8 @@ export type CustomErrorCode =
   | "SUBSCRIPTION_EXISTS"
   | "SUBSCRIPTION_NOT_FOUND"
   | "NOT_ALLOWED"
-  | "MISSING_REQUIRED_VALUE";
+  | "MISSING_REQUIRED_VALUE"
+  | "INVALID_ID";
 
 export class CustomError extends Error {
   code: CustomErrorCode;
