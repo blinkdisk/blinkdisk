@@ -38,7 +38,7 @@ function RouteComponent() {
           onClick={() => router.history.back()}
         >
           <ArrowLeftIcon />
-          Go back
+          {t("auth:goBack")}
         </Button>
       )}
       <div className="flex flex-col gap-y-3 text-center">
