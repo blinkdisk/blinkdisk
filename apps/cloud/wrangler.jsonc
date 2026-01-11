@@ -19,7 +19,7 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["Space"],
+      "new_sqlite_classes": ["Storage", "Space"],
     },
     {
       "tag": "v2",
