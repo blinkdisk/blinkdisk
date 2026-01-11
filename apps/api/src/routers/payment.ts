@@ -1,4 +1,4 @@
-import { CustomError } from "@api/lib/error";
+import { CustomError } from "@utils/error";
 import { getPolar } from "@api/lib/polar";
 import { posthog } from "@api/lib/posthog";
 import { getActiveSubscription } from "@api/lib/subscription";

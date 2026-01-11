@@ -8,7 +8,8 @@ export type CustomErrorCode =
   | "PRICE_NOT_FOUND"
   | "SUBSCRIPTION_EXISTS"
   | "SUBSCRIPTION_NOT_FOUND"
-  | "NOT_ALLOWED";
+  | "NOT_ALLOWED"
+  | "MISSING_REQUIRED_VALUE";
 
 export class CustomError extends Error {
   code: CustomErrorCode;

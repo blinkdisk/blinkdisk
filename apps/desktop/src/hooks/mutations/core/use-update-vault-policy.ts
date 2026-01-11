@@ -5,6 +5,7 @@ import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { ZPolicyType } from "@schemas/policy";
+import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateVaultPolicy({
@@ -21,7 +22,7 @@ export function useUpdateVaultPolicy({
   return useMutation({
     mutationKey: ["core", "vault", vaultId, "policy"],
     mutationFn: async (values: ZPolicyType) => {
-      if (!vaultId || !profileFilter) return;
+      if (!vaultId || !profileFilter) throw new CustomError("MISSING_REQUIRED_VALUE");
 
       await vaultApi(vaultId).put(
         "/api/v1/policy",
