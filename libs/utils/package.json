@@ -21,6 +21,7 @@
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
+    "legid-sync": "^0.2.1",
     "nanoid": "^5.1.5",
     "nodemailer": "^7.0.11",
     "tailwind-merge": "^3.0.2"

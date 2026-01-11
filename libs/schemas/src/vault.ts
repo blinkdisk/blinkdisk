@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 
 export const ZCreateVault = z.object({
+  id: z.string().min(1),
   coreId: z.string().min(1).max(244).optional(),
   name: ZVaultName,
   provider: ZProviderType,
@@ -25,12 +26,6 @@ export const ZCreateVaultDetails = z.object({
 });
 
 export type ZCreateVaultDetailsType = z.infer<typeof ZCreateVaultDetails>;
-
-export const ZCheckName = z.object({
-  name: ZVaultName,
-});
-
-export type ZCheckNameType = z.infer<typeof ZCheckName>;
 
 export const ZGetVault = z.object({
   vaultId: z.string(),
@@ -50,11 +45,13 @@ export const ZUpdateVaultForm = z.object({
 
 export type ZUpdateVaultFormType = z.infer<typeof ZUpdateVaultForm>;
 
-export const ZUpdateVault = ZUpdateVaultForm.extend({
+export const ZUpdateVault = z.object({
   vaultId: z.string(),
+  name: ZVaultName.optional(),
+  version: z.number().min(1).max(LATEST_VAULT_VERSION).optional(),
 });
 
-export type ZUpdateVaultType = z.infer<typeof ZUpdateVaultForm>;
+export type ZUpdateVaultType = z.infer<typeof ZUpdateVault>;
 
 export const ZBandwith = z.object({
   value: z.number().optional(),
@@ -76,21 +73,8 @@ export const ZVaultThrottle = z.object({
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
 
-export const ZHardDeleteVault = z.object({
+export const ZDeleteVault = z.object({
   vaultId: z.string(),
 });
 
-export type ZHardDeleteVaultType = z.infer<typeof ZHardDeleteVault>;
-
-export const ZSoftDeleteVault = z.object({
-  vaultId: z.string(),
-});
-
-export type ZSoftDeleteVaultType = z.infer<typeof ZSoftDeleteVault>;
-
-export const ZUpdateVaultVersion = z.object({
-  vaultId: z.string(),
-  version: z.number().min(1).max(LATEST_VAULT_VERSION),
-});
-
-export type ZUpdateVaultVersionType = z.infer<typeof ZUpdateVaultVersion>;
+export type ZDeleteVaultType = z.infer<typeof ZDeleteVault>;

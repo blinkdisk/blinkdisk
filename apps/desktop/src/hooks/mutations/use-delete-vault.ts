@@ -10,7 +10,7 @@ export function useDeleteVault({ onSuccess }: { onSuccess?: () => void }) {
   return useMutation({
     mutationKey: ["core", "vault", "delete"],
     mutationFn: async ({ vaultId }: { vaultId: string }) => {
-      await trpc.vault.deleteSoft.mutate({
+      await trpc.vault.delete.mutate({
         vaultId,
       });
     },

@@ -160,7 +160,7 @@ export function useMigrationListener() {
 
       console.info(logPrefix, "Updating vault version to 2");
       try {
-        await trpc.vault.updateVersion.mutate({
+        await trpc.vault.update.mutate({
           vaultId: vault.id,
           version: 2,
         });

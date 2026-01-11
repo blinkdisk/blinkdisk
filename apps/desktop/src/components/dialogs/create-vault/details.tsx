@@ -34,7 +34,7 @@ export function CreateVaultDetails({
       await navigate({
         to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
         params: {
-          vaultId: res.vault.id,
+          vaultId: res.vaultId,
           hostName: localHostName,
           userName: localUserName,
         },
