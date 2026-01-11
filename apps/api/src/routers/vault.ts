@@ -1,4 +1,4 @@
-import { CustomError } from "@api/lib/error";
+import { CustomError } from "@utils/error";
 import { posthog } from "@api/lib/posthog";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";

@@ -1,4 +1,4 @@
-import { CustomError } from "@api/lib/error";
+import { CustomError } from "@utils/error";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { ZAddConfig, ZListConfigs } from "@schemas/config";
