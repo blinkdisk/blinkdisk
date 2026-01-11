@@ -111,8 +111,8 @@ const api = {
         ReturnType<typeof Vault.validate>
       >,
     create: (payload: Parameters<typeof Vault.create>[0]) =>
-      ipcRenderer.invoke("vault.create", payload) as Promise<
-        ReturnType<typeof Vault.create>
+      ipcRenderer.invoke("vault.create", payload) as ReturnType<
+        typeof Vault.create
       >,
     cache: (payload: Parameters<typeof setVaultCache>[0]) =>
       ipcRenderer.invoke("vault.cache", payload) as Promise<

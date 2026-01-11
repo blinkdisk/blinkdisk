@@ -8,6 +8,7 @@ import { ProviderConfig } from "@schemas/providers";
 import { ZCreateVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { generateId } from "@utils/id";
+import { tryCatch } from "@utils/try-catch";
 
 export type CreateVaultResponse = {
   vaultId: string;
@@ -68,21 +69,28 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
           created = true;
         }
 
-        const res = await window.electron.vault.create({
-          vault: {
-            id: vaultId,
-            name: values.name,
-            provider: values.provider,
-            config: values.config,
-            options: defaultVaultOptions,
-            password: values.password,
-            ...(token ? { token } : {}),
-          },
-          userPolicy: convertPolicyToCore(defaultVaultPolicy),
-          globalPolicy: {},
-        });
+        const [res, err] = await tryCatch(
+          window.electron.vault.create({
+            vault: {
+              id: vaultId,
+              name: values.name,
+              provider: values.provider,
+              config: values.config,
+              options: defaultVaultOptions,
+              password: values.password,
+              ...(token ? { token } : {}),
+            },
+            userPolicy: convertPolicyToCore(defaultVaultPolicy),
+            globalPolicy: {},
+          }),
+        );
 
-        if (res.error) throw new Error(res.error.toString());
+        if (err || res.error) {
+          // Clean up vault if it was created
+          if (created) await tryCatch(trpc.vault.delete.mutate({ vaultId }));
+
+          throw err || new Error(res.error?.toString());
+        }
       }
 
       // Vault not created yet, create it (for all but BlinkDisk Cloud)
