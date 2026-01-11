@@ -51,7 +51,7 @@ export const ZUpdateVault = z.object({
   version: z.number().min(1).max(LATEST_VAULT_VERSION).optional(),
 });
 
-export type ZUpdateVaultType = z.infer<typeof ZUpdateVaultForm>;
+export type ZUpdateVaultType = z.infer<typeof ZUpdateVault>;
 
 export const ZBandwith = z.object({
   value: z.number().optional(),
