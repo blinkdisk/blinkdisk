@@ -1,3 +1,7 @@
+import {
+  createId as legidCreateId,
+  verifyId as legidVerifyId,
+} from "legid-sync";
 import { customAlphabet } from "nanoid";
 
 const prefixes = {
@@ -18,30 +22,38 @@ const prefixes = {
 
 export type Prefix = keyof typeof prefixes;
 
+const salt = "blinkdisk:";
 const length = 21;
-const minIdLength = 21;
-const maxIdLength = 21;
 
-const pool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-export const nanoid = customAlphabet(pool, length);
 export const codeGenerator = customAlphabet(
   "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789",
   length,
 );
 
-export function generateId(prefix?: Prefix, length?: number) {
-  if (!prefix) return nanoid(length);
-  return `${prefixes[prefix]}_${nanoid(length)}`;
+export function generateId(prefix?: Prefix) {
+  const id = legidCreateId({
+    // The field is called "approximateLength" as even numbers are rounded down
+    // to the nearest uneven number. We use 21, so it's always going to be 21.
+    approximateLength: length,
+    salt: salt,
+  });
+
+  if (!prefix) return id;
+  return `${prefixes[prefix]}_${id}`;
 }
 
-export function isValidId(id: string) {
-  if (id.includes("_")) id = id.split("_").at(-1) ?? "";
+export function verifyId(id: string) {
+  const parts = id.split("_");
+  const trimmed = parts.at(-1) || id;
 
-  if (!/^[a-z0-9]*$/i.test(id)) return false;
-  if (id.length < minIdLength || id.length > maxIdLength) return false;
+  const expectedLength: number = length;
 
-  return true;
+  // Length should always be 21 (see comment above)
+  if (trimmed.length !== expectedLength) return false;
+
+  return legidVerifyId(trimmed, {
+    salt: salt,
+  });
 }
 
 export function generateCode(length?: number) {
