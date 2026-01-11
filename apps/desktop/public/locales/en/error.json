@@ -61,5 +61,9 @@
   "SPACE_NOT_FOUND": "Space not found",
   "PRICE_NOT_FOUND": "Price not found",
   "SUBSCRIPTION_NOT_FOUND": "Subscription not found",
-  "NOT_ALLOWED": "You are not allowed to do this"
+  "NOT_ALLOWED": "You are not allowed to do this",
+  "MISSING_REQUIRED_VALUE": {
+    "title": "Required information is missing",
+    "description": "Please try again or restart the app."
+  }
 }

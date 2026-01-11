@@ -4,6 +4,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
 import { useAppTranslation } from "@hooks/use-app-translation";
+import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -18,7 +19,7 @@ export function useStopMount() {
   return useMutation({
     mutationKey: ["mount", "stop"],
     mutationFn: async () => {
-      if (!vaultId || !backup) return;
+      if (!vaultId || !backup) throw new CustomError("MISSING_REQUIRED_VALUE");
 
       const res = await vaultApi(vaultId).delete<{
         code?: "INTERNAL";

@@ -7,6 +7,7 @@ import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { ZPolicyType } from "@schemas/policy";
+import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateFolderPolicy({
@@ -29,7 +30,7 @@ export function useUpdateFolderPolicy({
   return useMutation({
     mutationKey: ["core", "vault", folder?.id, "policy"],
     mutationFn: async (values: ZPolicyType) => {
-      if (!vaultId || !vaultPolicy || !profileFilter) return;
+      if (!vaultId || !vaultPolicy || !profileFilter) throw new CustomError("MISSING_REQUIRED_VALUE");
 
       const policy = convertPolicyToCore(values);
 
