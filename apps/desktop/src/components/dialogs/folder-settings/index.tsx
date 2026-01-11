@@ -12,10 +12,13 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@ui/dialog";
+import { useState } from "react";
 
 export function FolderSettingsDialog() {
   const { t } = useAppTranslation("settings.folder");
   const { isOpen, setIsOpen, options } = useFolderSettingsDialog();
+
+  const [open, setOpen] = useState<string[]>([]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -26,12 +29,19 @@ export function FolderSettingsDialog() {
         </DialogDescription>
         <div className="mt-4">
           <PolicyContextProvider level="FOLDER" folderId={options?.folderId}>
-            <Accordion type="multiple" className="w-full">
-              <FolderGeneralSettings />
-              <ScheduleSettings />
-              <RetentionSettings />
-              <FilesSettings />
-            </Accordion>
+            {({ loading }) => (
+              <Accordion
+                type="multiple"
+                className="w-full"
+                value={loading ? [] : open}
+                onValueChange={setOpen}
+              >
+                <FolderGeneralSettings />
+                <ScheduleSettings />
+                <RetentionSettings />
+                <FilesSettings />
+              </Accordion>
+            )}
           </PolicyContextProvider>
         </div>
       </DialogContent>

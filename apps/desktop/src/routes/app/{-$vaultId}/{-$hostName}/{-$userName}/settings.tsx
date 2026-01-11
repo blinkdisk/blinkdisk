@@ -13,6 +13,7 @@ import { Accordion } from "@ui/accordion";
 import { Button } from "@ui/button";
 import { Skeleton } from "@ui/skeleton";
 import { HomeIcon } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute(
   "/app/{-$vaultId}/{-$hostName}/{-$userName}/settings",
@@ -23,6 +24,8 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { t } = useAppTranslation("settings.vault");
   const { data: vault } = useVault();
+
+  const [open, setOpen] = useState<string[]>([]);
 
   return (
     <div className="flex min-h-full flex-col overflow-x-hidden p-6">
@@ -56,14 +59,20 @@ function RouteComponent() {
       <div className="mt-auto"></div>
       <div className="lg:w-130 mx-auto w-full">
         <PolicyContextProvider level="VAULT">
-          <Accordion type="multiple">
-            <VaultGeneralSettings />
-            <VaultConfigSettings />
-            <ScheduleSettings />
-            <RetentionSettings />
-            <FilesSettings />
-            <VaultThrottleSettings />
-          </Accordion>
+          {({ loading }) => (
+            <Accordion
+              type="multiple"
+              value={loading ? [] : open}
+              onValueChange={setOpen}
+            >
+              <VaultGeneralSettings />
+              <VaultConfigSettings />
+              <ScheduleSettings />
+              <RetentionSettings />
+              <FilesSettings />
+              <VaultThrottleSettings />
+            </Accordion>
+          )}
         </PolicyContextProvider>
       </div>
       <div className="mb-auto"></div>
