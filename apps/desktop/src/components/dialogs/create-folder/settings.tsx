@@ -24,6 +24,7 @@ export function CreateFolderSettings({
 
   const [size, setSize] = useState<number | null>(null);
   const [alertShown, setAlertShown] = useState(false);
+  const [open, setOpen] = useState<string[]>([]);
 
   const { mutateAsync, isPending } = useCreateFolder({
     onError: (error) => {
@@ -37,12 +38,21 @@ export function CreateFolderSettings({
   return (
     <>
       <PolicyContextProvider level="FOLDER" mock={{ path: values.path }}>
-        <Accordion type="multiple" className="mt-2 w-full">
-          <ScheduleSettings />
-          <RetentionSettings />
-          <FilesSettings />
-        </Accordion>
-        <FolderSize path={values.path} setSize={setSize} />
+        {({ loading }) => (
+          <>
+            <Accordion
+              type="multiple"
+              className="mt-2 w-full"
+              value={loading ? [] : open}
+              onValueChange={setOpen}
+            >
+              <ScheduleSettings />
+              <RetentionSettings />
+              <FilesSettings />
+            </Accordion>
+            <FolderSize path={values.path} setSize={setSize} />
+          </>
+        )}
       </PolicyContextProvider>
       <Button
         onClick={() => mutateAsync({ ...values, size })}

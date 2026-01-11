@@ -213,7 +213,11 @@ type ExclusionRuleFilesEditorProps = {
   description: string;
 };
 
-function ExclusionRuleFilesEditor({ label, description, form }: ExclusionRuleFilesEditorProps) {
+function ExclusionRuleFilesEditor({
+  label,
+  description,
+  form,
+}: ExclusionRuleFilesEditorProps) {
   const { t } = useAppTranslation("policy.files");
 
   const field = useFieldContext<
@@ -246,7 +250,10 @@ function ExclusionRuleFilesEditor({ label, description, form }: ExclusionRuleFil
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
-            <form.Field key={index} name={`exclusionRuleFiles[${index}].filename`}>
+            <form.Field
+              key={index}
+              name={`exclusionRuleFiles[${index}].filename`}
+            >
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">
                   <Input

@@ -2,6 +2,7 @@ import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-
 import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
 import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
+import { useVault } from "@desktop/hooks/queries/use-vault";
 import { ZPolicyLevelType } from "@schemas/policy";
 import { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";
@@ -15,8 +16,12 @@ function usePolicyContext({
   folderId?: string;
   mock?: { path: string };
 }) {
-  const { data: vaultPolicy } = useVaultPolicy();
-  const { data: folderPolicy } = useFolderPolicy({ folderId, mock });
+  const { isPending: isVaultPending } = useVault();
+
+  const { data: vaultPolicy, isPending: isVaultPolicyPending } =
+    useVaultPolicy();
+  const { data: folderPolicy, isPending: isFolderPolicyPending } =
+    useFolderPolicy({ folderId, mock });
 
   const { mutateAsync: mutateVault } = useUpdateVaultPolicy();
 
@@ -28,6 +33,14 @@ function usePolicyContext({
   const policy = useMemo(
     () => (level === "FOLDER" ? folderPolicy : vaultPolicy),
     [folderPolicy, vaultPolicy, level],
+  );
+
+  const loading = useMemo(
+    () =>
+      level === "FOLDER"
+        ? isFolderPolicyPending
+        : isVaultPolicyPending || isVaultPending,
+    [level, isFolderPolicyPending, isVaultPolicyPending, isVaultPending],
   );
 
   const definedFields = useMemo(
@@ -58,6 +71,7 @@ function usePolicyContext({
   );
 
   return {
+    loading,
     vaultPolicy,
     folderPolicy,
     definedFields,
@@ -73,6 +87,7 @@ function usePolicyContext({
 export type PolicyContextType = ReturnType<typeof usePolicyContext>;
 
 const defaultContext = {
+  loading: true,
   vaultPolicy: undefined,
   folderPolicy: undefined,
   definedFields: undefined,
@@ -97,10 +112,14 @@ type PolicyContextProviderProps = {
 export function PolicyContextProvider({
   children,
   ...props
-}: PolicyContextProviderProps & { children: React.ReactNode }) {
+}: PolicyContextProviderProps & {
+  children: (context: PolicyContextType) => React.ReactNode;
+}) {
   const context = usePolicyContext(props);
 
   return (
-    <PolicyContext.Provider value={context}>{children}</PolicyContext.Provider>
+    <PolicyContext.Provider value={context}>
+      {children(context)}
+    </PolicyContext.Provider>
   );
 }
