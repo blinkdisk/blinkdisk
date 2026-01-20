@@ -24,12 +24,6 @@ export const windows = {
   exe: "BlinkDisk-Windows.exe",
 };
 
-const downloads = {
-  linux,
-  mac,
-  windows,
-};
-
 export function getDownloadUrl(filename: string) {
   return `https://github.com/blinkdisk/blinkdisk/releases/latest/download/${filename}`;
 }

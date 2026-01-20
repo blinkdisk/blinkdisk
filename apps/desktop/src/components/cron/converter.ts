@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { MutableRefObject } from "react";
 
 import { SUPPORTED_SHORTCUTS, UNITS } from "@desktop/components/cron/constants";
@@ -13,6 +11,7 @@ import {
   DropdownConfig,
   DropdownsConfig,
   LeadingZero,
+  LeadingZeroType,
   Locale,
   OnError,
   PeriodType,
@@ -20,6 +19,7 @@ import {
   SetValueNumbersOrUndefined,
   SetValuePeriod,
   Shortcuts,
+  ShortcutsType,
   Unit,
 } from "./types";
 import { convertStringToNumber, dedup, range, setError, sort } from "./utils";
@@ -43,7 +43,7 @@ export function setValuesFromCronString(
   setWeekDays: SetValueNumbersOrUndefined,
   setPeriod: SetValuePeriod,
 ) {
-  onError && onError(undefined);
+  if (onError) onError(undefined);
   setInternalError(false);
 
   let error = false;
@@ -64,7 +64,9 @@ export function setValuesFromCronString(
     // Shortcuts management
     if (
       shortcuts &&
-      (shortcuts === true || shortcuts.includes(cronString as any))
+      (shortcuts === true ||
+        (typeof shortcuts === "object" &&
+          shortcuts.includes(cronString as ShortcutsType)))
     ) {
       if (cronString === "@reboot") {
         setPeriod("reboot");
@@ -92,7 +94,7 @@ export function setValuesFromCronString(
       setMonthDays(cronParts[2]);
       setMonths(cronParts[3]);
       setWeekDays(cronParts[4]);
-    } catch (err) {
+    } catch {
       // Specific errors are not handle (yet)
       error = true;
     }
@@ -144,7 +146,7 @@ export function getCronStringFromValues(
 /**
  * Returns the cron part array as a string.
  */
-export function partToString(
+function partToString(
   cronPart: number[],
   unit: Unit,
   humanize?: boolean,
@@ -181,13 +183,13 @@ export function partToString(
         .map((range: number | number[]) => {
           if (Array.isArray(range)) {
             return `${formatValue(
-              range[0],
+              range[0]!,
               unit,
               humanize,
               leadingZero,
               clockFormat,
             )}-${formatValue(
-              range[1],
+              range[1]!,
               unit,
               humanize,
               leadingZero,
@@ -215,13 +217,15 @@ export function formatValue(
 ) {
   let cronPartString = value.toString();
   const { type, alt, min } = unit;
+
   const needLeadingZero =
-    leadingZero && (leadingZero === true || leadingZero.includes(type as any));
+    leadingZero &&
+    (leadingZero === true || leadingZero.includes(type as LeadingZeroType));
   const need24HourClock =
     clockFormat === "24-hour-clock" && (type === "hours" || type === "minutes");
 
   if ((humanize && type === "week-days") || (humanize && type === "months")) {
-    cronPartString = alt![value - min];
+    cronPartString = alt?.[value - min] || cronPartString;
   } else if (value < 10 && (needLeadingZero || need24HourClock)) {
     cronPartString = cronPartString.padStart(2, "0");
   }
@@ -243,7 +247,7 @@ export function formatValue(
 /**
  * Validates a range of positive integers
  */
-export function parsePartArray(arr: number[], unit: Unit) {
+function parsePartArray(arr: number[], unit: Unit) {
   const values = sort(dedup(fixSunday(arr, unit)));
 
   if (values.length === 0) {
@@ -269,6 +273,7 @@ function parseCronArray(
 ) {
   return cronArr.map((partArr, idx) => {
     const unit = UNITS[idx];
+    if (!unit) throw new Error(`Unit at index ${idx} is undefined`);
     const parsedArray = parsePartArray(partArr, unit);
     const dropdownOption: DropdownConfig | undefined =
       dropdownsConfig?.[unit.type];
@@ -292,6 +297,12 @@ function cronToString(parts: string[]) {
  * Find the period from cron parts
  */
 function getPeriodFromCronParts(cronParts: number[][]): PeriodType {
+  if (!cronParts[3]) return "minute";
+  if (!cronParts[2]) return "minute";
+  if (!cronParts[4]) return "minute";
+  if (!cronParts[1]) return "minute";
+  if (!cronParts[0]) return "minute";
+
   if (cronParts[3].length > 0) {
     return "year";
   } else if (cronParts[2].length > 0) {
@@ -318,7 +329,9 @@ function parseCronString(str: string) {
 
   if (parts.length === 5) {
     return parts.map((partStr, idx) => {
-      return parsePartString(partStr, UNITS[idx]);
+      const unit = UNITS[idx];
+      if (!unit) throw new Error(`Unit at index ${idx} is undefined`);
+      return parsePartString(partStr, unit);
     });
   }
 
@@ -352,10 +365,10 @@ function parsePartString(str: string, unit: Unit) {
             if (left === "*") {
               parsedValues = range(unit.min, unit.max);
             } else {
-              parsedValues = parseRange(left, str, unit);
+              parsedValues = parseRange(left!, str, unit);
             }
 
-            const step = parseStep(right, unit);
+            const step = parseStep(right!, unit);
             const intervalValues = applyInterval(parsedValues, step);
 
             return intervalValues;
@@ -389,7 +402,7 @@ function replaceAlternatives(str: string, min: number, alt?: string[]) {
     str = str.toUpperCase();
 
     for (let i = 0; i < alt.length; i++) {
-      str = str.replace(alt[i], `${i + min}`);
+      str = str.replace(alt[i]!, `${i + min}`);
     }
   }
   return str;
@@ -419,7 +432,7 @@ function parseRange(rangeStr: string, context: string, unit: Unit) {
   const subparts = rangeStr.split("-");
 
   if (subparts.length === 1) {
-    const value = convertStringToNumber(subparts[0]);
+    const value = convertStringToNumber(subparts[0]!);
 
     if (isNaN(value)) {
       throw new Error(`Invalid value "${context}" for ${unit.type}`);
@@ -427,8 +440,8 @@ function parseRange(rangeStr: string, context: string, unit: Unit) {
 
     return [value];
   } else if (subparts.length === 2) {
-    const minValue = convertStringToNumber(subparts[0]);
-    const maxValue = convertStringToNumber(subparts[1]);
+    const minValue = convertStringToNumber(subparts[0]!);
+    const maxValue = convertStringToNumber(subparts[1]!);
 
     if (isNaN(minValue) || isNaN(maxValue)) {
       throw new Error(`Invalid value "${context}" for ${unit.type}`);
@@ -455,9 +468,9 @@ function outOfRange(values: number[], unit: Unit) {
   const first = values[0];
   const last = values[values.length - 1];
 
-  if (first < unit.min) {
+  if (first !== undefined && first < unit.min) {
     return first;
-  } else if (last > unit.max) {
+  } else if (last !== undefined && last > unit.max) {
     return last;
   }
 
@@ -485,6 +498,7 @@ function parseStep(step: string, unit: Unit) {
 function applyInterval(values: number[], step?: number) {
   if (step) {
     const minVal = values[0];
+    if (minVal === undefined) return values;
 
     values = values.filter((value) => {
       return value % step === minVal % step || value === minVal;
@@ -506,7 +520,7 @@ function isFull(values: number[], unit: Unit) {
  */
 function getStep(values: number[]) {
   if (values.length > 2) {
-    const step = values[1] - values[0];
+    const step = values[1]! - values[0]!;
 
     if (step > 1) {
       return step;
@@ -519,8 +533,8 @@ function getStep(values: number[]) {
  */
 function isInterval(values: number[], step: number) {
   for (let i = 1; i < values.length; i++) {
-    const prev = values[i - 1];
-    const value = values[i];
+    const prev = values[i - 1]!;
+    const value = values[i]!;
 
     if (value - prev !== step) {
       return false;
@@ -538,7 +552,7 @@ function isFullInterval(values: number[], unit: Unit, step: number) {
   const max = getMax(values);
   const haveAllValues = values.length === (max - min) / step + 1;
 
-  if (min === unit.min && max + step > unit.max && haveAllValues) {
+  if (min === unit.min && max! + step > unit.max && haveAllValues) {
     return true;
   }
 
@@ -548,15 +562,17 @@ function isFullInterval(values: number[], unit: Unit, step: number) {
 /**
  * Returns the smallest value in the range
  */
-function getMin(values: number[]) {
-  return values[0];
+function getMin(values: number[]): number {
+  if (values.length === 0) throw new Error("Cannot get min of empty array");
+  return values[0]!;
 }
 
 /**
  * Returns the largest value in the range
  */
-function getMax(values: number[]) {
-  return values[values.length - 1];
+function getMax(values: number[]): number {
+  if (values.length === 0) throw new Error("Cannot get max of empty array");
+  return values[values.length - 1]!;
 }
 
 /**
@@ -568,7 +584,8 @@ function toRanges(values: number[]) {
   let startPart: number | null = null;
 
   values.forEach((value, index, self) => {
-    if (value !== self[index + 1] - 1) {
+    const nextValue = self[index + 1];
+    if (nextValue === undefined || value !== nextValue - 1) {
       if (startPart !== null) {
         retval.push([startPart, value]);
         startPart = null;

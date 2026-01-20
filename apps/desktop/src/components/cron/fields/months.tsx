@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { UNITS } from "../constants";
 import { DEFAULT_LOCALE_EN } from "../locale";
@@ -39,7 +37,7 @@ export function Months(props: MonthsProps) {
         grid={false}
         value={value}
         unit={{
-          ...UNITS[3],
+          ...UNITS[3]!,
           // Allow translation of alternative labels when using "humanizeLabels"
           // Issue #3
           alt: locale.altMonths || DEFAULT_LOCALE_EN.altMonths,

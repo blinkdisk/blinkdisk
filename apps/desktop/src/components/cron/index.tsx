@@ -2,11 +2,9 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import {
-  getCronStringFromValues,
-  setValuesFromCronString,
+    getCronStringFromValues,
+    setValuesFromCronString,
 } from "@desktop/components/cron/converter";
 import { Hours } from "@desktop/components/cron/fields/hours";
 import { Minutes } from "@desktop/components/cron/fields/minutes";
@@ -17,7 +15,7 @@ import { WeekDays } from "@desktop/components/cron/fields/week-days";
 import { cn } from "@utils/class";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CronProps, PeriodType } from "./types";
+import { CronProps, Locale, PeriodType } from "./types";
 import { usePrevious } from "./utils";
 
 export function Cron(props: CronProps) {
@@ -25,7 +23,7 @@ export function Cron(props: CronProps) {
 
   const locale = t("component", {
     returnObjects: true,
-  });
+  }) as unknown as Locale;
 
   const {
     value = "",
@@ -79,20 +77,38 @@ export function Cron(props: CronProps) {
   const [weekDays, setWeekDays] = useState<number[] | undefined>();
   const [hours, setHours] = useState<number[] | undefined>();
   const [minutes, setMinutes] = useState<number[] | undefined>();
-  const [error, setInternalError] = useState<boolean>(false);
   const [valueCleared, setValueCleared] = useState<boolean>(false);
   const previousValueCleared = usePrevious(valueCleared);
-  const localeJSON = JSON.stringify(locale);
 
-  useEffect(
-    () => {
+  useEffect(() => {
+    setValuesFromCronString(
+      value,
+      () => {},
+      onError,
+      allowEmpty,
+      internalValueRef,
+      true,
+      locale,
+      shortcuts,
+      setMinutes,
+      setHours,
+      setMonthDays,
+      setMonths,
+      setWeekDays,
+      setPeriod,
+    );
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (value !== internalValueRef.current) {
       setValuesFromCronString(
         value,
-        setInternalError,
+        () => {},
         onError,
         allowEmpty,
         internalValueRef,
-        true,
+        false,
         locale,
         shortcuts,
         setMinutes,
@@ -102,35 +118,9 @@ export function Cron(props: CronProps) {
         setWeekDays,
         setPeriod,
       );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
-  useEffect(
-    () => {
-      if (value !== internalValueRef.current) {
-        setValuesFromCronString(
-          value,
-          setInternalError,
-          onError,
-          allowEmpty,
-          internalValueRef,
-          false,
-          locale,
-          shortcuts,
-          setMinutes,
-          setHours,
-          setMonthDays,
-          setMonths,
-          setWeekDays,
-          setPeriod,
-        );
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [value, internalValueRef, localeJSON, allowEmpty, shortcuts],
-  );
+    }
+    // eslint-disable-next-line
+  }, [value, allowEmpty, shortcuts, locale]);
 
   useEffect(
     () => {
@@ -156,13 +146,12 @@ export function Cron(props: CronProps) {
         setValue(cron, { selectedPeriod });
         internalValueRef.current = cron;
 
-        onError && onError(undefined);
-        setInternalError(false);
+        if (onError) onError(undefined);
       } else if (valueCleared) {
         setValueCleared(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
     [
       period,
       monthDays,
@@ -198,7 +187,7 @@ export function Cron(props: CronProps) {
             // This prevents the component from overriding
             // the period on mount.
             if (!to) return;
-            setPeriod(to);
+            setPeriod(to as PeriodType);
           }}
           locale={locale}
           disabled={dropdownsConfig?.period?.disabled ?? disabled}

@@ -2,15 +2,10 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
-import { useMemo } from "react";
-
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { UNITS } from "../constants";
 import { DEFAULT_LOCALE_EN } from "../locale";
 import { MinutesProps } from "../types";
-import { classNames } from "../utils";
 
 export function Minutes(props: MinutesProps) {
   const {
@@ -29,16 +24,6 @@ export function Minutes(props: MinutesProps) {
     filterOption,
     getPopupContainer,
   } = props;
-  const internalClassName = useMemo(
-    () =>
-      classNames({
-        "react-js-cron-field": true,
-        "react-js-cron-minutes": true,
-        [`${className}-field`]: !!className,
-        [`${className}-minutes`]: !!className,
-      }),
-    [className],
-  );
 
   return (
     <div className="flex items-center gap-2">
@@ -63,7 +48,7 @@ export function Minutes(props: MinutesProps) {
             : locale.emptyMinutes || DEFAULT_LOCALE_EN.emptyMinutes
         }
         value={value}
-        unit={UNITS[0]}
+        unit={UNITS[0]!}
         setValue={setValue}
         locale={locale}
         className={className}

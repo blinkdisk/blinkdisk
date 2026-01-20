@@ -39,9 +39,6 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
-    "knip": {
-      "dependsOn": ["^knip"]
-    },
     "env:update": {
       "dependsOn": ["^env:update"]
     },

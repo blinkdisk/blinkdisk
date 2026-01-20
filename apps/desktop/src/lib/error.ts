@@ -1,10 +1,28 @@
 import i18n from "@desktop/i18n";
 import { toast } from "sonner";
 
-export function showErrorToast(error: any) {
-  console.error(error);
-  const code = error ? (error?.code ?? error?.data?.code) : undefined;
-  if (code) {
+interface ErrorWithCode {
+  code?: string;
+  data?: { code?: string };
+  message?: string;
+}
+
+type ErrorDataCode = {
+  data?: { code?: string };
+};
+
+export function showErrorToast(
+  error: ErrorWithCode | Error | ErrorDataCode | unknown,
+) {
+  const code =
+    error && typeof error === "object"
+      ? "code" in error && typeof error.code === "string"
+        ? error.code
+        : error && "data" in error
+          ? (error as ErrorDataCode).data?.code
+          : undefined
+      : undefined;
+  if (code && typeof code === "string") {
     const titleTranslation = i18n.t(`error:${code}.title`, "");
 
     if (titleTranslation) {
@@ -24,7 +42,7 @@ export function showErrorToast(error: any) {
     }
   }
 
-  if (error.message) {
+  if (error instanceof Error && error.message) {
     toast.error(error.message);
     return;
   }

@@ -351,7 +351,7 @@ export function pickDefinedFields<T extends object>(
 }
 
 export function getDefinedFields(policy: ZPolicyType) {
-  function definedFields(obj: any): string[] {
+  function definedFields(obj: Record<string, unknown>): string[] {
     return Object.keys(obj).filter((key) => obj[key] !== undefined);
   }
 

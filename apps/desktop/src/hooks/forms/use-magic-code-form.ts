@@ -18,7 +18,7 @@ export function useMagicCodeForm() {
       } catch (error) {
         formApi.setErrorMap({
           onSubmit: {
-            // @ts-expect-error
+            // @ts-expect-error error type
             code: error.message,
           },
         });

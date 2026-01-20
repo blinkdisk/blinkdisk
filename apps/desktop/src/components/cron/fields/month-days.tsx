@@ -2,15 +2,12 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { useMemo } from "react";
 
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { UNITS } from "../constants";
 import { DEFAULT_LOCALE_EN } from "../locale";
 import { MonthDaysProps } from "../types";
-import { classNames } from "../utils";
 
 export function MonthDays(props: MonthDaysProps) {
   const {
@@ -31,32 +28,15 @@ export function MonthDays(props: MonthDaysProps) {
   } = props;
   const noWeekDays = !weekDays || weekDays.length === 0;
 
-  const internalClassName = useMemo(
-    () =>
-      classNames({
-        "react-js-cron-field": true,
-        "react-js-cron-month-days": true,
-        "react-js-cron-month-days-placeholder": !noWeekDays,
-        [`${className}-field`]: !!className,
-        [`${className}-month-days`]: !!className,
-      }),
-    [className, noWeekDays],
-  );
-
   const localeJSON = JSON.stringify(locale);
-  const placeholder = useMemo(
-    () => {
-      if (noWeekDays) {
-        return locale.emptyMonthDays || DEFAULT_LOCALE_EN.emptyMonthDays;
-      }
+  const placeholder = useMemo(() => {
+    if (noWeekDays) {
+      return locale.emptyMonthDays || DEFAULT_LOCALE_EN.emptyMonthDays;
+    }
 
-      return (
-        locale.emptyMonthDaysShort || DEFAULT_LOCALE_EN.emptyMonthDaysShort
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [noWeekDays, localeJSON],
-  );
+    return locale.emptyMonthDaysShort || DEFAULT_LOCALE_EN.emptyMonthDaysShort;
+    // eslint-disable-next-line
+  }, [noWeekDays, localeJSON]);
 
   const displayMonthDays =
     !readOnly ||
@@ -75,7 +55,7 @@ export function MonthDays(props: MonthDaysProps) {
         placeholder={placeholder}
         value={value}
         setValue={setValue}
-        unit={UNITS[2]}
+        unit={UNITS[2]!}
         locale={locale}
         className={className}
         disabled={disabled}

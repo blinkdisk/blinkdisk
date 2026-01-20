@@ -2,12 +2,10 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { useEffect, useRef } from "react";
 
 import { DEFAULT_LOCALE_EN } from "./locale";
-import { Classes, Locale, OnError } from "./types";
+import { Locale, OnError } from "./types";
 
 /**
  * Creates an array of integers from start to end, inclusive
@@ -49,31 +47,22 @@ export function dedup(array: number[]) {
 }
 
 /**
- * Simple classNames util function to prevent adding external library 'classnames'
- */
-export function classNames(classes: Classes) {
-  return Object.entries(classes)
-    .filter(([key, value]) => key && value)
-    .map(([key]) => key)
-    .join(" ");
-}
-
-/**
  * Handle onError prop to set the error
  */
 export function setError(onError: OnError, locale: Locale) {
-  onError &&
+  if (onError) {
     onError({
       type: "invalid_cron",
       description:
         locale.errorInvalidCron || DEFAULT_LOCALE_EN.errorInvalidCron,
     });
+  }
 }
 
 /**
  * React useEffect hook to return the previous value
  */
-export function usePrevious(value: any) {
+export function usePrevious<T>(value: T): T {
   const ref = useRef(value);
 
   useEffect(() => {

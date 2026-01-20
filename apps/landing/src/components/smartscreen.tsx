@@ -117,7 +117,7 @@ export function SmartScreen() {
             ></div>
           </div>
           <div className="bg-white px-4 py-2 font-bold text-black">
-            Don't run
+            Don&apos;t run
           </div>
         </div>
       </div>

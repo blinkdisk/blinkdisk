@@ -2,18 +2,14 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { MultiSelect } from "@ui/multi-select";
 import { useCallback, useMemo } from "react";
-import { formatValue, parsePartArray, partToString } from "../converter";
-import { DEFAULT_LOCALE_EN } from "../locale";
+import { formatValue } from "../converter";
 import { CustomSelectProps } from "../types";
 
 export function CustomSelect(props: CustomSelectProps) {
   const {
     value,
-    grid = true,
     optionsList,
     setValue,
     locale,
@@ -38,73 +34,44 @@ export function CustomSelect(props: CustomSelectProps) {
     }
   }, [value]);
 
-  const options = useMemo(
-    () => {
-      if (optionsList) {
-        return optionsList
-          .map((option, index) => {
-            const number = unit.min === 0 ? index : index + 1;
-
-            return {
-              value: number.toString(),
-              label: option,
-            };
-          })
-          .filter(filterOption);
-      }
-
-      return [...Array(unit.total)]
-        .map((e, index) => {
+  const options = useMemo(() => {
+    if (optionsList) {
+      return optionsList
+        .map((option, index) => {
           const number = unit.min === 0 ? index : index + 1;
 
           return {
             value: number.toString(),
-            label: formatValue(
-              number,
-              unit,
-              humanizeLabels,
-              leadingZero,
-              clockFormat,
-            ),
+            label: option,
           };
         })
         .filter(filterOption);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [optionsList, leadingZero, humanizeLabels, clockFormat],
-  );
-  const localeJSON = JSON.stringify(locale);
-  const renderTag = useCallback(
-    (props: { value: string[] | undefined }) => {
-      const { value: itemValue } = props;
+    }
 
-      if (!value || value[0] !== Number(itemValue)) {
-        return <></>;
-      }
+    return [...Array(unit.total)]
+      .map((_, index) => {
+        const number = unit.min === 0 ? index : index + 1;
 
-      const parsedArray = parsePartArray(value, unit);
-      const cronValue = partToString(
-        parsedArray,
-        unit,
-        humanizeLabels,
-        leadingZero,
-        clockFormat,
-      );
-      const testEveryValue = cronValue.match(/^\*\/([0-9]+),?/) || [];
-
-      return (
-        <div>
-          {testEveryValue[1]
-            ? `${locale.everyText || DEFAULT_LOCALE_EN.everyText} ${
-                testEveryValue[1]
-              }`
-            : cronValue}
-        </div>
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [value, localeJSON, humanizeLabels, leadingZero, clockFormat],
-  );
+        return {
+          value: number.toString(),
+          label: formatValue(
+            number,
+            unit,
+            humanizeLabels,
+            leadingZero,
+            clockFormat,
+          ),
+        };
+      })
+      .filter(filterOption);
+  }, [
+    optionsList,
+    leadingZero,
+    humanizeLabels,
+    clockFormat,
+    unit,
+    filterOption,
+  ]);
 
   const onOptionClick = useCallback(
     (values: string[]) => {
@@ -114,10 +81,10 @@ export function CustomSelect(props: CustomSelectProps) {
       if (newValue.length === unit.total) {
         setValue([]);
       } else {
-        setValue(newValue);
+        setValue(newValue.map((v) => Number(v)));
       }
     },
-    [readOnly],
+    [readOnly, setValue, unit.total],
   );
 
   return (

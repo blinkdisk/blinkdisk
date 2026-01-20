@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { ShortcutsValues, Unit } from "./types";
 
 export const SUPPORTED_SHORTCUTS: ShortcutsValues[] = [

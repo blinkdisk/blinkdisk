@@ -1,9 +1,17 @@
 import { VaultAction } from "@desktop/hooks/use-config-validation";
 import { useAppTranslation } from "@hooks/use-app-translation";
 
+interface FormProps {
+  AppForm: React.ComponentType<{ children?: React.ReactNode }>;
+  Submit: React.ComponentType<{
+    className?: string;
+    children: React.ReactNode;
+  }>;
+}
+
 export type ProviderSubmitButtonProps = {
   action: VaultAction;
-  form: any;
+  form: FormProps;
 };
 
 export function ProviderSubmitButton({

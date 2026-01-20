@@ -7,9 +7,9 @@ import { showErrorToast } from "@desktop/lib/error";
 import { hashFolder } from "@desktop/lib/folder";
 import { vaultApi } from "@desktop/lib/vault";
 import { ZCreateFolderFormType } from "@schemas/folder";
-import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { CustomError } from "@utils/error";
 import { tryCatch } from "@utils/try-catch";
 import { usePostHog } from "posthog-js/react";
 
@@ -18,7 +18,7 @@ export function useCreateFolder({
   onError,
 }: {
   onSuccess: () => void;
-  onError?: (error: any) => void;
+  onError?: (error: unknown) => void;
 }) {
   const posthog = usePostHog();
   const navigate = useNavigate();
@@ -39,7 +39,8 @@ export function useCreateFolder({
         size: number | null;
       },
     ) => {
-      if (!vaultId || !profileFilter) throw new CustomError("MISSING_REQUIRED_VALUE");
+      if (!vaultId || !profileFilter)
+        throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (
         !values.force &&

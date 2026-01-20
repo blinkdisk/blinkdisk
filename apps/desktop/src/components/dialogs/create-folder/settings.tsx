@@ -28,7 +28,12 @@ export function CreateFolderSettings({
 
   const { mutateAsync, isPending } = useCreateFolder({
     onError: (error) => {
-      if (error.message === "FOLDER_TOO_LARGE") {
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        error.message === "FOLDER_TOO_LARGE"
+      ) {
         setAlertShown(true);
       }
     },
