@@ -252,11 +252,11 @@ export interface Locale {
   altWeekDays?: string[];
   altMonths?: string[];
 }
-export type SetValueFunction = (
+type SetValueFunction = (
   value: string,
   extra: SetValueFunctionExtra,
 ) => void;
-export interface SetValueFunctionExtra {
+interface SetValueFunctionExtra {
   selectedPeriod: PeriodType;
 }
 export type SetValue = (value: string) => void;
@@ -462,7 +462,7 @@ export interface Unit {
   total: number;
   alt?: string[];
 }
-export interface Clicks {
+interface Clicks {
   time: number;
   value: number;
 }

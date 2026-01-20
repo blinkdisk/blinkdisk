@@ -24,7 +24,7 @@ export const windows = {
   exe: "BlinkDisk-Windows.exe",
 };
 
-export const downloads = {
+const downloads = {
   linux,
   mac,
   windows,

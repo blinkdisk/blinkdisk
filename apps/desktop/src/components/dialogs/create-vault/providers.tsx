@@ -40,12 +40,12 @@ export function CreateVaultProviders({
   );
 }
 
-export type ProviderProps = {
+type ProviderProps = {
   provider: (typeof providers)[number] & { name: string };
   selectProvider: (provider: ProviderType) => void;
 };
 
-export function Provider({ provider, selectProvider }: ProviderProps) {
+function Provider({ provider, selectProvider }: ProviderProps) {
   const { t } = useAppTranslation("vault");
 
   const Icon = providerIcons[provider.type];

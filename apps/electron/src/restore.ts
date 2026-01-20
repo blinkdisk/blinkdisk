@@ -7,7 +7,7 @@ import { chmod, readdir, symlink } from "fs/promises";
 import pLimit from "p-limit";
 import { dirname, join } from "path";
 
-export type Restore = {
+type Restore = {
   id: string;
   status: "RUNNING" | "COMPLETE";
   folderId: string;

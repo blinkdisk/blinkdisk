@@ -3,10 +3,6 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
-export type ConfigListItem = Awaited<
-  ReturnType<typeof trpc.config.list.query>
->[number];
-
 export function useConfigList() {
   const { queryKeys, accountId } = useQueryKey();
   const { localHostName, localUserName } = useProfile();

@@ -253,7 +253,7 @@ type CardProps = {
   responsive?: boolean;
 };
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(
+const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ stats, repository, responsive }, ref) => {
     return (
       <div ref={ref} className="bg-secondary flex w-full flex-col gap-4 p-6">

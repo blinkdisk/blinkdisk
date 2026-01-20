@@ -6,15 +6,15 @@ import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 
-export type TaskStatus = "RUNNING" | "SUCCESS" | "FAILURE";
+type TaskStatus = "RUNNING" | "SUCCESS" | "FAILURE";
 
-export type TaskCounter = {
+type TaskCounter = {
   value: number;
   units?: string;
   level?: string;
 };
 
-export type TaskCounters = {
+type TaskCounters = {
   Bytes?: TaskCounter;
   Directories?: TaskCounter;
   Errors?: TaskCounter;

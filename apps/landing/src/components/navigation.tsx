@@ -145,7 +145,7 @@ export function Navigation() {
     </>
   );
 }
-export function Logo() {
+function Logo() {
   const { dark } = useTheme();
 
   return (
@@ -159,7 +159,7 @@ export function Logo() {
   );
 }
 
-export function Buttons({ className }: { className?: string }) {
+function Buttons({ className }: { className?: string }) {
   return (
     <div className={cn("flex gap-2", className)}>
       <Button
@@ -178,7 +178,7 @@ export function Buttons({ className }: { className?: string }) {
   );
 }
 
-export function Links() {
+function Links() {
   return links.map((link) => (
     <Link
       key={link.href}

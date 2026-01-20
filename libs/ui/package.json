@@ -48,7 +48,6 @@
     "react-loading-skeleton": "^3.5.0",
     "react-twemoji": "^0.6.0",
     "sonner": "^2.0.1",
-    "tw-animate-css": "^1.2.3",
     "twemoji-parser": "^14.0.0"
   }
 }

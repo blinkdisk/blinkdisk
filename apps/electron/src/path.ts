@@ -18,8 +18,6 @@ export const platform = (() => {
 export const globalConfigDirectory = () =>
   join(app.getPath("appData"), "blinkdisk", "vaults");
 
-export const configFileSuffix = ".config";
-
 export const corePath = () => {
   if (!app.isPackaged) return join(os.homedir(), "go", "bin", "core");
 

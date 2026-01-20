@@ -5,7 +5,7 @@ import { initTRPC } from "@trpc/server";
 import { TRPC_ERROR_CODES_BY_KEY } from "@trpc/server/rpc";
 import { ZodError } from "zod";
 
-export const t = initTRPC.context<Context>().create({
+const t = initTRPC.context<Context>().create({
   errorFormatter: ({ shape, error, ctx }) => {
     if (error.cause instanceof ZodError || error.cause instanceof CustomError)
       return {

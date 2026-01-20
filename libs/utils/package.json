@@ -9,7 +9,6 @@
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.13.9",
     "@types/nodemailer": "^7.0.4",
     "eslint": "^9.22.0",

@@ -10,7 +10,7 @@ type CleanupEmailProps = LocaleProps & {
   daysLeft: number;
 };
 
-export const CleanupEmail = ({ daysLeft, ...props }: CleanupEmailProps) => {
+const CleanupEmail = ({ daysLeft, ...props }: CleanupEmailProps) => {
   const { t } = useEmailTranslation(props, "cleanup");
 
   return (
