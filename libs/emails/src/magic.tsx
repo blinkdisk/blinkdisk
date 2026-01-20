@@ -10,7 +10,7 @@ type MagicEmailProps = LocaleProps & {
   code?: string[];
 };
 
-export const MagicEmail = ({ code, ...props }: MagicEmailProps) => {
+const MagicEmail = ({ code, ...props }: MagicEmailProps) => {
   const { t } = useEmailTranslation(props, "magic");
 
   return (

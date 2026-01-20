@@ -1,22 +1,21 @@
-name: Deploy Cloud
+name: Check types
 
 on:
-  push:
-    tags:
-      - v*
-  workflow_dispatch:
+  pull_request:
 
 jobs:
-  deploy:
+  typecheck:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Install pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v5.0.0
+        with:
+          version: 8.15.6
 
-      - name: Set up node
+      - name: Setup Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version-file: ".nvmrc"
@@ -25,8 +24,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Deploy project
-        run: pnpm --filter cloud run deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Run typecheck
+        run: pnpm typecheck

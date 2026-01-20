@@ -1,10 +1,10 @@
-name: Check types
+name: Check knip
 
 on:
   pull_request:
 
 jobs:
-  typecheck:
+  knip:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,11 +18,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: "18"
+          node-version-file: ".nvmrc"
           cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run typecheck
-        run: pnpm typecheck
+      - name: Run unused script
+        run: pnpm unused

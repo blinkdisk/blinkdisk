@@ -37,7 +37,6 @@ export function parseExclusionRule(rule: string) {
   };
 }
 
-export type RuleType = "NAME" | "EXTENSION";
 export type MatchType = "EXACT" | "STARTS_WITH" | "ENDS_WITH" | "CONTAINS";
 
 export function buildExclusionRule(values: ZExclusionFormType) {

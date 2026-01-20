@@ -8,7 +8,7 @@ import { Heading, Text } from "@react-email/components";
 
 type StorageFullEmailProps = LocaleProps;
 
-export const StorageFullEmail = ({ ...props }: StorageFullEmailProps) => {
+const StorageFullEmail = ({ ...props }: StorageFullEmailProps) => {
   const { t } = useEmailTranslation(props, "storageFull");
 
   return (

@@ -10,7 +10,7 @@ type StorageThresholdEmailProps = LocaleProps & {
   percentage: number;
 };
 
-export const StorageThresholdEmail = ({
+const StorageThresholdEmail = ({
   percentage,
   ...props
 }: StorageThresholdEmailProps) => {

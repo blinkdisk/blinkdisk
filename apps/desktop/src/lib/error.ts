@@ -32,7 +32,7 @@ export function showErrorToast(error: any) {
   showDefaultErrorToast();
 }
 
-export function showDefaultErrorToast() {
+function showDefaultErrorToast() {
   toast.error(i18n.t("error:fallback.title", ""), {
     description: i18n.t("error:fallback.description", ""),
   });

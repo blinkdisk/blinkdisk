@@ -12,7 +12,6 @@
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "^22.13.9",
     "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
     "eslint": "^9.22.0",
     "react-email": "^5.1.1",
     "typescript": "5.8.2"

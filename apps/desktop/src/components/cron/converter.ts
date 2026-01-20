@@ -309,7 +309,7 @@ function getPeriodFromCronParts(cronParts: number[][]): PeriodType {
 /**
  * Parses a cron string to an array of parts
  */
-export function parseCronString(str: string) {
+function parseCronString(str: string) {
   if (typeof str !== "string") {
     throw new Error("Invalid cron string");
   }
