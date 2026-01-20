@@ -5,7 +5,7 @@
 import { useEffect, useRef } from "react";
 
 import { DEFAULT_LOCALE_EN } from "./locale";
-import { Classes, Locale, OnError } from "./types";
+import { Locale, OnError } from "./types";
 
 /**
  * Creates an array of integers from start to end, inclusive
@@ -44,16 +44,6 @@ export function dedup(array: number[]) {
   });
 
   return result;
-}
-
-/**
- * Simple classNames util function to prevent adding external library 'classnames'
- */
-export function classNames(classes: Classes) {
-  return Object.entries(classes)
-    .filter(([key, value]) => key && value)
-    .map(([key]) => key)
-    .join(" ");
 }
 
 /**

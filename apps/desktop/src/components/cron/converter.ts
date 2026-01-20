@@ -146,7 +146,7 @@ export function getCronStringFromValues(
 /**
  * Returns the cron part array as a string.
  */
-export function partToString(
+function partToString(
   cronPart: number[],
   unit: Unit,
   humanize?: boolean,
@@ -250,7 +250,7 @@ export function formatValue(
 /**
  * Validates a range of positive integers
  */
-export function parsePartArray(arr: number[], unit: Unit) {
+function parsePartArray(arr: number[], unit: Unit) {
   const values = sort(dedup(fixSunday(arr, unit)));
 
   if (values.length === 0) {
