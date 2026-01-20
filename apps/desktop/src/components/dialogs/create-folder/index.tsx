@@ -6,10 +6,10 @@ import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogTitle,
 } from "@ui/dialog";
 import { cn } from "@utils/class";
 import { ArrowLeftIcon } from "lucide-react";
@@ -38,12 +38,12 @@ export function CreateFolderDialog() {
     form.reset();
     clearDefaultValues();
     setStep("GENERAL");
-    window.folderMockPolicy = undefined;
-  }, [form, clearDefaultValues]);
+  }, [form, clearDefaultValues, setStep]);
 
   const onSuccess = useCallback(() => {
     setIsOpen(false);
     reset();
+    window.folderMockPolicy = undefined;
   }, [reset, setIsOpen]);
 
   return (

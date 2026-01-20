@@ -50,7 +50,7 @@ export function Faq() {
         questions.
       </p>
       <dl className="mt-6 flex flex-col gap-2 sm:mt-16 sm:gap-4">
-        {faqs.map((faq, index) => (
+        {faqs.map((faq) => (
           <div key={faq.question}>
             <Disclosure as="div" key={faq.question} className="pt-6">
               {({ open }) => (

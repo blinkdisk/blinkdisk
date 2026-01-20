@@ -22,14 +22,15 @@ export function EncryptionAnimation() {
   useEffect(() => {
     if (running) return;
     running = true;
+
+    async function start() {
+      while (true) {
+        await animate();
+      }
+    }
+
     start();
   }, []);
-
-  async function start() {
-    while (true) {
-      await animate();
-    }
-  }
 
   async function animate() {
     const pool =

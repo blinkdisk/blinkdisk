@@ -29,14 +29,14 @@ export function SetupAnimation() {
   );
 
   useEffect(() => {
+    async function start() {
+      while (true) {
+        await animate();
+      }
+    }
+
     start();
   }, []);
-
-  async function start() {
-    while (true) {
-      await animate();
-    }
-  }
 
   async function animate() {
     setCompleted(false);

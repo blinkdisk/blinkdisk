@@ -2,7 +2,7 @@ import { GlobalStorageSchema } from "@electron/store";
 import { Store, useStore } from "@tanstack/react-store";
 import { useEffect } from "react";
 
-const store = new Store(window.electron.store.get() as any);
+const store = new Store(window.electron.store.get() as unknown);
 
 export function useAppStorage<K extends keyof GlobalStorageSchema>(
   key: K,
