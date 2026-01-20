@@ -102,8 +102,11 @@ export const vaultRouter = router({
           ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
         );
 
-        const stub = (ctx.env.VAULT as any).getByName(vaultId);
-        await stub.init(spaceId);
+        const stub = ctx.env.VAULT.getByName(vaultId);
+
+        await (stub as unknown as { init: (id: string) => Promise<void> }).init(
+          spaceId,
+        );
       }
 
       ctx.waitUntil(
@@ -229,8 +232,11 @@ export const vaultRouter = router({
 
     if (!space) throw new CustomError("SPACE_NOT_FOUND");
 
-    const stub = (ctx.env.SPACE as any).getByName(space.id);
-    const used = (await stub.getUsed()) as number;
+    const stub = ctx.env.SPACE.getByName(space.id);
+
+    const used = await (
+      stub as unknown as { getUsed: () => Promise<number> }
+    ).getUsed();
 
     return {
       used,
@@ -278,7 +284,11 @@ export const vaultRouter = router({
 
       if (vault.provider === "BLINKDISK_CLOUD") {
         const stub = ctx.env.VAULT.getByName(vault.id);
-        await (stub as any).delete(vault.id, true);
+        await (
+          stub as unknown as {
+            delete: (id: string, updateSpace: boolean) => Promise<void>;
+          }
+        ).delete(vault.id, true);
       }
     }),
 });

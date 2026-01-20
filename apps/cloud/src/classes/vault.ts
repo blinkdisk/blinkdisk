@@ -125,7 +125,7 @@ export class Vault extends DurableObject<Cloudflare.Env> {
         }),
       );
 
-    let response: any = null;
+    let response: object | null = null;
     switch (data.type) {
       case "PUT_BLOB":
         response = await putBlob(this, data, this.ctx.storage, this.env.SPACE);

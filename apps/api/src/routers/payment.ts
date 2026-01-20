@@ -1,4 +1,3 @@
-import { CustomError } from "@utils/error";
 import { getPolar } from "@api/lib/polar";
 import { posthog } from "@api/lib/posthog";
 import { getActiveSubscription } from "@api/lib/subscription";
@@ -6,6 +5,7 @@ import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { plans } from "@config/plans";
 import { ZChangePlan, ZCreateCheckout } from "@schemas/payment";
+import { CustomError } from "@utils/error";
 import { formatSubscriptionEn } from "@utils/format";
 import { logsnag } from "@utils/logsnag";
 
@@ -172,8 +172,11 @@ export const paymentRouter = router({
 
       if (!space) throw new CustomError("SPACE_NOT_FOUND");
 
-      const stub = (ctx.env.SPACE as any).getByName(space.id);
-      const used = await stub.getUsed(space.id);
+      const stub = ctx.env.SPACE.getByName(space.id);
+
+      const used = await (
+        stub as unknown as { getUsed: (id: string) => Promise<number> }
+      ).getUsed(space.id);
 
       const bytes = plan.storageGB * 1000 * 1000 * 1000;
       if (used > bytes) throw new CustomError("NOT_ALLOWED");

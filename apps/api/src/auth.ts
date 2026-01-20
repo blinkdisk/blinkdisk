@@ -18,7 +18,11 @@ const cookieSettings = {
   },
 } as const;
 
-export const auth = (databaseUrl: string, space: any, db: Kysely<DB>) => {
+export const auth = (
+  databaseUrl: string,
+  space: DurableObjectNamespace<undefined>,
+  db: Kysely<DB>,
+) => {
   return betterAuth({
     appName: "BlinkDisk",
     basePath: "/api/auth",
@@ -184,7 +188,11 @@ export const auth = (databaseUrl: string, space: any, db: Kysely<DB>) => {
               .execute();
 
             const stub = space.getByName(spaceId);
-            await stub.init(spaceId, FREE_SPACE_AVAILABLE);
+            await (
+              stub as unknown as {
+                init: (id: string, capacity: number) => Promise<void>;
+              }
+            ).init(spaceId, FREE_SPACE_AVAILABLE);
           },
         },
       },

@@ -6,7 +6,7 @@ import { ZCloudDeleteBlob } from "@schemas/cloud";
 
 export async function deleteBlob(
   durableObject: InstanceType<typeof Vault>,
-  data: any,
+  data: unknown,
   storage: DurableObjectStorage,
   space: DurableObjectNamespace<Space>,
 ) {

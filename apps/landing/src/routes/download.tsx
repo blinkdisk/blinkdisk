@@ -235,10 +235,9 @@ function RouteComponent() {
                     await navigator.share({
                       url: window.location.href,
                     });
-
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  } catch (e: any) {
-                    if (e.toString().includes("AbortError")) return;
+                  } catch (e: unknown) {
+                    const error = e instanceof Error ? e : null;
+                    if (error?.toString().includes("AbortError")) return;
 
                     toast.error("Failed to share link", {
                       description:

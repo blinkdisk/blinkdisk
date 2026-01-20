@@ -4,7 +4,7 @@ import { ZCloudGetMetadata } from "@schemas/cloud";
 
 export async function getMetadata(
   durableObject: InstanceType<typeof Vault>,
-  data: any,
+  data: unknown,
 ) {
   const {
     data: payload,

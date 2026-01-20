@@ -7,7 +7,7 @@ import { ZCloudPutBlob } from "@schemas/cloud";
 
 export async function putBlob(
   durableObject: InstanceType<typeof Vault>,
-  data: any,
+  data: unknown,
   storage: DurableObjectStorage,
   space: DurableObjectNamespace<Space>,
 ) {

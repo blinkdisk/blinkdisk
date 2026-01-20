@@ -55,13 +55,13 @@ export function registerProtocol() {
       if (!vault) return new Response("Vault not found", { status: 404 });
 
       try {
-        const data = req.body ? await new Response(req.body).text() : null;
+        const data = req.body ? await new Response(req.body).text() : undefined;
 
-        const res = (await vault.fetchRaw({
+        const res = await vault.fetchRaw({
           method: req.method as "GET" | "POST" | "PUT" | "DELETE",
           path: `${pathname}${search}`,
           data,
-        })) as any;
+        });
 
         return new Response(JSON.stringify(res), {
           status: 200,
@@ -69,8 +69,9 @@ export function registerProtocol() {
             "content-type": "application/json",
           },
         });
-      } catch (e: any) {
-        return new Response(JSON.stringify({ error: e.message }), {
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : "Unknown error";
+        return new Response(JSON.stringify({ error: message }), {
           status: 400,
           headers: {
             "content-type": "application/json",
