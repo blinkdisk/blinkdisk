@@ -10,8 +10,8 @@ interface ErrorWithCode {
 export function showErrorToast(error: ErrorWithCode | Error | unknown) {
   console.error(error);
   const code =
-    error && typeof error === "object" && "code" in error
-      ? error.code
+    error && typeof error === "object"
+      ? ("code" in error && typeof error.code === "string" ? error.code : error.data?.code)
       : undefined;
   if (code && typeof code === "string") {
     const titleTranslation = i18n.t(`error:${code}.title`, "");
