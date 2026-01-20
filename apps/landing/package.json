@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "deploy": "wrangler deploy",
     "typegen": "wrangler types",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
