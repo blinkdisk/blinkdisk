@@ -218,9 +218,6 @@ export function formatValue(
   let cronPartString = value.toString();
   const { type, alt, min } = unit;
 
-  if (alt === undefined) {
-    return cronPartString;
-  }
   const needLeadingZero =
     leadingZero &&
     (leadingZero === true || leadingZero.includes(type as LeadingZeroType));
@@ -228,7 +225,7 @@ export function formatValue(
     clockFormat === "24-hour-clock" && (type === "hours" || type === "minutes");
 
   if ((humanize && type === "week-days") || (humanize && type === "months")) {
-    cronPartString = alt![value - min] || cronPartString;
+    cronPartString = alt?.[value - min] || cronPartString;
   } else if (value < 10 && (needLeadingZero || need24HourClock)) {
     cronPartString = cronPartString.padStart(2, "0");
   }
