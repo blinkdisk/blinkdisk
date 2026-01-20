@@ -21,7 +21,15 @@ export function useAppStorage<K extends keyof GlobalStorageSchema>(
   const state = useStore(store, (state) => {
     if (!key) return undefined;
 
-    return key.split(".").reduce((o, i) => (o ? o[i] : undefined), state);
+    return key
+      .split(".")
+      .reduce(
+        (o, i) =>
+          o && typeof o === "object"
+            ? (o as Record<string, unknown>)[i]
+            : undefined,
+        state,
+      );
   });
 
   async function setValue(value: GlobalStorageSchema[K]) {

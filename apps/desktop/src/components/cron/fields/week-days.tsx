@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { useMemo } from "react";
 
 import { CustomSelect } from "@desktop/components/cron/fields/select";
@@ -32,17 +30,13 @@ export function WeekDays(props: WeekDaysProps) {
   const noMonthDays = period === "week" || !monthDays || monthDays.length === 0;
 
   const localeJSON = JSON.stringify(locale);
-  const placeholder = useMemo(
-    () => {
-      if (noMonthDays) {
-        return locale.emptyWeekDays || DEFAULT_LOCALE_EN.emptyWeekDays;
-      }
+  const placeholder = useMemo(() => {
+    if (noMonthDays) {
+      return locale.emptyWeekDays || DEFAULT_LOCALE_EN.emptyWeekDays;
+    }
 
-      return locale.emptyWeekDaysShort || DEFAULT_LOCALE_EN.emptyWeekDaysShort;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [noMonthDays, localeJSON],
-  );
+    return locale.emptyWeekDaysShort || DEFAULT_LOCALE_EN.emptyWeekDaysShort;
+  }, [noMonthDays, localeJSON]);
 
   const displayWeekDays =
     period === "week" ||
@@ -79,7 +73,7 @@ export function WeekDays(props: WeekDaysProps) {
         grid={false}
         value={value}
         unit={{
-          ...UNITS[4],
+          ...UNITS[4]!,
           // Allow translation of alternative labels when using "humanizeLabels"
           // Issue #3
           alt: locale.altWeekDays || DEFAULT_LOCALE_EN.altWeekDays,

@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { UNITS } from "../constants";
 import { DEFAULT_LOCALE_EN } from "../locale";
@@ -36,7 +34,7 @@ export function Hours(props: HoursProps) {
       <CustomSelect
         placeholder={locale.emptyHours || DEFAULT_LOCALE_EN.emptyHours}
         value={value}
-        unit={UNITS[1]}
+        unit={UNITS[1]!}
         setValue={setValue}
         locale={locale}
         className={className}

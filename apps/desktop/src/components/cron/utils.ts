@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { useEffect, useRef } from "react";
 
 import { DEFAULT_LOCALE_EN } from "./locale";
@@ -62,18 +60,19 @@ export function classNames(classes: Classes) {
  * Handle onError prop to set the error
  */
 export function setError(onError: OnError, locale: Locale) {
-  onError &&
+  if (onError) {
     onError({
       type: "invalid_cron",
       description:
         locale.errorInvalidCron || DEFAULT_LOCALE_EN.errorInvalidCron,
     });
+  }
 }
 
 /**
  * React useEffect hook to return the previous value
  */
-export function usePrevious(value: any) {
+export function usePrevious<T>(value: T): T {
   const ref = useRef(value);
 
   useEffect(() => {

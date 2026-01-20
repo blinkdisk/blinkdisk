@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import {
   getCronStringFromValues,
   setValuesFromCronString,
@@ -17,7 +15,7 @@ import { WeekDays } from "@desktop/components/cron/fields/week-days";
 import { cn } from "@utils/class";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CronProps, PeriodType } from "./types";
+import { CronProps, Locale, PeriodType } from "./types";
 import { usePrevious } from "./utils";
 
 export function Cron(props: CronProps) {
@@ -25,7 +23,7 @@ export function Cron(props: CronProps) {
 
   const locale = t("component", {
     returnObjects: true,
-  });
+  }) as unknown as Locale;
 
   const {
     value = "",
@@ -79,20 +77,40 @@ export function Cron(props: CronProps) {
   const [weekDays, setWeekDays] = useState<number[] | undefined>();
   const [hours, setHours] = useState<number[] | undefined>();
   const [minutes, setMinutes] = useState<number[] | undefined>();
-  const [error, setInternalError] = useState<boolean>(false);
+  const [internalError, setInternalError] = useState<boolean>(false);
+
+  void internalError;
   const [valueCleared, setValueCleared] = useState<boolean>(false);
   const previousValueCleared = usePrevious(valueCleared);
-  const localeJSON = JSON.stringify(locale);
 
-  useEffect(
-    () => {
+  useEffect(() => {
+    setValuesFromCronString(
+      value,
+      () => {},
+      onError,
+      allowEmpty,
+      internalValueRef,
+      true,
+      locale,
+      shortcuts,
+      setMinutes,
+      setHours,
+      setMonthDays,
+      setMonths,
+      setWeekDays,
+      setPeriod,
+    );
+  }, []);
+
+  useEffect(() => {
+    if (value !== internalValueRef.current) {
       setValuesFromCronString(
         value,
         setInternalError,
         onError,
         allowEmpty,
         internalValueRef,
-        true,
+        false,
         locale,
         shortcuts,
         setMinutes,
@@ -102,79 +120,48 @@ export function Cron(props: CronProps) {
         setWeekDays,
         setPeriod,
       );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+    }
+  }, [value, allowEmpty, shortcuts, locale]);
 
-  useEffect(
-    () => {
-      if (value !== internalValueRef.current) {
-        setValuesFromCronString(
-          value,
-          setInternalError,
-          onError,
-          allowEmpty,
-          internalValueRef,
-          false,
-          locale,
-          shortcuts,
-          setMinutes,
-          setHours,
-          setMonthDays,
-          setMonths,
-          setWeekDays,
-          setPeriod,
-        );
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [value, internalValueRef, localeJSON, allowEmpty, shortcuts],
-  );
+  useEffect(() => {
+    // Only change the value if a user touched a field
+    // and if the user didn't use the clear button
+    if (
+      (period || minutes || months || monthDays || weekDays || hours) &&
+      !valueCleared &&
+      !previousValueCleared
+    ) {
+      const selectedPeriod = period || defaultPeriodRef.current;
+      const cron = getCronStringFromValues(
+        selectedPeriod,
+        months,
+        monthDays,
+        weekDays,
+        hours,
+        minutes,
+        humanizeValue,
+        dropdownsConfig,
+      );
 
-  useEffect(
-    () => {
-      // Only change the value if a user touched a field
-      // and if the user didn't use the clear button
-      if (
-        (period || minutes || months || monthDays || weekDays || hours) &&
-        !valueCleared &&
-        !previousValueCleared
-      ) {
-        const selectedPeriod = period || defaultPeriodRef.current;
-        const cron = getCronStringFromValues(
-          selectedPeriod,
-          months,
-          monthDays,
-          weekDays,
-          hours,
-          minutes,
-          humanizeValue,
-          dropdownsConfig,
-        );
+      setValue(cron, { selectedPeriod });
+      internalValueRef.current = cron;
 
-        setValue(cron, { selectedPeriod });
-        internalValueRef.current = cron;
-
-        onError && onError(undefined);
-        setInternalError(false);
-      } else if (valueCleared) {
-        setValueCleared(false);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      period,
-      monthDays,
-      months,
-      weekDays,
-      hours,
-      minutes,
-      humanizeValue,
-      valueCleared,
-      dropdownsConfig,
-    ],
-  );
+      if (onError) onError(undefined);
+      setInternalError(false);
+    } else if (valueCleared) {
+      setValueCleared(false);
+    }
+  }, [
+    period,
+    monthDays,
+    months,
+    weekDays,
+    hours,
+    minutes,
+    humanizeValue,
+    valueCleared,
+    dropdownsConfig,
+  ]);
 
   const clockFormat = useMemo(() => {
     const date = new Date(Date.UTC(2020, 0, 1, 13, 0, 0)); // 1:00 PM UTC
@@ -198,7 +185,7 @@ export function Cron(props: CronProps) {
             // This prevents the component from overriding
             // the period on mount.
             if (!to) return;
-            setPeriod(to);
+            setPeriod(to as PeriodType);
           }}
           locale={locale}
           disabled={dropdownsConfig?.period?.disabled ?? disabled}

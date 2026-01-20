@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { ButtonProps } from "@ui/button";
 import { SelectProps } from "@ui/select";
 import { Dispatch, SetStateAction } from "react";
@@ -252,14 +250,10 @@ export interface Locale {
   altWeekDays?: string[];
   altMonths?: string[];
 }
-type SetValueFunction = (
-  value: string,
-  extra: SetValueFunctionExtra,
-) => void;
 interface SetValueFunctionExtra {
   selectedPeriod: PeriodType;
 }
-export type SetValue = (value: string) => void;
+export type SetValue = (value: string, extra?: SetValueFunctionExtra) => void;
 export type CronError =
   | {
       type: "invalid_cron";
@@ -271,7 +265,7 @@ export type OnError =
   | OnErrorFunction
   | Dispatch<SetStateAction<CronError>>
   | undefined;
-export interface ClearButtonProps extends Omit<ButtonProps, "onClick"> {}
+export type ClearButtonProps = Omit<ButtonProps, "onClick">;
 export type ClearButtonAction = "empty" | "fill-with-every";
 export type PeriodType =
   | "year"
@@ -376,7 +370,8 @@ export interface MinutesProps extends FieldProps {
 }
 export interface CustomSelectProps
   extends Omit<
-    SelectProps<any>,
+    SelectProps,
+    | "value"
     | "mode"
     | "tokenSeparators"
     | "virtual"
@@ -403,17 +398,20 @@ export interface CustomSelectProps
   readOnly: boolean;
   leadingZero?: LeadingZero;
   clockFormat?: ClockFormat;
+  className?: string;
+  allowClear?: boolean;
   period: PeriodType;
   unit: Unit;
   periodicityOnDoubleClick: boolean;
   mode: Mode;
   filterOption?: FilterOption;
   getPopupContainer?: () => HTMLElement;
+  placeholder?: string;
 }
 export type SetValueNumbersOrUndefined = Dispatch<
   SetStateAction<number[] | undefined>
 >;
-export type SetValuePeriod = Dispatch<SetStateAction<PeriodType>>;
+export type SetValuePeriod = Dispatch<SetStateAction<PeriodType | undefined>>;
 export type SetInternalError = Dispatch<SetStateAction<boolean>>;
 export interface DefaultLocale {
   everyText: string;
@@ -462,11 +460,6 @@ export interface Unit {
   total: number;
   alt?: string[];
 }
-interface Clicks {
-  time: number;
-  value: number;
-}
-
 export type FilterOption = ({
   value,
   label,

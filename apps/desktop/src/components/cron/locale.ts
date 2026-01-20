@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import { DefaultLocale } from "./types";
 
 export const DEFAULT_LOCALE_EN: DefaultLocale = {

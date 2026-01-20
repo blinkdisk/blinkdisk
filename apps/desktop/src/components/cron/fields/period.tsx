@@ -2,8 +2,6 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-// @ts-nocheck
-
 import {
   Select,
   SelectContent,
@@ -22,7 +20,6 @@ export function Period(props: PeriodProps) {
     value,
     setValue,
     locale,
-    className,
     disabled,
     readOnly,
     shortcuts,
