@@ -289,11 +289,11 @@ export class Vault {
     return provider.coreType;
   }
 
-  static mapConfigFields(providerType: ProviderType, config: any) {
+  static mapConfigFields(providerType: ProviderType, config: ProviderConfig) {
     const provider = providers.find((p) => p.type === providerType);
     if (!provider) throw new Error(`Provider ${providerType} not found`);
 
-    const mapped: any = {};
+    const mapped: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(config)) {
       if (provider.coreMapping && provider.coreMapping[key]) {
@@ -303,7 +303,7 @@ export class Vault {
       }
     }
 
-    return mapped as object;
+    return mapped;
   }
 
   static stopAll() {
@@ -474,7 +474,7 @@ export class Vault {
   }: {
     method: "GET" | "POST" | "PUT" | "DELETE";
     path: string;
-    data?: any;
+    data?: string | undefined;
     variant?: "main" | "renderer";
     filePath?: string;
     raw?: boolean;

@@ -137,10 +137,9 @@ export function CodeStatsResult({
         url: `${process.env.LANDING_URL}/code`,
         files: [file],
       });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      if (e.toString().includes("AbortError")) return;
+    } catch (e: unknown) {
+      const error = e instanceof Error || e instanceof DOMException ? e : null;
+      if (error?.name === "AbortError") return;
 
       toast.error("Failed to share image", {
         description: "Please manually create a screenshot instead.",

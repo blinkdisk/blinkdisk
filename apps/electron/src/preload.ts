@@ -186,7 +186,7 @@ function setStorage<
   K extends
     | keyof GlobalStorageSchema
     | `accounts.${string}.${keyof AccountStorageSchema}`,
->(key: K, value: any): Promise<void> {
+>(key: K, value: unknown): Promise<void> {
   return ipcRenderer.invoke("store.set", key, value);
 }
 

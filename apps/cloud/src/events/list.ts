@@ -4,7 +4,7 @@ import { ZCloudListBlobs } from "@schemas/cloud";
 
 export async function listBlobs(
   durableObject: InstanceType<typeof Vault>,
-  data: any,
+  data: unknown,
 ) {
   const {
     data: payload,

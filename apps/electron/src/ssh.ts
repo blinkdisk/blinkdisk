@@ -14,8 +14,10 @@ export function sshKeyscan(form: ZSftpConfigType) {
           timeout: 30_000,
           maxBuffer: 200 * 1024,
           env: {
-            PATH: (process.env as any).PATH ?? "",
-          } as any,
+            // eslint-disable-next-line turbo/no-undeclared-env-vars
+            PATH: process.env.PATH ?? "",
+            // Turbo seems to override the env type
+          } as unknown as NodeJS.ProcessEnv,
         },
         (err: ExecFileException | null, stdout: string, stderr: string) => {
           if (err || stderr) return res({ error: "SCAN_FAILED" });

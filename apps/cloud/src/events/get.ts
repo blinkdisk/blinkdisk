@@ -10,7 +10,7 @@ const MINIMUM_EGRESS_LIMIT = 1000 * 1000 * 1000;
 
 export async function getBlob(
   durableObject: InstanceType<typeof Vault>,
-  data: any,
+  data: unknown,
   storage: DurableObjectStorage,
 ) {
   const {

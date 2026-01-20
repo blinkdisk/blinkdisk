@@ -253,8 +253,12 @@ export async function polarWebhook(
           .where("id", "=", space.id)
           .execute();
 
-        const stub = c.env.SPACE.getByName(space.id) as any;
-        await stub.updateCapacity(capacity);
+        const stub = c.env.SPACE.getByName(space.id);
+        await (
+          stub as unknown as {
+            updateCapacity: (capacity: number) => Promise<void>;
+          }
+        ).updateCapacity(capacity);
       }
     } else if (event.type.startsWith("order.")) {
       const order = event.data as Order;
