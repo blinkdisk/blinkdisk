@@ -35,6 +35,7 @@ export function MonthDays(props: MonthDaysProps) {
     }
 
     return locale.emptyMonthDaysShort || DEFAULT_LOCALE_EN.emptyMonthDaysShort;
+    // eslint-disable-next-line
   }, [noWeekDays, localeJSON]);
 
   const displayMonthDays =

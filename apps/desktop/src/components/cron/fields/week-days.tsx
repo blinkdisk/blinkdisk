@@ -36,6 +36,7 @@ export function WeekDays(props: WeekDaysProps) {
     }
 
     return locale.emptyWeekDaysShort || DEFAULT_LOCALE_EN.emptyWeekDaysShort;
+    // eslint-disable-next-line
   }, [noMonthDays, localeJSON]);
 
   const displayWeekDays =

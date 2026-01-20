@@ -3,8 +3,8 @@
 // https://github.com/xrutayisire/react-js-cron
 
 import {
-  getCronStringFromValues,
-  setValuesFromCronString,
+    getCronStringFromValues,
+    setValuesFromCronString,
 } from "@desktop/components/cron/converter";
 import { Hours } from "@desktop/components/cron/fields/hours";
 import { Minutes } from "@desktop/components/cron/fields/minutes";
@@ -97,7 +97,8 @@ export function Cron(props: CronProps) {
       setWeekDays,
       setPeriod,
     );
-  }, [value, allowEmpty, shortcuts, locale]);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (value !== internalValueRef.current) {
@@ -118,46 +119,51 @@ export function Cron(props: CronProps) {
         setPeriod,
       );
     }
+    // eslint-disable-next-line
   }, [value, allowEmpty, shortcuts, locale]);
 
-  useEffect(() => {
-    // Only change the value if a user touched a field
-    // and if the user didn't use the clear button
-    if (
-      (period || minutes || months || monthDays || weekDays || hours) &&
-      !valueCleared &&
-      !previousValueCleared
-    ) {
-      const selectedPeriod = period || defaultPeriodRef.current;
-      const cron = getCronStringFromValues(
-        selectedPeriod,
-        months,
-        monthDays,
-        weekDays,
-        hours,
-        minutes,
-        humanizeValue,
-        dropdownsConfig,
-      );
+  useEffect(
+    () => {
+      // Only change the value if a user touched a field
+      // and if the user didn't use the clear button
+      if (
+        (period || minutes || months || monthDays || weekDays || hours) &&
+        !valueCleared &&
+        !previousValueCleared
+      ) {
+        const selectedPeriod = period || defaultPeriodRef.current;
+        const cron = getCronStringFromValues(
+          selectedPeriod,
+          months,
+          monthDays,
+          weekDays,
+          hours,
+          minutes,
+          humanizeValue,
+          dropdownsConfig,
+        );
 
-      setValue(cron, { selectedPeriod });
-      internalValueRef.current = cron;
+        setValue(cron, { selectedPeriod });
+        internalValueRef.current = cron;
 
-      if (onError) onError(undefined);
-    } else if (valueCleared) {
-      setValueCleared(false);
-    }
-  }, [
-    period,
-    monthDays,
-    months,
-    weekDays,
-    hours,
-    minutes,
-    humanizeValue,
-    valueCleared,
-    dropdownsConfig,
-  ]);
+        if (onError) onError(undefined);
+      } else if (valueCleared) {
+        setValueCleared(false);
+      }
+    },
+    // eslint-disable-next-line
+    [
+      period,
+      monthDays,
+      months,
+      weekDays,
+      hours,
+      minutes,
+      humanizeValue,
+      valueCleared,
+      dropdownsConfig,
+    ],
+  );
 
   const clockFormat = useMemo(() => {
     const date = new Date(Date.UTC(2020, 0, 1, 13, 0, 0)); // 1:00 PM UTC
