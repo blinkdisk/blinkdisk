@@ -16,8 +16,6 @@ import { CaptureResult } from "posthog-js";
 import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
 import "react-loading-skeleton/dist/skeleton.css";
 
-type TestLintWarning = any;
-
 export const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
