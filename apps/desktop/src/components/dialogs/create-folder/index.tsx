@@ -38,12 +38,13 @@ export function CreateFolderDialog() {
     form.reset();
     clearDefaultValues();
     setStep("GENERAL");
+    // eslint-disable-next-line
+    window.folderMockPolicy = undefined;
   }, [form, clearDefaultValues, setStep]);
 
   const onSuccess = useCallback(() => {
     setIsOpen(false);
     reset();
-    window.folderMockPolicy = undefined;
   }, [reset, setIsOpen]);
 
   return (

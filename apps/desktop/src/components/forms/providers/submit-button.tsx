@@ -2,7 +2,7 @@ import { VaultAction } from "@desktop/hooks/use-config-validation";
 import { useAppTranslation } from "@hooks/use-app-translation";
 
 interface FormProps {
-  AppForm: React.ComponentType<{ children: React.ReactNode }>;
+  AppForm: React.ComponentType<{ children?: React.ReactNode }>;
   Submit: React.ComponentType<{
     className?: string;
     children: React.ReactNode;
