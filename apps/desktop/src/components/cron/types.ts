@@ -446,9 +446,6 @@ export interface DefaultLocale {
   altWeekDays: string[];
   altMonths: string[];
 }
-export interface Classes {
-  [key: string]: boolean;
-}
 export interface ShortcutsValues {
   name: ShortcutsType;
   value: string;

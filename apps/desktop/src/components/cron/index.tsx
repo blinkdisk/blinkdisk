@@ -77,9 +77,6 @@ export function Cron(props: CronProps) {
   const [weekDays, setWeekDays] = useState<number[] | undefined>();
   const [hours, setHours] = useState<number[] | undefined>();
   const [minutes, setMinutes] = useState<number[] | undefined>();
-  const [internalError, setInternalError] = useState<boolean>(false);
-
-  void internalError;
   const [valueCleared, setValueCleared] = useState<boolean>(false);
   const previousValueCleared = usePrevious(valueCleared);
 
@@ -100,13 +97,13 @@ export function Cron(props: CronProps) {
       setWeekDays,
       setPeriod,
     );
-  }, []);
+  }, [value, allowEmpty, shortcuts, locale]);
 
   useEffect(() => {
     if (value !== internalValueRef.current) {
       setValuesFromCronString(
         value,
-        setInternalError,
+        () => {},
         onError,
         allowEmpty,
         internalValueRef,
@@ -147,7 +144,6 @@ export function Cron(props: CronProps) {
       internalValueRef.current = cron;
 
       if (onError) onError(undefined);
-      setInternalError(false);
     } else if (valueCleared) {
       setValueCleared(false);
     }
