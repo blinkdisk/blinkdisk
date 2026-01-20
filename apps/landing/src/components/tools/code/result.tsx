@@ -138,8 +138,8 @@ export function CodeStatsResult({
         files: [file],
       });
     } catch (e: unknown) {
-      const error = e instanceof Error ? e : null;
-      if (error?.toString().includes("AbortError")) return;
+      const error = e instanceof Error || e instanceof DOMException ? e : null;
+      if (error?.name === "AbortError") return;
 
       toast.error("Failed to share image", {
         description: "Please manually create a screenshot instead.",
