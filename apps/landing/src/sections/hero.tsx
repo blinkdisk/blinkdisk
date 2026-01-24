@@ -60,7 +60,7 @@ export function Hero() {
               size={mobile ? "lg" : "xl"}
             >
               <DownloadIcon className="mr-1.5" />
-              Download App
+              Download for free
             </Button>
           </motion.div>
         </div>
@@ -78,10 +78,10 @@ export function Hero() {
           className="w-content border shadow"
         />
         <div className="group absolute inset-0 flex items-center justify-center bg-opacity-0 transition-colors hover:bg-black/10">
-          <div className="bg-foreground/20 border-foreground/20 flex h-20 w-20 items-center justify-center rounded-full border-2 shadow-2xl transition-transform group-hover:scale-110">
+          <div className="bg-foreground/20 border-foreground/20 sm:size-18 lg:size-22 flex size-16 items-center justify-center rounded-full border-2 shadow-2xl transition-transform group-hover:scale-110 md:size-20">
             <PlayIcon
               fill="currentColor"
-              className="text-foreground ml-1 h-8 w-8"
+              className="text-foreground size-5/12"
             />
           </div>
         </div>
@@ -94,7 +94,7 @@ export function Hero() {
           className="max-w-[90vw] overflow-hidden border-0 bg-transparent p-0 shadow-none xl:!max-w-6xl"
           showCloseButton={false}
         >
-          <div className="relative aspect-video w-full overflow-hidden rounded-xl md:!rounded-2xl">
+          <div className="relative aspect-video w-full overflow-hidden rounded-lg sm:rounded-xl md:!rounded-2xl">
             <iframe
               width="100%"
               height="100%"
