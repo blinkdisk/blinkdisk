@@ -2,13 +2,16 @@ import { useIsMobile } from "@hooks/use-mobile";
 import { GithubIcon } from "@landing/components/icons/github";
 import { useTheme } from "@landing/hooks/use-theme";
 import { Button } from "@ui/button";
+import { Dialog, DialogContent } from "@ui/dialog";
 import { SplitText } from "@ui/split-text";
 import { motion } from "framer-motion";
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, PlayIcon } from "lucide-react";
+import { useState } from "react";
 
 export function Hero() {
   const mobile = useIsMobile();
   const { dark } = useTheme();
+  const [videoOpen, setVideoOpen] = useState(false);
 
   return (
     <div className="pt-page flex flex-col items-center justify-center pb-16 sm:pb-24">
@@ -62,13 +65,48 @@ export function Hero() {
           </motion.div>
         </div>
       </div>
-      <motion.img
+      <motion.div
         initial={{ opacity: 0, y: "5rem", scale: 0.975 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.25, delay: 1 }}
-        src={`/screenshots/${dark ? "dark" : "light"}.png`}
-        className="lg:rounded-4xl w-content mt-16 rounded-xl border shadow sm:mt-20 sm:rounded-2xl md:rounded-3xl"
-      />
+        className="lg:rounded-4xl relative mt-16 cursor-pointer overflow-hidden rounded-xl sm:mt-20 sm:rounded-2xl md:rounded-3xl"
+        onClick={() => setVideoOpen(true)}
+      >
+        <img
+          src={`/screenshots/${dark ? "dark" : "light"}.png`}
+          alt="Screenshot of the BlinkDisk desktop app"
+          className="w-content border shadow"
+        />
+        <div className="group absolute inset-0 flex items-center justify-center bg-opacity-0 transition-colors hover:bg-black/10">
+          <div className="bg-foreground/20 border-foreground/20 flex h-20 w-20 items-center justify-center rounded-full border-2 shadow-2xl transition-transform group-hover:scale-110">
+            <PlayIcon
+              fill="currentColor"
+              className="text-foreground ml-1 h-8 w-8"
+            />
+          </div>
+        </div>
+      </motion.div>
+
+      <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
+        <DialogContent
+          style={{ zIndex: 1004 }}
+          overlayStyle={{ zIndex: 1003 }}
+          className="max-w-[90vw] overflow-hidden border-0 bg-transparent p-0 shadow-none xl:!max-w-6xl"
+          showCloseButton={false}
+        >
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl md:!rounded-2xl">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/wAKE0aHJptM?autoplay=1"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
