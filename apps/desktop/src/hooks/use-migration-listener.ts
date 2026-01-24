@@ -57,7 +57,7 @@ export function useMigrationListener() {
       });
 
       if (status !== "RUNNING") {
-        console.info(logPrefix, "Vault", vault.id, "is", status, ", skipping");
+        console.warn(logPrefix, "Vault", vault.id, "is", status, ", skipping");
         continue;
       }
 
@@ -75,6 +75,11 @@ export function useMigrationListener() {
       }>("/api/v1/policies");
 
       const movedProfiles: string[] = [];
+
+      if (!res.data?.policies || !Array.isArray(res.data.policies)) {
+        console.warn(logPrefix, "No policies found or invalid policies format");
+        continue;
+      }
 
       for (const policy of res.data.policies) {
         if (!policy.target.host || !policy.target.userName) continue;
