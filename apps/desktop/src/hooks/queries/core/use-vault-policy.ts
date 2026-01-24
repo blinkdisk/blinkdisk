@@ -10,6 +10,7 @@ import {
 } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
+import { tryCatch } from "@utils/try-catch";
 
 export function useVaultPolicy() {
   const { profileFilter } = useProfile();
@@ -22,16 +23,16 @@ export function useVaultPolicy() {
     queryFn: async () => {
       if (!profileFilter) return null;
 
-      const res = await vaultApi(vaultId).get<CorePolicy & { code?: string }>(
-        "/api/v1/policy",
-        {
-          params: profileFilter,
-        },
+      const [res, error] = await tryCatch(
+        vaultApi(vaultId).get<CorePolicy & { code?: string }>(
+          "/api/v1/policy",
+          {
+            params: profileFilter,
+          },
+        ),
       );
 
-      if (!res.data) return null;
-
-      if (res.data.code === "NOT_FOUND") {
+      if (error && "code" in error && error.code === "NOT_FOUND") {
         // Create the vault policy in
         // case it doesn't exist yet
         await vaultApi(vaultId).put(
@@ -47,6 +48,10 @@ export function useVaultPolicy() {
           effective: defaultVaultPolicy,
         };
       }
+
+      if (error) throw error;
+
+      if (!res.data) return null;
 
       const policy = convertPolicyFromCore(res.data);
       if (!policy) return null;

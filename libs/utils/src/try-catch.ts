@@ -1,14 +1,20 @@
+import { CoreError, CustomError } from "@utils/error";
+
+type AnyError = Error | CustomError | CoreError;
+
 type Success<T> = [T, undefined];
 type Failure<E> = [undefined, E];
-type Result<T, E = Error> = Success<T> | Failure<E>;
+type Result<T, E = AnyError> = Success<T> | Failure<E>;
 type MaybePromise<T> = T | Promise<T>;
 
-export function tryCatch<T, E = Error>(
+export function tryCatch<T, E = AnyError>(
   arg: () => Promise<T>,
 ): Promise<Result<T, E>>;
-export function tryCatch<T, E = Error>(arg: () => T): Result<T, E>;
-export function tryCatch<T, E = Error>(arg: Promise<T>): Promise<Result<T, E>>;
-export function tryCatch<T, E = Error>(
+export function tryCatch<T, E = AnyError>(arg: () => T): Result<T, E>;
+export function tryCatch<T, E = AnyError>(
+  arg: Promise<T>,
+): Promise<Result<T, E>>;
+export function tryCatch<T, E = AnyError>(
   arg: (() => MaybePromise<T>) | Promise<T>,
 ): Result<T, E> | Promise<Result<T, E>> {
   if (typeof arg === "function") {

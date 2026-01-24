@@ -4,8 +4,9 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CustomError } from "@utils/error";
+import { tryCatch } from "@utils/try-catch";
 import { toast } from "sonner";
 
 export function useStopMount() {
@@ -21,11 +22,11 @@ export function useStopMount() {
     mutationFn: async () => {
       if (!vaultId || !backup) throw new CustomError("MISSING_REQUIRED_VALUE");
 
-      const res = await vaultApi(vaultId).delete<{
-        code?: "INTERNAL";
-      }>(`/api/v1/mounts/${backup?.rootID}`);
+      const [, error] = await tryCatch(
+        vaultApi(vaultId).delete(`/api/v1/mounts/${backup?.rootID}`),
+      );
 
-      if (res.data.code === "INTERNAL")
+      if (error && "code" in error && error.code === "INTERNAL")
         return toast.error(t("title"), {
           description: t("description"),
         });

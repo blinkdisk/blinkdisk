@@ -20,3 +20,13 @@ export class CustomError extends Error {
     this.code = code;
   }
 }
+
+export class CoreError extends Error {
+  code?: string;
+
+  constructor({ code, message }: { code?: string; message: string }) {
+    super();
+    this.code = code;
+    this.message = message;
+  }
+}
