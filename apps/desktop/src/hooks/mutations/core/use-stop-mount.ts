@@ -26,10 +26,14 @@ export function useStopMount() {
         vaultApi(vaultId).delete(`/api/v1/mounts/${backup?.rootID}`),
       );
 
-      if (error && "code" in error && error.code === "INTERNAL")
-        return toast.error(t("title"), {
-          description: t("description"),
-        });
+      if (error) {
+        if ("code" in error && error.code === "INTERNAL")
+          return toast.error(t("title"), {
+            description: t("description"),
+          });
+
+        throw error;
+      }
     },
     onError: showErrorToast,
     onSuccess: async () => {
