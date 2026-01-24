@@ -25,7 +25,7 @@ export class CoreError extends Error {
   code?: string;
 
   constructor({ code, message }: { code?: string; message: string }) {
-    super();
+    super(message);
     this.code = code;
     this.message = message;
   }
