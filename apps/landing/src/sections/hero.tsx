@@ -74,6 +74,7 @@ export function Hero() {
       >
         <img
           src={`/screenshots/${dark ? "dark" : "light"}.png`}
+          alt="Screenshot of the BlinkDisk desktop app"
           className="w-content border shadow"
         />
         <div className="group absolute inset-0 flex items-center justify-center bg-opacity-0 transition-colors hover:bg-black/10">
