@@ -4,6 +4,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
+import { tryCatch } from "@utils/try-catch";
 
 export type CoreMountItem = {
   path: string;
@@ -19,11 +20,15 @@ export function useMount() {
   return useQuery({
     queryKey: queryKeys.directory.mount(backup?.rootID),
     queryFn: async () => {
-      const res = await vaultApi(vaultId).get<
-        CoreMountItem | { code: "NOT_FOUND" }
-      >(`/api/v1/mounts/${backup?.rootID}`);
+      const [res, error] = await tryCatch(
+        vaultApi(vaultId).get<CoreMountItem | { code: "NOT_FOUND" }>(
+          `/api/v1/mounts/${backup?.rootID}`,
+        ),
+      );
 
-      if ("code" in res.data && res.data.code == "NOT_FOUND") return null;
+      if (error && "code" in error && error.code == "NOT_FOUND") return null;
+      if (error) throw error;
+
       return res.data as CoreMountItem;
     },
     enabled: !!accountId && !!vaultId && !!backup && running,

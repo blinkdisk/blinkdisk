@@ -69,7 +69,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
           created = true;
         }
 
-        const [res, err] = await tryCatch(
+        const [res, error] = await tryCatch(
           window.electron.vault.create({
             vault: {
               id: vaultId,
@@ -85,11 +85,11 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
           }),
         );
 
-        if (err || res.error) {
+        if (error || res.error) {
           // Clean up vault if it was created
           if (created) await tryCatch(trpc.vault.delete.mutate({ vaultId }));
 
-          throw err || new Error(res.error?.toString());
+          throw error || new Error(res.error?.toString());
         }
       }
 
