@@ -1,9 +1,9 @@
 import { RemoteTooltip } from "@desktop/components/vaults/remote-tooltip";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { DropdownMenuItem, DropdownMenuItemProps } from "@ui/dropdown-menu";
 
 export function LocalDropdownMenuItem(props: DropdownMenuItemProps) {
-  const { remote } = useProfile();
+  const { remote } = useLocalProfile();
 
   if (remote)
     return (

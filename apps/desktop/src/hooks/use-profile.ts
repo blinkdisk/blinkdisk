@@ -1,15 +1,6 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
 
-declare global {
-  interface Window {
-    initializedProfile?: string;
-  }
-}
-
-const localHostName = window.electron.os.hostName();
-const localUserName = window.electron.os.userName();
-
 export type ProfileFilter = {
   host: string;
   userName: string;
@@ -46,13 +37,6 @@ export function useProfile() {
     [navigate],
   );
 
-  const remote = useMemo(
-    () =>
-      (!!userName && userName !== localUserName) ||
-      (!!hostName && hostName !== localHostName),
-    [userName, hostName],
-  );
-
   const profileFilter = useMemo(() => {
     if (!userName || !hostName) return null;
     return { userName, host: hostName };
@@ -61,11 +45,8 @@ export function useProfile() {
   return {
     userName,
     hostName,
-    localUserName,
-    localHostName,
     changeUserName,
     changeHostName,
     profileFilter,
-    remote,
   };
 }

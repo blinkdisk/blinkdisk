@@ -1,5 +1,6 @@
 import { VaultHome } from "@desktop/components/vaults/home";
 import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -10,12 +11,14 @@ export const Route = createFileRoute("/app/{-$vaultId}/{-$hostName}/")({
 
 function RouteComponent() {
   const { data: profiles } = useVaultProfiles();
-  const { hostName, localUserName } = useProfile();
+
+  const { localUserName } = useLocalProfile();
+  const { hostName } = useProfile();
 
   const navigate = Route.useNavigate();
 
   useEffect(() => {
-    if (!profiles || !hostName) return;
+    if (!profiles || !hostName || !localUserName) return;
 
     const profile = profiles.find((profile) => profile.hostName === hostName);
 

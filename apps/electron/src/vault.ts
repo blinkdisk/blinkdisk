@@ -113,12 +113,23 @@ export class Vault {
         continue;
       }
 
+      const localHostName = getHostName(vault.id);
+      const localUserName = getUserName(vault.id);
+
       const config = configs.find((config) =>
         vault.configLevel === "VAULT"
           ? config.level === "VAULT" && config.vaultId === vault.id
-          : // The cached configs are already filtered by the current
-            // userName and hostName, no need to check it here again.
-            config.level === "PROFILE" && config.vaultId === vault.id,
+          : config.level === "PROFILE" &&
+            config.vaultId === vault.id &&
+            // When upgrading to v1.0.2, the 2 new fields might
+            // still be missing in the config cache, as they
+            // were filtered on the server side before.
+            //
+            // TODO: Remove this check once everyone has upgraded.
+            (!config.hostName && !config.userName
+              ? true
+              : config.hostName === localHostName &&
+                config.userName === localUserName),
       )?.data;
 
       const password = getPasswordCache({ vaultId: vault.id });
@@ -243,6 +254,8 @@ export class Vault {
           userPolicy: payload.userPolicy,
           clientOptions: {
             description: payload.vault.name,
+            username: getUserName(payload.vault.id),
+            hostname: getHostName(payload.vault.id),
           },
           options: {
             uniqueId: btoa(payload.vault.id),
@@ -412,8 +425,8 @@ export class Vault {
       data: {
         clientOptions: {
           description: this.name,
-          username: getUserName(),
-          hostname: getHostName(),
+          username: getUserName(this.id),
+          hostname: getHostName(this.id),
         },
         storage: {
           type: Vault.mapProviderType(this.provider!),

@@ -25,7 +25,7 @@ export function useAddVaultPasswordForm({
         // We need to check the password is valid at this point to prevent
         // the config from being encrypted with a different password.
 
-        const configs = await trpc.config.list.query({});
+        const configs = await trpc.config.list.query();
 
         // Find any config that is connected to this vault, it doesn't have
         // to be the exact userName or hostName as all share the same password.

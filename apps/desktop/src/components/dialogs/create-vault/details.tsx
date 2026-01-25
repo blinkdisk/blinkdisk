@@ -1,6 +1,5 @@
 import { ProviderType } from "@config/providers";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
@@ -23,7 +22,6 @@ export function CreateVaultDetails({
 }: CreateVaultDetailsProps) {
   const { t } = useAppTranslation("vault.createDialog.details");
   const { dark } = useTheme();
-  const { localUserName, localHostName } = useProfile();
 
   const navigate = useNavigate();
 
@@ -35,8 +33,8 @@ export function CreateVaultDetails({
         to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
         params: {
           vaultId: res.vaultId,
-          hostName: localHostName,
-          userName: localUserName,
+          hostName: window.electron.os.hostName(res.vaultId),
+          userName: window.electron.os.userName(res.vaultId),
         },
       });
 

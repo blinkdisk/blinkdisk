@@ -1,4 +1,5 @@
 import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Badge } from "@ui/badge";
@@ -21,7 +22,8 @@ export function SidebarHostNameSelect({
 }: SidebarHostNameSelectProps) {
   const { t } = useAppTranslation("sidebar.selectHostName");
 
-  const { hostName, changeHostName, localHostName } = useProfile();
+  const { localHostName } = useLocalProfile();
+  const { hostName, changeHostName } = useProfile();
 
   const { data: profiles } = useVaultProfiles();
 
@@ -46,7 +48,7 @@ export function SidebarHostNameSelect({
         {profiles?.map(({ hostName }) => (
           <SelectItem key={hostName} value={hostName}>
             {hostName}
-            {hostName !== localHostName ? (
+            {localHostName && hostName !== localHostName ? (
               <Badge variant="subtle" className="ml-1.5">
                 {t("remote")}
               </Badge>

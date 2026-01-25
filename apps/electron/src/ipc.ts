@@ -23,12 +23,18 @@ import { basename, dirname, join } from "node:path";
 ipcMain.on("window.console", () => window?.webContents.toggleDevTools());
 ipcMain.on("window.reload", () => window?.reload());
 ipcMain.on("store.get", (e, key) => (e.returnValue = store.get(key)));
-ipcMain.on("os.hostName", (e) => (e.returnValue = getHostName()));
-ipcMain.on("os.userName", (e) => (e.returnValue = getUserName()));
+ipcMain.on(
+  "os.hostName",
+  (e, vaultId) => (e.returnValue = getHostName(vaultId)),
+);
+ipcMain.on(
+  "os.userName",
+  (e, vaultId) => (e.returnValue = getUserName(vaultId)),
+);
 ipcMain.on("os.platform", (e) => (e.returnValue = platform()));
 
 ipcMain.handle("store.set", (_, key, value) => store.set(key, value));
-ipcMain.handle("store.clear", (_) => store.clear());
+ipcMain.handle("store.clear", () => store.clear());
 ipcMain.handle("path.basename", (_, path) => basename(path));
 ipcMain.handle("path.dirname", (_, path) => dirname(path));
 ipcMain.handle("dialog.open", (_, options) => dialog.showOpenDialog(options));
@@ -68,5 +74,5 @@ ipcMain.handle("shell.open.browser", (_, url) => openBrowser(url));
 ipcMain.handle("fs.folderSize", (_, path) => folderSize(path));
 ipcMain.handle("fs.isDirectory", (_, path) => isDirectory(path));
 ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
-ipcMain.handle("update.status", (_) => getUpdateStatus());
-ipcMain.handle("update.install", (_) => installUpdate());
+ipcMain.handle("update.status", () => getUpdateStatus());
+ipcMain.handle("update.install", () => installUpdate());

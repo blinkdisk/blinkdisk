@@ -50,12 +50,7 @@ export function useQueryKey() {
       },
       config: {
         all: [accountId, "config"],
-        list: (hostName?: string, userName?: string) => [
-          ...keys.config.all,
-          "list",
-          hostName,
-          userName,
-        ],
+        list: () => [...keys.config.all, "list"],
       },
       directory: {
         all: ["directory"],

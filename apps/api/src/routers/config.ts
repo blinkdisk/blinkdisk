@@ -1,12 +1,12 @@
-import { CustomError } from "@utils/error";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
-import { ZAddConfig, ZListConfigs } from "@schemas/config";
+import { ZAddConfig } from "@schemas/config";
 import { ZVaultEncryptedConfigType } from "@schemas/shared/vault";
+import { CustomError } from "@utils/error";
 import { generateId } from "@utils/id";
 
 export const configRouter = router({
-  list: authedProcedure.input(ZListConfigs).query(async ({ input, ctx }) => {
+  list: authedProcedure.query(async ({ ctx }) => {
     let configs = await ctx.db
       .selectFrom("Config")
       .innerJoin("Vault", "Vault.id", "Config.vaultId")
@@ -16,27 +16,11 @@ export const configRouter = router({
         "Config.data",
         "Config.vaultId",
         "Config.accountId",
+        "Config.userName",
+        "Config.hostName",
       ])
       .where("Vault.status", "=", "ACTIVE")
       .where("Config.accountId", "=", ctx.account?.id!)
-      .where(({ or, and, eb }) =>
-        or([
-          eb("Config.level", "=", "VAULT"),
-          ...(input.userName || input.hostName
-            ? [
-                and([
-                  eb("Config.level", "=", "PROFILE"),
-                  ...(input.userName
-                    ? [eb("Config.userName", "=", input.userName)]
-                    : []),
-                  ...(input.hostName
-                    ? [eb("Config.hostName", "=", input.hostName)]
-                    : []),
-                ]),
-              ]
-            : [eb("Config.level", "=", "PROFILE")]),
-        ]),
-      )
       .execute();
 
     return configs as (Omit<(typeof configs)[number], "data"> & {

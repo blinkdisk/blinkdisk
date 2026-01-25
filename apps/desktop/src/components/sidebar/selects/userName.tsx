@@ -1,4 +1,5 @@
 import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Badge } from "@ui/badge";
@@ -23,7 +24,9 @@ export function SidebarUserNameSelect({
   const { t } = useAppTranslation("sidebar.selectUserName");
 
   const { data: profiles } = useVaultProfiles();
-  const { localUserName, userName, hostName, changeUserName } = useProfile();
+
+  const { localUserName } = useLocalProfile();
+  const { userName, hostName, changeUserName } = useProfile();
 
   const userNames = useMemo(
     () => profiles?.find((profile) => profile.hostName === hostName)?.userNames,
@@ -51,7 +54,7 @@ export function SidebarUserNameSelect({
         {userNames?.map(({ userName }) => (
           <SelectItem key={userName} value={userName}>
             {userName}
-            {userName !== localUserName ? (
+            {localUserName && userName !== localUserName ? (
               <Badge variant="subtle" className="ml-1.5">
                 {t("remote")}
               </Badge>

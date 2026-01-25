@@ -1,5 +1,4 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
@@ -16,7 +15,6 @@ type Profile = {
 
 export function useVaultProfiles() {
   const { running } = useVaultStatus();
-  const { localHostName, localUserName } = useProfile();
   const { queryKeys, accountId } = useQueryKey();
   const { vaultId } = useVaultId();
 
@@ -65,6 +63,9 @@ export function useVaultProfiles() {
           });
         }
       }
+
+      const localHostName = window.electron.os.hostName(vaultId);
+      const localUserName = window.electron.os.userName(vaultId);
 
       const localProfileIndex = profiles.findIndex(
         (profile) => profile.hostName === localHostName,
