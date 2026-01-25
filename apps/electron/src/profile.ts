@@ -27,7 +27,6 @@ export function getHostName(vaultId: string) {
 
 function parseConfig(vaultId: string) {
   const path = resolve(globalConfigDirectory(), `${vaultId}.config`);
-  if (vaultId === "vlt_QOcXWZrQKW2UIwKNV5lin") console.log(path);
   if (existsSync(path)) {
     const raw = readFileSync(path, "utf8");
     const config = JSON.parse(raw);
