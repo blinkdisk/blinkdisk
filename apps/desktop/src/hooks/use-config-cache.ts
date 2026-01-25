@@ -19,6 +19,8 @@ export function useConfigCache() {
         data: config.data,
         accountId: config.accountId,
         vaultId: config.vaultId,
+        hostName: config.hostName,
+        userName: config.userName,
       })),
     });
   }, [accountId, configs, isLoading, setVaults]);

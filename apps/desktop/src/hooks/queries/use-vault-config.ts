@@ -19,12 +19,16 @@ export function useVaultConfig() {
 
       if (!vault || !configs || !password) return null;
 
+      const localHostName = window.electron.os.hostName(vault.id);
+      const localUserName = window.electron.os.userName(vault.id);
+
       const config = configs.find((config) =>
         vault.configLevel === "VAULT"
           ? config.level === "VAULT" && config.vaultId === vault.id
-          : // The cached configs are already filtered by the current
-            // userName and hostName, no need to check it here again.
-            config.level === "PROFILE" && config.vaultId === vault.id,
+          : config.level === "PROFILE" &&
+            config.vaultId === vault.id &&
+            config.hostName === localHostName &&
+            config.userName === localUserName,
       );
 
       if (!config) return null;

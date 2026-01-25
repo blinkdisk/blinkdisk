@@ -72,8 +72,10 @@ const api = {
   },
   zoom: (level: number) => webFrame.setZoomFactor(level),
   os: {
-    hostName: () => ipcRenderer.sendSync("os.hostName") as string,
-    userName: () => ipcRenderer.sendSync("os.userName") as string,
+    hostName: (vaultId?: string) =>
+      ipcRenderer.sendSync("os.hostName", vaultId) as string,
+    userName: (vaultId?: string) =>
+      ipcRenderer.sendSync("os.userName", vaultId) as string,
     platform: () => ipcRenderer.sendSync("os.platform") as string,
   },
   path: {

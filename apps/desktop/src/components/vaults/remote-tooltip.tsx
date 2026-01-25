@@ -1,4 +1,4 @@
-import { useProfile } from "@desktop/hooks/use-profile";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { LockIcon } from "lucide-react";
@@ -9,7 +9,7 @@ type RemoteTooltipProps = {
 
 export function RemoteTooltip({ children }: RemoteTooltipProps) {
   const { t } = useAppTranslation("vault.remoteTooltip");
-  const { remote } = useProfile();
+  const { remote } = useLocalProfile();
 
   if (!remote) return children;
   return (

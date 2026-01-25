@@ -1,4 +1,3 @@
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
@@ -9,7 +8,6 @@ export function useAddVaultConfig(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
-  const { localUserName, localHostName } = useProfile();
 
   return useMutation({
     mutationKey: ["config", "add"],
@@ -26,8 +24,8 @@ export function useAddVaultConfig(onSuccess?: () => void) {
 
       return await trpc.config.add.mutate({
         ...values,
-        userName: localUserName,
-        hostName: localHostName,
+        userName: window.electron.os.userName(values.vaultId),
+        hostName: window.electron.os.hostName(values.vaultId),
         config: await window.electron.vault.config.encrypt({
           password: password,
           config: values.config,

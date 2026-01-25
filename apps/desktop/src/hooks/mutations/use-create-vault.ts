@@ -1,5 +1,4 @@
 import { defaultVaultOptions } from "@config/vault";
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
@@ -18,7 +17,6 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
-  const { localUserName, localHostName } = useProfile();
 
   return useMutation({
     mutationKey: ["vault", "create"],
@@ -49,8 +47,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         name: values.name,
         provider: values.provider,
         config: encryptedConfig,
-        userName: localUserName,
-        hostName: localHostName,
+        userName: window.electron.os.userName(vaultId),
+        hostName: window.electron.os.hostName(vaultId),
         ...(validation.uniqueID
           ? {
               coreId: atob(validation.uniqueID || ""),
