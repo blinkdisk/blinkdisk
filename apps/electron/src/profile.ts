@@ -17,7 +17,7 @@ export function getUserName(vaultId: string) {
 export function getHostName(vaultId: string) {
   try {
     const config = parseConfig(vaultId);
-    if (config?.username) return config.hostname;
+    if (config?.hostname) return config.hostname;
 
     return getCurrentHostName();
   } catch {
