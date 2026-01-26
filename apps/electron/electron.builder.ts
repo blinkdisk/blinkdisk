@@ -32,6 +32,11 @@ export default {
   win: {
     appId,
     target: ["nsis"],
+    forceCodeSigning: true,
+    signtoolOptions: {
+      certificateSha1: process.env.CERTUM_CERTIFICATE_SHA1,
+      timeStampServer: process.env.CERTUM_TIMESTAMP_SERVER,
+    },
     extraResources: [
       {
         from: "../core/dist/blinkdisk_windows_amd64",
