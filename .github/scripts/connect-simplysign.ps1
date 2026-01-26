@@ -145,11 +145,6 @@ function Get-TotpCode {
     [Totp]::Now($Secret, $Digits, $Period, $Algorithm)
 }
 
-# Generate current TOTP code
-$otp = Get-TotpCode -Secret $Base32 -Digits $Digits -Period $Period -Algorithm $Algorithm
-Write-Host "Generated TOTP using $Algorithm algorithm"
-Write-Host ""
-
 # Launch SimplySign Desktop (registry should auto-open login dialog)
 Write-Host "Launching SimplySign Desktop..."
 Write-Host "Registry pre-configuration should auto-open login dialog"
@@ -204,6 +199,12 @@ $wshell.SendKeys($UserId)
 Start-Sleep -Milliseconds 200
 $wshell.SendKeys("{TAB}")
 Start-Sleep -Milliseconds 200
+
+# Generate current TOTP code
+$otp = Get-TotpCode -Secret $Base32 -Digits $Digits -Period $Period -Algorithm $Algorithm
+Write-Host "Generated TOTP using $Algorithm algorithm"
+Write-Host ""
+
 $wshell.SendKeys($otp)
 Start-Sleep -Milliseconds 200
 $wshell.SendKeys("{ENTER}")

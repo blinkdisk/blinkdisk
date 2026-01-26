@@ -45,6 +45,7 @@ export default async function (configuration) {
 
   const signToolArgs = [
     "sign",
+    "/debug",
     "/sha1",
     sha1,
     "/fd",
