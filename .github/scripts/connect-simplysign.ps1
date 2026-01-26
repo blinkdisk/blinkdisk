@@ -145,6 +145,12 @@ function Get-TotpCode {
     [Totp]::Now($Secret, $Digits, $Period, $Algorithm)
 }
 
+if ($existing = Get-Process -Name "SimplySignDesktop" -ea Ignore) {
+   Write-Host "Killing existing SimplySign Desktop process..."
+   k$proc.Kill()
+}
+
+
 # Launch SimplySign Desktop (registry should auto-open login dialog)
 Write-Host "Launching SimplySign Desktop..."
 Write-Host "Registry pre-configuration should auto-open login dialog"
