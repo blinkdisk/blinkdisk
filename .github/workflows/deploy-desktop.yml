@@ -103,6 +103,9 @@ jobs:
           # Authenticate with Certum using our enhanced script
           powershell -ExecutionPolicy Bypass -File "./.github/scripts/connect-simplysign.ps1"
 
+          echo "=== DEBUGGING AUTHENTICATION RESULT ==="
+          powershell -ExecutionPolicy Bypass -File "./.github/scripts/debug-simplysign.ps1"
+
           echo "Authentication completed"
         shell: bash
 
