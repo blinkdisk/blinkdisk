@@ -15,6 +15,7 @@
     "dev": "concurrently \"pnpm:compile:dev\" \"pnpm:dev:electron\"",
     "dev:electron": "electronmon ./build/index.js $ELECTRON_EXTRA_ARGS",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
     "compile:dev": "node esbuild.config.mjs development",
     "compile:prod": "node esbuild.config.mjs production",
     "prebuild": "pnpm build:frontend && tsc --noEmit && pnpm compile:prod compile",

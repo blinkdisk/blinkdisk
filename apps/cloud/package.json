@@ -6,7 +6,8 @@
     "deploy": "tsc --noEmit && wrangler deploy --minify",
     "typecheck": "tsc --noEmit",
     "typegen": "wrangler types --env-interface CloudflareBindings",
-    "env:update": "node env.js && pnpm run typegen"
+    "env:update": "node env.js && pnpm run typegen",
+    "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.886.0",
