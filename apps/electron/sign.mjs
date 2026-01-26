@@ -49,6 +49,8 @@ export default async function (configuration) {
     sha1,
     "/fd",
     configuration.hash,
+    "/td",
+    "SHA256",
     "/tr",
     process.env.CERTUM_TIMESTAMP_SERVER,
   ];
