@@ -2,6 +2,7 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 
 import { spawnSync } from "child_process";
+import fs from "fs";
 import path from "path";
 
 function getSignToolPath() {
@@ -76,7 +77,7 @@ export default async function (configuration) {
     });
 
     if (!result.error && 0 === result.status) {
-      console.log("Signing of", configuration.path, " succeeded");
+      console.log("Signing of ", configuration.path, " succeeded");
       return;
     } else {
       console.log(
@@ -88,5 +89,5 @@ export default async function (configuration) {
     }
   }
 
-  throw Exception("Failed to sign " + configuration.path);
+  throw new Error("Failed to sign " + configuration.path);
 }
