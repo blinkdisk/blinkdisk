@@ -16,6 +16,17 @@ else
   exit 1
 fi
 
+EXPECTED_CHECKSUM="03944c5baed6b426dddee5462414cafc3ead12e387e76d75cd1a4c1f83e9b6e7"
+ACTUAL_CHECKSUM=$(sha256sum "$CERTUM_INSTALLER" | awk '{print $1}')
+
+if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then
+  echo "❌ Checksum verification failed"
+  echo "Expected: $EXPECTED_CHECKSUM"
+  echo "Actual:   $ACTUAL_CHECKSUM"
+  exit 1
+fi
+echo "✅ Checksum verified"
+
 # Install with proven method (matching successful test)
 echo "Installing SimplySign Desktop..."
 echo "Full command: msiexec /i \"$CERTUM_INSTALLER\" /quiet /norestart /l*v install.log ALLUSERS=1 REBOOT=ReallySuppress"
