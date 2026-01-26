@@ -78,6 +78,92 @@ jobs:
         run: |
           pnpm install
 
+      - name: Setup certum
+        if: ${{ contains(matrix.os, 'windows') }}
+        env:
+          CERTUM_OTP_URI: ${{ secrets.CERTUM_OTP_URI }}
+          CERTUM_USERNAME: ${{ secrets.CERTUM_USERNAME }}
+        run: |
+          echo "=== SETTING UP CERTUM CODE SIGNING FOR WINDOWS ==="
+          echo "Installing SimplySign Desktop and configuring for automatic authentication"
+
+          # Install SimplySign Desktop
+          chmod +x ./.github/scripts/install-simplysign.sh
+          ./.github/scripts/install-simplysign.sh
+
+          # Configure registry for auto-login dialog
+          echo "Configuring registry for automatic login dialog..."
+          powershell -ExecutionPolicy Bypass -File "./.github/scripts/configure-simplysign.ps1"
+
+          echo "Certum signing environment ready"
+
+          echo "=== CERTUM AUTHENTICATION ==="
+          echo "Authenticating with Certum cloud certificate using TOTP"
+
+          # Authenticate with Certum using our enhanced script
+          powershell -ExecutionPolicy Bypass -File "./.github/scripts/connect-simplysign.ps1"
+
+          echo "Authentication completed"
+        shell: bash
+
+      - name: Verify certificate
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: |
+          echo "=== CERTIFICATE VERIFICATION AND WINDOWS BINARY SIGNING ==="
+          echo "Allowing connection to stabilize..."
+          sleep 10
+
+          echo "Comprehensive certificate availability check..."
+          echo ""
+
+          echo "=== Windows Certificate Store Analysis ==="
+          powershell -Command "
+            Write-Host 'Current User Personal Store:'
+            Get-ChildItem -Path 'Cert:\\CurrentUser\\My' -ErrorAction SilentlyContinue |
+              Select-Object Subject, Issuer, Thumbprint, HasPrivateKey, NotAfter |
+              Format-Table -AutoSize
+
+            Write-Host 'Local Machine Personal Store:'
+            Get-ChildItem -Path 'Cert:\\LocalMachine\\My' -ErrorAction SilentlyContinue |
+              Select-Object Subject, Issuer, Thumbprint, HasPrivateKey, NotAfter |
+              Format-Table -AutoSize
+
+            Write-Host 'Searching for Certum-related certificates:'
+            Get-ChildItem -Path 'Cert:\\CurrentUser\\*','Cert:\\LocalMachine\\*' -Recurse -ErrorAction SilentlyContinue |
+              Where-Object { \$_.Subject -like '*Certum*' -or \$_.Issuer -like '*Certum*' -or \$_.Subject -like '*Code Signing*' } |
+              Select-Object Subject, Issuer, Thumbprint, HasPrivateKey, NotAfter |
+              Format-Table -AutoSize
+
+            Write-Host 'Certificates with Code Signing capability:'
+            Get-ChildItem -Path 'Cert:\\CurrentUser\\My','Cert:\\LocalMachine\\My' -ErrorAction SilentlyContinue |
+              Where-Object { \$_.EnhancedKeyUsageList -like '*Code Signing*' } |
+              Select-Object Subject, Issuer, Thumbprint, HasPrivateKey, NotAfter |
+              Format-Table -AutoSize
+          "
+
+          echo ""
+          echo "=== PKCS#11 Library Check ==="
+          if [ -f "/c/Windows/System32/SimplySignPKCS.dll" ]; then
+            echo "PKCS#11 library present: /c/Windows/System32/SimplySignPKCS.dll"
+            ls -la "/c/Windows/System32/SimplySignPKCS.dll"
+          else
+            echo "PKCS#11 library not found"
+          fi
+
+          echo ""
+          echo "=== SimplySign Desktop Status ==="
+          powershell -Command "
+            Write-Host 'SimplySign Desktop process status:'
+            Get-Process -Name '*SimplySign*' -ErrorAction SilentlyContinue |
+              Select-Object Name, Id, MainWindowTitle, Responding |
+              Format-Table -AutoSize
+          "
+
+          echo ""
+          echo "Certificate debugging completed."
+          echo ""
+        shell: bash
+
       - name: Run prebuild
         working-directory: apps/electron
         run: pnpm run prebuild
@@ -86,6 +172,8 @@ jobs:
         working-directory: apps/electron
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CERTUM_CERTIFICATE_SHA1: ${{ secrets.CERTUM_CERTIFICATE_SHA1 }}
+          CERTUM_TIMESTAMP_SERVER: ${{ vars.CERTUM_TIMESTAMP_SERVER }}
         if: ${{ contains(matrix.os, 'windows') }}
         run: pnpm run build:windows
 
@@ -108,17 +196,17 @@ jobs:
           echo "$APPLE_API_SECRET_KEY" > /tmp/key.p8
           APPLE_API_KEY="/tmp/key.p8" pnpm run build:macos
 
-  publish-release:
-    name: Publish release
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+  # publish-release:
+  #   name: Publish release
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Publish release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release edit ${{ github.ref_name }} --draft=false
+  #     - name: Publish release
+  #       env:
+  #         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: gh release edit ${{ github.ref_name }} --draft=false
