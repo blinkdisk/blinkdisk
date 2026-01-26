@@ -47,8 +47,8 @@ try {
     $q = @{}
     foreach ($part in $uri.Query.TrimStart('?') -split '&') {
         $kv = $part -split '=', 2
-        if ($kv.Count -eq 2) { 
-            $q[$kv[0]] = [Uri]::UnescapeDataString($kv[1]) 
+        if ($kv.Count -eq 2) {
+            $q[$kv[0]] = [Uri]::UnescapeDataString($kv[1])
         }
     }
 }
@@ -147,7 +147,7 @@ function Get-TotpCode {
 
 # Generate current TOTP code
 $otp = Get-TotpCode -Secret $Base32 -Digits $Digits -Period $Period -Algorithm $Algorithm
-Write-Host "Generated TOTP: $otp (using $Algorithm algorithm)"
+Write-Host "Generated TOTP using $Algorithm algorithm"
 Write-Host ""
 
 # Launch SimplySign Desktop (registry should auto-open login dialog)
