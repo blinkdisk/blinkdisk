@@ -2,6 +2,30 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 
 import { spawnSync } from "child_process";
+import path from "path";
+
+function getSignToolPath() {
+  const programFiles86 =
+    process.env["ProgramFiles(x86)"] || "C:\\Program Files (x86)";
+
+  const kitsRoot = path.join(programFiles86, "Windows Kits", "10", "bin");
+
+  if (!fs.existsSync(kitsRoot)) {
+    throw new Error(`Windows Kits directory not found at: ${kitsRoot}`);
+  }
+
+  const folders = fs
+    .readdirSync(kitsRoot)
+    .filter((folder) => folder.startsWith("10."));
+
+  if (folders.length === 0)
+    throw new Error(
+      "No Windows 10 SDK versions found in Windows Kits directory.",
+    );
+
+  const latestVersion = folders.sort().reverse()[0];
+  return path.join(kitsRoot, latestVersion, "x64", "signtool.exe");
+}
 
 export default async function (configuration) {
   if (process.platform !== "win32") {
@@ -10,14 +34,13 @@ export default async function (configuration) {
   }
 
   const sha1 = process.env.CERTUM_CERTIFICATE_SHA1;
-  if (!sha1)
-    throw Exception(
-      "Failed to sign" +
-        configuration.path +
-        " because CERTUM_CERTIFICATE_SHA1 is not set",
-    );
+  if (!sha1) {
+    console.log("Skipping signing because CERTUM_CERTIFICATE_SHA1 is not set");
+    return;
+  }
 
-  const signTool = process.env.WINDOWS_SIGN_TOOL || "signtool.exe";
+  const signTool = getSignToolPath();
+  console.log("Found signtool.exe at", signTool);
 
   const signToolArgs = [
     "sign",

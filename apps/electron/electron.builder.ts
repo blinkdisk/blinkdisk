@@ -32,7 +32,6 @@ export default {
   win: {
     appId,
     target: ["nsis"],
-    forceCodeSigning: true,
     signtoolOptions: {
       sign: "./sign.mjs",
       signingHashAlgorithms: ["sha256"],
