@@ -34,8 +34,8 @@ export default {
     target: ["nsis"],
     forceCodeSigning: true,
     signtoolOptions: {
-      certificateSha1: process.env.CERTUM_CERTIFICATE_SHA1,
-      timeStampServer: process.env.CERTUM_TIMESTAMP_SERVER,
+      sign: "./sign.mjs",
+      signingHashAlgorithms: ["sha256"],
     },
     extraResources: [
       {
