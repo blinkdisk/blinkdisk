@@ -147,7 +147,7 @@ function Get-TotpCode {
 
 if ($existing = Get-Process -Name "SimplySignDesktop" -ea Ignore) {
    Write-Host "Killing existing SimplySign Desktop process..."
-   k$proc.Kill()
+   $existing.Kill()
 }
 
 
