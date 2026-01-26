@@ -38,46 +38,6 @@ jobs:
         run: "choco install --no-progress -y make curl"
         if: ${{ contains(matrix.os, 'windows') }}
 
-      - name: Set up go
-        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
-        with:
-          go-version-file: "apps/core/go.mod"
-          cache-dependency-path: |
-            apps/core/go.sum
-          check-latest: true
-
-      - name: Install macos certificates
-        run: make macos-certificates
-        working-directory: apps/core
-        env:
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEYCHAIN: ${{ secrets.CSC_KEYCHAIN }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
-        if: ${{ contains(matrix.os, 'macos') }}
-
-      - name: Set up core
-        working-directory: apps/core
-        run: make -j4 ci-setup
-
-      - name: Build core
-        working-directory: apps/core
-        timeout-minutes: 40
-        run: make ci-build
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v5.0.0
-
-      - name: Set up node
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: |
-          pnpm install
-
       - name: Setup certum
         if: ${{ contains(matrix.os, 'windows') }}
         env:
@@ -166,6 +126,46 @@ jobs:
           echo "Certificate debugging completed."
           echo ""
         shell: bash
+
+      - name: Set up go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: "apps/core/go.mod"
+          cache-dependency-path: |
+            apps/core/go.sum
+          check-latest: true
+
+      - name: Install macos certificates
+        run: make macos-certificates
+        working-directory: apps/core
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEYCHAIN: ${{ secrets.CSC_KEYCHAIN }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        if: ${{ contains(matrix.os, 'macos') }}
+
+      - name: Set up core
+        working-directory: apps/core
+        run: make -j4 ci-setup
+
+      - name: Build core
+        working-directory: apps/core
+        timeout-minutes: 40
+        run: make ci-build
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v5.0.0
+
+      - name: Set up node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: |
+          pnpm install
 
       - name: Run prebuild
         working-directory: apps/electron
