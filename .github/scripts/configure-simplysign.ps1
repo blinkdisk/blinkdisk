@@ -223,7 +223,7 @@ try {
         Write-Host "Key automation settings enabled:"
         Write-Host "  ShowLoginDialogOnStart = 1 (Login dialog will appear automatically)"
         Write-Host "  ShowLoginDialogOnAppRequest = 1 (Dialog appears when apps request access)"
-        Write-Host "  RememberLastUserName = 1 (Username persistence for efficiency)"
+        Write-Host "  RememberLastUserName = 0 (Username persistence for efficiency)"
         Write-Host ""
         Write-Host "Next steps:"
         Write-Host "1. Launch SimplySign Desktop"
