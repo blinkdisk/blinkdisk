@@ -82,18 +82,6 @@ jobs:
         timeout-minutes: 40
         run: make ci-build
 
-      - name: Sign core
-        if: ${{ contains(matrix.os, 'windows') }}
-        shell: pwsh
-        env:
-          CERTUM_CERTIFICATE_SHA1: ${{ secrets.CERTUM_CERTIFICATE_SHA1 }}
-          CERTUM_TIMESTAMP_SERVER: ${{ vars.CERTUM_TIMESTAMP_SERVER }}
-        run: |
-          $basePath = "C:\Program Files (x86)\Windows Kits\10\bin"
-          $preferredVersion = "x64"
-          $signtool = (Get-ChildItem -Path $basePath -Recurse -Filter "signtool.exe" -File | Where-Object { $_.FullName -like "*\$preferredVersion\*" })[-1] | Select-Object -ExpandProperty FullName
-          & $signtool sign /sha1 $env:CERTUM_CERTIFICATE_SHA1 /fd sha256 /td SHA256 /tr $env:CERTUM_TIMESTAMP_SERVER /v apps/core/dist/blinkdisk_windows_amd64/blinkdisk.exe
-
       - name: Install pnpm
         uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v5.0.0
 
