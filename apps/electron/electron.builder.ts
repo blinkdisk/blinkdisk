@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 import { Configuration } from "electron-builder";
 
 const appId = "com.blinkdisk.app";
@@ -32,10 +33,13 @@ export default {
   win: {
     appId,
     target: ["nsis"],
-    signtoolOptions: {
-      sign: "./sign.mjs",
-      signingHashAlgorithms: ["sha256"],
-    },
+    ...(process.env.CERTUM_CERTIFICATE_SHA1 && {
+      signtoolOptions: {
+        signingHashAlgorithms: ["sha256"],
+        certificateSha1: process.env.CERTUM_CERTIFICATE_SHA1,
+        timeStampServer: process.env.CERTUM_TIMESTAMP_SERVER,
+      },
+    }),
     extraResources: [
       {
         from: "../core/dist/blinkdisk_windows_amd64",
