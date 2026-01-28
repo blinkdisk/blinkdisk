@@ -95,7 +95,7 @@ export function SmartScreen() {
               </div>
               <div className="flex flex-col">
                 <span>BlinkDisk-Windows.exe</span>
-                <span>Unknown publisher</span>
+                <span>AT, Vorarlberg, Feldkirch, Open Source Developer, "Open Source Developer, Paul Köck" </span>
               </div>
             </div>
           ) : null}
