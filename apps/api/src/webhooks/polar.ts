@@ -114,7 +114,7 @@ export async function polarWebhook(
             });
 
             await posthog({
-              distinctId: account?.id!,
+              distinctId: account.id,
               event: "subscription_start",
               properties: posthogProperties,
             });
@@ -140,8 +140,6 @@ export async function polarWebhook(
 
         subscriptionId = previous.id;
         accountId = previous.accountId;
-
-        subscription.currentPeriodEnd;
 
         const endsAt = ["canceled", "unpaid", "incomplete_expired"].includes(
           subscription.status,
@@ -199,15 +197,17 @@ export async function polarWebhook(
         if (event.type === "subscription.canceled") {
           c.executionCtx.waitUntil(
             (async () => {
+              if (!account) return;
+
               await logsnag({
                 icon: "❌",
                 title: "Subscription canceled",
-                description: `${formatSubscriptionEn(plan, price)} subscription canceled by ${account?.email}.`,
+                description: `${formatSubscriptionEn(plan, price)} subscription canceled by ${account.email}.`,
                 channel: "subscriptions",
               });
 
               await posthog({
-                distinctId: account?.id!,
+                distinctId: account.id,
                 event: "subscription_cancel",
                 properties: posthogProperties,
               });
@@ -216,6 +216,8 @@ export async function polarWebhook(
         } else if (event.type === "subscription.uncanceled") {
           c.executionCtx.waitUntil(
             (async () => {
+              if (!account) return;
+
               await logsnag({
                 icon: "❤️‍🩹",
                 title: "Subscription resumed",
@@ -224,7 +226,7 @@ export async function polarWebhook(
               });
 
               await posthog({
-                distinctId: account?.id!,
+                distinctId: account.id,
                 event: "subscription_resume",
                 properties: posthogProperties,
               });

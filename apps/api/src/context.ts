@@ -18,7 +18,7 @@ export const createContext = async (
   const waitUntil = c.executionCtx.waitUntil.bind(c.executionCtx);
 
   return {
-    account: session?.user,
+    account: session?.user as NonNullable<typeof session>["user"],
     db: c.get("db"),
     waitUntil,
     req: c.req,

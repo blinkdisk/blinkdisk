@@ -20,10 +20,10 @@ export async function pickS3Endpoint(env: Cloudflare.Env) {
 
   if (!res) return env.CLOUD_S3_ENDPOINT;
 
-  let colo = res.match(/^colo=(.+)/m)?.[1] as keyof typeof coloServerMapping;
+  const colo = res.match(/^colo=(.+)/m)?.[1] as keyof typeof coloServerMapping;
   if (!colo) return env.CLOUD_S3_ENDPOINT;
 
-  let server = coloServerMapping[colo];
+  const server = coloServerMapping[colo];
   if (!server) return env.CLOUD_S3_ENDPOINT;
 
   const override = env[`CLOUD_S3_ENDPOINT_${server}`];

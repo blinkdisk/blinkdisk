@@ -33,7 +33,7 @@ export default {
       if (vaultId.startsWith("strg_"))
         vaultId = vaultId.replace(/^strg_/, "vlt_");
 
-      let stub = env.VAULT.getByName(vaultId);
+      const stub = env.VAULT.getByName(vaultId);
       return stub.fetch(request);
     }
 

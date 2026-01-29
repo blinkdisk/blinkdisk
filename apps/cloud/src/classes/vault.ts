@@ -31,7 +31,8 @@ export class Vault extends DurableObject<Cloudflare.Env> {
     this.rateLimit = env.RATE_LIMIT;
 
     this.ctx.getWebSockets().forEach((ws) => {
-      let attachment = ws.deserializeAttachment();
+      const attachment = ws.deserializeAttachment();
+
       if (attachment) {
         this.sessions.set(ws, { ...attachment });
         this.id = attachment?.vaultId;

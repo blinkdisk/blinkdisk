@@ -7,6 +7,7 @@
     "DATABASE_URL",
     "LANDING_URL",
     "DESKTOP_URL",
+    "CLOUD_URL",
     "POSTHOG_API_HOST",
     "POSTHOG_LANDING_KEY",
     "POSTHOG_DESKTOP_KEY",
@@ -26,7 +27,8 @@
     "EMAIL_DOMAIN",
     "SMTP_URL",
     "PLUNK_URL",
-    "PLUNK_SECRET_KEY"
+    "PLUNK_SECRET_KEY",
+    "GITHUB_REF_NAME"
   ],
   "tasks": {
     "build": {
