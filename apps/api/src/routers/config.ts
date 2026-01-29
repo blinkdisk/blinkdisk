@@ -7,7 +7,7 @@ import { generateId } from "@utils/id";
 
 export const configRouter = router({
   list: authedProcedure.query(async ({ ctx }) => {
-    let configs = await ctx.db
+    const configs = await ctx.db
       .selectFrom("Config")
       .innerJoin("Vault", "Vault.id", "Config.vaultId")
       .select([
@@ -20,7 +20,7 @@ export const configRouter = router({
         "Config.hostName",
       ])
       .where("Vault.status", "=", "ACTIVE")
-      .where("Config.accountId", "=", ctx.account?.id!)
+      .where("Config.accountId", "=", ctx.account.id)
       .execute();
 
     return configs as (Omit<(typeof configs)[number], "data"> & {
@@ -35,7 +35,7 @@ export const configRouter = router({
       .where("userName", "=", input.userName)
       .where("hostName", "=", input.hostName)
       .where("vaultId", "=", input.vaultId)
-      .where("accountId", "=", ctx.account?.id!)
+      .where("accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
     if (existing) {
@@ -48,7 +48,7 @@ export const configRouter = router({
       const vault = await ctx.db
         .selectFrom("Vault")
         .select(["id"])
-        .where("accountId", "=", ctx.account?.id!)
+        .where("accountId", "=", ctx.account.id)
         .where("id", "=", input.vaultId)
         .executeTakeFirst();
 
@@ -61,7 +61,7 @@ export const configRouter = router({
           level: "PROFILE",
           data: input.config,
           vaultId: input.vaultId,
-          accountId: ctx.account?.id!,
+          accountId: ctx.account.id,
           userName: input.userName,
           hostName: input.hostName,
         })

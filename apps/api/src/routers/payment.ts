@@ -13,7 +13,7 @@ export const paymentRouter = router({
   checkout: authedProcedure
     .input(ZCreateCheckout)
     .mutation(async ({ input, ctx }) => {
-      const subscription = await getActiveSubscription(ctx.account?.id!, ctx.db)
+      const subscription = await getActiveSubscription(ctx.account.id, ctx.db)
         .select(["id"])
         .executeTakeFirst();
 
@@ -31,7 +31,7 @@ export const paymentRouter = router({
       const account = await ctx.db
         .selectFrom("Account")
         .select(["polarId"])
-        .where("id", "=", ctx.account?.id!)
+        .where("id", "=", ctx.account.id)
         .executeTakeFirst();
 
       if (!account || !ctx.account) throw new CustomError("NOT_ALLOWED");
@@ -53,7 +53,7 @@ export const paymentRouter = router({
           .set({
             polarId,
           })
-          .where("id", "=", ctx.account?.id!)
+          .where("id", "=", ctx.account.id)
           .execute();
       }
 
@@ -83,7 +83,7 @@ export const paymentRouter = router({
           });
 
           await posthog({
-            distinctId: ctx.account?.id!,
+            distinctId: ctx.account.id,
             event: "checkout_start",
             properties: {
               planId: plan.id,
@@ -99,7 +99,7 @@ export const paymentRouter = router({
       return { id: checkout.id, url: checkout.url };
     }),
   getSubscription: authedProcedure.query(async ({ ctx }) => {
-    const subscription = await getActiveSubscription(ctx.account?.id!, ctx.db)
+    const subscription = await getActiveSubscription(ctx.account.id, ctx.db)
       .select(["id", "status", "planId", "priceId"])
       .executeTakeFirst();
 
@@ -110,7 +110,7 @@ export const paymentRouter = router({
     const account = await ctx.db
       .selectFrom("Account")
       .select(["polarId"])
-      .where("id", "=", ctx.account?.id!)
+      .where("id", "=", ctx.account.id)
       .executeTakeFirst();
 
     return {
@@ -121,7 +121,7 @@ export const paymentRouter = router({
     const account = await ctx.db
       .selectFrom("Account")
       .select(["polarId"])
-      .where("id", "=", ctx.account?.id!)
+      .where("id", "=", ctx.account.id)
       .executeTakeFirst();
 
     if (!account || !account.polarId) throw new CustomError("NOT_ALLOWED");
@@ -147,7 +147,7 @@ export const paymentRouter = router({
       const price = plan.prices.find((p) => p.id === input.priceId);
       if (!price || !price.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
-      const current = await getActiveSubscription(ctx.account?.id!, ctx.db)
+      const current = await getActiveSubscription(ctx.account.id, ctx.db)
         .select(["id", "priceId", "polarSubscriptionId"])
         .executeTakeFirst();
 
@@ -213,7 +213,7 @@ export const paymentRouter = router({
             });
 
             await posthog({
-              distinctId: ctx.account?.id!,
+              distinctId: ctx.account.id,
               event: "subscription_period_change",
               properties: posthogProperties,
             });
@@ -230,7 +230,7 @@ export const paymentRouter = router({
             });
 
             await posthog({
-              distinctId: ctx.account?.id!,
+              distinctId: ctx.account.id,
               event: "subscription_upgrade",
               properties: posthogProperties,
             });
@@ -247,7 +247,7 @@ export const paymentRouter = router({
             });
 
             await posthog({
-              distinctId: ctx.account?.id!,
+              distinctId: ctx.account.id,
               event: "subscription_downgrade",
               properties: posthogProperties,
             });

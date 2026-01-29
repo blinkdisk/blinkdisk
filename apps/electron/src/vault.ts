@@ -537,7 +537,7 @@ export class Vault {
             const isAsar = filePath.endsWith(".asar");
             // Electron overrides the node:fs package for .asar files,
             // so we need to use a temporary file path.
-            let tmpFilePath = isAsar ? `${filePath}.tmp` : filePath;
+            const tmpFilePath = isAsar ? `${filePath}.tmp` : filePath;
 
             const stream = createWriteStream(tmpFilePath);
             result.pipe(stream);
@@ -587,7 +587,7 @@ export class Vault {
   }
 
   handleData(data: string) {
-    let lines = (data + "").split("\n");
+    const lines = (data + "").split("\n");
 
     for (let i = 0; i < lines.length; i++) {
       const delimiter = lines[i]?.indexOf(": ") || 0;

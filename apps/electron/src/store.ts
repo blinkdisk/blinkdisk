@@ -53,10 +53,11 @@ type Prev = [never, 0, 1, 2, 3, 4, 5]; // You can extend this for more depth
 type DotNotation<T, TPrefix extends string = "", D extends number = 5> = [
   D,
 ] extends [never]
-  ? {}
+  ? object
   : {
       [K in keyof T & string]: T[K] extends object
-        ? T[K] extends Array<any>
+        ? // eslint-disable-next-line
+          T[K] extends Array<any>
           ? { [P in DotPrefix<TPrefix, K>]: T[K] }
           : { [P in DotPrefix<TPrefix, K>]: T[K] } & DotNotation<
               T[K],
@@ -66,6 +67,7 @@ type DotNotation<T, TPrefix extends string = "", D extends number = 5> = [
         : { [P in DotPrefix<TPrefix, K>]: T[K] };
     }[keyof T & string];
 
+// eslint-disable-next-line
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
   k: infer I,
 ) => void

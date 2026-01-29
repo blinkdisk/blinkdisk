@@ -25,7 +25,7 @@ export const vaultRouter = router({
           .selectFrom("Vault")
           .select(["id"])
           .where("coreId", "=", input.coreId)
-          .where("accountId", "=", ctx.account?.id!)
+          .where("accountId", "=", ctx.account.id)
           .executeTakeFirst();
 
         if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
@@ -52,7 +52,7 @@ export const vaultRouter = router({
         const space = await ctx.db
           .selectFrom("Space")
           .select(["id"])
-          .where("accountId", "=", ctx.account?.id!)
+          .where("accountId", "=", ctx.account.id)
           .executeTakeFirst();
 
         if (!space) throw new CustomError("SPACE_NOT_FOUND");
@@ -68,7 +68,7 @@ export const vaultRouter = router({
           name: input.name,
           version: LATEST_VAULT_VERSION,
           provider: input.provider,
-          accountId: ctx.account?.id!,
+          accountId: ctx.account.id,
           configLevel: provider.level,
           options,
           ...(spaceId && { spaceId }),
@@ -83,7 +83,7 @@ export const vaultRouter = router({
           id: configId,
           level: provider.level,
           data: removeEmptyStrings(input.config),
-          accountId: ctx.account?.id!,
+          accountId: ctx.account.id,
           vaultId,
           ...(provider.level === "PROFILE" && {
             userName: input.userName,
@@ -119,7 +119,7 @@ export const vaultRouter = router({
           });
 
           await posthog({
-            distinctId: ctx.account?.id!,
+            distinctId: ctx.account.id,
             event: "vault_create",
             properties: {
               provider: input.provider,
@@ -141,7 +141,7 @@ export const vaultRouter = router({
       };
     }),
   list: authedProcedure.query(async ({ ctx }) => {
-    let query = ctx.db
+    const query = ctx.db
       .selectFrom("Vault")
       .select([
         "id",
@@ -154,7 +154,7 @@ export const vaultRouter = router({
         "version",
       ])
       .where("status", "=", "ACTIVE")
-      .where("accountId", "=", ctx.account?.id!);
+      .where("accountId", "=", ctx.account.id);
 
     const vaults = await query.execute();
 
@@ -192,7 +192,7 @@ export const vaultRouter = router({
     const vault = await ctx.db
       .selectFrom("Vault")
       .select(["id", "coreId", "name", "provider", "configLevel"])
-      .where("accountId", "=", ctx.account?.id!)
+      .where("accountId", "=", ctx.account.id)
       .where("id", "=", input.vaultId)
       .executeTakeFirst();
 
@@ -207,7 +207,7 @@ export const vaultRouter = router({
         .selectFrom("Vault")
         .select(["id"])
         .where("id", "=", input.vaultId)
-        .where("accountId", "=", ctx.account?.id!)
+        .where("accountId", "=", ctx.account.id)
         .executeTakeFirst();
 
       if (!vault) throw new CustomError("VAULT_NOT_FOUND");
@@ -227,7 +227,7 @@ export const vaultRouter = router({
     const space = await ctx.db
       .selectFrom("Space")
       .select(["id", "capacity"])
-      .where("Space.accountId", "=", ctx.account?.id!)
+      .where("Space.accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
     if (!space) throw new CustomError("SPACE_NOT_FOUND");
@@ -249,7 +249,7 @@ export const vaultRouter = router({
       const vault = await ctx.db
         .selectFrom("Vault")
         .select(["Vault.id", "Vault.provider", "Vault.name"])
-        .where("Vault.accountId", "=", ctx.account?.id!)
+        .where("Vault.accountId", "=", ctx.account.id)
         .where("Vault.id", "=", input.vaultId)
         .executeTakeFirst();
 
@@ -271,7 +271,7 @@ export const vaultRouter = router({
           });
 
           await posthog({
-            distinctId: ctx.account?.id!,
+            distinctId: ctx.account.id,
             event: "vault_delete",
             properties: {
               provider: vault.provider,
