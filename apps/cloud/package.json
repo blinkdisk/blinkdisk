@@ -17,6 +17,7 @@
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "dotenv": "^16.4.7",
-    "wrangler": "^4.32.0"
+    "wrangler": "^4.32.0",
+    "eslint": "^9.22.0"
   }
 }
