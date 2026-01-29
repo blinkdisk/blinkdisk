@@ -116,7 +116,6 @@ export default {
   extraMetadata: {
     name: "blinkdisk",
     homepage: "https://blinkdisk.com",
-    // eslint-disable-next-line
     version: process.env.GITHUB_REF_NAME?.replace("v", ""),
   },
 } satisfies Configuration;

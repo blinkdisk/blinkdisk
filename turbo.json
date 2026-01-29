@@ -27,7 +27,8 @@
     "EMAIL_DOMAIN",
     "SMTP_URL",
     "PLUNK_URL",
-    "PLUNK_SECRET_KEY"
+    "PLUNK_SECRET_KEY",
+    "GITHUB_REF_NAME"
   ],
   "tasks": {
     "build": {
