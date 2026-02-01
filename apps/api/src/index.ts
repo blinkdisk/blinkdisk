@@ -33,6 +33,8 @@ app.use(
 
 app.use(ratelimit);
 
+app.get("/health", (c) => c.json({ status: "ok" }));
+
 app.use(async (c, next) => {
   const db = database(c.env.HYPERDRIVE.connectionString);
   c.set("db", db);

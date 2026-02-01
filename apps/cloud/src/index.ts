@@ -6,6 +6,10 @@ export default {
   async fetch(request: Request, env: CloudflareBindings): Promise<Response> {
     const url = new URL(request.url);
 
+    if (request.method === "GET" && url.pathname === "/health") {
+      return Response.json({ status: "ok" });
+    }
+
     if (request.method === "GET" && url.pathname === "/") {
       const upgradeHeader = request.headers.get("Upgrade");
       if (!upgradeHeader || upgradeHeader !== "websocket")
