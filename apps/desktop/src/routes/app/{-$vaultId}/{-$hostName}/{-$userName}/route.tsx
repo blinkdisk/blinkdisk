@@ -7,6 +7,7 @@ import { UpgradeDialog } from "@desktop/components/dialogs/upgrade";
 import { FolderDropzone } from "@desktop/components/folders/dropzone";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useSpaceUpdate } from "@desktop/hooks/use-space-update";
+import { useTaskbarProgress } from "@desktop/hooks/use-taskbar-progress";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -21,6 +22,7 @@ function RouteComponent() {
   // This will create the vault policy
   // in case it doesn't exist yet
   useVaultPolicy();
+  useTaskbarProgress();
 
   return (
     <>

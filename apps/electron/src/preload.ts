@@ -50,6 +50,8 @@ const api = {
   window: {
     reload: () => ipcRenderer.send("window.reload"),
     console: () => ipcRenderer.send("window.console"),
+    setProgressBar: (progress: number) =>
+      ipcRenderer.send("window.setProgressBar", progress),
   },
   store: {
     get: (

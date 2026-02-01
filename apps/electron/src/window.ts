@@ -60,3 +60,9 @@ export function sendWindow(channel: string, payload?: object) {
 
   window.webContents.send(channel, payload);
 }
+
+export function setProgressBar(progress: number) {
+  if (!window || window.isDestroyed()) return;
+
+  window.setProgressBar(progress);
+}
