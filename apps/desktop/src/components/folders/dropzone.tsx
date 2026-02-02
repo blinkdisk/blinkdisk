@@ -51,13 +51,13 @@ export function FolderDropzone() {
 
       const isDir = await window.electron.fs.isDirectory(firstPath);
 
-      const targetPath = isDir
-        ? firstPath
-        : await window.electron.path.dirname(firstPath);
+      const targetName = await window.electron.path.basename(firstPath);
 
-      const targetName = await window.electron.path.basename(targetPath);
-
-      openCreateFolder({ path: targetPath, name: targetName });
+      openCreateFolder({
+        path: firstPath,
+        name: targetName,
+        type: isDir ? "folder" : "file",
+      });
     },
     [openCreateFolder],
   );

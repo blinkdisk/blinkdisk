@@ -3,35 +3,97 @@ import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useParams } from "@tanstack/react-router";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ui/collapsible";
 import { CircularProgress } from "@ui/circular-progress";
 import {
   SidebarGroupLabel,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@ui/sidebar";
+import { cn } from "@utils/class";
+import { ChevronDownIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 
 type SidebarFolderListProps = {
   folders: CoreFolderItem[] | undefined | null;
 };
 
 export function SidebarFolderList({ folders }: SidebarFolderListProps) {
-  const { t } = useAppTranslation("sidebar.folderList");
+  const { t: tFolders } = useAppTranslation("sidebar.folderList");
+  const { t: tFiles } = useAppTranslation("sidebar.fileList");
 
   const { data: status } = useVaultStatus();
 
+  const [foldersOpen, setFoldersOpen] = useState(true);
+  const [filesOpen, setFilesOpen] = useState(true);
+
+  const { folderItems, fileItems } = useMemo(() => {
+    if (!folders) return { folderItems: undefined, fileItems: undefined };
+    return {
+      folderItems: folders.filter((f) => f.type !== "file"),
+      fileItems: folders.filter((f) => f.type === "file"),
+    };
+  }, [folders]);
+
   if (!["STARTING", "RUNNING"].includes(status || "")) return null;
   if (folders !== undefined && folders !== null && !folders.length) return null;
+
+  const hasFolders = folderItems === undefined || folderItems.length > 0;
+  const hasFiles = fileItems === undefined || fileItems.length > 0;
+
   return (
-    <div className="mt-4 flex flex-col">
-      <SidebarGroupLabel>{t("title")}</SidebarGroupLabel>
-      <div className="flex flex-col gap-2">
-        {(folders === undefined || folders === null
-          ? (new Array(3).fill(undefined) as undefined[])
-          : folders
-        ).map((folder, index) => (
-          <SidebarFolder key={folder ? folder.id : index} folder={folder} />
-        ))}
-      </div>
+    <div className="mt-4 flex flex-col gap-2">
+      {hasFolders && (
+        <Collapsible open={foldersOpen} onOpenChange={setFoldersOpen}>
+          <CollapsibleTrigger asChild>
+            <SidebarGroupLabel className="cursor-pointer">
+              <ChevronDownIcon
+                className={cn(
+                  "mr-1 size-3 transition-transform",
+                  !foldersOpen && "-rotate-90",
+                )}
+              />
+              {tFolders("title")}
+            </SidebarGroupLabel>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="flex flex-col gap-2">
+              {(folderItems === undefined
+                ? (new Array(2).fill(undefined) as undefined[])
+                : folderItems
+              ).map((folder, index) => (
+                <SidebarFolder key={folder ? folder.id : index} folder={folder} />
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
+
+      {hasFiles && (
+        <Collapsible open={filesOpen} onOpenChange={setFilesOpen}>
+          <CollapsibleTrigger asChild>
+            <SidebarGroupLabel className="cursor-pointer">
+              <ChevronDownIcon
+                className={cn(
+                  "mr-1 size-3 transition-transform",
+                  !filesOpen && "-rotate-90",
+                )}
+              />
+              {tFiles("title")}
+            </SidebarGroupLabel>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="flex flex-col gap-2">
+              {(fileItems === undefined
+                ? (new Array(1).fill(undefined) as undefined[])
+                : fileItems
+              ).map((folder, index) => (
+                <SidebarFolder key={folder ? folder.id : index} folder={folder} />
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
     </div>
   );
 }

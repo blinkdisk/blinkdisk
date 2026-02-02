@@ -1,5 +1,6 @@
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { LocalButton } from "@desktop/components/vaults/local-button";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import {
@@ -19,6 +20,7 @@ import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
 import {
   CalendarClockIcon,
+  DownloadIcon,
   FileSearchIcon,
   FilesIcon,
   HardDrive,
@@ -248,21 +250,48 @@ type BackupProps = {
 
 export function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
+  const { data: folder } = useFolder();
   const { openDeleteBackupDialog } = useDeleteBackupDialog();
+  const { mutate: startRestore, isPending: isRestoring } = useStartRestore();
 
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
 
+  const isFileBackup = folder?.type === "file";
+
+  const handleDownloadFile = () => {
+    if (!backup || !folder) return;
+
+    startRestore({
+      variant: "single",
+      item: {
+        id: backup.rootID,
+        name: folder.name || folder.source.path.split("/").pop() || "file",
+        objectId: backup.rootID,
+        type: "FILE",
+        meta: { mode: "", uid: 0, gid: 0 },
+        stats: { size: backup.summary.size },
+        modifiedAt: backup.startTime,
+      },
+    });
+  };
+
   return (
-    <div role="link" className={cn(cardClassName, "hover:bg-card-hover")}>
-      <Link
-        to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-        params={(params) => ({
-          ...params,
-          backupId: backup?.id || "",
-          directoryId: backup && "rootID" in backup ? backup?.rootID : "",
-        })}
-        className="absolute inset-0"
-      />
+    <div
+      role={isFileBackup ? "button" : "link"}
+      className={cn(cardClassName, "hover:bg-card-hover")}
+      onClick={isFileBackup ? handleDownloadFile : undefined}
+    >
+      {!isFileBackup && (
+        <Link
+          to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
+          params={(params) => ({
+            ...params,
+            backupId: backup?.id || "",
+            directoryId: backup && "rootID" in backup ? backup?.rootID : "",
+          })}
+          className="absolute inset-0"
+        />
+      )}
       <div className="flex flex-col">
         <p className="text-lg font-semibold">
           {backup ? formatDateTime(backup.startTime) : <Skeleton width={150} />}
@@ -307,20 +336,30 @@ export function Backup({ backup }: BackupProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48" align="end">
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-                  params={(params) => ({
-                    ...params,
-                    backupId: backup?.id || "",
-                    directoryId:
-                      backup && "rootID" in backup ? backup?.rootID : "",
-                  })}
+              {isFileBackup ? (
+                <DropdownMenuItem
+                  onClick={handleDownloadFile}
+                  disabled={isRestoring}
                 >
-                  <FileSearchIcon />
-                  {t("dropdown.browse")}
-                </Link>
-              </DropdownMenuItem>
+                  <DownloadIcon />
+                  {t("dropdown.download")}
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
+                    params={(params) => ({
+                      ...params,
+                      backupId: backup?.id || "",
+                      directoryId:
+                        backup && "rootID" in backup ? backup?.rootID : "",
+                    })}
+                  >
+                    <FileSearchIcon />
+                    {t("dropdown.browse")}
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 onClick={() =>
                   openDeleteBackupDialog({

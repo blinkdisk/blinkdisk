@@ -14,16 +14,18 @@ import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardTitle } from "@ui/card";
 import { CircularProgress } from "@ui/circular-progress";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ui/collapsible";
 import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
 import {
+  ChevronDownIcon,
   CircleFadingArrowUpIcon,
   CloudUploadIcon,
   FolderPlusIcon,
   PlusIcon,
   SettingsIcon,
 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { GaugeComponent } from "react-gauge-component";
 
 type VaultHomeProps = {
@@ -53,6 +55,17 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
       ),
     [folders],
   );
+
+  const { folderItems, fileItems } = useMemo(() => {
+    if (!folders) return { folderItems: undefined, fileItems: undefined };
+    return {
+      folderItems: folders.filter((f) => f.type !== "file"),
+      fileItems: folders.filter((f) => f.type === "file"),
+    };
+  }, [folders]);
+
+  const [foldersOpen, setFoldersOpen] = useState(true);
+  const [filesOpen, setFilesOpen] = useState(true);
 
   return (
     <>
@@ -223,7 +236,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             </h2>
             <p className="text-muted-foreground text-xs">
               {folders !== undefined ? (
-                t("folders.count", { count: folders?.length })
+                t("folders.count", { count: folderItems?.length ?? 0 })
               ) : (
                 <Skeleton width={120} />
               )}
@@ -232,7 +245,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
           <div className="flex items-center gap-3">
             {folders !== undefined ? (
               <>
-                <LocalButton onClick={openCreateFolder} variant="outline">
+                <LocalButton onClick={() => openCreateFolder()} variant="outline">
                   <PlusIcon />
                   {t("folders.addFolder")}
                 </LocalButton>
@@ -260,13 +273,69 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             title={t("folders.empty.title")}
             description={t("folders.empty.description")}
           >
-            <LocalButton onClick={openCreateFolder} size="lg">
+            <LocalButton onClick={() => openCreateFolder()} size="lg">
               <PlusIcon />
               {t("folders.addFolder")}
             </LocalButton>
           </Empty>
         ) : (
-          <FolderList folders={folders} />
+          <div className="flex flex-col gap-6">
+            <Collapsible open={foldersOpen} onOpenChange={setFoldersOpen}>
+              <CollapsibleTrigger className="flex w-full items-center gap-2 py-2">
+                <ChevronDownIcon
+                  className={cn(
+                    "text-muted-foreground size-4 transition-transform",
+                    !foldersOpen && "-rotate-90",
+                  )}
+                />
+                <span className="text-muted-foreground text-sm font-medium">
+                  {t("folders.title")}
+                </span>
+                <span className="text-muted-foreground text-xs">
+                  ({folderItems?.length ?? 0})
+                </span>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                {folderItems && folderItems.length > 0 ? (
+                  <FolderList folders={folderItems} />
+                ) : folderItems ? (
+                  <p className="text-muted-foreground py-4 text-center text-sm">
+                    {t("folders.empty.title")}
+                  </p>
+                ) : (
+                  <FolderList folders={undefined} />
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Collapsible open={filesOpen} onOpenChange={setFilesOpen}>
+              <CollapsibleTrigger className="flex w-full items-center gap-2 py-2">
+                <ChevronDownIcon
+                  className={cn(
+                    "text-muted-foreground size-4 transition-transform",
+                    !filesOpen && "-rotate-90",
+                  )}
+                />
+                <span className="text-muted-foreground text-sm font-medium">
+                  {t("files.title")}
+                </span>
+                <span className="text-muted-foreground text-xs">
+                  ({fileItems?.length ?? 0})
+                </span>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                {fileItems && fileItems.length > 0 ? (
+                  <FolderList folders={fileItems} />
+                ) : fileItems ? (
+                  <p className="text-muted-foreground py-4 text-center text-sm">
+                    {t("files.empty.title")}
+                  </p>
+                ) : (
+                  <FolderList folders={undefined} />
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
         )}
       </div>
     </>
