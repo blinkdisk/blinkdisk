@@ -20,7 +20,7 @@ const links = [
 <nav
   id="nav"
   style="z-index: 1002"
-  class="w-content fixed left-1/2 flex -translate-x-1/2 flex-row items-center justify-between rounded-2xl border border-transparent py-4 transition-all duration-300 top-0"
+  class="w-content fixed left-1/2 top-0 flex -translate-x-1/2 flex-row items-center justify-between rounded-2xl border border-transparent py-4 transition-all duration-300"
 >
   <!-- Desktop layout -->
   <div class="hidden w-full items-center justify-between sm:flex">
@@ -28,16 +28,18 @@ const links = [
       <Logo class="h-5 select-none sm:h-6" />
     </a>
     <div class="flex items-center gap-12">
-      {links.map((link) => (
-        <a
-          href={link.href}
-          class="text-foreground/80 hover:text-foreground transition-colors"
-          target={link.target}
-          rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
-        >
-          {link.label}
-        </a>
-      ))}
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class="text-foreground/80 hover:text-foreground transition-colors"
+            target={link.target}
+            rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
     </div>
     <div class="flex gap-2">
       <a
@@ -53,7 +55,23 @@ const links = [
         href="/download"
         class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+            points="7 10 12 15 17 10"></polyline><line
+            x1="12"
+            x2="12"
+            y1="15"
+            y2="3"></line></svg
+        >
         Download
       </a>
     </div>
@@ -83,9 +101,9 @@ const links = [
           stroke-linejoin="round"
           class="text-foreground/60 hover:text-foreground/80 size-6"
         >
-          <line x1="4" x2="20" y1="12" y2="12" />
-          <line x1="4" x2="20" y1="6" y2="6" />
-          <line x1="4" x2="20" y1="18" y2="18" />
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
         </svg>
         <svg
           id="close-icon"
@@ -100,8 +118,8 @@ const links = [
           stroke-linejoin="round"
           class="text-foreground/60 hover:text-foreground/80 hidden size-6"
         >
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
         </svg>
       </button>
     </div>
@@ -111,16 +129,20 @@ const links = [
     >
       <div class="flex w-full flex-col items-start overflow-hidden">
         <div class="mb-6 mt-4 flex flex-col gap-2 p-2">
-          {links.map((link) => (
-            <a
-              href={link.href}
-              class="text-foreground/80 hover:text-foreground transition-colors"
-              target={link.target}
-              rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
-            >
-              {link.label}
-            </a>
-          ))}
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="text-foreground/80 hover:text-foreground transition-colors"
+                target={link.target}
+                rel={
+                  link.target === "_blank" ? "noopener noreferrer" : undefined
+                }
+              >
+                {link.label}
+              </a>
+            ))
+          }
         </div>
         <div class="flex w-full gap-2 p-2">
           <a
@@ -136,7 +158,23 @@ const links = [
             href="/download"
             class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 grow items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+              ></path><polyline points="7 10 12 15 17 10"></polyline><line
+                x1="12"
+                x2="12"
+                y1="15"
+                y2="3"></line></svg
+            >
             Download
           </a>
         </div>
@@ -149,8 +187,9 @@ const links = [
 <div
   id="nav-overlay"
   style="z-index: 1000"
-  class="pointer-events-none fixed inset-0 bg-black/20 opacity-0 pt-16 transition-opacity duration-200 dark:bg-black/50 sm:hidden"
-></div>
+  class="pointer-events-none fixed inset-0 bg-black/20 pt-16 opacity-0 transition-opacity duration-200 sm:hidden dark:bg-black/50"
+>
+</div>
 
 <script>
   const nav = document.getElementById("nav");
@@ -166,10 +205,20 @@ const links = [
     const docked = window.scrollY >= 100;
 
     if (docked || isOpen) {
-      nav?.classList.add("bg-secondary", "border-foreground/10", "top-4", "p-4");
+      nav?.classList.add(
+        "bg-secondary",
+        "border-foreground/10",
+        "top-4",
+        "p-4",
+      );
       nav?.classList.remove("top-0", "border-transparent");
     } else {
-      nav?.classList.remove("bg-secondary", "border-foreground/10", "top-4", "p-4");
+      nav?.classList.remove(
+        "bg-secondary",
+        "border-foreground/10",
+        "top-4",
+        "p-4",
+      );
       nav?.classList.add("top-0", "border-transparent");
     }
   }

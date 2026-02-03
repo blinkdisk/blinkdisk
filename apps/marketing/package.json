@@ -24,19 +24,16 @@
     "@polar-sh/sdk": "^0.35.4",
     "@tailwindcss/vite": "^4.1.14",
     "astro": "^5.17.1",
-    "crisp-sdk-web": "^1.0.26",
     "dom-to-image": "^2.6.0",
     "js-confetti": "^0.13.1",
     "jszip": "^3.10.1",
     "lucide-react": "^0.483.0",
     "marked": "^17.0.1",
-    "posthog-js": "^1.270.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "sonner": "^2.0.1",
-    "ua-parser-js": "^2.0.5",
-    "usehooks-ts": "^3.1.1"
+    "ua-parser-js": "^2.0.5"
   },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
@@ -44,6 +41,7 @@
     "@types/dom-to-image": "^2.6.7",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
+    "eslint-plugin-astro": "^1.5.0",
     "typescript": "5.8.2",
     "wrangler": "^4.43.0"
   }

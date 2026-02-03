@@ -15,51 +15,53 @@ import { faqs } from "@/data/faqs";
     Still have questions? Here are answers to some frequently asked questions.
   </p>
   <dl class="mt-6 flex flex-col gap-2 sm:mt-16 sm:gap-4">
-    {faqs.map((faq) => (
-      <details class="group pt-6">
-        <summary class="text-foreground flex w-full cursor-pointer list-none items-start justify-between text-left">
-          <p class="text-sm font-medium leading-7 sm:text-base">
-            {faq.question}
-          </p>
-          <div class="ml-6 flex h-7 items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="size-6 group-open:hidden"
-            >
-              <path d="M5 12h14" />
-              <path d="M12 5v14" />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="hidden size-6 group-open:block"
-            >
-              <path d="M5 12h14" />
-            </svg>
-          </div>
-        </summary>
-        <dd class="mt-2 pr-12">
-          <p class="text-foreground/80 text-sm leading-7 sm:text-base">
-            {faq.answer}
-          </p>
-        </dd>
-      </details>
-    ))}
+    {
+      faqs.map((faq) => (
+        <details class="group pt-6">
+          <summary class="text-foreground flex w-full cursor-pointer list-none items-start justify-between text-left">
+            <p class="text-sm font-medium leading-7 sm:text-base">
+              {faq.question}
+            </p>
+            <div class="ml-6 flex h-7 items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-6 group-open:hidden"
+              >
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="hidden size-6 group-open:block"
+              >
+                <path d="M5 12h14" />
+              </svg>
+            </div>
+          </summary>
+          <dd class="mt-2 pr-12">
+            <p class="text-foreground/80 text-sm leading-7 sm:text-base">
+              {faq.answer}
+            </p>
+          </dd>
+        </details>
+      ))
+    }
   </dl>
 </section>
 

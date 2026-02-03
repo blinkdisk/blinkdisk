@@ -20,6 +20,9 @@ importers:
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
+      prettier-plugin-astro:
+        specifier: ^0.14.1
+        version: 0.14.1
       prettier-plugin-organize-imports:
         specifier: ^4.1.0
         version: 4.1.0(prettier@3.5.3)(typescript@5.8.2)
@@ -28,7 +31,7 @@ importers:
         version: 5.0.0(prettier@3.5.3)
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
-        version: 0.6.11(prettier-plugin-organize-imports@4.1.0)(prettier@3.5.3)
+        version: 0.6.11(prettier-plugin-astro@0.14.1)(prettier-plugin-organize-imports@4.1.0)(prettier@3.5.3)
       turbo:
         specifier: ^2.4.4
         version: 2.4.4
@@ -353,7 +356,7 @@ importers:
     dependencies:
       '@astrojs/check':
         specifier: ^0.9.5
-        version: 0.9.6(prettier@3.5.3)(typescript@5.8.2)
+        version: 0.9.6(prettier-plugin-astro@0.14.1)(prettier@3.5.3)(typescript@5.8.2)
       '@astrojs/cloudflare':
         specifier: ^12.5.1
         version: 12.6.12(@types/node@22.13.10)(astro@5.17.1)
@@ -387,9 +390,6 @@ importers:
       astro:
         specifier: ^5.17.1
         version: 5.17.1(@types/node@22.13.10)(typescript@5.8.2)
-      crisp-sdk-web:
-        specifier: ^1.0.26
-        version: 1.0.26
       dom-to-image:
         specifier: ^2.6.0
         version: 2.6.0
@@ -405,9 +405,6 @@ importers:
       marked:
         specifier: ^17.0.1
         version: 17.0.1
-      posthog-js:
-        specifier: ^1.270.1
-        version: 1.270.1
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -423,9 +420,6 @@ importers:
       ua-parser-js:
         specifier: ^2.0.5
         version: 2.0.5
-      usehooks-ts:
-        specifier: ^3.1.1
-        version: 3.1.1(react@19.0.0)
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -442,6 +436,9 @@ importers:
       '@types/react-dom':
         specifier: 19.0.4
         version: 19.0.4(@types/react@19.0.10)
+      eslint-plugin-astro:
+        specifier: ^1.5.0
+        version: 1.5.0(eslint@9.22.0)
       typescript:
         specifier: 5.8.2
         version: 5.8.2
@@ -588,9 +585,6 @@ importers:
       react-i18next:
         specifier: ^15.4.1
         version: 15.4.1(i18next@24.2.3)(react-dom@19.0.0)(react@19.0.0)
-      usehooks-ts:
-        specifier: ^3.1.1
-        version: 3.1.1(react@19.0.0)
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -840,13 +834,13 @@ packages:
     hasBin: true
     dev: false
 
-  /@astrojs/check@0.9.6(prettier@3.5.3)(typescript@5.8.2):
+  /@astrojs/check@0.9.6(prettier-plugin-astro@0.14.1)(prettier@3.5.3)(typescript@5.8.2):
     resolution: {integrity: sha512-jlaEu5SxvSgmfGIFfNgcn5/f+29H61NJzEMfAZ82Xopr4XBchXB1GVlcJsE+elUlsYSbXlptZLX+JMG3b/wZEA==}
     hasBin: true
     peerDependencies:
       typescript: ^5.0.0
     dependencies:
-      '@astrojs/language-server': 2.16.3(prettier@3.5.3)(typescript@5.8.2)
+      '@astrojs/language-server': 2.16.3(prettier-plugin-astro@0.14.1)(prettier@3.5.3)(typescript@5.8.2)
       chokidar: 4.0.3
       kleur: 4.1.5
       typescript: 5.8.2
@@ -886,13 +880,12 @@ packages:
 
   /@astrojs/compiler@2.13.0:
     resolution: {integrity: sha512-mqVORhUJViA28fwHYaWmsXSzLO9osbdZ5ImUfxBarqsYdMlPbqAqGJCxsNzvppp1BEzc1mJNjOVvQqeDN8Vspw==}
-    dev: false
 
   /@astrojs/internal-helpers@0.7.5:
     resolution: {integrity: sha512-vreGnYSSKhAjFJCWAwe/CNhONvoc5lokxtRoZims+0wa3KbHBdPHSSthJsKxPd8d/aic6lWKpRTYGY/hsgK6EA==}
     dev: false
 
-  /@astrojs/language-server@2.16.3(prettier@3.5.3)(typescript@5.8.2):
+  /@astrojs/language-server@2.16.3(prettier-plugin-astro@0.14.1)(prettier@3.5.3)(typescript@5.8.2):
     resolution: {integrity: sha512-yO5K7RYCMXUfeDlnU6UnmtnoXzpuQc0yhlaCNZ67k1C/MiwwwvMZz+LGa+H35c49w5QBfvtr4w4Zcf5PcH8uYA==}
     hasBin: true
     peerDependencies:
@@ -913,6 +906,7 @@ packages:
       '@volar/language-service': 2.4.28
       muggle-string: 0.4.1
       prettier: 3.5.3
+      prettier-plugin-astro: 0.14.1
       tinyglobby: 0.2.15
       volar-service-css: 0.0.68(@volar/language-service@2.4.28)
       volar-service-emmet: 0.0.68(@volar/language-service@2.4.28)
@@ -3842,7 +3836,6 @@ packages:
 
   /@jridgewell/sourcemap-codec@1.5.5:
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-    dev: false
 
   /@jridgewell/trace-mapping@0.3.25:
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
@@ -4181,6 +4174,11 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@pkgr/core@0.2.9:
+    resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
+    engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+    dev: true
 
   /@plunk/node@3.0.3:
     resolution: {integrity: sha512-f3NT418/EdLjebQ4arAwR64cnz7d5H7i1CeKh8+B0cVBrwzHvF+Q+QkhutF+FAp49yuI/BYc71qQH+RFc2fxxQ==}
@@ -8788,6 +8786,26 @@ packages:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
 
+  /astro-eslint-parser@1.2.2:
+    resolution: {integrity: sha512-JepyLROIad6f44uyqMF6HKE2QbunNzp3mYKRcPoDGt0QkxXmH222FAFC64WTyQu2Kg8NNEXHTN/sWuUId9sSxw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    dependencies:
+      '@astrojs/compiler': 2.13.0
+      '@typescript-eslint/scope-manager': 8.26.1
+      '@typescript-eslint/types': 8.26.1
+      astrojs-compiler-sync: 1.1.1(@astrojs/compiler@2.13.0)
+      debug: 4.4.3
+      entities: 6.0.1
+      eslint-scope: 8.3.0
+      eslint-visitor-keys: 4.2.0
+      espree: 10.3.0
+      fast-glob: 3.3.3
+      is-glob: 4.0.3
+      semver: 7.7.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /astro@5.17.1(@types/node@22.13.10)(typescript@5.8.2):
     resolution: {integrity: sha512-oD3tlxTaVWGq/Wfbqk6gxzVRz98xa/rYlpe+gU2jXJMSD01k6sEDL01ZlT8mVSYB/rMgnvIOfiQQ3BbLdN237A==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
@@ -8893,6 +8911,16 @@ packages:
       - uploadthing
       - yaml
     dev: false
+
+  /astrojs-compiler-sync@1.1.1(@astrojs/compiler@2.13.0):
+    resolution: {integrity: sha512-0mKvB9sDQRIZPsEJadw6OaFbGJ92cJPPR++ICca9XEyiUAZqgVuk25jNmzHPT0KF80rI94trSZrUR5iHFXGGOQ==}
+    engines: {node: ^18.18.0 || >=20.9.0}
+    peerDependencies:
+      '@astrojs/compiler': '>=0.27.0'
+    dependencies:
+      '@astrojs/compiler': 2.13.0
+      synckit: 0.11.12
+    dev: true
 
   /async-exit-hook@2.0.1:
     resolution: {integrity: sha512-NW2cX8m1Q7KPA7a5M2ULQeZ2wR5qI5PAbw5L0UOMxdioVk9PMZ0h1TmyZEkPYrCvYjDlFICusOu1dlEKAAeXBw==}
@@ -9718,10 +9746,6 @@ packages:
       buffer: 5.7.1
     dev: true
     optional: true
-
-  /crisp-sdk-web@1.0.26:
-    resolution: {integrity: sha512-MBK/+tCNJmt/l9ZYHb0cUUaaF02rCKeqLw1cruY/HU48tPOOnhUM0JdvuPaeq1d5VB2DCILY4rGYE4NeJbXvzg==}
-    dev: false
 
   /cross-dirname@0.1.0:
     resolution: {integrity: sha512-+R08/oI0nl3vfPcqftZRpytksBXDzOUveBq/NBVx0sUp1axwzPQrKinNx5yd5sxPu8j1wIy8AfnVQ+5eFdha6Q==}
@@ -10652,7 +10676,6 @@ packages:
   /entities@6.0.1:
     resolution: {integrity: sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==}
     engines: {node: '>=0.12'}
-    dev: false
 
   /env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
@@ -10859,6 +10882,16 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
+  /eslint-compat-utils@0.6.5(eslint@9.22.0):
+    resolution: {integrity: sha512-vAUHYzue4YAa2hNACjB8HvUQj5yehAZgiClyFVVom9cP8z5NSFq3PwB/TtJslN2zAMgRX6FCFCjYBbQh71g5RQ==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      eslint: '>=6.0.0'
+    dependencies:
+      eslint: 9.22.0
+      semver: 7.7.3
+    dev: true
+
   /eslint-config-prettier@10.1.1(eslint@9.22.0):
     resolution: {integrity: sha512-4EQQr6wXwS+ZJSzaR5ZCrYgLxqvUjdXctaEtBqHcbkW944B1NQyO4qpdHQbXBONfwxXdkAY81HH4+LUfrg+zPw==}
     hasBin: true
@@ -10866,6 +10899,25 @@ packages:
       eslint: '>=7.0.0'
     dependencies:
       eslint: 9.22.0
+    dev: true
+
+  /eslint-plugin-astro@1.5.0(eslint@9.22.0):
+    resolution: {integrity: sha512-IWy4kY3DKTJxd7g652zIWpBGFuxw7NIIt16kyqc8BlhnIKvI8yGJj+Maua0DiNYED3F/D8AmzoTTTA6A95WX9g==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: '>=8.57.0'
+    dependencies:
+      '@eslint-community/eslint-utils': 4.5.1(eslint@9.22.0)
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@typescript-eslint/types': 8.26.1
+      astro-eslint-parser: 1.2.2
+      eslint: 9.22.0
+      eslint-compat-utils: 0.6.5(eslint@9.22.0)
+      globals: 16.0.0
+      postcss: 8.5.6
+      postcss-selector-parser: 7.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /eslint-plugin-only-warn@1.1.0:
@@ -13840,7 +13892,6 @@ packages:
     resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: false
 
   /nanoid@5.1.5:
     resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
@@ -14551,6 +14602,14 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
+  /postcss-selector-parser@7.1.1:
+    resolution: {integrity: sha512-orRsuYpJVw8LdAwqqLykBj9ecS5/cRHlI5+nvTo8LcCKmzDmqVORXtOIYEEQuL9D4BxtA1lm5isAqzQZCoQ6Eg==}
+    engines: {node: '>=4'}
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
+    dev: true
+
   /postcss@8.5.3:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
@@ -14566,7 +14625,6 @@ packages:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
-    dev: false
 
   /postgres-array@2.0.0:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
@@ -14660,6 +14718,14 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
+  /prettier-plugin-astro@0.14.1:
+    resolution: {integrity: sha512-RiBETaaP9veVstE4vUwSIcdATj6dKmXljouXc/DDNwBSPTp8FRkLGDSGFClKsAFeeg+13SB0Z1JZvbD76bigJw==}
+    engines: {node: ^14.15.0 || >=16.0.0}
+    dependencies:
+      '@astrojs/compiler': 2.13.0
+      prettier: 3.5.3
+      sass-formatter: 0.7.9
+
   /prettier-plugin-organize-imports@4.1.0(prettier@3.5.3)(typescript@5.8.2):
     resolution: {integrity: sha512-5aWRdCgv645xaa58X8lOxzZoiHAldAPChljr/MT0crXVOWTZ+Svl4hIWlz+niYSlO6ikE5UXkN1JrRvIP2ut0A==}
     peerDependencies:
@@ -14684,7 +14750,7 @@ packages:
       prettier: 3.5.3
     dev: true
 
-  /prettier-plugin-tailwindcss@0.6.11(prettier-plugin-organize-imports@4.1.0)(prettier@3.5.3):
+  /prettier-plugin-tailwindcss@0.6.11(prettier-plugin-astro@0.14.1)(prettier-plugin-organize-imports@4.1.0)(prettier@3.5.3):
     resolution: {integrity: sha512-YxaYSIvZPAqhrrEpRtonnrXdghZg1irNg4qrjboCXrpybLWVs55cW2N3juhspVJiO0JBvYJT8SYsJpc8OQSnsA==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
@@ -14740,6 +14806,7 @@ packages:
         optional: true
     dependencies:
       prettier: 3.5.3
+      prettier-plugin-astro: 0.14.1
       prettier-plugin-organize-imports: 4.1.0(prettier@3.5.3)(typescript@5.8.2)
     dev: true
 
@@ -15104,7 +15171,7 @@ packages:
     resolution: {integrity: sha512-BNg9EN3DD3GsDXX7Aa8O4p92sryjkmzYYgmgTAc6CA4uGLEDzFfxOxugu21akOxpcXHiEgsYkC6nPsQvLLLmEg==}
     hasBin: true
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -15583,6 +15650,9 @@ packages:
       tslib: 2.8.1
     dev: true
 
+  /s.color@0.0.15:
+    resolution: {integrity: sha512-AUNrbEUHeKY8XsYr/DYpl+qk5+aM+DChopnWOPEzn8YKzOhv4l2zH6LzZms3tOZP3wwdOyc0RmTciyi46HLIuA==}
+
   /safe-array-concat@1.1.3:
     resolution: {integrity: sha512-AURm5f0jYEOydBj7VQlVvDrjeFgthDdEF5H1dP+6mNpoXOMo1quQqJ4wvJDyRZ9+pO3kGWoOdmV08cSv2aJV6Q==}
     engines: {node: '>=0.4'}
@@ -15626,6 +15696,11 @@ packages:
     dependencies:
       truncate-utf8-bytes: 1.0.2
     dev: true
+
+  /sass-formatter@0.7.9:
+    resolution: {integrity: sha512-CWZ8XiSim+fJVG0cFLStwDvft1VI7uvXdCNJYXhDvowiv+DsbD1nXLiQ4zrE5UBvj5DWZJ93cwN0NX5PMsr1Pw==}
+    dependencies:
+      suf-log: 2.5.3
 
   /sax@1.4.1:
     resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
@@ -16285,6 +16360,11 @@ packages:
   /stubborn-fs@1.2.5:
     resolution: {integrity: sha512-H2N9c26eXjzL/S/K+i/RHHcFanE74dptvvjM8iwzwbVcWY/zjBbgRqF3K0DY4+OD+uTTASTBvDoxPDaPN02D7g==}
 
+  /suf-log@2.5.3:
+    resolution: {integrity: sha512-KvC8OPjzdNOe+xQ4XWJV2whQA0aM1kGVczMQ8+dStAO6KfEB140JEVQ9dE76ONZ0/Ylf67ni4tILPJB41U0eow==}
+    dependencies:
+      s.color: 0.0.15
+
   /sumchecker@3.0.1:
     resolution: {integrity: sha512-MvjXzkz/BOfyVDkG0oFOtBxHX2u3gKbMHIF/dXblZsgD3BWOFLmHovIpZY7BykJdAjcqRCBi1WYBNdEC9yI7vg==}
     engines: {node: '>= 8.0'}
@@ -16336,6 +16416,13 @@ packages:
       picocolors: 1.1.1
       sax: 1.4.1
     dev: false
+
+  /synckit@0.11.12:
+    resolution: {integrity: sha512-Bh7QjT8/SuKUIfObSXNHNSK6WHo6J1tHCqJsuaFDP7gP0fkzSfTxI8y85JrppZ0h8l0maIgc2tfuZQ6/t3GtnQ==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    dependencies:
+      '@pkgr/core': 0.2.9
+    dev: true
 
   /tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}

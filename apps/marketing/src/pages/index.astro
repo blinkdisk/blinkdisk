@@ -19,24 +19,27 @@ const softwareSchema = {
   name: "BlinkDisk",
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "Windows, macOS, Linux",
-  description: "BlinkDisk is a desktop application that lets you effortlessly backup all your important files with just a few clicks.",
+  description:
+    "BlinkDisk is a desktop application that lets you effortlessly backup all your important files with just a few clicks.",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
     description: "Free with optional cloud storage plans",
   },
-  review: [{
-    "@type": "Review",
-    reviewRating: {
+  review: [
+    {
+      "@type": "Review",
+      reviewRating: {
         "@type": "Rating",
         ratingValue: 5,
+      },
+      author: {
+        "@type": "Person",
+        name: "Simon K.",
+      },
     },
-    author: {
-      "@type": "Person",
-      name: "Simon K.",
-    },
-  }],
+  ],
   featureList: [
     "End-to-end encryption",
     "Cross-platform support",

@@ -7,21 +7,24 @@ const features = [
   {
     category: "Intuitive Design",
     title: "Built for everyone",
-    description: "BlinkDisk is designed for everyone, no technical knowledge required. Just install, choose what to protect, and your first backup starts in minutes.",
+    description:
+      "BlinkDisk is designed for everyone, no technical knowledge required. Just install, choose what to protect, and your first backup starts in minutes.",
     animation: "setup",
     flip: false,
   },
   {
     category: "End-to-End Encryption",
     title: "Military-grade security",
-    description: "Your files are encrypted with your encryption password before they ever leave your device, ensuring only you can access them. Not even BlinkDisk can see your data.",
+    description:
+      "Your files are encrypted with your encryption password before they ever leave your device, ensuring only you can access them. Not even BlinkDisk can see your data.",
     animation: "encryption",
     flip: true,
   },
   {
     category: "File Deduplication",
     title: "Efficient by design",
-    description: "BlinkDisk automatically detects and stores identical files only once. This saves valuable space, reduces upload times, and makes every backup feel effortlessly fast.",
+    description:
+      "BlinkDisk automatically detects and stores identical files only once. This saves valuable space, reduces upload times, and makes every backup feel effortlessly fast.",
     animation: "deduplication",
     flip: false,
   },
@@ -32,34 +35,40 @@ const features = [
   id="features"
   class="w-content mx-auto flex flex-col items-center gap-20 py-16 sm:gap-16 sm:py-24"
 >
-  {features.map((feature) => (
-    <div
-      class:list={[
-        "w-content flex max-w-5xl flex-col items-center justify-between",
-        feature.flip ? "md:!flex-row-reverse" : "md:flex-row",
-      ]}
-    >
+  {
+    features.map((feature) => (
       <div
         class:list={[
-          "mb-8 flex w-full flex-col items-start justify-between xl:mb-0",
-          feature.flip ? "md:ml-20 xl:ml-32" : "md:mr-20 xl:mr-32",
+          "w-content flex max-w-5xl flex-col items-center justify-between",
+          feature.flip ? "md:!flex-row-reverse" : "md:flex-row",
         ]}
       >
-        <h2 class="text-primary text-xs font-semibold uppercase tracking-widest sm:text-sm sm:tracking-[0.2rem]">
-          {feature.category}
-        </h2>
-        <p class="text-foreground mt-4 text-left text-[2rem] font-bold leading-[1.125] md:text-[2.7rem]">
-          {feature.title}
-        </p>
-        <p class="text-muted-foreground mt-4 w-full text-sm sm:text-base md:mt-6">
-          {feature.description}
-        </p>
+        <div
+          class:list={[
+            "mb-8 flex w-full flex-col items-start justify-between xl:mb-0",
+            feature.flip ? "md:ml-20 xl:ml-32" : "md:mr-20 xl:mr-32",
+          ]}
+        >
+          <h2 class="text-primary text-xs font-semibold uppercase tracking-widest sm:text-sm sm:tracking-[0.2rem]">
+            {feature.category}
+          </h2>
+          <p class="text-foreground mt-4 text-left text-[2rem] font-bold leading-[1.125] md:text-[2.7rem]">
+            {feature.title}
+          </p>
+          <p class="text-muted-foreground mt-4 w-full text-sm sm:text-base md:mt-6">
+            {feature.description}
+          </p>
+        </div>
+        <div class="bg-card w-content flex aspect-[15/10] max-w-[25rem] flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border sm:aspect-[18/10]">
+          {feature.animation === "setup" && <SetupAnimation client:visible />}
+          {feature.animation === "encryption" && (
+            <EncryptionAnimation client:visible />
+          )}
+          {feature.animation === "deduplication" && (
+            <DeduplicationAnimation client:visible />
+          )}
+        </div>
       </div>
-      <div class="bg-card w-content flex aspect-[15/10] max-w-[25rem] flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border sm:aspect-[18/10]">
-        {feature.animation === "setup" && <SetupAnimation client:visible />}
-        {feature.animation === "encryption" && <EncryptionAnimation client:visible />}
-        {feature.animation === "deduplication" && <DeduplicationAnimation client:visible />}
-      </div>
-    </div>
-  ))}
+    ))
+  }
 </section>

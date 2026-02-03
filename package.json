@@ -18,6 +18,7 @@
     "dotenv-cli": "^8.0.0",
     "knip": "^5.82.1",
     "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-prisma": "^5.0.0",
     "prettier-plugin-tailwindcss": "^0.6.11",

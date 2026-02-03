@@ -3,7 +3,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import { plans } from "@config/plans";
-import { ArrowRightIcon, ClockIcon, CookieIcon, DollarSignIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  ClockIcon,
+  CookieIcon,
+  DollarSignIcon,
+} from "lucide-react";
 
 const commission = 0.3;
 const duration = 12;
@@ -26,7 +31,9 @@ const formattedEarnings = maxEarnings.toLocaleString("en-US", {
   currency: "USD",
   minimumFractionDigits: 0,
 });
-const formattedCommission = commission.toLocaleString("en-US", { style: "percent" });
+const formattedCommission = commission.toLocaleString("en-US", {
+  style: "percent",
+});
 ---
 
 <BaseLayout
@@ -36,7 +43,9 @@ const formattedCommission = commission.toLocaleString("en-US", { style: "percent
   <Navigation />
   <div class="py-page flex min-h-screen flex-col items-center">
     <div class="mt-auto"></div>
-    <div class="w-content mx-auto flex max-w-4xl flex-col items-center text-center">
+    <div
+      class="w-content mx-auto flex max-w-4xl flex-col items-center text-center"
+    >
       <div class="flex flex-col items-center">
         <a
           href="https://affiliate.watch/?ref=blinkdisk"
@@ -49,7 +58,9 @@ const formattedCommission = commission.toLocaleString("en-US", { style: "percent
             alt="Affiliate Badge"
           />
         </a>
-        <h1 class="mt-6 text-5xl font-bold leading-tight tracking-tight md:text-6xl">
+        <h1
+          class="mt-6 text-5xl font-bold leading-tight tracking-tight md:text-6xl"
+        >
           Earn up to {formattedEarnings}
           <br class="hidden sm:block" />
           for each referral
@@ -71,25 +82,35 @@ const formattedCommission = commission.toLocaleString("en-US", { style: "percent
       </a>
 
       <div class="mt-16 grid w-full grid-cols-1 gap-6 sm:mt-20 md:grid-cols-3">
-        <div class="bg-card flex flex-col items-center rounded-xl border p-6 text-center">
+        <div
+          class="bg-card flex flex-col items-center rounded-xl border p-6 text-center"
+        >
           <div class="text-primary mb-4 [&_svg]:size-8">
             <DollarSignIcon className="size-8" />
           </div>
-          <h3 class="text-foreground text-2xl font-bold">{formattedCommission} Commission</h3>
+          <h3 class="text-foreground text-2xl font-bold">
+            {formattedCommission} Commission
+          </h3>
           <p class="text-muted-foreground mt-2 text-sm">
             Earn {formattedCommission} commission on all referrals for 12 months
           </p>
         </div>
-        <div class="bg-card flex flex-col items-center rounded-xl border p-6 text-center">
+        <div
+          class="bg-card flex flex-col items-center rounded-xl border p-6 text-center"
+        >
           <div class="text-primary mb-4 [&_svg]:size-8">
             <ClockIcon className="size-8" />
           </div>
-          <h3 class="text-foreground text-2xl font-bold">{duration} Month Duration</h3>
+          <h3 class="text-foreground text-2xl font-bold">
+            {duration} Month Duration
+          </h3>
           <p class="text-muted-foreground mt-2 text-sm">
             Your commission continues for a full year on each referral
           </p>
         </div>
-        <div class="bg-card flex flex-col items-center rounded-xl border p-6 text-center">
+        <div
+          class="bg-card flex flex-col items-center rounded-xl border p-6 text-center"
+        >
           <div class="text-primary mb-4 [&_svg]:size-8">
             <CookieIcon className="size-8" />
           </div>

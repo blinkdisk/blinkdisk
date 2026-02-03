@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <div class="flex h-screen w-screen items-center justify-center">
@@ -14,8 +15,7 @@
       cy="12"
       r="10"
       stroke="currentColor"
-      stroke-width="4"
-    ></circle>
+      stroke-width="4"></circle>
     <path
       class="opacity-75"
       fill="currentColor"
@@ -35,7 +35,8 @@
     try {
       const parsed = new URL(url);
       return ALLOWED_REDIRECT_HOSTS.some(
-        (host) => parsed.hostname === host || parsed.hostname.endsWith(`.${host}`)
+        (host) =>
+          parsed.hostname === host || parsed.hostname.endsWith(`.${host}`),
       );
     } catch {
       return false;
