@@ -110,7 +110,7 @@ export default function EncryptionAnimation() {
         {encryptedText.length !== originalText.length &&
         encryptedText.length !== 0 ? (
           <span className="relative">
-            <div className="border-primary absolute left-0 top-0 h-6 border-l-2 shadow-[0_0_10px_var(--primary)]"></div>
+            <span className="border-primary absolute left-0 top-0 block h-6 border-l-2 shadow-[0_0_10px_var(--primary)]"></span>
           </span>
         ) : null}
         {decryptedText}
