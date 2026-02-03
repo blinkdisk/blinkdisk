@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Navigation from "@/components/react/Navigation";
+import Footer from "@/components/Footer.astro";
+---
+
+<BaseLayout
+  title="Page Not Found"
+  description="The page you're looking for doesn't exist."
+>
+  <Navigation client:load />
+  <div class="py-page flex min-h-screen flex-col items-center">
+    <div class="mt-auto"></div>
+    <div class="flex max-w-[90vw] flex-col items-center text-center">
+      <h1 class="text-8xl font-bold tracking-tight">404</h1>
+      <p class="text-muted-foreground mt-4 text-lg">
+        The page you're looking for doesn't exist.
+      </p>
+      <a
+        href="/"
+        class="bg-primary text-primary-foreground hover:bg-primary/90 mt-8 inline-flex h-10 items-center justify-center rounded-md px-6 text-sm font-medium transition-colors"
+      >
+        Go Home
+      </a>
+    </div>
+    <div class="mb-auto"></div>
+  </div>
+  <Footer />
+</BaseLayout>

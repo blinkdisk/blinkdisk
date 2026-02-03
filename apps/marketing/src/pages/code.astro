@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Navigation from "@/components/react/Navigation";
+import Footer from "@/components/Footer.astro";
+import CodeStatsClient from "@/components/react/CodeStatsClient";
+import ToasterWrapper from "@/components/react/ToasterWrapper";
+---
+
+<BaseLayout
+  title="Codebase Statistics Calculator"
+  description="Get insights into your projects' codebase, right in your browser. Count lines of code, characters, files, and much more at a glance."
+  og={{
+    title: "Your Codebase, by the numbers.",
+    image: "/brand/code.jpg",
+  }}
+>
+  <Navigation client:load />
+  <CodeStatsClient client:load />
+  <Footer />
+  <ToasterWrapper client:load />
+</BaseLayout>

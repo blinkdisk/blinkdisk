@@ -1,5 +1,0 @@
-{
-  "extends": "@blinkdisk/typescript/start.json",
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
-}

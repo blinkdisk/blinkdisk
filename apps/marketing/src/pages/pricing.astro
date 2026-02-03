@@ -1,0 +1,15 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Navigation from "@/components/react/Navigation";
+import Footer from "@/components/Footer.astro";
+import PricingClient from "@/components/react/PricingClient";
+---
+
+<BaseLayout
+  title="Pricing"
+  description="The plans & pricing for BlinkDisk. All powerful backup features are free, and you only pay for the storage you use."
+>
+  <Navigation client:load />
+  <PricingClient client:load />
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,93 @@
+---
+import Folder from "@/components/Folder.astro";
+import { exampleFolders } from "@config/folder";
+
+const steps = [
+  {
+    title: "Choose folders to protect",
+    description:
+      "Pick all folders you want to protect. We take care of everything else, with no complex setup.",
+  },
+  {
+    title: "Create your first backup",
+    description:
+      "Once set up, BlinkDisk starts to backup your files in the background. You'll always have secure copies.",
+  },
+  {
+    title: "Restore any file, anytime",
+    description:
+      "When something goes wrong, simply open BlinkDisk and restore any file in seconds.",
+  },
+];
+---
+
+<section
+  id="solution"
+  class="w-content mx-auto flex flex-col items-center py-16 sm:py-24"
+>
+  <div class="flex items-center gap-5">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary hidden size-10 md:block">
+      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+    <h2 class="text-center text-4xl font-bold sm:text-5xl">
+      Get protected in <br class="sm:hidden" />
+      <span class="sm:hidden">a few</span> minutes
+    </h2>
+  </div>
+  <p class="md:w-160 text-muted-foreground mt-4 w-full text-center text-sm md:text-base">
+    BlinkDisk gives your files the protection they deserve. It automatically
+    creates secure, encrypted backups. So no matter what happens, your files
+    are always safe.
+  </p>
+  <div class="mt-10 grid grid-cols-1 md:mt-20 md:grid-cols-3">
+    {steps.map(({ title, description }, index) => (
+      <div class="flex w-full flex-row items-center gap-8 md:flex-col md:gap-0">
+        <div class="flex h-full flex-col items-center md:h-auto md:w-full md:flex-row">
+          <hr
+            class:list={[
+              "border-primary/30 grow border-l-2 md:border-t-2",
+              index === 0 && "invisible",
+            ]}
+          />
+          <div class="bg-primary/10 border-primary/30 flex size-10 items-center justify-center rounded-lg border md:size-12">
+            <span class="text-primary whitespace-nowrap text-lg font-medium md:text-xl">
+              {index + 1}
+            </span>
+          </div>
+          <hr
+            class:list={[
+              "border-primary/30 grow border-l-2 md:border-t-2",
+              index === steps.length - 1 && "invisible",
+            ]}
+          />
+        </div>
+        <div class="flex w-[90%] flex-col items-start gap-2 py-4 sm:mt-6 sm:py-0 md:items-center md:text-center">
+          <h3 class="text-xl font-semibold md:text-2xl md:font-bold">
+            {title}
+          </h3>
+          <p class="text-muted-foreground text-sm">{description}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- CSS Marquee -->
+  <div
+    class="mt-18 md:mt-24 w-full overflow-hidden"
+    style="mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);"
+  >
+    <div class="marquee flex w-max">
+      <div class="flex items-center gap-8 pl-8">
+        {exampleFolders.map((folder) => (
+          <Folder folder={{ ...folder, emoji: "📁" }} />
+        ))}
+      </div>
+      <div class="flex items-center gap-8 pl-8">
+        {exampleFolders.map((folder) => (
+          <Folder folder={{ ...folder, emoji: "📁" }} />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

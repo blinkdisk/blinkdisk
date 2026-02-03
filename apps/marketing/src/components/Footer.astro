@@ -1,0 +1,147 @@
+---
+import Github from "@/components/icons/Github.astro";
+import X from "@/components/icons/X.astro";
+import Youtube from "@/components/icons/Youtube.astro";
+import logoDark from "@/assets/brand/logo-dark.svg";
+import logoLight from "@/assets/brand/logo-light.svg";
+
+const footerLinks = {
+  product: [
+    { label: "Download", href: "/download" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Roadmap", href: "https://github.com/orgs/blinkdisk/projects/2", external: true },
+  ],
+  resources: [
+    { label: "GitHub", href: "https://github.com/blinkdisk/blinkdisk", external: true },
+    { label: "Support", href: "mailto:support@blinkdisk.com", external: true },
+    { label: "Status", href: "https://status.blinkdisk.com", external: true },
+  ],
+  legal: [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Imprint", href: "/imprint" },
+  ],
+};
+
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com/blinkdisk", icon: "github" },
+  { label: "X (formerly Twitter)", href: "https://x.com/blinkdisk", icon: "x" },
+  { label: "YouTube", href: "https://www.youtube.com/@blinkdisk", icon: "youtube" },
+];
+
+const currentYear = new Date().getUTCFullYear();
+---
+
+<footer class="bg-secondary border-t">
+  <div class="mx-auto max-w-6xl px-6 py-12 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-5">
+      <div class="col-span-2 flex flex-col items-center md:items-start">
+        <a href="/" class="inline-block">
+          <img
+            src={logoLight.src}
+            class="h-7 select-none dark:hidden"
+            draggable="false"
+            alt="BlinkDisk"
+          />
+          <img
+            src={logoDark.src}
+            class="hidden h-7 select-none dark:block"
+            draggable="false"
+            alt="BlinkDisk"
+          />
+        </a>
+        <p class="text-muted-foreground mt-4 text-sm">
+          The easiest way to backup your files.
+        </p>
+        <div class="mt-6 flex justify-center gap-4 md:justify-start">
+          {socialLinks.map((social) => (
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={social.label}
+            >
+              {social.icon === "github" && <Github class="size-5" />}
+              {social.icon === "x" && <X class="size-5" />}
+              {social.icon === "youtube" && <Youtube class="size-5" />}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-foreground text-sm font-semibold">Product</h3>
+        <ul class="mt-4 space-y-3">
+          {footerLinks.product.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-foreground text-sm font-semibold">Resources</h3>
+        <ul class="mt-4 space-y-3">
+          {footerLinks.resources.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-foreground text-sm font-semibold">Legal</h3>
+        <ul class="mt-4 space-y-3">
+          {footerLinks.legal.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-border mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
+      <p class="text-muted-foreground text-sm">
+        © {currentYear} BlinkDisk. All rights reserved.
+      </p>
+      <iframe
+        id="status-badge"
+        src="https://status.blinkdisk.com/badge?theme=light"
+        width="175"
+        height="30"
+        class="-mr-2 dark:hidden overflow-hidden"
+        style="border: none;"
+      ></iframe>
+      <iframe
+        src="https://status.blinkdisk.com/badge?theme=dark"
+        width="175"
+        height="30"
+        class="-mr-2 hidden dark:block overflow-hidden"
+        style="border: none;"
+      ></iframe>
+    </div>
+  </div>
+</footer>
