@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/react/Navigation";
+import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import LegalClient from "@/components/react/LegalClient";
+import Legal from "@/components/Legal.astro";
 
 const content = `# Imprint
 
@@ -44,7 +44,7 @@ Our web pages and their contents are subject to the Austria copyright law. Unles
   title="Imprint"
   description="The imprint of BlinkDisk."
 >
-  <Navigation client:load />
-  <LegalClient client:load>{content}</LegalClient>
+  <Navigation />
+  <Legal content={content} />
   <Footer />
 </BaseLayout>

@@ -1,24 +1,24 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/react/Navigation";
-import Hero from "@/components/react/Hero";
+import Navigation from "@/components/Navigation.astro";
+import Hero from "@/components/Hero.astro";
 import Problems from "@/components/Problems.astro";
 import Solution from "@/components/Solution.astro";
 import Quote from "@/components/Quote.astro";
 import Features from "@/components/Features.astro";
 import Integrations from "@/components/Integrations.astro";
-import Faq from "@/components/react/Faq";
+import Faq from "@/components/Faq.astro";
 import Footer from "@/components/Footer.astro";
 ---
 
 <BaseLayout>
-  <Navigation client:load />
-  <Hero client:load />
+  <Navigation />
+  <Hero />
   <Problems />
   <Solution />
   <Quote />
   <Features />
   <Integrations />
-  <Faq client:visible />
+  <Faq />
   <Footer />
 </BaseLayout>

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/react/Navigation";
+import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import CodeStatsClient from "@/components/react/CodeStatsClient";
 import ToasterWrapper from "@/components/react/ToasterWrapper";
@@ -14,7 +14,7 @@ import ToasterWrapper from "@/components/react/ToasterWrapper";
     image: "/brand/code.jpg",
   }}
 >
-  <Navigation client:load />
+  <Navigation />
   <CodeStatsClient client:load />
   <Footer />
   <ToasterWrapper client:load />

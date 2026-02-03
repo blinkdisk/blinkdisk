@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/react/Navigation";
+import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import { plans } from "@config/plans";
 import { ArrowRightIcon, ClockIcon, CookieIcon, DollarSignIcon } from "lucide-react";
@@ -33,7 +33,7 @@ const formattedCommission = commission.toLocaleString("en-US", { style: "percent
   title="Affiliate Program"
   description="Join the BlinkDisk Affiliate Program in minutes and earn generous commissions for every customer you refer."
 >
-  <Navigation client:load />
+  <Navigation />
   <div class="py-page flex min-h-screen flex-col items-center">
     <div class="mt-auto"></div>
     <div class="w-content mx-auto flex max-w-4xl flex-col items-center text-center">

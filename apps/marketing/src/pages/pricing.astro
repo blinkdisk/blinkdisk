@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/react/Navigation";
+import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import PricingClient from "@/components/react/PricingClient";
 ---
@@ -9,7 +9,7 @@ import PricingClient from "@/components/react/PricingClient";
   title="Pricing"
   description="The plans & pricing for BlinkDisk. All powerful backup features are free, and you only pay for the storage you use."
 >
-  <Navigation client:load />
+  <Navigation />
   <PricingClient client:load />
   <Footer />
 </BaseLayout>

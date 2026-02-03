@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/react/Navigation";
+import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import LegalClient from "@/components/react/LegalClient";
+import Legal from "@/components/Legal.astro";
 
 const content = `# Terms of Service
 
@@ -272,7 +272,7 @@ In order to resolve a complaint regarding the Services or to receive further inf
   title="Terms of Service"
   description="The terms of service for BlinkDisk."
 >
-  <Navigation client:load />
-  <LegalClient client:load>{content}</LegalClient>
+  <Navigation />
+  <Legal content={content} />
   <Footer />
 </BaseLayout>
