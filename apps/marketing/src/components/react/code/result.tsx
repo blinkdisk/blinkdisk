@@ -13,8 +13,22 @@ import {
   ShareIcon,
   TypeIcon,
 } from "lucide-react";
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+
+let fontLoaded = false;
+function useSpaceMonoFont() {
+  const [loaded, setLoaded] = useState(fontLoaded);
+  useEffect(() => {
+    if (!fontLoaded) {
+      import("@fontsource/space-mono/latin-400.css").then(() => {
+        fontLoaded = true;
+        setLoaded(true);
+      });
+    }
+  }, []);
+  return loaded;
+}
 
 type CodeStatsResultProps = {
   files: CodeStatsFile[];
@@ -29,6 +43,7 @@ export function CodeStatsResult({
 }: CodeStatsResultProps) {
   const ref = useRef<HTMLDivElement>(null);
   const mobile = useIsMobile();
+  useSpaceMonoFont();
 
   const [excludedLanguages, setExcludedLanguages] = useState<string[]>([]);
 

@@ -1,14 +1,9 @@
+@import "@fontsource-variable/inter/wght.css";
 @import "@styles/globals.css";
 
 :root {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter Variable", "Inter", sans-serif;
   font-optical-sizing: auto;
-  font-style: normal;
-}
-
-.space-mono {
-  font-family: "Space Mono", monospace;
-  font-weight: 400;
   font-style: normal;
 }
 
