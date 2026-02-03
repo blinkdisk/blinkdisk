@@ -9,9 +9,50 @@ import Features from "@/components/Features.astro";
 import Integrations from "@/components/Integrations.astro";
 import Faq from "@/components/Faq.astro";
 import Footer from "@/components/Footer.astro";
+import { getFaqStructuredData } from "@/data/faqs";
+
+const siteUrl = import.meta.env.PUBLIC_LANDING_URL || "https://blinkdisk.com";
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "BlinkDisk",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Windows, macOS, Linux",
+  description: "BlinkDisk is a desktop application that lets you effortlessly backup all your important files with just a few clicks.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "Free with optional cloud storage plans",
+  },
+  review: [{
+    "@type": "Review",
+    reviewRating: {
+        "@type": "Rating",
+        ratingValue: 5,
+    },
+    author: {
+      "@type": "Person",
+      name: "Simon K.",
+    },
+  }],
+  featureList: [
+    "End-to-end encryption",
+    "Cross-platform support",
+    "Multiple storage backends",
+    "Automatic backups",
+    "File deduplication",
+  ],
+  screenshot: `${siteUrl}/screenshots/light.png`,
+  softwareVersion: "1.0",
+  downloadUrl: `${siteUrl}/download`,
+};
+
+const structuredData = [getFaqStructuredData(), softwareSchema];
 ---
 
-<BaseLayout>
+<BaseLayout structuredData={structuredData}>
   <Navigation />
   <Hero />
   <Problems />

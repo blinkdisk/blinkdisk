@@ -1,9 +1,8 @@
 ---
+import Logo from "@/components/icons/Logo.astro";
 import Github from "@/components/icons/Github.astro";
 import X from "@/components/icons/X.astro";
 import Youtube from "@/components/icons/Youtube.astro";
-import logoDark from "@/assets/brand/logo-dark.svg";
-import logoLight from "@/assets/brand/logo-light.svg";
 
 const footerLinks = {
   product: [
@@ -36,19 +35,8 @@ const currentYear = new Date().getUTCFullYear();
   <div class="mx-auto max-w-6xl px-6 py-12 sm:px-8 lg:px-12">
     <div class="grid grid-cols-2 gap-8 md:grid-cols-5">
       <div class="col-span-2 flex flex-col items-center md:items-start">
-        <a href="/" class="inline-block">
-          <img
-            src={logoLight.src}
-            class="h-7 select-none dark:hidden"
-            draggable="false"
-            alt="BlinkDisk"
-          />
-          <img
-            src={logoDark.src}
-            class="hidden h-7 select-none dark:block"
-            draggable="false"
-            alt="BlinkDisk"
-          />
+        <a href="/" class="inline-block" aria-label="BlinkDisk">
+          <Logo class="h-7 select-none" />
         </a>
         <p class="text-muted-foreground mt-4 text-sm">
           The easiest way to backup your files.

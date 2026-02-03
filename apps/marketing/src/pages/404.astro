@@ -9,18 +9,25 @@ import Footer from "@/components/Footer.astro";
   description="The page you're looking for doesn't exist."
 >
   <Navigation />
-  <div class="py-page flex min-h-screen flex-col items-center">
+  <div class="flex min-h-screen flex-col items-center">
     <div class="mt-auto"></div>
-    <div class="flex max-w-[90vw] flex-col items-center text-center">
-      <h1 class="text-8xl font-bold tracking-tight">404</h1>
-      <p class="text-muted-foreground mt-4 text-lg">
-        The page you're looking for doesn't exist.
+    <div class="flex max-w-[80vw] flex-col items-center sm:max-w-sm">
+      <h1 class="text-primary text-lg font-medium uppercase tracking-widest">
+        404 - Not Found
+      </h1>
+      <p class="mt-4 text-center text-4xl font-bold sm:text-5xl">
+        This page was
+        <br class="hidden sm:block" /> not backed up.
+      </p>
+      <p class="text-muted-foreground mt-4 text-center text-sm sm:text-base">
+        We tried restoring it, but it's gone forever.
+        <br class="hidden sm:block" /> (You do have your files backed up… right?)
       </p>
       <a
         href="/"
-        class="bg-primary text-primary-foreground hover:bg-primary/90 mt-8 inline-flex h-10 items-center justify-center rounded-md px-6 text-sm font-medium transition-colors"
+        class="bg-primary text-primary-foreground hover:bg-primary/90 mt-10 inline-flex h-11 items-center justify-center rounded-md px-8 text-base font-medium transition-colors"
       >
-        Go Home
+        Back to Home
       </a>
     </div>
     <div class="mb-auto"></div>

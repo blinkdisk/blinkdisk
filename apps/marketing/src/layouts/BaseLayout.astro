@@ -9,26 +9,63 @@ type Props = {
     title?: string;
     image?: string;
   };
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
 
 const defaultTitle = "BlinkDisk | Backup and secure your files";
 const defaultDescription =
   "BlinkDisk is a desktop application that lets you effortlessly backup all your important files with just a few clicks.";
 const defaultImage = `${import.meta.env.PUBLIC_LANDING_URL || "https://blinkdisk.com"}/brand/social.jpg`;
+const siteUrl = import.meta.env.PUBLIC_LANDING_URL || "https://blinkdisk.com";
 
-const { title, description, image, og } = Astro.props;
+const { title, description, image, og, structuredData } = Astro.props;
 
 const pageTitle = title ? `${title} | BlinkDisk` : defaultTitle;
 const pageDescription = description || defaultDescription;
 const pageImage = image || defaultImage;
 
 const ogTitle = og?.title || pageTitle;
-const ogImage = og?.image ? `${import.meta.env.PUBLIC_LANDING_URL || "https://blinkdisk.com"}${og.image}` : pageImage;
+const ogImage = og?.image ? `${siteUrl}${og.image}` : pageImage;
 
 const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY || "";
 const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com";
 const endorselyKey = import.meta.env.PUBLIC_ENDORSELY_KEY || "";
 const crispKey = import.meta.env.PUBLIC_CRISP_KEY || "";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "BlinkDisk",
+  url: siteUrl,
+  logo: `${siteUrl}/brand/logo.png`,
+  sameAs: [
+    "https://github.com/blinkdisk/blinkdisk",
+    "https://twitter.com/blinkdisk",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "support@blinkdisk.com",
+    contactType: "customer support",
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "BlinkDisk",
+  url: siteUrl,
+  description: defaultDescription,
+  publisher: {
+    "@type": "Organization",
+    name: "BlinkDisk",
+  },
+};
+
+const allStructuredData = [
+  organizationSchema,
+  websiteSchema,
+  ...(Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : []),
+];
 ---
 
 <!doctype html>
@@ -67,6 +104,11 @@ const crispKey = import.meta.env.PUBLIC_CRISP_KEY || "";
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-title" content="BlinkDisk" />
+
+    <!-- Structured Data (JSON-LD) -->
+    {allStructuredData.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
 
     <!-- Flash-free theme -->
     <script is:inline>

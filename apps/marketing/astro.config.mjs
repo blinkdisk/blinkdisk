@@ -17,7 +17,6 @@ export default defineConfig({
     }),
     integrations: [react(), sitemap()],
     vite: {
-        // @ts-expect-error - tailwindcss vite plugin types mismatch with astro
         plugins: [tailwindcss()],
         resolve: {
             alias: {
