@@ -22,7 +22,7 @@ const links = [
 export default function Navigation() {
   const mobile = useIsMobile();
 
-  const [docked, setDocked] = useState(true);
+  const [docked, setDocked] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -34,8 +34,6 @@ export default function Navigation() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  if (typeof window === "undefined") return null;
 
   return (
     <>
