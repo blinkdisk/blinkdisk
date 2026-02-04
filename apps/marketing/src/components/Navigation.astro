@@ -1,6 +1,7 @@
 ---
 import Logo from "@/components/icons/Logo.astro";
 import Github from "@/components/icons/Github.astro";
+import Button from "@/components/Button.astro";
 
 const links = [
   { href: "/pricing", label: "Pricing" },
@@ -42,19 +43,17 @@ const links = [
       }
     </div>
     <div class="flex gap-2">
-      <a
+      <Button
+        variant="secondary"
+        size="icon-sm"
         href="https://github.com/blinkdisk/blinkdisk"
         target="_blank"
         rel="noopener noreferrer"
-        class="bg-secondary hover:bg-secondary/80 border-border flex size-10 items-center justify-center rounded-md border transition-colors"
         aria-label="GitHub"
       >
         <Github class="size-5" />
-      </a>
-      <a
-        href="/download"
-        class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
-      >
+      </Button>
+      <Button size="sm" href="/download">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -73,7 +72,7 @@ const links = [
             y2="3"></line></svg
         >
         Download
-      </a>
+      </Button>
     </div>
   </div>
 
@@ -145,19 +144,18 @@ const links = [
           }
         </div>
         <div class="flex w-full gap-2 p-2">
-          <a
+          <Button
+            variant="secondary"
+            size="icon-sm"
+            class="size-10"
             href="https://github.com/blinkdisk/blinkdisk"
             target="_blank"
             rel="noopener noreferrer"
-            class="bg-secondary hover:bg-secondary/80 border-border flex size-10 items-center justify-center rounded-md border transition-colors"
             aria-label="GitHub"
           >
             <Github class="size-5" />
-          </a>
-          <a
-            href="/download"
-            class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 grow items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
-          >
+          </Button>
+          <Button size="sm" class="h-10 grow" href="/download">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -176,7 +174,7 @@ const links = [
                 y2="3"></line></svg
             >
             Download
-          </a>
+          </Button>
         </div>
       </div>
     </div>

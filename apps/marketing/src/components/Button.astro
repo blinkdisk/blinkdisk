@@ -1,0 +1,52 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@utils/class";
+
+type Variant = "default" | "secondary" | "outline";
+type Size = "default" | "sm" | "lg" | "xl" | "icon" | "icon-sm" | "icon-xs" | "icon-lg" | "icon-xl";
+
+type Props = HTMLAttributes<"a"> &
+  HTMLAttributes<"button"> & {
+    variant?: Variant;
+    size?: Size;
+    as?: "a" | "button";
+  };
+
+const {
+  variant = "default",
+  size = "default",
+  class: className,
+  as = "a",
+  ...props
+} = Astro.props as Props;
+
+const baseClasses = "relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer";
+
+const variantClasses: Record<Variant, string> = {
+  default: "bg-primary text-primary-foreground hover:bg-primary/90",
+  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border",
+  outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+};
+
+const sizeClasses: Record<Size, string> = {
+  default: "h-11 rounded-md px-5",
+  sm: "h-9 px-4",
+  lg: "h-11.5 rounded-md text-sm px-8",
+  xl: "h-13 rounded-md text-base px-8",
+  icon: "size-11",
+  "icon-sm": "size-9",
+  "icon-xs": "size-6",
+  "icon-lg": "size-11.5",
+  "icon-xl": "size-13 [&_svg]:size-5",
+};
+
+const classes = cn(baseClasses, variantClasses[variant], sizeClasses[size], className);
+
+const Element = as;
+---
+
+<Element class={classes} {...props}>
+  <span class="inline-flex items-center gap-2">
+    <slot />
+  </span>
+</Element>

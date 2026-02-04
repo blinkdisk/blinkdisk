@@ -1,5 +1,5 @@
 ---
-
+import Button from "@/components/Button.astro";
 ---
 
 <div class="py-30 flex min-h-screen flex-col items-center">
@@ -30,12 +30,9 @@
       Your subscription has been successfully started. You can now close this
       window and return to your desktop app.
     </p>
-    <button
-      id="open-app-btn"
-      class="bg-primary text-primary-foreground hover:bg-primary/90 mt-10 inline-flex h-10 items-center justify-center rounded-md px-6 text-sm font-medium transition-colors"
-    >
+    <Button as="button" id="open-app-btn">
       Open Desktop App
-    </button>
+    </Button>
   </div>
   <div class="mb-auto"></div>
 </div>
