@@ -15,11 +15,6 @@ export default function EncryptionAnimation() {
   const [encrypted, setEncrypted] = useState(false);
   const [encryptedText, setEncryptedText] = useState(originalText);
   const [decryptedText, setDecryptedText] = useState(originalText);
-  const [fontLoaded, setFontLoaded] = useState(false);
-
-  useEffect(() => {
-    import("@fontsource/space-mono/latin-400.css").then(() => setFontLoaded(true));
-  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -112,7 +107,7 @@ export default function EncryptionAnimation() {
       <hr className="w-full border-t" />
       <p
         className="whitespace-pre text-base/7"
-        style={{ fontFamily: fontLoaded ? "'Space Mono', monospace" : "monospace" }}
+        style={{ fontFamily: "'Space Mono', monospace" }}
       >
         <span className="text-muted-foreground">{encryptedText}</span>
         {encryptedText.length !== originalText.length &&

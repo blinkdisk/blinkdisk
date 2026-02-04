@@ -13,22 +13,8 @@ import {
   ShareIcon,
   TypeIcon,
 } from "lucide-react";
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-
-let fontLoaded = false;
-function useSpaceMonoFont() {
-  const [loaded, setLoaded] = useState(fontLoaded);
-  useEffect(() => {
-    if (!fontLoaded) {
-      import("@fontsource/space-mono/latin-400.css").then(() => {
-        fontLoaded = true;
-        setLoaded(true);
-      });
-    }
-  }, []);
-  return loaded;
-}
 
 type CodeStatsResultProps = {
   files: CodeStatsFile[];
@@ -43,7 +29,6 @@ export function CodeStatsResult({
 }: CodeStatsResultProps) {
   const ref = useRef<HTMLDivElement>(null);
   const mobile = useIsMobile();
-  useSpaceMonoFont();
 
   const [excludedLanguages, setExcludedLanguages] = useState<string[]>([]);
 
@@ -161,17 +146,6 @@ export function CodeStatsResult({
 
   return (
     <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet"
-        crossOrigin="anonymous"
-      />
       <div className="sm:w-130 flex w-[80vw] flex-col gap-4">
         <div className="flex items-center justify-between">
           <Button

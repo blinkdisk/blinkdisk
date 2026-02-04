@@ -12,6 +12,15 @@
     U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/space-mono/files/space-mono-latin-400-normal.woff2")
+    format("woff2");
+}
+
 :root {
   font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   font-optical-sizing: auto;
