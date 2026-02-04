@@ -8,6 +8,7 @@
     "jsxImportSource": "react",
     "paths": {
       "@/*": ["./src/*"],
+      "@marketing/*": ["./src/*"],
       "@ui/*": ["../../libs/ui/src/*"],
       "@utils/*": ["../../libs/utils/src/*"],
       "@hooks/*": ["../../libs/hooks/src/*"],

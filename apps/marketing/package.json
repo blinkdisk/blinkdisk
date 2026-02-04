@@ -7,9 +7,9 @@
     "dev": "cp ../../.env .env && astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "typecheck": "astro check",
     "deploy": "wrangler deploy",
-    "lint": "eslint . --max-warnings=0",
-    "typecheck": "astro check"
+    "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",

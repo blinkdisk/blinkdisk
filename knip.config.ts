@@ -36,14 +36,17 @@ const config: KnipConfig = {
       ignore: [...commonIgnore, "src/preload.ts"],
     },
     "apps/marketing": {
-      entry: [
-        "src/pages/**/*.{astro,mdx,js,ts}",
-        "!src/pages/**/_*",
-        "!src/pages/**/_*/**",
-        "src/content/**/*.mdx",
-      ],
-      project: [...commonProject, "apps/marketing/src/**/*.astro"],
       ignore: commonIgnore,
+      ignoreDependencies: [
+        // Used in CSS url() imports which knip doesn't detect
+        "@fontsource-variable/inter",
+        "@fontsource/space-mono",
+        // Used internally by Astro image processing
+        "sharp",
+        // Used in eslint.config.mjs (eslint provided via @blinkdisk/eslint)
+        "eslint-plugin-astro",
+      ],
+      ignoreBinaries: ["eslint"],
     },
     "libs/config": {
       entry: commonProject,
