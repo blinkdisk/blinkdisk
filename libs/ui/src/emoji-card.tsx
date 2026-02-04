@@ -1,7 +1,6 @@
 import { emojiToHue } from "@config/emoji";
 import { cn } from "@utils/class";
-import { useEffect, useMemo } from "react";
-import Twemoji from "react-twemoji";
+import { useMemo } from "react";
 import { parse } from "twemoji-parser";
 
 export type EmojiCardProps = {
@@ -17,18 +16,15 @@ export function EmojiCard({
   className,
   size = "md",
 }: EmojiCardProps) {
-  useEffect(() => {}, []);
-
-  const color = useMemo(() => {
-    if (!emojiToHue) return defaultColor;
-
-    const parsed = parse(emoji, {
-      buildUrl: (code) => code,
-    });
-
-    return parsed?.length && emojiToHue[parsed[0]?.url || ""]
-      ? `${emojiToHue[parsed[0]?.url || ""]}deg 100% 60%`
-      : defaultColor;
+  const { color, emojiUrl } = useMemo(() => {
+    const parsed = parse(emoji);
+    const url = parsed[0]?.url;
+    const code = url?.split("/").pop()?.replace(".svg", "") || "";
+    const hue = emojiToHue[code as keyof typeof emojiToHue];
+    return {
+      color: hue !== undefined ? `${hue}deg 100% 60%` : defaultColor,
+      emojiUrl: url,
+    };
   }, [emoji]);
 
   return (
@@ -41,18 +37,26 @@ export function EmojiCard({
           borderColor: `hsl(${color} / 0.1)`,
         }}
         className={cn(
-          // The twemoji library seems to add an empty string for some emojis, which
-          // moves the emoji off-center. We use text-[0px] to make the text 0x0px.
-          "flex items-center justify-center rounded-md border-2 text-[0px]",
+          "flex shrink-0 items-center justify-center rounded-md border-2",
           size === "lg"
-            ? "size-14 rounded-lg [&>div>img]:size-6"
+            ? "size-14 rounded-lg"
             : size === "sm"
-              ? "size-9 [&>div>img]:size-4"
-              : "size-11 [&>div>img]:size-5",
+              ? "size-9"
+              : "size-11",
           className,
         )}
       >
-        <Twemoji options={{ className: "twemoji" }}>{emoji}</Twemoji>
+        {emojiUrl ? (
+          <img
+            src={emojiUrl}
+            alt={emoji}
+            className={cn(
+              size === "lg" ? "size-6" : size === "sm" ? "size-4" : "size-5",
+            )}
+          />
+        ) : (
+          <span>{emoji}</span>
+        )}
       </div>
     </div>
   );

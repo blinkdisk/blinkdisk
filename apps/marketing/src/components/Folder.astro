@@ -1,4 +1,6 @@
 ---
+import EmojiCard from "@/components/EmojiCard.astro";
+
 type Props = {
   folder: {
     emoji: string;
@@ -12,11 +14,7 @@ const { folder } = Astro.props;
 ---
 
 <div class="flex items-center gap-3">
-  <div
-    class="bg-primary/10 flex size-10 shrink-0 items-center justify-center rounded-lg text-xl"
-  >
-    {folder.emoji}
-  </div>
+  <EmojiCard emoji={folder.emoji} size="sm" />
   <div class="flex flex-col">
     <p class="whitespace-nowrap text-base font-semibold">{folder.name}</p>
     <p class="text-muted-foreground text-xs">

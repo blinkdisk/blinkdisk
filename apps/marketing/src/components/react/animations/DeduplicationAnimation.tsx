@@ -1,4 +1,5 @@
 import { exampleFolders } from "@config/folder";
+import { EmojiCard } from "@ui/emoji-card";
 import { useMemo } from "react";
 
 export default function DeduplicationAnimation() {
@@ -29,9 +30,7 @@ export default function DeduplicationAnimation() {
             </div>
             <div className="flex w-1/2 items-center justify-center">
                 <div className="flex items-center gap-3">
-                    <div className="bg-primary/10 flex size-10 shrink-0 items-center justify-center rounded-lg text-xl">
-                        📦
-                    </div>
+                    <EmojiCard emoji="📦" size="sm" />
                     <div className="flex flex-col">
                         <p className="text-base font-semibold">Backup</p>
                         <p className="text-muted-foreground text-xs">
@@ -75,9 +74,7 @@ function Marquee({ folders, duration, direction }: MarqueeProps) {
                         key={folder.name}
                         className="flex items-center gap-2 whitespace-nowrap"
                     >
-                        <div className="bg-primary/10 flex size-8 shrink-0 items-center justify-center rounded-lg text-sm">
-                            📁
-                        </div>
+                        <EmojiCard emoji={folder.emoji} size="sm" />
                         <span className="text-sm font-medium">
                             {folder.name}
                         </span>
@@ -88,9 +85,7 @@ function Marquee({ folders, duration, direction }: MarqueeProps) {
                         key={`${folder.name}-dup`}
                         className="flex items-center gap-2 whitespace-nowrap"
                     >
-                        <div className="bg-primary/10 flex size-8 shrink-0 items-center justify-center rounded-lg text-sm">
-                            📁
-                        </div>
+                        <EmojiCard emoji={folder.emoji} size="sm" />
                         <span className="text-sm font-medium">
                             {folder.name}
                         </span>

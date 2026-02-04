@@ -1,0 +1,52 @@
+---
+import { emojiToHue } from "@config/emoji";
+import { parse } from "twemoji-parser";
+
+type Props = {
+  emoji?: string;
+  size?: "lg" | "md" | "sm";
+  class?: string;
+};
+
+const { emoji = "📁", size = "md", class: className } = Astro.props;
+
+const defaultColor = "0deg 0% 39%";
+
+const parsed = parse(emoji);
+const emojiUrl = parsed[0]?.url;
+const emojiCode = emojiUrl?.split("/").pop()?.replace(".svg", "") || "";
+const hue = emojiToHue[emojiCode as keyof typeof emojiToHue];
+const color = hue !== undefined ? `${hue}deg 100% 60%` : defaultColor;
+
+const sizeClasses = {
+  lg: "size-14 rounded-lg",
+  md: "size-11",
+  sm: "size-9",
+};
+
+const imgSizeClasses = {
+  lg: "size-6",
+  md: "size-5",
+  sm: "size-4",
+};
+---
+
+<div class:list={["bg-background rounded-md", size === "lg" && "rounded-lg"]}>
+  <div
+    style={{
+      background: `hsl(${color} / 0.15)`,
+      borderColor: `hsl(${color} / 0.1)`,
+    }}
+    class:list={[
+      "flex shrink-0 items-center justify-center rounded-md border-2",
+      sizeClasses[size],
+      className,
+    ]}
+  >
+    {emojiUrl ? (
+      <img src={emojiUrl} alt={emoji} class:list={[imgSizeClasses[size]]} />
+    ) : (
+      <span>{emoji}</span>
+    )}
+  </div>
+</div>

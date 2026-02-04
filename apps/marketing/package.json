@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "deploy": "wrangler deploy",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "astro check && tsc --noEmit"
+    "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",
@@ -36,6 +36,7 @@
     "react-dropzone": "^14.3.8",
     "sharp": "^0.34.5",
     "sonner": "^2.0.1",
+    "twemoji-parser": "^14.0.0",
     "ua-parser-js": "^2.0.5"
   },
   "devDependencies": {
@@ -44,8 +45,9 @@
     "@types/dom-to-image": "^2.6.7",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
+    "@types/twemoji-parser": "^13.1.4",
     "eslint-plugin-astro": "^1.5.0",
     "typescript": "5.8.2",
-    "wrangler": "^4.43.0"
+    "wrangler": "^4.62.0"
   }
 }

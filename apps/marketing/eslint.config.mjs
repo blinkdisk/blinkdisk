@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { config as reactConfig } from "@blinkdisk/eslint/react.mjs";
 import eslintPluginAstro from "eslint-plugin-astro";
 

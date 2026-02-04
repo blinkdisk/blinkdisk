@@ -11,7 +11,7 @@ import {
   EmojiPicker as Picker,
 } from "frimousse";
 import { useState } from "react";
-import Twemoji from "react-twemoji";
+import { parse } from "twemoji-parser";
 
 export type EmojiPickerProps = {
   locale: string;
@@ -105,20 +105,22 @@ export function EmojiPicker({
                       {children}
                     </div>
                   ),
-                  Emoji: (props: EmojiPickerListEmojiProps) => (
-                    <button
-                      className="flex items-start justify-center rounded-md p-1.5 text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
-                      {...props}
-                    >
-                      <Twemoji
-                        options={{
-                          className: "size-5",
-                        }}
+                  Emoji: (props: EmojiPickerListEmojiProps) => {
+                    const parsed = parse(props.emoji.emoji);
+                    const url = parsed[0]?.url;
+                    return (
+                      <button
+                        className="flex items-start justify-center rounded-md p-1.5 text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
+                        {...props}
                       >
-                        {props.emoji.emoji}
-                      </Twemoji>
-                    </button>
-                  ),
+                        {url ? (
+                          <img src={url} alt={props.emoji.emoji} className="size-5" />
+                        ) : (
+                          <span className="size-5">{props.emoji.emoji}</span>
+                        )}
+                      </button>
+                    );
+                  },
                 }}
               />
             </Picker.Viewport>

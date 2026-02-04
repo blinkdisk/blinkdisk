@@ -1,4 +1,5 @@
 import { exampleFolders } from "@config/folder";
+import { EmojiCard } from "@ui/emoji-card";
 import { CheckIcon, LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -77,9 +78,7 @@ export default function SetupAnimation() {
           className="flex w-full items-center justify-between transition-all duration-300"
         >
           <div className="flex items-center gap-3">
-            <div className="bg-primary/10 flex size-10 shrink-0 items-center justify-center rounded-lg text-xl">
-              📁
-            </div>
+            <EmojiCard emoji={folder.emoji} size="sm" />
             <div className="flex flex-col">
               <p className="text-base font-semibold">{folder.name}</p>
               <p className="text-muted-foreground text-xs">

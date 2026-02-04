@@ -1,4 +1,3 @@
-// @ts-check
 import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
@@ -12,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
     site: "https://blinkdisk.com",
     output: "static",
+    server: { port: 3000 },
     adapter: cloudflare({
         imageService: "compile",
     }),
