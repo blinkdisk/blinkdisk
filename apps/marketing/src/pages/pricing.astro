@@ -1,12 +1,12 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/Navigation.astro";
-import Footer from "@/components/Footer.astro";
-import PricingClient from "@/components/react/PricingClient";
+import BaseLayout from "@marketing/layouts/BaseLayout.astro";
+import Navigation from "@marketing/components/Navigation.astro";
+import Footer from "@marketing/components/Footer.astro";
+import PricingClient from "@marketing/components/react/PricingClient";
 import { plans } from "@config/plans";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
 
-const siteUrl = import.meta.env.PUBLIC_LANDING_URL || "https://blinkdisk.com";
+const siteUrl = import.meta.env.PUBLIC_MARKETING_URL || "https://blinkdisk.com";
 const freeStorageGB = Math.round(FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000);
 
 const planOffers = plans

@@ -21,7 +21,9 @@ function sleep(ms: number) {
 export default function SetupAnimation() {
   const [folders, setFolders] = useState<typeof exampleFolders>([]);
   const [completed, setCompleted] = useState(false);
-  const [style, setStyle] = useState<React.CSSProperties | undefined>(undefined);
+  const [style, setStyle] = useState<React.CSSProperties | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     let mounted = true;

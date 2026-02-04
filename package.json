@@ -5,7 +5,7 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "dev": "dotenv -- turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md,astro}\"",
     "env:update": "turbo run env:update",
     "db:migrate:dev": "dotenv -- pnpm --filter db migrate:dev",
     "db:migrate:prod": "dotenv -- pnpm --filter db migrate:prod",

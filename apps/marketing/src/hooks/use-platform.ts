@@ -1,4 +1,4 @@
-import { getPlatformFromOS } from "@/utils/platform";
+import { getPlatformFromOS } from "@marketing/utils/platform";
 import { useMemo } from "react";
 import { UAParser } from "ua-parser-js";
 

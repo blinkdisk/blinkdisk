@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { Toaster } from "@ui/toast";
+import { useEffect, useState } from "react";
 
 export default function ToasterWrapper() {
   const [dark, setDark] = useState(false);

@@ -1,18 +1,26 @@
-import type { APIRoute } from "astro";
 import { Polar } from "@polar-sh/sdk";
+import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const { checkoutId, affiliateId } = await request.json();
 
-    if (!checkoutId || typeof checkoutId !== "string" || checkoutId.length > 100) {
+    if (
+      !checkoutId ||
+      typeof checkoutId !== "string" ||
+      checkoutId.length > 100
+    ) {
       return new Response(JSON.stringify({ error: "Invalid checkoutId" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    if (!affiliateId || typeof affiliateId !== "string" || affiliateId.length > 100) {
+    if (
+      !affiliateId ||
+      typeof affiliateId !== "string" ||
+      affiliateId.length > 100
+    ) {
       return new Response(JSON.stringify({ error: "Invalid affiliateId" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },

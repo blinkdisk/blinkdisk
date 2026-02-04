@@ -1,11 +1,16 @@
-import { useCalendar } from "@/hooks/use-calendar";
-import { useClipboard } from "@/hooks/use-clipboard";
-import { useLogsnag } from "@/hooks/use-logsnag";
-import { usePlatform } from "@/hooks/use-platform";
-import type { Architecture } from "@/utils/architecture";
-import { getArchitectureFromCpu } from "@/utils/architecture";
-import { getDownloadUrl, linux, mac, windows } from "@/utils/downloads";
-import type { Platform } from "@/utils/platform";
+import { useCalendar } from "@marketing/hooks/use-calendar";
+import { useClipboard } from "@marketing/hooks/use-clipboard";
+import { useLogsnag } from "@marketing/hooks/use-logsnag";
+import { usePlatform } from "@marketing/hooks/use-platform";
+import type { Architecture } from "@marketing/utils/architecture";
+import { getArchitectureFromCpu } from "@marketing/utils/architecture";
+import {
+  getDownloadUrl,
+  linux,
+  mac,
+  windows,
+} from "@marketing/utils/downloads";
+import type { Platform } from "@marketing/utils/platform";
 import Confetti from "js-confetti";
 import {
   CalendarIcon,

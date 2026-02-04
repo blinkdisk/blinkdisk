@@ -43,10 +43,12 @@ const imgSizeClasses = {
       className,
     ]}
   >
-    {emojiUrl ? (
-      <img src={emojiUrl} alt={emoji} class:list={[imgSizeClasses[size]]} />
-    ) : (
-      <span>{emoji}</span>
-    )}
+    {
+      emojiUrl ? (
+        <img src={emojiUrl} alt={emoji} class:list={[imgSizeClasses[size]]} />
+      ) : (
+        <span>{emoji}</span>
+      )
+    }
   </div>
 </div>

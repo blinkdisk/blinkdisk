@@ -1,10 +1,13 @@
-import { CodeStatsDropzone } from "@/components/react/code/dropzone";
-import { useClipboard } from "@/hooks/use-clipboard";
-import type { CodeStatsFile, CodeStatsRepository } from "@/components/react/code/types";
+import { CodeStatsDropzone } from "@marketing/components/react/code/dropzone";
+import type {
+  CodeStatsFile,
+  CodeStatsRepository,
+} from "@marketing/components/react/code/types";
+import { useClipboard } from "@marketing/hooks/use-clipboard";
 import {
   excludedExtensions,
   extensionToLanguage,
-} from "@/utils/extension";
+} from "@marketing/utils/extension";
 import { Alert, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
@@ -19,11 +22,7 @@ import {
   LockIcon,
 } from "lucide-react";
 import type { FormEvent, ReactElement } from "react";
-import {
-  cloneElement,
-  useCallback,
-  useState,
-} from "react";
+import { cloneElement, useCallback, useState } from "react";
 import { toast } from "sonner";
 
 type Provider = "github" | "gitlab" | "other";
@@ -32,7 +31,12 @@ type Visibility = "public" | "private";
 
 const command = `git archive HEAD -o Code.zip`;
 
-const ALLOWED_GITLAB_HOSTS = ["gitlab.com", "gitlab.gnome.org", "gitlab.freedesktop.org", "invent.kde.org"];
+const ALLOWED_GITLAB_HOSTS = [
+  "gitlab.com",
+  "gitlab.gnome.org",
+  "gitlab.freedesktop.org",
+  "invent.kde.org",
+];
 
 function isValidGitlabHost(host: string): boolean {
   const normalized = host.toLowerCase().trim();
@@ -172,13 +176,21 @@ export function CodeStatsForm({
           >
             <TabsList className="w-full [&>button]:px-4 [&_svg]:mr-1 [&_svg]:size-4">
               <TabsTrigger value="github">
-                <svg viewBox="0 0 100 100" fill="currentColor" className="size-4 mr-1">
+                <svg
+                  viewBox="0 0 100 100"
+                  fill="currentColor"
+                  className="mr-1 size-4"
+                >
                   <path d="M50 5C25.1488 5 5 25.1489 5 50C5 69.9799 18.2134 86.8878 36.1995 92.8413C38.4419 93.2603 39.2824 91.8869 39.2824 90.7034C39.2824 89.6305 39.2399 86.1466 39.2186 82.1813C27.0685 84.7142 24.4405 76.9614 24.4405 76.9614C22.4001 71.8227 19.4579 70.4493 19.4579 70.4493C15.3715 67.6601 19.7509 67.7176 19.7509 67.7176C24.2551 68.0366 26.6223 72.3373 26.6223 72.3373C30.6088 79.2115 36.9889 77.3574 39.3886 76.2208C39.7969 73.2418 40.9911 71.205 42.3114 70.0959C32.4817 68.9762 22.167 65.1001 22.167 47.7681C22.167 42.9011 23.9159 38.8996 26.7285 35.7413C26.2627 34.6216 24.7299 30.0368 27.1624 23.8252C27.1624 23.8252 30.9128 22.6374 39.1505 28.4588C42.7127 27.4816 46.5668 26.9866 50.4209 26.9654C54.275 26.9972 58.1186 27.4816 61.6914 28.4694C69.919 22.648 73.6588 23.8358 73.6588 23.8358C76.102 30.0474 74.5692 34.6322 74.1034 35.7519C76.9266 38.8996 78.6542 42.9118 78.6542 47.7787C78.6542 65.1532 68.3181 68.9656 58.4565 70.0641C60.1097 71.4588 61.5893 74.2055 61.5893 78.4318C61.5893 84.4597 61.5362 89.3161 61.5362 90.7034C61.5362 91.8976 62.3555 93.2815 64.6405 92.8307C82.8073 86.8665 96 69.969 96 50C96 25.1489 75.8512 5 50 5Z" />
                 </svg>
                 GitHub
               </TabsTrigger>
               <TabsTrigger value="gitlab">
-                <svg viewBox="0 0 100 100" fill="currentColor" className="size-4 mr-1">
+                <svg
+                  viewBox="0 0 100 100"
+                  fill="currentColor"
+                  className="mr-1 size-4"
+                >
                   <path d="M95.876 39.4759L95.7947 39.2321L82.3907 2.94607C82.1631 2.36527 81.7648 1.86916 81.249 1.52182C80.7326 1.18158 80.1293 0.996626 79.5121 0.989043C78.8948 0.98146 78.2873 1.15168 77.7626 1.47895C77.2435 1.8154 76.8301 2.29341 76.5711 2.85813L67.4125 26.2133H32.5874L23.4289 2.85813C23.1764 2.28928 22.7648 1.80687 22.2458 1.46777C21.7211 1.14049 21.1137 0.970277 20.4964 0.977861C19.8791 0.985447 19.2758 1.1704 18.7594 1.51064C18.2446 1.86056 17.8465 2.3568 17.6176 2.93731L4.20489 39.2189L4.12351 39.4627C2.41987 44.0916 2.0842 49.1272 3.15852 53.9497C4.23284 58.7723 6.66979 63.1728 10.167 66.6384L10.2047 66.6739L10.2951 66.7529L32.3152 83.5776L43.2256 92.0062L49.9269 97.1759C50.5612 97.6631 51.3285 97.9254 52.1178 97.9254C52.9071 97.9254 53.6743 97.6631 54.3087 97.1759L61.01 92.0062L71.9204 83.5776L89.7866 66.6871L89.8324 66.6384C93.3238 63.176 95.7572 58.7818 96.8321 53.966C97.907 49.1503 97.5756 44.1211 95.876 39.4959V39.4759Z" />
                 </svg>
                 GitLab

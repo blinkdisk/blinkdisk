@@ -35,10 +35,15 @@ const config: KnipConfig = {
       project: commonProject,
       ignore: [...commonIgnore, "src/preload.ts"],
     },
-    "apps/landing": {
-      entry: ["src/routes/index.tsx", "src/router.tsx"],
-      project: commonProject,
-      ignore: [...commonIgnore, "src/routeTree.gen.ts"],
+    "apps/marketing": {
+      entry: [
+        "src/pages/**/*.{astro,mdx,js,ts}",
+        "!src/pages/**/_*",
+        "!src/pages/**/_*/**",
+        "src/content/**/*.mdx",
+      ],
+      project: [...commonProject, "apps/marketing/src/**/*.astro"],
+      ignore: commonIgnore,
     },
     "libs/config": {
       entry: commonProject,
@@ -107,6 +112,9 @@ const config: KnipConfig = {
     // Vite allows adding "?url" to an import
     /.+\?url$/,
   ],
+  ignoreIssues: {
+    "apps/marketing/src/components/react/**": ["exports"],
+  },
   ignoreDependencies: ["@types/electron", "@blinkdisk/.+", "cloudflare"],
   paths: {
     "@ui/*": ["./libs/ui/src/*"],

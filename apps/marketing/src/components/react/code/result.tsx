@@ -1,5 +1,8 @@
 import { useIsMobile } from "@hooks/use-mobile";
-import type { CodeStatsFile, CodeStatsRepository } from "@/components/react/code/types";
+import type {
+  CodeStatsFile,
+  CodeStatsRepository,
+} from "@marketing/components/react/code/types";
 import { Button } from "@ui/button";
 import { Switch } from "@ui/switch";
 import { cn } from "@utils/class";

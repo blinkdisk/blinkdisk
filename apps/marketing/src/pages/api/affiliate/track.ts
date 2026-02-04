@@ -4,7 +4,11 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const { referralId } = await request.json();
 
-    if (!referralId || typeof referralId !== "string" || referralId.length > 100) {
+    if (
+      !referralId ||
+      typeof referralId !== "string" ||
+      referralId.length > 100
+    ) {
       return new Response(JSON.stringify({ error: "Invalid referralId" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },

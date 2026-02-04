@@ -1,7 +1,10 @@
+import { CodeStatsForm } from "@marketing/components/react/code/form";
+import { CodeStatsResult } from "@marketing/components/react/code/result";
+import type {
+  CodeStatsFile,
+  CodeStatsRepository,
+} from "@marketing/components/react/code/types";
 import { useState } from "react";
-import { CodeStatsForm } from "@/components/react/code/form";
-import { CodeStatsResult } from "@/components/react/code/result";
-import type { CodeStatsFile, CodeStatsRepository } from "@/components/react/code/types";
 
 export default function CodeStatsClient() {
   const [repository, setRepository] = useState<CodeStatsRepository | null>(

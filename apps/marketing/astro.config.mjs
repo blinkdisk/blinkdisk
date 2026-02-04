@@ -20,7 +20,7 @@ export default defineConfig({
         plugins: [tailwindcss()],
         resolve: {
             alias: {
-                "@": path.resolve(__dirname, "./src"),
+                "@marketing": path.resolve(__dirname, "./src"),
                 "@ui": path.resolve(__dirname, "../../libs/ui/src"),
                 "@utils": path.resolve(__dirname, "../../libs/utils/src"),
                 "@hooks": path.resolve(__dirname, "../../libs/hooks/src"),

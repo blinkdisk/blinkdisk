@@ -1,6 +1,6 @@
 # BlinkDisk Agent Instructions
 
-BlinkDisk is a minimalistic and user-friendly desktop application that makes file backups accessible to everyone. 
+BlinkDisk is a minimalistic and user-friendly desktop application that makes file backups accessible to everyone.
 
 ## Key features
 
@@ -37,7 +37,7 @@ pnpm --filter=api lint
 
 ### Applications (apps/)
 
-- **core** - The core "engine" for handling the backups, forked from the Kopia project. 
+- **core** - The core "engine" for handling the backups, forked from the Kopia project.
 - **api** - Hono + tRPC backend used for syncing configuration with a user's account.
 - **cloud** - Cloudflare Workers + Durable Object project for our optional managed cloud storage solution.
 - **desktop** - React + Tanstack Router frontend for the desktop app UI.
@@ -58,19 +58,19 @@ pnpm --filter=api lint
 
 These path aliases are configured:
 
-- @ui/*: ./libs/ui/src/*
-- @api/*: ./apps/api/src/*
-- @marketing/*: ./apps/marketing/src/*
-- @styles/*: ./libs/styles/*
-- @utils/*: ./libs/utils/src/*
-- @desktop/*: ./apps/desktop/src/*
-- @hooks/*: ./libs/hooks/src/*
-- @db/*: ./libs/db/src/*
-- @emails/*: ./libs/emails/src/*
-- @schemas/*: ./libs/schemas/src/*
-- @config/*: ./libs/config/src/*
-- @electron/*: ./apps/electron/src/*
-- @cloud/*: ./apps/cloud/src/*
+- @ui/_: ./libs/ui/src/_
+- @api/_: ./apps/api/src/_
+- @marketing/_: ./apps/marketing/src/_
+- @styles/_: ./libs/styles/_
+- @utils/_: ./libs/utils/src/_
+- @desktop/_: ./apps/desktop/src/_
+- @hooks/_: ./libs/hooks/src/_
+- @db/_: ./libs/db/src/_
+- @emails/_: ./libs/emails/src/_
+- @schemas/_: ./libs/schemas/src/_
+- @config/_: ./libs/config/src/_
+- @electron/_: ./apps/electron/src/_
+- @cloud/_: ./apps/cloud/src/_
 
 ## Code Style
 

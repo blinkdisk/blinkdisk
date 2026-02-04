@@ -1,17 +1,17 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Navigation from "@/components/Navigation.astro";
-import Hero from "@/components/Hero.astro";
-import Problems from "@/components/Problems.astro";
-import Solution from "@/components/Solution.astro";
-import Quote from "@/components/Quote.astro";
-import Features from "@/components/Features.astro";
-import Integrations from "@/components/Integrations.astro";
-import Faq from "@/components/Faq.astro";
-import Footer from "@/components/Footer.astro";
-import { getFaqStructuredData } from "@/data/faqs";
+import BaseLayout from "@marketing/layouts/BaseLayout.astro";
+import Navigation from "@marketing/components/Navigation.astro";
+import Hero from "@marketing/components/Hero.astro";
+import Problems from "@marketing/components/Problems.astro";
+import Solution from "@marketing/components/Solution.astro";
+import Quote from "@marketing/components/Quote.astro";
+import Features from "@marketing/components/Features.astro";
+import Integrations from "@marketing/components/Integrations.astro";
+import Faq from "@marketing/components/Faq.astro";
+import Footer from "@marketing/components/Footer.astro";
+import { getFaqStructuredData } from "@marketing/data/faqs";
 
-const siteUrl = import.meta.env.PUBLIC_LANDING_URL || "https://blinkdisk.com";
+const siteUrl = import.meta.env.PUBLIC_MARKETING_URL || "https://blinkdisk.com";
 
 const softwareSchema = {
   "@context": "https://schema.org",
