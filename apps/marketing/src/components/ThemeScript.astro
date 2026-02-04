@@ -1,0 +1,34 @@
+---
+// Flash-free theme initialization script
+// Prevents flash of wrong theme on page load
+---
+
+<script is:inline>
+  (function () {
+    const STORAGE_KEY = "preferences.theme";
+
+    function isDark(theme) {
+      return theme === "dark" ? true : theme === "light" ? false : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    function applyTheme(theme) {
+      if (isDark(theme)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+
+    const theme = localStorage.getItem(STORAGE_KEY) || "system";
+    applyTheme(theme);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.key === "y") {
+        const current = localStorage.getItem(STORAGE_KEY) || "system";
+        const next = isDark(current) ? "light" : "dark";
+        localStorage.setItem(STORAGE_KEY, next);
+        applyTheme(next);
+      }
+    });
+  })();
+</script>

@@ -1,5 +1,6 @@
 ---
 import "@marketing/styles.css";
+import ThemeScript from "@marketing/components/ThemeScript.astro";
 
 type Props = {
   title?: string;
@@ -26,17 +27,7 @@ const { title = "Checkout | BlinkDisk" } = Astro.props;
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
 
-    <!-- Flash-free theme -->
-    <script is:inline>
-      (function () {
-        const theme = localStorage.getItem("preferences.theme") || "system";
-        const dark =
-          theme === "dark" ||
-          (theme === "system" &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches);
-        if (dark) document.documentElement.classList.add("dark");
-      })();
-    </script>
+    <ThemeScript />
   </head>
   <body class="landing">
     <slot />
