@@ -20,7 +20,7 @@ const links = [
 <nav
   id="nav"
   style="z-index: 1002"
-  class="w-content fixed left-1/2 top-0 flex -translate-x-1/2 flex-row items-center justify-between rounded-2xl border border-transparent py-4 transition-all duration-300"
+  class="w-content nav-bar fixed left-1/2 flex flex-row items-center justify-between rounded-2xl border py-4"
 >
   <!-- Desktop layout -->
   <div class="hidden w-full items-center justify-between sm:flex">
@@ -200,48 +200,35 @@ const links = [
   const closeIcon = document.getElementById("close-icon");
 
   let isOpen = false;
+  let isDocked = false;
+  let ticking = false;
 
   function updateNav() {
-    const docked = window.scrollY >= 100;
+    const shouldDock = window.scrollY >= 100 || isOpen;
 
-    if (docked || isOpen) {
-      nav?.classList.add(
-        "bg-secondary",
-        "border-foreground/10",
-        "top-4",
-        "p-4",
-      );
-      nav?.classList.remove("top-0", "border-transparent");
-    } else {
-      nav?.classList.remove(
-        "bg-secondary",
-        "border-foreground/10",
-        "top-4",
-        "p-4",
-      );
-      nav?.classList.add("top-0", "border-transparent");
+    if (shouldDock !== isDocked) {
+      isDocked = shouldDock;
+      nav?.classList.toggle("nav-docked", isDocked);
+    }
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(updateNav);
+      ticking = true;
     }
   }
 
   function toggleMenu() {
     isOpen = !isOpen;
-
-    if (isOpen) {
-      menu?.classList.remove("grid-rows-[0fr]");
-      menu?.classList.add("grid-rows-[1fr]");
-      overlay?.classList.remove("opacity-0", "pointer-events-none");
-      overlay?.classList.add("opacity-100");
-      menuIcon?.classList.add("hidden");
-      closeIcon?.classList.remove("hidden");
-    } else {
-      menu?.classList.add("grid-rows-[0fr]");
-      menu?.classList.remove("grid-rows-[1fr]");
-      overlay?.classList.add("opacity-0", "pointer-events-none");
-      overlay?.classList.remove("opacity-100");
-      menuIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
-    }
-
+    menu?.classList.toggle("grid-rows-[1fr]", isOpen);
+    menu?.classList.toggle("grid-rows-[0fr]", !isOpen);
+    overlay?.classList.toggle("opacity-100", isOpen);
+    overlay?.classList.toggle("opacity-0", !isOpen);
+    overlay?.classList.toggle("pointer-events-none", !isOpen);
+    menuIcon?.classList.toggle("hidden", isOpen);
+    closeIcon?.classList.toggle("hidden", !isOpen);
     updateNav();
   }
 
@@ -250,6 +237,24 @@ const links = [
     if (isOpen) toggleMenu();
   });
 
-  window.addEventListener("scroll", updateNav, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true });
   updateNav();
 </script>
+
+<style>
+  .nav-bar {
+    top: 0;
+    transform: translateX(-50%);
+    border-color: transparent;
+    background-color: transparent;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, padding 0.3s ease;
+    will-change: transform;
+  }
+
+  .nav-bar.nav-docked {
+    transform: translateX(-50%) translateY(1rem);
+    background-color: var(--secondary);
+    border-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+    padding: 1rem;
+  }
+</style>
