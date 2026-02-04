@@ -47,7 +47,7 @@ const currentYear = new Date().getUTCFullYear();
   <div class="mx-auto max-w-6xl px-6 py-12 sm:px-8 lg:px-12">
     <div class="grid grid-cols-2 gap-8 md:grid-cols-5">
       <div class="col-span-2 flex flex-col items-center md:items-start">
-        <a href="/" class="inline-block" aria-label="BlinkDisk">
+        <a href="/" class="inline-block" aria-label="BlinkDisk" data-astro-prefetch>
           <Logo class="h-7 select-none" />
         </a>
         <p class="text-muted-foreground mt-4 text-sm">
@@ -83,6 +83,7 @@ const currentYear = new Date().getUTCFullYear();
                   target={link.external ? "_blank" : undefined}
                   rel={link.external ? "noopener noreferrer" : undefined}
                   class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                  data-astro-prefetch={!link.external ? "" : undefined}
                 >
                   {link.label}
                 </a>
@@ -121,6 +122,7 @@ const currentYear = new Date().getUTCFullYear();
                 <a
                   href={link.href}
                   class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                  data-astro-prefetch
                 >
                   {link.label}
                 </a>

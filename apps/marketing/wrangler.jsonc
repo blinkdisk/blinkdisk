@@ -3,5 +3,6 @@
   "compatibility_date": "2026-02-03",
   "assets": {
     "directory": "./dist",
+    "html_handling": "drop-trailing-slash"
   },
 }

@@ -11,6 +11,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
     site: "https://blinkdisk.com",
     output: "static",
+    prefetch: true,
+    trailingSlash: "never",
     server: { port: 3000 },
     adapter: cloudflare({
         imageService: "compile",
