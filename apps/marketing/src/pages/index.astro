@@ -1,13 +1,13 @@
 ---
 import BaseLayout from "@marketing/layouts/BaseLayout.astro";
 import Navigation from "@marketing/components/Navigation.astro";
-import Hero from "@marketing/components/Hero.astro";
-import Problems from "@marketing/components/Problems.astro";
-import Solution from "@marketing/components/Solution.astro";
-import Quote from "@marketing/components/Quote.astro";
-import Features from "@marketing/components/Features.astro";
-import Integrations from "@marketing/components/Integrations.astro";
-import Faq from "@marketing/components/Faq.astro";
+import Hero from "@marketing/sections/Hero.astro";
+import Problems from "@marketing/sections/Problems.astro";
+import Solution from "@marketing/sections/Solution.astro";
+import Quote from "@marketing/sections/Quote.astro";
+import Features from "@marketing/sections/Features.astro";
+import Downloads from "@marketing/sections/Downloads.astro";
+import Faq from "@marketing/sections/Faq.astro";
 import Footer from "@marketing/components/Footer.astro";
 import { getFaqStructuredData } from "@marketing/data/faqs";
 
@@ -62,7 +62,7 @@ const structuredData = [getFaqStructuredData(), softwareSchema];
   <Solution />
   <Quote />
   <Features />
-  <Integrations />
+  <Downloads />
   <Faq />
   <Footer />
 </BaseLayout>

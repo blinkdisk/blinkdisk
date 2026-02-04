@@ -21,7 +21,7 @@
     "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
-    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
     "@fontsource/space-mono": "^5.2.9",
     "@lucide/astro": "^0.563.0",
     "@polar-sh/sdk": "^0.35.4",

@@ -11,35 +11,48 @@ import XIcon from "@lucide/astro/icons/x";
 
 <div class="pt-page flex flex-col items-center justify-center pb-16 sm:pb-24">
   <div
-    class="flex max-w-[90vw] flex-col items-center text-center md:max-w-[38rem]"
+    class="flex max-w-[90vw] flex-col items-center text-center md:max-w-[39rem]"
   >
     <h1
-      class="animate-fade-in mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl"
+      class="mt-4 text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl"
     >
-      Secure your files
+      Backup your files
       <br class="hidden sm:block" />
       before it's too late
     </h1>
     <p
-      class="text-muted-foreground animate-fade-in mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed"
-      style="animation-delay: 0.2s"
+      class="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed"
     >
       BlinkDisk is a desktop application that lets you effortlessly create
       backup copies of all your important files
       <span class="hidden sm:inline"> with just a few clicks</span>.
     </p>
-    <div class="mt-8 flex items-center gap-3 sm:mt-12">
+    <div class="mt-8 flex items-center gap-3 sm:hidden">
+      <Button
+        variant="outline"
+        size="icon"
+        href="https://github.com/blinkdisk/blinkdisk"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <GitHubIcon />
+      </Button>
+      <Button href="/download">
+        <DownloadIcon class="mr-1.5 size-4 md:size-5" />
+        Download for free
+      </Button>
+    </div>
+    <div class="mt-12 hidden items-center gap-3 sm:flex">
       <Button
         variant="outline"
         size="icon-xl"
         href="https://github.com/blinkdisk/blinkdisk"
         target="_blank"
         rel="noopener noreferrer"
-        style="animation-delay: 0.4s"
       >
         <GitHubIcon />
       </Button>
-      <Button size="xl" href="/download" style="animation-delay: 0.35s">
+      <Button size="xl" href="/download">
         <DownloadIcon class="mr-1.5 size-4 md:size-5" />
         Download for free
       </Button>
@@ -47,8 +60,7 @@ import XIcon from "@lucide/astro/icons/x";
   </div>
   <div
     id="hero-video-trigger"
-    class="animate-fade-in lg:rounded-4xl relative mt-16 cursor-pointer overflow-hidden rounded-xl sm:mt-20 sm:rounded-2xl md:rounded-3xl"
-    style="animation-delay: 0.5s"
+    class="lg:rounded-4xl relative mt-16 cursor-pointer overflow-hidden rounded-xl sm:mt-20 sm:rounded-2xl md:rounded-3xl"
   >
     <Image
       src={screenshotLight}

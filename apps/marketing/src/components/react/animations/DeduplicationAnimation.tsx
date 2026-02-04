@@ -57,7 +57,7 @@ function Marquee({ folders, duration, direction }: MarqueeProps) {
       className="flex w-max overflow-hidden"
       style={{
         maskImage:
-          "linear-gradient(to right, transparent, black 10%, black 100%)",
+          "linear-gradient(to right, transparent, black 2%, black 100%)",
       }}
     >
       <div className="flex items-center gap-4" style={animationStyle}>

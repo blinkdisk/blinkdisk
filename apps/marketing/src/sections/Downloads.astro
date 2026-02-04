@@ -2,21 +2,31 @@
 import Windows from "@marketing/components/icons/Windows.astro";
 import Macos from "@marketing/components/icons/Macos.astro";
 import Linux from "@marketing/components/icons/Linux.astro";
+import { DownloadButton } from "@marketing/components/react/DownloadButton";
+import type { Platform } from "@marketing/utils/platform";
 
-const operatingSystems = [
+const operatingSystems: {
+  name: string;
+  icon: string;
+  platform: Platform;
+  description: string;
+}[] = [
   {
     name: "Windows",
     icon: "windows",
+    platform: "windows",
     description: "Windows 11 and Windows 10 with 64-bit supported.",
   },
   {
     name: "macOS",
     icon: "macos",
+    platform: "macos",
     description: "Big Sur and all newer versions of macOS are supported.",
   },
   {
     name: "Linux",
     icon: "linux",
+    platform: "linux",
     description: "AppImage, deb, and rpm for x86_64, arm64 and armv7l.",
   },
 ];
@@ -48,12 +58,9 @@ const operatingSystems = [
           <p class="text-muted-foreground sm:max-w-50 mt-2 w-full text-sm sm:text-center">
             {os.description}
           </p>
-          <a
-            href="/download"
-            class="bg-secondary hover:bg-secondary/80 text-foreground border-border mt-4 inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors sm:mt-6"
-          >
-            Download
-          </a>
+          <div class="mt-8">
+            <DownloadButton client:visible os={os.platform} />
+          </div>
         </div>
       ))
     }

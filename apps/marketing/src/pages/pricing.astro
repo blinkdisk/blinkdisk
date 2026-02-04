@@ -2,9 +2,10 @@
 import BaseLayout from "@marketing/layouts/BaseLayout.astro";
 import Navigation from "@marketing/components/Navigation.astro";
 import Footer from "@marketing/components/Footer.astro";
-import PricingClient from "@marketing/components/react/PricingClient";
+import PlanSelector from "@marketing/components/react/PlanSelector";
 import { plans } from "@config/plans";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
+import { CheckIcon } from "lucide-react";
 
 const siteUrl = import.meta.env.PUBLIC_MARKETING_URL || "https://blinkdisk.com";
 const freeStorageGB = Math.round(FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000);
@@ -51,6 +52,97 @@ const productSchema = {
     ...planOffers,
   ],
 };
+
+const features = [
+  {
+    title: "Unlimited Storages",
+    description:
+      "Create as many backup locations as you like. No limits, no extra cost.",
+  },
+  {
+    title: "Unlimited Devices",
+    description: "Back up every device you own under a single account.",
+  },
+  {
+    title: "Unlimited Backups",
+    description:
+      "Run automatic or manual backups as often as you want without restrictions.",
+  },
+  {
+    title: "End-to-End Encryption",
+    description:
+      "Your data is encrypted before it leaves your device, ensuring only you can access it.",
+  },
+  {
+    title: "Built-in Compression",
+    description:
+      "Save storage space with built-in intelligent file compression.",
+    hideOnMobile: true,
+  },
+  {
+    title: "Retention Settings",
+    description:
+      "Control how long old backups are kept and automatically prune old ones.",
+  },
+  {
+    title: "File Deduplication",
+    description:
+      "Identical files are stored only once, saving space across all backups and devices.",
+  },
+  {
+    title: "Scheduled Backups",
+    description:
+      "Set BlinkDisk to automatically back up your data on a schedule that fits your workflow.",
+  },
+  {
+    title: "Custom Storage",
+    description:
+      "Use your own cloud provider or self-hosted storage for full control and zero costs.",
+  },
+];
+
+const storageOptions = [
+  {
+    name: "Local Drives",
+    description: "Store backups on your computer",
+    image: "filesystem.svg",
+  },
+  {
+    name: "Network Attached Storage",
+    description: "Use your home or office NAS",
+    image: "nas.svg",
+  },
+  {
+    name: "S3 Compatible",
+    description: "Any S3-compatible service",
+    image: "s3.svg",
+  },
+  {
+    name: "SFTP",
+    description: "Backup to secure SFTP server",
+    image: "sftp.svg",
+  },
+  {
+    name: "WebDAV",
+    description: "Use any WebDAV server",
+    image: "webdav.svg",
+  },
+  {
+    name: "AWS S3",
+    description: "Reliable storage by AWS",
+    image: "aws.svg",
+  },
+  {
+    name: "Google Cloud Storage",
+    description: "Google Cloud's storage solution",
+    image: "google-cloud-storage.svg",
+  },
+  {
+    name: "Azure Blob Storage",
+    description: "Azure's cloud storage option",
+    image: "azure-blob-storage.svg",
+  },
+];
 ---
 
 <BaseLayout
@@ -59,6 +151,94 @@ const productSchema = {
   structuredData={productSchema}
 >
   <Navigation />
-  <PricingClient client:load />
+  <div class="py-page flex min-h-screen flex-col items-center">
+    <div class="mt-auto"></div>
+
+    <h1 class="text-primary text-lg font-medium">Plans & Pricing</h1>
+    <p
+      class="mt-2 max-w-[90vw] text-center text-3xl font-bold tracking-tight sm:text-4xl"
+    >
+      Get all features for free…
+    </p>
+    <p
+      class="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm sm:max-w-md"
+    >
+      All BlinkDisk features are completely free, you only pay for the storage
+      you use. Here's a quick look at what's included.
+    </p>
+
+    <div
+      class="mt-12 grid max-w-[90vw] grid-cols-2 gap-4 md:max-w-5xl md:grid-cols-3 md:gap-8"
+    >
+      {
+        features.map((feature) => (
+          <div
+            class:list={[
+              "flex flex-col gap-3 md:flex-row",
+              feature.hideOnMobile ? "hidden md:flex" : "",
+            ]}
+          >
+            <CheckIcon className="text-primary mt-1 size-5 min-w-5" />
+            <div class="flex flex-col">
+              <p class="md:text-lg">{feature.title}</p>
+              <p class="text-muted-foreground mt-1 text-xs md:mt-0">
+                {feature.description}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <h2
+      class="mt-30 max-w-[90vw] text-center text-3xl font-bold tracking-tight sm:text-4xl"
+    >
+      …and backup anywhere.
+    </h2>
+    <p
+      class="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm sm:max-w-md"
+    >
+      We let you choose between BlinkDisk Cloud (our managed cloud backup
+      service) or a variety of custom storage providers.
+    </p>
+
+    <div class="w-content mt-12 flex flex-col items-start gap-20 lg:flex-row">
+      <PlanSelector client:load />
+
+      <div
+        class="relative flex w-full flex-col items-center lg:w-1/3 lg:items-start"
+      >
+        <div
+          class="border-foreground/20 absolute left-0 top-20 hidden h-[calc(100%-5rem)] -translate-x-10 border-l-2 border-dashed lg:block"
+        >
+        </div>
+        <h3 class="text-center text-3xl font-bold sm:text-left">
+          Custom Storage
+        </h3>
+        <div class="mt-10 flex flex-col gap-3">
+          {
+            storageOptions.map((storageOption) => (
+              <div class="flex items-center justify-start gap-3">
+                <img
+                  src={`/images/providers/${storageOption.image}`}
+                  class="size-7 grayscale"
+                  alt={storageOption.name}
+                />
+                <div class="flex flex-col">
+                  <p class="text-sm">{storageOption.name}</p>
+                  <p class="text-muted-foreground text-xs">
+                    {storageOption.description}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+          <p class="text-muted-foreground mt-2 text-center">…and a lot more.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-auto"></div>
+  </div>
   <Footer />
 </BaseLayout>

@@ -1,8 +1,40 @@
 ---
-import CheckoutLayout from "@marketing/layouts/CheckoutLayout.astro";
-import CheckoutSuccess from "@marketing/components/CheckoutSuccess.astro";
+import BaseLayout from "@marketing/layouts/BaseLayout.astro";
+import Button from "@marketing/components/Button.astro";
+import CheckIcon from "@lucide/astro/icons/check";
 ---
 
-<CheckoutLayout title="Subscription Successful">
-  <CheckoutSuccess />
-</CheckoutLayout>
+<BaseLayout title="Subscription Successful">
+  <div class="py-30 flex min-h-screen flex-col items-center">
+    <div class="mt-auto"></div>
+    <div class="flex max-w-[90vw] flex-col items-center">
+      <div
+        class="flex size-14 items-center justify-center rounded-xl border border-lime-500/30 bg-lime-500/10 text-lime-600 dark:text-lime-500 [&>svg]:size-6"
+      >
+        <CheckIcon class="size-6" />
+      </div>
+      <h1 class="mt-10 text-center text-4xl font-bold">
+        Subscribed successfully!
+      </h1>
+      <p class="text-muted-foreground mt-4 max-w-sm text-center text-sm">
+        Your subscription has been successfully started. You can now close this
+        window and return to your desktop app.
+      </p>
+      <Button as="button" id="open-app-btn" class="mt-10">
+        Open Desktop App
+      </Button>
+    </div>
+    <div class="mb-auto"></div>
+  </div>
+
+  <script>
+    import Confetti from "js-confetti";
+
+    const confetti = new Confetti();
+    confetti.addConfetti({ confettiNumber: 100 });
+
+    document.getElementById("open-app-btn")?.addEventListener("click", () => {
+      window.open("blinkdisk://checkout_completed");
+    });
+  </script>
+</BaseLayout>
