@@ -2,7 +2,9 @@
 import Logo from "@marketing/components/icons/Logo.astro";
 import Github from "@marketing/components/icons/Github.astro";
 import Button from "@marketing/components/Button.astro";
-import { Download, Menu, X } from "@lucide/astro";
+import DownloadIcon from "@lucide/astro/icons/download";
+import MenuIcon from "@lucide/astro/icons/menu";
+import XIcon from "@lucide/astro/icons/x";
 
 const links = [
   { href: "/pricing", label: "Pricing" },
@@ -55,7 +57,7 @@ const links = [
         <Github class="size-5" />
       </Button>
       <Button size="sm" href="/download">
-        <Download class="size-4" />
+        <DownloadIcon class="size-4" />
         Download
       </Button>
     </div>
@@ -72,11 +74,11 @@ const links = [
         class="flex size-8 items-center justify-center"
         aria-label="Toggle navigation"
       >
-        <Menu
+        <MenuIcon
           id="menu-icon"
           class="text-foreground/60 hover:text-foreground/80 size-6"
         />
-        <X
+        <XIcon
           id="close-icon"
           class="text-foreground/60 hover:text-foreground/80 hidden size-6"
         />
@@ -116,7 +118,7 @@ const links = [
             <Github class="size-5" />
           </Button>
           <Button size="sm" class="h-10 grow" href="/download">
-            <Download class="size-4" />
+            <DownloadIcon class="size-4" />
             Download
           </Button>
         </div>

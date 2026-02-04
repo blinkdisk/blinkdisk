@@ -1,7 +1,7 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { XIcon } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@utils/class";
@@ -74,7 +74,7 @@ const DialogContent = React.forwardRef<
         {children}
         {showCloseButton ? (
           <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-8 top-8 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none">
-            <X className="h-4 w-4" />
+            <XIcon className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         ) : null}

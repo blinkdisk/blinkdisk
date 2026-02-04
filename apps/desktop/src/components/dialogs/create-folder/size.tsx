@@ -9,7 +9,7 @@ import {
   CheckIcon,
   FileIcon,
   FolderSearch2Icon,
-  HardDrive,
+  HardDriveIcon,
   XIcon,
 } from "lucide-react";
 import { useContext, useEffect } from "react";
@@ -52,7 +52,7 @@ export function FolderSize({ path, setSize }: FolderSizeProps) {
             <span>{formatInt(result.included.files)}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <HardDrive className="text-muted-foreground size-4" />
+            <HardDriveIcon className="text-muted-foreground size-4" />
             <span>{formatSize(result.included.bytes)}</span>
           </div>
 
@@ -65,7 +65,7 @@ export function FolderSize({ path, setSize }: FolderSizeProps) {
             <span>{formatInt(result.excluded.files)}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <HardDrive className="text-muted-foreground size-4" />
+            <HardDriveIcon className="text-muted-foreground size-4" />
             <span>{formatSize(result.excluded.bytes)}</span>
           </div>
         </div>

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/auth/register")({
 function RouteComponent() {
   const { t } = useAppTranslation("auth.register");
   const { authenticated } = useAuth();
-  
+
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const search = Route.useSearch();
@@ -95,14 +95,14 @@ function RouteComponent() {
                     components={[
                       <a
                         key={0}
-                        href={`${process.env.LANDING_URL}/terms`}
+                        href={`${process.env.MARKETING_URL}/terms`}
                         target="_blank"
                         className="link-primary"
                         rel="noreferrer"
                       />,
                       <a
                         key={1}
-                        href={`${process.env.LANDING_URL}/privacy`}
+                        href={`${process.env.MARKETING_URL}/privacy`}
                         target="_blank"
                         className="link-primary"
                         rel="noreferrer"

@@ -1,5 +1,7 @@
 ---
-import { TriangleAlert, Lock, Info } from "@lucide/astro";
+import TriangleAlertIcon from "@lucide/astro/icons/triangle-alert";
+import LockIcon from "@lucide/astro/icons/lock";
+import InfoIcon from "@lucide/astro/icons/info";
 ---
 
 <section
@@ -7,7 +9,7 @@ import { TriangleAlert, Lock, Info } from "@lucide/astro";
   class="w-content mx-auto flex flex-col items-center py-16 sm:py-32"
 >
   <div class="flex items-center gap-5">
-    <TriangleAlert class="hidden size-10 text-red-500 sm:block" />
+    <TriangleAlertIcon class="hidden size-10 text-red-500 sm:block" />
     <h2 class="text-center text-4xl font-bold sm:text-5xl">
       Your files are at risk
     </h2>
@@ -80,7 +82,7 @@ import { TriangleAlert, Lock, Info } from "@lucide/astro";
           class="bg-card flex h-full w-full flex-col justify-between rounded-lg border p-5"
         >
           <div class="my-auto flex w-full flex-col items-center">
-            <TriangleAlert class="mx-auto size-8 text-red-500" />
+            <TriangleAlertIcon class="mx-auto size-8 text-red-500" />
             <p class="mt-3 text-center text-xl font-medium">
               Failed to start device
             </p>
@@ -112,7 +114,7 @@ import { TriangleAlert, Lock, Info } from "@lucide/astro";
         <div
           class="bg-card flex h-full w-full flex-col justify-between rounded-lg border p-5"
         >
-          <Lock class="size-8 text-red-500" />
+          <LockIcon class="size-8 text-red-500" />
           <div class="flex flex-col">
             <p class="text-base font-medium">Your files have been encrypted!</p>
             <p class="text-muted-foreground mt-1 text-xs">
@@ -126,7 +128,7 @@ import { TriangleAlert, Lock, Info } from "@lucide/astro";
 
   <div class="sm:w-140 mt-24 flex w-full flex-col gap-2 rounded-xl sm:mt-20">
     <div class="flex items-center gap-3">
-      <Info class="size-6 text-red-500" />
+      <InfoIcon class="size-6 text-red-500" />
       <h3 class="text-2xl font-bold">Cloud storage isn't a backup</h3>
     </div>
     <p class="text-muted-foreground text-sm">

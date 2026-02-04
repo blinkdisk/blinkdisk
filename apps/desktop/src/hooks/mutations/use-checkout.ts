@@ -21,7 +21,7 @@ export function useCheckout({ onSuccess }: UseCheckoutOptions = {}) {
     },
     onError: showErrorToast,
     onSuccess: async (res) => {
-      const url = new URL(`${process.env.LANDING_URL}/checkout/redirect`);
+      const url = new URL(`${process.env.MARKETING_URL}/checkout/redirect`);
 
       url.searchParams.append("id", res.id);
       url.searchParams.append("url", res.url);

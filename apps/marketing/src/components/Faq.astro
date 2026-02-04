@@ -1,6 +1,7 @@
 ---
 import { faqs } from "@marketing/data/faqs";
-import { Plus, Minus } from "@lucide/astro";
+import PlusIcon from "@lucide/astro/icons/plus";
+import MinusIcon from "@lucide/astro/icons/minus";
 ---
 
 <section
@@ -24,8 +25,8 @@ import { Plus, Minus } from "@lucide/astro";
               {faq.question}
             </p>
             <div class="ml-6 flex h-7 items-center">
-              <Plus class="size-6 stroke-1 group-open:hidden" />
-              <Minus class="hidden size-6 stroke-1 group-open:block" />
+              <PlusIcon class="size-6 stroke-1 group-open:hidden" />
+              <MinusIcon class="hidden size-6 stroke-1 group-open:block" />
             </div>
           </summary>
           <dd class="mt-2 pr-12">

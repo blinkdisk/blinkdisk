@@ -1,6 +1,7 @@
-// @ts-nocheck
-import { config as reactConfig } from "@blinkdisk/eslint/react.mjs";
 import eslintPluginAstro from "eslint-plugin-astro";
+import {
+    config as reactConfig,
+} from "../../libs/eslint/react.mjs";
 
 export default [
   ...reactConfig,
@@ -11,6 +12,18 @@ export default [
   {
     rules: {
       "react/no-unescaped-entities": "off",
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@lucide/astro",
+              message:
+                'Import icons directly from "@lucide/astro/icons/<icon-name>" for better tree-shaking.',
+            },
+          ],
+        },
+      ],
     },
   },
   {

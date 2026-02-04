@@ -70,7 +70,7 @@ export function Update({ children }: { children: ReactNode }) {
           <Button
             onClick={async () => {
               await window.electron.shell.open.browser(
-                `${process.env.LANDING_URL}/download`,
+                `${process.env.MARKETING_URL}/download`,
               );
             }}
             size="lg"

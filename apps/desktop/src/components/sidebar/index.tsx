@@ -20,7 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@ui/sidebar";
-import { EllipsisVertical, HomeIcon, SettingsIcon } from "lucide-react";
+import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
@@ -102,7 +102,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   size="icon"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <EllipsisVertical className="size-4" />
+                  <EllipsisVerticalIcon className="size-4" />
                 </SidebarMenuButton>
               </AccountMenuDropdown>
             </SidebarMenuItem>

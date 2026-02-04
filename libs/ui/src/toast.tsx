@@ -4,7 +4,7 @@ import {
   CircleCheckIcon,
   CircleXIcon,
   InfoIcon,
-  TriangleAlert,
+  TriangleAlertIcon,
 } from "lucide-react";
 import { Toaster as Sonner } from "sonner";
 
@@ -31,7 +31,7 @@ const Toaster = ({ ...props }: ToasterProps & { dark: boolean }) => {
         success: <CircleCheckIcon className="size-6 !pr-2 text-green-500" />,
         info: <InfoIcon className="text-primary-600 size-6 !pr-2" />,
         error: <CircleXIcon className="size-6 !pr-2 text-red-500" />,
-        warning: <TriangleAlert className="size-6 !pr-2 text-amber-600" />,
+        warning: <TriangleAlertIcon className="size-6 !pr-2 text-amber-600" />,
       }}
       theme={props.theme === "dark" ? "dark" : "light"}
       {...props}

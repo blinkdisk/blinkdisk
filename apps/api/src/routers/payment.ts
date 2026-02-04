@@ -60,7 +60,7 @@ export const paymentRouter = router({
       const checkout = await polar.checkouts.create({
         customerId: polarId,
         allowDiscountCodes: true,
-        successUrl: `${ctx.env.LANDING_URL}/checkout/success`,
+        successUrl: `${ctx.env.MARKETING_URL}/checkout/success`,
         products: [
           price.polarId[ctx.env.POLAR_ENVIRONMENT as "sandbox" | "production"],
         ],

@@ -1,7 +1,7 @@
 ---
 import Folder from "@marketing/components/Folder.astro";
 import { exampleFolders } from "@config/folder";
-import { Lock } from "@lucide/astro";
+import LockIcon from "@lucide/astro/icons/lock";
 
 const steps = [
   {
@@ -27,7 +27,7 @@ const steps = [
   class="w-content mx-auto flex flex-col items-center py-16 sm:py-24"
 >
   <div class="flex items-center gap-5">
-    <Lock class="text-primary hidden size-10 md:block" />
+    <LockIcon class="text-primary hidden size-10 md:block" />
     <h2 class="text-center text-4xl font-bold sm:text-5xl">
       Get protected in <br class="sm:hidden" />
       <span class="sm:hidden">a few</span> minutes
