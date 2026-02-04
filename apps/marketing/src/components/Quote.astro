@@ -1,5 +1,6 @@
 ---
-
+import { Image } from "astro:assets";
+import simonImage from "@/assets/images/simon.jpg";
 ---
 
 <section
@@ -38,10 +39,14 @@
       </p>
     </blockquote>
     <figcaption class="mt-8 flex items-center gap-4">
-      <img
+      <Image
+        src={simonImage}
         alt="Simon K."
-        src="/images/simon.jpg"
+        width={40}
+        height={40}
         class="size-10 rounded-full bg-gray-50 dark:bg-gray-800"
+        loading="lazy"
+        quality={80}
       />
       <div class="flex flex-col">
         <p class="text-lg font-semibold">Simon K.</p>

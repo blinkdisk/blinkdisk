@@ -34,6 +34,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
+    "sharp": "^0.34.5",
     "sonner": "^2.0.1",
     "ua-parser-js": "^2.0.5"
   },

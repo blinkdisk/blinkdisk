@@ -1,5 +1,7 @@
 ---
-
+import { Image } from "astro:assets";
+import screenshotLight from "@/assets/screenshots/light.png";
+import screenshotDark from "@/assets/screenshots/dark.png";
 ---
 
 <div class="pt-page flex flex-col items-center justify-center pb-16 sm:pb-24">
@@ -72,15 +74,25 @@
     class="animate-fade-in lg:rounded-4xl relative mt-16 cursor-pointer overflow-hidden rounded-xl sm:mt-20 sm:rounded-2xl md:rounded-3xl"
     style="animation-delay: 0.5s"
   >
-    <img
-      src="/screenshots/light.png"
+    <Image
+      src={screenshotLight}
       alt="Screenshot of the BlinkDisk desktop app"
       class="w-content border shadow dark:hidden"
+      widths={[640, 960, 1280, 1600]}
+      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 90vw, 1024px"
+      loading="eager"
+      fetchpriority="high"
+      quality={85}
     />
-    <img
-      src="/screenshots/dark.png"
+    <Image
+      src={screenshotDark}
       alt="Screenshot of the BlinkDisk desktop app"
       class="w-content hidden border shadow dark:block"
+      widths={[640, 960, 1280, 1600]}
+      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 90vw, 1024px"
+      loading="eager"
+      fetchpriority="high"
+      quality={85}
     />
     <div
       class="group absolute inset-0 flex items-center justify-center bg-opacity-0 transition-colors hover:bg-black/10"
