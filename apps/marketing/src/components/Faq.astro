@@ -1,5 +1,6 @@
 ---
 import { faqs } from "@/data/faqs";
+import { Plus, Minus } from "@lucide/astro";
 ---
 
 <section
@@ -23,35 +24,8 @@ import { faqs } from "@/data/faqs";
               {faq.question}
             </p>
             <div class="ml-6 flex h-7 items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="size-6 group-open:hidden"
-              >
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="hidden size-6 group-open:block"
-              >
-                <path d="M5 12h14" />
-              </svg>
+              <Plus class="size-6 stroke-1 group-open:hidden" />
+              <Minus class="hidden size-6 stroke-1 group-open:block" />
             </div>
           </summary>
           <dd class="mt-2 pr-12">

@@ -111,7 +111,7 @@ const config: KnipConfig = {
   paths: {
     "@ui/*": ["./libs/ui/src/*"],
     "@api/*": ["./apps/api/src/*"],
-    "@landing/*": ["./apps/landing/src/*"],
+    "@marketing/*": ["./apps/marketing/src/*"],
     "@styles/*": ["./libs/styles/*"],
     "@utils/*": ["./libs/utils/src/*"],
     "@desktop/*": ["./apps/desktop/src/*"],

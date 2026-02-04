@@ -520,12 +520,15 @@ importers:
       '@fontsource/space-mono':
         specifier: ^5.2.9
         version: 5.2.9
+      '@lucide/astro':
+        specifier: ^0.563.0
+        version: 0.563.0(astro@5.17.1)
       '@polar-sh/sdk':
         specifier: ^0.35.4
         version: 0.35.4
       '@tailwindcss/vite':
         specifier: ^4.1.14
-        version: 4.1.14(vite@7.3.1)
+        version: 4.1.14(vite@6.4.1)
       astro:
         specifier: ^5.17.1
         version: 5.17.1(@types/node@22.13.10)(typescript@5.8.2)
@@ -4205,6 +4208,14 @@ packages:
     resolution: {integrity: sha512-R44ZKjdT9LPGMu6GXfdRFu1327quUkkdIBOiPsOU6vRpROotYmJYMhBtjoJWRPbkIXo3Qge0gyU4UMpELQje5A==}
     dev: false
 
+  /@lucide/astro@0.563.0(astro@5.17.1):
+    resolution: {integrity: sha512-X9fNJvRR6pLJfkIEAFQkizWaNVvcduunJoFyR3fwPu30Y6jOu5S9k4k7HTSk3ZrEfqK2eFEqrBqqWH4fwSNKCg==}
+    peerDependencies:
+      astro: ^4 || ^5
+    dependencies:
+      astro: 5.17.1(@types/node@22.13.10)(typescript@5.8.2)
+    dev: false
+
   /@malept/cross-spawn-promise@2.0.0:
     resolution: {integrity: sha512-1DpKU0Z5ThltBwjNySMC14g0CkbyhCaz9FkhxqNsZI6uAPJXFS8cMXlBKo26FJ8ZuW6S9GCMcR9IO5k2X5/9Fg==}
     engines: {node: '>= 12.13.0'}
@@ -7819,6 +7830,17 @@ packages:
       lightningcss: 1.29.2
       tailwindcss: 4.0.14
       vite: 6.2.2(@types/node@22.13.10)
+    dev: false
+
+  /@tailwindcss/vite@4.1.14(vite@6.4.1):
+    resolution: {integrity: sha512-BoFUoU0XqgCUS1UXWhmDJroKKhNXeDzD7/XwabjkDIAbMnc4ULn5e2FuEuBbhZ6ENZoSYzKlzvZ44Yr6EUDUSA==}
+    peerDependencies:
+      vite: ^5.2.0 || ^6 || ^7
+    dependencies:
+      '@tailwindcss/node': 4.1.14
+      '@tailwindcss/oxide': 4.1.14
+      tailwindcss: 4.1.14
+      vite: 6.4.1(@types/node@22.13.10)
     dev: false
 
   /@tailwindcss/vite@4.1.14(vite@7.3.1):

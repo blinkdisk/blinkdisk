@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import screenshotLight from "@/assets/screenshots/light.png";
 import screenshotDark from "@/assets/screenshots/dark.png";
 import Button from "@/components/Button.astro";
+import { Download, Play, X } from "@lucide/astro";
 ---
 
 <div class="pt-page flex flex-col items-center justify-center pb-16 sm:pb-24">
@@ -48,24 +49,7 @@ import Button from "@/components/Button.astro";
         href="/download"
         style="animation-delay: 0.35s"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="mr-1.5 size-4 md:size-5"
-          ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
-            points="7 10 12 15 17 10"></polyline><line
-            x1="12"
-            x2="12"
-            y1="15"
-            y2="3"></line></svg
-        >
+        <Download class="mr-1.5 size-4 md:size-5" />
         Download for free
       </Button>
     </div>
@@ -101,14 +85,7 @@ import Button from "@/components/Button.astro";
       <div
         class="bg-foreground/20 border-foreground/20 sm:size-18 lg:size-22 flex size-16 items-center justify-center rounded-full border-2 shadow-2xl transition-transform group-hover:scale-110 md:size-20"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="text-foreground size-5/12"
-        >
-          <polygon points="6 3 20 12 6 21 6 3"></polygon>
-        </svg>
+        <Play class="text-foreground size-5/12 fill-current" />
       </div>
     </div>
   </div>
@@ -122,20 +99,7 @@ import Button from "@/components/Button.astro";
       class="video-modal-close"
       aria-label="Close video"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M18 6 6 18"></path>
-        <path d="m6 6 12 12"></path>
-      </svg>
+      <X class="size-5" />
     </button>
     <div class="video-modal-iframe-wrapper">
       <iframe

@@ -42,7 +42,7 @@ pnpm --filter=api lint
 - **cloud** - Cloudflare Workers + Durable Object project for our optional managed cloud storage solution.
 - **desktop** - React + Tanstack Router frontend for the desktop app UI.
 - **electron** - Electron backend (main process) for the desktop app.
-- **landing** - React + Tanstack Start marketing site.
+- **marketing** - Astro marketing site.
 
 ### Shared Libraries (libs/)
 
@@ -60,7 +60,7 @@ These path aliases are configured:
 
 - @ui/*: ./libs/ui/src/*
 - @api/*: ./apps/api/src/*
-- @landing/*: ./apps/landing/src/*
+- @marketing/*: ./apps/marketing/src/*
 - @styles/*: ./libs/styles/*
 - @utils/*: ./libs/utils/src/*
 - @desktop/*: ./apps/desktop/src/*
