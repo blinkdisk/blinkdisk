@@ -25,6 +25,7 @@
     "@fontsource/space-mono": "^5.2.9",
     "@lucide/astro": "^0.563.0",
     "@polar-sh/sdk": "^0.35.4",
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
     "astro": "^5.17.1",
     "dom-to-image": "^2.6.0",

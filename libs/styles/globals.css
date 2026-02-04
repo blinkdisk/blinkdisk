@@ -1,9 +1,9 @@
 @import "tailwindcss";
 @import "./animate.css";
+
 @source "../../ui/src";
 @source "../ui/src";
 @source "../hooks/src";
-@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -208,46 +208,4 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
-}
-
-.desktop a {
-  @apply cursor-default;
-}
-
-.disable-transitions * {
-  -o-transition: none !important;
-  -moz-transition: none !important;
-  -webkit-transition: none !important;
-  transition: none !important;
-}
-
-.w-content {
-  width: 90vw;
-
-  @media (min-width: 68rem) {
-    width: 64rem;
-  }
-}
-
-:root {
-  --page-padding-top: 6em;
-  --page-padding-bottom: 4rem;
-
-  @media (min-width: 64rem) {
-    --page-padding-top: 10rem;
-    --page-padding-bottom: 7.5rem;
-  }
-}
-
-.pt-page {
-  padding-top: var(--page-padding-top);
-}
-
-.pb-page {
-  padding-bottom: var(--page-padding-bottom);
-}
-
-.py-page {
-  padding-top: var(--page-padding-top);
-  padding-bottom: var(--page-padding-bottom);
 }
