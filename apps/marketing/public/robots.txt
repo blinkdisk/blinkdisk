@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+
+Sitemap: https://blinkdisk.com/sitemap-index.xml

@@ -1,4 +1,4 @@
-name: Deploy Landing
+name: Deploy Marketing
 
 on:
   push:
@@ -29,14 +29,14 @@ jobs:
         env:
           MARKETING_URL: ${{ vars.MARKETING_URL }}
           POSTHOG_API_HOST: ${{ vars.POSTHOG_API_HOST }}
-          POSTHOG_LANDING_KEY: ${{ vars.POSTHOG_LANDING_KEY }}
+          POSTHOG_MARKETING_KEY: ${{ vars.POSTHOG_MARKETING_KEY }}
           LOGSNAG_PUBLIC_KEY: ${{ vars.LOGSNAG_PUBLIC_KEY }}
           ENDORSELY_PUBLIC_KEY: ${{ vars.ENDORSELY_PUBLIC_KEY }}
           CRISP_KEY: ${{ vars.CRISP_KEY }}
-        run: pnpm --filter landing build
+        run: pnpm --filter marketing build
 
       - name: Deploy project
-        run: pnpm --filter landing run deploy
+        run: pnpm --filter marketing run deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

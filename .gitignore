@@ -41,5 +41,3 @@ yarn-error.log*
 .DS_Store
 *.pem
 .dev.vars
-
-sitemap.xml
