@@ -8,7 +8,7 @@ import { VaultThrottleSettings } from "@desktop/components/vaults/settings/throt
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Accordion } from "@ui/accordion";
 import { Button } from "@ui/button";
 import { Skeleton } from "@ui/skeleton";
@@ -44,8 +44,8 @@ function RouteComponent() {
       >
         {vault ? (
           <Button
-            as="link"
-            href="/app/{-$vaultId}/{-$hostName}/{-$userName}"
+            as={Link}
+            to="/app/{-$vaultId}/{-$hostName}/{-$userName}"
             variant="outline"
             size="sm"
           >

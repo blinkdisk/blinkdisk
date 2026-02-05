@@ -33,7 +33,6 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@tanstack/react-router": "^1.131.7",
     "@types/twemoji-parser": "^13.1.4",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",

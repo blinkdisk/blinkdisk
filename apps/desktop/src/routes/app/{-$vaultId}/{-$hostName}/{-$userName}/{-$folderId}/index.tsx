@@ -13,7 +13,7 @@ import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-setting
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
@@ -68,8 +68,8 @@ function RouteComponent() {
         }
       >
         <Button
-          as="link"
-          href="/app/{-$vaultId}/{-$hostName}/{-$userName}"
+          as={Link}
+          to="/app/{-$vaultId}/{-$hostName}/{-$userName}"
           variant="outline"
           size="sm"
         >
