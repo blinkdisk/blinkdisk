@@ -27,6 +27,7 @@ jobs:
 
       - name: Build project
         env:
+          API_URL: ${{ vars.API_URL }}
           MARKETING_URL: ${{ vars.MARKETING_URL }}
           POSTHOG_API_HOST: ${{ vars.POSTHOG_API_HOST }}
           POSTHOG_MARKETING_KEY: ${{ vars.POSTHOG_MARKETING_KEY }}

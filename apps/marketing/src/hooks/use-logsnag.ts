@@ -20,7 +20,7 @@ export function useLogsnag() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.PUBLIC_LOGSNAG_KEY}`,
+          Authorization: `Bearer ${import.meta.env.LOGSNAG_KEY}`,
         },
         body: JSON.stringify({
           project: "blinkdisk",

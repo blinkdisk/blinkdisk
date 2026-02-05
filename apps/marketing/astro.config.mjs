@@ -1,8 +1,15 @@
+import { config } from "dotenv";
+
+config({
+  path: "../../.env",
+});
+
 import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import env from "vite-plugin-environment";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -19,7 +26,22 @@ export default defineConfig({
     }),
     integrations: [react(), sitemap()],
     vite: {
-        plugins: [tailwindcss()],
+        plugins: [
+          tailwindcss(),
+          env(
+            {
+              API_URL: undefined,
+              MARKETING_URL: undefined,
+              LOGSNAG_PUBLIC_KEY: null,
+              POSTHOG_MARKETING_KEY: null,
+              ENDORSELY_PUBLIC_KEY: null,
+              CRISP_KEY: null,
+            },
+            {
+              loadEnvFiles: false,
+            },
+          )
+        ],
         resolve: {
             alias: {
                 "@marketing": path.resolve(__dirname, "./src"),

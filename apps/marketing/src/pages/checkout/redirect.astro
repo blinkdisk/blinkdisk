@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "@marketing/layouts/BaseLayout.astro";
+
+const apiUrl = import.meta.env.API_URL || "https://api.blinkdisk.com";
 ---
 
 <BaseLayout title="Redirecting...">
@@ -25,14 +27,14 @@ import BaseLayout from "@marketing/layouts/BaseLayout.astro";
     </svg>
   </div>
 
-  <script>
+  <script define:vars={{ apiUrl }}>
     const ALLOWED_REDIRECT_HOSTS = [
       "polar.sh",
       "sandbox.polar.sh",
       "checkout.polar.sh",
     ];
 
-    function isAllowedRedirectUrl(url: string): boolean {
+    function isAllowedRedirectUrl(url) {
       try {
         const parsed = new URL(url);
         return ALLOWED_REDIRECT_HOSTS.some(
@@ -54,16 +56,16 @@ import BaseLayout from "@marketing/layouts/BaseLayout.astro";
         return;
       }
 
-      if (id && (window as any).endorsely_referral) {
+      if (id && window.endorsely_referral) {
         try {
-          await fetch("/api/affiliate/link", {
+          await fetch(`${apiUrl}/affiliate/link`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
               checkoutId: id,
-              affiliateId: (window as any).endorsely_referral,
+              affiliateId: window.endorsely_referral,
             }),
           });
         } catch (e) {

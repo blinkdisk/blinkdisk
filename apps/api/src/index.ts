@@ -2,13 +2,14 @@ import { auth } from "@api/auth";
 import { createContext } from "@api/context";
 import { ratelimit } from "@api/middlewares/limit";
 import { appRouter } from "@api/router";
+import { affiliateLink } from "@api/routes/affiliate";
 import { polarWebhook } from "@api/webhooks/polar";
-import { DB } from "@db";
+import type { DB } from "@db";
 import { database } from "@db/index";
 import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { Kysely } from "kysely";
+import type { Kysely } from "kysely";
 
 export type HonoContextOptions = {
   Bindings: CloudflareBindings;
@@ -25,6 +26,8 @@ app.use(
     origin: (origin, c) => {
       if (c.env.DESKTOP_URL && origin.startsWith(c.env.DESKTOP_URL))
         return c.env.DESKTOP_URL;
+      if (c.env.MARKETING_URL && origin.startsWith(c.env.MARKETING_URL))
+        return c.env.MARKETING_URL;
       return "blinkdiskapp://frontend";
     },
     credentials: true,
@@ -50,6 +53,8 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 });
 
 app.post("/webhook/polar", polarWebhook);
+
+app.post("/affiliate/link", affiliateLink);
 
 app.use(
   "/trpc/*",
