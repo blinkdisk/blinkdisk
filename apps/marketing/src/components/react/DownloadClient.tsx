@@ -25,12 +25,18 @@ import { toast } from "sonner";
 declare global {
   interface Window {
     endorsely_referral?: string;
+    // eslint-disable-next-line
+    posthog?: any;
   }
 }
 
 type Extension = "AppImage" | "deb" | "rpm";
 
-export default function DownloadClient() {
+type Props = {
+  apiUrl: string;
+};
+
+export default function DownloadClient({ apiUrl }: Props) {
   const { logsnag } = useLogsnag();
   const { copy } = useClipboard();
   const { addToCalendar } = useCalendar();
@@ -86,15 +92,34 @@ export default function DownloadClient() {
       if (!logged) {
         localStorage.setItem("download.logged", "true");
 
+        if (window.endorsely_referral)
+          fetch(`${apiUrl}/affiliate/track`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              referralId: window.endorsely_referral,
+            }),
+          });
+
         logsnag({
           channel: "downloads",
           title: "Download started",
           description: `${file} just got downloaded.`,
           icon: "⬇️",
         });
+
+        if(window.posthog) 
+          window.posthog.capture("download_started", {
+            file,
+            platform,
+            architecture,
+            extension,
+          });
       }
     },
-    [logsnag],
+    [logsnag, apiUrl],
   );
 
   useEffect(() => {

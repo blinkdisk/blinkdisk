@@ -56,6 +56,8 @@ const apiUrl = import.meta.env.API_URL || "https://api.blinkdisk.com";
         return;
       }
 
+console.log(id, window.endorsely_referral);
+
       if (id && window.endorsely_referral) {
         try {
           await fetch(`${apiUrl}/affiliate/link`, {
@@ -76,6 +78,6 @@ const apiUrl = import.meta.env.API_URL || "https://api.blinkdisk.com";
       window.location.href = url;
     }
 
-    handleRedirect();
+    setTimeout(handleRedirect, 1000);
   </script>
 </BaseLayout>

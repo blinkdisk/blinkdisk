@@ -2,7 +2,8 @@ import { auth } from "@api/auth";
 import { createContext } from "@api/context";
 import { ratelimit } from "@api/middlewares/limit";
 import { appRouter } from "@api/router";
-import { affiliateLink } from "@api/routes/affiliate";
+import { affiliateLink } from "@api/routes/affiliate/link";
+import { affiliateTrack } from "@api/routes/affiliate/track";
 import { polarWebhook } from "@api/webhooks/polar";
 import type { DB } from "@db";
 import { database } from "@db/index";
@@ -54,6 +55,7 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 
 app.post("/webhook/polar", polarWebhook);
 
+app.post("/affiliate/track", affiliateTrack);
 app.post("/affiliate/link", affiliateLink);
 
 app.use(

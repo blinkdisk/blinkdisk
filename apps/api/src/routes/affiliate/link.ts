@@ -9,35 +9,14 @@ export async function affiliateLink(
   try {
     const { checkoutId, affiliateId } = await c.req.json();
 
-    if (
-      !checkoutId ||
-      typeof checkoutId !== "string" ||
-      checkoutId.length > 100
-    ) {
-      return c.json({ error: "Invalid checkoutId" }, 400);
-    }
-
-    if (
-      !affiliateId ||
-      typeof affiliateId !== "string" ||
-      affiliateId.length > 100
-    ) {
-      return c.json({ error: "Invalid affiliateId" }, 400);
-    }
-
-    const polar = getPolar(c.env.POLAR_ENVIRONMENT, c.env.POLAR_TOKEN);
+    const polar = getPolar(c.env.POLAR_ENVIRONMENT, c.env.POLAR_TOKEN)
 
     const checkout = await polar.checkouts.get({
       id: checkoutId,
     });
 
-    if (!checkout) {
-      return c.json({ error: "Checkout not found" }, 404);
-    }
-
-    if (checkout.status !== "open") {
-      return c.json({ error: "Checkout not open" }, 400);
-    }
+    if (!checkout) return c.json({ error: "Checkout not found" }, 404);
+    if (checkout.status !== "open") return c.json({ error: "Checkout closed" }, 400);
 
     await polar.checkouts.update({
       id: checkout.id,

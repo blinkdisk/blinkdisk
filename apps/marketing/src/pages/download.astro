@@ -1,11 +1,13 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import DownloadClient from "@marketing/components/react/DownloadClient";
+
+const apiUrl = import.meta.env.API_URL;
 ---
 
 <DefaultLayout
   title="Download"
   description="Download BlinkDisk for Windows, macOS, and Linux."
 >
-  <DownloadClient client:load />
+  <DownloadClient client:load apiUrl={apiUrl} />
 </DefaultLayout>

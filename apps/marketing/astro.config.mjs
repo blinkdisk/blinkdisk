@@ -34,6 +34,7 @@ export default defineConfig({
               MARKETING_URL: undefined,
               LOGSNAG_PUBLIC_KEY: null,
               POSTHOG_MARKETING_KEY: null,
+              POSTHOG_API_HOST: null,
               ENDORSELY_PUBLIC_KEY: null,
               CRISP_KEY: null,
             },
