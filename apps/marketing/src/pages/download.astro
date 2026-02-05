@@ -1,15 +1,11 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import DownloadClient from "@marketing/components/react/DownloadClient";
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Download"
   description="Download BlinkDisk for Windows, macOS, and Linux."
 >
-  <Navigation />
   <DownloadClient client:load />
-  <Footer />
-</BaseLayout>
+</DefaultLayout>

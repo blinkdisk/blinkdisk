@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import Legal from "@marketing/components/Legal.astro";
 
 const content = `# Refund Policy
@@ -35,11 +33,9 @@ BlinkDisk reserves the right to modify this refund policy at any time. Changes w
 If you have any questions about our refund policy, please contact us at support@blinkdisk.com.`;
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Refund Policy"
   description="The refund policy for BlinkDisk."
 >
-  <Navigation />
   <Legal content={content} />
-  <Footer />
-</BaseLayout>
+</DefaultLayout>

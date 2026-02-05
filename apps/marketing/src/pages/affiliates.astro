@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import { plans } from "@config/plans";
 import {
   ArrowRightIcon,
@@ -36,11 +34,10 @@ const formattedCommission = commission.toLocaleString("en-US", {
 });
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Affiliate Program"
   description="Join the BlinkDisk Affiliate Program in minutes and earn generous commissions for every customer you refer."
 >
-  <Navigation />
   <div class="py-page flex min-h-screen flex-col items-center">
     <div class="mt-auto"></div>
     <div
@@ -123,5 +120,4 @@ const formattedCommission = commission.toLocaleString("en-US", {
     </div>
     <div class="mb-auto"></div>
   </div>
-  <Footer />
-</BaseLayout>
+</DefaultLayout>

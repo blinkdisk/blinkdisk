@@ -1,12 +1,10 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import CodeStatsClient from "@marketing/components/react/CodeStatsClient";
 import ToasterWrapper from "@marketing/components/react/ToasterWrapper";
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Codebase Statistics Calculator"
   description="Get insights into your projects' codebase, right in your browser. Count lines of code, characters, files, and much more at a glance."
   og={{
@@ -14,8 +12,6 @@ import ToasterWrapper from "@marketing/components/react/ToasterWrapper";
     image: "/brand/code.jpg",
   }}
 >
-  <Navigation />
   <CodeStatsClient client:load />
-  <Footer />
   <ToasterWrapper client:load />
-</BaseLayout>
+</DefaultLayout>

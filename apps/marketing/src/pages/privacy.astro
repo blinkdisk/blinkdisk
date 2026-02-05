@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import Legal from "@marketing/components/Legal.astro";
 
 const content = `# Privacy Policy
@@ -217,11 +215,9 @@ If you have any questions about this Privacy Policy, You can contact us:
 *   By email: paul@blinkdisk.com`;
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Privacy Policy"
   description="The privacy policy for BlinkDisk."
 >
-  <Navigation />
   <Legal content={content} />
-  <Footer />
-</BaseLayout>
+</DefaultLayout>

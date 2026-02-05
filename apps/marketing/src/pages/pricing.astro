@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import PlanSelector from "@marketing/components/react/PlanSelector";
 import { plans } from "@config/plans";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
@@ -145,12 +143,11 @@ const storageOptions = [
 ];
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Pricing"
   description="The plans & pricing for BlinkDisk. All powerful backup features are free, and you only pay for the storage you use."
   structuredData={productSchema}
 >
-  <Navigation />
   <div class="py-page flex min-h-screen flex-col items-center">
     <div class="mt-auto"></div>
 
@@ -240,5 +237,4 @@ const storageOptions = [
 
     <div class="mb-auto"></div>
   </div>
-  <Footer />
-</BaseLayout>
+</DefaultLayout>

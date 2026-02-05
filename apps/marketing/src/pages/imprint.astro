@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import Legal from "@marketing/components/Legal.astro";
 
 const content = `# Imprint
@@ -40,8 +38,6 @@ Our web pages and their contents are subject to the Austria copyright law. Unles
 `;
 ---
 
-<BaseLayout title="Imprint" description="The imprint of BlinkDisk.">
-  <Navigation />
+<DefaultLayout title="Imprint" description="The imprint of BlinkDisk.">
   <Legal content={content} />
-  <Footer />
-</BaseLayout>
+</DefaultLayout>

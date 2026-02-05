@@ -1,14 +1,11 @@
 ---
-import BaseLayout from "@marketing/layouts/BaseLayout.astro";
-import Navigation from "@marketing/components/Navigation.astro";
-import Footer from "@marketing/components/Footer.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 ---
 
-<BaseLayout
+<DefaultLayout
   title="Page Not Found"
   description="The page you're looking for doesn't exist."
 >
-  <Navigation />
   <div class="flex min-h-screen flex-col items-center">
     <div class="mt-auto"></div>
     <div class="flex max-w-[80vw] flex-col items-center sm:max-w-sm">
@@ -32,5 +29,4 @@ import Footer from "@marketing/components/Footer.astro";
     </div>
     <div class="mb-auto"></div>
   </div>
-  <Footer />
-</BaseLayout>
+</DefaultLayout>
