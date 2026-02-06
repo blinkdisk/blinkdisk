@@ -14,7 +14,7 @@ const planOffers = plans
     const monthlyPrice = plan.prices.find((p) => p.period === "MONTHLY");
     return {
       "@type": "Offer",
-      name: `${plan.storageGB}GB Plan`,
+      name: `${plan.storageGB} GB Plan`,
       price: String(monthlyPrice?.amount || 0),
       priceCurrency: "USD",
       priceSpecification: {
@@ -23,7 +23,7 @@ const planOffers = plans
         priceCurrency: "USD",
         billingDuration: "P1M",
       },
-      description: `${plan.storageGB}GB cloud storage`,
+      description: `${plan.storageGB} GB cloud storage`,
       url: `${siteUrl}/pricing`,
     };
   });
@@ -44,7 +44,7 @@ const productSchema = {
       name: "Free Tier",
       price: "0",
       priceCurrency: "USD",
-      description: `${freeStorageGB}GB free cloud storage`,
+      description: `${freeStorageGB} GB free cloud storage`,
       url: `${siteUrl}/pricing`,
     },
     ...planOffers,
