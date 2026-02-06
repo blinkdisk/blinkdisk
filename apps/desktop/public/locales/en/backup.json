@@ -7,6 +7,7 @@
       "files_other": "{{formatted}} files",
       "dropdown": {
         "browse": "Browse files",
+        "download": "Download file",
         "delete": "Delete backup"
       }
     },
