@@ -30,8 +30,8 @@ export default defineConfig({
           tailwindcss(),
           env(
             {
-              API_URL: undefined,
-              MARKETING_URL: undefined,
+              API_URL: null,
+              MARKETING_URL: null,
               LOGSNAG_PUBLIC_KEY: null,
               POSTHOG_MARKETING_KEY: null,
               POSTHOG_API_HOST: null,
