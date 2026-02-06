@@ -1,6 +1,7 @@
 ---
 import "@marketing/styles.css";
 import ThemeScript from "@marketing/components/ThemeScript.astro";
+import { MARKETING_URL, POSTHOG_MARKETING_KEY, POSTHOG_API_HOST, ENDORSELY_PUBLIC_KEY, CRISP_KEY } from "astro:env/server";
 
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
@@ -21,8 +22,8 @@ export type Props = {
 const defaultTitle = "BlinkDisk | Backup and secure your files";
 const defaultDescription =
   "BlinkDisk is a desktop application that lets you effortlessly backup all your important files with just a few clicks.";
-const defaultImage = `${import.meta.env.MARKETING_URL || "https://blinkdisk.com"}/brand/social.jpg`;
-const siteUrl = import.meta.env.MARKETING_URL || "https://blinkdisk.com";
+const defaultImage = `${MARKETING_URL ?? "https://blinkdisk.com"}/brand/social.jpg`;
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
 const { title, description, image, og, structuredData } = Astro.props;
 
@@ -33,10 +34,10 @@ const pageImage = image || defaultImage;
 const ogTitle = og?.title || pageTitle;
 const ogImage = og?.image ? `${siteUrl}${og.image}` : pageImage;
 
-const posthogKey = import.meta.env.POSTHOG_MARKETING_KEY || "";
-const posthogHost = import.meta.env.POSTHOG_API_HOST || "";
-const endorselyKey = import.meta.env.ENDORSELY_PUBLIC_KEY || "";
-const crispKey = import.meta.env.CRISP_KEY || "";
+const posthogKey = POSTHOG_MARKETING_KEY ?? "";
+const posthogHost = POSTHOG_API_HOST ?? "";
+const endorselyKey = ENDORSELY_PUBLIC_KEY ?? "";
+const crispKey = CRISP_KEY ?? "";
 
 const organizationSchema = {
   "@context": "https://schema.org",

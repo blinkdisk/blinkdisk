@@ -4,8 +4,9 @@ import PlanSelector from "@marketing/components/react/PlanSelector";
 import { plans } from "@config/plans";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
 import { CheckIcon } from "lucide-react";
+import { MARKETING_URL } from "astro:env/server";
 
-const siteUrl = import.meta.env.MARKETING_URL || "https://blinkdisk.com";
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 const freeStorageGB = Math.round(FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000);
 
 const planOffers = plans

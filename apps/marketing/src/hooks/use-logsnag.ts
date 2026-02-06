@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { LOGSNAG_PUBLIC_KEY } from "astro:env/client";
 
 type LogsnagOptions = {
   channel: string;
@@ -20,7 +21,7 @@ export function useLogsnag() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.LOGSNAG_KEY}`,
+          Authorization: `Bearer ${LOGSNAG_PUBLIC_KEY}`,
         },
         body: JSON.stringify({
           project: "blinkdisk",

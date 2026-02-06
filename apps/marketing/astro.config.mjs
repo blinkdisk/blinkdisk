@@ -1,15 +1,8 @@
-import { config } from "dotenv";
-
-config({
-  path: "../../.env",
-});
-
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import env from "vite-plugin-environment";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -25,24 +18,19 @@ export default defineConfig({
         imageService: "compile",
     }),
     integrations: [react(), sitemap()],
+    env: {
+        schema: {
+            API_URL: envField.string({ context: "server", access: "public", optional: true }),
+            MARKETING_URL: envField.string({ context: "server", access: "public", optional: true }),
+            LOGSNAG_PUBLIC_KEY: envField.string({ context: "client", access: "public", optional: true }),
+            POSTHOG_MARKETING_KEY: envField.string({ context: "server", access: "public", optional: true }),
+            POSTHOG_API_HOST: envField.string({ context: "server", access: "public", optional: true }),
+            ENDORSELY_PUBLIC_KEY: envField.string({ context: "server", access: "public", optional: true }),
+            CRISP_KEY: envField.string({ context: "server", access: "public", optional: true }),
+        },
+    },
     vite: {
-        plugins: [
-          tailwindcss(),
-          env(
-            {
-              API_URL: null,
-              MARKETING_URL: null,
-              LOGSNAG_PUBLIC_KEY: null,
-              POSTHOG_MARKETING_KEY: null,
-              POSTHOG_API_HOST: null,
-              ENDORSELY_PUBLIC_KEY: null,
-              CRISP_KEY: null,
-            },
-            {
-              loadEnvFiles: false,
-            },
-          )
-        ],
+        plugins: [tailwindcss()],
         resolve: {
             alias: {
                 "@marketing": path.resolve(__dirname, "./src"),
