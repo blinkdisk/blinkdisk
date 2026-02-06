@@ -44,6 +44,8 @@ const config: KnipConfig = {
         "sharp",
         // Used in eslint.config.mjs (eslint provided via @blinkdisk/eslint)
         "eslint-plugin-astro",
+        // Used in CSS
+        "@tailwindcss/typography",
       ],
       ignoreBinaries: ["eslint"],
     },
