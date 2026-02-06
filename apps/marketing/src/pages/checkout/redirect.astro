@@ -27,7 +27,7 @@ const apiUrl = import.meta.env.API_URL || "https://api.blinkdisk.com";
     </svg>
   </div>
 
-  <script define:vars={{ apiUrl }}>
+  <script is:inline define:vars={{ apiUrl }}>
     const ALLOWED_REDIRECT_HOSTS = [
       "polar.sh",
       "sandbox.polar.sh",

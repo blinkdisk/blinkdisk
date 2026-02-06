@@ -39,7 +39,6 @@ const config: KnipConfig = {
       ignore: commonIgnore,
       ignoreDependencies: [
         // Used in CSS url() imports which knip doesn't detect
-        "@fontsource-variable/inter",
         "@fontsource/space-mono",
         // Used internally by Astro image processing
         "sharp",

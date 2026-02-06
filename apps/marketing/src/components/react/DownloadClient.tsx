@@ -119,7 +119,7 @@ export default function DownloadClient({ apiUrl }: Props) {
           });
       }
     },
-    [logsnag, apiUrl],
+    [logsnag, apiUrl, platform, architecture, extension],
   );
 
   useEffect(() => {

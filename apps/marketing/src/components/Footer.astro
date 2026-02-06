@@ -144,19 +144,17 @@ const currentYear = new Date().getUTCFullYear();
         title="Status Badge (Light)"
         width="185"
         height="30"
-        scrolling="no"
-        frameborder="0"
         class="-mr-4 overflow-hidden dark:hidden"
-        style="border: none;"></iframe>
+        style="border: none;"
+        {...{ scrolling: "no", frameBorder: "0" }}></iframe>
       <iframe
         src="https://status.blinkdisk.com/badge?theme=dark"
         title="Status Badge (Dark)"
         width="185"
         height="30"
-        scrolling="no"
-        frameborder="0"
         class="-mr-4 hidden overflow-hidden dark:block"
-        style="border: none;"></iframe>
+        style="border: none;"
+        {...{ scrolling: "no", frameBorder: "0" }}></iframe>
     </div>
   </div>
 </footer>
