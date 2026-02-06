@@ -33,7 +33,7 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
         <div className="flex items-center gap-1.5">
           <h2
             className={cn(
-              "max-w-full truncate text-lg font-semibold ph-no-capture",
+              "ph-no-capture max-w-full truncate text-lg font-semibold",
               size === "sm" && "text-sm",
             )}
           >
@@ -46,7 +46,7 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
         </div>
         <p
           className={cn(
-            "text-muted-foreground min-w-0 max-w-full truncate text-sm font-normal ph-no-capture",
+            "text-muted-foreground ph-no-capture min-w-0 max-w-full truncate text-sm font-normal",
             size === "sm" && "text-xs",
           )}
         >

@@ -62,7 +62,11 @@ const classes = cn(
 const Element = as;
 ---
 
-<Element class={classes} {...props} data-astro-prefetch={as === "a" ? "" : undefined}>
+<Element
+  class={classes}
+  {...props}
+  data-astro-prefetch={as === "a" ? "" : undefined}
+>
   <span class="inline-flex items-center gap-2">
     <slot />
   </span>

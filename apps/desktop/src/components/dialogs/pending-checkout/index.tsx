@@ -1,5 +1,5 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@ui/button";

@@ -1,8 +1,8 @@
 import { Context } from "@api/context";
-import { CustomError } from "@utils/error";
 import { captureException } from "@api/lib/posthog";
 import { initTRPC } from "@trpc/server";
 import { TRPC_ERROR_CODES_BY_KEY } from "@trpc/server/rpc";
+import { CustomError } from "@utils/error";
 import { ZodError } from "zod";
 
 const t = initTRPC.context<Context>().create({

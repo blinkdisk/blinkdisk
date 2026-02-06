@@ -1,7 +1,12 @@
 import { useRegisterForm } from "@desktop/hooks/forms/use-register-form";
 import { useAuth } from "@desktop/hooks/use-auth";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  useCanGoBack,
+  useRouter,
+} from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Trans } from "react-i18next";

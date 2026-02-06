@@ -9,14 +9,15 @@ export async function affiliateLink(
   try {
     const { checkoutId, affiliateId } = await c.req.json();
 
-    const polar = getPolar(c.env.POLAR_ENVIRONMENT, c.env.POLAR_TOKEN)
+    const polar = getPolar(c.env.POLAR_ENVIRONMENT, c.env.POLAR_TOKEN);
 
     const checkout = await polar.checkouts.get({
       id: checkoutId,
     });
 
     if (!checkout) return c.json({ error: "Checkout not found" }, 404);
-    if (checkout.status !== "open") return c.json({ error: "Checkout closed" }, 400);
+    if (checkout.status !== "open")
+      return c.json({ error: "Checkout closed" }, 400);
 
     await polar.checkouts.update({
       id: checkout.id,

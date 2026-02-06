@@ -5,8 +5,8 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZRestoreDirectoryType } from "@schemas/directory";
-import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CustomError } from "@utils/error";
 
 export function useStartRestore(options?: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();
@@ -29,7 +29,8 @@ export function useStartRestore(options?: { onSuccess?: () => void }) {
             values: ZRestoreDirectoryType;
           },
     ) => {
-      if (!vaultId || !folderId) throw new CustomError("MISSING_REQUIRED_VALUE");
+      if (!vaultId || !folderId)
+        throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (options.variant === "single")
         return await window.electron.vault.restore.single({

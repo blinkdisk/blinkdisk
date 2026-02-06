@@ -1,12 +1,12 @@
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { Link } from "@tanstack/react-router";
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@ui/breadcrumb";
 import { Skeleton } from "@ui/skeleton";
 import { Fragment } from "react/jsx-runtime";

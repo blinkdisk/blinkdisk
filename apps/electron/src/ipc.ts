@@ -22,7 +22,9 @@ import { basename, dirname, join } from "node:path";
 
 ipcMain.on("window.console", () => window?.webContents.toggleDevTools());
 ipcMain.on("window.reload", () => window?.reload());
-ipcMain.on("window.setProgressBar", (_, progress: number) => setProgressBar(progress));
+ipcMain.on("window.setProgressBar", (_, progress: number) =>
+  setProgressBar(progress),
+);
 ipcMain.on("store.get", (e, key) => (e.returnValue = store.get(key)));
 ipcMain.on(
   "os.hostName",

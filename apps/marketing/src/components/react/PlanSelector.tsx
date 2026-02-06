@@ -23,7 +23,7 @@ export default function PlanSelector() {
       <div className="flex flex-col items-center justify-between sm:flex-row">
         <div className="flex items-center gap-3">
           <Logo className="h-6 select-none" />
-          <span className="bg-primary/10 text-primary rounded-md px-2 py-0.5 text-sm border border-primary/30">
+          <span className="bg-primary/10 text-primary border-primary/30 rounded-md border px-2 py-0.5 text-sm">
             Cloud
           </span>
         </div>

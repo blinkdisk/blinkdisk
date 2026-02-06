@@ -3,8 +3,8 @@
 // https://github.com/xrutayisire/react-js-cron
 
 import {
-    getCronStringFromValues,
-    setValuesFromCronString,
+  getCronStringFromValues,
+  setValuesFromCronString,
 } from "@desktop/components/cron/converter";
 import { Hours } from "@desktop/components/cron/fields/hours";
 import { Minutes } from "@desktop/components/cron/fields/minutes";

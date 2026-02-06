@@ -1,7 +1,12 @@
 import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  useCanGoBack,
+  useRouter,
+} from "@tanstack/react-router";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
 import { Slot } from "@ui/input-otp";

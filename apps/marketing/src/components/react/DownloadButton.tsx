@@ -18,7 +18,11 @@ export function DownloadButton({ os }: Props) {
   const isCurrentPlatform = mounted && platform === os;
 
   return (
-    <Button variant={isCurrentPlatform ? "default" : "outline"} as="a" href="/download">
+    <Button
+      variant={isCurrentPlatform ? "default" : "outline"}
+      as="a"
+      href="/download"
+    >
       Download
     </Button>
   );

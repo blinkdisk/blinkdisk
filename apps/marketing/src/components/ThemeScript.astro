@@ -8,7 +8,11 @@
     const STORAGE_KEY = "preferences.theme";
 
     function isDark(theme) {
-      return theme === "dark" ? true : theme === "light" ? false : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return theme === "dark"
+        ? true
+        : theme === "light"
+          ? false
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
 
     function applyTheme(theme) {

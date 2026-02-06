@@ -3,8 +3,8 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
-import { CustomError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CustomError } from "@utils/error";
 
 export function useStartBackup() {
   const queryClient = useQueryClient();

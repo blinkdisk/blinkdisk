@@ -6,19 +6,19 @@ import { useAuth } from "@desktop/hooks/use-auth";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useIsMobile } from "@hooks/use-mobile";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 import {
-    CogIcon,
-    CreditCardIcon,
-    LogOutIcon,
-    UserIcon,
-    UserPlusIcon,
+  CogIcon,
+  CreditCardIcon,
+  LogOutIcon,
+  UserIcon,
+  UserPlusIcon,
 } from "lucide-react";
 import { ReactNode } from "react";
 

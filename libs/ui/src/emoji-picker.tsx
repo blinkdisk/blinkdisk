@@ -114,7 +114,11 @@ export function EmojiPicker({
                         {...props}
                       >
                         {url ? (
-                          <img src={url} alt={props.emoji.emoji} className="size-5" />
+                          <img
+                            src={url}
+                            alt={props.emoji.emoji}
+                            className="size-5"
+                          />
                         ) : (
                           <span className="size-5">{props.emoji.emoji}</span>
                         )}

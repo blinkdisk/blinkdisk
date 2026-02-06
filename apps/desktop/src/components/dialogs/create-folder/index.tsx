@@ -6,10 +6,10 @@ import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
 } from "@ui/dialog";
 import { cn } from "@utils/class";
 import { ArrowLeftIcon } from "lucide-react";
