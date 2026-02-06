@@ -1,8 +1,9 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import DownloadClient from "@marketing/components/react/DownloadClient";
+import { API_URL } from "astro:env/server";
 
-const apiUrl = import.meta.env.API_URL;
+const apiUrl = API_URL ?? "https://api.blinkdisk.com";
 ---
 
 <DefaultLayout

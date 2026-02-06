@@ -8,8 +8,9 @@ import Features from "@marketing/sections/Features.astro";
 import Downloads from "@marketing/sections/Downloads.astro";
 import Faq from "@marketing/sections/Faq.astro";
 import { getFaqStructuredData } from "@marketing/data/faqs";
+import { MARKETING_URL } from "astro:env/server";
 
-const siteUrl = import.meta.env.MARKETING_URL || "https://blinkdisk.com";
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
 const softwareSchema = {
   "@context": "https://schema.org",

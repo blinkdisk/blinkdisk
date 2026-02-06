@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "cp ../../.env .env && astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
@@ -47,10 +47,8 @@
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@types/twemoji-parser": "^13.1.4",
-    "dotenv": "^16.4.7",
     "eslint-plugin-astro": "^1.5.0",
     "typescript": "5.8.2",
-    "vite-plugin-environment": "^1.1.3",
     "wrangler": "^4.62.0"
   }
 }
