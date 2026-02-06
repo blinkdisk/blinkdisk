@@ -13,7 +13,7 @@ env:
   # Required by Makefile
   UNIX_SHELL_ON_WINDOWS: true
   API_URL: ${{ vars.API_URL }}
-  LANDING_URL: ${{ vars.LANDING_URL }}
+  MARKETING_URL: ${{ vars.MARKETING_URL }}
   CLOUD_URL: ${{ vars.CLOUD_URL }}
   POSTHOG_DESKTOP_KEY: ${{ vars.POSTHOG_DESKTOP_KEY }}
 

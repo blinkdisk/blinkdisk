@@ -1,4 +1,5 @@
 import { useAppTranslation } from "@hooks/use-app-translation";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import { Trans } from "react-i18next";
 
@@ -22,7 +23,7 @@ export function DefaultErrorPage() {
           />
         </p>
         <div>
-          <Button as="link" to="/" className="mt-8">
+          <Button as={Link} to="/" className="mt-8">
             {t("button")}
           </Button>
         </div>

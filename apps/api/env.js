@@ -7,7 +7,7 @@ config({
 });
 
 const whitelist = [
-  "LANDING_URL",
+  "MARKETING_URL",
   "BETTER_AUTH_SECRET",
   "CLOUD_JWT_PRIVATE_KEY",
   "LOGSNAG_PRIVATE_KEY",

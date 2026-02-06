@@ -1,0 +1,68 @@
+---
+import Windows from "@marketing/components/icons/Windows.astro";
+import Macos from "@marketing/components/icons/Macos.astro";
+import Linux from "@marketing/components/icons/Linux.astro";
+import { DownloadButton } from "@marketing/components/react/DownloadButton";
+import type { Platform } from "@marketing/utils/platform";
+
+const operatingSystems: {
+  name: string;
+  icon: string;
+  platform: Platform;
+  description: string;
+}[] = [
+  {
+    name: "Windows",
+    icon: "windows",
+    platform: "windows",
+    description: "Windows 11 and Windows 10 with 64-bit supported.",
+  },
+  {
+    name: "macOS",
+    icon: "macos",
+    platform: "macos",
+    description: "Big Sur and all newer versions of macOS are supported.",
+  },
+  {
+    name: "Linux",
+    icon: "linux",
+    platform: "linux",
+    description: "AppImage, deb, and rpm for x86_64, arm64 and armv7l.",
+  },
+];
+---
+
+<section
+  id="integrations"
+  class="w-content mx-auto flex flex-col items-center py-16 sm:py-24"
+>
+  <h2 class="text-center text-4xl font-bold sm:text-5xl">
+    Backup from anywhere
+  </h2>
+  <p class="text-muted-foreground mt-4 text-center text-sm md:text-base">
+    BlinkDisk runs on all major operating systems, including Windows, macOS and
+    Linux.
+  </p>
+  <div
+    class="sm:mt-22 mt-16 grid w-full grid-cols-1 gap-10 sm:grid-cols-3 md:gap-0"
+  >
+    {
+      operatingSystems.map((os) => (
+        <div class="max-w-70 mx-auto flex w-full flex-col items-start sm:items-center [&>svg]:size-10">
+          <div class="flex flex-row items-center gap-4 sm:flex-col">
+            {os.icon === "windows" && <Windows class="size-10" />}
+            {os.icon === "macos" && <Macos class="size-10" />}
+            {os.icon === "linux" && <Linux class="size-10" />}
+            <p class="text-3xl font-bold">{os.name}</p>
+          </div>
+          <p class="text-muted-foreground sm:max-w-50 mt-2 w-full text-sm sm:text-center">
+            {os.description}
+          </p>
+          <div class="mt-8">
+            <DownloadButton client:visible os={os.platform} />
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

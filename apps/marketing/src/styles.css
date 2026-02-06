@@ -1,0 +1,165 @@
+@import "@styles/globals.css";
+
+@plugin "@tailwindcss/typography";
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/inter/files/inter-latin-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("@fontsource/inter/files/inter-latin-500-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("@fontsource/inter/files/inter-latin-600-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("@fontsource/inter/files/inter-latin-700-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/space-mono/files/space-mono-latin-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("@fontsource/space-mono/files/space-mono-latin-700-normal.woff2")
+    format("woff2");
+}
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+:root {
+  --page-padding-top: 6em;
+  --page-padding-bottom: 4rem;
+
+  @media (min-width: 64rem) {
+    --page-padding-top: 10rem;
+    --page-padding-bottom: 7.5rem;
+  }
+}
+
+.pt-page {
+  padding-top: var(--page-padding-top);
+}
+
+.pb-page {
+  padding-bottom: var(--page-padding-bottom);
+}
+
+.py-page {
+  padding-top: var(--page-padding-top);
+  padding-bottom: var(--page-padding-bottom);
+}
+
+.w-content {
+  width: 90vw;
+
+  @media (min-width: 68rem) {
+    width: 64rem;
+  }
+}
+
+body {
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 800px;
+  background-image:
+    radial-gradient(circle at 50% 300px, oklch(1 0 0) 0%, transparent 50%),
+    radial-gradient(oklch(0.7 0 0 / 0.15) 1.5px, transparent 1.5px);
+  background-size:
+    100% 100%,
+    28px 28px;
+  mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dark body::before {
+  background-image:
+    radial-gradient(
+      circle at 50% 300px,
+      oklch(0.5 0 0 / 0.2) 0%,
+      transparent 50%
+    ),
+    radial-gradient(oklch(0.5 0 0 / 0.2) 1.5px, transparent 1.5px);
+}

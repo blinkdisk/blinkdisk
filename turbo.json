@@ -5,11 +5,10 @@
   "globalEnv": [
     "NODE_ENV",
     "DATABASE_URL",
-    "LANDING_URL",
+    "MARKETING_URL",
     "DESKTOP_URL",
     "CLOUD_URL",
-    "POSTHOG_API_HOST",
-    "POSTHOG_LANDING_KEY",
+    "POSTHOG_MARKETING_KEY",
     "POSTHOG_DESKTOP_KEY",
     "LOGSNAG_PRIVATE_KEY",
     "LOGSNAG_PUBLIC_KEY",
@@ -28,7 +27,9 @@
     "SMTP_URL",
     "PLUNK_URL",
     "PLUNK_SECRET_KEY",
-    "GITHUB_REF_NAME"
+    "GITHUB_REF_NAME",
+    "LOGSNAG_KEY",
+    "POSTHOG_API_HOST"
   ],
   "tasks": {
     "build": {

@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import simonImage from "@marketing/assets/images/simon.jpg";
+---
+
+<section
+  id="quote"
+  class="w-content mx-auto px-6 py-16 sm:px-0 sm:py-24 md:max-w-3xl"
+>
+  <figure class="w-full">
+    <p class="sr-only">5 out of 5 stars</p>
+    <div class="flex gap-1">
+      {
+        [...Array(5)].map(() => (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="fill-primary text-primary size-5 flex-none"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        ))
+      }
+    </div>
+    <blockquote
+      class="mt-8 text-xl/8 font-semibold tracking-tight sm:text-2xl/9"
+    >
+      <p>
+        "A few months ago, my hard drive suddenly died. Years of work, photos,
+        and memories were gone in an instant. If I had set up BlinkDisk before,
+        it would've taken five minutes to protect everything."
+      </p>
+    </blockquote>
+    <figcaption class="mt-8 flex items-center gap-4">
+      <Image
+        src={simonImage}
+        alt="Simon K."
+        width={40}
+        height={40}
+        class="size-10 rounded-full bg-gray-50 dark:bg-gray-800"
+        loading="lazy"
+        quality={80}
+      />
+      <div class="flex flex-col">
+        <p class="text-lg font-semibold">Simon K.</p>
+        <p class="text-muted-foreground text-sm">BlinkDisk User</p>
+      </div>
+    </figcaption>
+  </figure>
+</section>

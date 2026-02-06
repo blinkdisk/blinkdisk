@@ -1,0 +1,33 @@
+---
+import { marked } from "marked";
+
+type Props = {
+  content: string;
+};
+
+const { content } = Astro.props;
+
+function slugify(text: string): string {
+  const slugified = text.toLowerCase().replace(/\s/g, "-").replace(/,/g, "");
+  const parts = slugified.split(".-");
+  if (parts.length > 1) return parts.slice(1).join(".");
+  return slugified;
+}
+
+const renderer = new marked.Renderer();
+renderer.heading = ({ text, depth }) => {
+  const id = slugify(text);
+  return `<h${depth} id="${id}" class="scroll-mt-32">${text}</h${depth}>`;
+};
+
+const html = await marked(content, { renderer });
+---
+
+<div class="py-page flex min-h-screen flex-col items-center">
+  <div class="mt-auto"></div>
+  <article
+    class="prose dark:prose-invert md:prose-md max-w-[90vw] md:!max-w-[40rem]"
+    set:html={html}
+  />
+  <div class="mb-auto"></div>
+</div>

@@ -1,0 +1,15 @@
+---
+import BaseLayout, { type Props } from "@marketing/layouts/BaseLayout.astro";
+import Navigation from "@marketing/components/Navigation.astro";
+import Footer from "@marketing/components/Footer.astro";
+
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <Navigation />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

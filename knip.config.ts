@@ -35,10 +35,17 @@ const config: KnipConfig = {
       project: commonProject,
       ignore: [...commonIgnore, "src/preload.ts"],
     },
-    "apps/landing": {
-      entry: ["src/routes/index.tsx", "src/router.tsx"],
-      project: commonProject,
-      ignore: [...commonIgnore, "src/routeTree.gen.ts"],
+    "apps/marketing": {
+      ignore: commonIgnore,
+      ignoreDependencies: [
+        // Used in CSS url() imports which knip doesn't detect
+        "@fontsource/space-mono",
+        // Used internally by Astro image processing
+        "sharp",
+        // Used in eslint.config.mjs (eslint provided via @blinkdisk/eslint)
+        "eslint-plugin-astro",
+      ],
+      ignoreBinaries: ["eslint"],
     },
     "libs/config": {
       entry: commonProject,
@@ -107,11 +114,14 @@ const config: KnipConfig = {
     // Vite allows adding "?url" to an import
     /.+\?url$/,
   ],
+  ignoreIssues: {
+    "apps/marketing/src/components/react/**": ["exports"],
+  },
   ignoreDependencies: ["@types/electron", "@blinkdisk/.+", "cloudflare"],
   paths: {
     "@ui/*": ["./libs/ui/src/*"],
     "@api/*": ["./apps/api/src/*"],
-    "@landing/*": ["./apps/landing/src/*"],
+    "@marketing/*": ["./apps/marketing/src/*"],
     "@styles/*": ["./libs/styles/*"],
     "@utils/*": ["./libs/utils/src/*"],
     "@desktop/*": ["./apps/desktop/src/*"],

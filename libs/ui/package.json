@@ -12,7 +12,6 @@
     "@types/node": "^22.13.9",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "@types/react-twemoji": "^0.4.3",
     "eslint": "^9.22.0",
     "typescript": "5.8.2"
   },
@@ -34,7 +33,6 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@tanstack/react-router": "^1.131.7",
     "@types/twemoji-parser": "^13.1.4",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
@@ -46,7 +44,6 @@
     "react-day-picker": "^9.8.1",
     "react-dom": "^19.0.0",
     "react-loading-skeleton": "^3.5.0",
-    "react-twemoji": "^0.6.0",
     "sonner": "^2.0.1",
     "twemoji-parser": "^14.0.0"
   }

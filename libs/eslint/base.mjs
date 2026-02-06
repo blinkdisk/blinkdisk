@@ -39,6 +39,7 @@ export const config = [
       "build/**",
       "out/**",
       ".wrangler/**",
+      ".astro/**",
       "worker-configuration.d.ts",
     ],
   },

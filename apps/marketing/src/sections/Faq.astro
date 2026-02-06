@@ -1,0 +1,47 @@
+---
+import { faqs } from "@marketing/data/faqs";
+import PlusIcon from "@lucide/astro/icons/plus";
+import MinusIcon from "@lucide/astro/icons/minus";
+---
+
+<section
+  id="faqs"
+  class="md:!w-2xl w-content mx-auto pb-32 pt-16 sm:pb-40 sm:pt-24"
+>
+  <div class="flex flex-col items-center text-center">
+    <h2 class="text-center text-4xl font-bold sm:text-5xl">
+      Questions & Answers
+    </h2>
+  </div>
+  <p class="text-muted-foreground mt-4 text-center">
+    Still have questions? Here are answers to some frequently asked questions.
+  </p>
+  <div class="mt-6 flex flex-col gap-2 sm:mt-16 sm:gap-4">
+    {
+      faqs.map((faq) => (
+        <details class="group pt-6">
+          <summary class="text-foreground flex w-full cursor-pointer list-none items-start justify-between text-left">
+            <p class="text-sm font-medium leading-7 sm:text-base">
+              {faq.question}
+            </p>
+            <div class="ml-6 flex h-7 items-center">
+              <PlusIcon class="size-6 stroke-1 group-open:hidden" />
+              <MinusIcon class="hidden size-6 stroke-1 group-open:block" />
+            </div>
+          </summary>
+          <div class="mt-2 pr-12">
+            <p class="text-foreground/80 text-sm leading-7 sm:text-base">
+              {faq.answer}
+            </p>
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

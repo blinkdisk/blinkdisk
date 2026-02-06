@@ -1,0 +1,212 @@
+---
+import Logo from "@marketing/components/icons/Logo.astro";
+import Github from "@marketing/components/icons/Github.astro";
+import Button from "@marketing/components/Button.astro";
+import DownloadIcon from "@lucide/astro/icons/download";
+import MenuIcon from "@lucide/astro/icons/menu";
+import XIcon from "@lucide/astro/icons/x";
+
+const links = [
+  { href: "/pricing", label: "Pricing" },
+  {
+    label: "GitHub",
+    href: "https://github.com/blinkdisk/blinkdisk",
+    target: "_blank",
+  },
+  {
+    label: "Roadmap",
+    href: "https://github.com/orgs/blinkdisk/projects/2",
+    target: "_blank",
+  },
+];
+---
+
+<nav
+  id="nav"
+  style="z-index: 1002"
+  class="w-content nav-bar fixed left-1/2 flex flex-row items-center justify-between rounded-2xl border py-4"
+>
+  <!-- Desktop layout -->
+  <div class="hidden w-full items-center justify-between sm:flex">
+    <a href="/" class="ml-1.5" aria-label="BlinkDisk" data-astro-prefetch>
+      <Logo class="h-5 select-none sm:h-6" />
+    </a>
+    <div class="flex items-center gap-12">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class="text-foreground/80 hover:text-foreground transition-colors"
+            target={link.target}
+            rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
+            data-astro-prefetch={!link.target ? "" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+    <div class="flex gap-2">
+      <Button
+        variant="outline"
+        size="icon-sm"
+        href="https://github.com/blinkdisk/blinkdisk"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+      >
+        <span class="sr-only">GitHub</span>
+        <Github class="size-5" />
+      </Button>
+      <Button size="sm" href="/download">
+        <DownloadIcon class="size-4" />
+        Download
+      </Button>
+    </div>
+  </div>
+
+  <!-- Mobile layout -->
+  <div class="flex w-full flex-col sm:hidden">
+    <div class="flex w-full items-center justify-between">
+      <a href="/" class="ml-1.5" aria-label="BlinkDisk" data-astro-prefetch>
+        <Logo class="h-5 select-none" />
+      </a>
+      <button
+        id="nav-toggle"
+        class="flex size-8 items-center justify-center"
+        aria-label="Toggle navigation"
+      >
+        <MenuIcon
+          id="menu-icon"
+          class="text-foreground/60 hover:text-foreground/80 size-6"
+        />
+        <XIcon
+          id="close-icon"
+          class="text-foreground/60 hover:text-foreground/80 hidden size-6"
+        />
+      </button>
+    </div>
+    <div
+      id="nav-menu"
+      class="grid w-full grid-rows-[0fr] overflow-hidden transition-all duration-200"
+    >
+      <div class="flex w-full flex-col items-start overflow-hidden">
+        <div class="my-4 flex flex-col gap-2 p-2">
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="text-foreground/80 hover:text-foreground transition-colors"
+                target={link.target}
+                rel={
+                  link.target === "_blank" ? "noopener noreferrer" : undefined
+                }
+                data-astro-prefetch={!link.target ? "" : undefined}
+              >
+                {link.label}
+              </a>
+            ))
+          }
+        </div>
+        <div class="flex w-full gap-2 p-2">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            class="size-10"
+            href="https://github.com/blinkdisk/blinkdisk"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <span class="sr-only">GitHub</span>
+            <Github class="size-5" />
+          </Button>
+          <Button size="sm" class="h-10 grow" href="/download">
+            <DownloadIcon class="size-4" />
+            Download
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile overlay -->
+<div
+  id="nav-overlay"
+  style="z-index: 1000"
+  class="pointer-events-none fixed inset-0 bg-black/20 pt-16 opacity-0 transition-opacity duration-200 sm:hidden dark:bg-black/50"
+>
+</div>
+
+<script>
+  const nav = document.getElementById("nav");
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("nav-menu");
+  const overlay = document.getElementById("nav-overlay");
+  const menuIcon = document.getElementById("menu-icon");
+  const closeIcon = document.getElementById("close-icon");
+
+  let isOpen = false;
+  let isDocked = false;
+  let ticking = false;
+
+  function updateNav() {
+    const shouldDock = window.scrollY >= 100 || isOpen;
+
+    if (shouldDock !== isDocked) {
+      isDocked = shouldDock;
+      nav?.classList.toggle("nav-docked", isDocked);
+    }
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(updateNav);
+      ticking = true;
+    }
+  }
+
+  function toggleMenu() {
+    isOpen = !isOpen;
+    menu?.classList.toggle("grid-rows-[1fr]", isOpen);
+    menu?.classList.toggle("grid-rows-[0fr]", !isOpen);
+    overlay?.classList.toggle("opacity-100", isOpen);
+    overlay?.classList.toggle("opacity-0", !isOpen);
+    overlay?.classList.toggle("pointer-events-none", !isOpen);
+    menuIcon?.classList.toggle("hidden", isOpen);
+    closeIcon?.classList.toggle("hidden", !isOpen);
+    updateNav();
+  }
+
+  toggle?.addEventListener("click", toggleMenu);
+  overlay?.addEventListener("click", () => {
+    if (isOpen) toggleMenu();
+  });
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  updateNav();
+</script>
+
+<style>
+  .nav-bar {
+    top: 0;
+    transform: translateX(-50%);
+    border-color: transparent;
+    background-color: transparent;
+    transition:
+      transform 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      padding 0.3s ease;
+    will-change: transform;
+  }
+
+  .nav-bar.nav-docked {
+    transform: translateX(-50%) translateY(1rem);
+    background-color: var(--secondary);
+    border-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+    padding: 1rem;
+  }
+</style>

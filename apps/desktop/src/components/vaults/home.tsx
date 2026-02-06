@@ -11,6 +11,7 @@ import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardTitle } from "@ui/card";
 import { CircularProgress } from "@ui/circular-progress";
@@ -88,8 +89,8 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
               </Button>
             ) : (
               <Button
-                as="link"
-                href="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings"
+                as={Link}
+                to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings"
                 variant="outline"
                 size="sm"
               >

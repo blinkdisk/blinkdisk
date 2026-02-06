@@ -1,5 +1,4 @@
 import { Slot } from "@radix-ui/react-slot";
-import { Link, LinkComponentProps } from "@tanstack/react-router";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
@@ -44,22 +43,20 @@ const buttonVariants = cva(
 );
 
 type BaseProps = VariantProps<typeof buttonVariants> & {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   asChild?: boolean;
   loading?: boolean;
   innerClassName?: string;
   disabled?: boolean;
 };
 
-type HTMLButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+type HTMLButtonProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "onClick"
+> &
   BaseProps & {
     as?: undefined;
-    onClick: () => void;
-  };
-
-type LinkProps = LinkComponentProps &
-  BaseProps & {
-    as?: "link";
+    onClick?: (() => void) | React.MouseEventHandler<HTMLButtonElement>;
   };
 
 type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
@@ -67,63 +64,66 @@ type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
     as: "a";
   };
 
-export type ButtonProps = HTMLButtonProps | LinkProps | AnchorProps;
+type ComponentProps<C extends React.ElementType> = BaseProps &
+  Omit<React.ComponentPropsWithoutRef<C>, keyof BaseProps | "as"> & {
+    as: C;
+  };
 
-const Button = React.forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  ButtonProps
->(
-  (
-    {
-      as,
-      className,
-      innerClassName,
-      variant,
-      size,
-      asChild = false,
-      loading,
-      disabled,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const Comp = (
-      as === "a" ? "a" : as === "link" ? Link : asChild ? Slot : "button"
-    ) as React.ElementType;
-    const isAnchor = as === "link" || as === "a" || asChild;
-    const elementRef = isAnchor
-      ? (ref as React.Ref<HTMLAnchorElement>)
-      : (ref as React.Ref<HTMLButtonElement>);
+export type ButtonProps<C extends React.ElementType = "button"> =
+  | HTMLButtonProps
+  | AnchorProps
+  | ComponentProps<C>;
 
-    return (
-      <Comp
+function ButtonInner(
+  {
+    as,
+    className,
+    innerClassName,
+    variant,
+    size,
+    asChild = false,
+    loading,
+    disabled,
+    children,
+    ...props
+  }: ButtonProps,
+  ref: React.ForwardedRef<HTMLButtonElement>,
+) {
+  const Comp = (as ? as : asChild ? Slot : "button") as React.ElementType;
+
+  return (
+    <Comp
+      className={cn(
+        buttonVariants({ variant, size }),
+        loading && "disabled:opacity-100",
+        className,
+      )}
+      ref={ref}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading && (
+        <Loader className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+      )}
+      <span
         className={cn(
-          buttonVariants({ variant, size }),
-          loading && "disabled:opacity-100",
-          className,
+          "inline-flex items-center gap-2",
+          innerClassName,
+          loading && "invisible",
         )}
-        ref={elementRef}
-        disabled={disabled || loading}
-        {...(props as ButtonProps)}
       >
-        {loading && (
-          <Loader className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-        )}
-        <span
-          className={cn(
-            "inline-flex items-center gap-2",
-            innerClassName,
-            loading && "invisible",
-          )}
-        >
-          {children}
-        </span>
-      </Comp>
-    );
-  },
-);
+        {children}
+      </span>
+    </Comp>
+  );
+}
 
-Button.displayName = "Button";
+const Button = React.forwardRef(ButtonInner) as <
+  C extends React.ElementType = "button",
+>(
+  props: ButtonProps<C> & { ref?: React.ForwardedRef<HTMLButtonElement> },
+) => React.ReactElement;
+
+(Button as React.FC).displayName = "Button";
 
 export { Button, buttonVariants };

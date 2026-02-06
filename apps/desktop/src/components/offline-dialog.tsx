@@ -1,7 +1,7 @@
 import { Empty } from "@desktop/components/empty";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Dialog, DialogContent } from "@ui/dialog";
-import { WifiOff } from "lucide-react";
+import { WifiOffIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function OfflineDialog() {
@@ -25,7 +25,7 @@ export function OfflineDialog() {
     <Dialog open={isOffline} onOpenChange={() => {}}>
       <DialogContent className="max-w-md py-16" showCloseButton={false}>
         <Empty
-          icon={<WifiOff />}
+          icon={<WifiOffIcon />}
           title={t("title")}
           description={t("description")}
         />

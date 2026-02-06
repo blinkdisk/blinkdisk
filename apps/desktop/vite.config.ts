@@ -28,7 +28,7 @@ export default defineConfig({
     env(
       {
         API_URL: undefined,
-        LANDING_URL: undefined,
+        MARKETING_URL: undefined,
         POSTHOG_DESKTOP_KEY: null,
       },
       {

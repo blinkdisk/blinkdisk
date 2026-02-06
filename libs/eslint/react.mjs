@@ -7,6 +7,55 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import { config as baseConfig } from "./base.mjs";
 
+const lucideIconPlugin = {
+  rules: {
+    "icon-suffix": {
+      meta: {
+        type: "suggestion",
+        docs: {
+          description: "Enforce Icon suffix on lucide icon imports",
+        },
+        messages: {
+          missingSuffix:
+            'Lucide icon imports must end with "Icon" (e.g., {{ suggestion }} instead of {{ name }}).',
+        },
+      },
+      create(context) {
+        return {
+          ImportDeclaration(node) {
+            const source = node.source.value;
+            if (
+              typeof source === "string" && (
+                source.startsWith("@lucide/astro/icons/") || source.startsWith("lucide-react")
+              )
+            ) {
+              for (const specifier of node.specifiers) {
+                const isDefaultImport =
+                  specifier.type === "ImportDefaultSpecifier";
+                const isNamedImport = specifier.type === "ImportSpecifier";
+
+                if (
+                  (isDefaultImport || isNamedImport) &&
+                  !specifier.local.name.endsWith("Icon")
+                ) {
+                  context.report({
+                    node: specifier,
+                    messageId: "missingSuffix",
+                    data: {
+                      name: specifier.local.name,
+                      suggestion: specifier.local.name + "Icon",
+                    },
+                  });
+                }
+              }
+            }
+          },
+        };
+      },
+    },
+  },
+};
+
 /**
  * A custom ESLint configuration for libraries that use React.
  *
@@ -34,6 +83,14 @@ export const config = [
     rules: {
       ...pluginReactHooks.configs.recommended.rules,
       "react/react-in-jsx-scope": "off",
+    },
+  },
+  {
+    plugins: {
+      lucide: lucideIconPlugin,
+    },
+    rules: {
+      "lucide/icon-suffix": "error",
     },
   },
   reactCompiler.configs.recommended,

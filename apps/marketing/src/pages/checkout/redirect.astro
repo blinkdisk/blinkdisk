@@ -1,0 +1,83 @@
+---
+import BaseLayout from "@marketing/layouts/BaseLayout.astro";
+
+const apiUrl = import.meta.env.API_URL || "https://api.blinkdisk.com";
+---
+
+<BaseLayout title="Redirecting...">
+  <div class="flex h-screen w-screen items-center justify-center">
+    <svg
+      class="size-5 origin-center animate-spin"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+  </div>
+
+  <script is:inline define:vars={{ apiUrl }}>
+    const ALLOWED_REDIRECT_HOSTS = [
+      "polar.sh",
+      "sandbox.polar.sh",
+      "checkout.polar.sh",
+    ];
+
+    function isAllowedRedirectUrl(url) {
+      try {
+        const parsed = new URL(url);
+        return ALLOWED_REDIRECT_HOSTS.some(
+          (host) =>
+            parsed.hostname === host || parsed.hostname.endsWith(`.${host}`),
+        );
+      } catch {
+        return false;
+      }
+    }
+
+    async function handleRedirect() {
+      const params = new URLSearchParams(window.location.search);
+      const url = params.get("url");
+      const id = params.get("id");
+
+      if (!url || !isAllowedRedirectUrl(url)) {
+        window.location.href = "/";
+        return;
+      }
+
+console.log(id, window.endorsely_referral);
+
+      if (id && window.endorsely_referral) {
+        try {
+          await fetch(`${apiUrl}/affiliate/link`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              checkoutId: id,
+              affiliateId: window.endorsely_referral,
+            }),
+          });
+        } catch (e) {
+          console.error("Failed to link affiliate checkout:", e);
+        }
+      }
+
+      window.location.href = url;
+    }
+
+    setTimeout(handleRedirect, 1000);
+  </script>
+</BaseLayout>

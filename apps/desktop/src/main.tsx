@@ -1,5 +1,4 @@
-import "@styles/font.css";
-import "@styles/globals.css";
+import "@desktop/styles.css";
 
 import {
   RouterProvider,

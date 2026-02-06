@@ -21,7 +21,7 @@ import {
   CalendarClockIcon,
   FileSearchIcon,
   FilesIcon,
-  HardDrive,
+  HardDriveIcon,
   MoreVerticalIcon,
   PlayIcon,
   TrashIcon,
@@ -283,7 +283,7 @@ export function Backup({ backup }: BackupProps) {
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            {backup ? <HardDrive className="size-4" /> : null}
+            {backup ? <HardDriveIcon className="size-4" /> : null}
             <span>
               {backup ? (
                 formatSize(backup.summary.size)
