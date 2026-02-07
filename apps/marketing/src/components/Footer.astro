@@ -21,7 +21,7 @@ const footerLinks = {
       external: true,
     },
     { label: "Support", href: "mailto:support@blinkdisk.com", external: true },
-    { label: "Status", href: "https://status.blinkdisk.com", external: true },
+    { label: "Blog", href: "/blog" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
@@ -106,7 +106,7 @@ const currentYear = new Date().getUTCFullYear();
               <li>
                 <a
                   href={link.href}
-                  target="_blank"
+                  target={link.external ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   class="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >

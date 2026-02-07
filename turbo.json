@@ -21,6 +21,7 @@
     "API_URL",
     "CRON_SECRET",
     "DEV",
+    "PROD",
     "CRISP_KEY",
     "EMAIL_PROVIDER",
     "EMAIL_DOMAIN",

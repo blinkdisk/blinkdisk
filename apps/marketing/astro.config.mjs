@@ -1,5 +1,6 @@
 import { defineConfig, envField } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
+import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
@@ -17,7 +18,7 @@ export default defineConfig({
     adapter: cloudflare({
         imageService: "compile",
     }),
-    integrations: [react(), sitemap()],
+    integrations: [mdx(), react(), sitemap()],
     env: {
         schema: {
             API_URL: envField.string({ context: "server", access: "public", optional: true }),

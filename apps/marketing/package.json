@@ -14,6 +14,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.5",
     "@astrojs/cloudflare": "^12.5.1",
+    "@astrojs/mdx": "^4.3.13",
     "@astrojs/react": "^4.2.1",
     "@astrojs/sitemap": "^3.3.1",
     "@blinkdisk/config": "workspace:*",
@@ -35,6 +36,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
+    "satori": "^0.19.1",
     "sharp": "^0.34.5",
     "sonner": "^2.0.1",
     "twemoji-parser": "^14.0.0",

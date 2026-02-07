@@ -1,0 +1,159 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import TableOfContents from "@marketing/components/TableOfContents.astro";
+import Button from "@marketing/components/Button.astro";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { MARKETING_URL } from "astro:env/server";
+
+type Heading = {
+  depth: number;
+  slug: string;
+  text: string;
+};
+
+type Props = {
+  title: string;
+  description: string;
+  pubDate: Date;
+  author: string;
+  image: {
+    src: ImageMetadata;
+    alt: string;
+  };
+  headings: Heading[];
+  ctaHeadline?: string;
+  slug: string;
+  readingTime: number;
+};
+
+const { title, description, pubDate, author, image, headings, ctaHeadline, slug, readingTime } = Astro.props;
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
+const ogImage = `/blog/og/${slug}.png`;
+
+const formattedDate = pubDate.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description: description,
+  image: `${siteUrl}${image.src.src}`,
+  datePublished: pubDate.toISOString(),
+  author: {
+    "@type": "Person",
+    name: author,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "BlinkDisk",
+  },
+};
+---
+
+<DefaultLayout
+  title={title}
+  description={description}
+  image={image.src.src}
+  og={{ title, image: ogImage }}
+  structuredData={blogPostingSchema}
+>
+  <article class="pt-page pb-page mx-auto w-[90vw] max-w-3xl lg:max-w-4xl">
+    <header class="mb-12">
+      <h1 class="text-foreground mb-8 text-3xl font-bold md:text-4xl">
+        {title}
+      </h1>
+      <div class="text-foreground/60 mb-6 flex flex-wrap gap-x-8 gap-y-2">
+        <div>
+          <span class="block text-sm">Published on</span>
+          <span class="text-foreground">{formattedDate}</span>
+        </div>
+        <div>
+          <span class="block text-sm">Written by</span>
+          <span class="text-foreground">{author}</span>
+        </div>
+        <div>
+          <span class="block text-sm">Reading time</span>
+          <span class="text-foreground">{readingTime} min read</span>
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-xl">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          class="w-full"
+        />
+      </div>
+    </header>
+
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <div class="prose dark:prose-invert prose-img:rounded-xl prose-img:shadow min-w-0 max-w-none flex-1">
+        <slot />
+      </div>
+      <aside class="hidden w-56 shrink-0 lg:block">
+        <TableOfContents headings={headings} />
+      </aside>
+    </div>
+
+    <section class="cta-pattern relative mt-16 overflow-hidden rounded-2xl border bg-secondary px-8 py-12 text-center md:px-12 md:py-16">
+      <div class="mb-6 flex items-center justify-center gap-4">
+        <div class="bg-foreground/20 h-px w-8"></div>
+        <span class="text-foreground/50 text-xs font-medium uppercase tracking-wider">
+          Get started with BlinkDisk for free
+        </span>
+        <div class="bg-foreground/20 h-px w-8"></div>
+      </div>
+
+      <h2 class="text-foreground mb-4 text-2xl sm:text-3xl font-bold md:text-4xl whitespace-pre-wrap leading-tight">
+        {ctaHeadline ?? <>Ready to backup your files? <br class="hidden sm:block" />Download BlinkDisk for Free</>}
+      </h2>
+
+      <p class="text-foreground/70 mx-auto mb-8 max-w-lg text-sm sm:text-base md:text-lg">
+      BlinkDisk is a desktop application that lets you effortlessly create
+      backup copies of all your important files.
+      </p>
+
+      <div class="flex items-center justify-center gap-4 flex-row">
+        <Button href="/download" size="lg">
+          Download for free
+        </Button>
+        <Button href="/" size="lg" variant="outline" class="hidden sm:flex">
+          Read more
+        </Button>
+      </div>
+    </section>
+  </article>
+</DefaultLayout>
+
+<style>
+  .cta-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      circle at center,
+      oklch(0.4 0 0 / 0.35) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, transparent 30%, black 100%);
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      black 100%
+    );
+  }
+
+  :global(.dark) .cta-pattern::before {
+    background-image: radial-gradient(
+      circle at center,
+      oklch(0.6 0 0 / 0.25) 1px,
+      transparent 1px
+    );
+  }
+</style>
