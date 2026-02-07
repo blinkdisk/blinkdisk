@@ -130,7 +130,7 @@ body {
   position: relative;
 }
 
-body::before {
+body.background-pattern::before {
   content: "";
   position: absolute;
   top: 0;
@@ -154,7 +154,7 @@ body::before {
   z-index: -1;
 }
 
-.dark body::before {
+.dark body.background-pattern::before {
   background-image:
     radial-gradient(
       circle at 50% 300px,

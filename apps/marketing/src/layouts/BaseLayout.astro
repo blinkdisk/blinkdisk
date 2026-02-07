@@ -17,6 +17,7 @@ export type Props = {
     image?: string;
   };
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  backgroundPattern?: boolean;
 };
 
 const defaultTitle = "BlinkDisk | Backup and secure your files";
@@ -25,7 +26,7 @@ const defaultDescription =
 const defaultImage = `${MARKETING_URL ?? "https://blinkdisk.com"}/brand/social.jpg`;
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
-const { title, description, image, og, structuredData } = Astro.props;
+const { title, description, image, og, structuredData, backgroundPattern } = Astro.props;
 
 const pageTitle = title ? `${title} | BlinkDisk` : defaultTitle;
 const pageDescription = description || defaultDescription;
@@ -120,7 +121,7 @@ const allStructuredData = [
       <script is:inline src="https://assets.endorsely.com/endorsely.js" data-endorsely={endorselyKey} async></script>
     )}
   </head>
-  <body>
+  <body class:list={[{ "background-pattern": backgroundPattern }]}>
     <slot />
 
     <!-- PostHog -->
