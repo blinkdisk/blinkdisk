@@ -1,0 +1,95 @@
+---
+type Heading = {
+  depth: number;
+  slug: string;
+  text: string;
+};
+
+type Props = {
+  headings: Heading[];
+};
+
+const { headings } = Astro.props;
+
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  filteredHeadings.length > 0 && (
+    <nav class="toc sticky top-32">
+      <h2 class="text-foreground/60 mb-4 text-sm font-medium">On this page</h2>
+      <ul class="space-y-2">
+        {filteredHeadings.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              data-toc-link={heading.slug}
+              class:list={[
+                "toc-link text-foreground/60 hover:text-foreground block text-sm transition-colors",
+                { "pl-4": heading.depth === 3 },
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .toc-link.active {
+    color: var(--foreground);
+  }
+</style>
+
+<script>
+  function initTOC() {
+    const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+    if (links.length === 0) return;
+
+    const slugs = Array.from(links).map((link) => link.dataset.tocLink!);
+    const headings = slugs
+      .map((slug) => document.getElementById(slug))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (headings.length === 0) return;
+
+    let currentActive: string | null = null;
+
+    function setActive(slug: string | null) {
+      if (currentActive === slug) return;
+      currentActive = slug;
+
+      links.forEach((link) => {
+        if (link.dataset.tocLink === slug) {
+          link.classList.add("active");
+        } else {
+          link.classList.remove("active");
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries.filter((e) => e.isIntersecting);
+        if (visibleEntries.length > 0) {
+          const topEntry = visibleEntries.reduce((a, b) =>
+            a.boundingClientRect.top < b.boundingClientRect.top ? a : b
+          );
+          setActive(topEntry.target.id);
+        }
+      },
+      {
+        rootMargin: "-80px 0px -70% 0px",
+        threshold: 0,
+      }
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+  }
+
+  initTOC();
+  document.addEventListener("astro:page-load", initTOC);
+</script>

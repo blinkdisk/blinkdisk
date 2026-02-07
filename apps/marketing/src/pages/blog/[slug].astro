@@ -1,0 +1,36 @@
+---
+import BlogPostLayout from "@marketing/layouts/BlogPostLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const wordsPerMinute = 200;
+const wordCount = post.body?.split(/\s+/).length ?? 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+---
+
+<BlogPostLayout
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  author={post.data.author}
+  image={post.data.image}
+  headings={headings}
+  ctaHeadline={post.data.ctaHeadline}
+  slug={post.id}
+  readingTime={readingTime}
+>
+  <Content />
+</BlogPostLayout>

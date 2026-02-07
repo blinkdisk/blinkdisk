@@ -1,0 +1,115 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import BlogCard from "@marketing/components/BlogCard.astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
+
+const posts = await getCollection("blog", ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const sortedPosts = posts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const [featuredPost, ...restPosts] = sortedPosts;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+---
+
+<DefaultLayout
+  title="Blog"
+  description="Read the latest news and updates from BlinkDisk."
+>
+  <section class="pt-page pb-page w-content mx-auto">
+    <header class="mb-16 text-center">
+      <h1
+        class="text-primary mb-4 inline-block text-xs font-semibold uppercase tracking-widest sm:text-sm sm:tracking-[0.2rem]"
+      >
+        BlinkDisk Blog
+      </h1>
+      <p class="text-foreground mb-4 text-4xl font-bold md:text-5xl">
+        News & Updates
+      </p>
+      <p class="text-muted-foreground mx-auto max-w-md text-lg">
+        Tips, insights, and updates about file backups, data protection, and
+        making the most of BlinkDisk.
+      </p>
+    </header>
+
+    {
+      sortedPosts.length > 0 ? (
+        <>
+          {featuredPost && (
+            <a
+              href={`/blog/${featuredPost.id}`}
+              class="group mb-16 grid gap-8 md:grid-cols-2 md:items-center"
+              data-astro-prefetch
+            >
+              <div class="aspect-video overflow-hidden rounded-2xl">
+                <Image
+                  src={featuredPost.data.image.src}
+                  alt={featuredPost.data.image.alt}
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div class="flex flex-col">
+                <span class="bg-primary/10 text-primary mb-4 w-fit rounded-full px-3 py-1 text-xs font-medium">
+                  Latest Post
+                </span>
+                <span class="text-muted-foreground mb-3 text-sm">
+                  {formatDate(featuredPost.data.pubDate)}
+                </span>
+                <h2 class="text-foreground mb-3 text-2xl font-bold md:text-3xl">
+                  {featuredPost.data.title}
+                </h2>
+                <p class="text-muted-foreground mb-6 line-clamp-3 text-base">
+                  {featuredPost.data.description}
+                </p>
+                <span class="text-primary inline-flex items-center gap-2 font-medium transition-colors">
+                  Read article
+                  <ArrowRightIcon class="size-4" />
+                </span>
+              </div>
+            </a>
+          )}
+
+          {restPosts.length > 0 && (
+            <>
+              <div class="mb-8 flex items-center gap-4">
+                <h2 class="text-foreground text-xl font-semibold">
+                  More Articles
+                </h2>
+                <div class="bg-border h-px flex-1" />
+              </div>
+              <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {restPosts.map((post) => (
+                  <BlogCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    pubDate={post.data.pubDate}
+                    author={post.data.author}
+                    image={post.data.image}
+                    slug={post.id}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <div class="py-16 text-center">
+          <p class="text-muted-foreground text-lg">
+            No blog posts yet. Check back soon!
+          </p>
+        </div>
+      )
+    }
+  </section>
+</DefaultLayout>
