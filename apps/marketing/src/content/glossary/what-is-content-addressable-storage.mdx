@@ -63,11 +63,11 @@ Even a single bit change, such as modifying one character in a document, produce
 
 Content-addressable storage transforms backup efficiency in three key ways.
 
-**Deduplication happens automatically.** Store the same photo in ten different folders, and CAS keeps only one copy. The system recognizes identical content and references the same stored data, significantly reducing storage requirements.
+**[Deduplication](/glossary/what-is-deduplication-in-backups) happens automatically.** Store the same photo in ten different folders, and CAS keeps only one copy. The system recognizes identical content and references the same stored data, significantly reducing storage requirements.
 
 **Data integrity is built-in.** Every time you retrieve a file, the system verifies its hash matches what was originally stored. If a single bit flipped due to hardware degradation, you'll know immediately rather than discovering corrupted files years later.
 
-**Incremental backups become incredibly efficient.** Traditional systems check file timestamps and sizes to detect changes. CAS knows instantly whether content changed by comparing hashes, enabling block-level deduplication within files themselves.
+**[Incremental backups](/glossary/what-is-an-incremental-backup) become incredibly efficient.** Traditional systems check file timestamps and sizes to detect changes. CAS knows instantly whether content changed by comparing hashes, enabling block-level deduplication within files themselves.
 
 ## Real-World Applications
 
@@ -110,6 +110,6 @@ Content-addressable storage isn't perfect for every scenario.
 
 Content-addressable storage represents a fundamental shift in how we think about data. Moving from "where is it?" to "what is it?" solves problems that have plagued storage systems for decades.
 
-As data volumes explode and ransomware threats grow, the integrity guarantees and efficiency of CAS become increasingly valuable. Your backup isn't just a copy. It's a cryptographically verified, deduplicated archive you can trust.
+As data volumes explode and [ransomware](/glossary/what-is-ransomware) threats grow, the integrity guarantees and efficiency of CAS become increasingly valuable. Your backup isn't just a copy. It's a cryptographically verified, deduplicated archive you can trust.
 
 Whether you're protecting family photos or critical business documents, understanding content-addressable storage helps you appreciate why modern backup solutions work so effectively. The technology quietly ensures your data remains safe, intact, and efficiently stored.

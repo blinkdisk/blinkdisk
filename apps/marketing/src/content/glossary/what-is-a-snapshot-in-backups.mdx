@@ -68,7 +68,7 @@ flowchart TB
 
 When you create a snapshot, the system records metadata about where all your data currently lives. As you modify files, the snapshot preserves the original versions while your current data changes. This happens so fast you won't even notice.
 
-The first snapshot typically references all your data. Subsequent snapshots only track what changed since the previous one. This incremental approach means multiple snapshots use surprisingly little extra space.
+The first snapshot typically references all your data. Subsequent snapshots only track what changed since the previous one. This [incremental](/glossary/what-is-an-incremental-backup) approach means multiple snapshots use surprisingly little extra space.
 
 ## Snapshots vs Traditional Backups
 
@@ -93,7 +93,7 @@ Different snapshot types serve different needs. Understanding these helps you ch
 
 ### Full Snapshots
 
-Full snapshots capture the complete state of your data at a specific moment. They're comprehensive and independent, making them reliable for recovery. However, they consume more storage space than other types.
+[Full](/glossary/what-is-a-full-backup) snapshots capture the complete state of your data at a specific moment. They're comprehensive and independent, making them reliable for recovery. However, they consume more storage space than other types.
 
 ### Incremental Snapshots
 
@@ -101,7 +101,7 @@ Incremental snapshots only record changes since the last snapshot. They're fast 
 
 ### Differential Snapshots
 
-Differential snapshots capture all changes since the last full snapshot. They strike a balance between storage efficiency and restore simplicity. Recovery requires only the full snapshot and the latest differential.
+[Differential](/glossary/what-is-a-differential-backup) snapshots capture all changes since the last full snapshot. They strike a balance between storage efficiency and restore simplicity. Recovery requires only the full snapshot and the latest differential.
 
 | Snapshot Type    | Storage Used | Restore Complexity        | Best For                               |
 | ---------------- | ------------ | ------------------------- | -------------------------------------- |
@@ -137,7 +137,7 @@ Snapshots shine in specific scenarios where quick recovery and versioning matter
 
 **Virtual Machine Management**: Snapshots let you test software configurations safely. Try changes, then revert if they don't work out.
 
-**Ransomware Recovery**: If ransomware encrypts your files, snapshots often remain untouched. Restore clean versions without paying the ransom.
+**[Ransomware](/glossary/what-is-ransomware) Recovery**: If ransomware encrypts your files, snapshots often remain untouched. Restore clean versions without paying the ransom.
 
 ## Best Practices for Snapshots
 
@@ -145,7 +145,7 @@ Follow these guidelines to get the most from your snapshot strategy.
 
 **Don't Rely on Snapshots Alone**: Snapshots protect against human error and software issues but not hardware failure. Combine them with traditional backups for complete protection.
 
-**Set a Retention Policy**: Decide how long to keep snapshots. Older snapshots consume more space as changes accumulate. Balance history needs with storage capacity.
+**Set a [Retention](/glossary/what-is-retention-in-backups) Policy**: Decide how long to keep snapshots. Older snapshots consume more space as changes accumulate. Balance history needs with storage capacity.
 
 **Monitor Storage Usage**: Snapshots share storage with your original data. If your drive fills up, both current data and snapshots become unavailable.
 
@@ -173,6 +173,6 @@ Snapshots represent one of the most elegant solutions in data protection. They c
 
 Whether you're a home user protecting family photos or a business safeguarding critical operations, snapshots deserve a place in your data protection strategy. Use them for quick recovery from mistakes, versioning important projects, and creating safety nets before major changes.
 
-Remember that snapshots complement rather than replace traditional backups. Together, they provide comprehensive protection: snapshots for speed and convenience, backups for independence and disaster recovery.
+Remember that snapshots complement rather than replace traditional backups. Together, they provide comprehensive protection: snapshots for speed and convenience, backups for independence and [disaster recovery](/glossary/what-is-disaster-recovery).
 
 Start using snapshots today, and you'll wonder how you ever managed your data without them. When the inevitable mistake happens, that frozen moment in time will save the day.

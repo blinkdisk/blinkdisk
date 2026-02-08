@@ -19,7 +19,7 @@ Think of it as a safety deposit box in the sky. Your files are stored in profess
 
 Cloud backup operates through a simple but powerful process. First, you install backup software on your computer. This software scans your files, encrypts them for security, and uploads them to remote servers over your internet connection.
 
-Once the initial backup completes, the software monitors your files for changes. When you create, modify, or delete files, the backup updates automatically. Most services use incremental backups after the first upload, meaning only changed portions of files transfer, saving time and bandwidth.
+Once the initial backup completes, the software monitors your files for changes. When you create, modify, or delete files, the backup updates automatically. Most services use [incremental backups](/glossary/what-is-an-incremental-backup) after the first upload, meaning only changed portions of files transfer, saving time and bandwidth.
 
 Your data travels through encrypted connections and remains encrypted while stored. Only you hold the decryption keys, ensuring no one else can access your files, not even the backup provider.
 
@@ -67,7 +67,7 @@ Many people confuse cloud backup with cloud storage, but they serve different pu
 
 Cloud storage services like Dropbox or Google Drive excel at collaboration and making files accessible from multiple devices. However, they're not true backups. When ransomware encrypts your files, those encrypted versions sync to the cloud. When you accidentally delete a file, it often disappears from cloud storage too.
 
-Cloud backup creates immutable copies that remain unchanged regardless of what happens to your original files. Delete something by mistake? Your backup still has it. Ransomware strikes? Restore clean copies from before the attack.
+Cloud backup creates immutable copies that remain unchanged regardless of what happens to your original files. Delete something by mistake? Your backup still has it. [Ransomware](/glossary/what-is-ransomware) strikes? Restore clean copies from before the attack.
 
 ## Benefits of Cloud Backup
 
@@ -108,11 +108,11 @@ Look for AES-256 encryption, the military-grade standard used by banks and gover
 
 **Zero-Knowledge Architecture**
 
-Some services, including BlinkDisk, use zero-knowledge encryption. This means your data gets encrypted on your device before transmission, and only you hold the decryption keys. The service stores your files but cannot read them. Maximum privacy comes with responsibility. Lose your password and your data becomes unrecoverable.
+Some services, including BlinkDisk, use zero-knowledge [encryption](/glossary/what-is-end-to-end-encryption-in-backups). This means your data gets encrypted on your device before transmission, and only you hold the decryption keys. The service stores your files but cannot read them. Maximum privacy comes with responsibility. Lose your password and your data becomes unrecoverable.
 
 **Retention Policies**
 
-Check how long the service keeps deleted files and previous versions. Some keep versions for 30 days, others for years. Longer retention provides better protection against delayed discovery of problems.
+Check how long the service keeps deleted files and previous versions. Some keep versions for 30 days, others for years. Longer [retention](/glossary/what-is-retention-in-backups) provides better protection against delayed discovery of problems.
 
 ## Setting Up Your First Cloud Backup
 
@@ -140,7 +140,7 @@ Users often worry about specific aspects of cloud backup. Let's address the most
 
 **"What if the service shuts down?"**
 
-Reputable backup services provide export options allowing you to download all your data. Additionally, the 3-2-1 backup rule (three copies on two different media with one offsite) means cloud backup supplements rather than replaces other backup methods.
+Reputable backup services provide export options allowing you to download all your data. Additionally, the [3-2-1 backup rule](/glossary/what-is-the-3-2-1-backup-rule) (three copies on two different media with one offsite) means cloud backup supplements rather than replaces other backup methods.
 
 **"Can I trust the provider with my data?"**
 
@@ -148,7 +148,7 @@ Zero-knowledge encryption means you don't have to trust the provider. They store
 
 **"What about internet speed?"**
 
-Initial backups take time, especially for large collections. However, modern backup software uses compression and block-level deduplication to minimize upload sizes. After the first backup, only changes upload, typically just megabytes per day for average users.
+Initial backups take time, especially for large collections. However, modern backup software uses [compression](/glossary/what-is-compression-in-backups) and block-level [deduplication](/glossary/what-is-deduplication-in-backups) to minimize upload sizes. After the first backup, only changes upload, typically just megabytes per day for average users.
 
 ## When Cloud Backup Makes Sense
 

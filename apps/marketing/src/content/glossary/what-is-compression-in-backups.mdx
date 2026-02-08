@@ -92,7 +92,7 @@ These two technologies complement each other beautifully, but they solve differe
 | **Typical Savings** | 20-80% per file            | 50-95% across dataset               |
 | **Best For**        | Documents, databases, code | Shared files, VM backups            |
 
-Think of compression like vacuum-sealing individual items to remove air and make them smaller. Deduplication is like realizing you have ten identical shirts and only keeping one. Using both together delivers maximum space savings.
+Think of compression like vacuum-sealing individual items to remove air and make them smaller. [Deduplication](/glossary/what-is-deduplication-in-backups) is like realizing you have ten identical shirts and only keeping one. Using both together delivers maximum space savings.
 
 Modern backup solutions apply both techniques automatically. First, deduplication eliminates redundant data blocks. Then compression squeezes the unique chunks further. The result? Backups that are often 10-20% of their original size.
 
@@ -126,11 +126,11 @@ Already-compressed formats like JPEG, MP4, MP3, and ZIP files see minimal benefi
 
 Certain scenarios make compression absolutely essential for practical backup operations.
 
-**Cloud Backups**: When uploading to cloud storage, compression reduces both transfer time and ongoing storage costs. A 200GB backup might take hours to upload uncompressed, but only 45 minutes compressed.
+**[Cloud Backups](/glossary/what-is-cloud-backup)**: When uploading to cloud storage, compression reduces both transfer time and ongoing storage costs. A 200GB backup might take hours to upload uncompressed, but only 45 minutes compressed.
 
 **Limited Bandwidth**: Remote offices and mobile users often have slow connections. Compression makes daily backups feasible over connections that would otherwise be too slow.
 
-**Long-Term Archiving**: Organizations keeping backups for years benefit enormously from compression. The savings compound over time as retention periods grow.
+**Long-Term Archiving**: Organizations keeping backups for years benefit enormously from compression. The savings compound over time as [retention](/glossary/what-is-retention-in-backups) periods grow.
 
 **Laptop and Mobile Backups**: Devices with limited storage for local backup caches need every byte saved. Compression maximizes what you can protect locally.
 
@@ -156,7 +156,7 @@ Many people harbor unfounded concerns about backup compression.
 
 **"Compression is too slow"**: While this was true decades ago, modern algorithms and hardware handle compression efficiently. Often, the time saved transferring smaller files outweighs compression overhead.
 
-**"Encrypted files won't compress"**: While encryption removes patterns that compression exploits, this happens before backup compression runs. Your backup software compresses first, then encrypts, maintaining efficiency.
+**"[Encrypted](/glossary/what-is-end-to-end-encryption-in-backups) files won't compress"**: While encryption removes patterns that compression exploits, this happens before backup compression runs. Your backup software compresses first, then encrypts, maintaining efficiency.
 
 ## Conclusion
 

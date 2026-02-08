@@ -17,9 +17,9 @@ Differential backup offers the best of both worlds. You get reasonable backup sp
 
 ## How Differential Backups Work
 
-A differential backup starts with a complete full backup as its foundation. Every subsequent differential backup then copies all files that have changed since that initial full backup, not just since the last backup.
+A differential backup starts with a complete [full backup](/glossary/what-is-a-full-backup) as its foundation. Every subsequent differential backup then copies all files that have changed since that initial full backup, not just since the last backup.
 
-Think of it like adding layers to a stack. Your full backup is the base layer. Each differential backup adds another layer containing everything new or modified since the base. Unlike incremental backups, each differential layer grows larger as more files change over time.
+Think of it like adding layers to a stack. Your full backup is the base layer. Each differential backup adds another layer containing everything new or modified since the base. Unlike [incremental backups](/glossary/what-is-an-incremental-backup), each differential layer grows larger as more files change over time.
 
 The process is straightforward. Your backup software compares the current state of your files against the last full backup. Any file with a different timestamp, size, or checksum gets included in the differential backup.
 
@@ -103,7 +103,7 @@ Certain scenarios make differential backups the ideal choice.
 
 **Frequent Restores Needed**: If you often need to restore files or systems, the two-file restore process saves significant time compared to incremental strategies.
 
-**Cloud Backup Scenarios**: When uploading to cloud storage, differential backups reduce bandwidth usage compared to full backups while maintaining simpler restore procedures.
+**Cloud Backup Scenarios**: When uploading to [cloud storage](/glossary/what-is-cloud-backup), differential backups reduce bandwidth usage compared to full backups while maintaining simpler restore procedures.
 
 ## Best Practices for Differential Backups
 
@@ -117,9 +117,9 @@ Follow these guidelines to maximize the effectiveness of your differential backu
 
 **Combine with Incrementals**: Some advanced strategies use monthly full backups, weekly differentials, and daily incrementals for optimal efficiency.
 
-**Encrypt Your Data**: Always encrypt backups containing sensitive information, especially when storing them offsite or in the cloud.
+**Encrypt Your Data**: Always [encrypt](/glossary/what-is-end-to-end-encryption-in-backups) backups containing sensitive information, especially when storing them [offsite](/glossary/what-is-an-offsite-backup) or in the cloud.
 
-**Maintain Retention**: Keep multiple full backup sets with their associated differential backups. This protects against corruption in any single backup file.
+**Maintain [Retention](/glossary/what-is-retention-in-backups)**: Keep multiple full backup sets with their associated differential backups. This protects against corruption in any single backup file.
 
 ## Is a Differential Backup Right for You?
 

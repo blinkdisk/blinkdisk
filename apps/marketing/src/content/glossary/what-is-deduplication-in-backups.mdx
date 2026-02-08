@@ -79,7 +79,7 @@ Not all deduplication works the same way. Understanding the different approaches
 
 Source-side deduplication happens on your computer before data ever leaves for backup storage. The software analyzes your files locally, sends only unique chunks to the cloud or backup server, and references everything else.
 
-This approach shines when you have limited internet bandwidth. Instead of uploading that 10GB file you share with your team twenty times, you upload it once. The rest becomes simple reference updates.
+This approach shines when you have limited internet bandwidth. Instead of uploading that 10GB file you share with your team twenty times, you upload it once. The rest becomes simple reference updates. Learn more about [cloud backup](/glossary/what-is-cloud-backup).
 
 ### Target-Side Deduplication
 
@@ -113,7 +113,7 @@ These two technologies often work together, but they solve different problems.
 | **Best For**        | Shared files, VM backups, email systems | Media, documents, databases |
 | **Typical Savings** | 50-95%                                  | 20-80% per file             |
 
-Compression squeezes individual files by finding patterns within them. Deduplication looks across your entire backup set to find identical chunks. Using both together delivers maximum space savings.
+[Compression](/glossary/what-is-compression-in-backups) squeezes individual files by finding patterns within them. Deduplication looks across your entire backup set to find identical chunks. Using both together delivers maximum space savings.
 
 Think of compression like vacuum-sealing clothes for storage. Deduplication is like realizing you packed three identical sweaters and only keeping one. Together, they're incredibly effective.
 
@@ -127,7 +127,7 @@ Certain scenarios make deduplication absolutely essential for practical backup s
 
 **File Shares and Collaboration**: Teams constantly share and version documents. Deduplication ensures only the actual changes consume new storage.
 
-**Long-Term Archiving**: The longer you keep backups, the more duplicate data accumulates. Deduplication makes years of retention financially feasible.
+**Long-Term Archiving**: The longer you keep backups, the more duplicate data accumulates. Deduplication makes years of [retention](/glossary/what-is-retention-in-backups) financially feasible.
 
 ## Best Practices for Deduplication
 

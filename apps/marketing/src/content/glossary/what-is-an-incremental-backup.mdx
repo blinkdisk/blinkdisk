@@ -17,7 +17,7 @@ Incremental backup is the secret weapon of modern backup strategies. It lets you
 
 ## How Incremental Backups Work
 
-An incremental backup starts with a full backup that copies all your selected files. Every backup after that only captures files that are new or have been modified since the previous backup of any type.
+An incremental backup starts with a [full backup](/glossary/what-is-a-full-backup) that copies all your selected files. Every backup after that only captures files that are new or have been modified since the previous backup of any type.
 
 Think of it like packing for a trip. The first time you pack, you put everything in your suitcase. The next day, you only add the new items you bought. You don't repack everything, just what changed.
 
@@ -68,7 +68,7 @@ Full backups copy everything every time. They're simple and fast to restore but 
 
 ### Differential Backups
 
-Differential backups copy all files changed since the last full backup. They're faster than full backups but grow larger over time until the next full backup resets the baseline.
+[Differential backups](/glossary/what-is-a-differential-backup) copy all files changed since the last full backup. They're faster than full backups but grow larger over time until the next full backup resets the baseline.
 
 ### Incremental Backups
 
@@ -82,7 +82,7 @@ Incremental backups shine in specific scenarios where efficiency matters.
 
 **Frequent Protection**: If you need hourly or continuous protection, incremental backups are the only practical option.
 
-**Limited Bandwidth**: For cloud backups over slower internet connections, incremental backups minimize upload times.
+**Limited Bandwidth**: For [cloud backups](/glossary/what-is-cloud-backup) over slower internet connections, incremental backups minimize upload times.
 
 **Laptop Users**: Running backups on battery-powered devices benefits from the low resource usage of incremental backups.
 
@@ -104,9 +104,9 @@ Follow these guidelines to get the most from your incremental backup strategy.
 
 **Test Restores**: Periodically test restoring files to ensure your incremental chain works properly.
 
-**Retention Policy**: Keep enough incremental backups to meet your recovery point objectives. Balance storage costs with how far back you might need to recover.
+**[Retention](/glossary/what-is-retention-in-backups) Policy**: Keep enough incremental backups to meet your recovery point objectives. Balance storage costs with how far back you might need to recover.
 
-**Encryption**: Protect incremental backups with strong encryption, especially when storing them in the cloud.
+**[Encryption](/glossary/what-is-end-to-end-encryption-in-backups)**: Protect incremental backups with strong encryption, especially when storing them in the cloud.
 
 ## Is Incremental Backup Right for You?
 
