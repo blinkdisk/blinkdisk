@@ -1,0 +1,72 @@
+---
+import Button from "@marketing/components/Button.astro";
+
+type Props = {
+  headline?: string;
+  secondaryButtonText?: string;
+  secondaryButtonHref?: string;
+};
+
+const {
+  headline,
+  secondaryButtonText = "Read more",
+  secondaryButtonHref = "/",
+} = Astro.props;
+---
+
+<section class="cta-pattern relative mt-16 overflow-hidden rounded-2xl border bg-secondary px-8 py-12 text-center md:px-12 md:py-16">
+  <div class="mb-6 flex items-center justify-center gap-4">
+    <div class="bg-foreground/20 h-px w-8"></div>
+    <span class="text-foreground/50 text-xs font-medium uppercase tracking-wider">
+      Get started with BlinkDisk for free
+    </span>
+    <div class="bg-foreground/20 h-px w-8"></div>
+  </div>
+
+  <h2 class="text-foreground mb-4 text-2xl sm:text-3xl font-bold md:text-4xl whitespace-pre-wrap leading-tight">
+    {headline ?? <>Ready to backup your files? <br class="hidden sm:block" />Download BlinkDisk for Free</>}
+  </h2>
+
+  <p class="text-foreground/70 mx-auto mb-8 max-w-lg text-sm sm:text-base md:text-lg">
+    BlinkDisk is a desktop application that lets you effortlessly create
+    backup copies of all your important files.
+  </p>
+
+  <div class="flex items-center justify-center gap-4 flex-row">
+    <Button href="/download" size="lg">
+      Download for free
+    </Button>
+    <Button href={secondaryButtonHref} size="lg" variant="outline" class="hidden sm:flex">
+      {secondaryButtonText}
+    </Button>
+  </div>
+</section>
+
+<style>
+  .cta-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      circle at center,
+      oklch(0.4 0 0 / 0.35) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, transparent 30%, black 100%);
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      black 100%
+    );
+  }
+
+  :global(.dark) .cta-pattern::before {
+    background-image: radial-gradient(
+      circle at center,
+      oklch(0.6 0 0 / 0.25) 1px,
+      transparent 1px
+    );
+  }
+</style>

@@ -1,5 +1,6 @@
 import { defineConfig, envField } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
+import mermaid from "astro-mermaid";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -18,7 +19,50 @@ export default defineConfig({
     adapter: cloudflare({
         imageService: "compile",
     }),
-    integrations: [mdx(), react(), sitemap()],
+    integrations: [
+        mermaid({
+            theme: "base",
+            autoTheme: false,
+            mermaidConfig: {
+                themeVariables: {
+                    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+                    fontSize: "20px",
+                    clusterLabelFontSize: "25px",
+                    primaryColor: "#2d2d32",
+                    primaryTextColor: "#fafafa",
+                    primaryBorderColor: "#3f3f46",
+                    secondaryColor: "#2d2d32",
+                    secondaryTextColor: "#fafafa",
+                    secondaryBorderColor: "#3f3f46",
+                    tertiaryColor: "#27272a",
+                    tertiaryTextColor: "#fafafa",
+                    tertiaryBorderColor: "#3f3f46",
+                    lineColor: "#a1a1aa",
+                    textColor: "#e4e4e7",
+                    mainBkg: "#2d2d32",
+                    nodeBorder: "#3f3f46",
+                    clusterBkg: "#18181b",
+                    clusterBorder: "#3f3f46",
+                    titleColor: "#fafafa",
+                    edgeLabelBackground: "#27272a",
+                    nodeTextColor: "#fafafa",
+                },
+                flowchart: {
+                    htmlLabels: true,
+                    curve: "basis",
+                    nodeSpacing: 50,
+                    rankSpacing: 50,
+                    padding: 20,
+                    useMaxWidth: true,
+                    subGraphTitleMargin: { top: 10, bottom: 10 },
+                    wrappingWidth: 200,
+                },
+            },
+        }),
+        mdx(),
+        react(),
+        sitemap(),
+    ],
     env: {
         schema: {
             API_URL: envField.string({ context: "server", access: "public", optional: true }),

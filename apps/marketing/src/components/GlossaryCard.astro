@@ -1,16 +1,13 @@
 ---
 import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
-import { categoryLabels } from "@marketing/data/glossary";
 
 type Props = {
   term: string;
   slug: string;
-  shortAnswer: string;
-  category: string;
+  summary: string;
 };
 
-const { term, slug, shortAnswer, category } = Astro.props;
-const categoryLabel = categoryLabels[category] || category;
+const { term, slug, summary } = Astro.props;
 ---
 
 <a
@@ -19,13 +16,10 @@ const categoryLabel = categoryLabels[category] || category;
   data-astro-prefetch
 >
   <div class="mb-3 flex items-center justify-between">
-    <span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-medium">
-      {categoryLabel}
-    </span>
+    <h3 class="text-foreground text-lg font-semibold group-hover:text-primary transition-colors">
+      {term}
+    </h3>
     <ArrowRightIcon class="text-muted-foreground size-4 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
   </div>
-  <h3 class="text-foreground mb-2 text-lg font-semibold group-hover:text-primary transition-colors">
-    {term}
-  </h3>
-  <p class="text-muted-foreground text-sm line-clamp-2">{shortAnswer}</p>
+  <p class="text-muted-foreground text-sm line-clamp-2">{summary}</p>
 </a>

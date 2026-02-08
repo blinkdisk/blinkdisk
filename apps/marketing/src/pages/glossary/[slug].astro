@@ -16,7 +16,7 @@ export async function getStaticPaths() {
       .map((t) => ({
         term: t.data.term,
         slug: t.data.slug,
-        shortAnswer: t.data.shortAnswer,
+        summary: t.data.summary,
       }));
 
     return {
@@ -38,8 +38,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   term={term.data.term}
   slug={term.data.slug}
   question={term.data.question}
-  shortAnswer={term.data.shortAnswer}
-  category={term.data.category}
+  summary={term.data.summary}
+  author={term.data.author}
   headings={headings}
   relatedTerms={relatedTerms}
   readingTime={readingTime}

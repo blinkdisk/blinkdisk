@@ -2,8 +2,7 @@ type GlossaryTerm = {
   term: string;
   slug: string;
   question: string;
-  shortAnswer: string;
-  category: string;
+  summary: string;
 };
 
 export function getTermStructuredData(term: GlossaryTerm, siteUrl: string) {
@@ -11,7 +10,7 @@ export function getTermStructuredData(term: GlossaryTerm, siteUrl: string) {
     "@context": "https://schema.org",
     "@type": "DefinedTerm",
     name: term.term,
-    description: term.shortAnswer,
+    description: term.summary,
     url: `${siteUrl}/glossary/${term.slug}`,
     inDefinedTermSet: {
       "@type": "DefinedTermSet",
@@ -31,7 +30,7 @@ export function getTermFaqStructuredData(term: GlossaryTerm, fullAnswer: string)
         name: term.question,
         acceptedAnswer: {
           "@type": "Answer",
-          text: fullAnswer || term.shortAnswer,
+          text: fullAnswer || term.summary,
         },
       },
     ],
@@ -48,7 +47,7 @@ export function getGlossaryIndexStructuredData(terms: GlossaryTerm[], siteUrl: s
     hasDefinedTerm: terms.map((term) => ({
       "@type": "DefinedTerm",
       name: term.term,
-      description: term.shortAnswer,
+      description: term.summary,
       url: `${siteUrl}/glossary/${term.slug}`,
     })),
   };
@@ -65,10 +64,3 @@ export function getCombinedStructuredData(
   ];
 }
 
-export const categoryLabels: Record<string, string> = {
-  "backup-types": "Backup Types",
-  security: "Security",
-  storage: "Storage",
-  recovery: "Recovery",
-  "best-practices": "Best Practices",
-};

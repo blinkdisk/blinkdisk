@@ -1,6 +1,6 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import GlossaryCard from "@marketing/components/GlossaryCard.astro";
+import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
 import { getCollection } from "astro:content";
 import { getGlossaryIndexStructuredData } from "@marketing/data/glossary";
 import { MARKETING_URL } from "astro:env/server";
@@ -13,20 +13,13 @@ const sortedTerms = terms.sort((a, b) =>
   a.data.term.localeCompare(b.data.term)
 );
 
-const termsByLetter = sortedTerms.reduce(
-  (acc, term) => {
-    const firstLetter = term.data.term[0].toUpperCase();
-    if (!acc[firstLetter]) {
-      acc[firstLetter] = [];
-    }
-    acc[firstLetter].push(term);
-    return acc;
-  },
-  {} as Record<string, typeof terms>
-);
-
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const availableLetters = Object.keys(termsByLetter).sort();
+const termsWithLetterMarkers = sortedTerms.map((term, index) => {
+  const firstLetter = term.data.term[0].toUpperCase();
+  const prevLetter =
+    index > 0 ? sortedTerms[index - 1].data.term[0].toUpperCase() : null;
+  const isNewLetter = firstLetter !== prevLetter;
+  return { ...term, firstLetter, isNewLetter };
+});
 
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 const structuredData = getGlossaryIndexStructuredData(
@@ -34,8 +27,7 @@ const structuredData = getGlossaryIndexStructuredData(
     term: t.data.term,
     slug: t.data.slug,
     question: t.data.question,
-    shortAnswer: t.data.shortAnswer,
-    category: t.data.category,
+    summary: t.data.summary,
   })),
   siteUrl
 );
@@ -62,47 +54,47 @@ const structuredData = getGlossaryIndexStructuredData(
       </p>
     </header>
 
-    <nav class="mb-12 flex flex-wrap justify-center gap-2">
-      {
-        alphabet.map((letter) => {
-          const hasTerms = availableLetters.includes(letter);
-          return hasTerms ? (
-            <a
-              href={`#letter-${letter}`}
-              class="flex size-10 items-center justify-center rounded-lg border bg-card text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
-            >
-              {letter}
-            </a>
-          ) : (
-            <span class="flex size-10 items-center justify-center rounded-lg text-sm font-medium text-muted-foreground/50">
-              {letter}
-            </span>
-          );
-        })
-      }
-    </nav>
 
     {
       sortedTerms.length > 0 ? (
-        <div class="space-y-12">
-          {availableLetters.map((letter) => (
-            <section id={`letter-${letter}`}>
-              <div class="mb-6 flex items-center gap-4">
-                <h2 class="text-foreground text-2xl font-bold">{letter}</h2>
-                <div class="bg-border h-px flex-1" />
-              </div>
-              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {termsByLetter[letter].map((term) => (
-                  <GlossaryCard
-                    term={term.data.term}
-                    slug={term.data.slug}
-                    shortAnswer={term.data.shortAnswer}
-                    category={term.data.category}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+        <div class="relative max-w-2xl mx-auto">
+          <div class="absolute left-0 top-0 bottom-0 w-px bg-primary/40 hidden md:block" />
+
+          <div class="space-y-1">
+            {termsWithLetterMarkers.map(
+              ({ data, firstLetter, isNewLetter }) => (
+                <>
+                  {isNewLetter && (
+                    <div class="flex items-center gap-4 pt-8 pb-4 first:pt-0">
+                      <div class="relative flex size-12 items-center justify-center rounded-xl bg-card border border-primary/20 md:-ml-6">
+                        <span class="text-xl font-bold text-primary">
+                          {firstLetter}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <a
+                    href={`/glossary/${data.slug}`}
+                    class="group relative flex items-center gap-4 rounded-xl border border-transparent bg-transparent p-4 md:ml-4 transition-all hover:border-border hover:bg-card/80 hover:shadow-sm"
+                    data-astro-prefetch
+                  >
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-foreground text-lg font-semibold">
+                        {data.term}
+                      </h3>
+                      <p class="text-muted-foreground text-sm mt-1 line-clamp-1 sm:line-clamp-2">
+                        {data.summary}
+                      </p>
+                    </div>
+                    <div class="flex-shrink-0 flex items-center gap-2 text-muted-foreground">
+                      <span class="hidden sm:inline text-sm">Read more</span>
+                      <ArrowRightIcon class="size-4" />
+                    </div>
+                  </a>
+                </>
+              )
+            )}
+          </div>
         </div>
       ) : (
         <div class="py-16 text-center">
