@@ -20,4 +20,23 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { blog };
+const glossary = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/glossary" }),
+  schema: z.object({
+    term: z.string(),
+    slug: z.string(),
+    question: z.string(),
+    shortAnswer: z.string(),
+    category: z.enum([
+      "backup-types",
+      "security",
+      "storage",
+      "recovery",
+      "best-practices",
+    ]),
+    relatedTerms: z.array(z.string()).optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+export const collections = { blog, glossary };

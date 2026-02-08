@@ -1,0 +1,116 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import GlossaryCard from "@marketing/components/GlossaryCard.astro";
+import { getCollection } from "astro:content";
+import { getGlossaryIndexStructuredData } from "@marketing/data/glossary";
+import { MARKETING_URL } from "astro:env/server";
+
+const terms = await getCollection("glossary", ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const sortedTerms = terms.sort((a, b) =>
+  a.data.term.localeCompare(b.data.term)
+);
+
+const termsByLetter = sortedTerms.reduce(
+  (acc, term) => {
+    const firstLetter = term.data.term[0].toUpperCase();
+    if (!acc[firstLetter]) {
+      acc[firstLetter] = [];
+    }
+    acc[firstLetter].push(term);
+    return acc;
+  },
+  {} as Record<string, typeof terms>
+);
+
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const availableLetters = Object.keys(termsByLetter).sort();
+
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
+const structuredData = getGlossaryIndexStructuredData(
+  sortedTerms.map((t) => ({
+    term: t.data.term,
+    slug: t.data.slug,
+    question: t.data.question,
+    shortAnswer: t.data.shortAnswer,
+    category: t.data.category,
+  })),
+  siteUrl
+);
+---
+
+<DefaultLayout
+  title="Backup Glossary"
+  description="A comprehensive glossary of backup, storage, security, and data protection terms. Learn what terms like offsite backup, deduplication, and end-to-end encryption mean."
+  structuredData={structuredData}
+>
+  <section class="pt-page pb-page w-content mx-auto">
+    <header class="mb-16 text-center">
+      <h1
+        class="text-primary mb-4 inline-block text-xs font-semibold uppercase tracking-widest sm:text-sm sm:tracking-[0.2rem]"
+      >
+        Backup Glossary
+      </h1>
+      <p class="text-foreground mb-4 text-4xl font-bold md:text-5xl">
+        Terms & Definitions
+      </p>
+      <p class="text-muted-foreground mx-auto max-w-lg text-lg">
+        Learn the key concepts behind backup, storage, security, and data
+        protection.
+      </p>
+    </header>
+
+    <nav class="mb-12 flex flex-wrap justify-center gap-2">
+      {
+        alphabet.map((letter) => {
+          const hasTerms = availableLetters.includes(letter);
+          return hasTerms ? (
+            <a
+              href={`#letter-${letter}`}
+              class="flex size-10 items-center justify-center rounded-lg border bg-card text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              {letter}
+            </a>
+          ) : (
+            <span class="flex size-10 items-center justify-center rounded-lg text-sm font-medium text-muted-foreground/50">
+              {letter}
+            </span>
+          );
+        })
+      }
+    </nav>
+
+    {
+      sortedTerms.length > 0 ? (
+        <div class="space-y-12">
+          {availableLetters.map((letter) => (
+            <section id={`letter-${letter}`}>
+              <div class="mb-6 flex items-center gap-4">
+                <h2 class="text-foreground text-2xl font-bold">{letter}</h2>
+                <div class="bg-border h-px flex-1" />
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {termsByLetter[letter].map((term) => (
+                  <GlossaryCard
+                    term={term.data.term}
+                    slug={term.data.slug}
+                    shortAnswer={term.data.shortAnswer}
+                    category={term.data.category}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div class="py-16 text-center">
+          <p class="text-muted-foreground text-lg">
+            No glossary terms yet. Check back soon!
+          </p>
+        </div>
+      )
+    }
+  </section>
+</DefaultLayout>

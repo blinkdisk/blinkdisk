@@ -1,0 +1,31 @@
+---
+import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
+import { categoryLabels } from "@marketing/data/glossary";
+
+type Props = {
+  term: string;
+  slug: string;
+  shortAnswer: string;
+  category: string;
+};
+
+const { term, slug, shortAnswer, category } = Astro.props;
+const categoryLabel = categoryLabels[category] || category;
+---
+
+<a
+  href={`/glossary/${slug}`}
+  class="group flex flex-col rounded-xl border bg-card p-6 transition-colors hover:border-primary/50"
+  data-astro-prefetch
+>
+  <div class="mb-3 flex items-center justify-between">
+    <span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-medium">
+      {categoryLabel}
+    </span>
+    <ArrowRightIcon class="text-muted-foreground size-4 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+  </div>
+  <h3 class="text-foreground mb-2 text-lg font-semibold group-hover:text-primary transition-colors">
+    {term}
+  </h3>
+  <p class="text-muted-foreground text-sm line-clamp-2">{shortAnswer}</p>
+</a>
