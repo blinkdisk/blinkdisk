@@ -1,0 +1,108 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
+import { getCollection } from "astro:content";
+import { getGlossaryIndexStructuredData } from "@marketing/data/glossary";
+import { MARKETING_URL } from "astro:env/server";
+
+const terms = await getCollection("glossary", ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const sortedTerms = terms.sort((a, b) =>
+  a.data.term.localeCompare(b.data.term)
+);
+
+const termsWithLetterMarkers = sortedTerms.map((term, index) => {
+  const firstLetter = term.data.term[0].toUpperCase();
+  const prevLetter =
+    index > 0 ? sortedTerms[index - 1].data.term[0].toUpperCase() : null;
+  const isNewLetter = firstLetter !== prevLetter;
+  return { ...term, firstLetter, isNewLetter };
+});
+
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
+const structuredData = getGlossaryIndexStructuredData(
+  sortedTerms.map((t) => ({
+    term: t.data.term,
+    slug: t.data.slug,
+    question: t.data.question,
+    summary: t.data.summary,
+  })),
+  siteUrl
+);
+---
+
+<DefaultLayout
+  title="Backup Glossary"
+  description="A comprehensive glossary of backup, storage, security, and data protection terms. Learn what terms like offsite backup, deduplication, and end-to-end encryption mean."
+  structuredData={structuredData}
+>
+  <section class="pt-page pb-page w-content mx-auto">
+    <header class="mb-16 text-center">
+      <h1
+        class="text-primary mb-4 inline-block text-xs font-semibold uppercase tracking-widest sm:text-sm sm:tracking-[0.2rem]"
+      >
+        Backup Glossary
+      </h1>
+      <p class="text-foreground mb-4 text-4xl font-bold md:text-5xl">
+        Terms & Definitions
+      </p>
+      <p class="text-muted-foreground mx-auto max-w-lg text-lg">
+        Learn the key concepts behind backup, storage, security, and data
+        protection.
+      </p>
+    </header>
+
+
+    {
+      sortedTerms.length > 0 ? (
+        <div class="relative max-w-2xl mx-auto">
+          <div class="absolute left-0 top-0 bottom-0 w-px bg-primary/40 hidden md:block" />
+
+          <div class="space-y-1">
+            {termsWithLetterMarkers.map(
+              ({ data, firstLetter, isNewLetter }) => (
+                <>
+                  {isNewLetter && (
+                    <div class="flex items-center gap-4 pt-8 pb-4 first:pt-0">
+                      <div class="relative flex size-12 items-center justify-center rounded-xl bg-card border border-primary/20 md:-ml-6">
+                        <span class="text-xl font-bold text-primary">
+                          {firstLetter}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <a
+                    href={`/glossary/${data.slug}`}
+                    class="group relative flex items-center gap-4 rounded-xl border border-transparent bg-transparent p-4 md:ml-4 transition-all hover:border-border hover:bg-card/80 hover:shadow-sm"
+                    data-astro-prefetch
+                  >
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-foreground text-lg font-semibold">
+                        {data.term}
+                      </h3>
+                      <p class="text-muted-foreground text-sm mt-1 line-clamp-1 sm:line-clamp-2">
+                        {data.summary}
+                      </p>
+                    </div>
+                    <div class="flex-shrink-0 flex items-center gap-2 text-muted-foreground">
+                      <span class="hidden sm:inline text-sm">Read more</span>
+                      <ArrowRightIcon class="size-4" />
+                    </div>
+                  </a>
+                </>
+              )
+            )}
+          </div>
+        </div>
+      ) : (
+        <div class="py-16 text-center">
+          <p class="text-muted-foreground text-lg">
+            No glossary terms yet. Check back soon!
+          </p>
+        </div>
+      )
+    }
+  </section>
+</DefaultLayout>

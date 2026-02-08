@@ -3,19 +3,19 @@ import { getCollection } from "astro:content";
 import { generateOgImage, createOgImageResponse } from "@marketing/utils/og-image";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getCollection("blog", ({ data }) => {
+  const terms = await getCollection("glossary", ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true;
   });
 
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { title: post.data.title, description: post.data.description },
+  return terms.map((term) => ({
+    params: { slug: term.data.slug },
+    props: { question: term.data.question, summary: term.data.summary },
   }));
 };
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title, description } = props as { title: string; description: string };
+  const { question, summary } = props as { question: string; summary: string };
 
-  const png = await generateOgImage({ title, description, badge: "Blog" });
+  const png = await generateOgImage({ title: question, description: summary, badge: "Glossary" });
   return createOgImageResponse(png);
 };

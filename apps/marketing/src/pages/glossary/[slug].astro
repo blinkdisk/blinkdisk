@@ -1,0 +1,48 @@
+---
+import GlossaryTermLayout from "@marketing/layouts/GlossaryTermLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const terms = await getCollection("glossary", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const allTerms = await getCollection("glossary");
+
+  return terms.map((term) => {
+    const relatedTerms = (term.data.relatedTerms || [])
+      .map((slug) => allTerms.find((t) => t.data.slug === slug))
+      .filter((t): t is (typeof allTerms)[number] => t !== undefined)
+      .map((t) => ({
+        term: t.data.term,
+        slug: t.data.slug,
+        summary: t.data.summary,
+      }));
+
+    return {
+      params: { slug: term.data.slug },
+      props: { term, relatedTerms },
+    };
+  });
+}
+
+const { term, relatedTerms } = Astro.props;
+const { Content, headings } = await render(term);
+
+const wordsPerMinute = 200;
+const wordCount = term.body?.split(/\s+/).length ?? 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+---
+
+<GlossaryTermLayout
+  term={term.data.term}
+  slug={term.data.slug}
+  question={term.data.question}
+  summary={term.data.summary}
+  author={term.data.author}
+  headings={headings}
+  relatedTerms={relatedTerms}
+  readingTime={readingTime}
+>
+  <Content />
+</GlossaryTermLayout>

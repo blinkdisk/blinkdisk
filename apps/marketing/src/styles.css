@@ -14,7 +14,10 @@
   list-style: inherit !important;
 }
 
-.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+.prose
+  :where(h1, h2, h3, h4, h5, h6):not(
+    :where([class~="not-prose"], [class~="not-prose"] *)
+  ) {
   scroll-margin-top: 8rem;
 }
 
@@ -178,4 +181,129 @@ body.background-pattern::before {
       transparent 50%
     ),
     radial-gradient(oklch(0.5 0 0 / 0.2) 1.5px, transparent 1.5px);
+}
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: oklch(0.18 0 0);
+  border: 1px solid oklch(0.3 0 0);
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  min-height: 200px;
+}
+
+/* Hide raw mermaid text before rendering */
+.mermaid:not(:has(svg)) {
+  visibility: hidden;
+}
+
+.mermaid:has(svg) {
+  visibility: visible;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  rx: 8px;
+  ry: 8px;
+}
+
+/* Style the cluster/subgraph backgrounds */
+.mermaid .cluster rect {
+  rx: 12px !important;
+  ry: 12px !important;
+  fill: oklch(0.22 0 0) !important;
+  stroke: oklch(0.35 0 0) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid .cluster-label .nodeLabel,
+.mermaid .cluster-label span {
+  color: oklch(0.7 0 0) !important;
+  font-weight: 600;
+}
+
+.mermaid .node .label {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.mermaid .nodeLabel {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Remove purple borders from nodes */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+  stroke: oklch(0.4 0 0) !important;
+}
+
+/* Edge/arrow styling */
+.mermaid .edgePath .path {
+  stroke: oklch(0.6 0 0);
+  stroke-width: 1.5px;
+}
+
+.mermaid .edgePath marker path {
+  fill: oklch(0.6 0 0);
+}
+
+/* Edge labels */
+.mermaid .edgeLabel {
+  background-color: oklch(0.22 0 0);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Light mode overrides */
+:root:not(.dark) .mermaid {
+  background: oklch(0.97 0 0);
+  border-color: oklch(0.9 0 0);
+}
+
+:root:not(.dark) .mermaid .node rect,
+:root:not(.dark) .mermaid .node circle,
+:root:not(.dark) .mermaid .node ellipse,
+:root:not(.dark) .mermaid .node polygon {
+  fill: oklch(0.95 0 0) !important;
+  stroke: oklch(0.8 0 0) !important;
+}
+
+:root:not(.dark) .mermaid .nodeLabel {
+  color: oklch(0.2 0 0) !important;
+}
+
+:root:not(.dark) .mermaid .cluster rect {
+  fill: oklch(0.92 0 0) !important;
+  stroke: oklch(0.85 0 0) !important;
+}
+
+:root:not(.dark) .mermaid .cluster-label .nodeLabel,
+:root:not(.dark) .mermaid .cluster-label span {
+  color: oklch(0.4 0 0) !important;
+}
+
+:root:not(.dark) .mermaid .edgePath .path {
+  stroke: oklch(0.5 0 0);
+}
+
+:root:not(.dark) .mermaid .edgePath marker path {
+  fill: oklch(0.5 0 0);
+}
+
+:root:not(.dark) .mermaid .edgeLabel {
+  background-color: oklch(0.94 0 0);
 }

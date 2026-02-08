@@ -1,0 +1,88 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import TableOfContents from "@marketing/components/TableOfContents.astro";
+import RelatedTerms from "@marketing/components/RelatedTerms.astro";
+import Summary from "@marketing/components/Summary.astro";
+import CTA from "@marketing/components/CTA.astro";
+import { getCombinedStructuredData } from "@marketing/data/glossary";
+import { MARKETING_URL } from "astro:env/server";
+
+type Heading = {
+  depth: number;
+  slug: string;
+  text: string;
+};
+
+type RelatedTerm = {
+  term: string;
+  slug: string;
+  summary: string;
+};
+
+type Props = {
+  term: string;
+  slug: string;
+  question: string;
+  summary: string;
+  author: string;
+  headings: Heading[];
+  relatedTerms: RelatedTerm[];
+  readingTime: number;
+};
+
+const {
+  term,
+  slug,
+  question,
+  summary,
+  author,
+  headings,
+  relatedTerms,
+  readingTime,
+} = Astro.props;
+
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
+const ogImage = `/glossary/og/${slug}.png`;
+
+const termData = { term, slug, question, summary };
+const structuredData = getCombinedStructuredData(termData, summary, siteUrl);
+---
+
+<DefaultLayout
+  title={question}
+  description={summary}
+  og={{ title: question, image: ogImage }}
+  structuredData={structuredData}
+>
+  <article class="pt-page pb-page mx-auto w-[90vw] max-w-3xl lg:max-w-4xl">
+    <header class="mb-12">
+      <h1 class="text-foreground mb-8 text-3xl font-bold md:text-4xl">
+        {question}
+      </h1>
+      <div class="text-foreground/60 flex flex-wrap gap-x-8 gap-y-2">
+        <div>
+          <span class="block text-sm">Written by</span>
+          <span class="text-foreground">{author}</span>
+        </div>
+        <div>
+          <span class="block text-sm">Reading time</span>
+          <span class="text-foreground">{readingTime} min read</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <div class="prose dark:prose-invert prose-img:rounded-xl prose-img:shadow min-w-0 max-w-none flex-1">
+        <Summary>{summary}</Summary>
+        <slot />
+      </div>
+      <aside class="hidden w-56 shrink-0 lg:block">
+        <TableOfContents headings={headings} />
+      </aside>
+    </div>
+
+    <RelatedTerms terms={relatedTerms} />
+
+    <CTA />
+  </article>
+</DefaultLayout>
