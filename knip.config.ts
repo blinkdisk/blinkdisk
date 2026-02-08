@@ -40,8 +40,6 @@ const config: KnipConfig = {
       ignoreDependencies: [
         // Used in CSS url() imports which knip doesn't detect
         "@fontsource/space-mono",
-        // Used internally by Astro image processing
-        "sharp",
         // Used in eslint.config.mjs (eslint provided via @blinkdisk/eslint)
         "eslint-plugin-astro",
         // Used in CSS

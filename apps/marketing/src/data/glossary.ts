@@ -5,7 +5,7 @@ type GlossaryTerm = {
   summary: string;
 };
 
-export function getTermStructuredData(term: GlossaryTerm, siteUrl: string) {
+function getTermStructuredData(term: GlossaryTerm, siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "DefinedTerm",
@@ -20,7 +20,7 @@ export function getTermStructuredData(term: GlossaryTerm, siteUrl: string) {
   };
 }
 
-export function getTermFaqStructuredData(term: GlossaryTerm, fullAnswer: string) {
+function getTermFaqStructuredData(term: GlossaryTerm, fullAnswer: string) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
