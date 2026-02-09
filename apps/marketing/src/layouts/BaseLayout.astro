@@ -35,6 +35,8 @@ const pageImage = image || defaultImage;
 const ogTitle = og?.title || pageTitle;
 const ogImage = og?.image ? `${siteUrl}${og.image}` : pageImage;
 
+const canonicalUrl = `${siteUrl}${Astro.url.pathname}`;
+
 const posthogKey = POSTHOG_MARKETING_KEY ?? "";
 const posthogHost = POSTHOG_API_HOST ?? "";
 const endorselyKey = ENDORSELY_PUBLIC_KEY ?? "";
@@ -86,11 +88,13 @@ const allStructuredData = [
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BlinkDisk" />
 
