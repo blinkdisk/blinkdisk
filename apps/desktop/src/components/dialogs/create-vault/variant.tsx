@@ -1,8 +1,7 @@
 import { FREE_SPACE_AVAILABLE } from "@config/space";
-import { Logo } from "@desktop/components/logo";
+import { BlinkCloudIcon } from "@desktop/components/icons/blinkcloud";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { Badge } from "@ui/badge";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";
 import { CheckIcon, XIcon } from "lucide-react";
@@ -21,13 +20,8 @@ export function CreateVaultVariant({
   return (
     <div className="mt-8 flex flex-col gap-5">
       <Card>
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <Logo />
-            <Badge variant="muted" className="px-2 py-0.5 text-sm">
-              Cloud
-            </Badge>
-          </div>
+        <CardHeader className="pb-4 flex items-start">
+          <BlinkCloudIcon className="h-4 my-2 w-auto" />
         </CardHeader>
         <CardContent className="pb-5">
           <p className="text-muted-foreground text-sm">

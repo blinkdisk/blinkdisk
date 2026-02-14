@@ -11,7 +11,7 @@ import { SftpIcon } from "@desktop/components/icons/providers/sftp";
 import { WebdavIcon } from "@desktop/components/icons/providers/webdav";
 
 export const providerIcons = {
-  BLINKCLOUD: BlinkCloudIcon,
+  BLINKCLOUD: () => null,
   FILESYSTEM: FilesystemIcon,
   AMAZON_S3: AmazonS3Icon,
   AZURE_BLOB_STORAGE: AzureBlobStorageIcon,
