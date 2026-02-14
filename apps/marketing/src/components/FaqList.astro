@@ -1,0 +1,66 @@
+---
+import ChevronDownIcon from "@lucide/astro/icons/chevron-down";
+
+type Props = {
+  faqs: { question: string; answer: string }[];
+};
+
+const { faqs } = Astro.props;
+---
+
+<div class="w-content mx-auto flex flex-col">
+  {
+    faqs.map((faq) => (
+      <details class="group border-b last:border-b-0">
+        <summary class="text-foreground flex w-full cursor-pointer list-none items-center justify-between py-5 text-left">
+          <p class="text-sm font-semibold sm:text-base">
+            {faq.question}
+          </p>
+          <ChevronDownIcon class="text-muted-foreground ml-6 size-5 shrink-0 transition-transform duration-200 group-open:rotate-180" />
+        </summary>
+        <div class="faq-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]">
+          <div class="overflow-hidden">
+            <p class="text-muted-foreground pb-5 text-sm sm:text-base">
+              {faq.answer}
+            </p>
+          </div>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('details').forEach((details) => {
+    const summary = details.querySelector('summary');
+    const content = details.querySelector('.faq-content');
+
+    summary?.addEventListener('click', (e) => {
+      if (details.open) {
+        e.preventDefault();
+        content?.addEventListener('transitionend', () => {
+          details.open = false;
+        }, { once: true });
+        details.classList.add('closing');
+      }
+    });
+
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        details.classList.remove('closing');
+      }
+    });
+  });
+</script>
+
+<style>
+  details.closing .faq-content {
+    grid-template-rows: 0fr !important;
+  }
+</style>

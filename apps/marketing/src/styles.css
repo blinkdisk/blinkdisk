@@ -96,6 +96,14 @@
   animation-play-state: paused;
 }
 
+.marquee-reverse {
+  animation: marquee-right 30s linear infinite;
+}
+
+.marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
 @keyframes marquee-left {
   0% {
     transform: translateX(0);
