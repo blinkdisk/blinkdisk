@@ -4,7 +4,6 @@ import { FREE_SPACE_AVAILABLE } from "@config/space";
 import { usePlanPrices } from "@hooks/use-plan-prices";
 import { ArrowLeftIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Logo } from "./Logo";
 
 const currency = "USD";
 
@@ -19,15 +18,9 @@ export default function PlanSelector() {
   );
 
   return (
-    <div className="w-full lg:w-2/3">
-      <div className="flex flex-col items-center justify-between sm:flex-row">
-        <div className="flex items-center gap-3">
-          <Logo className="h-6 select-none" />
-          <span className="bg-primary/10 text-primary border-primary/30 rounded-md border px-2 py-0.5 text-sm">
-            Cloud
-          </span>
-        </div>
-        <div className="bg-secondary mt-6 flex rounded-lg p-1 sm:mt-0">
+    <div className="w-full">
+      <div className="flex justify-center">
+        <div className="bg-secondary flex rounded-lg p-1">
           <button
             onClick={() => setPeriod("MONTHLY")}
             className={`rounded-md px-6 py-2 text-sm font-medium transition-colors ${
@@ -53,17 +46,19 @@ export default function PlanSelector() {
           </button>
         </div>
       </div>
-      <div className="mt-8 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
-        <PlanCard
-          plan={{
-            id: "free",
-            storageGB: FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000,
-            prices: [],
-            free: true,
-          }}
-          period={period}
-          currency={currency}
-        />
+      <div className="mt-8 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+        <div className="sm:col-span-2 lg:col-span-2">
+          <PlanCard
+            plan={{
+              id: "free",
+              storageGB: FREE_SPACE_AVAILABLE / 1000 / 1000 / 1000,
+              prices: [],
+              free: true,
+            }}
+            period={period}
+            currency={currency}
+          />
+        </div>
         {plans
           .filter((plan) => !plan.group)
           .map((plan) => (
@@ -75,14 +70,16 @@ export default function PlanSelector() {
             />
           ))}
         {groupPlan && (
-          <PlanCard
-            plan={groupPlan}
-            period={period}
-            currency={currency}
-            groupIndex={groupIndex}
-            setGroupIndex={setGroupIndex}
-            maxGroupIndex={groupPlans.length - 1}
-          />
+          <div className="sm:col-span-2 lg:col-span-2">
+            <PlanCard
+              plan={groupPlan}
+              period={period}
+              currency={currency}
+              groupIndex={groupIndex}
+              setGroupIndex={setGroupIndex}
+              maxGroupIndex={groupPlans.length - 1}
+            />
+          </div>
         )}
       </div>
     </div>

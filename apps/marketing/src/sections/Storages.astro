@@ -1,0 +1,247 @@
+---
+const localStorages = [
+  {
+    name: "Your Computer",
+    description: "Store backups on any local drive",
+    image: "filesystem.svg",
+  },
+  {
+    name: "External Drives",
+    description: "Backup to external hard drives",
+    image: "external-drive.svg",
+  },
+  {
+    name: "USB Sticks",
+    description: "Portable backup to USB flash drives",
+    image: "usb.svg",
+  },
+  {
+    name: "Network Storage",
+    description: "Use your home or office NAS",
+    image: "nas.svg",
+  },
+];
+
+const cloudStorages = [
+  {
+    name: "BlinkDisk Cloud",
+    description: "Our managed cloud storage",
+    image: "blinkdisk.svg",
+  },
+  {
+    name: "AWS S3",
+    description: "Reliable storage by AWS",
+    image: "aws.svg",
+  },
+  {
+    name: "Google Cloud",
+    description: "Google Cloud's storage solution",
+    image: "google-cloud-storage.svg",
+  },
+  {
+    name: "Azure Blob",
+    description: "Azure's cloud storage option",
+    image: "azure-blob-storage.svg",
+  },
+];
+
+const otherStorages = [
+  {
+    name: "S3 Compatible",
+    description: "Any S3-compatible service",
+    image: "s3.svg",
+  },
+  {
+    name: "SFTP",
+    description: "Backup to secure SFTP server",
+    image: "sftp.svg",
+  },
+  {
+    name: "WebDAV",
+    description: "Use any WebDAV server",
+    image: "webdav.svg",
+  },
+  {
+    name: "RClone Remote",
+    description: "70+ cloud providers via RClone",
+    image: "rclone.svg",
+  },
+];
+---
+
+<section class="w-content mx-auto flex flex-col items-center py-16 sm:py-24">
+  <h2 class="text-center text-4xl font-bold sm:text-5xl">Ready for any storage</h2>
+  <p
+    class="text-muted-foreground mt-4 max-w-lg text-center text-sm md:text-base"
+  >
+    Store your backups wherever you want. Keep them local, sync to the cloud, or
+    use your own server.
+  </p>
+
+  <div class="relative w-full">
+    <div
+      class="mt-16 grid w-full grid-cols-1 gap-10 sm:mt-20 md:grid-cols-3 md:gap-8"
+    >
+    <div class="flex flex-col">
+      <div class="flex items-center gap-3">
+        <div class="bg-primary/10 text-primary rounded-lg p-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="20" height="8" x="2" y="14" rx="2"></rect>
+            <path d="M6.01 18H6"></path>
+            <path d="M10.01 18H10"></path>
+            <path d="M15 10v4"></path>
+            <path d="M17.84 7.17a4 4 0 0 0-5.66 0"></path>
+            <path d="M20.66 4.34a8 8 0 0 0-11.31 0"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Local</h3>
+      </div>
+      <p class="text-muted-foreground mt-2 text-sm">
+        Keep backups on devices you control.
+      </p>
+
+      <div class="relative">
+        <div class="mt-6 flex flex-col gap-3">
+          {
+            localStorages.map((storage) => (
+              <div class="bg-card flex items-center gap-4 rounded-xl border p-4">
+                <div class="bg-muted flex size-10 items-center justify-center rounded-lg">
+                  <img
+                    src={`/images/providers/${storage.image}`}
+                    class="size-6 grayscale"
+                    alt={storage.name}
+                  />
+                </div>
+                <div>
+                  <p class="text-sm font-medium">{storage.name}</p>
+                  <p class="text-muted-foreground text-xs">
+                    {storage.description}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-background to-transparent md:hidden"></div>
+      </div>
+    </div>
+
+    <div class="flex flex-col">
+      <div class="flex items-center gap-3">
+        <div class="bg-primary/10 text-primary rounded-lg p-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Cloud</h3>
+      </div>
+      <p class="text-muted-foreground mt-2 text-sm">
+        Sync offsite for extra protection.
+      </p>
+
+      <div class="relative">
+        <div class="mt-6 flex flex-col gap-3">
+          {
+            cloudStorages.map((storage) => (
+              <div class="bg-card flex items-center gap-4 rounded-xl border p-4">
+                <div class="bg-muted flex size-10 items-center justify-center rounded-lg">
+                  <img
+                    src={`/images/providers/${storage.image}`}
+                    class="size-6 grayscale"
+                    alt={storage.name}
+                  />
+                </div>
+                <div>
+                  <p class="text-sm font-medium">{storage.name}</p>
+                  <p class="text-muted-foreground text-xs">
+                    {storage.description}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-background to-transparent md:hidden"></div>
+      </div>
+    </div>
+
+    <div class="flex flex-col">
+      <div class="flex items-center gap-3">
+        <div class="bg-primary/10 text-primary rounded-lg p-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="20" height="8" x="2" y="2" rx="2" ry="2"></rect>
+            <rect width="20" height="8" x="2" y="14" rx="2" ry="2"></rect>
+            <line x1="6" x2="6.01" y1="6" y2="6"></line>
+            <line x1="6" x2="6.01" y1="18" y2="18"></line>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Other</h3>
+      </div>
+      <p class="text-muted-foreground mt-2 text-sm">
+        Use your own server or provider.
+      </p>
+
+      <div class="relative">
+        <div class="mt-6 flex flex-col gap-3">
+          {
+            otherStorages.map((storage) => (
+              <div class="bg-card flex items-center gap-4 rounded-xl border p-4">
+                <div class="bg-muted flex size-10 items-center justify-center rounded-lg">
+                  <img
+                    src={`/images/providers/${storage.image}`}
+                    class="size-6 grayscale"
+                    alt={storage.name}
+                  />
+                </div>
+                <div>
+                  <p class="text-sm font-medium">{storage.name}</p>
+                  <p class="text-muted-foreground text-xs">
+                    {storage.description}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-background to-transparent md:hidden"></div>
+      </div>
+    </div>
+    </div>
+    <div
+      class="pointer-events-none absolute bottom-0 left-0 hidden h-24 w-full bg-gradient-to-t from-background to-transparent md:block"
+    >
+    </div>
+  </div>
+
+  <p class="text-muted-foreground mt-6 text-center text-sm">
+    ...and many more.
+  </p>
+</section>

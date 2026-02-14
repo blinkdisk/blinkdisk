@@ -1,0 +1,389 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import Button from "@marketing/components/Button.astro";
+import CTA from "@marketing/components/CTA.astro";
+import ProPlanCard from "@marketing/components/react/ProPlanCard";
+import CheckIcon from "@lucide/astro/icons/check";
+import DownloadIcon from "@lucide/astro/icons/download";
+import GlobeIcon from "@lucide/astro/icons/globe";
+import ArrowDownIcon from "@lucide/astro/icons/arrow-down";
+import TagIcon from "@lucide/astro/icons/tag";
+import { MARKETING_URL } from "astro:env/server";
+
+const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
+
+const faqs = [
+  {
+    question: "What's the difference between BlinkDisk Cloud and custom storage?",
+    answer: "BlinkDisk Cloud is our fully managed storage solution. We handle the infrastructure, maintenance, and scaling so you don't have to. Custom storage lets you use your own cloud provider credentials (like AWS S3 or Backblaze B2) for complete control. Both options provide the same bank-grade end-to-end encryption.",
+  },
+  {
+    question: "Where is my data stored?",
+    answer: "Your data is replicated across multiple secure data centers worldwide for maximum reliability. Since all data is encrypted on your device before it ever leaves, your files remain completely private. Not even we can access them.",
+  },
+  {
+    question: "Can I switch from Cloud to custom storage later?",
+    answer: "Yes, anytime. Simply export your backups and configure a custom storage provider. Your data always belongs to you, and we make switching seamless.",
+  },
+  {
+    question: "What happens if I exceed my storage limit?",
+    answer: "We'll notify you in advance when you're approaching your limit. You can upgrade instantly with a single click, or remove old backups to free up space. Your existing backups remain fully accessible.",
+  },
+  {
+    question: "Is my data really secure?",
+    answer: "Yes. BlinkDisk uses AES-256-GCM encryption with keys that never leave your device. This means only you can decrypt your data. Even if someone gained access to our servers, your files would remain unreadable gibberish without your encryption key.",
+  },
+];
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "BlinkDisk Cloud",
+  description: "Hassle-free managed cloud backups with 15GB free. Bank-grade encryption, automatic scaling, and zero maintenance required.",
+  image: `${siteUrl}/brand/social.jpg`,
+  brand: {
+    "@type": "Brand",
+    name: "BlinkDisk",
+  },
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "15GB free cloud storage",
+    url: `${siteUrl}/cloud`,
+  },
+};
+---
+
+<DefaultLayout
+  title="BlinkDisk Cloud - Managed Backup Storage"
+  description="Zero setup, zero maintenance backup storage. Get 15GB free with end-to-end encryption. Your data, protected in the cloud."
+  structuredData={productSchema}
+>
+  <section>
+    <div class="py-page flex min-h-[85vh] flex-col items-center justify-center text-center">
+      <h1 class="max-w-4xl text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
+        The cloud storage<br />
+        built for backups
+      </h1>
+
+      <p class="text-muted-foreground mt-4 max-w-xl text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed">
+        The easiest way to protect your files. Download, sign in, and you're backed up in 30 seconds. No servers, no configuration, no hassle.
+      </p>
+
+      <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+        <Button href="#pricing" variant="outline" size="xl">
+          <TagIcon class="size-4" />
+          View Pricing
+        </Button>
+        <Button href="/download" size="xl">
+          <DownloadIcon class="size-4" />
+          Download for free
+        </Button>
+      </div>
+
+      <div class="text-muted-foreground mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
+        <div class="flex items-center gap-2">
+          <CheckIcon class="text-primary size-4" />
+          <span>15GB free</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <CheckIcon class="text-primary size-4" />
+          <span>No credit card</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <CheckIcon class="text-primary size-4" />
+          <span>End-to-end encrypted</span>
+        </div>
+      </div>
+
+      <div class="w-content mx-auto mt-20 flex flex-col gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div class="overflow-hidden rounded-2xl border bg-card">
+          <div class="relative flex h-48 items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 p-6">
+            <div class="absolute inset-0 opacity-[0.04]" style="background-image: repeating-linear-gradient(45deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%); background-size: 16px 16px;"></div>
+            <div class="relative flex items-center gap-6">
+              <div class="flex flex-col items-center">
+                <div class="text-6xl font-bold tracking-tight md:text-7xl">30</div>
+                <div class="text-muted-foreground text-sm">seconds</div>
+              </div>
+              <div class="text-muted-foreground/30 text-4xl">→</div>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-2 rounded-lg bg-green-500/10 px-3 py-1.5 text-sm text-green-600 dark:text-green-400">
+                  <div class="size-2 rounded-full bg-green-500"></div>
+                  Backup running
+                </div>
+                <div class="text-muted-foreground text-xs">No configuration needed</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 text-left">
+            <span class="text-primary text-sm font-medium">Setup</span>
+            <h3 class="mt-1 text-xl font-semibold">Zero Configuration</h3>
+            <p class="text-muted-foreground mt-2 text-sm">No servers to configure, no API keys to manage. Just download, sign in, and your first backup starts automatically.</p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border bg-card">
+          <div class="relative flex h-48 flex-col items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 p-6">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0); background-size: 24px 24px;"></div>
+            <div class="relative flex items-baseline gap-1">
+              <span class="text-muted-foreground text-2xl">$</span>
+              <span class="text-5xl font-bold">0</span>
+            </div>
+            <div class="text-muted-foreground relative mt-1 text-sm">to get started</div>
+            <div class="relative mt-4 flex gap-2">
+              <span class="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary">15GB free</span>
+              <span class="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary">No card</span>
+            </div>
+          </div>
+          <div class="p-6 text-left">
+            <span class="text-primary text-sm font-medium">Pricing</span>
+            <h3 class="mt-1 text-xl font-semibold">Fair & Transparent</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Start free with 15GB, then pay only for what you need. No hidden fees, no surprise charges, cancel anytime.</p>
+          </div>
+        </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="overflow-hidden rounded-2xl border bg-card">
+          <div class="relative flex h-48 items-center justify-center overflow-hidden bg-gradient-to-br from-secondary to-secondary/50">
+            <div class="absolute inset-0 opacity-[0.04]" style="background-image: repeating-linear-gradient(0deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%), repeating-linear-gradient(90deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%); background-size: 32px 32px;"></div>
+            <div class="relative flex items-center justify-center">
+              <div class="absolute size-32 animate-pulse rounded-full border-2 border-dashed border-primary/30"></div>
+              <div class="absolute size-20 rounded-full border-2 border-primary/50"></div>
+              <div class="absolute -left-8 -top-4 size-4 rounded-full bg-primary shadow-lg shadow-primary/50"></div>
+              <div class="absolute -right-6 top-2 size-3 rounded-full bg-primary/70 shadow-lg shadow-primary/30"></div>
+              <div class="absolute -bottom-2 left-4 size-3 rounded-full bg-primary/70 shadow-lg shadow-primary/30"></div>
+              <div class="bg-primary/10 rounded-full p-3">
+                <GlobeIcon class="text-primary size-8" />
+              </div>
+            </div>
+          </div>
+          <div class="p-6 text-left">
+            <span class="text-primary text-sm font-medium">Reliability</span>
+            <h3 class="mt-1 text-xl font-semibold">Built-in Reliability</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Your data is automatically replicated across multiple regions. If one data center fails, your backups remain safe and accessible.</p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border bg-card">
+          <div class="relative flex h-48 items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 p-6">
+            <svg class="absolute inset-0 h-full w-full opacity-[0.07]">
+              <pattern id="wavyPattern" patternUnits="userSpaceOnUse" width="28" height="28" patternTransform="rotate(45)">
+                <path d="M0 14 Q7 7, 14 14 T28 14" fill="none" stroke="currentColor" stroke-width="1.5" />
+              </pattern>
+              <rect width="100%" height="100%" fill="url(#wavyPattern)" />
+            </svg>
+            <svg viewBox="0 0 200 140" class="relative h-full w-full max-w-[200px]">
+              <line x1="100" y1="70" x2="40" y2="28" stroke="currentColor" stroke-opacity="0.2" stroke-width="2" stroke-dasharray="4 4" />
+              <line x1="100" y1="70" x2="160" y2="28" stroke="currentColor" stroke-opacity="0.2" stroke-width="2" stroke-dasharray="4 4" />
+              <line x1="100" y1="70" x2="40" y2="112" stroke="currentColor" stroke-opacity="0.2" stroke-width="2" stroke-dasharray="4 4" />
+              <line x1="100" y1="70" x2="160" y2="112" stroke="currentColor" stroke-opacity="0.2" stroke-width="2" stroke-dasharray="4 4" />
+              <circle cx="100" cy="70" r="24" fill="var(--secondary)" stroke="var(--primary)" stroke-width="2" stroke-opacity="0.3" />
+              <circle cx="100" cy="70" r="24" fill="var(--primary)" fill-opacity="0.1" />
+              <g transform="translate(88, 58)">
+                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <g transform="translate(28, 12)">
+                <rect x="0" y="0" width="24" height="16" rx="2" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <rect x="8" y="16" width="8" height="3" fill="currentColor" fill-opacity="0.3" />
+                <rect x="4" y="19" width="16" height="2" rx="1" fill="currentColor" fill-opacity="0.3" />
+              </g>
+              <g transform="translate(148, 12)">
+                <rect x="0" y="0" width="24" height="16" rx="2" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <rect x="8" y="16" width="8" height="3" fill="currentColor" fill-opacity="0.3" />
+                <rect x="4" y="19" width="16" height="2" rx="1" fill="currentColor" fill-opacity="0.3" />
+              </g>
+              <g transform="translate(28, 100)">
+                <rect x="0" y="0" width="24" height="16" rx="2" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <rect x="8" y="16" width="8" height="3" fill="currentColor" fill-opacity="0.3" />
+                <rect x="4" y="19" width="16" height="2" rx="1" fill="currentColor" fill-opacity="0.3" />
+              </g>
+              <g transform="translate(148, 100)">
+                <rect x="0" y="0" width="24" height="16" rx="2" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <rect x="8" y="16" width="8" height="3" fill="currentColor" fill-opacity="0.3" />
+                <rect x="4" y="19" width="16" height="2" rx="1" fill="currentColor" fill-opacity="0.3" />
+              </g>
+            </svg>
+          </div>
+          <div class="p-6 text-left">
+            <span class="text-primary text-sm font-medium">Access</span>
+            <h3 class="mt-1 text-xl font-semibold">Access Anywhere</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Back up from your laptop, restore to your desktop. Your files are always within reach, no matter which device you're using.</p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border bg-card">
+          <div class="relative flex h-48 items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 p-6">
+            <div class="absolute inset-0" style="background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px); background-size: 24px 24px; opacity: 0.07;"></div>
+            <svg viewBox="0 0 220 120" class="relative h-full w-full max-w-[280px]">
+              <defs>
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--primary); stop-opacity: 0.3" />
+                  <stop offset="100%" style="stop-color: var(--primary); stop-opacity: 1" />
+                </linearGradient>
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color: var(--primary); stop-opacity: 0.3" />
+                  <stop offset="100%" style="stop-color: var(--primary); stop-opacity: 0" />
+                </linearGradient>
+              </defs>
+              <g transform="translate(20, 10)">
+                <line x1="0" y1="0" x2="0" y2="90" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="0" y1="90" x2="190" y2="90" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="-4" y1="20" x2="0" y2="20" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="-4" y1="40" x2="0" y2="40" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="-4" y1="60" x2="0" y2="60" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="40" y1="90" x2="40" y2="94" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="80" y1="90" x2="80" y2="94" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="120" y1="90" x2="120" y2="94" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <line x1="160" y1="90" x2="160" y2="94" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" />
+                <path
+                  d="M 0 75 Q 30 70, 50 60 T 100 45 T 150 25 T 190 10"
+                  fill="none"
+                  stroke="url(#lineGradient)"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M 0 75 Q 30 70, 50 60 T 100 45 T 150 25 T 190 10 L 190 90 L 0 90 Z"
+                  fill="url(#areaGradient)"
+                />
+                <circle cx="190" cy="10" r="4" fill="var(--primary)" />
+              </g>
+            </svg>
+          </div>
+          <div class="p-6 text-left">
+            <span class="text-primary text-sm font-medium">Storage</span>
+            <h3 class="mt-1 text-xl font-semibold">Grows With You</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Need more space? Upgrade instantly. Downsizing? No problem. Adjust your plan anytime with a single click.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="w-content mx-auto py-20">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+        Simple, Transparent Pricing
+      </h2>
+      <p class="text-muted-foreground mx-auto mt-4 max-w-2xl text-base sm:text-lg">
+        Start free with 15GB. Upgrade anytime when you need more room for your memories and important files.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="bg-card relative flex flex-col rounded-2xl border p-8">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold">Free</h3>
+          <p class="text-muted-foreground mt-1 text-sm">Ideal for documents and photos</p>
+        </div>
+        <div class="mb-6">
+          <div class="flex items-baseline">
+            <span class="text-4xl font-bold">$0</span>
+            <span class="text-muted-foreground ml-1">/month</span>
+          </div>
+          <p class="text-muted-foreground mt-1 text-sm">Free forever</p>
+        </div>
+        <ul class="mb-8 flex-1 space-y-3 text-sm">
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span><strong>15 GB</strong> cloud storage</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>End-to-end encryption</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>All desktop features</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>No credit card required</span>
+          </li>
+        </ul>
+        <Button href="/download" variant="outline" class="w-full">
+          Get Started
+        </Button>
+      </div>
+
+      <ProPlanCard client:load />
+
+      <div class="bg-card relative flex flex-col rounded-2xl border p-8">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold">Enterprise</h3>
+          <p class="text-muted-foreground mt-1 text-sm">For businesses that need more</p>
+        </div>
+        <div class="mb-6">
+          <div class="flex items-baseline">
+            <span class="text-4xl font-bold">Custom</span>
+          </div>
+          <p class="text-muted-foreground mt-1 text-sm">Tailored to your needs</p>
+        </div>
+        <ul class="mb-8 flex-1 space-y-3 text-sm">
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span><strong>Unlimited</strong> storage</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>End-to-end encryption</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>Dedicated support</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>Custom integrations</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <CheckIcon class="text-primary size-4 shrink-0" />
+            <span>SLA guarantees</span>
+          </li>
+        </ul>
+        <Button href="mailto:enterprise@blinkdisk.com" variant="outline" class="w-full">
+          Contact Sales
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="w-content mx-auto py-20">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+        Frequently Asked Questions
+      </h2>
+    </div>
+
+    <div class="mt-12">
+      <div class="divide-y rounded-xl border">
+        {faqs.map((faq) => (
+          <details class="group">
+            <summary class="flex cursor-pointer items-center justify-between p-6 font-medium hover:bg-secondary/50">
+              {faq.question}
+              <span class="text-muted-foreground ml-4 shrink-0 transition-transform group-open:rotate-180">
+                <ArrowDownIcon class="size-5" />
+              </span>
+            </summary>
+            <div class="text-muted-foreground px-6 pb-6 text-sm leading-relaxed">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="w-content mx-auto pb-20">
+    <CTA
+      headline={"Ready to secure your files?\nStart backing up in 30 seconds"}
+      secondaryButtonText="Compare plans"
+      secondaryButtonHref="/pricing"
+    />
+  </div>
+</DefaultLayout>
+
