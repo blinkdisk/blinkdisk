@@ -1,5 +1,6 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import Logo from "@marketing/components/icons/Logo.astro";
 import Button from "@marketing/components/Button.astro";
 import CTA from "@marketing/components/CTA.astro";
 import FaqList from "@marketing/components/FaqList.astro";
@@ -62,14 +63,21 @@ const productSchema = {
 >
   <section>
     <div class="py-page flex min-h-[85vh] flex-col items-center justify-center text-center">
+      <div class="mb-8 flex items-center justify-center gap-2">
+        <Logo class="h-5 text-primary" />
+        <span class="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">Cloud</span>
+      </div>
+
       <h1 class="max-w-4xl text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
         The cloud storage<br />
         built for backups
       </h1>
 
-      <p class="text-muted-foreground mt-4 max-w-xl text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed">
-        The easiest way to protect your files. Download, sign in, and you're backed up in 30 seconds. No servers, no configuration, no hassle.
-      </p>
+    <p
+      class="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed max-w-2xl"
+    >
+      BlinkDisk Cloud is our optional cloud storage solution. It's fast, secure, and easy to use.
+    </p>
 
       <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
         <Button href="#pricing" variant="outline" size="xl">
@@ -266,11 +274,11 @@ const productSchema = {
 
   <section id="pricing" class="w-content mx-auto py-20">
     <div class="text-center">
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
-        Simple, Transparent Pricing
+      <h2 class="text-center text-4xl font-bold sm:text-5xl">
+        Affordable Pricing
       </h2>
-      <p class="text-muted-foreground mx-auto mt-4 max-w-2xl text-base sm:text-lg">
-        Start free with 15GB. Upgrade anytime when you need more room for your memories and important files.
+      <p class="text-muted-foreground mt-4 text-center">
+        Start for free and upgrade anytime when you need more storage. 
       </p>
     </div>
 
@@ -354,9 +362,12 @@ const productSchema = {
 
   <section class="py-20">
     <div class="w-content mx-auto text-center">
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
-        Frequently Asked Questions
+      <h2 class="text-center text-4xl font-bold sm:text-5xl">
+        Questions & Answers
       </h2>
+      <p class="text-muted-foreground mt-4 text-center">
+        Still have questions? Here are answers to some frequently asked questions.
+      </p>
     </div>
 
     <div class="mt-12">

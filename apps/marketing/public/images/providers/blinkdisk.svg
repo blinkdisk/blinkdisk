@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" fill="none">
 <g clip-path="url(#clip0_85_7)">
-<rect x="349.158" y="145.577" width="501.92" height="501.92" rx="89.5542" transform="rotate(45 349.158 145.577)" stroke="#6366F1" stroke-width="63" stroke-miterlimit="1" stroke-dasharray="104.91 104.91"/>
-<rect x="650.541" y="101.029" width="564.92" height="564.92" rx="121.054" transform="rotate(45 650.541 101.029)" fill="#6366F1"/>
+<rect x="349.158" y="145.577" width="501.92" height="501.92" rx="89.5542" transform="rotate(45 349.158 145.577)" stroke="#7d7d7d" stroke-width="63" stroke-miterlimit="1" stroke-dasharray="104.91 104.91"/>
+<rect x="650.541" y="101.029" width="564.92" height="564.92" rx="121.054" transform="rotate(45 650.541 101.029)" fill="#7d7d7d"/>
 </g>
 <defs>
 <clipPath id="clip0_85_7">
-<rect width="1000" height="1000" fill="#6366F1"/>
+<rect width="1000" height="1000" fill="#7d7d7d"/>
 </clipPath>
 </defs>
 </svg>
