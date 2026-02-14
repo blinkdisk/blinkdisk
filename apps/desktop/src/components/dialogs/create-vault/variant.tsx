@@ -4,7 +4,7 @@ import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";
-import { CheckIcon, XIcon } from "lucide-react";
+import { CheckIcon, ExternalLinkIcon, XIcon } from "lucide-react";
 
 export type CreateVaultVariantProps = {
   selectCloud: () => void;
@@ -20,8 +20,20 @@ export function CreateVaultVariant({
   return (
     <div className="mt-8 flex flex-col gap-5">
       <Card>
-        <CardHeader className="pb-4 flex items-start">
+        <CardHeader className="pb-4 flex flex-row items-center justify-between">
           <BlinkCloudIcon className="h-4 my-2 w-auto" />
+          <Button
+            as="a"
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground"
+            href={`${process.env.MARKETING_URL}/blinkcloud?ref=desktop`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ExternalLinkIcon />
+            {t("blinkcloud.readMore")}
+          </Button>
         </CardHeader>
         <CardContent className="pb-5">
           <p className="text-muted-foreground text-sm">
