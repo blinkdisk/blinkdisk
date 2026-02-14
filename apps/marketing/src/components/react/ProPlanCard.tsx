@@ -28,17 +28,8 @@ export default function ProPlanCard() {
     return period === "YEARLY" ? price.amount / 12 : price.amount;
   }, [price, period]);
 
-  const originalMonthlyAmount = useMemo(() => {
-    if (period !== "YEARLY") return null;
-    const monthlyPrice = selectedPlan?.prices.find((p) => p.period === "MONTHLY");
-    return monthlyPrice?.amount ?? null;
-  }, [selectedPlan, period]);
-
   const formatStorage = (gb: number) => {
-    if (gb >= 1000) {
-      return `${gb / 1000} TB`;
-    }
-    return `${gb} GB`;
+    return `${gb.toLocaleString()} GB`;
   };
 
   return (
@@ -47,9 +38,9 @@ export default function ProPlanCard() {
         Most Popular
       </div>
       <div className="mb-6">
-        <h3 className="text-lg font-semibold">Pro</h3>
+        <h3 className="text-xl font-semibold">Pro</h3>
         <p className="text-muted-foreground mt-1 text-sm">
-          For power users and professionals
+          For anyone who needs more storage
         </p>
       </div>
 
@@ -81,17 +72,14 @@ export default function ProPlanCard() {
         </div>
 
         <div className="mb-4">
-          <label className="text-muted-foreground mb-2 block text-xs font-medium uppercase tracking-wide">
-            Storage
-          </label>
           <Select
             value={String(planIndex)}
             onValueChange={(value) => setPlanIndex(Number(value))}
           >
-            <SelectTrigger>
+            <SelectTrigger className="bg-secondary">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-48">
               {availablePlans.map((plan, index) => (
                 <SelectItem key={plan.id} value={String(index)}>
                   {formatStorage(plan.storageGB)}
@@ -101,16 +89,6 @@ export default function ProPlanCard() {
           </Select>
         </div>
 
-        {originalMonthlyAmount && (
-          <p className="text-muted-foreground text-sm line-through">
-            {originalMonthlyAmount.toLocaleString(undefined, {
-              style: "currency",
-              currency,
-              minimumFractionDigits: 0,
-            })}
-            /month
-          </p>
-        )}
         <div className="flex items-baseline">
           <span className="text-4xl font-bold">
             {monthlyAmount.toLocaleString(undefined, {
@@ -127,26 +105,14 @@ export default function ProPlanCard() {
       <ul className="mb-8 flex-1 space-y-3 text-sm">
         <li className="flex items-center gap-2">
           <CheckIcon className="text-primary size-4 shrink-0" />
+          <span>Everything in Free</span>
+        </li>
+        <li className="flex items-center gap-2">
+          <CheckIcon className="text-primary size-4 shrink-0" />
           <span>
             <strong>{formatStorage(selectedPlan?.storageGB ?? 0)}</strong> cloud
             storage
           </span>
-        </li>
-        <li className="flex items-center gap-2">
-          <CheckIcon className="text-primary size-4 shrink-0" />
-          <span>End-to-end encryption</span>
-        </li>
-        <li className="flex items-center gap-2">
-          <CheckIcon className="text-primary size-4 shrink-0" />
-          <span>All desktop features</span>
-        </li>
-        <li className="flex items-center gap-2">
-          <CheckIcon className="text-primary size-4 shrink-0" />
-          <span>Priority support</span>
-        </li>
-        <li className="flex items-center gap-2">
-          <CheckIcon className="text-primary size-4 shrink-0" />
-          <span>Scale storage anytime</span>
         </li>
       </ul>
 

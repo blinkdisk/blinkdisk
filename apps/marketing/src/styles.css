@@ -2,6 +2,10 @@
 
 @plugin "@tailwindcss/typography";
 
+html {
+  scroll-behavior: smooth;
+}
+
 .prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   list-style-type: disc !important;
 }

@@ -9,6 +9,7 @@
     "description": "Create a new vault.",
     "variant": {
       "blinkcloud": {
+        "readMore": "Read more",
         "features": {
           "freeStorage": "{{freeSpace}} for free",
           "noSetup": "No setup required",

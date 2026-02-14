@@ -1,6 +1,6 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import Logo from "@marketing/components/icons/Logo.astro";
+import BlinkCloud from "@marketing/components/icons/BlinkCloud.astro";
 import Button from "@marketing/components/Button.astro";
 import CTA from "@marketing/components/CTA.astro";
 import FaqList from "@marketing/components/FaqList.astro";
@@ -9,14 +9,15 @@ import CheckIcon from "@lucide/astro/icons/check";
 import DownloadIcon from "@lucide/astro/icons/download";
 import GlobeIcon from "@lucide/astro/icons/globe";
 import TagIcon from "@lucide/astro/icons/tag";
+import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
 import { MARKETING_URL } from "astro:env/server";
 
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
 const faqs = [
   {
-    question: "What's the difference between BlinkDisk Cloud and custom storage?",
-    answer: "BlinkDisk Cloud is our fully managed storage solution. We handle the infrastructure, maintenance, and scaling so you don't have to. Custom storage lets you use your own cloud provider credentials (like AWS S3 or Backblaze B2) for complete control. Both options provide the same bank-grade end-to-end encryption.",
+    question: "What's the difference between BlinkCloud and custom storage?",
+    answer: "BlinkCloud is our fully managed storage solution. We handle the infrastructure, maintenance, and scaling so you don't have to. Custom storage lets you use your own cloud provider credentials (like AWS S3 or Backblaze B2) for complete control. Both options provide the same bank-grade end-to-end encryption.",
   },
   {
     question: "Where is my data stored?",
@@ -39,7 +40,7 @@ const faqs = [
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  name: "BlinkDisk Cloud",
+  name: "BlinkCloud",
   description: "Hassle-free managed cloud backups with 15GB free. Bank-grade encryption, automatic scaling, and zero maintenance required.",
   image: `${siteUrl}/brand/social.jpg`,
   brand: {
@@ -51,21 +52,20 @@ const productSchema = {
     price: "0",
     priceCurrency: "USD",
     description: "15GB free cloud storage",
-    url: `${siteUrl}/cloud`,
+    url: `${siteUrl}/blinkcloud`,
   },
 };
 ---
 
 <DefaultLayout
-  title="BlinkDisk Cloud - Managed Backup Storage"
+  title="BlinkCloud: The cloud storage built for backups"
   description="Zero setup, zero maintenance backup storage. Get 15GB free with end-to-end encryption. Your data, protected in the cloud."
   structuredData={productSchema}
 >
   <section>
     <div class="py-page flex min-h-[85vh] flex-col items-center justify-center text-center">
-      <div class="mb-8 flex items-center justify-center gap-2">
-        <Logo class="h-5 text-primary" />
-        <span class="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">Cloud</span>
+      <div class="mb-8 flex items-center justify-center">
+        <BlinkCloud class="h-4 text-primary" />
       </div>
 
       <h1 class="max-w-4xl text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
@@ -74,35 +74,20 @@ const productSchema = {
       </h1>
 
     <p
-      class="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed max-w-2xl"
+      class="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed max-w-[90vw] md:max-w-xl"
     >
-      BlinkDisk Cloud is our optional cloud storage solution. It's fast, secure, and easy to use.
+      BlinkCloud is our optional managed cloud storage for your backups. No setup required, no maintenance needed.
     </p>
 
       <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-        <Button href="#pricing" variant="outline" size="xl">
+        <Button href="#pricing" variant="outline" size="xl" class="w-full sm:w-auto">
           <TagIcon class="size-4" />
           View Pricing
         </Button>
-        <Button href="/download" size="xl">
+        <Button href="/download" size="xl" class="w-full sm:w-auto">
           <DownloadIcon class="size-4" />
-          Download for free
+          Download BlinkDisk
         </Button>
-      </div>
-
-      <div class="text-muted-foreground mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
-        <div class="flex items-center gap-2">
-          <CheckIcon class="text-primary size-4" />
-          <span>15GB free</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <CheckIcon class="text-primary size-4" />
-          <span>No credit card</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <CheckIcon class="text-primary size-4" />
-          <span>End-to-end encrypted</span>
-        </div>
       </div>
 
       <div class="w-content mx-auto mt-20 flex flex-col gap-4">
@@ -110,45 +95,60 @@ const productSchema = {
           <div class="overflow-hidden rounded-2xl border bg-card">
           <div class="relative flex h-48 items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 p-6">
             <div class="absolute inset-0 opacity-[0.04]" style="background-image: repeating-linear-gradient(45deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%); background-size: 16px 16px;"></div>
-            <div class="relative flex items-center gap-6">
-              <div class="flex flex-col items-center">
-                <div class="text-6xl font-bold tracking-tight md:text-7xl">30</div>
-                <div class="text-muted-foreground text-sm">seconds</div>
-              </div>
-              <div class="text-muted-foreground/30 text-4xl">→</div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center gap-2 rounded-lg bg-green-500/10 px-3 py-1.5 text-sm text-green-600 dark:text-green-400">
-                  <div class="size-2 rounded-full bg-green-500"></div>
-                  Backup running
+            <div class="relative flex w-full items-center justify-evenly">
+              <div class="flex flex-col items-center gap-2">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+                  <DownloadIcon class="size-6 text-primary" />
                 </div>
-                <div class="text-muted-foreground text-xs">No configuration needed</div>
+                <span class="text-sm text-muted-foreground">Download</span>
+              </div>
+              <ArrowRightIcon class="size-6 text-muted-foreground/50" />
+              <div class="flex flex-col items-center gap-2">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+                  <svg class="size-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <span class="text-sm text-muted-foreground">Sign in</span>
+              </div>
+              <ArrowRightIcon class="size-6 text-muted-foreground/50" />
+              <div class="flex flex-col items-center gap-2">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+                  <CheckIcon class="size-6 text-primary" />
+                </div>
+                <span class="text-sm text-muted-foreground">Done</span>
               </div>
             </div>
           </div>
           <div class="p-6 text-left">
             <span class="text-primary text-sm font-medium">Setup</span>
-            <h3 class="mt-1 text-xl font-semibold">Zero Configuration</h3>
+            <h3 class="mt-1 text-xl font-semibold">Zero Configuration Required</h3>
             <p class="text-muted-foreground mt-2 text-sm">No servers to configure, no API keys to manage. Just download, sign in, and your first backup starts automatically.</p>
           </div>
         </div>
 
         <div class="overflow-hidden rounded-2xl border bg-card">
-          <div class="relative flex h-48 flex-col items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 p-6">
+          <div class="relative flex h-48 items-center justify-center bg-gradient-to-br from-secondary to-secondary/50 px-6 py-6">
             <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0); background-size: 24px 24px;"></div>
-            <div class="relative flex items-baseline gap-1">
-              <span class="text-muted-foreground text-2xl">$</span>
-              <span class="text-5xl font-bold">0</span>
-            </div>
-            <div class="text-muted-foreground relative mt-1 text-sm">to get started</div>
-            <div class="relative mt-4 flex gap-2">
-              <span class="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary">15GB free</span>
-              <span class="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary">No card</span>
+            <div class="relative w-full max-w-sm rounded-lg px-4 py-3">
+              <div class="mb-3 flex items-center justify-between border-b-2 border-dashed border-foreground/15 pb-3">
+                <span class="text-sm font-medium">Invoice</span>
+                <span class="text-xs text-muted-foreground">#0001</span>
+              </div>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-muted-foreground">BlinkCloud (15 GB)</span>
+                  <span>$0.00</span>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center justify-between border-t-2 border-dashed border-foreground/15 pt-3">
+                <span class="text-sm font-semibold">Total</span>
+                <span class="text-xl font-bold text-primary">$0.00</span>
+              </div>
             </div>
           </div>
           <div class="p-6 text-left">
             <span class="text-primary text-sm font-medium">Pricing</span>
-            <h3 class="mt-1 text-xl font-semibold">Fair & Transparent</h3>
-            <p class="text-muted-foreground mt-2 text-sm">Start free with 15GB, then pay only for what you need. No hidden fees, no surprise charges, cancel anytime.</p>
+            <h3 class="mt-1 text-xl font-semibold">Affordable Pricing</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Start free with 15GB, then upgrade when you need more space. No hidden fees, no surprise charges, cancel anytime.</p>
           </div>
         </div>
         </div>
@@ -171,7 +171,7 @@ const productSchema = {
           <div class="p-6 text-left">
             <span class="text-primary text-sm font-medium">Reliability</span>
             <h3 class="mt-1 text-xl font-semibold">Built-in Reliability</h3>
-            <p class="text-muted-foreground mt-2 text-sm">Your data is automatically replicated across multiple regions. If one data center fails, your backups remain safe and accessible.</p>
+            <p class="text-muted-foreground mt-2 text-sm">Your data is replicated across multiple regions. If one data center fails, your backups remain safe and accessible.</p>
           </div>
         </div>
 
@@ -218,7 +218,7 @@ const productSchema = {
           <div class="p-6 text-left">
             <span class="text-primary text-sm font-medium">Access</span>
             <h3 class="mt-1 text-xl font-semibold">Access Anywhere</h3>
-            <p class="text-muted-foreground mt-2 text-sm">Back up from your laptop, restore to your desktop. Your files are always within reach, no matter which device you're using.</p>
+            <p class="text-muted-foreground mt-2 text-sm">Back up from your laptop, restore to your desktop. Your files are within reach, no matter which device you're using.</p>
           </div>
         </div>
 
@@ -285,15 +285,15 @@ const productSchema = {
     <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
       <div class="bg-card relative flex flex-col rounded-2xl border p-8">
         <div class="mb-6">
-          <h3 class="text-lg font-semibold">Free</h3>
-          <p class="text-muted-foreground mt-1 text-sm">Ideal for documents and photos</p>
+          <h3 class="text-xl font-semibold">Free</h3>
+          <p class="text-muted-foreground mt-1 text-sm">Perfect for getting started</p>
         </div>
         <div class="mb-6">
           <div class="flex items-baseline">
             <span class="text-4xl font-bold">$0</span>
             <span class="text-muted-foreground ml-1">/month</span>
           </div>
-          <p class="text-muted-foreground mt-1 text-sm">Free forever</p>
+          <p class="text-muted-foreground mt-1 text-sm">100% free</p>
         </div>
         <ul class="mb-8 flex-1 space-y-3 text-sm">
           <li class="flex items-center gap-2">
@@ -322,7 +322,7 @@ const productSchema = {
 
       <div class="bg-card relative flex flex-col rounded-2xl border p-8">
         <div class="mb-6">
-          <h3 class="text-lg font-semibold">Enterprise</h3>
+          <h3 class="text-xl font-semibold">Enterprise</h3>
           <p class="text-muted-foreground mt-1 text-sm">For businesses that need more</p>
         </div>
         <div class="mb-6">
@@ -334,11 +334,11 @@ const productSchema = {
         <ul class="mb-8 flex-1 space-y-3 text-sm">
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />
-            <span><strong>Unlimited</strong> storage</span>
+            <span>Everything in Pro</span>
           </li>
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />
-            <span>End-to-end encryption</span>
+            <span><strong>Unlimited</strong> storage</span>
           </li>
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />
@@ -348,13 +348,9 @@ const productSchema = {
             <CheckIcon class="text-primary size-4 shrink-0" />
             <span>Custom integrations</span>
           </li>
-          <li class="flex items-center gap-2">
-            <CheckIcon class="text-primary size-4 shrink-0" />
-            <span>SLA guarantees</span>
-          </li>
         </ul>
         <Button href="mailto:enterprise@blinkdisk.com" variant="outline" class="w-full">
-          Contact Sales
+          Contact
         </Button>
       </div>
     </div>
@@ -377,7 +373,7 @@ const productSchema = {
 
   <div class="w-content mx-auto pb-20">
     <CTA
-      headline={"Ready to secure your files?\nStart backing up in 30 seconds"}
+      headline={"Try BlinkCloud for free\nNo credit card required"}
       secondaryButtonText="Compare plans"
       secondaryButtonHref="/pricing"
     />
