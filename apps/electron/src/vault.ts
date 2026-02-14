@@ -297,13 +297,13 @@ export class Vault {
   }
 
   static mapProviderType(providerType: ProviderType) {
-    const provider = providers.find((p) => p.type === providerType);
+    const provider = providers.find((p) => p.type === providerType || p.alias?.includes(providerType));
     if (!provider) throw new Error(`Provider ${providerType} not found`);
     return provider.coreType;
   }
 
   static mapConfigFields(providerType: ProviderType, config: ProviderConfig) {
-    const provider = providers.find((p) => p.type === providerType);
+    const provider = providers.find((p) => p.type === providerType || p.alias?.includes(providerType));
     if (!provider) throw new Error(`Provider ${providerType} not found`);
 
     const mapped: Record<string, unknown> = {};

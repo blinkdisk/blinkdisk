@@ -15,6 +15,7 @@ export type ProviderType =
 
 export type Provider = {
   type: ProviderType;
+  alias?: string[];
   coreType: string;
   level: ConfigLevel;
   coreMapping?: Record<string, string>;
@@ -38,6 +39,7 @@ const s3Base = {
 export const providers: Provider[] = [
   {
     type: "BLINKCLOUD",
+    alias: ["BLINKDISK_CLOUD"],
     level: "VAULT",
     coreType: "bdc",
     hidden: true,
