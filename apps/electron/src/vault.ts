@@ -273,7 +273,7 @@ export class Vault {
           storage: {
             type: this.mapProviderType(payload.vault.provider),
             config:
-              payload.vault.provider === "BLINKDISK_CLOUD"
+              payload.vault.provider === "BLINKCLOUD"
                 ? {
                     url: process.env.CLOUD_URL,
                     token: payload.vault.token,
@@ -431,7 +431,7 @@ export class Vault {
         storage: {
           type: Vault.mapProviderType(this.provider!),
           config:
-            this.provider === "BLINKDISK_CLOUD"
+            this.provider === "BLINKCLOUD"
               ? {
                   url: process.env.CLOUD_URL,
                   token: this.token,

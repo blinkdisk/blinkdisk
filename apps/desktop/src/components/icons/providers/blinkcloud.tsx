@@ -1,10 +1,10 @@
 import { cn } from "@utils/class";
 
-export type BlinkDiskCloudIconProps = {
+export type BlinkCloudIconProps = {
   className?: string;
 };
 
-export function BlinkDiskCloudIcon({ className }: BlinkDiskCloudIconProps) {
+export function BlinkCloudIcon({ className }: BlinkCloudIconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

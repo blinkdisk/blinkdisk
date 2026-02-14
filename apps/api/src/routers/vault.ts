@@ -48,7 +48,7 @@ export const vaultRouter = router({
       const options = defaultVaultOptions;
 
       let spaceId: string | null = null;
-      if (input.provider === "BLINKDISK_CLOUD") {
+      if (input.provider === "BLINKCLOUD") {
         const space = await ctx.db
           .selectFrom("Space")
           .select(["id"])
@@ -93,7 +93,7 @@ export const vaultRouter = router({
         .execute();
 
       let token: string | null = null;
-      if (input.provider === "BLINKDISK_CLOUD" && spaceId) {
+      if (input.provider === "BLINKCLOUD" && spaceId) {
         token = await generateServiceToken(
           {
             vaultId,
@@ -165,7 +165,7 @@ export const vaultRouter = router({
     for (const vault of vaults) {
       let token: string | null = null;
 
-      if (vault.provider === "BLINKDISK_CLOUD") {
+      if (vault.provider === "BLINKCLOUD") {
         token = await generateServiceToken(
           {
             vaultId: vault.id,
@@ -282,7 +282,7 @@ export const vaultRouter = router({
         })(),
       );
 
-      if (vault.provider === "BLINKDISK_CLOUD") {
+      if (vault.provider === "BLINKCLOUD") {
         const stub = ctx.env.VAULT.getByName(vault.id);
         await (
           stub as unknown as {

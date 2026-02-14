@@ -32,22 +32,22 @@ export function CreateVaultVariant({
         <CardContent className="pb-5">
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("blinkdiskCloud.features.freeStorage", {
+            {t("blinkcloud.features.freeStorage", {
               freeSpace: formatSize(FREE_SPACE_AVAILABLE),
             })}
           </p>
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("blinkdiskCloud.features.noSetup")}
+            {t("blinkcloud.features.noSetup")}
           </p>
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("blinkdiskCloud.features.cheaper")}
+            {t("blinkcloud.features.cheaper")}
           </p>
         </CardContent>
         <CardFooter>
           <Button className="w-full" onClick={selectCloud}>
-            {t("blinkdiskCloud.button")}
+            {t("blinkcloud.button")}
           </Button>
         </CardFooter>
       </Card>

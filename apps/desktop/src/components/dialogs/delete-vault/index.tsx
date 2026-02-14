@@ -45,7 +45,7 @@ export function DeleteVaultDialog() {
             <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>{t("description")}</DialogDescription>
           </DialogHeader>
-          {vault && vault.provider !== "BLINKDISK_CLOUD" ? (
+          {vault && vault.provider !== "BLINKCLOUD" ? (
             <Alert className="mt-4 w-full">
               <InfoIcon />
               <AlertTitle>{t("storageAlert.title")}</AlertTitle>

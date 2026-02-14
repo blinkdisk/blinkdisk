@@ -18,7 +18,7 @@ export function VaultConfigSettings() {
     [vault],
   );
 
-  if (!vault || vault.provider === "BLINKDISK_CLOUD") return null;
+  if (!vault || vault.provider === "BLINKCLOUD") return null;
   return (
     <SettingsCategory
       id="config"

@@ -18,7 +18,7 @@
     "submit": "Add folder",
     "exceedingAlert": {
       "title": "Not enough cloud storage",
-      "description": "This folder likely can’t be backed up because it would exceed your available BlinkDisk Cloud storage. To back it up, you’ll need to upgrade your BlinkDisk Cloud plan.",
+      "description": "This folder likely can’t be backed up because it would exceed your available BlinkCloud storage. To back it up, you’ll need to upgrade your BlinkCloud plan.",
       "continue": "Add anyway",
       "upgrade": "Upgrade storage"
     },
