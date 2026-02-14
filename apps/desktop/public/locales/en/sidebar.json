@@ -1,5 +1,5 @@
 {
-  "addFolder": "Add folder",
+  "addFolder": "Add file or folder",
   "selectHostName": {
     "empty": "Select device",
     "remote": "Remote"
@@ -28,6 +28,9 @@
   },
   "folderList": {
     "title": "Folders"
+  },
+  "fileList": {
+    "title": "Files"
   },
   "storageAlert": {
     "high": {
