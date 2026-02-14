@@ -8,7 +8,7 @@
     "title": "Create new vault",
     "description": "Create a new vault.",
     "variant": {
-      "blinkdiskCloud": {
+      "blinkcloud": {
         "features": {
           "freeStorage": "{{freeSpace}} for free",
           "noSetup": "No setup required",
@@ -86,8 +86,8 @@
     "description": "You need to configure this vault before using it."
   },
   "providers": {
-    "BLINKDISK_CLOUD": {
-      "name": "BlinkDisk Cloud"
+    "BLINKCLOUD": {
+      "name": "BlinkCloud"
     },
     "FILESYSTEM": {
       "name": "Local filesystem",

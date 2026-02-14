@@ -1,7 +1,6 @@
 import { AmazonS3Icon } from "@desktop/components/icons/providers/amazon-s3";
 import { AzureBlobStorageIcon } from "@desktop/components/icons/providers/azure-blob-storage";
 import { BackblazeIcon } from "@desktop/components/icons/providers/backblaze";
-import { BlinkDiskCloudIcon } from "@desktop/components/icons/providers/blinkdisk-cloud";
 import { FilesystemIcon } from "@desktop/components/icons/providers/filesytem";
 import { GoogleCloudStorageIcon } from "@desktop/components/icons/providers/google-cloud-storage";
 import { NetworkAttachedStorageIcon } from "@desktop/components/icons/providers/network-attached-storage";
@@ -11,7 +10,7 @@ import { SftpIcon } from "@desktop/components/icons/providers/sftp";
 import { WebdavIcon } from "@desktop/components/icons/providers/webdav";
 
 export const providerIcons = {
-  BLINKDISK_CLOUD: BlinkDiskCloudIcon,
+  BLINKCLOUD: () => null,
   FILESYSTEM: FilesystemIcon,
   AMAZON_S3: AmazonS3Icon,
   AZURE_BLOB_STORAGE: AzureBlobStorageIcon,

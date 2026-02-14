@@ -1,8 +1,7 @@
 import { FREE_SPACE_AVAILABLE } from "@config/space";
-import { Logo } from "@desktop/components/logo";
+import { BlinkCloudIcon } from "@desktop/components/icons/blinkcloud";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
-import { Badge } from "@ui/badge";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";
 import { CheckIcon, XIcon } from "lucide-react";
@@ -21,33 +20,28 @@ export function CreateVaultVariant({
   return (
     <div className="mt-8 flex flex-col gap-5">
       <Card>
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <Logo />
-            <Badge variant="muted" className="px-2 py-0.5 text-sm">
-              Cloud
-            </Badge>
-          </div>
+        <CardHeader className="pb-4 flex items-start">
+          <BlinkCloudIcon className="h-4 my-2 w-auto" />
         </CardHeader>
         <CardContent className="pb-5">
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("blinkdiskCloud.features.freeStorage", {
+            {t("blinkcloud.features.freeStorage", {
               freeSpace: formatSize(FREE_SPACE_AVAILABLE),
             })}
           </p>
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("blinkdiskCloud.features.noSetup")}
+            {t("blinkcloud.features.noSetup")}
           </p>
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("blinkdiskCloud.features.cheaper")}
+            {t("blinkcloud.features.cheaper")}
           </p>
         </CardContent>
         <CardFooter>
           <Button className="w-full" onClick={selectCloud}>
-            {t("blinkdiskCloud.button")}
+            {t("blinkcloud.button")}
           </Button>
         </CardFooter>
       </Card>

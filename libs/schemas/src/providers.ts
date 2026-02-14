@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const ZBlinkDiskCloudConfig = z.object({});
+export const ZBlinkCloudConfig = z.object({});
 
-export type ZBlinkDiskCloudConfigType = z.infer<typeof ZBlinkDiskCloudConfig>;
+export type ZBlinkCloudConfigType = z.infer<typeof ZBlinkCloudConfig>;
 
 export const ZFilesystemConfig = z.object({
   path: z.string().min(1).max(512),
@@ -95,7 +95,7 @@ export const ZWebDavConfig = z.object({
 export type ZWebDavConfigType = z.infer<typeof ZWebDavConfig>;
 
 export type ProviderConfig =
-  | ZBlinkDiskCloudConfigType
+  | ZBlinkCloudConfigType
   | ZS3CompatibleConfigType
   | ZAmazonS3ConfigType
   | ZS3CompatibleConfigType
@@ -105,7 +105,7 @@ export type ProviderConfig =
   | ZWebDavConfigType;
 
 export const ZProviderType = z.enum([
-  "BLINKDISK_CLOUD",
+  "BLINKCLOUD",
   "FILESYSTEM",
   "NETWORK_ATTACHED_STORAGE",
   "AMAZON_S3",

@@ -46,7 +46,7 @@ export function useCreateFolder({
         !values.force &&
         space &&
         vault &&
-        vault.provider === "BLINKDISK_CLOUD"
+        vault.provider === "BLINKCLOUD"
       ) {
         let size = values.size;
 
