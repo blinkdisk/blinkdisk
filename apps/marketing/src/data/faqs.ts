@@ -7,7 +7,7 @@ export const faqs = [
   {
     question: "Where do my backups actually go?",
     answer:
-      "That's completely up to you. You can use BlinkCloud for a hassle-free setup, or connect your own storage like an external drive, NAS, or S3 bucket.",
+      "That's completely up to you. You can use CloudBlink for a hassle-free setup, or connect your own storage like an external drive, NAS, or S3 bucket.",
   },
   {
     question: "Can anyone see the files I'm backing up?",

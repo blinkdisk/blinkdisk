@@ -1,6 +1,6 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import BlinkCloud from "@marketing/components/icons/BlinkCloud.astro";
+import CloudBlink from "@marketing/components/icons/CloudBlink.astro";
 import Button from "@marketing/components/Button.astro";
 import CTA from "@marketing/components/CTA.astro";
 import FaqList from "@marketing/components/FaqList.astro";
@@ -16,8 +16,8 @@ const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
 const faqs = [
   {
-    question: "What's the difference between BlinkCloud and custom storage?",
-    answer: "BlinkCloud is our fully managed storage solution. We handle the infrastructure, maintenance, and scaling so you don't have to. Custom storage lets you use your own cloud provider credentials (like AWS S3 or Backblaze B2) for complete control. Both options provide the same bank-grade end-to-end encryption.",
+    question: "What's the difference between CloudBlink and custom storage?",
+    answer: "CloudBlink is our fully managed storage solution. We handle the infrastructure, maintenance, and scaling so you don't have to. Custom storage lets you use your own cloud provider credentials (like AWS S3 or Backblaze B2) for complete control. Both options provide the same bank-grade end-to-end encryption.",
   },
   {
     question: "Where is my data stored?",
@@ -40,7 +40,7 @@ const faqs = [
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  name: "BlinkCloud",
+  name: "CloudBlink",
   description: "Hassle-free managed cloud backups with 15GB free. Bank-grade encryption, automatic scaling, and zero maintenance required.",
   image: `${siteUrl}/brand/social.jpg`,
   brand: {
@@ -52,20 +52,20 @@ const productSchema = {
     price: "0",
     priceCurrency: "USD",
     description: "15GB free cloud storage",
-    url: `${siteUrl}/blinkcloud`,
+    url: `${siteUrl}/cloudblink`,
   },
 };
 ---
 
 <DefaultLayout
-  title="BlinkCloud: The cloud storage built for backups"
+  title="CloudBlink: The cloud storage built for backups"
   description="Zero setup, zero maintenance backup storage. Get 15GB free with end-to-end encryption. Your data, protected in the cloud."
   structuredData={productSchema}
 >
   <section>
     <div class="py-page flex min-h-[85vh] flex-col items-center justify-center text-center">
       <div class="mb-8 flex items-center justify-center">
-        <BlinkCloud class="h-4 text-primary" />
+        <CloudBlink class="h-4 text-primary" />
       </div>
 
       <h1 class="max-w-4xl text-5xl text-[2.5rem] font-bold leading-tight tracking-tight md:text-6xl">
@@ -76,7 +76,7 @@ const productSchema = {
     <p
       class="text-muted-foreground mt-4 text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed max-w-[90vw] md:max-w-xl"
     >
-      BlinkCloud is our optional managed cloud storage for your backups. No setup required, no maintenance needed.
+      CloudBlink is our optional managed cloud storage for your backups. No setup required, no maintenance needed.
     </p>
 
       <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
@@ -135,7 +135,7 @@ const productSchema = {
               </div>
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
-                  <span class="text-muted-foreground">BlinkCloud (15 GB)</span>
+                  <span class="text-muted-foreground">CloudBlink (15 GB)</span>
                   <span>$0.00</span>
                 </div>
               </div>
@@ -373,7 +373,7 @@ const productSchema = {
 
   <div class="w-content mx-auto pb-20">
     <CTA
-      headline={"Try BlinkCloud for free\nNo credit card required"}
+      headline={"Try CloudBlink for free\nNo credit card required"}
       secondaryButtonText="View plans"
       secondaryButtonHref="#pricing"
     />

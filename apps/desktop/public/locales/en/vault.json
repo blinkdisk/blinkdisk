@@ -8,7 +8,7 @@
     "title": "Create new vault",
     "description": "Create a new vault.",
     "variant": {
-      "blinkcloud": {
+      "cloudblink": {
         "readMore": "Read more",
         "features": {
           "freeStorage": "{{freeSpace}} for free",
@@ -87,8 +87,8 @@
     "description": "You need to configure this vault before using it."
   },
   "providers": {
-    "BLINKCLOUD": {
-      "name": "BlinkCloud"
+    "CLOUDBLINK": {
+      "name": "CloudBlink"
     },
     "FILESYSTEM": {
       "name": "Local filesystem",

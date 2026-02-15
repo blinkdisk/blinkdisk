@@ -109,7 +109,7 @@ model LegacyProfile {
 }
 
 enum VaultProvider {
-  BLINKCLOUD
+  CLOUDBLINK
   FILESYSTEM
   NETWORK_ATTACHED_STORAGE
   AMAZON_S3
