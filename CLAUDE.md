@@ -14,10 +14,10 @@ BlinkDisk is a minimalistic and user-friendly desktop application that makes fil
 
 Users can pick between these two options:
 
-- BlinkCloud: Our managed cloud storage with a free tier and affordable subscription plans.
+- CloudBlink: Our managed cloud storage with a free tier and affordable subscription plans.
 - Custom Storage: Use your own storage for 100% free (supports a wide variants of options)
 
-- We have a managed model called "BlinkCloud" that offers an affordable solution with no setup required.
+- We have a managed model called "CloudBlink" that offers an affordable solution with no setup required.
 - I also offer a bring-your-own-keys model where people can enter their own cloud credentials and use the desktop app for completely free, but this requires more knowledge and time to setup.
 
 ## Commands

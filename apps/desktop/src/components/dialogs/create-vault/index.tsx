@@ -50,7 +50,7 @@ export function CreateVaultDialog() {
           {step !== "VARIANT" ? (
             <Button
               onClick={() => {
-                if (step === "DETAILS" && provider == "BLINKCLOUD")
+                if (step === "DETAILS" && provider == "CLOUDBLINK")
                   setStep("VARIANT");
                 else setStep(backButton[step]);
               }}
@@ -68,7 +68,7 @@ export function CreateVaultDialog() {
         {step === "VARIANT" ? (
           <CreateVaultVariant
             selectCloud={() => {
-              setProvider("BLINKCLOUD");
+              setProvider("CLOUDBLINK");
               setConfig(undefined);
               setStep("DETAILS");
             }}

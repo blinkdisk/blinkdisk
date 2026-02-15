@@ -54,7 +54,7 @@ export async function cleanup(
   const vaults = await db
     .selectFrom("Vault")
     .select(["id"])
-    .where("provider", "=", "BLINKCLOUD")
+    .where("provider", "=", "CLOUDBLINK")
     .where(
       "spaceId",
       "in",

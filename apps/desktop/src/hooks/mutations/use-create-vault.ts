@@ -59,8 +59,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       let created = false;
       if (!validation.uniqueID) {
         let token: string | null | undefined = null;
-        if (values.provider === "BLINKCLOUD") {
-          // For BlinkCloud, we need to create the vault in the API
+        if (values.provider === "CLOUDBLINK") {
+          // For CloudBlink, we need to create the vault in the API
           // first to get the token and initialize the durable object.
           const res = await trpc.vault.create.mutate(createOptions);
           token = res.vault.token;
@@ -91,7 +91,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         }
       }
 
-      // Vault not created yet, create it (for all but BlinkCloud)
+      // Vault not created yet, create it (for all but CloudBlink)
       if (!created) await trpc.vault.create.mutate(createOptions);
 
       await window.electron.vault.password.set({

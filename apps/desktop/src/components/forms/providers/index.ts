@@ -10,7 +10,7 @@ import { SftpForm } from "@desktop/components/forms/providers/sftp";
 import { WebDavForm } from "@desktop/components/forms/providers/webdav";
 
 export const providerForms = {
-  BLINKCLOUD: () => null,
+  CLOUDBLINK: () => null,
   FILESYSTEM: FilesystemForm,
   NETWORK_ATTACHED_STORAGE: NetworkAttachedStorageForm,
   AMAZON_S3: AmazonS3Form,

@@ -77,7 +77,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
           }
         >
           {vault ? (
-            vault.provider === "BLINKCLOUD" ? (
+            vault.provider === "CLOUDBLINK" ? (
               <Button
                 size="sm"
                 variant={(storagePercentage || 0) < 0.7 ? "outline" : "default"}
@@ -150,7 +150,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
               </div>
             </CardContent>
           </Card>
-          {!vault || (vault && vault.provider === "BLINKCLOUD") ? (
+          {!vault || (vault && vault.provider === "CLOUDBLINK") ? (
             <>
               <Card
                 className={cn(

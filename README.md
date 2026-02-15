@@ -51,9 +51,9 @@ Whether you're on Windows, macOS, or Linux, BlinkDisk keeps your files safe and 
 
 ### 💾 Multiple Storage Options
 
-#### ☁️ BlinkCloud
+#### ☁️ CloudBlink
 
-Our managed cloud storage with a free tier and affordable subscription plans. No setup required. [See Pricing](https://blinkdisk.com/blinkcloud?utm_source=github#pricing).
+Our managed cloud storage with a free tier and affordable subscription plans. No setup required. [See Pricing](https://blinkdisk.com/cloudblink?utm_source=github#pricing).
 
 #### 🔧 Custom Storage
 

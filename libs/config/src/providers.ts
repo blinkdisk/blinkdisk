@@ -1,7 +1,7 @@
 import { ConfigLevel } from "@db/enums";
 
 export type ProviderType =
-  | "BLINKCLOUD"
+  | "CLOUDBLINK"
   | "FILESYSTEM"
   | "NETWORK_ATTACHED_STORAGE"
   | "AMAZON_S3"
@@ -38,8 +38,8 @@ const s3Base = {
 
 export const providers: Provider[] = [
   {
-    type: "BLINKCLOUD",
-    alias: ["BLINKDISK_CLOUD"],
+    type: "CLOUDBLINK",
+    alias: ["BLINKDISK_CLOUD", "BLINKCLOUD"],
     level: "VAULT",
     coreType: "bdc",
     hidden: true,
