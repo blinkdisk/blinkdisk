@@ -1,0 +1,82 @@
+---
+import type { CellValue, SupportedValue, StarsValue, TextValue } from "@config/comparison";
+import CheckIcon from "@lucide/astro/icons/check";
+import XIcon from "@lucide/astro/icons/x";
+import MinusIcon from "@lucide/astro/icons/minus";
+import StarIcon from "@lucide/astro/icons/star";
+
+type Props = {
+  value: CellValue;
+  highlight?: boolean;
+};
+
+const { value, highlight = false } = Astro.props;
+
+function isSupported(v: CellValue): v is SupportedValue {
+  return v !== null && "supported" in v;
+}
+
+function isStars(v: CellValue): v is StarsValue {
+  return v !== null && "stars" in v;
+}
+
+function isText(v: CellValue): v is TextValue {
+  return v !== null && "text" in v;
+}
+---
+
+<td class:list={[
+  "px-4 py-3 text-center",
+  highlight && "bg-primary/5"
+]}>
+  {value === null ? (
+    <span class="text-muted-foreground text-sm">No data</span>
+  ) : isSupported(value) ? (
+    <div class="flex flex-col items-center gap-1">
+      {value.supported === true ? (
+        <span class="inline-flex items-center justify-center size-6 rounded-full bg-green-500/10 text-green-600 dark:text-green-400">
+          <CheckIcon class="size-4" />
+          <span class="sr-only">Supported</span>
+        </span>
+      ) : value.supported === false ? (
+        <span class="inline-flex items-center justify-center size-6 rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
+          <XIcon class="size-4" />
+          <span class="sr-only">Not supported</span>
+        </span>
+      ) : (
+        <span class="inline-flex items-center justify-center size-6 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
+          <MinusIcon class="size-4" />
+          <span class="sr-only">Partially supported</span>
+        </span>
+      )}
+      {value.note && (
+        <span class="text-xs text-muted-foreground">{value.note}</span>
+      )}
+    </div>
+  ) : isStars(value) ? (
+    <div class="flex flex-col items-center gap-1">
+      <div class="flex gap-0.5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <StarIcon
+            class:list={[
+              "size-4",
+              i < value.stars
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-muted-foreground/30"
+            ]}
+          />
+        ))}
+      </div>
+      {value.note && (
+        <span class="text-xs text-muted-foreground">{value.note}</span>
+      )}
+    </div>
+  ) : isText(value) ? (
+    <div class="flex flex-col items-center gap-1">
+      <span class="text-sm font-medium text-foreground">{value.text}</span>
+      {value.note && (
+        <span class="text-xs text-muted-foreground">{value.note}</span>
+      )}
+    </div>
+  ) : null}
+</td>

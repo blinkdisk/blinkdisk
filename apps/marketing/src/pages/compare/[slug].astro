@@ -1,0 +1,277 @@
+---
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import CTA from "@marketing/components/CTA.astro";
+import Button from "@marketing/components/Button.astro";
+import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
+import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
+import ExternalLinkIcon from "@lucide/astro/icons/external-link";
+import ListChecksIcon from "@lucide/astro/icons/list-checks";
+import TagIcon from "@lucide/astro/icons/tag";
+import ShieldIcon from "@lucide/astro/icons/shield";
+import MonitorIcon from "@lucide/astro/icons/monitor";
+import HardDriveIcon from "@lucide/astro/icons/hard-drive";
+import ZapIcon from "@lucide/astro/icons/zap";
+import {
+  competitors,
+  blinkdisk,
+  featureLabels,
+  pricingLabels,
+  privacyLabels,
+  platformLabels,
+  storageLabels,
+  performanceLabels,
+  type BackupTool,
+} from "@config/comparison";
+
+export async function getStaticPaths() {
+  const paths: { params: { slug: string }; props: { tools: BackupTool[] } }[] = [];
+
+  // Generate competitor vs BlinkDisk pages (2-tool comparison)
+  for (const competitor of competitors) {
+    paths.push({
+      params: { slug: `${competitor.slug}-vs-blinkdisk` },
+      props: { tools: [competitor, blinkdisk] },
+    });
+  }
+
+  // Generate competitor vs competitor pages (3-tool comparison with BlinkDisk)
+  for (let i = 0; i < competitors.length; i++) {
+    for (let j = i + 1; j < competitors.length; j++) {
+      const [first, second] = [competitors[i], competitors[j]].sort((a, b) =>
+        a.slug.localeCompare(b.slug)
+      );
+      paths.push({
+        params: { slug: `${first.slug}-vs-${second.slug}` },
+        props: { tools: [first, second, blinkdisk] },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { tools } = Astro.props;
+
+const hasThirdPartyComparison = tools.length > 2;
+const title = `${tools[0].name} vs ${tools[1].name}: A Detailed Comparison`;
+const description = hasThirdPartyComparison
+  ? `Compare ${tools[0].name} and ${tools[1].name} backup software. See how they stack up against BlinkDisk in features, pricing, privacy, platforms, storage options, and performance.`
+  : `Compare ${tools[0].name} and ${tools[1].name} backup software side by side. See features, pricing, privacy, platforms, storage options, and performance compared.`;
+
+const sectionIcons = {
+  features: ListChecksIcon,
+  pricing: TagIcon,
+  privacy: ShieldIcon,
+  platforms: MonitorIcon,
+  storages: HardDriveIcon,
+  performance: ZapIcon,
+} as const;
+
+const sections = [
+  {
+    id: "features",
+    title: "Features",
+    category: "features" as const,
+    labels: featureLabels,
+    description: "The core capabilities that determine how effectively a backup tool protects your data. Look for incremental backups and deduplication to save time and storage space.",
+  },
+  {
+    id: "pricing",
+    title: "Pricing",
+    category: "pricing" as const,
+    labels: pricingLabels,
+    description: "Backup costs add up over time. Consider whether you need unlimited storage or if bringing your own storage could save you money in the long run.",
+  },
+  {
+    id: "privacy",
+    title: "Privacy & Security",
+    category: "privacy" as const,
+    labels: privacyLabels,
+    description: "Your backups contain sensitive data. End-to-end encryption ensures only you can access your files, even if the backup provider is compromised.",
+  },
+  {
+    id: "platforms",
+    title: "Platform Support",
+    category: "platforms" as const,
+    labels: platformLabels,
+    description: "Make sure your backup solution works on all the devices you use. Linux support is often overlooked but essential for developers and power users.",
+  },
+  {
+    id: "storages",
+    title: "Storage Options",
+    category: "storages" as const,
+    labels: storageLabels,
+    description: "Flexibility in where you store backups gives you control over costs and data sovereignty. Bring-your-own-storage options let you use existing cloud accounts.",
+  },
+  {
+    id: "performance",
+    title: "Performance",
+    category: "performance" as const,
+    labels: performanceLabels,
+    description: "A good backup tool should work quietly in the background without slowing down your computer or taking forever to complete backups.",
+  },
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: tools.map((tool, index) => ({
+      "@type": "SoftwareApplication",
+      position: index + 1,
+      name: tool.name,
+      url: tool.website,
+      applicationCategory: "Backup Software",
+    })),
+  },
+};
+---
+
+<DefaultLayout title={title} description={description} structuredData={structuredData}>
+  <article class={`mx-auto pt-page pb-page w-content ${tools.length === 2 ? "md:max-w-4xl" : ""}`}>
+    <header class="mb-10">
+      <h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+        {tools[0].name} vs {tools[1].name}: A Detailed Comparison
+      </h1>
+      <p class="text-lg text-muted-foreground">
+        {hasThirdPartyComparison ? (
+          <>
+            Looking for the best backup solution? Compare {tools[0].name} and {tools[1].name} side by side,
+            and see how BlinkDisk offers a compelling alternative with its open-source approach
+            and flexible storage options.
+          </>
+        ) : (
+          <>
+            Looking for the best backup solution? Compare {tools[0].name} and {tools[1].name} side by side
+            to see which one offers the best features, pricing, privacy, and performance for your needs.
+          </>
+        )}
+      </p>
+    </header>
+
+    <div class={`mb-10 grid grid-cols-1 gap-4 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+      {tools.map((tool) => (
+        <div class="text-center">
+          <button
+            type="button"
+            class="w-full md:cursor-zoom-in"
+            data-lightbox-trigger
+            data-src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+            data-alt={`${tool.name} screenshot`}
+          >
+            <img
+              src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+              alt={`${tool.name} screenshot`}
+              class="w-full aspect-[10/7] object-cover object-top rounded-lg border"
+            />
+          </button>
+          <div class="mt-3">
+            <Button
+              href={tool.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outline"
+              size="lg"
+              class="w-full"
+            >
+              <ExternalLinkIcon class="size-4" />
+              {tool.name}
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div
+      id="lightbox"
+      class="fixed inset-0 z-[1010] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+      data-lightbox
+    >
+      <button
+        type="button"
+        class="absolute inset-0 cursor-default"
+        data-lightbox-backdrop
+        aria-label="Close lightbox"
+      ></button>
+      <img
+        src=""
+        alt=""
+        class="relative max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl"
+        data-lightbox-image
+      />
+    </div>
+
+    <script>
+      const lightbox = document.querySelector('[data-lightbox]') as HTMLElement;
+      const lightboxImage = document.querySelector('[data-lightbox-image]') as HTMLImageElement;
+      const triggers = document.querySelectorAll('[data-lightbox-trigger]');
+      const backdrop = document.querySelector('[data-lightbox-backdrop]');
+
+      function openLightbox(src: string, alt: string) {
+        lightboxImage.src = src;
+        lightboxImage.alt = alt;
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          if (window.innerWidth < 768) return;
+          const src = trigger.getAttribute('data-src') || '';
+          const alt = trigger.getAttribute('data-alt') || '';
+          openLightbox(src, alt);
+        });
+      });
+
+      backdrop?.addEventListener('click', closeLightbox);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+          closeLightbox();
+        }
+      });
+    </script>
+
+    <nav class={`mb-10 p-4 bg-card border rounded-lg flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground ${hasThirdPartyComparison ? "justify-evenly" : "justify-between"}`}>
+      {sections.map((section, i) => {
+        const Icon = sectionIcons[section.id];
+        return (
+          <>
+            <a
+              href={`#${section.id}`}
+              class="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+            >
+              <Icon class="size-3.5" />
+              {section.title}
+            </a>
+            {i < sections.length - 1 && <span class="text-border">·</span>}
+          </>
+        );
+      })}
+    </nav>
+
+    {sections.map((section) => (
+      <>
+        <SectionHeading id={section.id} title={section.title} />
+        <p class="text-muted-foreground mb-4 -mt-2">{section.description}</p>
+        <div class="bg-card border rounded-lg overflow-hidden">
+          <ComparisonTable tools={tools} category={section.category} labels={section.labels} />
+        </div>
+      </>
+    ))}
+
+    <CTA
+      headline="Ready to give BlinkDisk a try?"
+    />
+  </article>
+</DefaultLayout>

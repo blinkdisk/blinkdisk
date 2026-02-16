@@ -1,0 +1,45 @@
+---
+import type { BackupTool, CellValue, LabelConfig } from "@config/comparison";
+import ComparisonRow from "./ComparisonRow.astro";
+
+type Props = {
+  tools: BackupTool[];
+  category: keyof Pick<BackupTool, "features" | "pricing" | "privacy" | "platforms" | "storages" | "performance">;
+  labels: Record<string, LabelConfig>;
+};
+
+const { tools, category, labels } = Astro.props;
+
+const keys = Object.keys(labels) as (keyof typeof labels)[];
+const columnWidth = tools.length === 2 ? "w-[40%]" : "w-[27%]";
+---
+
+<div class="overflow-x-auto">
+  <table class="w-full min-w-[600px] border-collapse">
+    <thead>
+      <tr class="border-b border-border">
+        <th class="w-[100px]"></th>
+        {tools.map((tool) => {
+          const isBlinkDisk = tool.slug === "blinkdisk";
+          return (
+            <th class={`px-4 py-3 text-center text-sm font-semibold ${columnWidth} ${isBlinkDisk ? "text-primary bg-primary/5" : "text-foreground"}`}>
+              <a href={tool.website} target="_blank" rel="noopener noreferrer" class={isBlinkDisk ? "hover:text-primary/80 transition-colors" : "hover:text-primary transition-colors"}>
+                {tool.name}
+              </a>
+            </th>
+          );
+        })}
+      </tr>
+    </thead>
+    <tbody>
+      {keys.map((key) => (
+        <ComparisonRow
+          label={labels[key].text}
+          labelLink={labels[key].link}
+          values={tools.map((tool) => (tool[category] as Record<string, CellValue>)[key])}
+          highlightIndices={tools.map((tool, i) => tool.slug === "blinkdisk" ? i : -1).filter(i => i !== -1)}
+        />
+      ))}
+    </tbody>
+  </table>
+</div>

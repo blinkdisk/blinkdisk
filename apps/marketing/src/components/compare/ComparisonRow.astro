@@ -1,0 +1,28 @@
+---
+import type { CellValue } from "@config/comparison";
+import ComparisonCell from "./ComparisonCell.astro";
+
+type Props = {
+  label: string;
+  labelLink?: string;
+  values: CellValue[];
+  highlightIndices: number[];
+};
+
+const { label, labelLink, values, highlightIndices } = Astro.props;
+---
+
+<tr class="border-b border-border/50 last:border-b-0">
+  <td class="px-4 py-3 text-sm font-medium text-foreground whitespace-nowrap">
+    {labelLink ? (
+      <a href={labelLink} class="underline underline-offset-2 decoration-foreground/30 hover:text-primary transition-colors">
+        {label}
+      </a>
+    ) : (
+      label
+    )}
+  </td>
+  {values.map((value, index) => (
+    <ComparisonCell value={value} highlight={highlightIndices.includes(index)} />
+  ))}
+</tr>
