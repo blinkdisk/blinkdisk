@@ -19,16 +19,13 @@ const columnWidth = tools.length === 2 ? "w-[40%]" : "w-[27%]";
     <thead>
       <tr class="border-b border-border">
         <th class="w-[100px]"></th>
-        {tools.map((tool) => {
-          const isBlinkDisk = tool.slug === "blinkdisk";
-          return (
-            <th class={`px-4 py-3 text-center text-sm font-semibold ${columnWidth} ${isBlinkDisk ? "text-primary bg-primary/5" : "text-foreground"}`}>
-              <a href={tool.website} target="_blank" rel="noopener noreferrer" class={isBlinkDisk ? "hover:text-primary/80 transition-colors" : "hover:text-primary transition-colors"}>
-                {tool.name}
-              </a>
-            </th>
-          );
-        })}
+        {tools.map((tool) => (
+          <th class={`px-4 py-3 text-center text-sm font-semibold text-foreground ${columnWidth}`}>
+            <a href={tool.website} target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+              {tool.name}
+            </a>
+          </th>
+        ))}
       </tr>
     </thead>
     <tbody>
@@ -37,7 +34,6 @@ const columnWidth = tools.length === 2 ? "w-[40%]" : "w-[27%]";
           label={labels[key].text}
           labelLink={labels[key].link}
           values={tools.map((tool) => (tool[category] as Record<string, CellValue>)[key])}
-          highlightIndices={tools.map((tool, i) => tool.slug === "blinkdisk" ? i : -1).filter(i => i !== -1)}
         />
       ))}
     </tbody>

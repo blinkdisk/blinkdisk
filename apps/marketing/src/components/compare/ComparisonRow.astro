@@ -6,10 +6,9 @@ type Props = {
   label: string;
   labelLink?: string;
   values: CellValue[];
-  highlightIndices: number[];
 };
 
-const { label, labelLink, values, highlightIndices } = Astro.props;
+const { label, labelLink, values } = Astro.props;
 ---
 
 <tr class="border-b border-border/50 last:border-b-0">
@@ -22,7 +21,7 @@ const { label, labelLink, values, highlightIndices } = Astro.props;
       label
     )}
   </td>
-  {values.map((value, index) => (
-    <ComparisonCell value={value} highlight={highlightIndices.includes(index)} />
+  {values.map((value) => (
+    <ComparisonCell value={value} />
   ))}
 </tr>

@@ -7,10 +7,9 @@ import StarIcon from "@lucide/astro/icons/star";
 
 type Props = {
   value: CellValue;
-  highlight?: boolean;
 };
 
-const { value, highlight = false } = Astro.props;
+const { value } = Astro.props;
 
 function isSupported(v: CellValue): v is SupportedValue {
   return v !== null && "supported" in v;
@@ -25,10 +24,7 @@ function isText(v: CellValue): v is TextValue {
 }
 ---
 
-<td class:list={[
-  "px-4 py-3 text-center",
-  highlight && "bg-primary/5"
-]}>
+<td class="px-4 py-3 text-center">
   {value === null ? (
     <span class="text-muted-foreground text-sm">No data</span>
   ) : isSupported(value) ? (
