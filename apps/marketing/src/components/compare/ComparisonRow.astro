@@ -1,24 +1,47 @@
 ---
 import type { CellValue } from "@config/comparison";
 import ComparisonCell from "./ComparisonCell.astro";
+import WindowsIcon from "@marketing/components/icons/Windows.astro";
+import MacosIcon from "@marketing/components/icons/Macos.astro";
+import LinuxIcon from "@marketing/components/icons/Linux.astro";
+import AndroidIcon from "@marketing/components/icons/Android.astro";
 
 type Props = {
   label: string;
   labelLink?: string;
+  labelDescription?: string;
+  labelIcon?: string;
   values: CellValue[];
 };
 
-const { label, labelLink, values } = Astro.props;
+const { label, labelLink, labelDescription, labelIcon, values } = Astro.props;
+
+const iconComponents = {
+  windows: WindowsIcon,
+  apple: MacosIcon,
+  linux: LinuxIcon,
+  android: AndroidIcon,
+};
+
+const IconComponent = labelIcon ? iconComponents[labelIcon as keyof typeof iconComponents] : null;
 ---
 
 <tr class="border-b border-border/50 last:border-b-0">
-  <td class="px-4 py-3 text-sm font-medium text-foreground whitespace-nowrap">
-    {labelLink ? (
-      <a href={labelLink} class="underline underline-offset-2 decoration-foreground/30 hover:text-primary transition-colors">
-        {label}
-      </a>
-    ) : (
-      label
+  <td class="px-4 py-3 text-sm text-foreground">
+    <div class="font-medium flex items-center gap-2">
+      {IconComponent && (
+        <IconComponent class="size-4 text-muted-foreground" />
+      )}
+      {labelLink ? (
+        <a href={labelLink} class="underline underline-offset-2 decoration-foreground/30 hover:text-primary transition-colors">
+          {label}
+        </a>
+      ) : (
+        label
+      )}
+    </div>
+    {labelDescription && (
+      <div class="text-xs text-muted-foreground mt-0.5">{labelDescription}</div>
     )}
   </td>
   {values.map((value) => (

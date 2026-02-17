@@ -1,0 +1,264 @@
+---
+import Button from "@marketing/components/Button.astro";
+import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
+import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
+import { ToolSelector, AddToolButton } from "@marketing/components/react/ToolSelector";
+import ExternalLinkIcon from "@lucide/astro/icons/external-link";
+import ListChecksIcon from "@lucide/astro/icons/list-checks";
+import TagIcon from "@lucide/astro/icons/tag";
+import ShieldIcon from "@lucide/astro/icons/shield";
+import MonitorIcon from "@lucide/astro/icons/monitor";
+import HardDriveIcon from "@lucide/astro/icons/hard-drive";
+import InfoIcon from "@lucide/astro/icons/info";
+import {
+  allTools,
+  generalLabels,
+  featureLabels,
+  pricingLabels,
+  privacyLabels,
+  platformLabels,
+  storageLabels,
+  type BackupTool,
+} from "@config/comparison";
+
+type Props = {
+  tools: BackupTool[];
+  title: string;
+  description: string;
+};
+
+const { tools, title, description } = Astro.props;
+
+const sectionIcons: Record<string, typeof ListChecksIcon> = {
+  general: InfoIcon,
+  features: ListChecksIcon,
+  pricing: TagIcon,
+  privacy: ShieldIcon,
+  platforms: MonitorIcon,
+  storages: HardDriveIcon,
+};
+
+const sections = [
+  {
+    id: "general",
+    title: "General",
+    category: "general" as const,
+    labels: generalLabels,
+    description: "Basic info and backup types supported.",
+  },
+  {
+    id: "features",
+    title: "Features",
+    category: "features" as const,
+    labels: featureLabels,
+    description: "Core backup capabilities.",
+  },
+  {
+    id: "pricing",
+    title: "Pricing",
+    category: "pricing" as const,
+    labels: pricingLabels,
+    description: "Cost and storage plans.",
+  },
+  {
+    id: "privacy",
+    title: "Privacy & Security",
+    category: "privacy" as const,
+    labels: privacyLabels,
+    description: "Encryption and data protection.",
+  },
+  {
+    id: "platforms",
+    title: "Platform Support",
+    category: "platforms" as const,
+    labels: platformLabels,
+    description: "Supported operating systems.",
+  },
+  {
+    id: "storages",
+    title: "Storage Options",
+    category: "storages" as const,
+    labels: storageLabels,
+    description: "Where you can store your backups.",
+  },
+];
+
+const toolOptions = allTools.map((tool) => ({ value: tool.slug, label: tool.name }));
+const selectedSlugs = tools.map((tool) => tool.slug);
+const hasTools = tools.length > 0;
+
+const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null] : tools;
+---
+
+<article class={`mx-auto pt-page pb-page w-content ${tools.length <= 2 ? "md:max-w-4xl" : ""}`}>
+  <header class="mb-10">
+    <h1 class="text-4xl sm:text-4xl font-bold text-foreground mb-4">
+      {title}
+    </h1>
+    <p class="text-lg text-muted-foreground">
+      {description}
+    </p>
+  </header>
+
+  <div class={`mb-10 grid grid-cols-1 gap-4 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+    {tools.map((tool, index) => (
+      <div class="text-center">
+        <div class="mb-3">
+          <ToolSelector
+            client:load
+            tools={toolOptions}
+            selectedSlugs={selectedSlugs}
+            index={index}
+            showRemove={true}
+          />
+        </div>
+        <button
+          type="button"
+          class="w-full md:cursor-zoom-in"
+          data-lightbox-trigger
+          data-src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+          data-alt={`${tool.name} screenshot`}
+        >
+          <img
+            src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+            alt={`${tool.name} screenshot`}
+            class="w-full aspect-[10/7] object-cover object-top rounded-lg border"
+          />
+        </button>
+        <div class="mt-3">
+          <Button
+            href={tool.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            size="lg"
+            class="w-full"
+          >
+            <ExternalLinkIcon class="size-4" />
+            {tool.name}
+          </Button>
+        </div>
+      </div>
+    ))}
+    {tools.length === 0 && (
+      <>
+        <div class="text-center">
+          <AddToolButton
+            client:load
+            tools={toolOptions}
+            selectedSlugs={selectedSlugs}
+          />
+        </div>
+        <div class="text-center">
+          <AddToolButton
+            client:load
+            tools={toolOptions}
+            selectedSlugs={selectedSlugs}
+          />
+        </div>
+      </>
+    )}
+    {tools.length === 1 && (
+      <div class="text-center">
+        <AddToolButton
+          client:load
+          tools={toolOptions}
+          selectedSlugs={selectedSlugs}
+        />
+      </div>
+    )}
+  </div>
+
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[1010] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+    data-lightbox
+  >
+    <button
+      type="button"
+      class="absolute inset-0 cursor-default"
+      data-lightbox-backdrop
+      aria-label="Close lightbox"
+    ></button>
+    <img
+      src=""
+      alt=""
+      class="relative max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl"
+      data-lightbox-image
+    />
+  </div>
+
+  <script>
+    const lightbox = document.querySelector('[data-lightbox]') as HTMLElement;
+    const lightboxImage = document.querySelector('[data-lightbox-image]') as HTMLImageElement;
+    const triggers = document.querySelectorAll('[data-lightbox-trigger]');
+    const backdrop = document.querySelector('[data-lightbox-backdrop]');
+
+    function openLightbox(src: string, alt: string) {
+      lightboxImage.src = src;
+      lightboxImage.alt = alt;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        if (window.innerWidth < 768) return;
+        const src = trigger.getAttribute('data-src') || '';
+        const alt = trigger.getAttribute('data-alt') || '';
+        openLightbox(src, alt);
+      });
+    });
+
+    backdrop?.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+        closeLightbox();
+      }
+    });
+  </script>
+
+  {hasTools && (
+    <>
+      <nav class="mb-10 p-4 bg-card border rounded-lg flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground justify-evenly">
+        {sections.map((section, i) => {
+          const Icon = sectionIcons[section.id];
+          return (
+            <>
+              <a
+                href={`#${section.id}`}
+                class="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+              >
+                <Icon class="size-3.5" />
+                {section.title}
+              </a>
+              {i < sections.length - 1 && <span class="text-border">·</span>}
+            </>
+          );
+        })}
+      </nav>
+
+      {sections.map((section) => {
+        const Icon = sectionIcons[section.id];
+        return (
+          <>
+            <SectionHeading id={section.id} title={section.title}>
+              <Icon slot="icon" class="size-6 text-muted-foreground" />
+            </SectionHeading>
+            <p class="text-muted-foreground mb-6 -mt-4">{section.description}</p>
+            <div class="bg-card border rounded-lg overflow-hidden">
+              <ComparisonTable tools={paddedTools} category={section.category} labels={section.labels} />
+            </div>
+          </>
+        );
+      })}
+    </>
+  )}
+</article>

@@ -3,27 +3,31 @@ import type { BackupTool, CellValue, LabelConfig } from "@config/comparison";
 import ComparisonRow from "./ComparisonRow.astro";
 
 type Props = {
-  tools: BackupTool[];
-  category: keyof Pick<BackupTool, "features" | "pricing" | "privacy" | "platforms" | "storages" | "performance">;
+  tools: (BackupTool | null)[];
+  category: keyof Pick<BackupTool, "general" | "features" | "pricing" | "privacy" | "platforms" | "storages">;
   labels: Record<string, LabelConfig>;
 };
 
 const { tools, category, labels } = Astro.props;
 
 const keys = Object.keys(labels) as (keyof typeof labels)[];
-const columnWidth = tools.length === 2 ? "w-[40%]" : "w-[27%]";
+const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[27%]";
 ---
 
 <div class="overflow-x-auto">
   <table class="w-full min-w-[600px] border-collapse">
     <thead>
       <tr class="border-b border-border">
-        <th class="w-[100px]"></th>
+        <th></th>
         {tools.map((tool) => (
           <th class={`px-4 py-3 text-center text-sm font-semibold text-foreground ${columnWidth}`}>
-            <a href={tool.website} target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
-              {tool.name}
-            </a>
+            {tool ? (
+              <a href={tool.website} target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+                {tool.name}
+              </a>
+            ) : (
+              <span class="text-muted-foreground">—</span>
+            )}
           </th>
         ))}
       </tr>
@@ -33,7 +37,9 @@ const columnWidth = tools.length === 2 ? "w-[40%]" : "w-[27%]";
         <ComparisonRow
           label={labels[key].text}
           labelLink={labels[key].link}
-          values={tools.map((tool) => (tool[category] as Record<string, CellValue>)[key])}
+          labelDescription={labels[key].description}
+          labelIcon={labels[key].icon}
+          values={tools.map((tool) => tool ? (tool[category] as Record<string, CellValue>)[key] : null)}
         />
       ))}
     </tbody>
