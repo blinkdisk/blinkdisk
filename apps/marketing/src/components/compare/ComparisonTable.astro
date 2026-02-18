@@ -1,0 +1,48 @@
+---
+import type { BackupTool, CellValue, LabelConfig } from "@config/comparison";
+import ComparisonRow from "./ComparisonRow.astro";
+
+type Props = {
+  tools: (BackupTool | null)[];
+  category: keyof Pick<BackupTool, "general" | "features" | "privacy" | "platforms" | "storages">;
+  labels: Record<string, LabelConfig>;
+};
+
+const { tools, category, labels } = Astro.props;
+
+const keys = Object.keys(labels) as (keyof typeof labels)[];
+const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[25%]";
+---
+
+<div class="overflow-x-auto">
+  <table class="w-full min-w-[600px] border-collapse">
+    <thead>
+      <tr class="border-b border-border">
+        <th></th>
+        {tools.map((tool) => (
+          <th class={`px-4 py-3 text-center text-sm font-semibold text-foreground ${columnWidth}`}>
+            {tool ? (
+              <a href={tool.website} target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+                {tool.name}
+              </a>
+            ) : (
+              <span class="text-muted-foreground">—</span>
+            )}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {keys.map((key) => (
+        <ComparisonRow
+          label={labels[key].text}
+          labelLink={labels[key].link}
+          labelDescription={labels[key].description}
+          labelIcon={labels[key].icon}
+          srText={labels[key].srText}
+          values={tools.map((tool) => tool ? (tool[category] as Record<string, CellValue>)[key] : null)}
+        />
+      ))}
+    </tbody>
+  </table>
+</div>

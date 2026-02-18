@@ -6,12 +6,15 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
+import { getComparisionSitemap } from "../../libs/config/src/comparison";
 import path from "path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const site = "https://blinkdisk.com";
+
 export default defineConfig({
-    site: "https://blinkdisk.com",
+    site,
     output: "static",
     prefetch: true,
     trailingSlash: "never",
@@ -61,7 +64,9 @@ export default defineConfig({
         }),
         mdx(),
         react(),
-        sitemap(),
+        sitemap({
+            customPages: getComparisionSitemap(site),
+        }),
     ],
     env: {
         schema: {

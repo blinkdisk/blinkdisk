@@ -1,0 +1,244 @@
+---
+import Button from "@marketing/components/Button.astro";
+import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
+import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
+import PricingCalculator, { hasCalculator } from "@marketing/components/compare/react/PricingCalculator";
+import { ToolSelector, AddToolButton } from "@marketing/components/react/ToolSelector";
+import ExternalLinkIcon from "@lucide/astro/icons/external-link";
+import ListChecksIcon from "@lucide/astro/icons/list-checks";
+import TagIcon from "@lucide/astro/icons/tag";
+import ShieldIcon from "@lucide/astro/icons/shield";
+import MonitorIcon from "@lucide/astro/icons/monitor";
+import HardDriveIcon from "@lucide/astro/icons/hard-drive";
+import InfoIcon from "@lucide/astro/icons/info";
+import MailIcon from "@lucide/astro/icons/mail";
+import {
+  allTools,
+  generalLabels,
+  featureLabels,
+  privacyLabels,
+  platformLabels,
+  storageLabels,
+  type BackupTool,
+} from "@config/comparison";
+
+type Props = {
+  tools: BackupTool[];
+  title: string;
+  description: string;
+};
+
+const { tools, title, description } = Astro.props;
+
+const sectionIcons: Record<string, typeof ListChecksIcon> = {
+  general: InfoIcon,
+  features: ListChecksIcon,
+  pricing: TagIcon,
+  privacy: ShieldIcon,
+  platforms: MonitorIcon,
+  storages: HardDriveIcon,
+};
+
+const tableSections = [
+  { id: "general", title: "General", category: "general" as const, labels: generalLabels, description: "Basic info and backup types supported." },
+  { id: "features", title: "Features", category: "features" as const, labels: featureLabels, description: "Core backup capabilities." },
+  { id: "privacy", title: "Privacy & Security", category: "privacy" as const, labels: privacyLabels, description: "Encryption and data protection." },
+  { id: "platforms", title: "Platform Support", category: "platforms" as const, labels: platformLabels, description: "Supported operating systems." },
+  { id: "storages", title: "Storage Options", category: "storages" as const, labels: storageLabels, description: "Where you can store your backups." },
+];
+
+const allSections = [
+  ...tableSections.slice(0, 2).map(({ id, title }) => ({ id, title })),
+  { id: "pricing", title: "Pricing" },
+  ...tableSections.slice(2).map(({ id, title }) => ({ id, title })),
+];
+
+const toolOptions = allTools.map((tool) => ({ value: tool.slug, label: tool.name }));
+const selectedSlugs = tools.map((tool) => tool.slug);
+const hasTools = tools.length > 0;
+
+const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null] : tools;
+---
+
+<article class={`mx-auto pt-page pb-page w-content ${tools.length <= 2 ? "md:max-w-4xl" : ""}`}>
+  <header class="mb-10">
+    <h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+      {title}
+    </h1>
+    <p class="sm:text-lg text-muted-foreground">
+      {description}
+    </p>
+  </header>
+
+  <div class={`mb-10 grid grid-cols-1 gap-4 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+    {tools.map((tool, index) => (
+      <div class="text-center">
+        <div class="mb-3">
+          <ToolSelector
+            client:load
+            tools={toolOptions}
+            selectedSlugs={selectedSlugs}
+            index={index}
+            showRemove={true}
+          />
+        </div>
+        <button
+          type="button"
+          class="w-full md:cursor-zoom-in"
+          data-lightbox-trigger
+          data-src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+          data-alt={`${tool.name} screenshot`}
+        >
+          <img
+            src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+            alt={`${tool.name} screenshot`}
+            class="w-full aspect-[10/7] object-cover object-top rounded-lg border"
+          />
+        </button>
+        <div class="mt-3">
+          <Button
+            href={tool.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            size="lg"
+            class="w-full"
+          >
+            <ExternalLinkIcon class="size-4" />
+            {tool.name}
+          </Button>
+        </div>
+      </div>
+    ))}
+    {tools.length < 2 && Array.from({ length: 2 - tools.length }).map(() => (
+      <div class="text-center">
+        <AddToolButton client:load tools={toolOptions} selectedSlugs={selectedSlugs} />
+      </div>
+    ))}
+  </div>
+
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[1010] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+    data-lightbox
+  >
+    <button
+      type="button"
+      class="absolute inset-0 cursor-default"
+      data-lightbox-backdrop
+      aria-label="Close lightbox"
+    ></button>
+    <img
+      src=""
+      alt=""
+      class="relative max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl"
+      data-lightbox-image
+    />
+  </div>
+
+  <script>
+    import "@marketing/scripts/lightbox";
+  </script>
+
+  {hasTools && (
+    <>
+      <nav class="mb-10 p-4 bg-card border rounded-lg flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground justify-evenly">
+        {allSections.map((section, i) => {
+          const Icon = sectionIcons[section.id];
+          return (
+            <>
+              <a
+                href={`#${section.id}`}
+                class="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+              >
+                <Icon class="size-3.5" />
+                {section.title}
+              </a>
+              {i < allSections.length - 1 && <span class="text-border">·</span>}
+            </>
+          );
+        })}
+      </nav>
+
+      {tableSections.slice(0, 2).map((section) => {
+        const Icon = sectionIcons[section.id];
+        return (
+          <>
+            <SectionHeading id={section.id} title={section.title}>
+              <Icon slot="icon" class="size-6 text-muted-foreground" />
+            </SectionHeading>
+            <p class="text-muted-foreground mb-6 -mt-4">{section.description}</p>
+            <div class="bg-card border rounded-lg overflow-hidden">
+              <ComparisonTable tools={paddedTools} category={section.category} labels={section.labels} />
+            </div>
+          </>
+        );
+      })}
+
+      <SectionHeading id="pricing" title="Pricing">
+        <TagIcon slot="icon" class="size-6 text-muted-foreground" />
+      </SectionHeading>
+      <p class="text-muted-foreground mb-6 -mt-4">Simple and transparent pricing calculators.</p>
+      <div class={`grid grid-cols-1 gap-6 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+        {tools.map((tool) => (
+          <div class="flex flex-col gap-4">
+            <h4 class="text-center text-sm font-semibold">{tool.name}</h4>
+            {hasCalculator(tool.slug) ? (
+              <PricingCalculator client:load tool={tool} />
+            ) : null}
+            {tool.pricingUrl && (
+              <Button
+                href={tool.pricingUrl}
+                target={tool.pricingUrl.startsWith("http") ? "_blank" : undefined}
+                rel={tool.pricingUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                variant="outline"
+                class="w-full"
+              >
+                <ExternalLinkIcon class="size-4" />
+                View Pricing
+              </Button>
+            )}
+          </div>
+        ))}
+        {tools.length === 1 && (
+          <div class="flex items-center justify-center">
+            <p class="text-sm text-muted-foreground">Add another tool to compare pricing</p>
+          </div>
+        )}
+      </div>
+
+      {tableSections.slice(2).map((section) => {
+        const Icon = sectionIcons[section.id];
+        return (
+          <>
+            <SectionHeading id={section.id} title={section.title}>
+              <Icon slot="icon" class="size-6 text-muted-foreground" />
+            </SectionHeading>
+            <p class="text-muted-foreground mb-6 -mt-4">{section.description}</p>
+            <div class="bg-card border rounded-lg overflow-hidden">
+              <ComparisonTable tools={paddedTools} category={section.category} labels={section.labels} />
+            </div>
+          </>
+        );
+      })}
+
+      <section class="mt-16 p-6 bg-card border border-dashed rounded-lg flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-semibold text-foreground mb-1">
+            See something incorrect?
+          </h3>
+          <p class="text-muted-foreground text-sm">
+            We strive to keep our comparison data accurate. If you notice any errors, please let us know.
+          </p>
+        </div>
+        <Button
+          href="mailto:support@blinkdisk.com"
+          variant="outline"
+          class="shrink-0"
+        >
+          <MailIcon />
+          Contact us
+        </Button>
+      </section>
+    </>
+  )}
+</article>

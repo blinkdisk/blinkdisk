@@ -1,9 +1,16 @@
 {
   "name": "marketing",
   "compatibility_date": "2026-02-03",
+  "main": "dist/_worker.js/index.js",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
   "assets": {
-    "directory": "./dist",
-    "html_handling": "drop-trailing-slash",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "directory": "./dist"
   },
+  "observability": {
+    "enabled": true
+  }
 }

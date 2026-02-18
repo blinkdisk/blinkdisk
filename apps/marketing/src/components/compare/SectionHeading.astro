@@ -1,0 +1,13 @@
+---
+type Props = {
+  id: string;
+  title: string;
+};
+
+const { id, title } = Astro.props;
+---
+
+<h2 id={id} class="text-2xl sm:text-3xl font-bold text-foreground mt-12 md:mt-16 mb-6 scroll-mt-20 flex items-center gap-3">
+  <slot name="icon" />
+  {title}
+</h2>
