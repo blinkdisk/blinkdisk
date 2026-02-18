@@ -100,13 +100,13 @@ export const storageLabels: Record<keyof BackupTool["storages"], LabelConfig> = 
   rclone: { text: "Rclone Remotes", description: "50+ cloud providers via Rclone" },
 };
 
-export function getComparisionSitemap(baseUrl: string) {
+export function getComparisonSitemap(baseUrl: string) {
   const paths: string[] = [];
 
-  for (const tool of allTools) {
-    if (tool.slug === "blinkdisk") continue;
-    paths.push(`/compare/${tool.slug}-vs-blinkdisk`);
-  }
+  // for (const tool of allTools) {
+  //   if (tool.slug === "blinkdisk") continue;
+  //   paths.push(`/compare/${tool.slug}-vs-blinkdisk`);
+  // }
 
   for (let i = 0; i < allTools.length; i++) {
     for (let j = i + 1; j < allTools.length; j++) {
