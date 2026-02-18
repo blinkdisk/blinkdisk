@@ -2,10 +2,7 @@
 import Button from "@marketing/components/Button.astro";
 import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
 import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
-import CompetitorPricingCard from "@marketing/components/compare/CompetitorPricingCard.astro";
-import BlinkDiskPricingCalculator from "@marketing/components/react/BlinkDiskPricingCalculator";
-import BackblazePricingCalculator from "@marketing/components/react/BackblazePricingCalculator";
-import CarbonitePricingCalculator from "@marketing/components/react/CarbonitePricingCalculator";
+import PricingCalculator, { hasCalculator } from "@marketing/components/compare/react/PricingCalculator";
 import { ToolSelector, AddToolButton } from "@marketing/components/react/ToolSelector";
 import ExternalLinkIcon from "@lucide/astro/icons/external-link";
 import ListChecksIcon from "@lucide/astro/icons/list-checks";
@@ -14,6 +11,7 @@ import ShieldIcon from "@lucide/astro/icons/shield";
 import MonitorIcon from "@lucide/astro/icons/monitor";
 import HardDriveIcon from "@lucide/astro/icons/hard-drive";
 import InfoIcon from "@lucide/astro/icons/info";
+import MailIcon from "@lucide/astro/icons/mail";
 import {
   allTools,
   generalLabels,
@@ -273,15 +271,9 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
         {tools.map((tool) => (
           <div class="flex flex-col gap-4">
             <h4 class="text-center text-sm font-semibold">{tool.name}</h4>
-            {tool.slug === "blinkdisk" ? (
-              <BlinkDiskPricingCalculator client:load />
-            ) : tool.slug === "backblaze" ? (
-              <BackblazePricingCalculator client:load />
-            ) : tool.slug === "carbonite" ? (
-              <CarbonitePricingCalculator client:load />
-            ) : (
-              <CompetitorPricingCard tool={tool} />
-            )}
+            {hasCalculator(tool.slug) ? (
+              <PricingCalculator client:load tool={tool} />
+            ) : null}
             {tool.pricingUrl && (
               <Button
                 href={tool.pricingUrl}
@@ -317,6 +309,25 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
           </>
         );
       })}
+
+      <section class="mt-16 p-6 bg-card border border-dashed rounded-lg flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-semibold text-foreground mb-1">
+            See something incorrect?
+          </h3>
+          <p class="text-muted-foreground text-sm">
+            We strive to keep our comparison data accurate. If you notice any errors, please let us know.
+          </p>
+        </div>
+        <Button
+          href="mailto:support@blinkdisk.com"
+          variant="outline"
+          class="shrink-0"
+        >
+          <MailIcon />
+          Contact us
+        </Button>
+      </section>
     </>
   )}
 </article>

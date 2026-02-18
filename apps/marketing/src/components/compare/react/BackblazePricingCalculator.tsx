@@ -33,7 +33,7 @@ export default function BackblazePricingCalculator() {
         </Tabs>
 
         <div className="mt-5 flex items-baseline gap-1">
-          <span className="text-2xl font-bold">
+          <span className="text-3xl font-bold">
             {amount.toLocaleString(undefined, {
               style: "currency",
               currency: "USD",

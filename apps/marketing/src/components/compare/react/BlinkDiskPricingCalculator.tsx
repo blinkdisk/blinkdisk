@@ -40,7 +40,7 @@ export default function BlinkDiskPricingCalculator() {
     <div className="flex flex-col gap-4">
       <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
         <p className="text-sm font-medium text-primary">Custom Storage</p>
-        <p className="mt-1 text-2xl font-bold">100% Free</p>
+        <p className="mt-1 text-3xl font-bold">100% Free</p>
         <p className="mt-1 text-xs text-muted-foreground">
           Use your own S3, Backblaze B2, SFTP, etc.
         </p>
@@ -94,7 +94,7 @@ export default function BlinkDiskPricingCalculator() {
         )}
 
         <div className="flex items-baseline gap-1 mt-5">
-          <span className="text-2xl font-bold">
+          <span className="text-3xl font-bold">
             {displayAmount.toLocaleString(undefined, {
               style: "currency",
               currency,

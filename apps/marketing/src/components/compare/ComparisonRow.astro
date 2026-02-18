@@ -11,10 +11,11 @@ type Props = {
   labelLink?: string;
   labelDescription?: string;
   labelIcon?: string;
+  srText?: { true: string; false: string; partial: string };
   values: CellValue[];
 };
 
-const { label, labelLink, labelDescription, labelIcon, values } = Astro.props;
+const { label, labelLink, labelDescription, labelIcon, srText, values } = Astro.props;
 
 const iconComponents = {
   windows: WindowsIcon,
@@ -45,6 +46,6 @@ const IconComponent = labelIcon ? iconComponents[labelIcon as keyof typeof iconC
     )}
   </td>
   {values.map((value) => (
-    <ComparisonCell value={value} />
+    <ComparisonCell value={value} srText={srText} />
   ))}
 </tr>

@@ -1,3 +1,5 @@
+import { Button } from "@ui/button";
+import { Input } from "@ui/input";
 import {
   Select,
   SelectContent,
@@ -6,6 +8,7 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+import { MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 type PlanType = "basic" | "plus" | "prime";
@@ -86,21 +89,35 @@ export default function CarbonitePricingCalculator() {
           <label className="mb-1 block text-xs text-muted-foreground">
             {plan.quantityLabel}
           </label>
-          <Select
-            value={String(quantity)}
-            onValueChange={(value) => setQuantity(Number(value))}
-          >
-            <SelectTrigger className="bg-secondary text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                <SelectItem key={n} value={String(n)}>
-                  {n}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              type="button"
+              size="icon-sm"
+              variant="outline"
+              disabled={quantity <= 1}
+            >
+              <MinusIcon className="size-4" />
+            </Button>
+            <Input
+              className="w-16 text-center bg-secondary"
+              type="number"
+              min={1}
+              value={quantity}
+              onChange={(e) => {
+                const val = Math.max(1, e.target.valueAsNumber || 1);
+                setQuantity(val);
+              }}
+            />
+            <Button
+              onClick={() => setQuantity(quantity + 1)}
+              type="button"
+              size="icon-sm"
+              variant="outline"
+            >
+              <PlusIcon className="size-4" />
+            </Button>
+          </div>
         </div>
 
         <Tabs
@@ -116,7 +133,7 @@ export default function CarbonitePricingCalculator() {
         </Tabs>
 
         <div className="mt-5 flex items-baseline gap-1">
-          <span className="text-2xl font-bold">
+          <span className="text-3xl font-bold">
             {totalAmount.toLocaleString(undefined, {
               style: "currency",
               currency: "USD",

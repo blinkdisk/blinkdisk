@@ -11,7 +11,7 @@ type Props = {
 const { tools, category, labels } = Astro.props;
 
 const keys = Object.keys(labels) as (keyof typeof labels)[];
-const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[27%]";
+const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[25%]";
 ---
 
 <div class="overflow-x-auto">
@@ -39,6 +39,7 @@ const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[27%]";
           labelLink={labels[key].link}
           labelDescription={labels[key].description}
           labelIcon={labels[key].icon}
+          srText={labels[key].srText}
           values={tools.map((tool) => tool ? (tool[category] as Record<string, CellValue>)[key] : null)}
         />
       ))}

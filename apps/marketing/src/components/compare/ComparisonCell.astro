@@ -6,9 +6,13 @@ import MinusIcon from "@lucide/astro/icons/minus";
 
 type Props = {
   value: CellValue;
+  srText?: { true: string; false: string; partial: string };
 };
 
-const { value } = Astro.props;
+const { value, srText } = Astro.props;
+
+const defaultSrText = { true: "Supported", false: "Not supported", partial: "Partially supported" };
+const finalSrText = srText ?? defaultSrText;
 
 function isSupported(v: CellValue): v is SupportedValue {
   return v !== null && "supported" in v;
@@ -27,17 +31,17 @@ function isText(v: CellValue): v is TextValue {
       {value.supported === true ? (
         <span class="inline-flex items-center justify-center size-6 rounded-full bg-green-500/10 text-green-600 dark:text-green-400">
           <CheckIcon class="size-4" />
-          <span class="sr-only">Supported</span>
+          <span class="sr-only">{finalSrText.true}</span>
         </span>
       ) : value.supported === false ? (
         <span class="inline-flex items-center justify-center size-6 rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
           <XIcon class="size-4" />
-          <span class="sr-only">Not supported</span>
+          <span class="sr-only">{finalSrText.false}</span>
         </span>
       ) : (
         <span class="inline-flex items-center justify-center size-6 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
           <MinusIcon class="size-4" />
-          <span class="sr-only">Partially supported</span>
+          <span class="sr-only">{finalSrText.partial}</span>
         </span>
       )}
       {value.note && (

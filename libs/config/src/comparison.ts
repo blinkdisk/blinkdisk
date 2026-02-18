@@ -10,7 +10,7 @@ export type TextValue = {
   source?: string;
 };
 
-export type CellValue = SupportedValue | TextValue | null;
+export type CellValue = SupportedValue | TextValue | null ;
 
 export type BackupTool = {
   slug: string;
@@ -18,28 +18,20 @@ export type BackupTool = {
   website: string;
   pricingUrl?: string;
   general: {
-    releaseYear: CellValue;
     folderBackups: CellValue;
     imageBackups: CellValue;
     openSource: CellValue;
+    releaseYear: CellValue;
   };
   features: {
-    incrementalBackups: CellValue;
     deduplication: CellValue;
     compression: CellValue;
     versioning: CellValue;
     scheduling: CellValue;
   };
-  pricing: {
-    freeTier: CellValue;
-    startingPrice: CellValue;
-    unlimitedStorage: CellValue;
-    byoStorage: CellValue;
-  };
   privacy: {
     endToEndEncryption: CellValue;
     zeroKnowledge: CellValue;
-    localEncryption: CellValue;
   };
   platforms: {
     windows: CellValue;
@@ -64,34 +56,30 @@ export type LabelConfig = {
   link?: string;
   description?: string;
   icon?: string;
+  srText?: {
+    true: string;
+    false: string;
+    partial: string;
+  };
 };
 
 export const generalLabels: Record<keyof BackupTool["general"], LabelConfig> = {
-  releaseYear: { text: "Release Year" },
   folderBackups: { text: "File/Folder Backups" },
   imageBackups: { text: "Disk Image Backups" },
-  openSource: { text: "Open Source" },
+  openSource: { text: "Open Source", srText: { true: "Yes", false: "No", partial: "Partially" } },
+  releaseYear: { text: "Release Year" },
 };
 
 export const featureLabels: Record<keyof BackupTool["features"], LabelConfig> = {
-  incrementalBackups: { text: "Incremental Backups", link: "/glossary/what-is-an-incremental-backup", description: "Only backs up changed files" },
   deduplication: { text: "Deduplication", link: "/glossary/what-is-deduplication-in-backups", description: "Avoids storing duplicate data" },
   compression: { text: "Compression", link: "/glossary/what-is-compression-in-backups", description: "Reduces backup size" },
   versioning: { text: "Version History", description: "Access previous file versions" },
   scheduling: { text: "Scheduled Backups", description: "Automatic backups on a schedule" },
 };
 
-export const pricingLabels: Record<keyof BackupTool["pricing"], LabelConfig> = {
-  freeTier: { text: "Free Tier" },
-  startingPrice: { text: "Starting Price" },
-  unlimitedStorage: { text: "Unlimited Storage" },
-  byoStorage: { text: "Bring Your Own Storage", description: "Use your own cloud storage" },
-};
-
 export const privacyLabels: Record<keyof BackupTool["privacy"], LabelConfig> = {
-  endToEndEncryption: { text: "End-to-End Encryption", link: "/glossary/what-is-end-to-end-encryption-in-backups", description: "Only you can read your data" },
-  zeroKnowledge: { text: "Zero-Knowledge", description: "Provider can't access your data" },
-  localEncryption: { text: "Local Encryption", description: "Encrypted before upload" },
+  endToEndEncryption: { text: "End-to-End Encryption", link: "/glossary/what-is-end-to-end-encryption-in-backups", description: "Encrypted on your device" },
+  zeroKnowledge: { text: "Zero-Knowledge", description: "Provider doesn't hold the keys" },
 };
 
 export const platformLabels: Record<keyof BackupTool["platforms"], LabelConfig> = {
@@ -138,26 +126,18 @@ export const allTools: BackupTool[] = [
     general: {
       releaseYear: { text: "2025", note: "Built on Kopia, released in 2021" },
       folderBackups: { supported: true },
-      imageBackups: { supported: false, note: "Coming soon" },
+      imageBackups: { supported: false },
       openSource: { supported: true },
     },
     features: {
-      incrementalBackups: { supported: true },
       deduplication: { supported: true },
       compression: { supported: true },
       versioning: { supported: true },
       scheduling: { supported: true },
     },
-    pricing: {
-      freeTier: { supported: true, note: "5GB free with CloudBlink" },
-      startingPrice: { text: "$4/mo", note: "200GB CloudBlink plan" },
-      unlimitedStorage: { supported: false },
-      byoStorage: { supported: true, note: "100% free with your own storage" },
-    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
-      localEncryption: { supported: true },
     },
     platforms: {
       windows: { supported: true },
@@ -188,22 +168,14 @@ export const allTools: BackupTool[] = [
       openSource: { supported: false },
     },
     features: {
-      incrementalBackups: { supported: true },
       deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true, note: "30 days or 1 year" },
+      compression: null,
+      versioning: { supported: true, note: "30 days or 1 year | Forever costs $6/TB" },
       scheduling: { supported: true },
     },
-    pricing: {
-      freeTier: { supported: false },
-      startingPrice: { text: "$9/mo" },
-      unlimitedStorage: { supported: true },
-      byoStorage: { supported: false },
-    },
     privacy: {
-      endToEndEncryption: { supported: "partial", note: "Optional private key" },
-      zeroKnowledge: { supported: "partial" },
-      localEncryption: { supported: true },
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: "partial", note: "Opt-in" },
     },
     platforms: {
       windows: { supported: true },
@@ -230,37 +202,29 @@ export const allTools: BackupTool[] = [
     general: {
       releaseYear: { text: "2006" },
       folderBackups: { supported: true },
-      imageBackups: { supported: true, note: "Plus plan and above" },
+      imageBackups: { supported: false },
       openSource: { supported: false },
     },
     features: {
-      incrementalBackups: { supported: true },
       deduplication: { supported: true },
       compression: { supported: true },
-      versioning: { supported: true },
+      versioning: { supported: true, note: "Max. 3 months" },
       scheduling: { supported: true },
-    },
-    pricing: {
-      freeTier: { supported: false },
-      startingPrice: { text: "$6/mo", note: "Basic plan, billed annually" },
-      unlimitedStorage: { supported: true, note: "Basic plan only" },
-      byoStorage: { supported: false },
     },
     privacy: {
       endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: false },
-      localEncryption: { supported: true },
+      zeroKnowledge: { supported: "partial", note: "Opt-in" },
     },
     platforms: {
       windows: { supported: true },
       macos: { supported: true },
       linux: { supported: false },
-      android: { supported: true },
-      ios: { supported: true },
+      android: { supported: "partial", note: "Restore only" },
+      ios: { supported: "partial", note: "Restore only" },
     },
     storages: {
       managedCloud: { supported: true },
-      localFilesystem: { supported: true, note: "Plus plan" },
+      localFilesystem: { supported: false },
       nas: { supported: false },
       s3Compatible: { supported: false },
       sftp: { supported: false },
