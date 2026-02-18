@@ -40,50 +40,17 @@ const sectionIcons: Record<string, typeof ListChecksIcon> = {
 };
 
 const tableSections = [
-  {
-    id: "general",
-    title: "General",
-    category: "general" as const,
-    labels: generalLabels,
-    description: "Basic info and backup types supported.",
-  },
-  {
-    id: "features",
-    title: "Features",
-    category: "features" as const,
-    labels: featureLabels,
-    description: "Core backup capabilities.",
-  },
-  {
-    id: "privacy",
-    title: "Privacy & Security",
-    category: "privacy" as const,
-    labels: privacyLabels,
-    description: "Encryption and data protection.",
-  },
-  {
-    id: "platforms",
-    title: "Platform Support",
-    category: "platforms" as const,
-    labels: platformLabels,
-    description: "Supported operating systems.",
-  },
-  {
-    id: "storages",
-    title: "Storage Options",
-    category: "storages" as const,
-    labels: storageLabels,
-    description: "Where you can store your backups.",
-  },
+  { id: "general", title: "General", category: "general" as const, labels: generalLabels, description: "Basic info and backup types supported." },
+  { id: "features", title: "Features", category: "features" as const, labels: featureLabels, description: "Core backup capabilities." },
+  { id: "privacy", title: "Privacy & Security", category: "privacy" as const, labels: privacyLabels, description: "Encryption and data protection." },
+  { id: "platforms", title: "Platform Support", category: "platforms" as const, labels: platformLabels, description: "Supported operating systems." },
+  { id: "storages", title: "Storage Options", category: "storages" as const, labels: storageLabels, description: "Where you can store your backups." },
 ];
 
 const allSections = [
-  { id: "general", title: "General" },
-  { id: "features", title: "Features" },
+  ...tableSections.slice(0, 2).map(({ id, title }) => ({ id, title })),
   { id: "pricing", title: "Pricing" },
-  { id: "privacy", title: "Privacy & Security" },
-  { id: "platforms", title: "Platform Support" },
-  { id: "storages", title: "Storage Options" },
+  ...tableSections.slice(2).map(({ id, title }) => ({ id, title })),
 ];
 
 const toolOptions = allTools.map((tool) => ({ value: tool.slug, label: tool.name }));
@@ -95,10 +62,10 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
 
 <article class={`mx-auto pt-page pb-page w-content ${tools.length <= 2 ? "md:max-w-4xl" : ""}`}>
   <header class="mb-10">
-    <h1 class="text-4xl sm:text-4xl font-bold text-foreground mb-4">
+    <h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
       {title}
     </h1>
-    <p class="text-lg text-muted-foreground">
+    <p class="sm:text-lg text-muted-foreground">
       {description}
     </p>
   </header>
@@ -142,33 +109,11 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
         </div>
       </div>
     ))}
-    {tools.length === 0 && (
-      <>
-        <div class="text-center">
-          <AddToolButton
-            client:load
-            tools={toolOptions}
-            selectedSlugs={selectedSlugs}
-          />
-        </div>
-        <div class="text-center">
-          <AddToolButton
-            client:load
-            tools={toolOptions}
-            selectedSlugs={selectedSlugs}
-          />
-        </div>
-      </>
-    )}
-    {tools.length === 1 && (
+    {tools.length < 2 && Array.from({ length: 2 - tools.length }).map(() => (
       <div class="text-center">
-        <AddToolButton
-          client:load
-          tools={toolOptions}
-          selectedSlugs={selectedSlugs}
-        />
+        <AddToolButton client:load tools={toolOptions} selectedSlugs={selectedSlugs} />
       </div>
-    )}
+    ))}
   </div>
 
   <div
@@ -191,41 +136,7 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
   </div>
 
   <script>
-    const lightbox = document.querySelector('[data-lightbox]') as HTMLElement;
-    const lightboxImage = document.querySelector('[data-lightbox-image]') as HTMLImageElement;
-    const triggers = document.querySelectorAll('[data-lightbox-trigger]');
-    const backdrop = document.querySelector('[data-lightbox-backdrop]');
-
-    function openLightbox(src: string, alt: string) {
-      lightboxImage.src = src;
-      lightboxImage.alt = alt;
-      lightbox.classList.remove('hidden');
-      lightbox.classList.add('flex');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-      lightbox.classList.add('hidden');
-      lightbox.classList.remove('flex');
-      document.body.style.overflow = '';
-    }
-
-    triggers.forEach((trigger) => {
-      trigger.addEventListener('click', () => {
-        if (window.innerWidth < 768) return;
-        const src = trigger.getAttribute('data-src') || '';
-        const alt = trigger.getAttribute('data-alt') || '';
-        openLightbox(src, alt);
-      });
-    });
-
-    backdrop?.addEventListener('click', closeLightbox);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
-        closeLightbox();
-      }
-    });
+    import "@marketing/scripts/lightbox";
   </script>
 
   {hasTools && (

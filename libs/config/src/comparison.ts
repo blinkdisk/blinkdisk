@@ -104,11 +104,13 @@ export function getComparisionSitemap(baseUrl: string) {
   const paths: string[] = [];
 
   for (const tool of allTools) {
+    if (tool.slug === "blinkdisk") continue;
     paths.push(`/compare/${tool.slug}-vs-blinkdisk`);
   }
 
   for (let i = 0; i < allTools.length; i++) {
     for (let j = i + 1; j < allTools.length; j++) {
+      if (allTools[i]?.slug === "blinkdisk" || allTools[j]?.slug === "blinkdisk") continue;
       const [first, second] = [allTools[i], allTools[j]].sort((a, b) => a?.slug.localeCompare(b?.slug || "") || 0);
       paths.push(`/compare/${first?.slug}-vs-${second?.slug}-vs-blinkdisk`);
     }

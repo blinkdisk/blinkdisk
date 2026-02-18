@@ -4,7 +4,7 @@ import ComparisonRow from "./ComparisonRow.astro";
 
 type Props = {
   tools: (BackupTool | null)[];
-  category: keyof Pick<BackupTool, "general" | "features" | "pricing" | "privacy" | "platforms" | "storages">;
+  category: keyof Pick<BackupTool, "general" | "features" | "privacy" | "platforms" | "storages">;
   labels: Record<string, LabelConfig>;
 };
 
