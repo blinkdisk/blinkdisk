@@ -2,6 +2,10 @@
 import Button from "@marketing/components/Button.astro";
 import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
 import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
+import CompetitorPricingCard from "@marketing/components/compare/CompetitorPricingCard.astro";
+import BlinkDiskPricingCalculator from "@marketing/components/react/BlinkDiskPricingCalculator";
+import BackblazePricingCalculator from "@marketing/components/react/BackblazePricingCalculator";
+import CarbonitePricingCalculator from "@marketing/components/react/CarbonitePricingCalculator";
 import { ToolSelector, AddToolButton } from "@marketing/components/react/ToolSelector";
 import ExternalLinkIcon from "@lucide/astro/icons/external-link";
 import ListChecksIcon from "@lucide/astro/icons/list-checks";
@@ -14,7 +18,6 @@ import {
   allTools,
   generalLabels,
   featureLabels,
-  pricingLabels,
   privacyLabels,
   platformLabels,
   storageLabels,
@@ -38,7 +41,7 @@ const sectionIcons: Record<string, typeof ListChecksIcon> = {
   storages: HardDriveIcon,
 };
 
-const sections = [
+const tableSections = [
   {
     id: "general",
     title: "General",
@@ -52,13 +55,6 @@ const sections = [
     category: "features" as const,
     labels: featureLabels,
     description: "Core backup capabilities.",
-  },
-  {
-    id: "pricing",
-    title: "Pricing",
-    category: "pricing" as const,
-    labels: pricingLabels,
-    description: "Cost and storage plans.",
   },
   {
     id: "privacy",
@@ -81,6 +77,15 @@ const sections = [
     labels: storageLabels,
     description: "Where you can store your backups.",
   },
+];
+
+const allSections = [
+  { id: "general", title: "General" },
+  { id: "features", title: "Features" },
+  { id: "pricing", title: "Pricing" },
+  { id: "privacy", title: "Privacy & Security" },
+  { id: "platforms", title: "Platform Support" },
+  { id: "storages", title: "Storage Options" },
 ];
 
 const toolOptions = allTools.map((tool) => ({ value: tool.slug, label: tool.name }));
@@ -228,7 +233,7 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
   {hasTools && (
     <>
       <nav class="mb-10 p-4 bg-card border rounded-lg flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground justify-evenly">
-        {sections.map((section, i) => {
+        {allSections.map((section, i) => {
           const Icon = sectionIcons[section.id];
           return (
             <>
@@ -239,13 +244,66 @@ const paddedTools: (BackupTool | null)[] = tools.length === 1 ? [tools[0], null]
                 <Icon class="size-3.5" />
                 {section.title}
               </a>
-              {i < sections.length - 1 && <span class="text-border">·</span>}
+              {i < allSections.length - 1 && <span class="text-border">·</span>}
             </>
           );
         })}
       </nav>
 
-      {sections.map((section) => {
+      {tableSections.slice(0, 2).map((section) => {
+        const Icon = sectionIcons[section.id];
+        return (
+          <>
+            <SectionHeading id={section.id} title={section.title}>
+              <Icon slot="icon" class="size-6 text-muted-foreground" />
+            </SectionHeading>
+            <p class="text-muted-foreground mb-6 -mt-4">{section.description}</p>
+            <div class="bg-card border rounded-lg overflow-hidden">
+              <ComparisonTable tools={paddedTools} category={section.category} labels={section.labels} />
+            </div>
+          </>
+        );
+      })}
+
+      <SectionHeading id="pricing" title="Pricing">
+        <TagIcon slot="icon" class="size-6 text-muted-foreground" />
+      </SectionHeading>
+      <p class="text-muted-foreground mb-6 -mt-4">Simple and transparent pricing calculators.</p>
+      <div class={`grid grid-cols-1 gap-6 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+        {tools.map((tool) => (
+          <div class="flex flex-col gap-4">
+            <h4 class="text-center text-sm font-semibold">{tool.name}</h4>
+            {tool.slug === "blinkdisk" ? (
+              <BlinkDiskPricingCalculator client:load />
+            ) : tool.slug === "backblaze" ? (
+              <BackblazePricingCalculator client:load />
+            ) : tool.slug === "carbonite" ? (
+              <CarbonitePricingCalculator client:load />
+            ) : (
+              <CompetitorPricingCard tool={tool} />
+            )}
+            {tool.pricingUrl && (
+              <Button
+                href={tool.pricingUrl}
+                target={tool.pricingUrl.startsWith("http") ? "_blank" : undefined}
+                rel={tool.pricingUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                variant="outline"
+                class="w-full"
+              >
+                <ExternalLinkIcon class="size-4" />
+                View Pricing
+              </Button>
+            )}
+          </div>
+        ))}
+        {tools.length === 1 && (
+          <div class="flex items-center justify-center">
+            <p class="text-sm text-muted-foreground">Add another tool to compare pricing</p>
+          </div>
+        )}
+      </div>
+
+      {tableSections.slice(2).map((section) => {
         const Icon = sectionIcons[section.id];
         return (
           <>

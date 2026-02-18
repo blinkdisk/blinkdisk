@@ -16,6 +16,7 @@ export type BackupTool = {
   slug: string;
   name: string;
   website: string;
+  pricingUrl?: string;
   general: {
     releaseYear: CellValue;
     folderBackups: CellValue;
@@ -133,6 +134,7 @@ export const allTools: BackupTool[] = [
     slug: "blinkdisk",
     name: "BlinkDisk",
     website: "https://blinkdisk.com?utm_source=compare",
+    pricingUrl: "/cloudblink#pricing",
     general: {
       releaseYear: { text: "2025", note: "Built on Kopia, released in 2021" },
       folderBackups: { supported: true },
@@ -178,6 +180,7 @@ export const allTools: BackupTool[] = [
     slug: "backblaze",
     name: "Backblaze",
     website: "https://www.backblaze.com/cloud-backup/personal",
+    pricingUrl: "https://www.backblaze.com/cloud-backup/pricing",
     general: {
       releaseYear: { text: "2008" },
       folderBackups: { supported: true },
@@ -223,6 +226,7 @@ export const allTools: BackupTool[] = [
     slug: "carbonite",
     name: "Carbonite",
     website: "https://carbonite.com",
+    pricingUrl: "https://www.carbonite.com/personal/backup/#priceplans",
     general: {
       releaseYear: { text: "2006" },
       folderBackups: { supported: true },
