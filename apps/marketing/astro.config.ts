@@ -22,6 +22,12 @@ export default defineConfig({
     adapter: cloudflare({
         imageService: "compile",
     }),
+    redirects: {
+        "/pricing": {
+            status: 302,
+            destination: "/",
+        }
+    },
     integrations: [
         mermaid({
             theme: "base",
