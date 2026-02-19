@@ -234,4 +234,42 @@ export const allTools: BackupTool[] = [
       rclone: { supported: false },
     },
   },
+  {
+    slug: "crashplan",
+    name: "CrashPlan",
+    website: "https://crashplan.com",
+    pricingUrl: "https://smb.crashplan.com/smb-pricing/",
+    general: {
+      releaseYear: { text: "2007" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: true },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: null,
+      webdav: null,
+      rclone: null,
+    },
+  },
 ];

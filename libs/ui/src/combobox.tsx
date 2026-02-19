@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import * as React from "react";
+import { useState } from "react";
 
 import {
   Command,
@@ -40,7 +40,7 @@ export function Combobox({
   className,
   triggerClassName,
 }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const selectedOption = options.find((option) => option.value === value);
 
