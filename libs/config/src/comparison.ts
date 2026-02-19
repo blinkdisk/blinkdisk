@@ -272,4 +272,42 @@ export const allTools: BackupTool[] = [
       rclone: null,
     },
   },
+  {
+    slug: "acronis",
+    name: "Acronis",
+    website: "https://www.acronis.com/en/products/true-image/",
+    pricingUrl: "https://www.acronis.com/en/products/true-image/purchasing/",
+    general: {
+      releaseYear: { text: "2003" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: false },
+      android: { supported: true },
+      ios: { supported: true },
+    },
+    storages: {
+      managedCloud: { supported: true },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: true },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
 ];

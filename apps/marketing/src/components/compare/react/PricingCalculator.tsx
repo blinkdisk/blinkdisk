@@ -1,4 +1,5 @@
 import type { BackupTool } from "@config/comparison";
+import AcronisPricingCalculator from "./AcronisPricingCalculator";
 import BackblazePricingCalculator from "./BackblazePricingCalculator";
 import BlinkDiskPricingCalculator from "./BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "./CarbonitePricingCalculator";
@@ -9,6 +10,7 @@ type Props = {
 };
 
 const calculators: Record<string, React.ComponentType> = {
+  "acronis": AcronisPricingCalculator,
   blinkdisk: BlinkDiskPricingCalculator,
   backblaze: BackblazePricingCalculator,
   carbonite: CarbonitePricingCalculator,
