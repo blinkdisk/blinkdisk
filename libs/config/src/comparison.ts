@@ -310,4 +310,42 @@ export const allTools: BackupTool[] = [
       rclone: { supported: false },
     },
   },
+  {
+    slug: "idrive",
+    name: "IDrive",
+    website: "https://www.idrive.com",
+    pricingUrl: "https://www.idrive.com/pricing",
+    general: {
+      releaseYear: { text: "1995" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: "partial", note: "Via IDrive Mirror" },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: false },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: "partial", note: "Opt-in at signup" },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: "partial", note: "No GUI" },
+      android: { supported: true },
+      ios: { supported: true },
+    },
+    storages: {
+      managedCloud: { supported: true },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: false },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
 ];

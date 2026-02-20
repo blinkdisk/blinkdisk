@@ -4,17 +4,19 @@ import BackblazePricingCalculator from "./BackblazePricingCalculator";
 import BlinkDiskPricingCalculator from "./BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "./CarbonitePricingCalculator";
 import CrashPlanPricingCalculator from "./CrashPlanPricingCalculator";
+import IDrivePricingCalculator from "./IDrivePricingCalculator";
 
 type Props = {
   tool: BackupTool;
 };
 
 const calculators: Record<string, React.ComponentType> = {
-  "acronis": AcronisPricingCalculator,
+  acronis: AcronisPricingCalculator,
   blinkdisk: BlinkDiskPricingCalculator,
   backblaze: BackblazePricingCalculator,
   carbonite: CarbonitePricingCalculator,
   crashplan: CrashPlanPricingCalculator,
+  idrive: IDrivePricingCalculator,
 };
 
 export default function PricingCalculator({ tool }: Props) {
