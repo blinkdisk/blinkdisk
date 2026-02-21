@@ -348,4 +348,42 @@ export const allTools: BackupTool[] = [
       rclone: { supported: false },
     },
   },
+  {
+    slug: "easeus-todo-backup",
+    name: "EaseUS Todo Backup",
+    website: "https://www.easeus.com/backup-software/",
+    pricingUrl: "https://www.easeus.com/store/backup.html",
+    general: {
+      releaseYear: { text: "2009" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true, note: "AES 256-bit" },
+      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: false },
+      android: { supported: true },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: true, note: "EaseUS Cloud" },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: null,
+      rclone: { supported: false },
+    },
+  },
 ];

@@ -4,6 +4,7 @@ import BackblazePricingCalculator from "./BackblazePricingCalculator";
 import BlinkDiskPricingCalculator from "./BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "./CarbonitePricingCalculator";
 import CrashPlanPricingCalculator from "./CrashPlanPricingCalculator";
+import EaseUSTodoBackupPricingCalculator from "./EaseUSTodoBackupPricingCalculator";
 import IDrivePricingCalculator from "./IDrivePricingCalculator";
 
 type Props = {
@@ -16,6 +17,7 @@ const calculators: Record<string, React.ComponentType> = {
   backblaze: BackblazePricingCalculator,
   carbonite: CarbonitePricingCalculator,
   crashplan: CrashPlanPricingCalculator,
+  "easeus-todo-backup": EaseUSTodoBackupPricingCalculator,
   idrive: IDrivePricingCalculator,
 };
 
