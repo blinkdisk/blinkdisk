@@ -29,7 +29,7 @@ function RouteComponent() {
 
   const form = useRegisterForm({
     defaultValues: {
-      email: search.email,
+      email: search.email || "",
     },
   });
 
