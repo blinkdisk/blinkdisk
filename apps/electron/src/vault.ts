@@ -442,22 +442,30 @@ export class Vault {
 
     await vault.boot();
 
-    return (await vault.fetch({
-      method: "POST",
-      path: "/api/v1/repo/connect",
-      data: {
-        clientOptions: {
-          description: this.name,
-          username: getUserName(id),
-          hostname: getHostName(id),
+    try {
+      const response = (await vault.fetch({
+        method: "POST",
+        path: "/api/v1/repo/connect",
+        data: {
+          clientOptions: {
+            description: this.name,
+            username: getUserName(id),
+            hostname: getHostName(id),
+          },
+          storage: {
+            type: Vault.mapProviderType(provider),
+            config: Vault.mapConfigFields(provider, config),
+          },
+          password,
         },
-        storage: {
-          type: Vault.mapProviderType(provider),
-          config: Vault.mapConfigFields(provider, config),
-        },
-        password,
-      },
-    })) as { error?: string };
+      })) as { error?: string };
+
+      vault.stop();
+      return response as { error?: string };
+    } catch (e) {
+      vault.stop();
+      return e as { code?: string; error?: string };
+    }
   }
 
   async fetch({
