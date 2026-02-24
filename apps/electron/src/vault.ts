@@ -6,11 +6,7 @@ import {
   getConfigCache,
   getVaultCache,
 } from "@electron/cache";
-import {
-  decryptString,
-  decryptVaultConfig,
-  EncryptedConfig,
-} from "@electron/encryption";
+import { decryptString, EncryptedConfig } from "@electron/encryption";
 import { log } from "@electron/log";
 import { getPasswordCache } from "@electron/password";
 import { corePath, globalConfigDirectory } from "@electron/path";
@@ -46,6 +42,7 @@ export class Vault {
   token?: string;
   config?: EncryptedConfig | null;
 
+  intervals: NodeJS.Timeout[] = [];
   process?: ChildProcessWithoutNullStreams;
   serverPassword?: string;
   serverControlPassword?: string;
@@ -297,13 +294,17 @@ export class Vault {
   }
 
   static mapProviderType(providerType: ProviderType) {
-    const provider = providers.find((p) => p.type === providerType || p.alias?.includes(providerType));
+    const provider = providers.find(
+      (p) => p.type === providerType || p.alias?.includes(providerType),
+    );
     if (!provider) throw new Error(`Provider ${providerType} not found`);
     return provider.coreType;
   }
 
   static mapConfigFields(providerType: ProviderType, config: ProviderConfig) {
-    const provider = providers.find((p) => p.type === providerType || p.alias?.includes(providerType));
+    const provider = providers.find(
+      (p) => p.type === providerType || p.alias?.includes(providerType),
+    );
     if (!provider) throw new Error(`Provider ${providerType} not found`);
 
     const mapped: Record<string, unknown> = {};
@@ -329,17 +330,38 @@ export class Vault {
     this.status = "STARTING";
 
     await this.boot();
+    await this.startPoll();
+  }
 
-    const status = (await this.fetch({
-      method: "GET",
-      path: "/api/v1/repo/status",
-    })) as {
-      connected?: boolean;
+  async startPoll() {
+    const checkRunning = async () => {
+      const status = (await this.fetch({
+        method: "GET",
+        path: "/api/v1/repo/status",
+      })) as {
+        connected?: boolean;
+      };
+
+      if (status.connected) {
+        this.status = "RUNNING";
+        return { stop: true };
+      }
+
+      return { stop: false };
     };
 
-    if (!status.connected) await this.connect();
+    const { stop } = await checkRunning();
+    if (stop) return;
 
-    this.status = "RUNNING";
+    const interval = setInterval(async () => {
+      const { stop } = await checkRunning();
+      if (stop) {
+        clearInterval(interval);
+        return this.intervals.filter((i) => i !== interval);
+      }
+    }, 500);
+
+    this.intervals.push(interval);
   }
 
   boot() {
@@ -398,48 +420,40 @@ export class Vault {
     });
   }
 
-  async connect() {
-    const password = getPasswordCache({ vaultId: this.id! });
+  static async connect({
+    id,
+    name,
+    config,
+    password,
+    provider,
+  }: {
+    id: string;
+    name: string;
+    provider: ProviderType;
+    config: ProviderConfig;
+    password: string;
+  }) {
+    const vault = new Vault({
+      id,
+      name,
+      status: "READY",
+      version: LATEST_VAULT_VERSION,
+    });
 
-    if (!password) {
-      this.status = "PASSWORD_MISSING";
-      throw new Error("PASSWORD_MISSING");
-    }
+    await vault.boot();
 
-    let decryptedConfig: object | null = null;
-    try {
-      decryptedConfig = this.config
-        ? await decryptVaultConfig({
-            password,
-            encrypted: this.config,
-          })
-        : null;
-    } catch {
-      this.invalidPassword();
-      throw new Error("INVALID_PASSWORD");
-    }
-
-    return (await this.fetch({
+    return (await vault.fetch({
       method: "POST",
       path: "/api/v1/repo/connect",
       data: {
         clientOptions: {
           description: this.name,
-          username: getUserName(this.id),
-          hostname: getHostName(this.id),
+          username: getUserName(id),
+          hostname: getHostName(id),
         },
         storage: {
-          type: Vault.mapProviderType(this.provider!),
-          config:
-            this.provider === "CLOUDBLINK"
-              ? {
-                  url: process.env.CLOUD_URL,
-                  token: this.token,
-                  version: this.version,
-                }
-              : decryptedConfig
-                ? Vault.mapConfigFields(this.provider!, decryptedConfig)
-                : {},
+          type: Vault.mapProviderType(provider),
+          config: Vault.mapConfigFields(provider, config),
         },
         password,
       },
@@ -656,9 +670,8 @@ export class Vault {
   }
 
   stop() {
-    if (!this.process) return;
-
-    this.process?.kill("SIGTERM");
+    if (this.process) this.process?.kill("SIGTERM");
+    this.intervals.forEach(clearInterval);
 
     this.process = undefined;
     this.serverPassword = undefined;

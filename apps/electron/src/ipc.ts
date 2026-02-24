@@ -52,6 +52,7 @@ ipcMain.handle("dialog.save", (_, { defaultFileName, ...options }) =>
 ipcMain.handle("vault.cache", (_, payload) => setVaultCache(payload));
 ipcMain.handle("vault.validate", (_, config) => Vault.validate(config));
 ipcMain.handle("vault.create", (_, config) => Vault.create(config));
+ipcMain.handle("vault.connect", (_, config) => Vault.connect(config));
 ipcMain.handle("vault.status", (_, payload) => getVault(payload)?.status);
 ipcMain.handle("vault.restore.single", (_, payload) => restoreSingle(payload));
 ipcMain.handle("vault.restore.multiple", (_, payload) =>

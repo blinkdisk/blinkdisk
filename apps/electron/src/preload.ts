@@ -118,6 +118,10 @@ const api = {
       ipcRenderer.invoke("vault.create", payload) as ReturnType<
         typeof Vault.create
       >,
+    connect: (payload: Parameters<typeof Vault.connect>[0]) =>
+      ipcRenderer.invoke("vault.connect", payload) as Promise<
+        Awaited<ReturnType<typeof Vault.connect>>
+      >,
     cache: (payload: Parameters<typeof setVaultCache>[0]) =>
       ipcRenderer.invoke("vault.cache", payload) as Promise<
         ReturnType<typeof setVaultCache>
