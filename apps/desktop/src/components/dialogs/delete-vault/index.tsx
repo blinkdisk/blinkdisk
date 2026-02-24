@@ -13,8 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@ui/dialog";
+import { Input } from "@ui/input";
+import { LabelContainer } from "@ui/label";
 import { InfoIcon } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 export function DeleteVaultDialog() {
   const navigate = useNavigate();
@@ -24,6 +26,18 @@ export function DeleteVaultDialog() {
   const { isOpen, setIsOpen, options } = useDeleteVaultDialog();
 
   const { data: vault } = useVault(options?.vaultId);
+
+  const [confirmName, setConfirmName] = useState("");
+  const [showError, setShowError] = useState(false);
+
+  const isConfirmed = vault
+    ? confirmName.replace(/\s/g, "").toLowerCase() === vault.name.replace(/\s/g, "").toLowerCase()
+    : false;
+
+  const reset = useCallback(async () => {
+    setConfirmName("");
+    setShowError(false);
+  }, []);
 
   const onSuccess = useCallback(async () => {
     setIsOpen(false);
@@ -39,7 +53,7 @@ export function DeleteVaultDialog() {
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
         <DialogContent className="w-105">
           <DialogHeader>
             <DialogTitle>{t("title")}</DialogTitle>
@@ -54,15 +68,47 @@ export function DeleteVaultDialog() {
               </AlertDescription>
             </Alert>
           ) : null}
+          {vault && (
+            <LabelContainer
+              containerClassName="mt-4"
+              name="confirm"
+              title={t("confirm.label", { vaultName: vault.name })}
+              errors={
+                showError
+                  ? [
+                      {
+                        message: confirmName.length === 0
+                          ? t("confirm.error.empty", { vaultName: vault.name })
+                          : t("confirm.error.mismatch"),
+                        translated: true,
+                      },
+                    ]
+                  : undefined
+              }
+            >
+              <Input
+                id="confirm"
+                type="text"
+                value={confirmName}
+                onChange={(e) => {
+                  setShowError(false);
+                  setConfirmName(e.target.value)
+                }}
+                placeholder={t("confirm.placeholder")}
+              />
+            </LabelContainer>
+          )}
           <DialogFooter className="mt-6">
             <Button onClick={() => setIsOpen(false)} variant="outline">
               {t("cancel")}
             </Button>
             <Button
               loading={isDeletePending}
-              onClick={() =>
-                options && mutateDelete({ vaultId: options.vaultId })
-              }
+              onClick={() => {
+                if (!isConfirmed)
+                  return setShowError(true);
+                if (options) mutateDelete({ vaultId: options.vaultId });
+              }}
               variant="destructive"
             >
               {t("continue")}

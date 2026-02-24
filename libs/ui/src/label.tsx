@@ -39,6 +39,7 @@ export type LabelContainerProps = {
     code?: string;
     path?: string;
     message?: string;
+    translated?: boolean;
   }[];
   end?: React.ReactNode;
   optional?: boolean;
@@ -104,19 +105,21 @@ const LabelContainer = React.forwardRef<
         </div>
         {errors && errors.length > 0 ? (
           <div className="flex flex-col gap-y-2">
-            {errors.flat().map((error, index) => (
+            {errors.flat().map(({ translated, ...error }, index) => (
               <div key={index} className="text-destructive text-xs">
                 <TriangleAlertIcon className="mb-0.25 mr-1.5 inline-block size-3.5" />
-                {t(
-                  `validation:${error.type || error.validation || error.message}_${error.code}`,
-                  {
-                    ...error,
-                    field:
-                      title && typeof title === "string"
-                        ? title
-                        : name || error.path || "",
-                  },
-                )}
+                {translated
+                  ? error.message
+                  : t(
+                      `validation:${error.type || error.validation || error.message}_${error.code}`,
+                      {
+                        ...error,
+                        field:
+                          title && typeof title === "string"
+                            ? title
+                            : name || error.path || "",
+                      },
+                    )}
               </div>
             ))}
           </div>
