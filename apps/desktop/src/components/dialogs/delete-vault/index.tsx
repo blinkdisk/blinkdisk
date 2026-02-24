@@ -16,7 +16,7 @@ import {
 import { Input } from "@ui/input";
 import { LabelContainer } from "@ui/label";
 import { InfoIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export function DeleteVaultDialog() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export function DeleteVaultDialog() {
   const reset = useCallback(async () => {
     setConfirmName("");
     setShowError(false);
-  }, [navigate, setIsOpen]);
+  }, []);
 
   const onSuccess = useCallback(async () => {
     setIsOpen(false);
