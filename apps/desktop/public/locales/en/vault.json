@@ -374,6 +374,14 @@
   "deleteDialog": {
     "title": "Delete vault",
     "description": "Are you sure you want to delete this vault? This action cannot be undone.",
+    "confirm": {
+      "label": "To confirm, type \"{{vaultName}}\" below:",
+      "placeholder": "Enter vault name",
+      "error": {
+        "empty": "Please type \"{{vaultName}}\" to confirm deletion.",
+        "mismatch": "The vault name you entered does not match."
+      }
+    },
     "storageAlert": {
       "title": "Backup files won't be deleted",
       "description": "Your vault will be removed from BlinkDisk, but your backup files will be kept in your custom storage."
