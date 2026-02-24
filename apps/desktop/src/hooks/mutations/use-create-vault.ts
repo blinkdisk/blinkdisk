@@ -35,6 +35,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       if (validation.code === "INVALID_PASSWORD")
         throw { code: "INVALID_PASSWORD" };
 
+      const initialised = !!validation.uniqueID;
+
       const encryptedConfig = await window.electron.vault.config.encrypt({
         password: values.password,
         config: values.config,
@@ -57,7 +59,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       };
 
       let created = false;
-      if (!validation.uniqueID) {
+      if (!initialised) {
         let token: string | null | undefined = null;
         if (values.provider === "CLOUDBLINK") {
           // For CloudBlink, we need to create the vault in the API
@@ -80,6 +82,26 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
             },
             userPolicy: convertPolicyToCore(defaultVaultPolicy),
             globalPolicy: {},
+          }),
+        );
+
+        if (error || res.error) {
+          // Clean up vault if it was created
+          if (created) await tryCatch(trpc.vault.delete.mutate({ vaultId }));
+
+          throw error || new Error(res.error?.toString());
+        }
+      } else {
+        // Vault already exists, connect to it.
+        //
+        // This state should not be possible for CloudBlink vaults.
+        const [res, error] = await tryCatch(
+          window.electron.vault.connect({
+            id: vaultId,
+            name: values.name,
+            provider: values.provider,
+            config: values.config,
+            password: values.password,
           }),
         );
 
