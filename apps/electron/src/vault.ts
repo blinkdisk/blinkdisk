@@ -448,7 +448,7 @@ export class Vault {
         path: "/api/v1/repo/connect",
         data: {
           clientOptions: {
-            description: this.name,
+            description: name,
             username: getUserName(id),
             hostname: getHostName(id),
           },
