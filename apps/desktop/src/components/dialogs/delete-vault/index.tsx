@@ -31,7 +31,8 @@ export function DeleteVaultDialog() {
   const [showError, setShowError] = useState(false);
 
   const isConfirmed = vault
-    ? confirmName.replace(/\s/g, "").toLowerCase() === vault.name.replace(/\s/g, "").toLowerCase()
+    ? confirmName.replace(/\s/g, "").toLowerCase() ===
+      vault.name.replace(/\s/g, "").toLowerCase()
     : false;
 
   const reset = useCallback(async () => {
@@ -77,9 +78,12 @@ export function DeleteVaultDialog() {
                 showError
                   ? [
                       {
-                        message: confirmName.length === 0
-                          ? t("confirm.error.empty", { vaultName: vault.name })
-                          : t("confirm.error.mismatch"),
+                        message:
+                          confirmName.length === 0
+                            ? t("confirm.error.empty", {
+                                vaultName: vault.name,
+                              })
+                            : t("confirm.error.mismatch"),
                         translated: true,
                       },
                     ]
@@ -92,7 +96,7 @@ export function DeleteVaultDialog() {
                 value={confirmName}
                 onChange={(e) => {
                   setShowError(false);
-                  setConfirmName(e.target.value)
+                  setConfirmName(e.target.value);
                 }}
                 placeholder={t("confirm.placeholder")}
               />
@@ -105,8 +109,7 @@ export function DeleteVaultDialog() {
             <Button
               loading={isDeletePending}
               onClick={() => {
-                if (!isConfirmed)
-                  return setShowError(true);
+                if (!isConfirmed) return setShowError(true);
                 if (options) mutateDelete({ vaultId: options.vaultId });
               }}
               variant="destructive"

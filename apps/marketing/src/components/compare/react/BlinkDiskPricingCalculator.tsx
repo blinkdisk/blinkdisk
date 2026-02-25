@@ -38,29 +38,31 @@ export default function BlinkDiskPricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
-        <p className="text-sm font-medium text-primary">Custom Storage</p>
+      <div className="border-primary/30 bg-primary/5 rounded-xl border-2 border-dashed p-4">
+        <p className="text-primary text-sm font-medium">Custom Storage</p>
         <p className="mt-1 text-3xl font-bold">100% Free</p>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-1 text-xs">
           Use your own S3, Backblaze B2, SFTP, etc.
         </p>
       </div>
 
-      <div className="w-full flex items-center gap-4">
-        <hr className="border-t w-full" />
-        <p className="text-sm text-muted-foreground">or</p>
-        <hr className="border-t w-full" />
+      <div className="flex w-full items-center gap-4">
+        <hr className="w-full border-t" />
+        <p className="text-muted-foreground text-sm">or</p>
+        <hr className="w-full border-t" />
       </div>
 
-      <div className="rounded-xl border bg-card p-4">
+      <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">CloudBlink</p>
-        <p className="text-sm text-muted-foreground">Our managed cloud storage service</p>
+        <p className="text-muted-foreground text-sm">
+          Our managed cloud storage service
+        </p>
 
         <Select
           value={String(planIndex)}
           onValueChange={(value) => setPlanIndex(Number(value))}
         >
-          <SelectTrigger className="mt-5 bg-secondary text-sm">
+          <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="max-h-48">
@@ -85,7 +87,7 @@ export default function BlinkDiskPricingCalculator() {
               <TabsTrigger value="MONTHLY">Monthly</TabsTrigger>
               <TabsTrigger value="YEARLY">
                 Yearly
-                <span className="ml-1 rounded bg-primary/10 px-1 py-0.5 text-[10px] text-primary">
+                <span className="bg-primary/10 text-primary ml-1 rounded px-1 py-0.5 text-[10px]">
                   -25%
                 </span>
               </TabsTrigger>
@@ -93,7 +95,7 @@ export default function BlinkDiskPricingCalculator() {
           </Tabs>
         )}
 
-        <div className="flex items-baseline gap-1 mt-5">
+        <div className="mt-5 flex items-baseline gap-1">
           <span className="text-3xl font-bold">
             {displayAmount.toLocaleString(undefined, {
               style: "currency",

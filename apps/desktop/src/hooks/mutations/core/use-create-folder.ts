@@ -42,12 +42,7 @@ export function useCreateFolder({
       if (!vaultId || !profileFilter)
         throw new CustomError("MISSING_REQUIRED_VALUE");
 
-      if (
-        !values.force &&
-        space &&
-        vault &&
-        vault.provider === "CLOUDBLINK"
-      ) {
+      if (!values.force && space && vault && vault.provider === "CLOUDBLINK") {
         let size = values.size;
 
         if (size === null) {

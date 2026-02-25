@@ -8,13 +8,21 @@ export const prerender = false;
 const slug = Astro.params.slug;
 if (!slug) return Astro.redirect("/404");
 
-const toolsOrUndefined = slug.split("-vs-").map(slug => allTools.find(t => t.slug === slug));
+const toolsOrUndefined = slug
+  .split("-vs-")
+  .map((slug) => allTools.find((t) => t.slug === slug));
 
-if(toolsOrUndefined.some((tool) => tool === undefined) || toolsOrUndefined.length > 3) return Astro.redirect("/404")
+if (
+  toolsOrUndefined.some((tool) => tool === undefined) ||
+  toolsOrUndefined.length > 3
+)
+  return Astro.redirect("/404");
 
-const tools = toolsOrUndefined.filter((t): t is NonNullable<typeof t> => t !== undefined);
+const tools = toolsOrUndefined.filter(
+  (t): t is NonNullable<typeof t> => t !== undefined,
+);
 
-const title = `${tools.map(t => t.name).join(" vs ")}: A Detailed Comparison`;
+const title = `${tools.map((t) => t.name).join(" vs ")}: A Detailed Comparison`;
 const description = `Compare ${tools.length === 1 ? `${tools[0].name} and other backup software` : tools.length === 2 ? `${tools[0].name} and ${tools[1].name}` : `${tools[0].name}, ${tools[1].name} and ${tools[2].name}`} side by side. See features, pricing, privacy, platforms, storage options, and performance compared.`;
 
 const structuredData = {
@@ -35,6 +43,14 @@ const structuredData = {
 };
 ---
 
-<DefaultLayout title={title} description={description} structuredData={structuredData}>
-  <ComparisonPageContent tools={tools} title={title} description={description} />
+<DefaultLayout
+  title={title}
+  description={description}
+  structuredData={structuredData}
+>
+  <ComparisonPageContent
+    tools={tools}
+    title={title}
+    description={description}
+  />
 </DefaultLayout>

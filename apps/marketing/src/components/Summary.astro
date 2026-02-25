@@ -8,16 +8,19 @@ const { class: className } = Astro.props;
 
 <aside
   class:list={[
-    "not-prose relative mb-8 overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5",
+    "not-prose border-primary/20 from-primary/5 to-accent/5 relative mb-8 overflow-hidden rounded-xl border bg-gradient-to-br",
     className,
   ]}
 >
-  <div class="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-primary to-accent"></div>
+  <div
+    class="from-primary to-accent absolute left-0 top-0 h-full w-1 bg-gradient-to-b"
+  >
+  </div>
   <div class="px-6 pb-5 pt-3">
-    <span class="text-xs font-bold uppercase tracking-widest text-primary">
+    <span class="text-primary text-xs font-bold uppercase tracking-widest">
       Summary
     </span>
-    <div class="text-foreground/80 text-[0.95rem] leading-relaxed mt-2">
+    <div class="text-foreground/80 mt-2 text-[0.95rem] leading-relaxed">
       <slot />
     </div>
   </div>

@@ -33,7 +33,7 @@ export default function ProPlanCard() {
   };
 
   return (
-    <div className="bg-card relative flex flex-col rounded-2xl border-2 border-primary/50 p-8">
+    <div className="bg-card border-primary/50 relative flex flex-col rounded-2xl border-2 p-8">
       <div className="bg-primary text-primary-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-medium">
         Most Popular
       </div>

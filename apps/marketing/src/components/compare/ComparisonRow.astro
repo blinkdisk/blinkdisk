@@ -15,7 +15,8 @@ type Props = {
   values: CellValue[];
 };
 
-const { label, labelLink, labelDescription, labelIcon, srText, values } = Astro.props;
+const { label, labelLink, labelDescription, labelIcon, srText, values } =
+  Astro.props;
 
 const iconComponents = {
   windows: WindowsIcon,
@@ -24,28 +25,35 @@ const iconComponents = {
   android: AndroidIcon,
 };
 
-const IconComponent = labelIcon ? iconComponents[labelIcon as keyof typeof iconComponents] : null;
+const IconComponent = labelIcon
+  ? iconComponents[labelIcon as keyof typeof iconComponents]
+  : null;
 ---
 
-<tr class="border-b border-border/50 last:border-b-0">
-  <td class="px-4 py-3 text-sm text-foreground">
-    <div class="font-medium flex items-center gap-2">
-      {IconComponent && (
-        <IconComponent class="size-4 text-muted-foreground" />
-      )}
-      {labelLink ? (
-        <a href={labelLink} class="underline underline-offset-2 decoration-foreground/30 hover:text-primary transition-colors">
-          {label}
-        </a>
-      ) : (
-        label
-      )}
+<tr class="border-border/50 border-b last:border-b-0">
+  <td class="text-foreground px-4 py-3 text-sm">
+    <div class="flex items-center gap-2 font-medium">
+      {IconComponent && <IconComponent class="text-muted-foreground size-4" />}
+      {
+        labelLink ? (
+          <a
+            href={labelLink}
+            class="decoration-foreground/30 hover:text-primary underline underline-offset-2 transition-colors"
+          >
+            {label}
+          </a>
+        ) : (
+          label
+        )
+      }
     </div>
-    {labelDescription && (
-      <div class="text-xs text-muted-foreground mt-0.5">{labelDescription}</div>
-    )}
+    {
+      labelDescription && (
+        <div class="text-muted-foreground mt-0.5 text-xs">
+          {labelDescription}
+        </div>
+      )
+    }
   </td>
-  {values.map((value) => (
-    <ComparisonCell value={value} srText={srText} />
-  ))}
+  {values.map((value) => <ComparisonCell value={value} srText={srText} />)}
 </tr>

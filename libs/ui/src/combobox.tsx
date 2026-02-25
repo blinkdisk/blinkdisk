@@ -52,7 +52,7 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "flex h-11 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "border-input bg-background ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex h-11 w-full items-center justify-between whitespace-nowrap rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
             triggerClassName,
           )}
         >
@@ -60,7 +60,9 @@ export function Combobox({
           <ChevronsUpDownIcon className="ml-2 size-4 shrink-0 opacity-50" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className={cn("w-[var(--radix-popover-trigger-width)] p-0", className)}>
+      <PopoverContent
+        className={cn("w-[var(--radix-popover-trigger-width)] p-0", className)}
+      >
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
           <CommandList>

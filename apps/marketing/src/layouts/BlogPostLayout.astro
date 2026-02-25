@@ -27,7 +27,17 @@ type Props = {
   readingTime: number;
 };
 
-const { title, description, pubDate, author, image, headings, ctaHeadline, slug, readingTime } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  author,
+  image,
+  headings,
+  ctaHeadline,
+  slug,
+  readingTime,
+} = Astro.props;
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 const ogImage = `/blog/og/${slug}.png`;
 
@@ -82,16 +92,14 @@ const blogPostingSchema = {
         </div>
       </div>
       <div class="overflow-hidden rounded-xl">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          class="w-full"
-        />
+        <Image src={image.src} alt={image.alt} class="w-full" />
       </div>
     </header>
 
     <div class="flex flex-col gap-8 lg:flex-row">
-      <div class="prose dark:prose-invert prose-img:rounded-xl prose-img:shadow min-w-0 max-w-none flex-1">
+      <div
+        class="prose dark:prose-invert prose-img:rounded-xl prose-img:shadow min-w-0 max-w-none flex-1"
+      >
         <slot />
       </div>
       <aside class="hidden w-56 shrink-0 lg:block">

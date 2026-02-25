@@ -66,7 +66,7 @@ export default function IDrivePricingCalculator() {
   const price =
     effectivePeriod === "monthly" && storage?.monthly
       ? storage.monthly
-      : storage?.yearly ?? 0;
+      : (storage?.yearly ?? 0);
 
   const handlePlanChange = (value: PlanType) => {
     setPlanType(value);
@@ -75,12 +75,12 @@ export default function IDrivePricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border bg-card p-4">
+      <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">{plan.name}</p>
-        <p className="text-sm text-muted-foreground">{plan.description}</p>
+        <p className="text-muted-foreground text-sm">{plan.description}</p>
 
         <Select value={planType} onValueChange={handlePlanChange}>
-          <SelectTrigger className="mt-5 bg-secondary text-sm">
+          <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -95,7 +95,7 @@ export default function IDrivePricingCalculator() {
             value={storageIndex.toString()}
             onValueChange={(value) => setStorageIndex(parseInt(value))}
           >
-            <SelectTrigger className="mt-3 bg-secondary text-sm">
+            <SelectTrigger className="bg-secondary mt-3 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

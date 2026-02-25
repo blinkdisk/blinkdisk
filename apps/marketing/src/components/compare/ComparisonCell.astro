@@ -11,7 +11,11 @@ type Props = {
 
 const { value, srText } = Astro.props;
 
-const defaultSrText = { true: "Supported", false: "Not supported", partial: "Partially supported" };
+const defaultSrText = {
+  true: "Supported",
+  false: "Not supported",
+  partial: "Partially supported",
+};
 const finalSrText = srText ?? defaultSrText;
 
 function isSupported(v: CellValue): v is SupportedValue {
@@ -24,36 +28,38 @@ function isText(v: CellValue): v is TextValue {
 ---
 
 <td class="px-4 py-3 text-center">
-  {value === null ? (
-    <span class="text-muted-foreground text-sm">No data</span>
-  ) : isSupported(value) ? (
-    <div class="flex flex-col items-center gap-1">
-      {value.supported === true ? (
-        <span class="inline-flex items-center justify-center size-6 rounded-full bg-green-500/10 text-green-600 dark:text-green-400">
-          <CheckIcon class="size-4" />
-          <span class="sr-only">{finalSrText.true}</span>
-        </span>
-      ) : value.supported === false ? (
-        <span class="inline-flex items-center justify-center size-6 rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
-          <XIcon class="size-4" />
-          <span class="sr-only">{finalSrText.false}</span>
-        </span>
-      ) : (
-        <span class="inline-flex items-center justify-center size-6 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
-          <MinusIcon class="size-4" />
-          <span class="sr-only">{finalSrText.partial}</span>
-        </span>
-      )}
-      {value.note && (
-        <span class="text-xs text-muted-foreground">{value.note}</span>
-      )}
-    </div>
-  ) : isText(value) ? (
-    <div class="flex flex-col items-center gap-1">
-      <span class="text-sm font-medium text-foreground">{value.text}</span>
-      {value.note && (
-        <span class="text-xs text-muted-foreground">{value.note}</span>
-      )}
-    </div>
-  ) : null}
+  {
+    value === null ? (
+      <span class="text-muted-foreground text-sm">No data</span>
+    ) : isSupported(value) ? (
+      <div class="flex flex-col items-center gap-1">
+        {value.supported === true ? (
+          <span class="inline-flex size-6 items-center justify-center rounded-full bg-green-500/10 text-green-600 dark:text-green-400">
+            <CheckIcon class="size-4" />
+            <span class="sr-only">{finalSrText.true}</span>
+          </span>
+        ) : value.supported === false ? (
+          <span class="inline-flex size-6 items-center justify-center rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
+            <XIcon class="size-4" />
+            <span class="sr-only">{finalSrText.false}</span>
+          </span>
+        ) : (
+          <span class="inline-flex size-6 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
+            <MinusIcon class="size-4" />
+            <span class="sr-only">{finalSrText.partial}</span>
+          </span>
+        )}
+        {value.note && (
+          <span class="text-muted-foreground text-xs">{value.note}</span>
+        )}
+      </div>
+    ) : isText(value) ? (
+      <div class="flex flex-col items-center gap-1">
+        <span class="text-foreground text-sm font-medium">{value.text}</span>
+        {value.note && (
+          <span class="text-muted-foreground text-xs">{value.note}</span>
+        )}
+      </div>
+    ) : null
+  }
 </td>

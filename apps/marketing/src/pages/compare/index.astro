@@ -3,7 +3,8 @@ import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import ComparisonPageContent from "@marketing/components/compare/ComparisonPageContent.astro";
 
 const title = "Backup Software Comparison: Find the Best Tool for Your Needs";
-const description = "Compare backup software side-by-side. Review features, pricing, security, privacy, platforms, and ease of use to find the perfect backup solution for your data.";
+const description =
+  "Compare backup software side-by-side. Review features, pricing, security, privacy, platforms, and ease of use to find the perfect backup solution for your data.";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -13,6 +14,10 @@ const structuredData = {
 };
 ---
 
-<DefaultLayout title={title} description={description} structuredData={structuredData}>
+<DefaultLayout
+  title={title}
+  description={description}
+  structuredData={structuredData}
+>
   <ComparisonPageContent tools={[]} title={title} description={description} />
 </DefaultLayout>

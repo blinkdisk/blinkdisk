@@ -13,9 +13,7 @@ const { faqs } = Astro.props;
     faqs.map((faq) => (
       <details class="group border-b last:border-b-0">
         <summary class="text-foreground flex w-full cursor-pointer list-none items-center justify-between py-5 text-left">
-          <p class="text-sm font-semibold sm:text-base">
-            {faq.question}
-          </p>
+          <p class="text-sm font-semibold sm:text-base">{faq.question}</p>
           <ChevronDownIcon class="text-muted-foreground ml-6 size-5 shrink-0 transition-transform duration-200 group-open:rotate-180" />
         </summary>
         <div class="faq-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]">
@@ -37,23 +35,27 @@ const { faqs } = Astro.props;
 </style>
 
 <script>
-  document.querySelectorAll('details').forEach((details) => {
-    const summary = details.querySelector('summary');
-    const content = details.querySelector('.faq-content');
+  document.querySelectorAll("details").forEach((details) => {
+    const summary = details.querySelector("summary");
+    const content = details.querySelector(".faq-content");
 
-    summary?.addEventListener('click', (e) => {
+    summary?.addEventListener("click", (e) => {
       if (details.open) {
         e.preventDefault();
-        content?.addEventListener('transitionend', () => {
-          details.open = false;
-        }, { once: true });
-        details.classList.add('closing');
+        content?.addEventListener(
+          "transitionend",
+          () => {
+            details.open = false;
+          },
+          { once: true },
+        );
+        details.classList.add("closing");
       }
     });
 
-    details.addEventListener('toggle', () => {
+    details.addEventListener("toggle", () => {
       if (details.open) {
-        details.classList.remove('closing');
+        details.classList.remove("closing");
       }
     });
   });

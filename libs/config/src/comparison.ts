@@ -10,7 +10,7 @@ export type TextValue = {
   source?: string;
 };
 
-export type CellValue = SupportedValue | TextValue | null ;
+export type CellValue = SupportedValue | TextValue | null;
 
 export type BackupTool = {
   slug: string;
@@ -66,23 +66,51 @@ export type LabelConfig = {
 export const generalLabels: Record<keyof BackupTool["general"], LabelConfig> = {
   folderBackups: { text: "File/Folder Backups" },
   imageBackups: { text: "Disk Image Backups" },
-  openSource: { text: "Open Source", srText: { true: "Yes", false: "No", partial: "Partially" } },
+  openSource: {
+    text: "Open Source",
+    srText: { true: "Yes", false: "No", partial: "Partially" },
+  },
   releaseYear: { text: "Release Year" },
 };
 
-export const featureLabels: Record<keyof BackupTool["features"], LabelConfig> = {
-  deduplication: { text: "Deduplication", link: "/glossary/what-is-deduplication-in-backups", description: "Avoids storing duplicate data" },
-  compression: { text: "Compression", link: "/glossary/what-is-compression-in-backups", description: "Reduces backup size" },
-  versioning: { text: "Version History", description: "Access previous file versions" },
-  scheduling: { text: "Scheduled Backups", description: "Automatic backups on a schedule" },
-};
+export const featureLabels: Record<keyof BackupTool["features"], LabelConfig> =
+  {
+    deduplication: {
+      text: "Deduplication",
+      link: "/glossary/what-is-deduplication-in-backups",
+      description: "Avoids storing duplicate data",
+    },
+    compression: {
+      text: "Compression",
+      link: "/glossary/what-is-compression-in-backups",
+      description: "Reduces backup size",
+    },
+    versioning: {
+      text: "Version History",
+      description: "Access previous file versions",
+    },
+    scheduling: {
+      text: "Scheduled Backups",
+      description: "Automatic backups on a schedule",
+    },
+  };
 
 export const privacyLabels: Record<keyof BackupTool["privacy"], LabelConfig> = {
-  endToEndEncryption: { text: "End-to-End Encryption", link: "/glossary/what-is-end-to-end-encryption-in-backups", description: "Encrypted on your device" },
-  zeroKnowledge: { text: "Zero-Knowledge", description: "Provider doesn't hold the keys" },
+  endToEndEncryption: {
+    text: "End-to-End Encryption",
+    link: "/glossary/what-is-end-to-end-encryption-in-backups",
+    description: "Encrypted on your device",
+  },
+  zeroKnowledge: {
+    text: "Zero-Knowledge",
+    description: "Provider doesn't hold the keys",
+  },
 };
 
-export const platformLabels: Record<keyof BackupTool["platforms"], LabelConfig> = {
+export const platformLabels: Record<
+  keyof BackupTool["platforms"],
+  LabelConfig
+> = {
   windows: { text: "Windows", icon: "windows" },
   macos: { text: "macOS", icon: "apple" },
   linux: { text: "Linux", icon: "linux" },
@@ -90,15 +118,33 @@ export const platformLabels: Record<keyof BackupTool["platforms"], LabelConfig> 
   ios: { text: "iOS", icon: "apple" },
 };
 
-export const storageLabels: Record<keyof BackupTool["storages"], LabelConfig> = {
-  managedCloud: { text: "Managed Cloud", link: "/glossary/what-is-cloud-backup", description: "Provider's own cloud storage" },
-  localFilesystem: { text: "Local Filesystem", link: "/glossary/what-is-a-local-backup", description: "External drives, USB, etc." },
-  nas: { text: "Network Attached Storage", description: "Backup to NAS devices" },
-  s3Compatible: { text: "S3-Compatible Storage", description: "AWS S3, Backblaze B2, etc." },
-  sftp: { text: "SFTP", description: "Secure file transfer protocol" },
-  webdav: { text: "WebDAV", description: "Web-based file access" },
-  rclone: { text: "Rclone Remotes", description: "50+ cloud providers via Rclone" },
-};
+export const storageLabels: Record<keyof BackupTool["storages"], LabelConfig> =
+  {
+    managedCloud: {
+      text: "Managed Cloud",
+      link: "/glossary/what-is-cloud-backup",
+      description: "Provider's own cloud storage",
+    },
+    localFilesystem: {
+      text: "Local Filesystem",
+      link: "/glossary/what-is-a-local-backup",
+      description: "External drives, USB, etc.",
+    },
+    nas: {
+      text: "Network Attached Storage",
+      description: "Backup to NAS devices",
+    },
+    s3Compatible: {
+      text: "S3-Compatible Storage",
+      description: "AWS S3, Backblaze B2, etc.",
+    },
+    sftp: { text: "SFTP", description: "Secure file transfer protocol" },
+    webdav: { text: "WebDAV", description: "Web-based file access" },
+    rclone: {
+      text: "Rclone Remotes",
+      description: "50+ cloud providers via Rclone",
+    },
+  };
 
 export function getComparisonSitemap(baseUrl: string) {
   const paths: string[] = [];
@@ -110,8 +156,14 @@ export function getComparisonSitemap(baseUrl: string) {
 
   for (let i = 0; i < allTools.length; i++) {
     for (let j = i + 1; j < allTools.length; j++) {
-      if (allTools[i]?.slug === "blinkdisk" || allTools[j]?.slug === "blinkdisk") continue;
-      const [first, second] = [allTools[i], allTools[j]].sort((a, b) => a?.slug.localeCompare(b?.slug || "") || 0);
+      if (
+        allTools[i]?.slug === "blinkdisk" ||
+        allTools[j]?.slug === "blinkdisk"
+      )
+        continue;
+      const [first, second] = [allTools[i], allTools[j]].sort(
+        (a, b) => a?.slug.localeCompare(b?.slug || "") || 0,
+      );
       paths.push(`/compare/${first?.slug}-vs-${second?.slug}-vs-blinkdisk`);
     }
   }
@@ -172,7 +224,10 @@ export const allTools: BackupTool[] = [
     features: {
       deduplication: { supported: true },
       compression: null,
-      versioning: { supported: true, note: "30 days or 1 year | Forever costs $6/TB" },
+      versioning: {
+        supported: true,
+        note: "30 days or 1 year | Forever costs $6/TB",
+      },
       scheduling: { supported: true },
     },
     privacy: {

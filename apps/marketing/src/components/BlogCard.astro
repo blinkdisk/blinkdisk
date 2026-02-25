@@ -23,11 +23,7 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 });
 ---
 
-<a
-  href={`/blog/${slug}`}
-  class="group flex flex-col"
-  data-astro-prefetch
->
+<a href={`/blog/${slug}`} class="group flex flex-col" data-astro-prefetch>
   <div class="aspect-video overflow-hidden rounded-xl">
     <Image
       src={image.src}

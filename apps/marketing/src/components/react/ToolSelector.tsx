@@ -1,5 +1,5 @@
-import { PlusIcon, XIcon } from "lucide-react";
 import { Combobox, type ComboboxOption } from "@ui/combobox";
+import { PlusIcon, XIcon } from "lucide-react";
 
 type ToolSelectorProps = {
   tools: ComboboxOption[];
@@ -8,7 +8,12 @@ type ToolSelectorProps = {
   showRemove?: boolean;
 };
 
-export function ToolSelector({ tools, selectedSlugs, index, showRemove }: ToolSelectorProps) {
+export function ToolSelector({
+  tools,
+  selectedSlugs,
+  index,
+  showRemove,
+}: ToolSelectorProps) {
   const currentSlug = selectedSlugs[index];
 
   const handleValueChange = (newSlug: string) => {
@@ -41,7 +46,7 @@ export function ToolSelector({ tools, selectedSlugs, index, showRemove }: ToolSe
         <button
           type="button"
           onClick={handleRemove}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-input bg-background text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          className="border-input bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-11 w-11 shrink-0 items-center justify-center rounded-md border transition-colors"
           aria-label="Remove from comparison"
         >
           <XIcon className="size-4" />
@@ -58,7 +63,7 @@ type AddToolButtonProps = {
 
 export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
   const availableTools = tools.filter(
-    (tool) => !selectedSlugs.includes(tool.value)
+    (tool) => !selectedSlugs.includes(tool.value),
   );
 
   const handleAddTool = (slug: string) => {
@@ -73,16 +78,16 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
   const isFirstTool = selectedSlugs.length === 0;
 
   return (
-    <div className="flex h-full min-h-[280px] flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-muted-foreground/30 bg-gradient-to-b from-muted/50 to-muted/20 p-6">
-      <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+    <div className="border-muted-foreground/30 from-muted/50 to-muted/20 flex h-full min-h-[280px] flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed bg-gradient-to-b p-6">
+      <div className="bg-primary/10 text-primary border-primary/20 flex size-12 items-center justify-center rounded-xl border">
         <PlusIcon className="size-6" />
       </div>
       <div className="text-center">
-        <h3 className="font-semibold text-foreground text-xl">
-           Add {isFirstTool ? "a" : "another"} tool
+        <h3 className="text-foreground text-xl font-semibold">
+          Add {isFirstTool ? "a" : "another"} tool
         </h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-           Choose {isFirstTool ? "a" : "another"} tool to start comparing
+        <p className="text-muted-foreground mt-1 text-sm">
+          Choose {isFirstTool ? "a" : "another"} tool to start comparing
         </p>
       </div>
       <Combobox

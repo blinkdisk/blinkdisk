@@ -37,12 +37,16 @@ function getTermFaqStructuredData(term: GlossaryTerm, fullAnswer: string) {
   };
 }
 
-export function getGlossaryIndexStructuredData(terms: GlossaryTerm[], siteUrl: string) {
+export function getGlossaryIndexStructuredData(
+  terms: GlossaryTerm[],
+  siteUrl: string,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "DefinedTermSet",
     name: "BlinkDisk Backup Glossary",
-    description: "A comprehensive glossary of backup, storage, and data protection terms.",
+    description:
+      "A comprehensive glossary of backup, storage, and data protection terms.",
     url: `${siteUrl}/glossary`,
     hasDefinedTerm: terms.map((term) => ({
       "@type": "DefinedTerm",
@@ -56,11 +60,10 @@ export function getGlossaryIndexStructuredData(terms: GlossaryTerm[], siteUrl: s
 export function getCombinedStructuredData(
   term: GlossaryTerm,
   fullAnswer: string,
-  siteUrl: string
+  siteUrl: string,
 ) {
   return [
     getTermStructuredData(term, siteUrl),
     getTermFaqStructuredData(term, fullAnswer),
   ];
 }
-

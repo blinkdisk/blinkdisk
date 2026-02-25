@@ -43,10 +43,10 @@ BlinkDisk automatically detects and stores identical files only once. This saves
 
 Whether you're on Windows, macOS, or Linux, BlinkDisk keeps your files safe and synced seamlessly across all your machines.
 
-| Platform | Supported Versions |
-|----------|-------------------|
-| Windows  | Windows 10/11 (64-bit) |
-| macOS    | Big Sur and newer |
+| Platform | Supported Versions                         |
+| -------- | ------------------------------------------ |
+| Windows  | Windows 10/11 (64-bit)                     |
+| macOS    | Big Sur and newer                          |
 | Linux    | AppImage, deb, rpm (x86_64, arm64, armv7l) |
 
 ### 💾 Multiple Storage Options

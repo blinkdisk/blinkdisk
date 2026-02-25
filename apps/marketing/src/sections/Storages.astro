@@ -74,10 +74,10 @@ const allStorages = [...localStorages, ...cloudStorages, ...otherStorages];
 ---
 
 <section class="w-content mx-auto flex flex-col items-center py-16 sm:py-24">
-  <h2 class="text-center text-4xl font-bold sm:text-5xl">Ready for any storage</h2>
-  <p
-    class="text-muted-foreground mt-4 text-center text-sm md:text-base"
-  >
+  <h2 class="text-center text-4xl font-bold sm:text-5xl">
+    Ready for any storage
+  </h2>
+  <p class="text-muted-foreground mt-4 text-center text-sm md:text-base">
     BlinkDisk allows you to store your backups on nearly any storage you want.
   </p>
 
@@ -90,7 +90,9 @@ const allStorages = [...localStorages, ...cloudStorages, ...otherStorages];
 
   <!-- Desktop Grid -->
   <div class="relative hidden w-full sm:block">
-    <div class="mt-20 grid w-full grid-flow-col grid-rows-6 gap-4 md:grid-rows-4">
+    <div
+      class="mt-20 grid w-full grid-flow-col grid-rows-6 gap-4 md:grid-rows-4"
+    >
       {
         allStorages.map((storage) => (
           <div class="bg-card flex items-center gap-4 rounded-xl border p-4">
@@ -101,15 +103,16 @@ const allStorages = [...localStorages, ...cloudStorages, ...otherStorages];
             />
             <div>
               <p class="text-sm font-medium">{storage.name}</p>
-              <p class="text-muted-foreground text-xs">
-                {storage.description}
-              </p>
+              <p class="text-muted-foreground text-xs">{storage.description}</p>
             </div>
           </div>
         ))
       }
     </div>
-    <div class="pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-background to-transparent"></div>
+    <div
+      class="from-background pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t to-transparent"
+    >
+    </div>
   </div>
 
   <p class="text-muted-foreground mt-6 text-center text-sm">

@@ -1,8 +1,8 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { ReactNode } from "react";
 import satori from "satori";
 import sharp from "sharp";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 
 const fontsDir = join(process.cwd(), "public/fonts");
 
@@ -30,8 +30,13 @@ type OgImageOptions = {
   badge?: string;
 };
 
-export async function generateOgImage({ title, description, badge }: OgImageOptions): Promise<Buffer> {
-  const truncatedDescription = description.length > 180 ? description.slice(0, 177) + "..." : description;
+export async function generateOgImage({
+  title,
+  description,
+  badge,
+}: OgImageOptions): Promise<Buffer> {
+  const truncatedDescription =
+    description.length > 180 ? description.slice(0, 177) + "..." : description;
   const titleSize = title.length > 50 ? (badge ? 52 : 56) : badge ? 60 : 64;
   const gap = badge ? "32px" : "40px";
   const descriptionSize = badge ? "26px" : "28px";
@@ -78,7 +83,8 @@ export async function generateOgImage({ title, description, badge }: OgImageOpti
         flexDirection: "column",
         justifyContent: "center",
         padding: "60px",
-        background: "linear-gradient(to bottom right, #0f0f0f 0%, #0f0f0f 40%, #2d1b4e 100%)",
+        background:
+          "linear-gradient(to bottom right, #0f0f0f 0%, #0f0f0f 40%, #2d1b4e 100%)",
         fontFamily: "Inter",
       },
       children: [

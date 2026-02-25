@@ -1,5 +1,5 @@
-import { useCallback } from "react";
 import { LOGSNAG_PUBLIC_KEY } from "astro:env/client";
+import { useCallback } from "react";
 
 type LogsnagOptions = {
   channel: string;

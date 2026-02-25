@@ -66,12 +66,12 @@ export default function EaseUSTodoBackupPricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border bg-card p-4">
+      <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">EaseUS Todo Backup</p>
-        <p className="text-sm text-muted-foreground">{plan.description}</p>
+        <p className="text-muted-foreground text-sm">{plan.description}</p>
 
         <Select value={planType} onValueChange={handlePlanChange}>
-          <SelectTrigger className="mt-5 bg-secondary text-sm">
+          <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

@@ -7,7 +7,10 @@ type Props = {
 const { id, title } = Astro.props;
 ---
 
-<h2 id={id} class="text-2xl sm:text-3xl font-bold text-foreground mt-12 md:mt-16 mb-6 scroll-mt-20 flex items-center gap-3">
+<h2
+  id={id}
+  class="text-foreground mb-6 mt-12 flex scroll-mt-20 items-center gap-3 text-2xl font-bold sm:text-3xl md:mt-16"
+>
   <slot name="icon" />
   {title}
 </h2>

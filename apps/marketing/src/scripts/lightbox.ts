@@ -1,6 +1,8 @@
 function initLightbox() {
   const lightbox = document.querySelector("[data-lightbox]") as HTMLElement;
-  const lightboxImage = document.querySelector("[data-lightbox-image]") as HTMLImageElement;
+  const lightboxImage = document.querySelector(
+    "[data-lightbox-image]",
+  ) as HTMLImageElement;
   const triggers = document.querySelectorAll("[data-lightbox-trigger]");
   const backdrop = document.querySelector("[data-lightbox-backdrop]");
 

@@ -21,14 +21,14 @@ export default function CrashPlanPricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border bg-card p-4">
+      <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">CrashPlan</p>
-        <p className="text-sm text-muted-foreground">
-          Endpoint backup for small businesses 
+        <p className="text-muted-foreground text-sm">
+          Endpoint backup for small businesses
         </p>
 
         <div className="mt-5">
-          <label className="mb-1 block text-xs text-muted-foreground">
+          <label className="text-muted-foreground mb-1 block text-xs">
             Devices
           </label>
           <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export default function CrashPlanPricingCalculator() {
               <MinusIcon className="size-4" />
             </Button>
             <Input
-              className="w-16 text-center bg-secondary"
+              className="bg-secondary w-16 text-center"
               type="number"
               min={1}
               value={quantity}
@@ -86,7 +86,7 @@ export default function CrashPlanPricingCalculator() {
           <span className="text-muted-foreground">{label}</span>
         </div>
         {quantity > 1 && (
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-xs">
             {amount.toLocaleString(undefined, {
               style: "currency",
               currency: "USD",

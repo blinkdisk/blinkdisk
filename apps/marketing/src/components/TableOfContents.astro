@@ -46,7 +46,8 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 <script>
   function initTOC() {
-    const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+    const links =
+      document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
     if (links.length === 0) return;
 
     const slugs = Array.from(links).map((link) => link.dataset.tocLink!);
@@ -76,7 +77,7 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         const visibleEntries = entries.filter((e) => e.isIntersecting);
         if (visibleEntries.length > 0) {
           const topEntry = visibleEntries.reduce((a, b) =>
-            a.boundingClientRect.top < b.boundingClientRect.top ? a : b
+            a.boundingClientRect.top < b.boundingClientRect.top ? a : b,
           );
           setActive(topEntry.target.id);
         }
@@ -84,7 +85,7 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
       {
         rootMargin: "-80px 0px -70% 0px",
         threshold: 0,
-      }
+      },
     );
 
     headings.forEach((heading) => observer.observe(heading));

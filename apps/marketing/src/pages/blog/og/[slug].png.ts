@@ -1,6 +1,9 @@
+import {
+  createOgImageResponse,
+  generateOgImage,
+} from "@marketing/utils/og-image";
 import type { APIRoute, GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
-import { generateOgImage, createOgImageResponse } from "@marketing/utils/og-image";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection("blog", ({ data }) => {
@@ -14,7 +17,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title, description } = props as { title: string; description: string };
+  const { title, description } = props as {
+    title: string;
+    description: string;
+  };
 
   const png = await generateOgImage({ title, description, badge: "Blog" });
   return createOgImageResponse(png);

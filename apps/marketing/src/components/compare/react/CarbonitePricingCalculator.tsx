@@ -67,15 +67,15 @@ export default function CarbonitePricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border bg-card p-4">
+      <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">Carbonite</p>
-        <p className="text-sm text-muted-foreground">{plan.description}</p>
+        <p className="text-muted-foreground text-sm">{plan.description}</p>
 
         <Select
           value={planType}
           onValueChange={(value) => setPlanType(value as PlanType)}
         >
-          <SelectTrigger className="mt-5 bg-secondary text-sm">
+          <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -86,7 +86,7 @@ export default function CarbonitePricingCalculator() {
         </Select>
 
         <div className="mt-3">
-          <label className="mb-1 block text-xs text-muted-foreground">
+          <label className="text-muted-foreground mb-1 block text-xs">
             {plan.quantityLabel}
           </label>
           <div className="flex items-center gap-2">
@@ -100,7 +100,7 @@ export default function CarbonitePricingCalculator() {
               <MinusIcon className="size-4" />
             </Button>
             <Input
-              className="w-16 text-center bg-secondary"
+              className="bg-secondary w-16 text-center"
               type="number"
               min={1}
               value={quantity}
@@ -144,7 +144,7 @@ export default function CarbonitePricingCalculator() {
           <span className="text-muted-foreground">{label}</span>
         </div>
         {quantity > 1 && (
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-xs">
             {amount.toLocaleString(undefined, {
               style: "currency",
               currency: "USD",

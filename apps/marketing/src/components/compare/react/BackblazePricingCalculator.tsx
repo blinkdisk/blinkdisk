@@ -16,9 +16,11 @@ export default function BackblazePricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border bg-card p-4">
+      <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">Backblaze</p>
-        <p className="text-sm text-muted-foreground">Unlimited storage per computer</p>
+        <p className="text-muted-foreground text-sm">
+          Unlimited storage per computer
+        </p>
 
         <Tabs
           value={period}

@@ -14,29 +14,47 @@ const {
 } = Astro.props;
 ---
 
-<section class="cta-pattern relative mt-16 overflow-hidden rounded-2xl border bg-secondary px-8 py-12 text-center md:px-12 md:py-16">
+<section
+  class="cta-pattern bg-secondary relative mt-16 overflow-hidden rounded-2xl border px-8 py-12 text-center md:px-12 md:py-16"
+>
   <div class="mb-6 flex items-center justify-center gap-4">
     <div class="bg-foreground/20 h-px w-8"></div>
-    <span class="text-foreground/50 text-xs font-medium uppercase tracking-wider">
+    <span
+      class="text-foreground/50 text-xs font-medium uppercase tracking-wider"
+    >
       Get started with BlinkDisk for free
     </span>
     <div class="bg-foreground/20 h-px w-8"></div>
   </div>
 
-  <h2 class="text-foreground mb-4 text-2xl sm:text-3xl font-bold md:text-4xl whitespace-pre-wrap leading-tight">
-    {headline ?? <>Ready to backup your files? <br class="hidden sm:block" />Download BlinkDisk for Free</>}
+  <h2
+    class="text-foreground mb-4 whitespace-pre-wrap text-2xl font-bold leading-tight sm:text-3xl md:text-4xl"
+  >
+    {
+      headline ?? (
+        <>
+          Ready to backup your files? <br class="hidden sm:block" />
+          Download BlinkDisk for Free
+        </>
+      )
+    }
   </h2>
 
-  <p class="text-foreground/70 mx-auto mb-8 max-w-lg text-sm sm:text-base md:text-lg">
-    BlinkDisk is a desktop application that lets you effortlessly create
-    backup copies of all your important files.
+  <p
+    class="text-foreground/70 mx-auto mb-8 max-w-lg text-sm sm:text-base md:text-lg"
+  >
+    BlinkDisk is a desktop application that lets you effortlessly create backup
+    copies of all your important files.
   </p>
 
-  <div class="flex items-center justify-center gap-4 flex-row">
-    <Button href="/download" size="lg">
-      Download for free
-    </Button>
-    <Button href={secondaryButtonHref} size="lg" variant="outline" class="hidden sm:flex">
+  <div class="flex flex-row items-center justify-center gap-4">
+    <Button href="/download" size="lg"> Download for free </Button>
+    <Button
+      href={secondaryButtonHref}
+      size="lg"
+      variant="outline"
+      class="hidden sm:flex"
+    >
       {secondaryButtonText}
     </Button>
   </div>

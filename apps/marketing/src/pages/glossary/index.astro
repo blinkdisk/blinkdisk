@@ -10,7 +10,7 @@ const terms = await getCollection("glossary", ({ data }) => {
 });
 
 const sortedTerms = terms.sort((a, b) =>
-  a.data.term.localeCompare(b.data.term)
+  a.data.term.localeCompare(b.data.term),
 );
 
 const termsWithLetterMarkers = sortedTerms.map((term, index) => {
@@ -29,7 +29,7 @@ const structuredData = getGlossaryIndexStructuredData(
     question: t.data.question,
     summary: t.data.summary,
   })),
-  siteUrl
+  siteUrl,
 );
 ---
 
@@ -54,20 +54,19 @@ const structuredData = getGlossaryIndexStructuredData(
       </p>
     </header>
 
-
     {
       sortedTerms.length > 0 ? (
-        <div class="relative max-w-2xl mx-auto">
-          <div class="absolute left-0 top-0 bottom-0 w-px bg-primary/40 hidden md:block" />
+        <div class="relative mx-auto max-w-2xl">
+          <div class="bg-primary/40 absolute bottom-0 left-0 top-0 hidden w-px md:block" />
 
           <div class="space-y-1">
             {termsWithLetterMarkers.map(
               ({ data, firstLetter, isNewLetter }) => (
                 <>
                   {isNewLetter && (
-                    <div class="flex items-center gap-4 pt-8 pb-4 first:pt-0">
-                      <div class="relative flex size-12 items-center justify-center rounded-xl bg-card border border-primary/20 md:-ml-6">
-                        <span class="text-xl font-bold text-primary">
+                    <div class="flex items-center gap-4 pb-4 pt-8 first:pt-0">
+                      <div class="bg-card border-primary/20 relative flex size-12 items-center justify-center rounded-xl border md:-ml-6">
+                        <span class="text-primary text-xl font-bold">
                           {firstLetter}
                         </span>
                       </div>
@@ -75,24 +74,24 @@ const structuredData = getGlossaryIndexStructuredData(
                   )}
                   <a
                     href={`/glossary/${data.slug}`}
-                    class="group relative flex items-center gap-4 rounded-xl border border-transparent bg-transparent p-4 md:ml-4 transition-all hover:border-border hover:bg-card/80 hover:shadow-sm"
+                    class="hover:border-border hover:bg-card/80 group relative flex items-center gap-4 rounded-xl border border-transparent bg-transparent p-4 transition-all hover:shadow-sm md:ml-4"
                     data-astro-prefetch
                   >
-                    <div class="flex-1 min-w-0">
+                    <div class="min-w-0 flex-1">
                       <h3 class="text-foreground text-lg font-semibold">
                         {data.term}
                       </h3>
-                      <p class="text-muted-foreground text-sm mt-1 line-clamp-1 sm:line-clamp-2">
+                      <p class="text-muted-foreground mt-1 line-clamp-1 text-sm sm:line-clamp-2">
                         {data.summary}
                       </p>
                     </div>
-                    <div class="flex-shrink-0 flex items-center gap-2 text-muted-foreground">
-                      <span class="hidden sm:inline text-sm">Read more</span>
+                    <div class="text-muted-foreground flex flex-shrink-0 items-center gap-2">
+                      <span class="hidden text-sm sm:inline">Read more</span>
                       <ArrowRightIcon class="size-4" />
                     </div>
                   </a>
                 </>
-              )
+              ),
             )}
           </div>
         </div>
