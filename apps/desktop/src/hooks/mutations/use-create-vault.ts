@@ -105,7 +105,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
           }),
         );
 
-        if (error || res.error) {
+        if (error || (res.error && res.error !== "ALREADY_CONNECTED")) {
           // Clean up vault if it was created
           if (created) await tryCatch(trpc.vault.delete.mutate({ vaultId }));
 

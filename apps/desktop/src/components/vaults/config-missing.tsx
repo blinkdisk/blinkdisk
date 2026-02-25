@@ -40,7 +40,9 @@ export function ConfigMissing({ vault }: ConfigMissingProps) {
                 vault &&
                 addVaultConfig({
                   config,
-                  vaultId: vault?.id,
+                  vaultId: vault.id,
+                  name: vault.name,
+                  provider: vault.provider,
                 })
               }
             />
