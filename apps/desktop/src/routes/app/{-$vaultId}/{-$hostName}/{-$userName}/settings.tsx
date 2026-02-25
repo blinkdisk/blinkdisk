@@ -1,4 +1,5 @@
 import { PolicyContextProvider } from "@desktop/components/policy/context";
+import { CompressionSettings } from "@desktop/components/policy/compression";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
@@ -70,6 +71,7 @@ function RouteComponent() {
               <ScheduleSettings />
               <RetentionSettings />
               <FilesSettings />
+              <CompressionSettings />
               <VaultThrottleSettings />
             </Accordion>
           )}

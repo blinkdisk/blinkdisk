@@ -1,3 +1,4 @@
+import { compressionAlgorithms } from "@config/algorithms";
 import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 
@@ -18,7 +19,7 @@ export const ZRetentionPolicy = z.object({
 export type ZRetentionPolicyType = z.infer<typeof ZRetentionPolicy>;
 
 const ZFileSize = z.object({
-  value: z.number().optional(),
+  value: z.number().min(0).optional(),
   unit: z.enum(["B", "KB", "MB", "GB", "TB"]),
 });
 
@@ -69,32 +70,16 @@ export type ZSchedulePolicyType = z.infer<typeof ZSchedulePolicy>;
 export const ZCompressionPolicy = z.object({
   algorithm: z
     .enum([
+      // Not sure why this is here, but it is.
+      // I'm scared to touch it.
       "",
-      "none",
-      "deflate-best-compression",
-      "deflate-best-speed",
-      "deflate-default",
-      "gzip",
-      "gzip-best-compression",
-      "gzip-best-speed",
-      "pgzip",
-      "pgzip-best-compression",
-      "pgzip-best-speed",
-      "s2-better",
-      "s2-default",
-      "s2-parallel-4",
-      "s2-parallel-8",
-      "zstd",
-      "zstd-better-compression",
-      "zstd-fastest",
-      "lz4",
-      "zstd-best-compression",
+      ...compressionAlgorithms,
     ])
     .optional(),
   extensionAllowlist: z.string().array().optional(),
   extensionDenylist: z.string().array().optional(),
-  minFileSize: z.number().int().positive().optional(),
-  maxFileSize: z.number().int().positive().optional(),
+  minFileSize: ZFileSize.optional(),
+  maxFileSize: ZFileSize.optional(),
 });
 
 export type ZCompressionPolicyType = z.infer<typeof ZCompressionPolicy>;

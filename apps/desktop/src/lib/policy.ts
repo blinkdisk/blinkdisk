@@ -188,8 +188,14 @@ export function convertPolicyFromCore(policy: CorePolicy): ZPolicyType | null {
           : undefined,
       extensionAllowlist: policy.compression.onlyCompress,
       extensionDenylist: policy.compression.neverCompress,
-      minFileSize: policy.compression.minSize,
-      maxFileSize: policy.compression.maxSize,
+      minFileSize:
+        policy.compression.minSize !== undefined
+          ? fromBytes(policy.compression.minSize)
+          : undefined,
+      maxFileSize:
+        policy.compression.maxSize !== undefined
+          ? fromBytes(policy.compression.maxSize)
+          : undefined,
     },
     metadata: {
       algorithm: policy.metadataCompression.compressorName,
@@ -296,10 +302,20 @@ export function convertPolicyToCore(policy: ZPolicyType) {
     },
     compression: {
       compressorName: policy.compression?.algorithm,
-      onlyCompress: policy.compression?.extensionAllowlist,
-      neverCompress: policy.compression?.extensionDenylist,
-      minSize: policy.compression?.minFileSize,
-      maxSize: policy.compression?.maxFileSize,
+      onlyCompress: policy.compression?.extensionAllowlist?.map((ext) =>
+        ext.startsWith(".") ? ext : `.${ext}`,
+      ),
+      neverCompress: policy.compression?.extensionDenylist?.map((ext) =>
+        ext.startsWith(".") ? ext : `.${ext}`,
+      ),
+      minSize:
+        policy.compression?.minFileSize !== undefined
+          ? toBytes(policy.compression.minFileSize)
+          : undefined,
+      maxSize:
+        policy.compression?.maxFileSize !== undefined
+          ? toBytes(policy.compression.maxFileSize)
+          : undefined,
     },
     metadataCompression: {
       compressorName: policy.metadata?.algorithm,
@@ -359,6 +375,7 @@ export function getDefinedFields(policy: ZPolicyType) {
     schedule: definedFields(policy.schedule),
     retention: definedFields(policy.retention),
     files: definedFields(policy.files),
+    compression: definedFields(policy.compression),
   };
 }
 

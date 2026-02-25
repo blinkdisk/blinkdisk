@@ -1,5 +1,6 @@
 import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
+import { CompressionSettings } from "@desktop/components/policy/compression";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
@@ -40,6 +41,7 @@ export function FolderSettingsDialog() {
                 <ScheduleSettings />
                 <RetentionSettings />
                 <FilesSettings />
+                <CompressionSettings />
               </Accordion>
             )}
           </PolicyContextProvider>
