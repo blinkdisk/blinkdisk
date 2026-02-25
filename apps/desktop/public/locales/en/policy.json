@@ -130,5 +130,67 @@
       "description": "Exclude common cache directories in backups."
     },
     "save": "Save"
+  },
+  "compression": {
+    "title": "Compression",
+    "description": "Configure how backup data is compressed.",
+    "algorithm": {
+      "label": "Compression algorithm",
+      "description": "The algorithm used to compress backup data.",
+      "placeholder": "Select algorithm",
+      "tabs": {
+        "off": "None",
+        "recommended": "Recommended",
+        "other": "Other"
+      },
+      "presets": {
+        "faster": "Faster",
+        "balanced": "Balanced",
+        "smaller": "Smaller"
+      },
+      "items": {
+        "": "Default",
+        "none": "None",
+        "gzip": "Gzip",
+        "gzip-best-compression": "Gzip (best compression)",
+        "gzip-best-speed": "Gzip (best speed)",
+        "zstd": "Zstandard",
+        "zstd-best-compression": "Zstandard (best compression)",
+        "zstd-better-compression": "Zstandard (better compression)",
+        "zstd-fastest": "Zstandard (fastest)",
+        "s2-default": "S2",
+        "s2-better": "S2 (better)",
+        "s2-parallel-4": "S2 (parallel, 4 threads)",
+        "s2-parallel-8": "S2 (parallel, 8 threads)",
+        "pgzip": "Parallel Gzip",
+        "pgzip-best-compression": "Parallel Gzip (best compression)",
+        "pgzip-best-speed": "Parallel Gzip (best speed)",
+        "deflate-default": "Deflate",
+        "deflate-best-compression": "Deflate (best compression)",
+        "deflate-best-speed": "Deflate (best speed)",
+        "lz4": "LZ4 (Not recommended)"
+      }
+    },
+    "minFileSize": {
+      "label": "Minimum file size",
+      "description": "Only compress files larger than this size."
+    },
+    "maxFileSize": {
+      "label": "Maximum file size",
+      "description": "Only compress files smaller than this size."
+    },
+    "extensionAllowlist": {
+      "label": "Extension allowlist",
+      "description": "Only compress files with these extensions.",
+      "add": "Add extension",
+      "placeholder": "e.g. .txt"
+    },
+    "extensionDenylist": {
+      "label": "Extension denylist",
+      "description": "Never compress files with these extensions.",
+      "add": "Add extension",
+      "placeholder": "e.g. .zip"
+    },
+    "save": "Save"
   }
 }
