@@ -1,5 +1,5 @@
-import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { compressionAlgorithms } from "@config/algorithms";
+import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 
 export const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);
@@ -19,7 +19,7 @@ export const ZRetentionPolicy = z.object({
 export type ZRetentionPolicyType = z.infer<typeof ZRetentionPolicy>;
 
 const ZFileSize = z.object({
-  value: z.number().optional(),
+  value: z.number().min(0).optional(),
   unit: z.enum(["B", "KB", "MB", "GB", "TB"]),
 });
 
