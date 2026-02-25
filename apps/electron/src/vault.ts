@@ -443,7 +443,7 @@ export class Vault {
     await vault.boot();
 
     try {
-      const response = (await vault.fetch({
+      const response = await vault.fetch({
         method: "POST",
         path: "/api/v1/repo/connect",
         data: {
@@ -458,10 +458,10 @@ export class Vault {
           },
           password,
         },
-      })) as { error?: string };
+      });
 
       vault.stop();
-      return response as { error?: string };
+      return response as { error?: string; code?: string };
     } catch (e) {
       vault.stop();
       return e as { code?: string; error?: string };
