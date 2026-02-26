@@ -36,9 +36,7 @@ export function useMigrationListener() {
       let starting = false;
 
       for (const vault of legacyVaults) {
-        const status = await window.electron!.vault.status({
-          vaultId: vault.id,
-        });
+        const status = await window.electron!.vault.status(vault.id!);
 
         if (status === "STARTING") starting = true;
       }
@@ -52,9 +50,7 @@ export function useMigrationListener() {
     for (const vault of legacyVaults) {
       const logPrefix = `[${vault.id}]`;
 
-      const status = await window.electron!.vault.status({
-        vaultId: vault.id,
-      });
+      const status = await window.electron!.vault.status(vault.id!);
 
       if (status !== "RUNNING") {
         console.warn(logPrefix, "Vault", vault.id, "is", status, ", skipping");

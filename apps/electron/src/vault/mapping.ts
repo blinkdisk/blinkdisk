@@ -1,4 +1,5 @@
 import { providers, ProviderType } from "@config/providers";
+import { LATEST_VAULT_VERSION } from "@config/vault";
 import { ProviderConfig } from "@schemas/providers";
 
 export function mapProviderType(providerType: ProviderType) {
@@ -12,14 +13,14 @@ export function mapProviderType(providerType: ProviderType) {
 export function mapConfigFields(
   providerType: ProviderType,
   config: ProviderConfig,
-  version: number,
+  version?: number,
   token?: string | null,
 ) {
   if (providerType === "CLOUDBLINK")
     return {
       url: process.env.CLOUD_URL,
       token,
-      version,
+      version: version || LATEST_VAULT_VERSION,
     };
 
   const provider = providers.find(

@@ -191,7 +191,7 @@ export const vaultRouter = router({
   get: authedProcedure.input(ZGetVault).query(async ({ input, ctx }) => {
     const vault = await ctx.db
       .selectFrom("Vault")
-      .select(["id", "coreId", "name", "provider", "configLevel"])
+      .select(["id", "coreId", "name", "provider", "version", "configLevel"])
       .where("accountId", "=", ctx.account.id)
       .where("id", "=", input.vaultId)
       .executeTakeFirst();

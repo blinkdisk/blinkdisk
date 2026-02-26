@@ -150,14 +150,14 @@ function logFormatted(id: string, data: string) {
 }
 
 async function startStatusPool(id: string) {
-  const vault = vaults[id];
-  if (!vault)
-    return log.error(
-      `Tried to check vault status for ${id}, but couldn't find vault`,
-    );
-
   let i = 0;
   while (true) {
+    const vault = vaults[id];
+    if (!vault) {
+      await new Promise((res) => setTimeout(res, 1000));
+      continue;
+    }
+
     const [status, error] = await tryCatch(
       fetchVault(vault, {
         method: "GET",
@@ -172,7 +172,7 @@ async function startStatusPool(id: string) {
 
     let vaultStatus: VaultStatus = "SETUP";
     if (status.connected) vaultStatus = "RUNNING";
-    if (status.initTaskID) vaultStatus = "STARTING";
+    else if (status.initTaskID) vaultStatus = "STARTING";
 
     i = i + 1;
     const delay = i < 10 ? 100 * i : 1000;

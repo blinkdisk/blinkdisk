@@ -4,7 +4,7 @@ import {
   GlobalStorageSchema,
   store,
 } from "@electron/store";
-import { Vault } from "@electron/vault";
+import { startAllVaults } from "./vault/manage";
 
 export type VaultCacheWithId = GlobalStorageSchema["vaults"][string] & {
   id: string;
@@ -57,7 +57,7 @@ export function setVaultCache({
     ),
   );
 
-  Vault.onCacheChanged();
+  startAllVaults();
 }
 
 export function getVaultCache() {
@@ -76,8 +76,6 @@ export function deleteVaultFromCache(id: string) {
     ...vaults,
     [id]: undefined,
   });
-
-  Vault.onCacheChanged();
 }
 
 export function getAccountCache() {
@@ -122,8 +120,6 @@ export function setConfigCache({
       {} as GlobalStorageSchema["configs"],
     ),
   );
-
-  Vault.onCacheChanged();
 }
 
 export function getConfigCache() {

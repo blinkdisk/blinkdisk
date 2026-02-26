@@ -1,5 +1,7 @@
 import { fileExists } from "@electron/fs";
-import { getVault, Vault } from "@electron/vault";
+import { fetchVault } from "@electron/vault/fetch";
+import { getVault } from "@electron/vault/manage";
+import { VaultInstance } from "@electron/vault/types";
 import { window } from "@electron/window";
 import { ZRestoreDirectoryType } from "@schemas/directory";
 import { app, dialog } from "electron";
@@ -28,7 +30,7 @@ export type RestoreItem = {
 async function restore(
   item: RestoreItem,
   directory: string,
-  vault: Vault,
+  vault: VaultInstance,
   onProgress?: (progress: number) => void,
 ) {
   let path = join(directory, item.name);
@@ -58,7 +60,7 @@ async function restore(
   }
 
   if (item.type === "DIRECTORY") {
-    const res = (await vault.fetch({
+    const res = (await fetchVault(vault, {
       method: "POST",
       path: `/api/v1/restore`,
       data: {
@@ -108,7 +110,7 @@ async function restore(
       await new Promise((res) => setTimeout(res, 1000));
     }
   } else if (item.type === "SYMLINK") {
-    const res = (await vault.fetch({
+    const res = (await fetchVault(vault, {
       method: "GET",
       path: `/api/v1/objects/${item.objectId}`,
       search: {
@@ -120,7 +122,7 @@ async function restore(
     if (!res) return;
     await symlink(res, path);
   } else {
-    await vault.fetch({
+    await fetchVault(vault, {
       method: "GET",
       path: `/api/v1/objects/${item.objectId}`,
       search: {
@@ -144,7 +146,7 @@ export async function restoreSingle({
 }) {
   if (!window) throw new Error("WINDOW_NOT_INITIALIZED");
 
-  const vault = getVault({ vaultId });
+  const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
   const result = await dialog.showOpenDialog(window, {
@@ -192,7 +194,7 @@ export async function restoreMultiple({
 }) {
   if (!window) throw new Error("WINDOW_NOT_INITIALIZED");
 
-  const vault = getVault({ vaultId });
+  const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
   const result = await dialog.showOpenDialog(window, {
@@ -246,7 +248,7 @@ export async function restoreDirectory({
   objectId: string;
   options: ZRestoreDirectoryType;
 }) {
-  const vault = getVault({ vaultId });
+  const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
   queueMicrotask(async () => {
@@ -265,7 +267,7 @@ export async function restoreDirectory({
       folderId,
     });
 
-    const res = (await vault.fetch({
+    const res = (await fetchVault(vault, {
       method: "POST",
       path: `/api/v1/restore`,
       data: {
@@ -340,8 +342,8 @@ export async function restoreDirectory({
   return true;
 }
 
-async function getRestoreStatus(vault: Vault, restoreId: string) {
-  const task = (await vault.fetch({
+async function getRestoreStatus(vault: VaultInstance, restoreId: string) {
+  const task = (await fetchVault(vault, {
     method: "GET",
     path: `/api/v1/tasks/${restoreId}`,
   })) as {
@@ -367,8 +369,8 @@ async function getRestoreStatus(vault: Vault, restoreId: string) {
   };
 }
 
-async function getDirectoryItemCount(vault: Vault, objectId: string) {
-  const stats = (await vault.fetch({
+async function getDirectoryItemCount(vault: VaultInstance, objectId: string) {
+  const stats = (await fetchVault(vault, {
     method: "GET",
     path: `/api/v1/objects/${objectId}`,
   })) as {

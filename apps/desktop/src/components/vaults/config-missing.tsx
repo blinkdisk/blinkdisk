@@ -43,6 +43,7 @@ export function ConfigMissing({ vault }: ConfigMissingProps) {
                   vaultId: vault.id,
                   name: vault.name,
                   provider: vault.provider,
+                  version: vault.version,
                 })
               }
             />

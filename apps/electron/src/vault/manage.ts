@@ -13,7 +13,7 @@ import { validationVault } from "./validate";
 
 export const vaults: Record<string, VaultInstance> = {};
 
-export async function create(payload: {
+export async function createVault(payload: {
   vault: {
     id: string;
     name: string;
@@ -83,15 +83,7 @@ export async function create(payload: {
   }
 }
 
-export function stopVault(id: string) {
-  const vault = vaults[id];
-  if (!vault) return log.warn(`Tried to stop vault ${id} but it doesn't exist`);
-
-  vault.server.process.kill();
-  delete vaults[id];
-}
-
-export async function connect({
+export async function connectVault({
   id,
   name,
   config,
@@ -105,7 +97,7 @@ export async function connect({
   provider: ProviderType;
   config: ProviderConfig;
   password: string;
-  version: number;
+  version?: number;
   token?: string | null;
 }) {
   let vault: VaultInstance;
@@ -172,4 +164,18 @@ export async function startAllVaults() {
 export function stopAllVaults() {
   Object.keys(vaults).forEach(stopVault);
   if (validationVault) validationVault.server.process.kill();
+}
+
+export function stopVault(id: string) {
+  const vault = vaults[id];
+  if (!vault) return log.warn(`Tried to stop vault ${id} but it doesn't exist`);
+
+  vault.server.process.kill();
+  delete vaults[id];
+}
+
+export function getVault(id: string) {
+  const vault = vaults[id];
+  if (!vault) throw new Error(`Get vault called, but ${id} not found`);
+  return vault;
 }

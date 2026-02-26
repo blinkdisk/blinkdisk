@@ -18,6 +18,7 @@ export function useAddVaultConfig(onSuccess?: () => void) {
         config: object;
         name: string;
         provider: ProviderType;
+        version: number;
       },
     ) => {
       const password = await window.electron.vault.password.get({
@@ -33,6 +34,7 @@ export function useAddVaultConfig(onSuccess?: () => void) {
           provider: values.provider,
           config: values.config,
           password: password,
+          version: values.version,
         }),
       );
 
