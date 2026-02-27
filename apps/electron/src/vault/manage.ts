@@ -179,3 +179,8 @@ export function getVault(id: string) {
   if (!vault) throw new Error(`Get vault called, but ${id} not found`);
   return vault;
 }
+
+export function getVaultStatus(id: string) {
+  const vault = getVault(id);
+  return { status: vault.status, initTask: vault.initTask };
+}

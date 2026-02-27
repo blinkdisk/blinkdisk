@@ -9,7 +9,7 @@ import { PlusIcon } from "lucide-react";
 export function SidebarAddFolder() {
   const { t } = useAppTranslation("sidebar");
   const { openCreateFolder } = useCreateFolderDialog();
-  const { data: status } = useVaultStatus();
+  const { status } = useVaultStatus();
 
   if (!status) return null;
   if (status === "STARTING")

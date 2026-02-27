@@ -17,8 +17,12 @@ import type {
   GlobalStorageSchema,
 } from "@electron/store";
 import type { UpdateStatus } from "@electron/updater";
-import { connectVault, createVault, getVault } from "@electron/vault/manage";
-import { VaultStatus } from "@electron/vault/types";
+import {
+  connectVault,
+  createVault,
+  getVault,
+  getVaultStatus,
+} from "@electron/vault/manage";
 import { validateVaultConfig } from "@electron/vault/validate";
 import {
   contextBridge,
@@ -129,7 +133,9 @@ const api = {
         ReturnType<typeof setVaultCache>
       >,
     status: (payload: Parameters<typeof getVault>[0]) =>
-      ipcRenderer.invoke("vault.status", payload) as Promise<VaultStatus>,
+      ipcRenderer.invoke("vault.status", payload) as Promise<
+        ReturnType<typeof getVaultStatus>
+      >,
     config: {
       encrypt: (payload: Parameters<typeof encryptVaultConfig>[0]) =>
         ipcRenderer.invoke("vault.config.encrypt", payload),

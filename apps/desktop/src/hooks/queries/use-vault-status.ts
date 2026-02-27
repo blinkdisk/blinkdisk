@@ -21,6 +21,8 @@ export function useVaultStatus() {
 
   return {
     ...query,
-    running: query.data === "RUNNING",
+    status: query.data?.status,
+    initTask: query.data?.initTask,
+    running: query.data?.status === "RUNNING",
   };
 }

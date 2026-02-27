@@ -177,7 +177,11 @@ async function startStatusPool(id: string) {
     i = i + 1;
     const delay = i < 10 ? 100 * i : 1000;
 
-    if (vaults[id]) vaults[id].status = vaultStatus;
+    if (vaults[id]) {
+      vaults[id].status = vaultStatus;
+      vaults[id].initTask = status.initTaskID || undefined;
+    }
+
     await new Promise((res) => setTimeout(res, delay));
   }
 }

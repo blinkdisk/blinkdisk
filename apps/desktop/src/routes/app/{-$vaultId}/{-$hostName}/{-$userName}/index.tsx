@@ -12,7 +12,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { data: vault } = useVault();
-  const { data: status } = useVaultStatus();
+  const { status } = useVaultStatus();
   const { data: folders } = useFolderList();
 
   return (

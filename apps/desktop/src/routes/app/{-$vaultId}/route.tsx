@@ -15,7 +15,7 @@ function RouteComponent() {
   useMigrationListener();
 
   const { data: vault } = useVault();
-  const { data: status } = useVaultStatus();
+  const { status } = useVaultStatus();
 
   const [, setLastUsedVaultId] = useAccountStorage("lastUsedVaultId");
 

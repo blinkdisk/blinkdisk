@@ -17,7 +17,7 @@ import { getUpdateStatus, installUpdate } from "@electron/updater";
 import {
   connectVault,
   createVault,
-  getVault,
+  getVaultStatus,
   startAllVaults,
 } from "@electron/vault/manage";
 import { validateVaultConfig } from "@electron/vault/validate";
@@ -59,7 +59,7 @@ ipcMain.handle("vault.cache", (_, payload) => setVaultCache(payload));
 ipcMain.handle("vault.validate", (_, config) => validateVaultConfig(config));
 ipcMain.handle("vault.create", (_, config) => createVault(config));
 ipcMain.handle("vault.connect", (_, config) => connectVault(config));
-ipcMain.handle("vault.status", (_, payload) => getVault(payload)?.status);
+ipcMain.handle("vault.status", (_, payload) => getVaultStatus(payload));
 ipcMain.handle("vault.start.all", () => startAllVaults());
 ipcMain.handle("vault.restore.single", (_, payload) => restoreSingle(payload));
 ipcMain.handle("vault.restore.multiple", (_, payload) =>

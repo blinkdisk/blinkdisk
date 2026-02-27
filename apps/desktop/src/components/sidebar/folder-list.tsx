@@ -17,7 +17,7 @@ type SidebarFolderListProps = {
 export function SidebarFolderList({ folders }: SidebarFolderListProps) {
   const { t } = useAppTranslation("sidebar.folderList");
 
-  const { data: status } = useVaultStatus();
+  const { status } = useVaultStatus();
 
   if (!["STARTING", "RUNNING"].includes(status || "")) return null;
   if (folders !== undefined && folders !== null && !folders.length) return null;

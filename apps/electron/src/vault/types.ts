@@ -18,5 +18,6 @@ export type VaultServer = {
 export type VaultInstance = {
   id: string;
   status: VaultStatus;
+  initTask?: string;
   server: VaultServer;
 };
