@@ -8,7 +8,6 @@ export type VaultAction = "CREATE" | "SETUP" | "UPDATE";
 export function useConfigValidation(
   providerType: ProviderType,
   action: VaultAction,
-  coreId?: string,
 ) {
   const onSubmitAsync = useCallback(
     async ({ value }: { value: object }) => {
@@ -44,7 +43,7 @@ export function useConfigValidation(
           name: existing.name,
         };
     },
-    [action, coreId, providerType],
+    [action, providerType],
   );
 
   return { onSubmitAsync };

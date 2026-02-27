@@ -84,8 +84,8 @@ export function Setup() {
             {ConfigForm && (
               <ConfigForm
                 action="SETUP"
+                // eslint-disable-next-line
                 config={loadedConfig as any}
-                coreId={vault?.coreId}
                 onSubmit={async (config) => {
                   setConfig(config);
 

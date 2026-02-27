@@ -9,14 +9,12 @@ export type GoogleCloudStorageFormProps = {
   action: VaultAction;
   config?: ZGoogleCloudStorageConfigType;
   onSubmit: (config: ZGoogleCloudStorageConfigType) => void;
-  coreId?: string;
 };
 
 export function GoogleCloudStorageForm({
   action,
   config,
   onSubmit,
-  coreId,
 }: GoogleCloudStorageFormProps) {
   const { t } = useAppTranslation(
     "vault.providers.GOOGLE_CLOUD_STORAGE.fields",
@@ -26,7 +24,6 @@ export function GoogleCloudStorageForm({
     action,
     config,
     onSubmit,
-    coreId,
   });
 
   return (
