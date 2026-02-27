@@ -3,7 +3,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export type CoreTaskStatus =
+type CoreTaskStatus =
   | "RUNNING"
   | "CANCELING"
   | "CANCELED"

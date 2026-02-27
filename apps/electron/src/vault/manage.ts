@@ -166,7 +166,7 @@ export function stopAllVaults() {
   if (validationVault) validationVault.server.process.kill();
 }
 
-export function stopVault(id: string) {
+function stopVault(id: string) {
   const vault = vaults[id];
   if (!vault) return log.warn(`Tried to stop vault ${id} but it doesn't exist`);
 
