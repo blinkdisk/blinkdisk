@@ -10,10 +10,6 @@ export type VaultCacheWithId = GlobalStorageSchema["vaults"][string] & {
   id: string;
 };
 
-export type ConfigCacheWithId = GlobalStorageSchema["configs"][string] & {
-  id: string;
-};
-
 export type AccountCacheWithId = AccountStorageType & {
   id: string;
 };
@@ -85,48 +81,4 @@ export function getAccountCache() {
     id,
     ...account,
   })) as AccountCacheWithId[];
-}
-
-export function setConfigCache({
-  accountId,
-  configs,
-}: {
-  accountId: string;
-  configs: ConfigCacheWithId[];
-}) {
-  const cachedConfigs = store.get("configs") || {};
-  const otherConfigs = Object.entries(cachedConfigs)
-    .map(
-      ([id, config]) =>
-        ({
-          id,
-          ...config,
-        }) as GlobalStorageSchema["configs"][string] & {
-          id: string;
-        },
-    )
-    .filter((config) => config.accountId !== accountId);
-
-  otherConfigs.push(...configs);
-
-  store.set(
-    "configs",
-    otherConfigs.reduce(
-      (acc, config) => {
-        const { id, ...rest } = config;
-        acc[id] = rest;
-        return acc;
-      },
-      {} as GlobalStorageSchema["configs"],
-    ),
-  );
-}
-
-export function getConfigCache() {
-  const configs = store.get("configs") || {};
-
-  return Object.entries(configs).map(([id, config]) => ({
-    id,
-    ...config,
-  })) as ConfigCacheWithId[];
 }

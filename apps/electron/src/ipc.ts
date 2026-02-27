@@ -1,4 +1,4 @@
-import { setConfigCache, setVaultCache } from "@electron/cache";
+import { setVaultCache } from "@electron/cache";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
 import { getPasswordCache, setPasswordCache } from "@electron/password";
@@ -78,7 +78,6 @@ ipcMain.handle("vault.config.decrypt", (_, payload) =>
 );
 ipcMain.handle("vault.password.set", (_, payload) => setPasswordCache(payload));
 ipcMain.handle("vault.password.get", (_, payload) => getPasswordCache(payload));
-ipcMain.handle("config.cache", (_, payload) => setConfigCache(payload));
 ipcMain.handle("shell.open.file", (_, url) => shell.showItemInFolder(url));
 ipcMain.handle("shell.open.folder", (_, url) => shell.openPath(url));
 ipcMain.handle("shell.open.browser", (_, url) => openBrowser(url));

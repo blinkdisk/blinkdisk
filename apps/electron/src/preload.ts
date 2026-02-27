@@ -1,4 +1,4 @@
-import type { setConfigCache, setVaultCache } from "@electron/cache";
+import type { setVaultCache } from "@electron/cache";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
@@ -103,10 +103,6 @@ const api = {
         "dialog.save",
         options,
       ) as Promise<SaveDialogReturnValue>,
-  },
-  config: {
-    cache: (payload: Parameters<typeof setConfigCache>[0]) =>
-      ipcRenderer.invoke("config.cache", payload),
   },
   fs: {
     folderSize: (path: string) =>
