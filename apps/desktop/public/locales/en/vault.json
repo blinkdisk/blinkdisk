@@ -86,6 +86,10 @@
     "title": "Vault config required",
     "description": "You need to configure this vault before using it."
   },
+  "starting": {
+    "title": "Starting vault",
+    "description": "Your vault is being initialized. This usually takes a few seconds."
+  },
   "providers": {
     "CLOUDBLINK": {
       "name": "CloudBlink"

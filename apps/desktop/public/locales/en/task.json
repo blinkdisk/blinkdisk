@@ -1,0 +1,24 @@
+{
+  "dialog": {
+    "title": {
+      "loading": "Loading...",
+      "fallback": "Task"
+    },
+    "description": {
+      "loading": "Loading task details..."
+    },
+    "logs": {
+      "waiting": "Waiting for logs...",
+      "empty": "No logs available"
+    },
+    "close": "Close",
+    "cancel": "Cancel Task",
+    "status": {
+      "RUNNING": "Running",
+      "CANCELING": "Canceling",
+      "CANCELED": "Canceled",
+      "SUCCESS": "Success",
+      "FAILED": "Failed"
+    }
+  }
+}
