@@ -66,6 +66,7 @@ export function useCreateFolder({
           ...(window.folderMockPolicy || {}),
           name: values.name,
           emoji: values.emoji,
+          type: values.type || "folder",
         },
       });
 

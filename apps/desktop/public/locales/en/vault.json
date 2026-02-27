@@ -351,11 +351,20 @@
       "title": "Folders",
       "count_one": "{{count}} folder backed up",
       "count_other": "{{count}} folders backed up",
-      "addFolder": "Add folder",
+      "addFolder": "Add file or folder",
       "backupAll": "Backup all",
       "empty": {
         "title": "No folders added",
-        "description": "You haven't added any folders yet. Add one by pressing the button below."
+        "description": "You haven't added any folders yet."
+      }
+    },
+    "files": {
+      "title": "Files",
+      "count_one": "{{count}} file backed up",
+      "count_other": "{{count}} files backed up",
+      "empty": {
+        "title": "No files added",
+        "description": "You haven't added any files yet."
       }
     },
     "score": {

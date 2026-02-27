@@ -13,6 +13,7 @@ export type CoreFolderItem = {
   id: string;
   name?: string;
   emoji?: string;
+  type?: "file" | "folder";
   source: {
     host: string;
     userName: string;
@@ -47,7 +48,7 @@ export type CoreFolderItem = {
     };
     rootEntry: {
       name: string;
-      type: string;
+      type: "d" | "f";
       mode: string;
       mtime: string;
       uid: number;
@@ -123,9 +124,17 @@ export function useFolderList() {
           path: folder.source.path,
         });
 
+        const derivedType: "file" | "folder" =
+          folder.lastSnapshot?.rootEntry?.type === "f"
+            ? "file"
+            : folder.type === "file"
+              ? "file"
+              : "folder";
+
         folders.push({
           ...folder,
           id,
+          type: derivedType,
         });
       }
 

@@ -24,7 +24,7 @@ export function SidebarAddFolder() {
         <LocalButton
           className="bg-sidebar-muted border-sidebar-border w-full"
           variant="outline"
-          onClick={openCreateFolder}
+          onClick={() => openCreateFolder()}
         >
           <PlusIcon />
           <span>{t("addFolder")}</span>

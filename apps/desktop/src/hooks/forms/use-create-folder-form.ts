@@ -13,6 +13,7 @@ export function useCreateFolderForm({
       name: "",
       emoji: "📁",
       path: "",
+      type: "folder" as const,
       ...(defaultValues || {}),
     },
     validators: {

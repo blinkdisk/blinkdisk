@@ -1,21 +1,25 @@
 {
   "createDialog": {
-    "title": "Add folder",
-    "description": "Create a new folder to backup your files.",
+    "title": "Add file or folder",
+    "description": "Add a file or folder to backup.",
+    "type": {
+      "folder": "Folder",
+      "file": "File"
+    },
     "name": {
-      "label": "Folder name",
-      "placeholder": "Enter folder name"
+      "label": "Name",
+      "placeholder": "Enter name"
     },
     "emoji": {
       "button": "Change emoji"
     },
     "path": {
-      "label": "Folder path",
-      "placeholder": "Select folder path",
-      "title": "Select folder path"
+      "label": "Path",
+      "placeholder": "Select path",
+      "title": "Select path"
     },
     "continue": "Continue",
-    "submit": "Add folder",
+    "submit": "Add file or folder",
     "exceedingAlert": {
       "title": "Not enough cloud storage",
       "description": "This folder likely can’t be backed up because it would exceed your available CloudBlink storage. To back it up, you’ll need to upgrade your CloudBlink plan.",
@@ -45,8 +49,8 @@
     "empty": "No emoji found."
   },
   "dropzone": {
-    "title": "Drop folder to add",
-    "description": "Drop any files or folders to add it to your vault and start backing them up."
+    "title": "Drop to add",
+    "description": "Drop any files or folders to add them to your vault and start backing them up."
   },
   "list": {
     "item": {
