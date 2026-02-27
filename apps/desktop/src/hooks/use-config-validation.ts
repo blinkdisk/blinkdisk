@@ -3,7 +3,7 @@ import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { useCallback } from "react";
 
-export type VaultAction = "CREATE" | "CONNECT" | "UPDATE";
+export type VaultAction = "CREATE" | "SETUP" | "UPDATE";
 
 export function useConfigValidation(
   providerType: ProviderType,
@@ -12,6 +12,10 @@ export function useConfigValidation(
 ) {
   const onSubmitAsync = useCallback(
     async ({ value }: { value: object }) => {
+      // Validation for connect is done elsewhere
+      if (action === "SETUP") return;
+
+      // Can't update config at the moment
       if (action === "UPDATE") return { code: "READ_ONLY" };
 
       const result = await window.electron.vault.validate({
@@ -19,13 +23,7 @@ export function useConfigValidation(
         config: value as ProviderConfig,
       });
 
-      if (result.code === "NOT_INITIALIZED") {
-        if (action === "CREATE") return;
-        if (action === "CONNECT")
-          return {
-            code: "VAULT_NOT_FOUND",
-          };
-      }
+      if (result.code === "NOT_INITIALIZED") return;
 
       if (result.error)
         return {
@@ -37,23 +35,14 @@ export function useConfigValidation(
 
       const storedId = atob(result.uniqueID || "");
 
-      if (action === "CONNECT" && storedId !== coreId)
+      const vaults = await trpc.vault.list.query();
+
+      const existing = vaults.find((v) => v.coreId === storedId);
+      if (existing)
         return {
-          code: "INCORRECT_VAULT_FOUND",
+          code: "VAULT_ALREADY_EXISTS",
+          name: existing.name,
         };
-
-      if (action === "CREATE") {
-        const vaults = await trpc.vault.list.query();
-
-        const existing = vaults.find((v) => v.coreId === storedId);
-        if (existing)
-          return {
-            code: "VAULT_ALREADY_EXISTS",
-            name: existing.name,
-          };
-
-        return undefined;
-      }
     },
     [action, coreId, providerType],
   );

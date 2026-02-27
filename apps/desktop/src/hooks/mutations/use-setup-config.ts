@@ -6,7 +6,7 @@ import { ZAddConfigType } from "@schemas/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { tryCatch } from "@utils/try-catch";
 
-export function useAddVaultConfig(onSuccess?: () => void) {
+export function useSetupConfig(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();

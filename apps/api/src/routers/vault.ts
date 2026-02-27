@@ -198,7 +198,21 @@ export const vaultRouter = router({
 
     if (!vault) throw new CustomError("VAULT_NOT_FOUND");
 
-    return vault;
+    let token: string | undefined = undefined;
+    if (vault.provider === "CLOUDBLINK") {
+      token = await generateServiceToken(
+        {
+          vaultId: vault.id,
+        },
+        // The dotenv parser somtimes leaves a trailing backslash
+        ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
+      );
+    }
+
+    return {
+      ...vault,
+      token,
+    };
   }),
   update: authedProcedure
     .input(ZUpdateVault)

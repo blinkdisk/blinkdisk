@@ -170,9 +170,10 @@ async function startStatusPool(id: string) {
 
     if (error) continue;
 
-    let vaultStatus: VaultStatus = "SETUP";
+    let vaultStatus: VaultStatus;
     if (status.connected) vaultStatus = "RUNNING";
     else if (status.initTaskID) vaultStatus = "STARTING";
+    else vaultStatus = "SETUP";
 
     i = i + 1;
     const delay = i < 10 ? 100 * i : 1000;

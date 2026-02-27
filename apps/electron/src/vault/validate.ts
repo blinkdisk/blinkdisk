@@ -11,7 +11,9 @@ export let validationVault: VaultInstance | null = null;
 export async function validateVaultConfig(vault: {
   type: ProviderType;
   config: ProviderConfig;
+  version?: number;
   password?: string;
+  token?: string;
 }) {
   if (!validationVault) {
     const id = "temporary";
@@ -29,7 +31,12 @@ export async function validateVaultConfig(vault: {
     data: {
       storage: {
         type: mapProviderType(vault.type),
-        config: mapConfigFields(vault.type, vault.config, LATEST_VAULT_VERSION),
+        config: mapConfigFields(
+          vault.type,
+          vault.config,
+          vault.version || LATEST_VAULT_VERSION,
+          vault.token,
+        ),
       },
       ...(vault.password && { password: vault.password }),
     },

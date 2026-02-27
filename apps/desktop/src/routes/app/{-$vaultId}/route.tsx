@@ -1,6 +1,5 @@
 import { TaskDialog } from "@desktop/components/dialogs/task";
-import { ConfigMissing } from "@desktop/components/vaults/config-missing";
-import { PasswordMissing } from "@desktop/components/vaults/password-missing";
+import { Setup } from "@desktop/components/vaults/setup";
 import { VaultStarting } from "@desktop/components/vaults/starting";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
@@ -34,8 +33,7 @@ function RouteComponent() {
         <VaultStarting />
       ) : vault && status === "SETUP" ? (
         <>
-          <ConfigMissing vault={vault} />
-          <PasswordMissing vaultId={vault.id} status={"PASSWORD_INVALID"} />
+          <Setup />
         </>
       ) : (
         <Outlet />
