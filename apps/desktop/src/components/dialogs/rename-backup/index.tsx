@@ -26,7 +26,7 @@ export function RenameBackupDialog() {
     if (isOpen && options) {
       form.reset({ name: options.currentName ?? "" });
     }
-  }, [isOpen, options]);
+  }, [isOpen, options, form]);
 
   return (
     <Dialog
