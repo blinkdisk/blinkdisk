@@ -18,7 +18,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "types": ["../api/worker-configuration.d.ts"]
+    "types": ["../api/worker-configuration.d.ts", "vitest/globals"],
   },
-  "include": ["src", "../../libs/hooks/src/use-app-translation.ts"]
+  "include": ["src", "../../libs/hooks/src/use-app-translation.ts"],
 }

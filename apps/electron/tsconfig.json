@@ -5,8 +5,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ESNext",
-    "sourceMap": false
+    "sourceMap": false,
+    "types": ["vitest/globals"],
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
