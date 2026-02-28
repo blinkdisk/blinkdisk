@@ -18,6 +18,7 @@ export const configRouter = router({
         "Config.accountId",
         "Config.userName",
         "Config.hostName",
+        "Config.createdAt",
       ])
       .where("Vault.status", "=", "ACTIVE")
       .where("Config.accountId", "=", ctx.account.id)

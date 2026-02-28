@@ -1,7 +1,6 @@
 import { useSetupPasswordForm } from "@desktop/hooks/forms/use-setup-password-form";
 import { useSetupVault } from "@desktop/hooks/mutations/use-setup-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useVaultConfig } from "@desktop/hooks/queries/use-vault-config";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
 import { SettingsIcon } from "lucide-react";
@@ -17,12 +16,15 @@ export function Setup() {
   const [step, setStep] = useState<SetupStep>("PASSWORD");
 
   const [password, setPassword] = useState("");
-  const [config, setConfig] = useState<ProviderConfig | null>(null);
+  const [initialConfig, setInitialConfig] = useState<ProviderConfig | null>(
+    null,
+  );
 
-  const { data: loadedConfig } = useVaultConfig();
+  const [config, setConfig] = useState<ProviderConfig | null>(null);
 
   const { mutateAsync } = useSetupVault({
     setStep,
+    setInitialConfig,
   });
 
   const form = useSetupPasswordForm({
@@ -81,8 +83,10 @@ export function Setup() {
             {ConfigForm && (
               <ConfigForm
                 action="SETUP"
+                // ProviderConfig and the form could be different
+                // providers from typescripts perspective
                 // eslint-disable-next-line
-                config={loadedConfig as any}
+                config={initialConfig as any}
                 onSubmit={async (config) => {
                   setConfig(config);
 

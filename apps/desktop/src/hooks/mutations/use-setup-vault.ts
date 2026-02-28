@@ -5,19 +5,20 @@ import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CustomError } from "@utils/error";
+import { tryCatch } from "@utils/try-catch";
 import { VaultItem } from "../queries/use-vault";
-import { useVaultConfig } from "../queries/use-vault-config";
 
 export function useSetupVault({
   onSuccess,
   setStep,
+  setInitialConfig,
 }: {
   onSuccess?: () => void;
-  setStep: (step: SetupStep) => void;
+  setStep: (to: SetupStep) => void;
+  setInitialConfig: (to: ProviderConfig) => void;
 }) {
   const queryClient = useQueryClient();
 
-  const { data: loadedConfig } = useVaultConfig();
   const { queryKeys } = useQueryKey();
 
   return useMutation({
@@ -29,11 +30,45 @@ export function useSetupVault({
     }) => {
       let config = values.config;
 
-      if (values.vault.provider === "CLOUDBLINK") config = {};
+      if (!config) {
+        if (values.vault.provider === "CLOUDBLINK") config = {};
+        else {
+          const configs = await trpc.config.list.query();
 
-      if (!config && values.vault.configLevel === "VAULT" && loadedConfig)
-        config = loadedConfig;
+          // Pick the newest config for the vault
+          const encryptedConfig = configs
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            )
+            .find((config) => config.vaultId === values.vault.id);
 
+          // This shouldn't happen in theory
+          if (!encryptedConfig) return setStep("CONFIG");
+
+          const [decryptedConfig, err] = await tryCatch(
+            window.electron.vault.config.decrypt({
+              password: values.password!,
+              encrypted: encryptedConfig.data,
+            }) as Promise<ProviderConfig>,
+          );
+
+          // Very likely the password is incorrect
+          if (err) {
+            setStep("PASSWORD");
+            throw new CustomError("INVALID_PASSWORD");
+          }
+
+          if (values.vault.configLevel === "VAULT") config = decryptedConfig;
+          else {
+            setInitialConfig(decryptedConfig);
+            return setStep("CONFIG");
+          }
+        }
+      }
+
+      // This shouldn't happen in theory
       if (!config) return setStep("CONFIG");
 
       const validateRes = await window.electron.vault.validate({
