@@ -42,7 +42,7 @@ export default {
     }),
     extraResources: [
       {
-        from: "../core/dist/blinkdisk_windows_amd64",
+        from: "../core/dist/kopia_windows_amd64",
         to: "./binaries",
       },
     ],
@@ -71,7 +71,7 @@ export default {
     x64ArchFiles: "**/blinkdisk",
     extraResources: [
       {
-        from: "../core/dist/blinkdisk_darwin_universal",
+        from: "../core/dist/kopia_darwin_universal",
         to: "./binaries",
       },
     ],
@@ -99,7 +99,7 @@ export default {
     ],
     extraResources: [
       {
-        from: "../core/dist/blinkdisk_linux_${arch}",
+        from: "../core/dist/kopia_linux_${arch}",
         to: "./binaries",
       },
     ],
