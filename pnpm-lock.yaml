@@ -17555,6 +17555,19 @@ packages:
       typescript: 5.7.3
     dev: true
 
+  /tsconfck@3.1.5(typescript@5.8.2):
+    resolution: {integrity: sha512-CLDfGgUp7XPswWnezWwsCRxNmgQjhYq3VXHM0/XIRxhVrKw0M1if9agzryh1QS3nxjCROvV+xWxoJO1YctzzWg==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    peerDependencies:
+      typescript: ^5.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.8.2
+    dev: true
+
   /tsconfck@3.1.6(typescript@5.8.2):
     resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
     engines: {node: ^18 || >=20}
@@ -17566,6 +17579,7 @@ packages:
         optional: true
     dependencies:
       typescript: 5.8.2
+    dev: false
 
   /tsconfig-paths@4.2.0:
     resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
@@ -18269,9 +18283,9 @@ packages:
       vite:
         optional: true
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.0
       globrex: 0.1.2
-      tsconfck: 3.1.6(typescript@5.8.2)
+      tsconfck: 3.1.5(typescript@5.8.2)
     transitivePeerDependencies:
       - supports-color
       - typescript

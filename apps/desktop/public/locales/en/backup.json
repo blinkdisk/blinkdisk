@@ -8,6 +8,7 @@
       "dropdown": {
         "browse": "Browse files",
         "rename": "Rename backup",
+        "pin": "Pin backup",
         "delete": "Delete backup"
       }
     },
@@ -74,5 +75,18 @@
     },
     "cancel": "Cancel",
     "continue": "Delete backup"
+  },
+  "pinDialog": {
+    "title": "Pin backup",
+    "description": "Manage pins for this backup.",
+    "alert": {
+      "title": "What are pins?",
+      "description": "When a backup has a pin, it won't be removed even if it falls outside your retention policy."
+    },
+    "label": "New pin",
+    "placeholder": "e.g. \"keep\"",
+    "add": "Add",
+    "duplicate": "This pin is already added.",
+    "save": "Save"
   }
 }

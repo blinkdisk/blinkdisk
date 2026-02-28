@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@ui/dialog";
+import { useEffect } from "react";
 
 export function RenameBackupDialog() {
   const { t } = useAppTranslation("backup.renameDialog");
@@ -20,6 +21,12 @@ export function RenameBackupDialog() {
     currentName: options?.currentName ?? "",
     onSuccess: () => setIsOpen(false),
   });
+
+  useEffect(() => {
+    if (isOpen && options) {
+      form.reset({ name: options.currentName ?? "" });
+    }
+  }, [isOpen, options, form]);
 
   return (
     <Dialog
