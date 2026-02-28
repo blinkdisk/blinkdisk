@@ -107,6 +107,9 @@ export async function fetchVaultRaw(
           const stream = createWriteStream(tmpFilePath);
           result.pipe(stream);
 
+          stream.on("error", (e) => rej(e));
+          result.on("error", (e) => rej(e));
+
           stream.on("finish", async () => {
             stream.close();
 
@@ -119,6 +122,9 @@ export async function fetchVaultRaw(
           });
         } else {
           let data = Buffer.alloc(0);
+
+          result.on("error", (e) => rej(e));
+
           result.on("data", (newData: Buffer) => {
             const newBuffer = Buffer.from(newData);
             data = Buffer.concat([data, newBuffer]);
