@@ -6,6 +6,7 @@ import { useDirectory } from "@desktop/hooks/queries/core/use-directory";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useBackup } from "@desktop/hooks/use-backup";
 import { useFolder } from "@desktop/hooks/use-folder";
+import { getBackupDisplayName } from "@desktop/lib/backup";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@ui/button";
@@ -58,11 +59,7 @@ function RouteComponent() {
                 },
                 {
                   id: "backup",
-                  text:
-                    new Date(backup.startTime).toLocaleString(undefined, {
-                      timeStyle: "short",
-                      dateStyle: "short",
-                    }) || "",
+                  text: getBackupDisplayName(backup),
                   href:
                     !path || !path.length
                       ? undefined

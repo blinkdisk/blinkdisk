@@ -1,4 +1,5 @@
 import { DeleteBackupDialog } from "@desktop/components/dialogs/delete-backup";
+import { RenameBackupDialog } from "@desktop/components/dialogs/rename-backup";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -11,6 +12,7 @@ function RouteComponent() {
   return (
     <>
       <DeleteBackupDialog />
+      <RenameBackupDialog />
       <Outlet />
     </>
   );

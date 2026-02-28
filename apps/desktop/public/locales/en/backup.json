@@ -7,6 +7,7 @@
       "files_other": "{{formatted}} files",
       "dropdown": {
         "browse": "Browse files",
+        "rename": "Rename backup",
         "delete": "Delete backup"
       }
     },
@@ -56,6 +57,13 @@
         "fallback": "{{completed}} processed"
       }
     }
+  },
+  "renameDialog": {
+    "title": "Rename backup",
+    "description": "Give this backup a custom name to find it more easily.",
+    "label": "Name",
+    "placeholder": "My backup",
+    "continue": "Rename backup"
   },
   "deleteDialog": {
     "title": "Delete backup",

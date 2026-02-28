@@ -11,6 +11,8 @@ import {
 
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
+import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
+import { formatBackupDate } from "@desktop/lib/backup";
 import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
@@ -19,10 +21,12 @@ import { Skeleton } from "@ui/skeleton";
 import { cn } from "@utils/class";
 import {
   CalendarClockIcon,
+  CalendarIcon,
   FileSearchIcon,
   FilesIcon,
   HardDriveIcon,
   MoreVerticalIcon,
+  PenLineIcon,
   PlayIcon,
   TrashIcon,
 } from "lucide-react";
@@ -30,6 +34,7 @@ import { useMemo } from "react";
 
 interface Backup {
   id: string;
+  description: string;
   startTime: string;
   rootID: string;
   summary: {
@@ -46,14 +51,6 @@ type FakeBackupType = {
   type: "FAKE";
   startTime: string;
 };
-
-function formatDateTime(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleString(undefined, {
-    timeStyle: "short",
-    dateStyle: "short",
-  });
-}
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString(undefined, {
@@ -249,6 +246,7 @@ type BackupProps = {
 export function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
   const { openDeleteBackupDialog } = useDeleteBackupDialog();
+  const { openRenameBackupDialog } = useRenameBackupDialog();
 
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
 
@@ -264,10 +262,26 @@ export function Backup({ backup }: BackupProps) {
         className="absolute inset-0"
       />
       <div className="flex flex-col">
-        <p className="text-lg font-semibold">
-          {backup ? formatDateTime(backup.startTime) : <Skeleton width={150} />}
+        <div className="flex items-center gap-2">
+          <p className="text-lg font-semibold">
+            {backup ? (
+              formattedTime?.replace("about ", "~ ")
+            ) : (
+              <Skeleton width={100} />
+            )}
+          </p>
+          {backup?.description ? (
+            <p className="text-primary whitespace-pre font-medium">
+              {backup.description}
+            </p>
+          ) : null}
+        </div>
+        <p className="text-muted-foreground text-sm">
+          <CalendarIcon className="mr-2 inline-block size-4" />
+          {backup ? formatBackupDate(backup) : <Skeleton width={150} />}
         </p>
-
+      </div>
+      <div className="flex items-center gap-3">
         <div className="text-muted-foreground flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1.5">
             {backup ? <FilesIcon className="size-4" /> : null}
@@ -293,11 +307,6 @@ export function Backup({ backup }: BackupProps) {
             </span>
           </div>
         </div>
-      </div>
-      <div className="flex items-center gap-3">
-        <p className="text-muted-foreground text-sm">
-          {backup ? formattedTime : <Skeleton width={100} />}
-        </p>
         <div className="h-6 border-r" />
         {backup ? (
           <DropdownMenu>
@@ -320,6 +329,17 @@ export function Backup({ backup }: BackupProps) {
                   <FileSearchIcon />
                   {t("dropdown.browse")}
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  openRenameBackupDialog({
+                    backupId: backup.id,
+                    currentName: backup.description,
+                  })
+                }
+              >
+                <PenLineIcon />
+                {t("dropdown.rename")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
