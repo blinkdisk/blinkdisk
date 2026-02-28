@@ -1,10 +1,7 @@
-import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
 import pluginReact from "eslint-plugin-react";
 import reactCompiler from "eslint-plugin-react-compiler";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
-import tseslint from "typescript-eslint";
 import { config as baseConfig } from "./base.mjs";
 
 const lucideIconPlugin = {
@@ -25,9 +22,9 @@ const lucideIconPlugin = {
           ImportDeclaration(node) {
             const source = node.source.value;
             if (
-              typeof source === "string" && (
-                source.startsWith("@lucide/astro/icons/") || source.startsWith("lucide-react")
-              )
+              typeof source === "string" &&
+              (source.startsWith("@lucide/astro/icons/") ||
+                source.startsWith("lucide-react"))
             ) {
               for (const specifier of node.specifiers) {
                 const isDefaultImport =
@@ -62,9 +59,6 @@ const lucideIconPlugin = {
  * @type {import("eslint").Linter.Config[]} */
 export const config = [
   ...baseConfig,
-  js.configs.recommended,
-  eslintConfigPrettier,
-  ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
     languageOptions: {

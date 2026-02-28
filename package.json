@@ -12,6 +12,7 @@
     "db:studio": "dotenv -- pnpm --filter db studio",
     "emails:studio": "dotenv -- pnpm --filter emails studio",
     "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
     "unused": "knip"
   },
   "devDependencies": {
