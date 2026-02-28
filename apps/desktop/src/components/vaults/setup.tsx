@@ -23,9 +23,6 @@ export function Setup() {
 
   const { mutateAsync } = useSetupVault({
     setStep,
-    onSuccess: () => {
-      form.reset();
-    },
   });
 
   const form = useSetupPasswordForm({

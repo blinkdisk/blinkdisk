@@ -43,10 +43,6 @@
     "title": "The email is not verified yet",
     "description": "Please enter the verification code that was sent to your email address below."
   },
-  "INVALID_PASSWORD": {
-    "title": "The password is invalid",
-    "description": "Please double check the password you entered."
-  },
   "SUBSCRIPTION_EXISTS": {
     "title": "You already have an active subscription",
     "description": "Please try upgrading your subscription instead."
@@ -65,5 +61,13 @@
   "MISSING_REQUIRED_VALUE": {
     "title": "Required information is missing",
     "description": "Please try again or restart the app."
+  },
+  "INVALID_PASSWORD": {
+    "title": "Invalid encryption password",
+    "description": "The encryption password you entered is incorrect."
+  },
+  "INCORRECT_VAULT": {
+    "title": "Different vault found",
+    "description": "Your configuration resolved to a different vault. Please double check your settings."
   }
 }

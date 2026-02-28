@@ -75,6 +75,8 @@ export async function createVault(payload: {
       },
     });
 
+    vaults[vault.id] = vault;
+
     return response as { error?: string };
   } catch (e) {
     log.error("Failed to create vault, stopping:", e);
@@ -181,6 +183,11 @@ export function getVault(id: string) {
 }
 
 export function getVaultStatus(id: string) {
-  const vault = getVault(id);
-  return { status: vault.status, initTask: vault.initTask };
+  try {
+    const vault = getVault(id);
+    return { status: vault.status, initTask: vault.initTask };
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }

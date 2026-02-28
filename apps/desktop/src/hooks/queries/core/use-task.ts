@@ -22,11 +22,11 @@ export type CoreTask = {
 };
 
 export function useTask(taskId?: string, enabled = true) {
-  const { accountId } = useQueryKey();
+  const { accountId, queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useQuery({
-    queryKey: [accountId, "task", vaultId, taskId],
+    queryKey: queryKeys.task.single(taskId),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<CoreTask>(
         `/api/v1/tasks/${taskId}`,

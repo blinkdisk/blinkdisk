@@ -1,3 +1,4 @@
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
@@ -6,6 +7,7 @@ import { CustomError } from "@utils/error";
 
 export function useCancelTask() {
   const { vaultId } = useVaultId();
+  const { queryKeys } = useQueryKey();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -16,10 +18,9 @@ export function useCancelTask() {
       await vaultApi(vaultId).post(`/api/v1/tasks/${taskId}/cancel`, {});
     },
     onError: showErrorToast,
-    onSuccess: async () => {
+    onSuccess: async (_, vars) => {
       await queryClient.invalidateQueries({
-        queryKey: [undefined, "task"],
-        exact: false,
+        queryKey: queryKeys.task.single(vars.taskId),
       });
     },
   });

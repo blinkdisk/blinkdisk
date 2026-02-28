@@ -72,16 +72,6 @@
       "label": "Encryption Password",
       "placeholder": "Enter vault encryption password"
     },
-    "error": {
-      "invalidPassword": {
-        "title": "Invalid encryption password",
-        "description": "The encryption password you entered is incorrect."
-      },
-      "incorrectVault": {
-        "title": "Different vault found",
-        "description": "Your configuration resolved to a different vault. Please double check your settings."
-      }
-    },
     "submit": "Continue"
   },
   "starting": {

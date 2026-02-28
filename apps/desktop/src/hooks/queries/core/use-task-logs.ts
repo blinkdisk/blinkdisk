@@ -12,11 +12,11 @@ export type CoreTaskLogEntry = {
 };
 
 export function useTaskLogs(taskId?: string, enabled = true) {
-  const { accountId } = useQueryKey();
+  const { accountId, queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useQuery({
-    queryKey: [accountId, "task", vaultId, taskId, "logs"],
+    queryKey: queryKeys.task.logs(taskId),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<{ logs: CoreTaskLogEntry[] }>(
         `/api/v1/tasks/${taskId}/logs`,

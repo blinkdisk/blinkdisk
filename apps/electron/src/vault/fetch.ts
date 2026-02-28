@@ -110,9 +110,12 @@ export async function fetchVaultRaw(
           stream.on("finish", async () => {
             stream.close();
 
-            if (isAsar) await rename(tmpFilePath, filePath);
-
-            res(null);
+            try {
+              if (isAsar) await rename(tmpFilePath, filePath);
+              res(null);
+            } catch (e) {
+              rej(e);
+            }
           });
         } else {
           let data = Buffer.alloc(0);
