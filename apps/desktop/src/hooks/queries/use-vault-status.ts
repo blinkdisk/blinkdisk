@@ -9,9 +9,7 @@ export function useVaultStatus() {
   const query = useQuery({
     queryKey: queryKeys.vault.status(vaultId),
     queryFn: async () => {
-      const res = await window.electron!.vault.status({
-        vaultId: vaultId!,
-      });
+      const res = await window.electron!.vault.status(vaultId!);
 
       if (!res) return null;
       return res;
@@ -23,6 +21,8 @@ export function useVaultStatus() {
 
   return {
     ...query,
-    running: query.data === "RUNNING",
+    status: query.data?.status,
+    initTask: query.data?.initTask,
+    running: query.data?.status === "RUNNING",
   };
 }

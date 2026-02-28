@@ -47,6 +47,10 @@ export function useAuth() {
         true,
       );
 
+      // We need to make sure all vaults are started,
+      // maybe the account was inactive.
+      await window.electron.vault.start.all();
+
       await setAccountId(session.user.id);
 
       await queryClient.invalidateQueries({

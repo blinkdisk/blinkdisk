@@ -1,6 +1,6 @@
 import { ProviderType } from "@config/providers";
 import { ConfigLevel } from "@db/enums";
-import { EncryptedConfig, EncryptedString } from "@electron/encryption";
+import { EncryptedString } from "@electron/encryption";
 import { sendWindow } from "@electron/window";
 import { ZVaultOptionsType } from "@schemas/shared/vault";
 import Store from "electron-store";
@@ -20,16 +20,6 @@ export type GlobalStorageType = {
       token?: EncryptedString;
       version: number;
       provider: ProviderType;
-    };
-  };
-  configs: {
-    [id: string]: {
-      level: ConfigLevel;
-      data: EncryptedConfig;
-      accountId: string;
-      vaultId: string;
-      userName?: string | null;
-      hostName?: string | null;
     };
   };
   passwords: {
@@ -113,6 +103,9 @@ export const store = new Store({
       store.delete("storages");
       store.delete("configs");
       store.delete("vaults");
+    },
+    ">1.3.0": (store) => {
+      store.delete("configs");
     },
   },
 });

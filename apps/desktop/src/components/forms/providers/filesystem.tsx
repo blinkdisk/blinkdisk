@@ -9,14 +9,12 @@ export type FilesystemFormProps = {
   action: VaultAction;
   config?: ZFilesystemConfigType;
   onSubmit: (config: ZFilesystemConfigType) => void;
-  coreId?: string;
 };
 
 export function FilesystemForm({
   action,
   config,
   onSubmit,
-  coreId,
 }: FilesystemFormProps) {
   const { t } = useAppTranslation("vault.providers.FILESYSTEM.fields");
 
@@ -24,7 +22,6 @@ export function FilesystemForm({
     action,
     config,
     onSubmit,
-    coreId,
   });
 
   return (

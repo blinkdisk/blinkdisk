@@ -96,6 +96,11 @@ export function useQueryKey() {
         folders: () => [...keys.policy.all, "folder"],
         folder: (folderId?: string) => [...keys.policy.folders(), folderId],
       },
+      task: {
+        all: [accountId, "task"],
+        single: (taskId?: string) => [...keys.task.all, taskId],
+        logs: (taskId?: string) => [...keys.task.all, taskId, "logs"],
+      },
     };
 
     return keys;

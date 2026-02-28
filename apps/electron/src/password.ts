@@ -4,7 +4,6 @@ import {
   encryptString,
 } from "@electron/encryption";
 import { store } from "@electron/store";
-import { Vault } from "@electron/vault";
 
 export function setPasswordCache({
   vaultId,
@@ -15,7 +14,6 @@ export function setPasswordCache({
 }) {
   const encrypted = encryptString(password);
   store.set(`passwords.${vaultId}`, encrypted);
-  Vault.onCacheChanged();
 }
 
 export function getPasswordCache({ vaultId }: { vaultId: string }) {

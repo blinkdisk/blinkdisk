@@ -191,14 +191,28 @@ export const vaultRouter = router({
   get: authedProcedure.input(ZGetVault).query(async ({ input, ctx }) => {
     const vault = await ctx.db
       .selectFrom("Vault")
-      .select(["id", "coreId", "name", "provider", "configLevel"])
+      .select(["id", "coreId", "name", "provider", "version", "configLevel"])
       .where("accountId", "=", ctx.account.id)
       .where("id", "=", input.vaultId)
       .executeTakeFirst();
 
     if (!vault) throw new CustomError("VAULT_NOT_FOUND");
 
-    return vault;
+    let token: string | undefined = undefined;
+    if (vault.provider === "CLOUDBLINK") {
+      token = await generateServiceToken(
+        {
+          vaultId: vault.id,
+        },
+        // The dotenv parser somtimes leaves a trailing backslash
+        ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
+      );
+    }
+
+    return {
+      ...vault,
+      token,
+    };
   }),
   update: authedProcedure
     .input(ZUpdateVault)

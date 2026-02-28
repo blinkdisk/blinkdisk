@@ -34,6 +34,7 @@ i18n.loadNamespaces([
   "backup",
   "subscription",
   "update",
+  "task",
 ]);
 
 export const dateLocales = {

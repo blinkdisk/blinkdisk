@@ -9,14 +9,12 @@ export type BackblazeFormProps = {
   action: VaultAction;
   config?: ZBackblazeConfigType;
   onSubmit: (config: ZBackblazeConfigType) => void;
-  coreId?: string;
 };
 
 export function BackblazeForm({
   action,
   config,
   onSubmit,
-  coreId,
 }: BackblazeFormProps) {
   const { t } = useAppTranslation("vault.providers.BACKBLAZE.fields");
 
@@ -24,7 +22,6 @@ export function BackblazeForm({
     action,
     config,
     onSubmit,
-    coreId,
   });
 
   return (

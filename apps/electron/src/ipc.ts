@@ -1,4 +1,4 @@
-import { setConfigCache, setVaultCache } from "@electron/cache";
+import { setVaultCache } from "@electron/cache";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
 import { getPasswordCache, setPasswordCache } from "@electron/password";
@@ -14,7 +14,13 @@ import { openBrowser } from "@electron/shell";
 import { sshKeyscan } from "@electron/ssh";
 import { store } from "@electron/store";
 import { getUpdateStatus, installUpdate } from "@electron/updater";
-import { getVault, Vault } from "@electron/vault";
+import {
+  connectVault,
+  createVault,
+  getVaultStatus,
+  startAllVaults,
+} from "@electron/vault/manage";
+import { validateVaultConfig } from "@electron/vault/validate";
 import { setProgressBar, window } from "@electron/window";
 import { app, dialog, ipcMain, shell } from "electron";
 import { platform } from "node:os";
@@ -50,10 +56,11 @@ ipcMain.handle("dialog.save", (_, { defaultFileName, ...options }) =>
   }),
 );
 ipcMain.handle("vault.cache", (_, payload) => setVaultCache(payload));
-ipcMain.handle("vault.validate", (_, config) => Vault.validate(config));
-ipcMain.handle("vault.create", (_, config) => Vault.create(config));
-ipcMain.handle("vault.connect", (_, config) => Vault.connect(config));
-ipcMain.handle("vault.status", (_, payload) => getVault(payload)?.status);
+ipcMain.handle("vault.validate", (_, config) => validateVaultConfig(config));
+ipcMain.handle("vault.create", (_, config) => createVault(config));
+ipcMain.handle("vault.connect", (_, config) => connectVault(config));
+ipcMain.handle("vault.status", (_, payload) => getVaultStatus(payload));
+ipcMain.handle("vault.start.all", () => startAllVaults());
 ipcMain.handle("vault.restore.single", (_, payload) => restoreSingle(payload));
 ipcMain.handle("vault.restore.multiple", (_, payload) =>
   restoreMultiple(payload),
@@ -71,7 +78,6 @@ ipcMain.handle("vault.config.decrypt", (_, payload) =>
 );
 ipcMain.handle("vault.password.set", (_, payload) => setPasswordCache(payload));
 ipcMain.handle("vault.password.get", (_, payload) => getPasswordCache(payload));
-ipcMain.handle("config.cache", (_, payload) => setConfigCache(payload));
 ipcMain.handle("shell.open.file", (_, url) => shell.showItemInFolder(url));
 ipcMain.handle("shell.open.folder", (_, url) => shell.openPath(url));
 ipcMain.handle("shell.open.browser", (_, url) => openBrowser(url));

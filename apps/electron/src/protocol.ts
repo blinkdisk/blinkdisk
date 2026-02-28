@@ -1,7 +1,8 @@
-import { getVault } from "@electron/vault";
+import { getVault } from "@electron/vault/manage";
 import { app, net, protocol } from "electron";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { fetchVaultRaw } from "./vault/fetch";
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -50,14 +51,14 @@ export function registerProtocol() {
       );
     } else if (host.startsWith("vault")) {
       const vaultId = req.headers.get("vault-id") || "";
-      const vault = getVault({ vaultId });
+      const vault = getVault(vaultId);
 
       if (!vault) return new Response("Vault not found", { status: 404 });
 
       try {
         const data = req.body ? await new Response(req.body).text() : undefined;
 
-        const res = await vault.fetchRaw({
+        const res = await fetchVaultRaw(vault, {
           method: req.method as "GET" | "POST" | "PUT" | "DELETE",
           path: `${pathname}${search}`,
           data,

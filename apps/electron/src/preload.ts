@@ -1,4 +1,4 @@
-import type { setConfigCache, setVaultCache } from "@electron/cache";
+import type { setVaultCache } from "@electron/cache";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
@@ -17,7 +17,13 @@ import type {
   GlobalStorageSchema,
 } from "@electron/store";
 import type { UpdateStatus } from "@electron/updater";
-import type { getVault, Vault } from "@electron/vault";
+import {
+  connectVault,
+  createVault,
+  getVault,
+  getVaultStatus,
+} from "@electron/vault/manage";
+import { validateVaultConfig } from "@electron/vault/validate";
 import {
   contextBridge,
   ipcRenderer,
@@ -98,10 +104,6 @@ const api = {
         options,
       ) as Promise<SaveDialogReturnValue>,
   },
-  config: {
-    cache: (payload: Parameters<typeof setConfigCache>[0]) =>
-      ipcRenderer.invoke("config.cache", payload),
-  },
   fs: {
     folderSize: (path: string) =>
       ipcRenderer.invoke("fs.folderSize", path) as Promise<number>,
@@ -110,17 +112,17 @@ const api = {
     getPathFromFile: (file: File) => webUtils.getPathForFile(file),
   },
   vault: {
-    validate: (payload: Parameters<typeof Vault.validate>[0]) =>
+    validate: (payload: Parameters<typeof validateVaultConfig>[0]) =>
       ipcRenderer.invoke("vault.validate", payload) as Promise<
-        ReturnType<typeof Vault.validate>
+        ReturnType<typeof validateVaultConfig>
       >,
-    create: (payload: Parameters<typeof Vault.create>[0]) =>
+    create: (payload: Parameters<typeof createVault>[0]) =>
       ipcRenderer.invoke("vault.create", payload) as ReturnType<
-        typeof Vault.create
+        typeof createVault
       >,
-    connect: (payload: Parameters<typeof Vault.connect>[0]) =>
+    connect: (payload: Parameters<typeof connectVault>[0]) =>
       ipcRenderer.invoke("vault.connect", payload) as Promise<
-        Awaited<ReturnType<typeof Vault.connect>>
+        Awaited<ReturnType<typeof connectVault>>
       >,
     cache: (payload: Parameters<typeof setVaultCache>[0]) =>
       ipcRenderer.invoke("vault.cache", payload) as Promise<
@@ -128,7 +130,7 @@ const api = {
       >,
     status: (payload: Parameters<typeof getVault>[0]) =>
       ipcRenderer.invoke("vault.status", payload) as Promise<
-        InstanceType<typeof Vault>["status"]
+        ReturnType<typeof getVaultStatus>
       >,
     config: {
       encrypt: (payload: Parameters<typeof encryptVaultConfig>[0]) =>
@@ -145,6 +147,9 @@ const api = {
         ipcRenderer.invoke("vault.password.get", payload) as Promise<
           ReturnType<typeof getPasswordCache>
         >,
+    },
+    start: {
+      all: () => ipcRenderer.invoke("vault.start.all"),
     },
     restore: {
       single: (payload: Parameters<typeof restoreSingle>[0]) =>

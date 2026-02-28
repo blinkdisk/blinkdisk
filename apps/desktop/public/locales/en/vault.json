@@ -43,10 +43,6 @@
       "existsError": {
         "title": "Vault already exists",
         "description": "This vault is already connected to your account under the name \"{{name}}\"."
-      },
-      "incorrectError": {
-        "title": "Different vault found",
-        "description": "Your configuration resolved to a different vault. Please double check your settings."
       }
     },
     "details": {
@@ -69,22 +65,18 @@
       "submit": "Create vault"
     }
   },
-  "passwordMissing": {
-    "title": "Unlock vault",
-    "description": "You need to enter the vault's encryption password in order to unlock the vault.",
+  "setup": {
+    "title": "Setup vault",
+    "description": "You need to configure this vault before using it.",
     "password": {
       "label": "Encryption Password",
       "placeholder": "Enter vault encryption password"
     },
-    "invalidError": {
-      "title": "Invalid encryption password",
-      "description": "The encryption password you entered is incorrect."
-    },
     "submit": "Continue"
   },
-  "configMissing": {
-    "title": "Vault config required",
-    "description": "You need to configure this vault before using it."
+  "starting": {
+    "title": "Starting vault",
+    "description": "Your vault is being initialized. This usually takes a few seconds."
   },
   "providers": {
     "CLOUDBLINK": {
