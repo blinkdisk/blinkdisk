@@ -16,6 +16,7 @@
     "dev:electron": "electronmon ./build/index.js $ELECTRON_EXTRA_ARGS",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
+    "test": "vitest run",
     "compile:dev": "node esbuild.config.mjs development",
     "compile:prod": "node esbuild.config.mjs production",
     "prebuild": "pnpm build:frontend && tsc --noEmit && pnpm compile:prod compile",
@@ -47,6 +48,8 @@
     "electronmon": "^2.0.3",
     "esbuild": "^0.25.3",
     "eslint": "^9.22.0",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.18"
   }
 }

@@ -47,6 +47,9 @@
     "env:update": {
       "dependsOn": ["^env:update"]
     },
+    "test": {
+      "dependsOn": ["^test"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
