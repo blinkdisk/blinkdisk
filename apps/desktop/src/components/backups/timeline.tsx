@@ -1,3 +1,4 @@
+import { PinBadge } from "@desktop/components/backups/pin-badge";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { useFolder } from "@desktop/hooks/use-folder";
@@ -11,6 +12,7 @@ import {
 
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
+import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
 import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
 import { formatBackupDate } from "@desktop/lib/backup";
 import { formatSize } from "@desktop/lib/number";
@@ -27,6 +29,7 @@ import {
   HardDriveIcon,
   MoreVerticalIcon,
   PenLineIcon,
+  PinIcon,
   PlayIcon,
   TrashIcon,
 } from "lucide-react";
@@ -37,6 +40,7 @@ interface Backup {
   description: string;
   startTime: string;
   rootID: string;
+  pins: string[];
   summary: {
     size: number;
     files: number;
@@ -246,6 +250,7 @@ type BackupProps = {
 export function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
   const { openDeleteBackupDialog } = useDeleteBackupDialog();
+  const { openPinBackupDialog } = usePinBackupDialog();
   const { openRenameBackupDialog } = useRenameBackupDialog();
 
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
@@ -282,29 +287,38 @@ export function Backup({ backup }: BackupProps) {
         </p>
       </div>
       <div className="flex items-center gap-3">
-        <div className="text-muted-foreground flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-1.5">
-            {backup ? <FilesIcon className="size-4" /> : null}
-            <span>
-              {backup ? (
-                t("files", {
-                  count: backup.summary?.files,
-                  formatted: backup.summary?.files.toLocaleString(),
-                })
-              ) : (
-                <Skeleton width={70} />
-              )}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            {backup ? <HardDriveIcon className="size-4" /> : null}
-            <span>
-              {backup ? (
-                formatSize(backup.summary.size)
-              ) : (
-                <Skeleton width={70} />
-              )}
-            </span>
+        <div className="flex flex-col items-end gap-2">
+          {backup && backup.pins.length > 0 && (
+            <div className="z-10 flex flex-wrap justify-end gap-1.5">
+              {backup.pins.map((pin) => (
+                <PinBadge key={pin} pin={pin} size="sm" />
+              ))}
+            </div>
+          )}
+          <div className="text-muted-foreground flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-1.5">
+              {backup ? <FilesIcon className="size-4" /> : null}
+              <span>
+                {backup ? (
+                  t("files", {
+                    count: backup.summary?.files,
+                    formatted: backup.summary?.files.toLocaleString(),
+                  })
+                ) : (
+                  <Skeleton width={70} />
+                )}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {backup ? <HardDriveIcon className="size-4" /> : null}
+              <span>
+                {backup ? (
+                  formatSize(backup.summary.size)
+                ) : (
+                  <Skeleton width={70} />
+                )}
+              </span>
+            </div>
           </div>
         </div>
         <div className="h-6 border-r" />
@@ -340,6 +354,17 @@ export function Backup({ backup }: BackupProps) {
               >
                 <PenLineIcon />
                 {t("dropdown.rename")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  openPinBackupDialog({
+                    backupId: backup.id,
+                    currentPins: backup.pins,
+                  })
+                }
+              >
+                <PinIcon />
+                {t("dropdown.pin")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
