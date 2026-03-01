@@ -75,10 +75,16 @@ export function useSetupVault({
         type: values.vault.provider,
         token: values.vault.token,
         version: values.vault.version,
+        password: values.password,
         config,
       });
 
       if (validateRes.code || validateRes.error) {
+        if (validateRes.code === "INVALID_PASSWORD") {
+          setStep("PASSWORD");
+          throw new CustomError("INVALID_PASSWORD");
+        }
+
         setStep("CONFIG");
         throw new Error(validateRes.error?.toString());
       }
