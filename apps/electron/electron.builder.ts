@@ -68,7 +68,7 @@ export default {
         arch: ["universal"],
       },
     ],
-    x64ArchFiles: "**/blinkdisk",
+    x64ArchFiles: "**/kopia",
     extraResources: [
       {
         from: "../core/dist/kopia_darwin_universal",
