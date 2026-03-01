@@ -23,9 +23,9 @@ export const corePath = () => {
 
   return (
     {
-      mac: join(process.resourcesPath, "binaries", "blinkdisk"),
-      win: join(process.resourcesPath, "binaries", "blinkdisk.exe"),
-      linux: join(process.resourcesPath, "binaries", "blinkdisk"),
+      mac: join(process.resourcesPath, "binaries", "kopia"),
+      win: join(process.resourcesPath, "binaries", "kopia.exe"),
+      linux: join(process.resourcesPath, "binaries", "kopia"),
     } as const
   )[platform];
 };

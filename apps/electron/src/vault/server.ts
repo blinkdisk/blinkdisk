@@ -8,6 +8,7 @@ import { generateId } from "@utils/id";
 import { tryCatch } from "@utils/try-catch";
 import { spawn } from "child_process";
 import { app } from "electron";
+import { existsSync, renameSync } from "fs";
 import { resolve } from "path";
 import { CookieJar } from "tough-cookie";
 import { fetchVault } from "./fetch";
@@ -25,6 +26,8 @@ export function startVaultServer(id: string, pollStatus = true) {
     let certificateHash: string;
     let certificate: string;
 
+    migratePasswordFile(id);
+
     const args = [
       "server",
       "start",
@@ -36,7 +39,7 @@ export function startVaultServer(id: string, pollStatus = true) {
       "--tls-generate-cert",
       "--async-repo-connect",
       "--error-notifications=always",
-      "--blinkdiskui-notifications",
+      "--kopiaui-notifications",
       `--auth-cookie-signing-key=${signingKey}`,
       "--shutdown-on-stdin",
       "--address=127.0.0.1:0",
@@ -113,7 +116,7 @@ export function startVaultServer(id: string, pollStatus = true) {
 
       if (address) {
         cookies?.setCookieSync(
-          `BlinkDisk-Session-Cookie=${sessionCookie}`,
+          `Kopia-Session-Cookie=${sessionCookie}`,
           address,
         );
       }
@@ -142,6 +145,25 @@ export function startVaultServer(id: string, pollStatus = true) {
       }
     });
   });
+}
+
+function migratePasswordFile(id: string) {
+  try {
+    const oldPasswordFile = resolve(
+      globalConfigDirectory(),
+      `${id}.config.blinkdisk-password`,
+    );
+
+    const newPasswordFile = resolve(
+      globalConfigDirectory(),
+      `${id}.config.kopia-password`,
+    );
+
+    if (existsSync(oldPasswordFile) && !existsSync(newPasswordFile))
+      renameSync(oldPasswordFile, newPasswordFile);
+  } catch (e) {
+    console.warn("Failed to migrate password file", e);
+  }
 }
 
 function logFormatted(id: string, data: string) {

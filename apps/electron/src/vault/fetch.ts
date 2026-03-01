@@ -71,7 +71,7 @@ export async function fetchVaultRaw(
           }),
           Authorization: `Basic ${Buffer.from(
             variant === "renderer"
-              ? `blinkdisk:${vault.server.password}`
+              ? `kopia:${vault.server.password}`
               : `server-control:${vault.server.controlPassword}`,
           ).toString("base64")}`,
           ...(variant === "renderer"
