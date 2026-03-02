@@ -216,7 +216,7 @@ function FakeBackup() {
             }}
             className="bg-foreground/5 dark:bg-foreground/10 absolute bottom-0 left-0 top-0 transition-all"
           ></div>
-          <BackupProgress upload={folder.upload} variant="descriptive" />
+          <BackupProgress upload={folder.upload} />
         </>
       ) : (
         <>

@@ -7,13 +7,11 @@ import { useMemo } from "react";
 
 interface BackupProgressProps {
   upload: Required<CoreFolderItem["upload"]>;
-  variant?: "descriptive" | "default";
   size?: "sm" | "default";
 }
 
 export function BackupProgress({
   upload,
-  variant = "default",
   size = "default",
 }: BackupProgressProps) {
   const { t } = useAppTranslation("backup.progress");
@@ -48,13 +46,10 @@ export function BackupProgress({
             size === "sm" && "text-sm",
           )}
         >
-          {t(`${variant}.title`, numbers)}
+          {t("title", numbers)}
         </p>
         <p className="text-muted-foreground whitespace-nowrap text-xs">
-          {t(
-            `${variant}.description.${numbers.total ? "total" : "fallback"}`,
-            numbers,
-          )}
+          {t(`description.${numbers.total ? "total" : "fallback"}`, numbers)}
         </p>
       </div>
     </div>

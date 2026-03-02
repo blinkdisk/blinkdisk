@@ -44,19 +44,10 @@
     "backup": "Backup folder"
   },
   "progress": {
-    "descriptive": {
-      "title": "Backup in progress",
-      "description": {
-        "total": "{{percentage}} · {{completed}} / {{total}}",
-        "fallback": "{{percentage}} · {{completed}}"
-      }
-    },
-    "default": {
-      "title": "{{percentage}} complete",
-      "description": {
-        "total": "{{completed}} / {{total}}",
-        "fallback": "{{completed}} processed"
-      }
+    "title": "Backup {{percentage}} complete",
+    "description": {
+      "total": "{{completed}} / {{total}}",
+      "fallback": "{{completed}} processed"
     }
   },
   "renameDialog": {

@@ -67,7 +67,7 @@ export type CoreFolderItem = {
     cachedBytes: number;
     hashedBytes: number;
     uploadedBytes: number;
-    estimatedBytes: number;
+    estimatedBytes?: number;
     cachedFiles: number;
     hashedFiles: number;
     excludedFiles: number;
