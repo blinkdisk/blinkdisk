@@ -44,7 +44,10 @@
     "backup": "Backup folder"
   },
   "progress": {
-    "title": "Backup {{percentage}} complete",
+    "title": {
+      "default": "{{percentage}} complete",
+      "fallback": "Backing up..."
+    },
     "description": {
       "total": "{{completed}} / {{total}}",
       "fallback": "{{completed}} processed"

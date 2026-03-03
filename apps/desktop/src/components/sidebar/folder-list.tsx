@@ -4,6 +4,7 @@ import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useParams } from "@tanstack/react-router";
 import { CircularProgress } from "@ui/circular-progress";
+import { Loader } from "@ui/loader";
 import {
   SidebarGroupLabel,
   SidebarMenuButton,
@@ -64,12 +65,16 @@ function SidebarFolder({ folder }: SidebarFolderProps) {
           {folder &&
           folder.status === "UPLOADING" &&
           folder.currentTaskStatus !== "CANCELING" ? (
-            <CircularProgress
-              value={100 * (folder?.upload?.progress || 0)}
-              size={25}
-              strokeWidth={4}
-              progressClassName="opacity-60 dark:opacity-70"
-            />
+            folder.upload?.progress ? (
+              <CircularProgress
+                value={100 * (folder?.upload?.progress || 0)}
+                size={25}
+                strokeWidth={4}
+                progressClassName="opacity-60 dark:opacity-70"
+              />
+            ) : (
+              <Loader size={1.2} />
+            )
           ) : null}
         </Link>
       </SidebarMenuButton>

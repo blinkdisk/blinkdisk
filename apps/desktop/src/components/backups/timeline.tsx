@@ -212,9 +212,16 @@ function FakeBackup() {
         <>
           <div
             style={{
-              width: `${((folder.upload?.progress || 0) * 100).toFixed(0)}%`,
+              width: folder.upload?.progress
+                ? `${((folder.upload?.progress || 0) * 100).toFixed(0)}%`
+                : "100%",
             }}
-            className="bg-foreground/5 dark:bg-foreground/10 absolute bottom-0 left-0 top-0 transition-all"
+            className={cn(
+              "absolute bottom-0 left-0 top-0 transition-all",
+              folder.upload?.estimatedBytes
+                ? "bg-foreground/5 dark:bg-foreground/10"
+                : "bg-foreground/3 dark:bg-foreground/5 animate-pulse",
+            )}
           ></div>
           <BackupProgress upload={folder.upload} />
         </>

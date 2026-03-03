@@ -66,19 +66,19 @@ export type CoreFolderItem = {
   upload?: {
     cachedBytes: number;
     hashedBytes: number;
-    uploadedBytes: number;
+    uploadedBytes?: number;
     estimatedBytes?: number;
     cachedFiles: number;
     hashedFiles: number;
-    excludedFiles: number;
-    excludedDirs: number;
-    errors: number;
-    ignoredErrors: number;
-    estimatedFiles: number;
+    excludedFiles?: number;
+    excludedDirs?: number;
+    errors?: number;
+    ignoredErrors?: number;
+    estimatedFiles?: number;
     directory: string;
-    lastErrorPath: string;
-    lastError: string;
-    progress: number;
+    lastErrorPath?: string;
+    lastError?: string;
+    progress?: number;
   };
   currentTask: string;
   currentTaskStatus:
