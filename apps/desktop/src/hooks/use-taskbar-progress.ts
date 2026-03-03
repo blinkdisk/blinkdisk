@@ -30,7 +30,7 @@ export function useTaskbarProgress() {
     let totalEstimated = 0;
 
     for (const folder of uploadingFolders) {
-      if (folder.upload) {
+      if (folder.upload && folder.upload.estimatedBytes) {
         totalProcessed += folder.upload.hashedBytes + folder.upload.cachedBytes;
         totalEstimated += folder.upload.estimatedBytes;
       }
