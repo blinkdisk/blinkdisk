@@ -1,3 +1,7 @@
+import * as Sentry from "@sentry/electron/renderer";
+
+Sentry.init();
+
 import type { setVaultCache } from "@electron/cache";
 import type {
   decryptVaultConfig,

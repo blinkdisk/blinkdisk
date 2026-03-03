@@ -6,9 +6,10 @@ config({
 });
 
 import { TsconfigPathsPlugin } from "@esbuild-plugins/tsconfig-paths";
+import { sentryEsbuildPlugin } from "@sentry/esbuild-plugin";
 import esbuild from "esbuild";
 
-const ENV_WHITELIST = ["API_URL", "CLOUD_URL"];
+const ENV_WHITELIST = ["API_URL", "CLOUD_URL", "SENTRY_DESKTOP_DSN"];
 
 const env = {};
 for (const key of ENV_WHITELIST) {
@@ -23,7 +24,19 @@ const base = {
   bundle: true,
   outdir: "build",
   target: "node16",
-  plugins: [TsconfigPathsPlugin({ tsconfig: "./tsconfig.json" })],
+  sourcemap: true,
+  plugins: [
+    TsconfigPathsPlugin({ tsconfig: "./tsconfig.json" }),
+    ...(!isDev
+      ? [
+          sentryEsbuildPlugin({
+            org: process.env.SENTRY_ORGANIZATION,
+            project: process.env.SENTRY_DESKTOP_PROJECT,
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+          }),
+        ]
+      : []),
+  ],
   external: ["electron"],
   define: env,
 };

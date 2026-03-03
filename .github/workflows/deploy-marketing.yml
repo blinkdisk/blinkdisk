@@ -34,6 +34,10 @@ jobs:
           LOGSNAG_PUBLIC_KEY: ${{ vars.LOGSNAG_PUBLIC_KEY }}
           ENDORSELY_PUBLIC_KEY: ${{ vars.ENDORSELY_PUBLIC_KEY }}
           CRISP_KEY: ${{ vars.CRISP_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORGANIZATION: ${{ vars.SENTRY_ORGANIZATION }}
+          SENTRY_MARKETING_PROJECT: ${{ vars.SENTRY_MARKETING_PROJECT }}
+          SENTRY_MARKETING_DSN: ${{ vars.SENTRY_MARKETING_DSN }}
         run: pnpm --filter marketing build
 
       - name: Deploy project
