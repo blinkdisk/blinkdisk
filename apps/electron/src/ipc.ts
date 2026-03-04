@@ -86,6 +86,3 @@ ipcMain.handle("fs.isDirectory", (_, path) => isDirectory(path));
 ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
 ipcMain.handle("update.status", () => getUpdateStatus());
 ipcMain.handle("update.install", () => installUpdate());
-ipcMain.handle("sentry.test.main", () => {
-  throw new Error("Sentry test error from main process");
-});
