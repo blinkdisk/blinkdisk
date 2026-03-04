@@ -7,6 +7,7 @@ export default Sentry.withSentry(
   (env: CloudflareBindings) => ({
     dsn: env.SENTRY_CLOUD_DSN,
     sendDefaultPii: true,
+    enabled: env.NODE_ENV !== "development",
   }),
   {
     async fetch(request: Request, env: CloudflareBindings): Promise<Response> {

@@ -9,7 +9,12 @@ import { TsconfigPathsPlugin } from "@esbuild-plugins/tsconfig-paths";
 import { sentryEsbuildPlugin } from "@sentry/esbuild-plugin";
 import esbuild from "esbuild";
 
-const ENV_WHITELIST = ["API_URL", "CLOUD_URL", "SENTRY_DESKTOP_DSN"];
+const ENV_WHITELIST = [
+  "NODE_ENV",
+  "API_URL",
+  "CLOUD_URL",
+  "SENTRY_DESKTOP_DSN",
+];
 
 const env = {};
 for (const key of ENV_WHITELIST) {

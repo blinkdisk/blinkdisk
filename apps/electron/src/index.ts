@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/electron/main";
 
 Sentry.init({
   dsn: process.env.SENTRY_DESKTOP_DSN,
+  enabled: process.env.NODE_ENV !== "development",
 });
 
 // Registering must happen after Sentry,

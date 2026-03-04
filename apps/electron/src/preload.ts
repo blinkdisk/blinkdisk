@@ -1,6 +1,8 @@
 import * as Sentry from "@sentry/electron/renderer";
 
-Sentry.init();
+Sentry.init({
+  enabled: process.env.NODE_ENV !== "development",
+});
 
 import type { setVaultCache } from "@electron/cache";
 import type {
