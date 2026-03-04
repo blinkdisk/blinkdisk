@@ -22,6 +22,7 @@ const whitelist = [
   "SMTP_URL",
   "PLUNK_URL",
   "PLUNK_SECRET_KEY",
+  "SENTRY_API_DSN",
 ];
 
 let env = "";

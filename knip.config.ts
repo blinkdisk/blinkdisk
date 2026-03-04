@@ -117,7 +117,13 @@ const config: KnipConfig = {
   ignoreIssues: {
     "apps/marketing/src/components/react/**": ["exports"],
   },
-  ignoreDependencies: ["@types/electron", "@blinkdisk/.+", "cloudflare"],
+  ignoreDependencies: [
+    "@types/electron",
+    "@blinkdisk/.+",
+    "cloudflare",
+    "@sentry/cloudflare",
+    "@sentry/cli",
+  ],
   paths: {
     "@ui/*": ["./libs/ui/src/*"],
     "@api/*": ["./apps/api/src/*"],

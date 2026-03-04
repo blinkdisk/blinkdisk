@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "compatibility_flags": ["nodejs_compat"],
   "compatibility_date": "2025-08-22",
+  "upload_source_maps": true,
   "observability": {
     "enabled": true,
   },

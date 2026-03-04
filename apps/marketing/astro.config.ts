@@ -2,6 +2,7 @@ import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import sentry from "@sentry/astro";
 import tailwindcss from "@tailwindcss/vite";
 import mermaid from "astro-mermaid";
 import { defineConfig, envField } from "astro/config";
@@ -73,6 +74,11 @@ export default defineConfig({
     sitemap({
       customPages: getComparisonSitemap(site),
     }),
+    sentry({
+      project: process.env.SENTRY_MARKETING_PROJECT,
+      org: process.env.SENTRY_ORGANIZATION,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
   ],
   env: {
     schema: {
@@ -108,6 +114,11 @@ export default defineConfig({
       }),
       CRISP_KEY: envField.string({
         context: "server",
+        access: "public",
+        optional: true,
+      }),
+      SENTRY_MARKETING_DSN: envField.string({
+        context: "client",
         access: "public",
         optional: true,
       }),

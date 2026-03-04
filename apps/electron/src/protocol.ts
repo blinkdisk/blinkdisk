@@ -4,18 +4,24 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { fetchVaultRaw } from "./vault/fetch";
 
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: "blinkdiskapp",
-    privileges: {
-      standard: true,
-      secure: true,
-      supportFetchAPI: true,
+export function registerProtcol() {
+  protocol.registerSchemesAsPrivileged([
+    {
+      scheme: "sentry-ipc",
+      privileges: { bypassCSP: true, corsEnabled: true, supportFetchAPI: true },
     },
-  },
-]);
+    {
+      scheme: "blinkdiskapp",
+      privileges: {
+        standard: true,
+        secure: true,
+        supportFetchAPI: true,
+      },
+    },
+  ]);
+}
 
-export function registerProtocol() {
+export function listenProtocol() {
   protocol.handle("blinkdiskapp", async (req) => {
     const { host, pathname, search } = new URL(req.url);
 

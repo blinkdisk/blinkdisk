@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "node env.js && wrangler dev --port=4000 -c ./wrangler.jsonc -c ../cloud/wrangler.jsonc --persist-to=../../.wrangler",
-    "deploy": "tsc --noEmit && wrangler deploy --minify",
+    "deploy": "tsc --noEmit && wrangler deploy --minify -var SENTRY_RELEASE:$(sentry-cli releases propose-version) outdir dist",
+    "postdeploy": "bash ./sentry.sh",
     "typecheck": "tsc --noEmit",
     "typegen": "wrangler types --env-interface CloudflareBindings",
     "env:update": "node env.js && pnpm run typegen",
@@ -15,6 +16,7 @@
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
+    "@sentry/cli": "^3.3.0",
     "@types/node": "^22.13.9",
     "dotenv": "^16.4.7",
     "eslint": "^9.22.0",
@@ -24,6 +26,7 @@
   "dependencies": {
     "@hono/trpc-server": "^0.4.0",
     "@polar-sh/sdk": "^0.35.4",
+    "@sentry/cloudflare": "^10.42.0",
     "@trpc/server": "^10.45.2",
     "axios": "^1.13.2",
     "better-auth": "^1.3.4",

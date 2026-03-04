@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.16.4",
+    "@sentry/electron": "^7.9.0",
+    "@sentry/react": "^10.40.0",
+    "@sentry/vite-plugin": "^5.1.1",
     "@tailwindcss/vite": "^4.0.14",
     "@tanstack/devtools-vite": "^0.3.12",
     "@tanstack/react-devtools": "^0.9.2",

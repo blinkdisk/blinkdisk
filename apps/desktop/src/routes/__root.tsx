@@ -1,5 +1,4 @@
 import { Devtools } from "@desktop/components/devtools";
-import { DefaultErrorPage } from "@desktop/components/errors/default";
 import { OfflineDialog } from "@desktop/components/offline-dialog";
 import { Update } from "@desktop/components/update";
 import { useStorageListener } from "@desktop/hooks/use-app-storage";
@@ -13,7 +12,7 @@ import { SidebarProvider } from "@ui/sidebar";
 import { SkeletonTheme } from "@ui/skeleton";
 import { Toaster } from "@ui/toast";
 import { CaptureResult } from "posthog-js";
-import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
+import { PostHogProvider } from "posthog-js/react";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export const queryClient = new QueryClient();
@@ -49,18 +48,16 @@ function RootComponent() {
           },
         }}
       >
-        <PostHogErrorBoundary fallback={DefaultErrorPage}>
-          <QueryClientProvider client={queryClient}>
-            <Devtools />
-            <SkeletonTheme dark={dark}>
-              <Update>
-                <Outlet />
-                <Toaster dark={dark} />
-                <OfflineDialog />
-              </Update>
-            </SkeletonTheme>
-          </QueryClientProvider>
-        </PostHogErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <Devtools />
+          <SkeletonTheme dark={dark}>
+            <Update>
+              <Outlet />
+              <Toaster dark={dark} />
+              <OfflineDialog />
+            </Update>
+          </SkeletonTheme>
+        </QueryClientProvider>
       </PostHogProvider>
     </SidebarProvider>
   );
