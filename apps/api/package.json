@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "node env.js && wrangler dev --port=4000 -c ./wrangler.jsonc -c ../cloud/wrangler.jsonc --persist-to=../../.wrangler",
-    "deploy": "tsc --noEmit && wrangler deploy --minify -var SENTRY_RELEASE:$(sentry-cli releases propose-version) outdir dist",
+    "deploy": "tsc --noEmit && wrangler deploy --minify --var SENTRY_RELEASE:$(sentry-cli releases propose-version) --outdir dist",
     "postdeploy": "bash ./sentry.sh",
     "typecheck": "tsc --noEmit",
     "typegen": "wrangler types --env-interface CloudflareBindings",

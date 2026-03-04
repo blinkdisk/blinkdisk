@@ -7,6 +7,7 @@ config({
 });
 
 const whitelist = [
+  "NODE_ENV",
   "LOGSNAG_PRIVATE_KEY",
   "CLOUD_JWT_PUBLIC_KEY",
   "CLOUD_S3_ENDPOINT",
