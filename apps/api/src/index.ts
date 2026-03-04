@@ -8,6 +8,7 @@ import { polarWebhook } from "@api/webhooks/polar";
 import type { DB } from "@db";
 import { database } from "@db/index";
 import { trpcServer } from "@hono/trpc-server";
+import * as Sentry from "@sentry/cloudflare";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { Kysely } from "kysely";
@@ -37,7 +38,9 @@ app.use(
 
 app.use(ratelimit);
 
-app.get("/health", (c) => c.json({ status: "ok" }));
+app.get("/health", (c) => {
+  return c.json({ status: "ok" });
+});
 
 app.use(async (c, next) => {
   const db = database(c.env.HYPERDRIVE.connectionString);
@@ -66,4 +69,10 @@ app.use(
   }),
 );
 
-export default app;
+export default Sentry.withSentry(
+  (env: CloudflareBindings) => ({
+    dsn: env.SENTRY_API_DSN,
+    sendDefaultPii: true,
+  }),
+  app,
+);

@@ -30,3 +30,5 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SENTRY_CLOUD_PROJECT: ${{ vars.SENTRY_CLOUD_PROJECT }}
+          SENTRY_CLOUD_DSN: ${{ vars.SENTRY_CLOUD_DSN }}

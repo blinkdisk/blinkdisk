@@ -1,5 +1,5 @@
 import { Context } from "@api/context";
-import { captureException } from "@api/lib/posthog";
+import * as Sentry from "@sentry/cloudflare";
 import { initTRPC } from "@trpc/server";
 import { TRPC_ERROR_CODES_BY_KEY } from "@trpc/server/rpc";
 import { CustomError } from "@utils/error";
@@ -20,14 +20,15 @@ const t = initTRPC.context<Context>().create({
       };
 
     if (ctx)
-      ctx.waitUntil(
-        captureException(error, ctx.account?.id, {
+      Sentry.captureException(error, {
+        data: {
+          accountId: ctx.account?.id,
           path: ctx.req.path,
           method: ctx.req.method,
           url: ctx.req.url,
           headers: ctx.req.header(),
-        }),
-      );
+        },
+      });
 
     return {
       message: "INTERNAL_SERVER_ERROR",
