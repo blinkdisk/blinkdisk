@@ -197,6 +197,9 @@ const api = {
     status: () => ipcRenderer.invoke("update.status") as Promise<UpdateStatus>,
     install: () => ipcRenderer.invoke("update.install") as Promise<void>,
   },
+  sentry: {
+    testMain: () => ipcRenderer.invoke("sentry.test.main"),
+  },
 };
 
 function setStorage<

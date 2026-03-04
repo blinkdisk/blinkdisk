@@ -11,6 +11,13 @@ export function useShortcutListener() {
       e.preventDefault();
       window.electron.window.reload();
     }
+
+    // Hidden shortcut to test Sentry error reporting
+    if (e.ctrlKey && e.shiftKey && e.key === "F12") {
+      e.preventDefault();
+      window.electron.sentry.testMain();
+      throw new Error("Sentry test error form renderer process");
+    }
   }, []);
 
   useEffect(() => {
