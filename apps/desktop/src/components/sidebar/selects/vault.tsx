@@ -31,7 +31,7 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
       // The fallback prevents it from being uncontrolled
       value={vaultId || "-"}
       onValueChange={(value) =>
-        value === "ADD" ? openCreateVault() : changeVault(value)
+        value === "ADD" ? openCreateVault() : value && changeVault(value)
       }
     >
       <SelectTrigger

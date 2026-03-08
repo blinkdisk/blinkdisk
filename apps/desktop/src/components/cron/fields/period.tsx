@@ -84,8 +84,8 @@ export function Period(props: PeriodProps) {
   }
 
   const handleChange = useCallback(
-    (newValue: PeriodType) => {
-      if (!readOnly) {
+    (newValue: PeriodType | null) => {
+      if (!readOnly && newValue) {
         setValue(newValue);
       }
     },

@@ -1,18 +1,20 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import {
-    SelectContent,
-    SelectItem,
-    SelectProps,
-    Select as SelectRoot,
-    SelectTrigger,
-    SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectProps,
+  Select as SelectRoot,
+  SelectTrigger,
+  SelectValue,
 } from "@ui/select";
 import React, { ReactNode, useContext } from "react";
 
 const Select = React.forwardRef<
   HTMLButtonElement,
-  SelectProps & { label: LabelContainerProps } & {
+  SelectProps<{ value: string; label: ReactNode }> & {
+    label: DynamicFieldProps;
+  } & {
     placeholder?: string;
     items: { value: string; label: ReactNode }[];
     triggerClassName?: string;
@@ -20,22 +22,30 @@ const Select = React.forwardRef<
   }
 >(
   (
-    { triggerClassName, contentClassName, label, placeholder, items, disabled, ...props },
+    {
+      triggerClassName,
+      contentClassName,
+      label,
+      placeholder,
+      items,
+      disabled,
+      ...props
+    },
     ref,
   ) => {
-    const field = useFieldContext<string>();
+    const field = useFieldContext<string | undefined>();
     const disabledContext = useContext(FormDisabledContext);
 
     return (
-      <LabelContainer
+      <DynamicField
         {...label}
         errors={field.state.meta.errors}
         name={field.name}
       >
         <SelectRoot
           {...props}
-          onValueChange={(value) => field.setValue(value)}
-          value={field.state.value}
+          onValueChange={(value) => field.setValue(value?.value)}
+          value={items.find((item) => item.value === field.state.value)}
           disabled={disabledContext || disabled}
         >
           <SelectTrigger ref={ref} className={triggerClassName}>
@@ -43,13 +53,13 @@ const Select = React.forwardRef<
           </SelectTrigger>
           <SelectContent className={contentClassName}>
             {items.map((item) => (
-              <SelectItem key={item.value} id={item.value} value={item.value}>
+              <SelectItem key={item.value} value={item.value}>
                 {item.label}
               </SelectItem>
             ))}
           </SelectContent>
         </SelectRoot>
-      </LabelContainer>
+      </DynamicField>
     );
   },
 );

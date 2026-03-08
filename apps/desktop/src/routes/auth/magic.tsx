@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
-import { Slot } from "@ui/input-otp";
+import { InputOTPSlot } from "@ui/input-otp";
 import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
 import { Trans } from "react-i18next";
 
@@ -26,7 +26,7 @@ function RouteComponent() {
   const errors = useStore(form.store, (state) => state.errorMap);
 
   return (
-    <div className="flex max-w-[21rem] flex-col gap-y-8">
+    <div className="max-w-84 flex flex-col gap-y-8">
       {canGoBack && (
         <Button
           variant="outline"
@@ -64,12 +64,12 @@ function RouteComponent() {
                 <div className="flex w-full items-center justify-between">
                   <div className="flex">
                     {slots.slice(0, 5).map((slot, idx) => (
-                      <Slot key={idx} {...slot} />
+                      <InputOTPSlot key={idx} index={idx} {...slot} />
                     ))}
                   </div>
                   <div className="flex">
                     {slots.slice(5).map((slot, idx) => (
-                      <Slot key={idx} {...slot} />
+                      <InputOTPSlot key={idx} index={idx} {...slot} />
                     ))}
                   </div>
                 </div>

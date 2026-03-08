@@ -4,8 +4,8 @@ import {
   useStore,
 } from "@hooks/use-app-form";
 import { ZFileSizeType } from "@schemas/policy";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { Input, InputProps } from "@ui/input";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
 import {
   Select,
   SelectContent,
@@ -18,14 +18,14 @@ import React, { useContext } from "react";
 
 const Filesize = React.forwardRef<
   HTMLInputElement,
-  InputProps & { label: LabelContainerProps }
+  InputProps & { label: DynamicFieldProps }
 >(({ className, label, disabled, ...props }, ref) => {
   const field = useFieldContext<ZFileSizeType | undefined>();
   const disabledContext = useContext(FormDisabledContext);
   const formValue = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...label}
       innerClassName={cn(
         "flex-row justify-between items-center",
@@ -83,7 +83,7 @@ const Filesize = React.forwardRef<
           </SelectContent>
         </Select>
       </div>
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

@@ -37,7 +37,7 @@ export function SidebarUserNameSelect({
     <Select
       // The fallback prevents it from being uncontrolled
       value={userName || "-"}
-      onValueChange={changeUserName}
+      onValueChange={(to) => to && changeUserName(to)}
     >
       <SelectTrigger
         className={cn(

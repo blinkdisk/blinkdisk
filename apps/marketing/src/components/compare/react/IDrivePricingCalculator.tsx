@@ -79,7 +79,10 @@ export default function IDrivePricingCalculator() {
         <p className="text-lg font-semibold">{plan.name}</p>
         <p className="text-muted-foreground text-sm">{plan.description}</p>
 
-        <Select value={planType} onValueChange={handlePlanChange}>
+        <Select
+          value={planType}
+          onValueChange={(to) => to && handlePlanChange(to)}
+        >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
@@ -93,7 +96,7 @@ export default function IDrivePricingCalculator() {
         {plan.storageOptions.length > 1 && (
           <Select
             value={storageIndex.toString()}
-            onValueChange={(value) => setStorageIndex(parseInt(value))}
+            onValueChange={(value) => value && setStorageIndex(parseInt(value))}
           >
             <SelectTrigger className="bg-secondary mt-3 text-sm">
               <SelectValue />

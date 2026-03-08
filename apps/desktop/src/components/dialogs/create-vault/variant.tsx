@@ -23,13 +23,12 @@ export function CreateVaultVariant({
         <CardHeader className="flex flex-row items-center justify-between pb-3">
           <CloudBlinkIcon className="h-4 w-auto" />
           <Button
-            as="a"
             variant="ghost"
             size="sm"
             className="text-muted-foreground"
-            href={`${process.env.MARKETING_URL}/cloudblink?ref=desktop`}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() =>
+              window.open(`${process.env.MARKETING_URL}/cloudblink?ref=desktop`)
+            }
           >
             <ExternalLinkIcon />
             {t("cloudblink.readMore")}

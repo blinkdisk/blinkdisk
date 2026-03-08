@@ -13,8 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@ui/dialog";
+import { DynamicField } from "@ui/dynamic-field";
 import { Input } from "@ui/input";
-import { LabelContainer } from "@ui/label";
 import { InfoIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
@@ -70,7 +70,7 @@ export function DeleteVaultDialog() {
             </Alert>
           ) : null}
           {vault && (
-            <LabelContainer
+            <DynamicField
               containerClassName="mt-4"
               name="confirm"
               title={t("confirm.label", { vaultName: vault.name })}
@@ -100,7 +100,7 @@ export function DeleteVaultDialog() {
                 }}
                 placeholder={t("confirm.placeholder")}
               />
-            </LabelContainer>
+            </DynamicField>
           )}
           <DialogFooter className="mt-6">
             <Button onClick={() => setIsOpen(false)} variant="outline">

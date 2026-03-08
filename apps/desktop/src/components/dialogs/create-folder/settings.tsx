@@ -1,8 +1,8 @@
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
 import { FolderSize } from "@desktop/components/dialogs/create-folder/size";
+import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
-import { CompressionSettings } from "@desktop/components/policy/compression";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
@@ -47,10 +47,10 @@ export function CreateFolderSettings({
         {({ loading }) => (
           <>
             <Accordion
-              type="multiple"
               className="mt-2 w-full"
               value={loading ? [] : open}
               onValueChange={setOpen}
+              multiple
             >
               <ScheduleSettings />
               <RetentionSettings />

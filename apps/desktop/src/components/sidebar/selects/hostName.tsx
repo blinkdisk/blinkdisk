@@ -31,7 +31,7 @@ export function SidebarHostNameSelect({
     <Select
       // The fallback prevents it from being uncontrolled
       value={hostName || "-"}
-      onValueChange={changeHostName}
+      onValueChange={(to) => to && changeHostName(to)}
     >
       <SelectTrigger
         className={cn(

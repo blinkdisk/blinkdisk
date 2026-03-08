@@ -1,18 +1,18 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
 import { CheckboxProps, Checkbox as CheckboxRoot } from "@ui/checkbox";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { cn } from "@utils/class";
 import React, { useContext } from "react";
 
 const Checkbox = React.forwardRef<
   HTMLButtonElement,
-  CheckboxProps & { label: LabelContainerProps }
+  CheckboxProps & { label: DynamicFieldProps }
 >(({ label, className, disabled, ...props }, ref) => {
   const field = useFieldContext<boolean>();
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...label}
       innerClassName={cn(
         "flex-row-reverse justify-end items-center gap-3",
@@ -31,7 +31,7 @@ const Checkbox = React.forwardRef<
         id={field.name}
         disabled={disabledContext || disabled}
       />
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

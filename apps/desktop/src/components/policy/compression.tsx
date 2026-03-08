@@ -9,8 +9,8 @@ import {
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
+import { DynamicField } from "@ui/dynamic-field";
 import { Input } from "@ui/input";
-import { LabelContainer } from "@ui/label";
 import {
   SelectContent,
   SelectItem,
@@ -159,11 +159,10 @@ function AlgorithmSelector() {
 
   const activeTab = useMemo(() => getTabFromAlgorithm(value), [value]);
 
-  const activePreset =
-    PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
+  const activePreset = PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
 
   return (
-    <LabelContainer
+    <DynamicField
       title={t("algorithm.label")}
       description={t("algorithm.description")}
       errors={field.state.meta.errors}
@@ -222,7 +221,7 @@ function AlgorithmSelector() {
         </TabsContent>
         <TabsContent value="other">
           <SelectRoot
-            onValueChange={(val) => field.setValue(val)}
+            onValueChange={(val) => val && field.setValue(val)}
             value={value}
             disabled={disabledContext}
           >
@@ -239,7 +238,7 @@ function AlgorithmSelector() {
           </SelectRoot>
         </TabsContent>
       </Tabs>
-    </LabelContainer>
+    </DynamicField>
   );
 }
 
@@ -265,7 +264,7 @@ function ExtensionListEditor({
   const value = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer title={label} description={description}>
+    <DynamicField title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
@@ -307,6 +306,6 @@ function ExtensionListEditor({
         <PlusIcon />
         {addLabel}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }

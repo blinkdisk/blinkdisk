@@ -89,8 +89,9 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
               </Button>
             ) : (
               <Button
-                as={Link}
-                to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings"
+                render={
+                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
+                }
                 variant="outline"
                 size="sm"
               >
@@ -154,7 +155,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             <>
               <Card
                 className={cn(
-                  "flex flex-shrink-0 items-center justify-center",
+                  "flex shrink-0 items-center justify-center",
                   (storagePercentage || 0) >= 0.9
                     ? "border-destructive/20 bg-destructive/10 text-destructive [&_.muted]:text-destructive/70"
                     : (storagePercentage || 0) >= 0.8
@@ -233,7 +234,10 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
           <div className="flex items-center gap-3">
             {folders !== undefined ? (
               <>
-                <LocalButton onClick={openCreateFolder} variant="outline">
+                <LocalButton
+                  onClick={() => openCreateFolder()}
+                  variant="outline"
+                >
                   <PlusIcon />
                   {t("folders.addFolder")}
                 </LocalButton>
@@ -261,7 +265,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             title={t("folders.empty.title")}
             description={t("folders.empty.description")}
           >
-            <LocalButton onClick={openCreateFolder} size="lg">
+            <LocalButton onClick={() => openCreateFolder()} size="lg">
               <PlusIcon />
               {t("folders.addFolder")}
             </LocalButton>

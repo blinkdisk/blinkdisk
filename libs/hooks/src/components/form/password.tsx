@@ -1,13 +1,13 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { Input } from "@ui/input";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
 import { cn } from "@utils/class";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { useContext, useState } from "react";
 
 const Password = React.forwardRef<
   HTMLInputElement,
-  React.ComponentProps<"input"> & { label: LabelContainerProps }
+  React.ComponentProps<"input"> & { label: DynamicFieldProps }
 >(({ className, label, disabled, ...props }, ref) => {
   const field = useFieldContext<string>();
   const disabledContext = useContext(FormDisabledContext);
@@ -15,7 +15,7 @@ const Password = React.forwardRef<
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...label}
       innerClassName={cn("relative", label.innerClassName)}
       errors={field.state.meta.errors}
@@ -45,7 +45,7 @@ const Password = React.forwardRef<
           <EyeIcon className="size-4" />
         )}
       </button>
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

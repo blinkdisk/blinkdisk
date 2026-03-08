@@ -1,5 +1,5 @@
-import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { CompressionSettings } from "@desktop/components/policy/compression";
+import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
@@ -45,8 +45,7 @@ function RouteComponent() {
       >
         {vault ? (
           <Button
-            as={Link}
-            to="/app/{-$vaultId}/{-$hostName}/{-$userName}"
+            render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
             variant="outline"
             size="sm"
           >
@@ -62,9 +61,9 @@ function RouteComponent() {
         <PolicyContextProvider level="VAULT">
           {({ loading }) => (
             <Accordion
-              type="multiple"
               value={loading ? [] : open}
               onValueChange={setOpen}
+              multiple
             >
               <VaultGeneralSettings />
               <VaultConfigSettings />

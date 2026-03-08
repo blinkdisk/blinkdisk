@@ -1,45 +1,82 @@
-"use client";
+import { OTPInput, OTPInputContext } from "input-otp";
+import * as React from "react";
 
 import { cn } from "@utils/class";
-import { OTPInput, SlotProps } from "input-otp";
+import { MinusIcon } from "lucide-react";
 
-export type InputOTPProps = React.ComponentProps<typeof OTPInput>;
-export const InputOTP = OTPInput;
+export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {
+  containerClassName?: string;
+};
 
-export function Slot(props: SlotProps & { className?: string }) {
+function InputOTP({ className, containerClassName, ...props }: InputOTPProps) {
+  return (
+    <OTPInput
+      data-slot="input-otp"
+      containerClassName={cn(
+        "cn-input-otp flex items-center has-disabled:opacity-50",
+        containerClassName,
+      )}
+      spellCheck={false}
+      className={cn("disabled:cursor-not-allowed", className)}
+      {...props}
+    />
+  );
+}
+
+function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
+      data-slot="input-otp-group"
       className={cn(
-        "bg-card relative h-11 w-8 border border-l-0 text-lg",
-        "flex items-center justify-center",
-        "border-input border-y border-r first:rounded-l-md first:border-l last:rounded-r-md",
-        "group-hover:border-accent-foreground/20 group-focus-within:border-accent-foreground/20",
-        "outline-primary outline outline-0",
-        { "outline-primary z-50 outline-2": props.isActive },
-        props.className,
+        "has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:border-destructive has-aria-invalid:ring-3 flex items-center rounded-lg",
+        className,
       )}
+      {...props}
+    />
+  );
+}
+
+function InputOTPSlot({
+  index,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & {
+  index: number;
+}) {
+  const inputOTPContext = React.useContext(OTPInputContext);
+  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
+
+  return (
+    <div
+      data-slot="input-otp-slot"
+      data-active={isActive}
+      className={cn(
+        "dark:bg-input/30 border-input data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive data-[active=true]:ring-3 relative flex size-8 items-center justify-center border-y border-r text-sm outline-none transition-all first:rounded-l-lg first:border-l last:rounded-r-lg data-[active=true]:z-10",
+        className,
+      )}
+      {...props}
     >
-      <div className="group-has-[input[data-input-otp-placeholder-shown]]:opacity-20">
-        {props.char ?? props.placeholderChar}
-      </div>
-      {props.hasFakeCaret && <FakeCaret />}
+      {char}
+      {hasFakeCaret && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
+        </div>
+      )}
     </div>
   );
 }
 
-// You can emulate a fake textbox caret!
-function FakeCaret() {
+function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
-    <div className="animate-caret-blink pointer-events-none absolute inset-0 flex items-center justify-center">
-      <div className="h-8 w-px bg-white" />
+    <div
+      data-slot="input-otp-separator"
+      className="flex items-center [&_svg:not([class*='size-'])]:size-4"
+      role="separator"
+      {...props}
+    >
+      <MinusIcon />
     </div>
   );
 }
 
-export function FakeDash() {
-  return (
-    <div className="flex w-10 items-center justify-center">
-      <div className="bg-input h-0.5 w-3 rounded-full" />
-    </div>
-  );
-}
+export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };

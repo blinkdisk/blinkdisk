@@ -20,10 +20,10 @@ import {
   UserIcon,
   UserPlusIcon,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactElement } from "react";
 
 export type AccountMenuDropdownProps = {
-  children: ReactNode;
+  children: ReactElement;
 };
 
 export function AccountMenuDropdown({ children }: AccountMenuDropdownProps) {
@@ -41,7 +41,7 @@ export function AccountMenuDropdown({ children }: AccountMenuDropdownProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+      <DropdownMenuTrigger render={children} />
       <DropdownMenuContent
         className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
         side={isMobile ? "bottom" : "right"}

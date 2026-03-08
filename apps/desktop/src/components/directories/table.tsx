@@ -81,7 +81,7 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
           <Checkbox
             checked={
               table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
+              (table.getIsSomePageRowsSelected() && false)
             }
             onCheckedChange={(value) =>
               table.toggleAllPageRowsSelected(!!value)

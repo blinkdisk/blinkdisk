@@ -1,20 +1,16 @@
-"use client";
-
 import * as React from "react";
 
 import { cn } from "@utils/class";
 
 function Table({
-  containerClassName,
   className,
-  ref,
+  containerClassName,
   ...props
 }: React.ComponentProps<"table"> & { containerClassName?: string }) {
   return (
     <div
       data-slot="table-container"
       className={cn("relative w-full overflow-x-auto", containerClassName)}
-      ref={ref}
     >
       <table
         data-slot="table"
@@ -63,7 +59,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b",
+        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
         className,
       )}
       {...props}
@@ -76,7 +72,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "text-foreground h-10 whitespace-nowrap px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "text-foreground h-10 whitespace-nowrap px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}
@@ -89,7 +85,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "whitespace-nowrap p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "whitespace-nowrap p-2 align-middle [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}

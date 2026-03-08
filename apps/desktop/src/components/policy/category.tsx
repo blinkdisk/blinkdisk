@@ -27,7 +27,7 @@ export function SettingsCategory({
 
   return (
     <AccordionItem value={id} disabled={loading}>
-      <AccordionTrigger className="items-center" hideArrow={loading}>
+      <AccordionTrigger className="items-center">
         <div className="flex items-center gap-4">
           {loading ? (
             <Skeleton className="!size-11 !rounded-lg" />

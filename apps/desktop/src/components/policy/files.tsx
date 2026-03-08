@@ -10,8 +10,8 @@ import {
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
+import { DynamicField } from "@ui/dynamic-field";
 import { Input } from "@ui/input";
-import { LabelContainer } from "@ui/label";
 import { EditIcon, FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext, useMemo } from "react";
 
@@ -112,7 +112,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
   const value = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer title={label} description={description}>
+    <DynamicField title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
@@ -175,7 +175,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
         <PlusIcon />
         {t("exclusions.add")}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }
 
@@ -231,7 +231,7 @@ function ExclusionRuleFilesEditor({
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
+    <DynamicField
       title={label}
       description={
         <>
@@ -292,6 +292,6 @@ function ExclusionRuleFilesEditor({
         <PlusIcon />
         {t("exclusionRuleFiles.add")}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }

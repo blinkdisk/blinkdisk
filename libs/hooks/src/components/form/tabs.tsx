@@ -1,11 +1,11 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { TabsList, TabsProps, Tabs as TabsRoot, TabsTrigger } from "@ui/tabs";
 import React, { ReactNode, useContext } from "react";
 
 const Tabs = React.forwardRef<
   HTMLDivElement,
-  TabsProps & { label: LabelContainerProps } & {
+  TabsProps & { label: DynamicFieldProps } & {
     items: { value: string; label: ReactNode }[];
   }
 >(({ className, onValueChange, label, items, ...props }, ref) => {
@@ -13,18 +13,14 @@ const Tabs = React.forwardRef<
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
-      {...label}
-      errors={field.state.meta.errors}
-      name={field.name}
-    >
+    <DynamicField {...label} errors={field.state.meta.errors} name={field.name}>
       <TabsRoot
         {...props}
         ref={ref}
         value={field.state.value}
-        onValueChange={(to) => {
+        onValueChange={(to, e) => {
           field.setValue(to);
-          onValueChange?.(to);
+          onValueChange?.(to, e);
         }}
       >
         <TabsList className={className}>
@@ -35,7 +31,7 @@ const Tabs = React.forwardRef<
           ))}
         </TabsList>
       </TabsRoot>
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

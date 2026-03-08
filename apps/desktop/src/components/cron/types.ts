@@ -370,7 +370,7 @@ export interface MinutesProps extends FieldProps {
 }
 export interface CustomSelectProps
   extends Omit<
-    SelectProps,
+    SelectProps<{ value: string; label: string }>,
     | "value"
     | "mode"
     | "tokenSeparators"

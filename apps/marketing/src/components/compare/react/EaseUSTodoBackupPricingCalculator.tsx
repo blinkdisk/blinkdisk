@@ -70,7 +70,10 @@ export default function EaseUSTodoBackupPricingCalculator() {
         <p className="text-lg font-semibold">EaseUS Todo Backup</p>
         <p className="text-muted-foreground text-sm">{plan.description}</p>
 
-        <Select value={planType} onValueChange={handlePlanChange}>
+        <Select
+          value={planType}
+          onValueChange={(to) => to && handlePlanChange(to)}
+        >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>

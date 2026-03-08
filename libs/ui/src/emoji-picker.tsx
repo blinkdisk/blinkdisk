@@ -1,5 +1,3 @@
-"use client";
-
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Input } from "@ui/input";
 import { Loader } from "@ui/loader";
@@ -10,12 +8,12 @@ import {
   Locale,
   EmojiPicker as Picker,
 } from "frimousse";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { parse } from "twemoji-parser";
 
 export type EmojiPickerProps = {
   locale: string;
-  children?: React.ReactNode;
+  children?: ReactElement;
   onEmojiSelect?: (emoji: string) => void;
 };
 
@@ -63,7 +61,7 @@ export function EmojiPicker({
   return (
     <>
       <Popover onOpenChange={setIsOpen} open={isOpen} modal>
-        <PopoverTrigger asChild>{children}</PopoverTrigger>
+        <PopoverTrigger render={children} />
         <PopoverContent className="w-fit overflow-hidden rounded-xl p-0">
           <Picker.Root
             onEmojiSelect={({ emoji }) => onEmojiSelect?.(emoji)}

@@ -1,8 +1,15 @@
-import { Combobox, type ComboboxOption } from "@ui/combobox";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@ui/combobox";
 import { PlusIcon, XIcon } from "lucide-react";
 
 type ToolSelectorProps = {
-  tools: ComboboxOption[];
+  tools: { label: string; value: string }[];
   selectedSlugs: string[];
   index: number;
   showRemove?: boolean;
@@ -16,9 +23,9 @@ export function ToolSelector({
 }: ToolSelectorProps) {
   const currentSlug = selectedSlugs[index];
 
-  const handleValueChange = (newSlug: string) => {
+  const handleValueChange = (newSlug: string | null) => {
     const newSlugs = [...selectedSlugs];
-    newSlugs[index] = newSlug;
+    if (newSlug) newSlugs[index] = newSlug;
     window.location.href = `/compare/${newSlugs.join("-vs-")}`;
   };
 
@@ -34,14 +41,23 @@ export function ToolSelector({
   return (
     <div className="flex gap-2">
       <Combobox
-        options={tools}
+        items={tools}
+        onInputValueChange={(to) => to && handleValueChange(to)}
         value={currentSlug}
-        onValueChange={handleValueChange}
-        placeholder="Select a tool..."
-        searchPlaceholder="Search backup tools..."
-        emptyText="No tools found."
-        triggerClassName="flex-1"
-      />
+      >
+        <ComboboxInput placeholder="Select a tool..." />
+        <ComboboxContent>
+          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxList>
+            {(item) => (
+              <ComboboxItem key={item} value={item}>
+                {item}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+
       {showRemove && (
         <button
           type="button"
@@ -57,7 +73,7 @@ export function ToolSelector({
 }
 
 type AddToolButtonProps = {
-  tools: ComboboxOption[];
+  tools: { label: string; value: string }[];
   selectedSlugs: string[];
 };
 
@@ -90,14 +106,23 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
           Choose {isFirstTool ? "a" : "another"} tool to start comparing
         </p>
       </div>
+
       <Combobox
-        options={availableTools}
-        onValueChange={handleAddTool}
-        placeholder="Select a tool..."
-        searchPlaceholder="Search backup tools..."
-        emptyText="No more tools available."
-        triggerClassName="w-full max-w-[220px]"
-      />
+        items={availableTools}
+        onInputValueChange={(to) => to && handleAddTool(to)}
+      >
+        <ComboboxInput placeholder="Select a tool..." />
+        <ComboboxContent>
+          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxList>
+            {(item) => (
+              <ComboboxItem key={item} value={item}>
+                {item}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
     </div>
   );
 }

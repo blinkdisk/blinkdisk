@@ -328,26 +328,34 @@ export function Backup({ backup }: BackupProps) {
         <div className="h-6 border-r" />
         {backup ? (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon-sm" className="[&_svg]:size-5" variant="ghost">
-                <MoreVerticalIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48" align="end">
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-                  params={(params) => ({
-                    ...params,
-                    backupId: backup?.id || "",
-                    directoryId:
-                      backup && "rootID" in backup ? backup?.rootID : "",
-                  })}
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  size="icon-sm"
+                  className="[&_svg]:size-5"
+                  variant="ghost"
                 >
-                  <FileSearchIcon />
-                  {t("dropdown.browse")}
-                </Link>
-              </DropdownMenuItem>
+                  <MoreVerticalIcon />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="w-48" align="end">
+              <DropdownMenuItem
+                render={
+                  <Link
+                    to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
+                    params={(params) => ({
+                      ...params,
+                      backupId: backup?.id || "",
+                      directoryId:
+                        backup && "rootID" in backup ? backup?.rootID : "",
+                    })}
+                  >
+                    <FileSearchIcon />
+                    {t("dropdown.browse")}
+                  </Link>
+                }
+              />
               <DropdownMenuItem
                 onClick={() =>
                   openRenameBackupDialog({

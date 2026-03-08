@@ -68,8 +68,7 @@ function RouteComponent() {
         }
       >
         <Button
-          as={Link}
-          to="/app/{-$vaultId}/{-$hostName}/{-$userName}"
+          render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
           variant="outline"
           size="sm"
         >
