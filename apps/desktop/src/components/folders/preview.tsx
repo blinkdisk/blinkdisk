@@ -1,4 +1,5 @@
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import { useTheme } from "@desktop/hooks/use-theme";
 import { formatInt, formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { EmojiCard } from "@ui/emoji-card";
@@ -12,6 +13,7 @@ type FolderPreviewProps = {
 
 export function FolderPreview({ folder, size }: FolderPreviewProps) {
   const { t } = useAppTranslation("folder.preview");
+  const { dark } = useTheme();
 
   return (
     <div
@@ -21,7 +23,11 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
       )}
     >
       {folder ? (
-        <EmojiCard emoji={folder.emoji} size={size === "sm" ? "sm" : "md"} />
+        <EmojiCard
+          emoji={folder.emoji}
+          size={size === "sm" ? "sm" : "md"}
+          theme={dark ? "dark" : "light"}
+        />
       ) : (
         <Skeleton
           width={size === "sm" ? "2.25rem" : "2.75rem"}

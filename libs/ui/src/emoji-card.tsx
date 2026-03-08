@@ -6,6 +6,7 @@ import { parse } from "twemoji-parser";
 export type EmojiCardProps = {
   emoji: string | undefined;
   size?: "lg" | "md" | "sm";
+  theme?: "light" | "dark";
   className?: string;
 };
 
@@ -14,6 +15,7 @@ const defaultColor = "0deg 0% 39%";
 export function EmojiCard({
   emoji = "📁",
   className,
+  theme,
   size = "md",
 }: EmojiCardProps) {
   const { color, emojiUrl } = useMemo(() => {
@@ -22,10 +24,13 @@ export function EmojiCard({
     const code = url?.split("/").pop()?.replace(".svg", "") || "";
     const hue = emojiToHue[code as keyof typeof emojiToHue];
     return {
-      color: hue !== undefined ? `${hue}deg 100% 60%` : defaultColor,
+      color:
+        hue !== undefined
+          ? `${hue}deg 100% ${!theme ? "50%" : theme === "dark" ? "65%" : "35%"}`
+          : defaultColor,
       emojiUrl: url,
     };
-  }, [emoji]);
+  }, [emoji, theme]);
 
   return (
     <div

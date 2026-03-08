@@ -57,13 +57,13 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   isActive={
                     pathname === `/app/${vaultId}/${hostName}/${userName}`
                   }
-                  asChild
-                >
-                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
-                    <HomeIcon />
-                    {t("home")}
-                  </Link>
-                </SidebarMenuButton>
+                  render={
+                    <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
+                      <HomeIcon />
+                      {t("home")}
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
@@ -72,13 +72,13 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     pathname ===
                     `/app/${vaultId}/${hostName}/${userName}/settings`
                   }
-                  asChild
-                >
-                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings">
-                    <SettingsIcon />
-                    {t("settings")}
-                  </Link>
-                </SidebarMenuButton>
+                  render={
+                    <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                      <SettingsIcon />
+                      {t("settings")}
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
             </>
           ) : null}

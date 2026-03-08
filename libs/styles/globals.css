@@ -8,10 +8,10 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  --background: oklch(0.97 0 0);
   --foreground: oklch(0.32 0 0);
-  --card: oklch(0.99 0 0);
-  --card-hover: oklch(0.98 0 247.84);
+  --card: oklch(0.985 0 0);
+  --card-hover: oklch(0.99 0 247.84);
   --card-foreground: oklch(0.32 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.32 0 0);
@@ -34,7 +34,7 @@
   --chart-4: oklch(0.37 0.21 269.42);
   --chart-5: oklch(0.33 0.17 271.65);
   --radius: 0.6rem;
-  --sidebar-background: oklch(0.96 0 0);
+  --sidebar-background: oklch(0.94 0 0);
   --sidebar-foreground: oklch(0.32 0 0);
   --sidebar-primary: oklch(0.59 0.2 277.12);
   --sidebar-primary-foreground: oklch(1 0 0);
@@ -50,8 +50,8 @@
 .dark {
   --background: oklch(0.25 0 0);
   --foreground: oklch(0.92 0 0);
-  --card: oklch(0.24 0 0);
-  --card-hover: oklch(0.247 0 0);
+  --card: oklch(0.28 0 0);
+  --card-hover: oklch(0.3 0 0);
   --card-foreground: oklch(0.92 0 0);
   --popover: oklch(0.27 0 0);
   --popover-foreground: oklch(0.92 0 0);

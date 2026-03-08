@@ -107,7 +107,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
         </VaultTitlebar>
         <div className="flex flex-row gap-6">
           <Card className="grow">
-            <CardContent className="flex h-full items-center gap-7 p-6">
+            <CardContent className="flex h-full items-center gap-7 px-6 py-2">
               {vault ? (
                 <GaugeComponent
                   labels={{
@@ -165,7 +165,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
                         : "",
                 )}
               >
-                <CardContent className="flex w-60 flex-col justify-between p-6">
+                <CardContent className="flex w-60 flex-col justify-between px-6 py-2">
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col">
                       <CardTitle className="text-sm font-medium">

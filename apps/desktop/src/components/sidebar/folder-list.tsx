@@ -50,34 +50,34 @@ function SidebarFolder({ folder }: SidebarFolderProps) {
     <SidebarMenuItem>
       <SidebarMenuButton
         className="h-12"
-        asChild
         isActive={folder && folderId === folder?.id}
-      >
-        <Link
-          to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
-          params={(params) => ({
-            ...params,
-            folderId: folder?.id || "",
-          })}
-          className="flex items-center justify-between"
-        >
-          <FolderPreview folder={folder} size="sm" />
-          {folder &&
-          folder.status === "UPLOADING" &&
-          folder.currentTaskStatus !== "CANCELING" ? (
-            folder.upload?.progress ? (
-              <CircularProgress
-                value={100 * (folder?.upload?.progress || 0)}
-                size={25}
-                strokeWidth={4}
-                progressClassName="opacity-60 dark:opacity-70"
-              />
-            ) : (
-              <Loader size={1.2} />
-            )
-          ) : null}
-        </Link>
-      </SidebarMenuButton>
+        render={
+          <Link
+            to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
+            params={(params) => ({
+              ...params,
+              folderId: folder?.id || "",
+            })}
+            className="flex items-center justify-between"
+          >
+            <FolderPreview folder={folder} size="sm" />
+            {folder &&
+            folder.status === "UPLOADING" &&
+            folder.currentTaskStatus !== "CANCELING" ? (
+              folder.upload?.progress ? (
+                <CircularProgress
+                  value={100 * (folder?.upload?.progress || 0)}
+                  size={25}
+                  strokeWidth={4}
+                  progressClassName="opacity-60 dark:opacity-70"
+                />
+              ) : (
+                <Loader size={1.2} />
+              )
+            ) : null}
+          </Link>
+        }
+      />
     </SidebarMenuItem>
   );
 }

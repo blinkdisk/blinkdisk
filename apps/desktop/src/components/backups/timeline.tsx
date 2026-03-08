@@ -121,13 +121,13 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 
   return (
     <div className="relative">
-      <div className="dark:border-input bottom-22 absolute top-0 border-l-2" />
+      <div className="border-input bottom-22 absolute top-0 border-l-2" />
 
       <div className="space-y-8">
         {groupedBackups.map(([dateKey, dayBackups]) => (
           <div key={dateKey} className="relative">
             <div className="mb-4 flex items-center gap-3">
-              <div className="dark:border-input h-0 w-6 border-b-2"></div>
+              <div className="border-input h-0 w-6 border-b-2"></div>
               <p className="text-muted-foreground text-lg">
                 {dayBackups[0] ? (
                   formatDate(dayBackups[0]?.startTime || "")
@@ -153,7 +153,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
                 >
                   <div
                     className={cn(
-                      "dark:border-input left-2 w-8 rounded-bl-full border-2 border-r-0 border-t-0",
+                      "border-input left-2 w-8 rounded-bl-full border-2 border-r-0 border-t-0",
                       backup && "type" in backup && backup?.type === "FAKE"
                         ? "h-10"
                         : "h-12",
@@ -181,7 +181,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 }
 
 const cardClassName =
-  "relative bg-card flex w-full flex-row items-center justify-between gap-2 rounded-2xl border p-5 focus-visible:ring-2 outline-none ring-ring";
+  "transition-colors relative bg-card flex w-full flex-row items-center justify-between gap-2 rounded-2xl border border-foreground/10 p-5 focus-visible:ring-2 outline-none ring-ring";
 
 function FakeBackup() {
   const { t } = useAppTranslation("backup.list");
