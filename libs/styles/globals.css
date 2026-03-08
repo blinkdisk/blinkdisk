@@ -10,14 +10,14 @@
 :root {
   --background: oklch(0.97 0 0);
   --foreground: oklch(0.32 0 0);
-  --card: oklch(0.985 0 0);
+  --card: oklch(0.98 0 0);
   --card-hover: oklch(0.99 0 247.84);
   --card-foreground: oklch(0.32 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.32 0 0);
   --primary: oklch(0.59 0.2 277.12);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0 0);
+  --secondary: oklch(0.99 0 0);
   --secondary-foreground: oklch(0.32 0 0);
   --muted: oklch(0.98 0 247.84);
   --muted-foreground: oklch(0.55 0.02 264.36);
@@ -57,7 +57,7 @@
   --popover-foreground: oklch(0.92 0 0);
   --primary: oklch(0.59 0.2 277.12);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.21 0 0);
+  --secondary: oklch(0.31 0 0);
   --secondary-foreground: oklch(0.92 0 0);
   --muted: oklch(0.27 0 0);
   --muted-foreground: oklch(0.72 0 0);

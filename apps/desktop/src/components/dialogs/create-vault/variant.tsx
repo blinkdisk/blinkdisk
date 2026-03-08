@@ -71,7 +71,7 @@ export function CreateVaultVariant({
           </p>
         </CardContent>
         <CardFooter>
-          <Button variant="outline" className="w-full" onClick={selectCustom}>
+          <Button variant="secondary" className="w-full" onClick={selectCustom}>
             {t("custom.button")}
           </Button>
         </CardFooter>

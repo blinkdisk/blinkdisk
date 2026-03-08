@@ -236,7 +236,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
               <>
                 <LocalButton
                   onClick={() => openCreateFolder()}
-                  variant="outline"
+                  variant="secondary"
                 >
                   <PlusIcon />
                   {t("folders.addFolder")}
