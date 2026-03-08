@@ -164,7 +164,7 @@ function CronEditor({ label, form }: CronEditorProps) {
                       disabled={disabledContext}
                     />
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       type="button"
                       size="icon-sm"
                       className="shrink-0"
@@ -183,7 +183,7 @@ function CronEditor({ label, form }: CronEditorProps) {
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         onClick={() => {
           field.pushValue({

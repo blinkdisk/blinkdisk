@@ -51,7 +51,7 @@ export function FolderGeneralSettings() {
               locale={language}
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
-              <Button disabled={disabledContext} variant="outline">
+              <Button disabled={disabledContext} variant="secondary">
                 {t("emoji.button")}
               </Button>
             </EmojiPicker>

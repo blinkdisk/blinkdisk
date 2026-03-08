@@ -80,10 +80,7 @@ const Path = React.forwardRef<
         <Button
           type="button"
           variant="secondary"
-          className={cn(
-            "border-input bg-card hover:bg-card justify-start pl-4 pr-9",
-            className,
-          )}
+          className={cn("justify-start pl-4 pr-9", className)}
           innerClassName={cn(
             "truncate gap-3",
             !field.state.value

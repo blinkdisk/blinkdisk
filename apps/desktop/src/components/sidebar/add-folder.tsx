@@ -23,7 +23,7 @@ export function SidebarAddFolder() {
       <SidebarMenuItem>
         <LocalButton
           className="bg-sidebar-muted border-sidebar-border w-full"
-          variant="outline"
+          variant="secondary"
           onClick={() => openCreateFolder()}
         >
           <PlusIcon />

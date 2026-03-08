@@ -20,7 +20,7 @@ export function VaultStarting() {
         </p>
         {initTask && (
           <Button
-            variant="outline"
+            variant="secondary"
             className="mt-6"
             onClick={() => openTaskDialog({ taskId: initTask })}
           >

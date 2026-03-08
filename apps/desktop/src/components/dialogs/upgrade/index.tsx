@@ -212,7 +212,7 @@ function Plan({
               {setGroupIndex ? (
                 <Button
                   size="icon-xs"
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => setGroupIndex((groupIndex || 0) - 1)}
                   disabled={groupIndex === 0}
                 >
@@ -245,7 +245,11 @@ function Plan({
             ) : null}
           </>
         ) : (
-          <Button onClick={() => setContact(false)} variant="outline" size="sm">
+          <Button
+            onClick={() => setContact(false)}
+            variant="secondary"
+            size="sm"
+          >
             <ArrowLeftIcon className="size-4" />
             {t("contact.back")}
           </Button>
@@ -306,7 +310,7 @@ function Plan({
           </Button>
         ) : action === "MANAGE" ? (
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => manage()}
             loading={isManagePending}
           >
@@ -336,7 +340,7 @@ function Plan({
               });
             }}
             disabled={!isDowngradePossible}
-            variant="outline"
+            variant="secondary"
           >
             {t(isDowngradePossible ? "downgrade" : "downgradeNotPossible", {
               storageGB: plan.storageGB.toLocaleString(),

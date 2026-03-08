@@ -103,7 +103,7 @@ export function VaultRestores() {
               window.electron.shell.open.folder(restore.destination)
             }
             size="sm"
-            variant="outline"
+            variant="secondary"
           >
             {t("openFolder")}
           </Button>

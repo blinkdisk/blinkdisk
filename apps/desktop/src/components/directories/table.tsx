@@ -197,7 +197,7 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
           <Button
             onClick={() => startMount()}
             loading={isStartMountPending}
-            variant="outline"
+            variant="secondary"
           >
             <FolderOpenIcon />
             {t(

@@ -28,7 +28,7 @@ const Counter = React.forwardRef<
           onClick={() => field.handleChange((field.state.value || 0) - 1)}
           type="button"
           size="icon-sm"
-          variant="outline"
+          variant="secondary"
           disabled={disabledContext || disabled}
         >
           <MinusIcon />
@@ -59,7 +59,7 @@ const Counter = React.forwardRef<
           onClick={() => field.handleChange((field.state.value || 0) + 1)}
           type="button"
           size="icon-sm"
-          variant="outline"
+          variant="secondary"
           disabled={disabledContext || disabled}
         >
           <PlusIcon />

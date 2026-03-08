@@ -278,7 +278,7 @@ function ExtensionListEditor({
                     disabled={disabledContext}
                   />
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     type="button"
                     size="icon"
                     className="shrink-0"
@@ -296,7 +296,7 @@ function ExtensionListEditor({
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         disabled={disabledContext}
         onClick={() => {

@@ -110,7 +110,7 @@ function RouteComponent() {
               });
           }}
           size="sm"
-          variant="outline"
+          variant="secondary"
         >
           <ArrowLeftIcon />
           {t("back")}

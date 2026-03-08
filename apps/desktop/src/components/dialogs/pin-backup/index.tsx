@@ -108,7 +108,7 @@ export function PinBackupDialog() {
             />
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={addPin}
               disabled={!newPin.trim()}
             >

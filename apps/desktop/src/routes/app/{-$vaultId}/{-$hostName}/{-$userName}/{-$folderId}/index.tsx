@@ -69,7 +69,7 @@ function RouteComponent() {
       >
         <Button
           render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
-          variant="outline"
+          variant="secondary"
           size="sm"
         >
           <ArrowLeftIcon />
@@ -83,7 +83,7 @@ function RouteComponent() {
           {backups !== null && backups !== undefined ? (
             <>
               <Button
-                variant="outline"
+                variant="secondary"
                 onClick={() =>
                   folder &&
                   openFolderSettings({
@@ -96,7 +96,7 @@ function RouteComponent() {
               </Button>
               {folder && folder.status === "UPLOADING" ? (
                 <LocalButton
-                  variant="outline"
+                  variant="secondary"
                   onClick={() =>
                     folder.currentTask &&
                     cancelBackup({ taskId: folder.currentTask })

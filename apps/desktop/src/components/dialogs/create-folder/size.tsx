@@ -79,7 +79,7 @@ export function FolderSize({ path, setSize }: FolderSizeProps) {
               </p>
             </div>
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={startEstimation}
               loading={isLoading || isRunning}
             >

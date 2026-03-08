@@ -122,7 +122,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
                   <ExclusionPreview rule={subField.state.value as string} />
                   <div className="flex gap-2">
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       type="button"
                       size="icon-sm"
                       className="shrink-0"
@@ -139,7 +139,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
                       <EditIcon />
                     </Button>
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       type="button"
                       size="icon-sm"
                       className="shrink-0"
@@ -158,7 +158,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         disabled={disabledContext}
         onClick={() => {
@@ -262,7 +262,7 @@ function ExclusionRuleFilesEditor({
                     disabled={disabledContext}
                   />
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     type="button"
                     size="icon"
                     className="shrink-0"
@@ -280,7 +280,7 @@ function ExclusionRuleFilesEditor({
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         disabled={disabledContext}
         onClick={() => {

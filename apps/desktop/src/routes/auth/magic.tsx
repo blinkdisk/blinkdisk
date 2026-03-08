@@ -29,7 +29,7 @@ function RouteComponent() {
     <div className="max-w-84 flex flex-col gap-y-8">
       {canGoBack && (
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           className="fixed right-10 top-10"
           onClick={() => router.history.back()}

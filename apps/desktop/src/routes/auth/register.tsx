@@ -37,7 +37,7 @@ function RouteComponent() {
     <div className="flex flex-col gap-y-8">
       {authenticated && canGoBack && (
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           className="fixed right-10 top-10"
           onClick={() => router.history.back()}

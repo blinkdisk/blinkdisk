@@ -103,7 +103,7 @@ export function DeleteVaultDialog() {
             </DynamicField>
           )}
           <DialogFooter className="mt-6">
-            <Button onClick={() => setIsOpen(false)} variant="outline">
+            <Button onClick={() => setIsOpen(false)} variant="secondary">
               {t("cancel")}
             </Button>
             <Button

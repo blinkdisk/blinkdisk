@@ -231,7 +231,7 @@ function FakeBackup() {
             </p>
           </div>
           <LocalButton
-            variant="outline"
+            variant="secondary"
             onClick={() => folder && startBackup({ path: folder.source.path })}
             loading={
               isStartingBackup ||

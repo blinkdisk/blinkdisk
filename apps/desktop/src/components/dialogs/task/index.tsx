@@ -177,7 +177,7 @@ export function TaskDialog() {
         </div>
 
         <DialogFooter className="mt-4">
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button variant="secondary" onClick={() => setIsOpen(false)}>
             {t("close")}
           </Button>
           {task?.status === "RUNNING" && (

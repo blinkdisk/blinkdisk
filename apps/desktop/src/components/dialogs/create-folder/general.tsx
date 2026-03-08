@@ -35,7 +35,7 @@ export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
           locale={language}
           onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
         >
-          <Button variant="outline">{t("emoji.button")}</Button>
+          <Button variant="secondary">{t("emoji.button")}</Button>
         </EmojiPicker>
       </div>
       <form.AppField

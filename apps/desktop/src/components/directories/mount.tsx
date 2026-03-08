@@ -29,7 +29,7 @@ export function DirectoryMount() {
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <Button
-          variant="outline"
+          variant="secondary"
           onClick={() => stopMount()}
           loading={isStopMountPending}
           size="sm"
