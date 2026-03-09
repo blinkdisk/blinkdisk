@@ -65,7 +65,7 @@ export function EmojiPicker({
         <PopoverContent className="w-fit overflow-hidden rounded-xl p-0">
           <Picker.Root
             onEmojiSelect={({ emoji }) => onEmojiSelect?.(emoji)}
-            className="flex h-[368px] w-fit flex-col bg-white dark:bg-neutral-900"
+            className="bg-popover flex h-[368px] w-fit flex-col"
             locale={
               supportedLocales.includes(locale) ? (locale as Locale) : "en"
             }
@@ -92,7 +92,7 @@ export function EmojiPicker({
                     ...props
                   }: EmojiPickerListCategoryHeaderProps) => (
                     <div
-                      className="bg-white px-3 pb-1.5 pt-3 text-xs font-medium text-neutral-600 dark:bg-neutral-900 dark:text-neutral-400"
+                      className="bg-popover px-3 pb-1.5 pt-3 text-xs font-medium text-neutral-600 dark:text-neutral-400"
                       {...props}
                     >
                       {category.label}

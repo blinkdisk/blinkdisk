@@ -90,18 +90,12 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
             <SidebarAddFolder />
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
+                <SidebarMenuButton size="lg">
                   <AccountPreview account={session} />
                 </SidebarMenuButton>
               </AccountSelectDropdown>
               <AccountMenuDropdown>
-                <SidebarMenuButton
-                  size="icon"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
+                <SidebarMenuButton size="icon">
                   <EllipsisVerticalIcon className="size-4" />
                 </SidebarMenuButton>
               </AccountMenuDropdown>

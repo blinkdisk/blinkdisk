@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { Label } from "@ui/label";
 import { Separator } from "@ui/separator";
 import { cn } from "@utils/class";
+import { TriangleAlertIcon } from "lucide-react";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
@@ -217,6 +218,7 @@ function FieldError({
       className={cn("text-destructive text-sm font-normal", className)}
       {...props}
     >
+      <TriangleAlertIcon className="-mt-0.5 mr-2 inline-block size-4" />
       {content}
     </div>
   );

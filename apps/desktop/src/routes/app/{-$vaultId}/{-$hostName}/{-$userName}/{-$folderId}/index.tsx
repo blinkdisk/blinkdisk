@@ -69,7 +69,7 @@ function RouteComponent() {
       >
         <Button
           render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
-          variant="secondary"
+          variant="outline"
           size="sm"
         >
           <ArrowLeftIcon />

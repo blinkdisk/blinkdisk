@@ -92,7 +92,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
                 render={
                   <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
                 }
-                variant="secondary"
+                variant="outline"
                 size="sm"
               >
                 <SettingsIcon />

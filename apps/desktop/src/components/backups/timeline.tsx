@@ -181,7 +181,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 }
 
 const cardClassName =
-  "transition-colors relative bg-card flex w-full flex-row items-center justify-between gap-2 rounded-2xl border border-foreground/10 p-5 focus-visible:ring-2 outline-none ring-ring";
+  "transition-colors relative bg-card flex w-full flex-row items-center justify-between gap-2 rounded-2xl border p-5 focus-visible:ring-2 outline-none ring-ring";
 
 function FakeBackup() {
   const { t } = useAppTranslation("backup.list");

@@ -41,7 +41,7 @@ export function SidebarUserNameSelect({
     >
       <SelectTrigger
         className={cn(
-          "bg-sidebar-muted border-sidebar-border focus:z-10",
+          "bg-sidebar-secondary hover:bg-sidebar-secondary-hover border-sidebar-secondary-border focus:z-10",
           className,
         )}
       >
