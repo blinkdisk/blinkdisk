@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const ZKey = z
   .string()
-  .regex(/^(?!.*\.\.\/).+$/gm, 'Path must not include patterns like "../"');
+  .regex(/^(?!.*(?:\.\.\/|\.\.\\)).+$/, 'Path must not include directory traversal patterns');
 
 export const ZCloudBase = z.object({
   requestId: z.string(),
