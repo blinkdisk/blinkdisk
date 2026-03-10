@@ -316,7 +316,7 @@ export async function polarWebhook(
     );
   } catch (e) {
     if (e instanceof WebhookVerificationError)
-      c.json({ error: "Invalid signature" }, 400);
+      return c.json({ error: "Invalid signature" }, 400);
 
     console.error(e);
 
