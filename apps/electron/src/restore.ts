@@ -7,7 +7,19 @@ import { ZRestoreDirectoryType } from "@schemas/directory";
 import { app, dialog } from "electron";
 import { chmod, readdir, symlink } from "fs/promises";
 import pLimit from "p-limit";
-import { dirname, join } from "path";
+import { dirname, join, relative, isAbsolute, resolve } from "path";
+
+function isPathSafe(basePath: string, targetPath: string): boolean {
+  const resolved = resolve(basePath, targetPath);
+  const rel = relative(basePath, resolved);
+  return !!rel && !rel.startsWith("..") && !isAbsolute(rel);
+}
+
+function sanitizeItemName(name: string): string {
+  const sanitized = name.replace(/\.\.[/\\]/g, "").replace(/^[/\\]+/, "");
+  if (!sanitized) throw new Error("Invalid item name");
+  return sanitized;
+}
 
 type Restore = {
   id: string;
@@ -33,7 +45,12 @@ async function restore(
   vault: VaultInstance,
   onProgress?: (progress: number) => void,
 ) {
-  let path = join(directory, item.name);
+  const safeName = sanitizeItemName(item.name);
+  let path = join(directory, safeName);
+
+  if (!isPathSafe(directory, safeName))
+    throw new Error("Path traversal detected in restore item name");
+
   const pathExists = await fileExists(path);
 
   if (pathExists) {
@@ -120,6 +137,12 @@ async function restore(
     })) as string;
 
     if (!res) return;
+
+    const symlinkTarget = resolve(directory, res);
+    const symlinkRel = relative(directory, symlinkTarget);
+    if (symlinkRel.startsWith("..") || isAbsolute(symlinkRel))
+      throw new Error("Symlink target escapes restore directory");
+
     await symlink(res, path);
   } else {
     await fetchVault(vault, {
@@ -159,7 +182,7 @@ export async function restoreSingle({
   const destination = result.filePaths[0];
 
   queueMicrotask(async () => {
-    const restoreId = Math.random().toString(16);
+    const restoreId = crypto.randomUUID();
 
     restores.push({
       id: restoreId,
@@ -208,7 +231,7 @@ export async function restoreMultiple({
 
   queueMicrotask(async () => {
     const limit = pLimit(10);
-    const restoreId = Math.random().toString(16);
+    const restoreId = crypto.randomUUID();
 
     restores.push({
       id: restoreId,
@@ -251,8 +274,27 @@ export async function restoreDirectory({
   const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
+  const targetPath =
+    options.type === "UNPACKED" ? options.directoryPath : options.filePath;
+  const resolvedTarget = resolve(targetPath);
+  const homeDir = app.getPath("home");
+
+  if (
+    !resolvedTarget.startsWith(homeDir) ||
+    resolvedTarget.startsWith("/root")
+  ) {
+    throw new Error("Restore path must be within the user's home directory");
+  }
+
+  const blockedPrefixes = [".ssh", ".gnupg", ".config", ".local/bin"].map(
+    (p) => join(homeDir, p),
+  );
+  if (blockedPrefixes.some((prefix) => resolvedTarget.startsWith(prefix))) {
+    throw new Error("Restore path targets a sensitive directory");
+  }
+
   queueMicrotask(async () => {
-    const restoreId = Math.random().toString(16);
+    const restoreId = crypto.randomUUID();
 
     restores.push({
       id: restoreId,
