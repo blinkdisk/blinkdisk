@@ -81,27 +81,6 @@ const LogEntry = memo(function LogEntry({ log }: { log: CoreTaskLogEntry }) {
       )}
     </p>
   );
-
-  return (
-    <div className="border-border/50 hover:bg-muted/30 border-b px-3 py-2 font-mono text-xs last:border-b-0">
-      <div className="flex items-start gap-2">
-        <span className="text-muted-foreground shrink-0">
-          {formatTimestamp(log.ts)}
-        </span>
-        <span className="text-primary/70 shrink-0">[{log.mod}]</span>
-      </div>
-      {extras.length > 0 && (
-        <div className="text-muted-foreground ml-[calc(theme(spacing2)+8ch)] mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
-          {extras.map(([key, value]) => (
-            <span key={key}>
-              <span className="text-muted-foreground/70">{key}=</span>
-              <span className="text-foreground/60">{formatValue(value)}</span>
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  );
 });
 
 export function TaskDialog() {

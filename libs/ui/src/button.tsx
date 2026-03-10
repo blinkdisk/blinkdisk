@@ -5,7 +5,7 @@ import { Loader } from "@ui/loader";
 import { cn } from "@utils/class";
 
 const buttonVariants = cva(
-  "relative focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 rounded-lg border border-transparent bg-clip-padding text-sm font-medium focus-visible:ring-3 aria-invalid:ring-3 [&_svg:not([class*='size-'])]:size-4 group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 rounded-md border border-transparent bg-clip-padding text-sm font-medium focus-visible:ring-3 aria-invalid:ring-3 [&_svg:not([class*='size-'])]:size-4 group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -14,7 +14,7 @@ const buttonVariants = cva(
           "border hover:bg-card hover:text-foreground border-foreground/20",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover border border-input",
-        ghost: "hover:bg-muted hover:text-foreground dark:hover:bg-muted/50",
+        ghost: "hover:bg-foreground/5",
         destructive:
           "bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30",
         "destructive-secondary":
@@ -22,10 +22,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-11 rounded-md px-5",
+        default: "h-11 px-5",
         sm: "h-9 px-4",
-        lg: "h-11.5 rounded-md text-sm px-8",
-        xl: "h-13 rounded-md text-base px-8",
+        lg: "h-11.5 text-sm px-8",
+        xl: "h-13 text-base px-8",
         icon: "size-11",
         "icon-sm": "size-9",
         "icon-xs": "size-6",
