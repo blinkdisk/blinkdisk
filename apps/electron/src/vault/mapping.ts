@@ -1,6 +1,8 @@
 import { providers, ProviderType } from "@config/providers";
 import { LATEST_VAULT_VERSION } from "@config/vault";
 import { ProviderConfig } from "@schemas/providers";
+import { existsSync, statSync } from "node:fs";
+import { basename, resolve } from "node:path";
 
 export function mapProviderType(providerType: ProviderType) {
   const provider = providers.find(
@@ -31,10 +33,34 @@ export function mapConfigFields(
   const mapped: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(config)) {
-    if (provider.coreMapping && provider.coreMapping[key]) {
-      mapped[provider.coreMapping[key]] = value;
+    const mappedKey =
+      provider.coreMapping && provider.coreMapping[key]
+        ? provider.coreMapping[key]
+        : key;
+
+    if (mappedKey === "rcloneExe" && typeof value === "string" && value) {
+      const resolvedPath = resolve(value);
+      const name = basename(resolvedPath).toLowerCase();
+
+      if (!name.startsWith("rclone"))
+        throw new Error(
+          "rclone executable path must point to a binary named rclone",
+        );
+
+      if (!existsSync(resolvedPath))
+        throw new Error("rclone executable path does not exist");
+
+      try {
+        const stats = statSync(resolvedPath);
+        if (!stats.isFile())
+          throw new Error("rclone executable path is not a file");
+      } catch {
+        throw new Error("Failed to validate rclone executable path");
+      }
+
+      mapped[mappedKey] = resolvedPath;
     } else {
-      mapped[key] = value;
+      mapped[mappedKey] = value;
     }
   }
 
