@@ -9,19 +9,21 @@ export async function ratelimit(
     c.req.header("x-forwarded-for") ||
     c.req.header("x-client-ip");
 
-  if (ip) {
-    const { success } = await c.env.RATE_LIMIT.limit({
-      key: ip,
-    });
-
-    if (!success)
-      return c.json(
-        {
-          error: "Too many requests",
-        },
-        429,
-      );
+  if (!ip) {
+    return c.json({ error: "Unable to determine client IP" }, 400);
   }
+
+  const { success } = await c.env.RATE_LIMIT.limit({
+    key: ip,
+  });
+
+  if (!success)
+    return c.json(
+      {
+        error: "Too many requests",
+      },
+      429,
+    );
 
   return next();
 }
