@@ -70,7 +70,7 @@ export type ZAzureBlobStorageConfigType = z.infer<
 export const ZSftpConfig = z.object({
   host: z.string().min(1).max(255),
   user: z.string().min(1).max(32),
-  port: z.number().int().positive(),
+  port: z.number().int().min(1).max(65535),
   path: z.string().min(1).max(4096),
   password: z.string().max(128).optional(),
   privateKey: z.string().max(10000).optional(),
