@@ -69,6 +69,7 @@ function RouteComponent() {
       >
         <Button
           render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
+          nativeButton={false}
           variant="outline"
           size="sm"
         >
