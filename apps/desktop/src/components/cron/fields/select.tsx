@@ -18,20 +18,14 @@ export function CustomSelect(props: CustomSelectProps) {
     value,
     optionsList,
     setValue,
-    locale,
-    className,
     humanizeLabels,
     disabled,
     readOnly,
     leadingZero,
     clockFormat,
-    period,
     unit,
-    periodicityOnDoubleClick,
-    mode,
-    allowClear,
     filterOption = () => true,
-    ...otherProps
+    placeholder,
   } = props;
 
   const stringValue = useMemo(() => {
@@ -102,7 +96,7 @@ export function CustomSelect(props: CustomSelectProps) {
       multiple
     >
       <SelectTrigger className="h-10 text-xs">
-        <SelectValue />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {options.map((item) => (
@@ -112,16 +106,5 @@ export function CustomSelect(props: CustomSelectProps) {
         ))}
       </SelectContent>
     </Select>
-  );
-
-  return (
-    <Select
-      value={stringValue || []}
-      onChange={onOptionClick}
-      disabled={disabled || readOnly}
-      options={options}
-      triggerClassName="h-10 text-xs"
-      {...otherProps}
-    />
   );
 }
