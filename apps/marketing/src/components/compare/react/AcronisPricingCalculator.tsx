@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type PlanType = "essentials" | "advanced" | "premium";
 
@@ -61,6 +61,24 @@ export default function AcronisTrueImagePricingCalculator() {
     setStorageIndex(0);
   };
 
+  const planItems = useMemo(
+    () => [
+      { value: "essentials", label: "Essentials" },
+      { value: "advanced", label: "Advanced" },
+      { value: "premium", label: "Premium" },
+    ],
+    [],
+  );
+
+  const storageItems = useMemo(
+    () =>
+      plan.storageOptions.map((option, index) => ({
+        value: index.toString(),
+        label: option.label,
+      })),
+    [plan.storageOptions],
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-card rounded-xl border p-4">
@@ -70,29 +88,33 @@ export default function AcronisTrueImagePricingCalculator() {
         <Select
           value={planType}
           onValueChange={(to) => to && handlePlanChange(to)}
+          items={planItems}
         >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="essentials">Essentials</SelectItem>
-            <SelectItem value="advanced">Advanced</SelectItem>
-            <SelectItem value="premium">Premium</SelectItem>
+            {planItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
-        {plan.storageOptions.length > 1 && (
+        {storageItems.length > 1 && (
           <Select
             value={storageIndex.toString()}
             onValueChange={(value) => value && setStorageIndex(parseInt(value))}
+            items={storageItems}
           >
             <SelectTrigger className="bg-secondary mt-3 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {plan.storageOptions.map((option, index) => (
-                <SelectItem key={option.label} value={index.toString()}>
-                  {option.label}
+              {storageItems.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
                 </SelectItem>
               ))}
             </SelectContent>

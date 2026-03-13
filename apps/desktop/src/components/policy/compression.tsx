@@ -161,6 +161,13 @@ function AlgorithmSelector() {
 
   const activePreset = PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
 
+  const algorithms = useMemo(() => {
+    return compressionAlgorithms.map((alg) => ({
+      value: alg,
+      label: t(`algorithm.items.${alg}`),
+    }));
+  }, [t]);
+
   return (
     <DynamicField
       title={t("algorithm.label")}
@@ -225,14 +232,15 @@ function AlgorithmSelector() {
             onValueChange={(val) => val && field.setValue(val)}
             value={value}
             disabled={disabledContext}
+            items={algorithms}
           >
             <SelectTrigger>
               <SelectValue placeholder={t("algorithm.placeholder")} />
             </SelectTrigger>
             <SelectContent className="max-h-64">
-              {compressionAlgorithms.map((alg) => (
-                <SelectItem key={alg} value={alg}>
-                  {t(`algorithm.items.${alg}`)}
+              {algorithms.map((alg) => (
+                <SelectItem key={alg.value} value={alg.value}>
+                  {alg.label}
                 </SelectItem>
               ))}
             </SelectContent>

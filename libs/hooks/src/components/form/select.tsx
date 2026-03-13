@@ -44,9 +44,12 @@ const Select = React.forwardRef<
       >
         <SelectRoot
           {...props}
-          onValueChange={(value) => field.setValue(value?.value)}
-          value={items.find((item) => item.value === field.state.value)}
+          onValueChange={(value) => {
+            field.setValue(value as unknown as string);
+          }}
+          value={items.find((item) => item.value === field.state.value) ?? null}
           disabled={disabledContext || disabled}
+          items={items}
         >
           <SelectTrigger ref={ref} className={triggerClassName}>
             <SelectValue placeholder={placeholder} />

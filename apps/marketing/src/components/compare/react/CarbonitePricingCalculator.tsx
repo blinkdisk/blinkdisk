@@ -9,7 +9,7 @@ import {
 } from "@ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type PlanType = "basic" | "plus" | "prime";
 type BillingPeriod = "1_YEAR" | "2_YEARS" | "3_YEARS";
@@ -65,6 +65,15 @@ export default function CarbonitePricingCalculator() {
 
   const totalAmount = amount * quantity;
 
+  const planItems = useMemo(
+    () => [
+      { value: "basic", label: "Basic" },
+      { value: "plus", label: "Plus" },
+      { value: "prime", label: "Prime" },
+    ],
+    [],
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-card rounded-xl border p-4">
@@ -74,14 +83,17 @@ export default function CarbonitePricingCalculator() {
         <Select
           value={planType}
           onValueChange={(value) => setPlanType(value as PlanType)}
+          items={planItems}
         >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="basic">Basic</SelectItem>
-            <SelectItem value="plus">Plus</SelectItem>
-            <SelectItem value="prime">Prime</SelectItem>
+            {planItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 

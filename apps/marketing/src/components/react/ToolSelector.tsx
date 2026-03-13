@@ -42,16 +42,16 @@ export function ToolSelector({
     <div className="flex gap-2">
       <Combobox
         items={tools}
-        onInputValueChange={(to) => to && handleValueChange(to)}
-        value={currentSlug}
+        onValueChange={(item) => item && handleValueChange(item.value)}
+        value={tools.find((t) => t.value === currentSlug) ?? null}
       >
-        <ComboboxInput placeholder="Select a tool..." />
+        <ComboboxInput className="h-11 flex-1" placeholder="Select a tool..." />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item) => (
-              <ComboboxItem key={item} value={item}>
-                {item}
+              <ComboboxItem key={item.value} value={item}>
+                {item.label}
               </ComboboxItem>
             )}
           </ComboboxList>
@@ -107,17 +107,17 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
         </p>
       </div>
 
-      <Combobox
+      <Combobox<{ label: string; value: string }>
         items={availableTools}
-        onInputValueChange={(to) => to && handleAddTool(to)}
+        onValueChange={(item) => item && handleAddTool(item.value)}
       >
         <ComboboxInput placeholder="Select a tool..." />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item) => (
-              <ComboboxItem key={item} value={item}>
-                {item}
+              <ComboboxItem key={item.value} value={item}>
+                {item.label}
               </ComboboxItem>
             )}
           </ComboboxList>

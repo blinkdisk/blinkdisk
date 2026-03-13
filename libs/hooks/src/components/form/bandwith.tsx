@@ -16,6 +16,13 @@ import {
 import { cn } from "@utils/class";
 import React, { useContext } from "react";
 
+const bandwidthUnits = [
+  { value: "bps", label: "bps" },
+  { value: "Kbps", label: "Kbps" },
+  { value: "Mbps", label: "Mbps" },
+  { value: "Gbps", label: "Gbps" },
+] as const satisfies { value: string; label: string }[];
+
 const Bandwith = React.forwardRef<
   HTMLInputElement,
   InputProps & { label: DynamicFieldProps }
@@ -70,15 +77,17 @@ const Bandwith = React.forwardRef<
               unit: to as ZBandwithType["unit"],
             })
           }
+          items={bandwidthUnits}
         >
           <SelectTrigger className="gap-1">
             <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="bps">bps</SelectItem>
-            <SelectItem value="Kbps">Kbps</SelectItem>
-            <SelectItem value="Mbps">Mbps</SelectItem>
-            <SelectItem value="Gbps">Gbps</SelectItem>
+            {bandwidthUnits.map((unit) => (
+              <SelectItem key={unit.value} value={unit.value}>
+                {unit.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
