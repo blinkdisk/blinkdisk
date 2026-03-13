@@ -2,7 +2,13 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { MultiSelect } from "@ui/multi-select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/select";
 import { useCallback, useMemo } from "react";
 import { formatValue } from "../converter";
 import { CustomSelectProps } from "../types";
@@ -88,7 +94,28 @@ export function CustomSelect(props: CustomSelectProps) {
   );
 
   return (
-    <MultiSelect
+    <Select
+      items={options}
+      value={stringValue || []}
+      onValueChange={onOptionClick}
+      disabled={disabled || readOnly}
+      multiple
+    >
+      <SelectTrigger className="h-10 text-xs">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((item) => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+
+  return (
+    <Select
       value={stringValue || []}
       onChange={onOptionClick}
       disabled={disabled || readOnly}

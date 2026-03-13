@@ -45,7 +45,7 @@ export function VaultGeneralSettings() {
       </form>
       <div className="border-destructive/30 relative mt-8 flex justify-between rounded-xl border-2 border-dashed p-4">
         <div>
-          <p className="font-medium">{t("delete.title")}</p>
+          <p className="m-0! font-medium">{t("delete.title")}</p>
           <p className="text-muted-foreground text-xs">
             {t("delete.description")}
           </p>

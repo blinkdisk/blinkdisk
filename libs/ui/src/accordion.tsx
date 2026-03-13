@@ -60,13 +60,13 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="h-(--accordion-panel-height) overflow-hidden text-sm transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0"
+      className="accordion-content h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0 overflow-hidden text-sm transition-[height] duration-200 ease-out"
       keepMounted
       {...props}
     >
       <div
         className={cn(
-          "[&_a]:underline-offset-3 [&_a]:hover:text-foreground pb-2.5 pt-0 [&_a]:underline [&_p:not(:last-child)]:mb-4",
+          "[&_a]:underline-offset-3 [&_a]:hover:text-foreground pb-6 [&_a]:underline",
           className,
         )}
       >
