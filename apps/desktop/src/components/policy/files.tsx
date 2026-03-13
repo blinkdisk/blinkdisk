@@ -191,12 +191,12 @@ function ExclusionPreview({ rule }: ExclusionPreviewProps) {
     <div className="flex flex-col">
       {parsed.type === "EXTENSION" ? (
         <>
-          <p className="text-muted-foreground text-xs">{t("extension")}</p>
+          <p className="text-muted-foreground m-0! text-xs">{t("extension")}</p>
           <p className="font-medium">{parsed.extension}</p>
         </>
       ) : (
         <>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground m-0! text-xs">
             {parsed.foldersOnly ? t("name.foldersOnly") : t("name.both")}{" "}
             {t("matchType." + parsed.matchType)}
           </p>
