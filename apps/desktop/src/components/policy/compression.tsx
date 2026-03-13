@@ -169,6 +169,7 @@ function AlgorithmSelector() {
       name={field.name}
     >
       <Tabs
+        className="flex flex-col"
         value={activeTab}
         onValueChange={(tab) => {
           const tabId = tab as TabId;

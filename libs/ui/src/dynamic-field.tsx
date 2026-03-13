@@ -54,15 +54,19 @@ export function DynamicField({
   return (
     <Field className={containerClassName}>
       <div className={cn("flex flex-col gap-1", innerClassName)}>
-        {end ? (
-          <div className="flex items-end">
+        <div className="flex flex-col">
+          {end ? (
+            <div className="flex items-end">
+              <Label {...props} />
+              {end}
+            </div>
+          ) : (
             <Label {...props} />
-            {end}
-          </div>
-        ) : (
-          <Label {...props} />
-        )}
-        {description && <FieldDescription>{description}</FieldDescription>}
+          )}
+          {description && (
+            <FieldDescription className="mb-1">{description}</FieldDescription>
+          )}
+        </div>
         {children}
       </div>
       {errorMessages?.length ? (

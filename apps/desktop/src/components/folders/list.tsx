@@ -75,7 +75,7 @@ function Folder({ folder }: FolderProps) {
   return (
     <div
       role="link"
-      className="bg-card hover:bg-card-hover ring-ring shadow-xs relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2"
+      className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2"
     >
       <Link
         to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
