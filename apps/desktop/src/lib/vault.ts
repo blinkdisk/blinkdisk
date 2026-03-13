@@ -10,11 +10,12 @@ client.interceptors.response.use(
     const data = result.data;
 
     if (data && typeof data === "object" && data.error) {
-      console.error(
-        `Core error:`,
-        data.code ? `[${data.code}]` : "",
-        data.error,
-      );
+      if (data.error !== "mount point not found")
+        console.error(
+          `Core error:`,
+          data.code ? `[${data.code}]` : "",
+          data.error,
+        );
 
       return Promise.reject(
         new CoreError({
