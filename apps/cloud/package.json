@@ -12,7 +12,6 @@
   },
   "imports": {
     "#*": [
-      "./src/*",
       "./src/*.ts",
       "./src/*.tsx",
       "./src/*.js",
@@ -20,7 +19,8 @@
       "./src/*/index.ts",
       "./src/*/index.tsx",
       "./src/*/index.js",
-      "./src/*/index.jsx"
+      "./src/*/index.jsx",
+      "./src/*"
     ]
   },
   "dependencies": {

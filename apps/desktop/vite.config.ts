@@ -11,7 +11,6 @@ import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import env from "vite-plugin-environment";
-import paths from "vite-tsconfig-paths";
 
 export default defineConfig({
   clearScreen: false,
@@ -21,7 +20,6 @@ export default defineConfig({
   },
   plugins: [
     devtools(),
-    paths(),
     router({ target: "react", autoCodeSplitting: true }),
     react({
       babel: {

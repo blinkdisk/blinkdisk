@@ -13,12 +13,12 @@ Sentry.init({
 // but before the app ready event.
 registerProtcol();
 
-import "@electron/deeplink";
-import "@electron/instance";
-import "@electron/ipc";
-import "@electron/log";
-import "@electron/startup";
-import "@electron/updater";
+import "#deeplink";
+import "#instance";
+import "#ipc";
+import "#log";
+import "#startup";
+import "#updater";
 
 import { createTray } from "#tray";
 import { startAllVaults, stopAllVaults } from "#vault/manage";

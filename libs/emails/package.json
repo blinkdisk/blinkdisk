@@ -4,7 +4,6 @@
   "private": true,
   "imports": {
     "#*": [
-      "./src/*",
       "./src/*.ts",
       "./src/*.tsx",
       "./src/*.js",
@@ -12,8 +11,11 @@
       "./src/*/index.ts",
       "./src/*/index.tsx",
       "./src/*/index.js",
-      "./src/*/index.jsx"
-    ]
+      "./src/*/index.jsx",
+      "./src/*"
+    ],
+    "#components/*": "./src/components/*.tsx",
+    "#hooks/*": "./src/hooks/*.ts"
   },
   "exports": {
     "./*": "./src/*.tsx"
