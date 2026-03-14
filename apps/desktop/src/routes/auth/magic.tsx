@@ -64,12 +64,12 @@ function RouteComponent() {
                 <div className="flex w-full items-center justify-between">
                   <div className="flex">
                     {slots.slice(0, 5).map((slot, idx) => (
-                      <InputOTPSlot key={idx} index={idx} {...slot} />
+                      <InputOTPSlot key={idx} index={idx} {...slot} char={slot.char ?? undefined} />
                     ))}
                   </div>
                   <div className="flex">
                     {slots.slice(5).map((slot, idx) => (
-                      <InputOTPSlot key={idx + 5} index={idx + 5} {...slot} />
+                      <InputOTPSlot key={idx + 5} index={idx + 5} {...slot} char={slot.char ?? undefined} />
                     ))}
                   </div>
                 </div>
