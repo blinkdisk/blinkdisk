@@ -124,22 +124,6 @@ const config: KnipConfig = {
     "@sentry/cloudflare",
     "@sentry/cli",
   ],
-  paths: {
-    "@ui/*": ["./libs/ui/src/*"],
-    "@api/*": ["./apps/api/src/*"],
-    "@marketing/*": ["./apps/marketing/src/*"],
-    "@styles/*": ["./libs/styles/*"],
-    "@utils/*": ["./libs/utils/src/*"],
-    "@desktop/*": ["./apps/desktop/src/*"],
-    "@hooks/*": ["./libs/hooks/src/*"],
-    "@db/*": ["./libs/db/src/*"],
-    "@db": ["./libs/db/src/index.ts"],
-    "@emails/*": ["./libs/emails/src/*"],
-    "@schemas/*": ["./libs/schemas/src/*"],
-    "@config/*": ["./libs/config/src/*"],
-    "@electron/*": ["./apps/electron/src/*"],
-    "@cloud/*": ["./apps/cloud/src/*"],
-  },
 };
 
 export default config;

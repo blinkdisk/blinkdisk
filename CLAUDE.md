@@ -54,24 +54,6 @@ pnpm --filter=api lint
 - **hooks** - Shared React hooks library
 - **emails** - Email templates using React Email
 
-### Workspace Imports
-
-These path aliases are configured:
-
-- @ui/_: ./libs/ui/src/_
-- @api/_: ./apps/api/src/_
-- @marketing/_: ./apps/marketing/src/_
-- @styles/_: ./libs/styles/_
-- @utils/_: ./libs/utils/src/_
-- @desktop/_: ./apps/desktop/src/_
-- @hooks/_: ./libs/hooks/src/_
-- @db/_: ./libs/db/src/_
-- @emails/_: ./libs/emails/src/_
-- @schemas/_: ./libs/schemas/src/_
-- @config/_: ./libs/config/src/_
-- @electron/_: ./apps/electron/src/_
-- @cloud/_: ./apps/cloud/src/_
-
 ## Code Style
 
 - **Typescript**: Always use `type` not `interface`

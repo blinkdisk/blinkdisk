@@ -6,14 +6,5 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@marketing/*": ["./src/*"],
-      "@ui/*": ["../../libs/ui/src/*"],
-      "@utils/*": ["../../libs/utils/src/*"],
-      "@hooks/*": ["../../libs/hooks/src/*"],
-      "@styles/*": ["../../libs/styles/*"],
-      "@config/*": ["../../libs/config/src/*"]
-    }
-  }
+  },
 }
