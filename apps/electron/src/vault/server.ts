@@ -1,11 +1,11 @@
+import { generateId } from "@blinkdisk/utils/id";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { deleteVaultFromCache } from "@electron/cache";
 import { log } from "@electron/log";
 import { corePath, globalConfigDirectory } from "@electron/path";
 import { vaults } from "@electron/vault/manage";
 import { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
-import { generateId } from "@utils/id";
-import { tryCatch } from "@utils/try-catch";
 import { spawn } from "child_process";
 import { app } from "electron";
 import { existsSync, renameSync } from "fs";

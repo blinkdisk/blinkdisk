@@ -1,9 +1,9 @@
+import { CustomError } from "@blinkdisk/utils/error";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@utils/error";
 
 export function useCancelTask() {
   const { vaultId } = useVaultId();

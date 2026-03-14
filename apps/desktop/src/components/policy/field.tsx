@@ -1,7 +1,7 @@
+import { useFieldContext, useStore } from "@blinkdisk/forms/use-app-form";
+import { Checkbox } from "@blinkdisk/ui/checkbox";
+import { cn } from "@blinkdisk/utils/class";
 import { PolicyContext } from "@desktop/components/policy/context";
-import { useFieldContext, useStore } from "@hooks/use-app-form";
-import { Checkbox } from "@ui/checkbox";
-import { cn } from "@utils/class";
 import { useContext } from "react";
 
 type PolicyFieldProps = {

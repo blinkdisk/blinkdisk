@@ -1,6 +1,6 @@
 import { ListObjectsCommand } from "@aws-sdk/client-s3";
+import { ZCloudListBlobs } from "@blinkdisk/schemas/cloud";
 import { Vault } from "@cloud/classes/vault";
-import { ZCloudListBlobs } from "@schemas/cloud";
 
 export async function listBlobs(
   durableObject: InstanceType<typeof Vault>,

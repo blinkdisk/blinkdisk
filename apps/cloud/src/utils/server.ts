@@ -1,5 +1,5 @@
-import { coloServerMapping } from "@config/server";
-import { tryCatch } from "@utils/try-catch";
+import { coloServerMapping } from "@blinkdisk/config/server";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 const withTimeout = async (url: string, timeout = 1000) => {
   const controller = new AbortController();

@@ -1,7 +1,7 @@
-import type { ButtonProps } from "@ui/button";
-import { Button } from "@ui/button";
-import { Loader } from "@ui/loader";
-import { cn } from "@utils/class";
+import type { ButtonProps } from "@blinkdisk/ui/button";
+import { Button } from "@blinkdisk/ui/button";
+import { Loader } from "@blinkdisk/ui/loader";
+import { cn } from "@blinkdisk/utils/class";
 import { FileIcon } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 

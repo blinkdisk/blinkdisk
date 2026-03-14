@@ -1,4 +1,4 @@
-import { ConfigLevel } from "@db/enums";
+import { ConfigLevel } from "@blinkdisk/db/enums";
 
 export type ProviderType =
   | "CLOUDBLINK"
@@ -13,7 +13,7 @@ export type ProviderType =
   | "RCLONE"
   | "WEBDAV";
 
-export type Provider = {
+type Provider = {
   type: ProviderType;
   alias?: string[];
   coreType: string;

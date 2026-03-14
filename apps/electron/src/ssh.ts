@@ -1,4 +1,4 @@
-import type { ZSftpConfigType } from "@schemas/providers";
+import type { ZSftpConfigType } from "@blinkdisk/schemas/providers";
 import { execFile, ExecFileException } from "child_process";
 
 export function sshKeyscan(form: ZSftpConfigType) {

@@ -6,6 +6,9 @@
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
@@ -13,5 +16,7 @@
     "eslint": "^9.22.0",
     "typescript": "5.8.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@blinkdisk/db": "workspace:*"
+  }
 }

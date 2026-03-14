@@ -1,10 +1,10 @@
+import { TableCell, TableRow } from "@blinkdisk/ui/table";
+import { cn } from "@blinkdisk/utils/class";
 import { Item } from "@desktop/components/directories/table";
 import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useNavigate } from "@tanstack/react-router";
 import { flexRender, Row } from "@tanstack/react-table";
 import { VirtualItem } from "@tanstack/react-virtual";
-import { TableCell, TableRow } from "@ui/table";
-import { cn } from "@utils/class";
 
 type DirectoryItemRowProps = {
   row: Row<Item> | undefined;

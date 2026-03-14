@@ -1,13 +1,13 @@
-import { ProviderType } from "@config/providers";
-import { LATEST_VAULT_VERSION } from "@config/vault";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import { getAccountCache, getVaultCache } from "@electron/cache";
 import { log } from "@electron/log";
 import { getHostName, getUserName } from "@electron/profile";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 import { startVaultServer } from "@electron/vault/server";
-import { ProviderConfig } from "@schemas/providers";
-import { ZVaultOptionsType } from "@schemas/shared/vault";
 import { VaultInstance } from "./types";
 import { validationVault } from "./validate";
 

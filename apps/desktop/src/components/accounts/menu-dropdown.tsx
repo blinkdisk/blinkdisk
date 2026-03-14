@@ -1,10 +1,5 @@
-import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-portal";
-import { useBilling } from "@desktop/hooks/queries/use-billing";
-import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
-import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
-import { useAuth } from "@desktop/hooks/use-auth";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { useIsMobile } from "@hooks/use-mobile";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { useIsMobile } from "@blinkdisk/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
+} from "@blinkdisk/ui/dropdown-menu";
+import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-portal";
+import { useBilling } from "@desktop/hooks/queries/use-billing";
+import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
+import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
+import { useAuth } from "@desktop/hooks/use-auth";
 import {
   CogIcon,
   CreditCardIcon,

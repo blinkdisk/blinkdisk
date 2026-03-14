@@ -1,9 +1,9 @@
-import { LanguageCode } from "@config/language";
+import { LanguageCode } from "@blinkdisk/config/language";
+import { ZMagicCodeType } from "@blinkdisk/schemas/auth";
 import { useAuth } from "@desktop/hooks/use-auth";
 import i18n from "@desktop/i18n";
 import { authClient } from "@desktop/lib/auth";
 import { showErrorToast } from "@desktop/lib/error";
-import { ZMagicCodeType } from "@schemas/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";

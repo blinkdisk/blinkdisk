@@ -1,13 +1,13 @@
-import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
-import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { useStore } from "@tanstack/react-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@ui/dialog";
+} from "@blinkdisk/ui/dialog";
+import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
+import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
+import { useStore } from "@tanstack/react-form";
 
 export function AccountSettingsDialog() {
   const { t } = useAppTranslation("settings.account");

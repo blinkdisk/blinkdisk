@@ -1,3 +1,14 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@blinkdisk/ui/dropdown-menu";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import { LocalDropdownMenuItem } from "@desktop/components/vaults/local-dropdown-item";
@@ -7,18 +18,7 @@ import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
-import { Skeleton } from "@ui/skeleton";
 import {
   CloudUploadIcon,
   FolderSearchIcon,

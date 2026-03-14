@@ -1,9 +1,9 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZBackblazeConfigType } from "@blinkdisk/schemas/providers";
 import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
 import { useBackblazeForm } from "@desktop/hooks/forms/providers/use-backblaze-form";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZBackblazeConfigType } from "@schemas/providers";
 
 export type BackblazeFormProps = {
   action: VaultAction;

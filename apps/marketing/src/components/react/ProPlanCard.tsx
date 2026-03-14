@@ -1,13 +1,13 @@
-import type { BillingPeriod } from "@config/plans";
-import { plans } from "@config/plans";
+import type { BillingPeriod } from "@blinkdisk/config/plans";
+import { plans } from "@blinkdisk/config/plans";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+} from "@blinkdisk/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { CheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 

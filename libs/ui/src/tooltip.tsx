@@ -1,8 +1,8 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
-function TooltipProvider({
+export function TooltipProvider({
   delay = 0,
   ...props
 }: TooltipPrimitive.Provider.Props) {
@@ -61,4 +61,4 @@ function TooltipContent({
   );
 }
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+export { Tooltip, TooltipContent, TooltipTrigger };

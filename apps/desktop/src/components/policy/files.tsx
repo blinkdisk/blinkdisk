@@ -1,17 +1,17 @@
+import {
+  FormDisabledContext,
+  useFieldContext,
+  useStore,
+} from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { DynamicField } from "@blinkdisk/ui/dynamic-field";
+import { Input } from "@blinkdisk/ui/input";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
 import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
 import { parseExclusionRule } from "@desktop/lib/exclusion";
-import {
-  FormDisabledContext,
-  useFieldContext,
-  useStore,
-} from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { DynamicField } from "@ui/dynamic-field";
-import { Input } from "@ui/input";
 import { EditIcon, FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext, useMemo } from "react";
 

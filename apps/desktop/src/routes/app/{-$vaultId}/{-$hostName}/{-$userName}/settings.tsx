@@ -1,3 +1,7 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Accordion } from "@blinkdisk/ui/accordion";
+import { Button } from "@blinkdisk/ui/button";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
@@ -8,11 +12,7 @@ import { VaultGeneralSettings } from "@desktop/components/vaults/settings/genera
 import { VaultThrottleSettings } from "@desktop/components/vaults/settings/throttle";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Accordion } from "@ui/accordion";
-import { Button } from "@ui/button";
-import { Skeleton } from "@ui/skeleton";
 import { HomeIcon } from "lucide-react";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { useState } from "react";
 
 type BillingPeriod = "MONTHLY" | "YEARLY" | "TWO_YEARS";

@@ -1,6 +1,6 @@
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 function Progress({
   className,
@@ -49,33 +49,4 @@ function ProgressIndicator({
   );
 }
 
-function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
-  return (
-    <ProgressPrimitive.Label
-      className={cn("text-sm font-medium", className)}
-      data-slot="progress-label"
-      {...props}
-    />
-  );
-}
-
-function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
-  return (
-    <ProgressPrimitive.Value
-      className={cn(
-        "text-muted-foreground ml-auto text-sm tabular-nums",
-        className,
-      )}
-      data-slot="progress-value"
-      {...props}
-    />
-  );
-}
-
-export {
-  Progress,
-  ProgressIndicator,
-  ProgressLabel,
-  ProgressTrack,
-  ProgressValue,
-};
+export { Progress };

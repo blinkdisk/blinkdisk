@@ -1,5 +1,5 @@
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { AlertTriangleIcon } from "lucide-react";
 
 type ConfigValidationErrorProps = {

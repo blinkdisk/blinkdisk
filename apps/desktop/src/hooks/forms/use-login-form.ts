@@ -1,6 +1,6 @@
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import { ZLogin } from "@blinkdisk/schemas/auth";
 import { useLogin } from "@desktop/hooks/mutations/use-login";
-import { useAppForm } from "@hooks/use-app-form";
-import { ZLogin } from "@schemas/auth";
 
 export function useLoginForm() {
   const { mutateAsync } = useLogin();

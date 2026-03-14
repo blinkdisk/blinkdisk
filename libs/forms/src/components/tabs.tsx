@@ -1,6 +1,11 @@
-import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { TabsList, TabsProps, Tabs as TabsRoot, TabsTrigger } from "@ui/tabs";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import {
+  TabsList,
+  TabsProps,
+  Tabs as TabsRoot,
+  TabsTrigger,
+} from "@blinkdisk/ui/tabs";
+import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import React, { ReactNode, useContext } from "react";
 
 const Tabs = React.forwardRef<

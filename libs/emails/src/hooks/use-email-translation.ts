@@ -1,10 +1,8 @@
 import email from "../../locales/en/email.json";
 
-export type TranslationValue =
-  | string
-  | { [key: string]: string | TranslationValue };
-export type Namespace = { [key: string]: TranslationValue };
-export type Locale = { [namespace: string]: Namespace };
+type TranslationValue = string | { [key: string]: string | TranslationValue };
+type Namespace = { [key: string]: TranslationValue };
+type Locale = { [namespace: string]: Namespace };
 export type Locales = { [locale: string]: Locale };
 
 export type LocaleProps = {

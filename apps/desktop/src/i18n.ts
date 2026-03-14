@@ -1,4 +1,4 @@
-import { defaultLanguageCode, languageCodes } from "@config/language";
+import { defaultLanguageCode, languageCodes } from "@blinkdisk/config/language";
 import { enUS } from "date-fns/locale";
 import i18n from "i18next";
 import detector from "i18next-browser-languagedetector";

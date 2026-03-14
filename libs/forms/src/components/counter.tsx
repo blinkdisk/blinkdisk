@@ -1,8 +1,8 @@
-import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { Button } from "@ui/button";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { Input, InputProps } from "@ui/input";
-import { cn } from "@utils/class";
+import { Button } from "@blinkdisk/ui/button";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { Input, InputProps } from "@blinkdisk/ui/input";
+import { cn } from "@blinkdisk/utils/class";
+import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import React, { useContext } from "react";
 

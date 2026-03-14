@@ -1,15 +1,15 @@
+import { useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
+import { InputOTPSlot } from "@blinkdisk/ui/input-otp";
 import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
-import { useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import {
   createFileRoute,
   Link,
   useCanGoBack,
   useRouter,
 } from "@tanstack/react-router";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
-import { InputOTPSlot } from "@ui/input-otp";
 import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
 import { Trans } from "react-i18next";
 
@@ -64,12 +64,22 @@ function RouteComponent() {
                 <div className="flex w-full items-center justify-between">
                   <div className="flex">
                     {slots.slice(0, 5).map((slot, idx) => (
-                      <InputOTPSlot key={idx} index={idx} {...slot} char={slot.char ?? undefined} />
+                      <InputOTPSlot
+                        key={idx}
+                        index={idx}
+                        {...slot}
+                        char={slot.char ?? undefined}
+                      />
                     ))}
                   </div>
                   <div className="flex">
                     {slots.slice(5).map((slot, idx) => (
-                      <InputOTPSlot key={idx + 5} index={idx + 5} {...slot} char={slot.char ?? undefined} />
+                      <InputOTPSlot
+                        key={idx + 5}
+                        index={idx + 5}
+                        {...slot}
+                        char={slot.char ?? undefined}
+                      />
                     ))}
                   </div>
                 </div>

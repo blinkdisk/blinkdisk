@@ -1,4 +1,4 @@
-import "@desktop/styles.css";
+import "./styles.css";
 
 import { init } from "@sentry/electron/renderer";
 import {

@@ -1,11 +1,11 @@
-import { PolicyContext } from "@desktop/components/policy/context";
-import { ZPolicyType } from "@schemas/policy";
+import { ZPolicyType } from "@blinkdisk/schemas/policy";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@ui/accordion";
-import { Skeleton } from "@ui/skeleton";
+} from "@blinkdisk/ui/accordion";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { PolicyContext } from "@desktop/components/policy/context";
 import { ReactNode, useContext } from "react";
 
 type SettingsCategoryProps = {

@@ -11,6 +11,10 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
+    "@blinkdisk/db": "workspace:*",
+    "@blinkdisk/utils": "workspace:*",
+    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/schemas": "workspace:*",
     "@aws-sdk/client-s3": "^3.886.0",
     "@aws-sdk/s3-request-presigner": "^3.886.0",
     "@sentry/cloudflare": "^10.42.0"

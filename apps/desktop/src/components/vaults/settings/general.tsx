@@ -1,10 +1,10 @@
+import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { useUpdateVaultForm } from "@desktop/hooks/forms/use-update-vault-form";
 import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dialog";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { FormDisabledContext, useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
 import { SettingsIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 

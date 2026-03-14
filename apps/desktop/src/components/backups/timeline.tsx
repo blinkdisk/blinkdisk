@@ -1,26 +1,26 @@
-import { PinBadge } from "@desktop/components/backups/pin-badge";
-import { BackupProgress } from "@desktop/components/backups/progress";
-import { LocalButton } from "@desktop/components/vaults/local-button";
-import { useFolder } from "@desktop/hooks/use-folder";
-import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
+} from "@blinkdisk/ui/dropdown-menu";
+import { PinBadge } from "@desktop/components/backups/pin-badge";
+import { BackupProgress } from "@desktop/components/backups/progress";
+import { LocalButton } from "@desktop/components/vaults/local-button";
+import { useFolder } from "@desktop/hooks/use-folder";
+import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
 import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
 import { formatBackupDate } from "@desktop/lib/backup";
 import { formatSize } from "@desktop/lib/number";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@ui/button";
-import { Skeleton } from "@ui/skeleton";
-import { cn } from "@utils/class";
 import {
   CalendarClockIcon,
   CalendarIcon,

@@ -1,13 +1,13 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import { useLoginForm } from "@desktop/hooks/forms/use-login-form";
 import { useAuth } from "@desktop/hooks/use-auth";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import {
   createFileRoute,
   Link,
   useCanGoBack,
   useRouter,
 } from "@tanstack/react-router";
-import { Button } from "@ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Trans } from "react-i18next";
 

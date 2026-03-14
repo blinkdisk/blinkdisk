@@ -1,7 +1,7 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import { useStopMount } from "@desktop/hooks/mutations/core/use-stop-mount";
 import { useMount } from "@desktop/hooks/queries/core/use-mount";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
 import { FolderSymlinkIcon, SquareIcon } from "lucide-react";
 
 export function DirectoryMount() {

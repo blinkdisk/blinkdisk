@@ -1,9 +1,9 @@
+import { FormDisabledContext } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { providerForms } from "@desktop/components/forms/providers";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultConfig } from "@desktop/hooks/queries/use-vault-config";
-import { FormDisabledContext } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { HardDriveIcon } from "lucide-react";
 import { useMemo } from "react";
 

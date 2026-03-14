@@ -20,8 +20,8 @@ export default defineConfig({
     sourcemap: true,
   },
   plugins: [
-    devtools(),
     paths(),
+    devtools(),
     router({ target: "react", autoCodeSplitting: true }),
     react({
       babel: {

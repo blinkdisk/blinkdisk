@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
+} from "@blinkdisk/ui/select";
 import { useCallback, useMemo } from "react";
 import { formatValue } from "../converter";
 import { CustomSelectProps } from "../types";

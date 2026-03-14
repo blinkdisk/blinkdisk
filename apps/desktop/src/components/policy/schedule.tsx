@@ -1,15 +1,15 @@
-import { Cron } from "@desktop/components/cron";
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
 import {
   FormDisabledContext,
   useFieldContext,
   useStore,
-} from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { DynamicField } from "@ui/dynamic-field";
+} from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { DynamicField } from "@blinkdisk/ui/dynamic-field";
+import { Cron } from "@desktop/components/cron";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyField } from "@desktop/components/policy/field";
+import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
 import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 

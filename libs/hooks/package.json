@@ -6,6 +6,9 @@
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
@@ -15,9 +18,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
-    "@blinkdisk/ui": "workspace:*",
-    "@tanstack/react-form": "^1.27.1",
-    "lucide-react": "^0.483.0",
+    "@blinkdisk/config": "workspace:*",
     "react": "^19.0.0",
     "react-i18next": "^15.4.1"
   }

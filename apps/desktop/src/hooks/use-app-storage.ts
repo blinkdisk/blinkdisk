@@ -1,4 +1,4 @@
-import { GlobalStorageSchema } from "@electron/store";
+import { GlobalStorageSchema } from "@blinkdisk/electron/store";
 import { Store, useStore } from "@tanstack/react-store";
 import { useEffect } from "react";
 

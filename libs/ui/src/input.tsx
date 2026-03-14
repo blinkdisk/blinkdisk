@@ -1,7 +1,7 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import * as React from "react";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 export type InputProps = React.ComponentProps<"input"> & {
   as?: "textarea" | "input";

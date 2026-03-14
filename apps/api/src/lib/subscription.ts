@@ -1,4 +1,4 @@
-import { DB } from "@db/schema";
+import { DB } from "@blinkdisk/db/schema";
 import { Kysely } from "kysely";
 
 export function getActiveSubscription(accountId: string, db: Kysely<DB>) {

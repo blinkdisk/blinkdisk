@@ -1,9 +1,9 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { SidebarMenuItem } from "@ui/sidebar";
-import { Skeleton } from "@ui/skeleton";
 import { PlusIcon } from "lucide-react";
 
 export function SidebarAddFolder() {

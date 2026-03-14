@@ -1,12 +1,12 @@
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import {
+  ZGoogleCloudStorageConfig,
+  ZGoogleCloudStorageConfigType,
+} from "@blinkdisk/schemas/providers";
 import {
   useConfigValidation,
   VaultAction,
 } from "@desktop/hooks/use-config-validation";
-import { useAppForm } from "@hooks/use-app-form";
-import {
-  ZGoogleCloudStorageConfig,
-  ZGoogleCloudStorageConfigType,
-} from "@schemas/providers";
 
 export function useGoogleCloudStorageForm({
   action,
@@ -17,10 +17,7 @@ export function useGoogleCloudStorageForm({
   config?: ZGoogleCloudStorageConfigType;
   onSubmit: (value: ZGoogleCloudStorageConfigType) => void;
 }) {
-  const { onSubmitAsync } = useConfigValidation(
-    "GOOGLE_CLOUD_STORAGE",
-    action,
-  );
+  const { onSubmitAsync } = useConfigValidation("GOOGLE_CLOUD_STORAGE", action);
 
   return useAppForm({
     defaultValues: {

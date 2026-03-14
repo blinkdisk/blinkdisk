@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback } from "@ui/avatar";
-import { Skeleton } from "@ui/skeleton";
+import { Avatar, AvatarFallback } from "@blinkdisk/ui/avatar";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { useMemo } from "react";
 
 type AccountPreviewProps = {

@@ -1,9 +1,12 @@
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import {
+  ZBackblazeConfig,
+  ZBackblazeConfigType,
+} from "@blinkdisk/schemas/providers";
 import {
   useConfigValidation,
   VaultAction,
 } from "@desktop/hooks/use-config-validation";
-import { useAppForm } from "@hooks/use-app-form";
-import { ZBackblazeConfig, ZBackblazeConfigType } from "@schemas/providers";
 
 export function useBackblazeForm({
   action,

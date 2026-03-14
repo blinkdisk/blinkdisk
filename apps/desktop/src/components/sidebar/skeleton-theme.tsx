@@ -1,5 +1,5 @@
+import { SkeletonTheme } from "@blinkdisk/ui/skeleton";
 import { useTheme } from "@desktop/hooks/use-theme";
-import { SkeletonTheme } from "@ui/skeleton";
 
 export type SidebarSkeletonThemeProps = {
   children: React.ReactNode;

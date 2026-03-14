@@ -1,9 +1,9 @@
+import { ZVaultThrottleType } from "@blinkdisk/schemas/vault";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { convertThrottleToCore } from "@desktop/lib/throttle";
 import { vaultApi } from "@desktop/lib/vault";
-import { ZVaultThrottleType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateThrottle(onSuccess?: () => void) {

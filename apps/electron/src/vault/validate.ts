@@ -1,10 +1,10 @@
-import { ProviderType } from "@config/providers";
-import { LATEST_VAULT_VERSION } from "@config/vault";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 import { startVaultServer } from "@electron/vault/server";
 import { VaultInstance } from "@electron/vault/types";
-import { ProviderConfig } from "@schemas/providers";
 
 export let validationVault: VaultInstance | null = null;
 

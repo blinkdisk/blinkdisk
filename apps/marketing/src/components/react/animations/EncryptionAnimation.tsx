@@ -1,4 +1,4 @@
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { EyeIcon, FileIcon, LockIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 

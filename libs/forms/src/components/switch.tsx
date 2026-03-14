@@ -1,7 +1,7 @@
-import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { SwitchProps, Switch as SwitchRoot } from "@ui/switch";
-import { cn } from "@utils/class";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { SwitchProps, Switch as SwitchRoot } from "@blinkdisk/ui/switch";
+import { cn } from "@blinkdisk/utils/class";
+import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import React, { useContext } from "react";
 
 const Switch = React.forwardRef<

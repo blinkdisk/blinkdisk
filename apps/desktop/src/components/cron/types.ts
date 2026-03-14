@@ -2,8 +2,8 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { ButtonProps } from "@ui/button";
-import { SelectProps } from "@ui/select";
+import { ButtonProps } from "@blinkdisk/ui/button";
+import { SelectProps } from "@blinkdisk/ui/select";
 import { Dispatch, SetStateAction } from "react";
 
 // External props

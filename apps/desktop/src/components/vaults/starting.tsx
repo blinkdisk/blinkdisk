@@ -1,8 +1,8 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import VaultIcon from "@desktop/components/icons/vault";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useTaskDialog } from "@desktop/hooks/state/use-task-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
 
 export function VaultStarting() {
   const { t } = useAppTranslation("vault.starting");

@@ -1,9 +1,15 @@
-import { FREE_SPACE_AVAILABLE } from "@config/space";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@blinkdisk/ui/card";
 import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
 import { formatSize } from "@desktop/lib/number";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";
 import { CheckIcon, ExternalLinkIcon, XIcon } from "lucide-react";
 
 export type CreateVaultVariantProps = {

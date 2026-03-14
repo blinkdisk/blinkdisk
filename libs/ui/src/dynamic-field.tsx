@@ -1,5 +1,5 @@
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { cn } from "@utils/class";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
 import { Field, FieldDescription, FieldError, FieldLabel } from "./field";
 

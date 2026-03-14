@@ -1,7 +1,4 @@
-import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
-import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
-import { cn } from "@utils/class";
+} from "@blinkdisk/ui/dropdown-menu";
+import { cn } from "@blinkdisk/utils/class";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { ChevronDownIcon, PlusIcon, VaultIcon } from "lucide-react";
 
 type SidebarVaultSelectProps = {
@@ -29,7 +29,7 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "border-input flex w-full select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors bg-sidebar-secondary hover:bg-sidebar-secondary-hover border-sidebar-secondary-border focus:z-10 h-11",
+          "border-input bg-sidebar-secondary hover:bg-sidebar-secondary-hover border-sidebar-secondary-border flex h-11 w-full select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:z-10",
           className,
         )}
       >

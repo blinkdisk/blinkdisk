@@ -1,13 +1,13 @@
-import { languageCodes, languages } from "@config/language";
-import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
-import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { languageCodes, languages } from "@blinkdisk/config/language";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@ui/dialog";
+} from "@blinkdisk/ui/dialog";
+import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
+import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 
 export function PreferencesSettingsDialog() {

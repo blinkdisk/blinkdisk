@@ -1,5 +1,5 @@
-import { emojiToHue } from "@config/emoji";
-import { cn } from "@utils/class";
+import { emojiToHue } from "@blinkdisk/config/emoji";
+import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
 import { parse } from "twemoji-parser";
 

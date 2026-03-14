@@ -1,4 +1,4 @@
-import type { ElectronAPI } from "@electron/preload";
+import type { ElectronAPI } from "@blinkdisk/electron/preload";
 
 declare global {
   interface Window {

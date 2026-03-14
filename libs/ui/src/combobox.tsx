@@ -1,21 +1,15 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
-import * as React from "react";
 
-import { Button } from "@ui/button";
+import { cn } from "@blinkdisk/utils/class";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@ui/input-group";
-import { cn } from "@utils/class";
 import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 
 const Combobox = ComboboxPrimitive.Root;
-
-function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props) {
-  return <ComboboxPrimitive.Value data-slot="combobox-value" {...props} />;
-}
 
 function ComboboxTrigger({
   className,
@@ -160,35 +154,6 @@ function ComboboxItem({
   );
 }
 
-function ComboboxGroup({ className, ...props }: ComboboxPrimitive.Group.Props) {
-  return (
-    <ComboboxPrimitive.Group
-      data-slot="combobox-group"
-      className={cn(className)}
-      {...props}
-    />
-  );
-}
-
-function ComboboxLabel({
-  className,
-  ...props
-}: ComboboxPrimitive.GroupLabel.Props) {
-  return (
-    <ComboboxPrimitive.GroupLabel
-      data-slot="combobox-label"
-      className={cn("text-muted-foreground px-2 py-1.5 text-xs", className)}
-      {...props}
-    />
-  );
-}
-
-function ComboboxCollection({ ...props }: ComboboxPrimitive.Collection.Props) {
-  return (
-    <ComboboxPrimitive.Collection data-slot="combobox-collection" {...props} />
-  );
-}
-
 function ComboboxEmpty({ className, ...props }: ComboboxPrimitive.Empty.Props) {
   return (
     <ComboboxPrimitive.Empty
@@ -202,101 +167,11 @@ function ComboboxEmpty({ className, ...props }: ComboboxPrimitive.Empty.Props) {
   );
 }
 
-function ComboboxSeparator({
-  className,
-  ...props
-}: ComboboxPrimitive.Separator.Props) {
-  return (
-    <ComboboxPrimitive.Separator
-      data-slot="combobox-separator"
-      className={cn("bg-border -mx-1 my-1 h-px", className)}
-      {...props}
-    />
-  );
-}
-
-function ComboboxChips({
-  className,
-  ...props
-}: React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> &
-  ComboboxPrimitive.Chips.Props) {
-  return (
-    <ComboboxPrimitive.Chips
-      data-slot="combobox-chips"
-      className={cn(
-        "dark:bg-input/30 border-input focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:border-destructive dark:has-aria-invalid:border-destructive/50 focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1 flex min-h-8 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-function ComboboxChip({
-  className,
-  children,
-  showRemove = true,
-  ...props
-}: ComboboxPrimitive.Chip.Props & {
-  showRemove?: boolean;
-}) {
-  return (
-    <ComboboxPrimitive.Chip
-      data-slot="combobox-chip"
-      className={cn(
-        "bg-muted text-foreground has-data-[slot=combobox-chip-remove]:pr-0 has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 whitespace-nowrap rounded-sm px-1.5 text-xs font-medium",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      {showRemove && (
-        <ComboboxPrimitive.ChipRemove
-          className="-ml-1 opacity-50 hover:opacity-100"
-          data-slot="combobox-chip-remove"
-          render={
-            <Button variant="ghost" size="icon-xs">
-              <XIcon className="pointer-events-none" />
-            </Button>
-          }
-        />
-      )}
-    </ComboboxPrimitive.Chip>
-  );
-}
-
-function ComboboxChipsInput({
-  className,
-  ...props
-}: ComboboxPrimitive.Input.Props) {
-  return (
-    <ComboboxPrimitive.Input
-      data-slot="combobox-chip-input"
-      className={cn("min-w-16 flex-1 outline-none", className)}
-      {...props}
-    />
-  );
-}
-
-function useComboboxAnchor() {
-  return React.useRef<HTMLDivElement | null>(null);
-}
-
 export {
   Combobox,
-  ComboboxChip,
-  ComboboxChips,
-  ComboboxChipsInput,
-  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
-  ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
-  ComboboxLabel,
   ComboboxList,
-  ComboboxSeparator,
-  ComboboxTrigger,
-  ComboboxValue,
-  useComboboxAnchor,
 };

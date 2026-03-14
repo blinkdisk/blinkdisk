@@ -1,4 +1,4 @@
-import type { AppRouter } from "@api/router";
+import type { AppRouter } from "@blinkdisk/api/router";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 
 export const trpc = createTRPCProxyClient<AppRouter>({

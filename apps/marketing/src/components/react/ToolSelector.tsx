@@ -5,7 +5,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@ui/combobox";
+} from "@blinkdisk/ui/combobox";
 import { PlusIcon, XIcon } from "lucide-react";
 
 type ToolSelectorProps = {

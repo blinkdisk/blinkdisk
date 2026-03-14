@@ -1,11 +1,11 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import { Empty } from "@desktop/components/empty";
 import { VaultHome } from "@desktop/components/vaults/home";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@ui/button";
 import { CloudAlertIcon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
 

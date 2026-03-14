@@ -1,9 +1,9 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZAzureBlobStorageConfigType } from "@blinkdisk/schemas/providers";
 import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
 import { useAzureBlobStorageForm } from "@desktop/hooks/forms/providers/use-azure-blob-storage-form";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZAzureBlobStorageConfigType } from "@schemas/providers";
 
 export type AzureBlobStorageFormProps = {
   action: VaultAction;

@@ -1,9 +1,9 @@
-import { LanguageCode } from "@config/language";
+import { LanguageCode } from "@blinkdisk/config/language";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import { ZUpdatePreferences } from "@blinkdisk/schemas/settings";
 import { useUpdatePreferences } from "@desktop/hooks/mutations/use-update-preferences";
 import { useTheme } from "@desktop/hooks/use-theme";
 import i18n from "@desktop/i18n";
-import { useAppForm } from "@hooks/use-app-form";
-import { ZUpdatePreferences } from "@schemas/settings";
 
 export function useUpdatePreferencesForm() {
   const { theme } = useTheme();

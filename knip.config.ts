@@ -16,7 +16,6 @@ const config: KnipConfig = {
       project: ["turbo.json"],
     },
     "apps/api": {
-      entry: ["src/index.ts"],
       project: commonProject,
       ignore: commonIgnore,
     },
@@ -31,7 +30,6 @@ const config: KnipConfig = {
       ignore: commonIgnore,
     },
     "apps/electron": {
-      entry: ["src/index.ts"],
       project: commonProject,
       ignore: [...commonIgnore, "src/preload.ts"],
     },
@@ -47,40 +45,13 @@ const config: KnipConfig = {
       ],
       ignoreBinaries: ["eslint"],
     },
-    "libs/config": {
-      entry: commonProject,
+    "libs/*": {
+      includeEntryExports: true,
       project: commonProject,
       ignore: commonIgnore,
     },
     "libs/db": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/emails": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/hooks": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/schemas": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/ui": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/utils": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
+      ignore: ["src/schema.ts"],
     },
     "libs/eslint": {
       entry: ["*.mjs"],
@@ -139,6 +110,7 @@ const config: KnipConfig = {
     "@config/*": ["./libs/config/src/*"],
     "@electron/*": ["./apps/electron/src/*"],
     "@cloud/*": ["./apps/cloud/src/*"],
+    "@forms/*": ["./apps/forms/src/*"],
   },
 };
 

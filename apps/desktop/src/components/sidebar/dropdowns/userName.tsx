@@ -1,16 +1,16 @@
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
-import { useLocalProfile } from "@desktop/hooks/use-local-profile";
-import { useProfile } from "@desktop/hooks/use-profile";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Badge } from "@ui/badge";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Badge } from "@blinkdisk/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
-import { cn } from "@utils/class";
+} from "@blinkdisk/ui/dropdown-menu";
+import { cn } from "@blinkdisk/utils/class";
+import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { useProfile } from "@desktop/hooks/use-profile";
 import { ChevronDownIcon, UserIcon } from "lucide-react";
 import { useMemo } from "react";
 
@@ -37,7 +37,7 @@ export function SidebarUserNameSelect({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "border-input flex w-full select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors bg-sidebar-secondary hover:bg-sidebar-secondary-hover border-sidebar-secondary-border focus:z-10 h-11",
+          "border-input bg-sidebar-secondary hover:bg-sidebar-secondary-hover border-sidebar-secondary-border flex h-11 w-full select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:z-10",
           className,
         )}
       >

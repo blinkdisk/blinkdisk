@@ -1,3 +1,13 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import {
+  Sidebar as SidebarContainer,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@blinkdisk/ui/sidebar";
 import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
@@ -9,17 +19,7 @@ import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
-import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
-import {
-  Sidebar as SidebarContainer,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@ui/sidebar";
 import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { ComponentProps } from "react";
 

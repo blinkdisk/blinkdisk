@@ -1,3 +1,7 @@
+import { Alert, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
+import { Input } from "@blinkdisk/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { CodeStatsDropzone } from "@marketing/components/react/code/dropzone";
 import type {
   CodeStatsFile,
@@ -8,10 +12,6 @@ import {
   excludedExtensions,
   extensionToLanguage,
 } from "@marketing/utils/extension";
-import { Alert, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
-import { Input } from "@ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
 import JSZip from "jszip";
 import {
   ArchiveIcon,

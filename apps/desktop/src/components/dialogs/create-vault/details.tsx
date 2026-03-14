@@ -1,11 +1,11 @@
-import { ProviderType } from "@config/providers";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
 import { useTheme } from "@desktop/hooks/use-theme";
-import { useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ProviderConfig } from "@schemas/providers";
 import { useNavigate } from "@tanstack/react-router";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { AlertTriangleIcon } from "lucide-react";
 import PasswordStrengthBar from "react-password-strength-bar";
 

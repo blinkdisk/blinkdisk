@@ -4,8 +4,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+} from "@blinkdisk/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { useMemo, useState } from "react";
 
 type PlanType = "home-mac" | "home-windows" | "workstation";

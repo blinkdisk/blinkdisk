@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
+} from "@blinkdisk/ui/select";
 import { useCallback } from "react";
 
 import { useTranslation } from "react-i18next";

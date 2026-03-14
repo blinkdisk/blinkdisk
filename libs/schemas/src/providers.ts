@@ -1,8 +1,7 @@
 import { z } from "zod";
 
-export const ZCloudBlinkConfig = z.object({});
-
-export type ZCloudBlinkConfigType = z.infer<typeof ZCloudBlinkConfig>;
+// eslint-disable-next-line
+export type ZCloudBlinkConfigType = {};
 
 export const ZFilesystemConfig = z.object({
   path: z.string().min(1).max(512),

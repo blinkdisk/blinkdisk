@@ -1,5 +1,4 @@
-import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
 import {
   SelectContent,
   SelectItem,
@@ -7,7 +6,8 @@ import {
   Select as SelectRoot,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
+} from "@blinkdisk/ui/select";
+import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import React, { ReactNode, useContext } from "react";
 
 const Select = React.forwardRef<

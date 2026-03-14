@@ -1,3 +1,11 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Accordion } from "@blinkdisk/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@blinkdisk/ui/dialog";
 import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
 import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
@@ -5,14 +13,6 @@ import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Accordion } from "@ui/accordion";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@ui/dialog";
 import { useState } from "react";
 
 export function FolderSettingsDialog() {

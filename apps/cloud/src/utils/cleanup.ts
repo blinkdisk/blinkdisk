@@ -1,6 +1,6 @@
-import { FREE_SPACE_AVAILABLE } from "@config/space";
-import { Database } from "@db/index";
-import { sendEmail } from "@utils/email";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import { Database } from "@blinkdisk/db/index";
+import { sendEmail } from "@blinkdisk/utils/email";
 
 export async function sendCleanupEmails(db: Database, scheduledTime: number) {
   const start = new Date(scheduledTime);
