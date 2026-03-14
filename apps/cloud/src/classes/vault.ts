@@ -204,7 +204,7 @@ export class Vault extends DurableObject<Cloudflare.Env> {
 
       if (spaceId && currentBytes) {
         const stub = this.env.SPACE.getByName(spaceId);
-        await stub.substract(currentBytes);
+        await stub.subtract(currentBytes);
       }
     }
 

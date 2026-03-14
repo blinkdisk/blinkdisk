@@ -43,7 +43,7 @@ export class Space extends DurableObject<Cloudflare.Env> {
     };
   }
 
-  async substract(delta: number) {
+  async subtract(delta: number) {
     const used = (await this.ctx.storage.get<number>("usedBytes")) || 0;
     await this.ctx.storage.put("usedBytes", Math.max(0, used - delta));
   }
