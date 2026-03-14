@@ -5,6 +5,7 @@ config({
   path: "../../.env",
 });
 
+import { TsconfigPathsPlugin } from "@esbuild-plugins/tsconfig-paths";
 import { sentryEsbuildPlugin } from "@sentry/esbuild-plugin";
 import esbuild from "esbuild";
 
@@ -30,6 +31,7 @@ const base = {
   target: "node16",
   sourcemap: true,
   plugins: [
+    TsconfigPathsPlugin({ tsconfig: "./tsconfig.json" }),
     ...(!isDev
       ? [
           sentryEsbuildPlugin({

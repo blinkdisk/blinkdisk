@@ -9,7 +9,6 @@
     "lib": ["ESNext"],
     "jsx": "react-jsx",
     "types": ["./worker-configuration.d.ts"],
-    "baseUrl": "./src/",
   },
   "include": ["src"],
   "exclude": ["node_modules"],
