@@ -6,8 +6,9 @@
     "moduleResolution": "bundler",
     "target": "ESNext",
     "sourceMap": false,
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "rootDir": "./src",
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

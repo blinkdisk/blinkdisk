@@ -13,7 +13,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022",
-    "baseUrl": "../.."
+    "target": "ES2022"
   }
 }

@@ -10,7 +10,17 @@
     "studio": "prisma studio"
   },
   "imports": {
-    "#*": "./src/*"
+    "#*": [
+      "./src/*",
+      "./src/*.ts",
+      "./src/*.tsx",
+      "./src/*.js",
+      "./src/*.jsx",
+      "./src/*/index.ts",
+      "./src/*/index.tsx",
+      "./src/*/index.js",
+      "./src/*/index.jsx"
+    ]
   },
   "exports": {
     "./*": "./src/*.ts"
