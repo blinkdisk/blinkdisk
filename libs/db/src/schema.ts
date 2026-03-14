@@ -49,22 +49,6 @@ export type Config = {
   accountId: string;
   createdAt: Generated<Timestamp>;
 };
-export type LegacyDevice = {
-  id: Generated<string>;
-  alias: string;
-  hostName: string | null;
-  machineId: string | null;
-  createdAt: Generated<Timestamp>;
-  accountId: string;
-};
-export type LegacyProfile = {
-  id: Generated<string>;
-  alias: string;
-  userName: string | null;
-  accountId: string;
-  deviceId: string;
-  createdAt: Generated<Timestamp>;
-};
 export type Session = {
   id: Generated<string>;
   accountId: string;
@@ -123,8 +107,6 @@ export type DB = {
   Account: Account;
   AuthMethod: AuthMethod;
   Config: Config;
-  LegacyDevice: LegacyDevice;
-  LegacyProfile: LegacyProfile;
   Session: Session;
   Space: Space;
   Subscription: Subscription;
