@@ -73,8 +73,6 @@ export default Sentry.withSentry(
   (env: CloudflareBindings) => ({
     dsn: env.SENTRY_API_DSN,
     sendDefaultPii: true,
-    integrations: (defaults) =>
-      defaults.filter((i) => i.name !== "Console"),
   }),
   app,
 );
