@@ -2,6 +2,9 @@
   "name": "@blinkdisk/emails",
   "version": "0.0.0",
   "private": true,
+  "exports": {
+    "./*": "./src/*.tsx"
+  },
   "scripts": {
     "studio": "email dev --dir src/ --port 3001",
     "lint": "eslint . --max-warnings 0",

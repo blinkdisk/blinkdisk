@@ -9,6 +9,9 @@
     "migrate:prod": "prisma migrate deploy",
     "studio": "prisma studio"
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",

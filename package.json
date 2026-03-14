@@ -1,5 +1,5 @@
 {
-  "name": "@blinkdisk/root",
+  "name": "blinkdisk",
   "private": true,
   "scripts": {
     "build": "turbo run build",
