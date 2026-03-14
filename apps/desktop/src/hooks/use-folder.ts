@@ -1,5 +1,5 @@
-import { useFolderList } from "#hooks/queries/core/use-folder-list";
-import { useFolderId } from "#hooks/use-folder-id";
+import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
+import { useFolderId } from "@desktop/hooks/use-folder-id";
 import { useMemo } from "react";
 
 export function useFolder(folderId?: string) {

@@ -1,7 +1,3 @@
-import { SettingsCategory } from "#components/policy/category";
-import { PolicyContext } from "#components/policy/context";
-import { usePolicyGeneralForm } from "#hooks/forms/use-policy-general-form";
-import { useFolder } from "#hooks/use-folder";
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
@@ -9,6 +5,10 @@ import { DynamicField } from "@blinkdisk/ui/dynamic-field";
 import { EmojiCard } from "@blinkdisk/ui/emoji-card";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import { Input } from "@blinkdisk/ui/input";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyContext } from "@desktop/components/policy/context";
+import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
+import { useFolder } from "@desktop/hooks/use-folder";
 import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";
 

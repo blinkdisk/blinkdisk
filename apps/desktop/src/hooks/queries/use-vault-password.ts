@@ -1,4 +1,4 @@
-import { useQueryKey } from "#hooks/use-query-key";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultPassword(vault?: { id: string } | null) {

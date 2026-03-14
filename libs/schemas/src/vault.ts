@@ -1,10 +1,10 @@
-import { ZProviderType } from "#providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ZProviderType } from "@schemas/providers";
 import {
   ZVaultEncryptedConfig,
   ZVaultName,
   ZVaultPassword,
-} from "#shared/vault";
-import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+} from "@schemas/shared/vault";
 import { z } from "zod";
 
 export const ZCreateVault = z.object({

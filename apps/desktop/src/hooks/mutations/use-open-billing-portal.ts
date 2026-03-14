@@ -1,4 +1,4 @@
-import { trpc } from "#lib/trpc";
+import { trpc } from "@desktop/lib/trpc";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";

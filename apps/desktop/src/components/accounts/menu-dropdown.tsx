@@ -1,8 +1,8 @@
-import { useOpenBillingPortal } from "#hooks/mutations/use-open-billing-portal";
-import { useBilling } from "#hooks/queries/use-billing";
-import { useAccountSettingsDialog } from "#hooks/state/use-account-settings-dialog";
-import { usePreferencesSettingsDialog } from "#hooks/state/use-preferences-settings-dialog";
-import { useAuth } from "#hooks/use-auth";
+import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-portal";
+import { useBilling } from "@desktop/hooks/queries/use-billing";
+import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
+import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
+import { useAuth } from "@desktop/hooks/use-auth";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useIsMobile } from "@blinkdisk/hooks/use-mobile";
 import {

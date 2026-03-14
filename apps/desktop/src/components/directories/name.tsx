@@ -1,4 +1,4 @@
-import { Item } from "#components/directories/table";
+import { Item } from "@desktop/components/directories/table";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { CellContext } from "@tanstack/react-table";
 import { Loader } from "@blinkdisk/ui/loader";

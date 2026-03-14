@@ -1,8 +1,8 @@
-import { Empty } from "#components/empty";
-import { VaultHome } from "#components/vaults/home";
-import { useVaultList } from "#hooks/queries/use-vault-list";
-import { useCreateVaultDialog } from "#hooks/state/use-create-vault-dialog";
-import { useAccountId } from "#hooks/use-account-id";
+import { Empty } from "@desktop/components/empty";
+import { VaultHome } from "@desktop/components/vaults/home";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@blinkdisk/ui/button";

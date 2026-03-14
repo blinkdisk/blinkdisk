@@ -1,7 +1,7 @@
 // App should be imported before sentry
 import { app } from "electron";
 // But sentry should be imported directly after
-import { listenProtocol, registerProtcol } from "#protocol";
+import { listenProtocol, registerProtcol } from "@electron/protocol";
 import * as Sentry from "@sentry/electron/main";
 
 Sentry.init({
@@ -20,9 +20,9 @@ import "#log";
 import "#startup";
 import "#updater";
 
-import { createTray } from "#tray";
-import { startAllVaults, stopAllVaults } from "#vault/manage";
-import { createWindow } from "#window";
+import { createTray } from "@electron/tray";
+import { startAllVaults, stopAllVaults } from "@electron/vault/manage";
+import { createWindow } from "@electron/window";
 
 app.on("ready", () => {
   listenProtocol();

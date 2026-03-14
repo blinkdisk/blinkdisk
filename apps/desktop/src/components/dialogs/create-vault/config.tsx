@@ -1,4 +1,4 @@
-import { providerForms } from "#components/forms/providers";
+import { providerForms } from "@desktop/components/forms/providers";
 import { ProviderType } from "@blinkdisk/config/providers";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useMemo } from "react";

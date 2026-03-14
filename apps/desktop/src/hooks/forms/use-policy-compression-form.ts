@@ -1,5 +1,5 @@
-import { PolicyContext } from "#components/policy/context";
-import { pickDefinedFields } from "#lib/policy";
+import { PolicyContext } from "@desktop/components/policy/context";
+import { pickDefinedFields } from "@desktop/lib/policy";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZCompressionPolicy,

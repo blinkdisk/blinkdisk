@@ -1,8 +1,8 @@
 import {
   VaultBreadcrumb,
   VaultBreadcrumbProps,
-} from "#components/vaults/breadcrumb";
-import { VaultItem } from "#hooks/queries/use-vault";
+} from "@desktop/components/vaults/breadcrumb";
+import { VaultItem } from "@desktop/hooks/queries/use-vault";
 
 type VaultTitlebarProps = {
   vault: VaultItem | undefined;

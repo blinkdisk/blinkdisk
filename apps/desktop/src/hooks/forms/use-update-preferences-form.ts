@@ -1,7 +1,7 @@
 import { LanguageCode } from "@blinkdisk/config/language";
-import { useUpdatePreferences } from "#hooks/mutations/use-update-preferences";
-import { useTheme } from "#hooks/use-theme";
-import i18n from "#i18n";
+import { useUpdatePreferences } from "@desktop/hooks/mutations/use-update-preferences";
+import { useTheme } from "@desktop/hooks/use-theme";
+import i18n from "@desktop/i18n";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZUpdatePreferences } from "@blinkdisk/schemas/settings";
 

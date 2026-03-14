@@ -1,5 +1,5 @@
-import { dateLocales } from "#i18n";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { dateLocales } from "@desktop/i18n";
 import { formatDistanceToNow } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 

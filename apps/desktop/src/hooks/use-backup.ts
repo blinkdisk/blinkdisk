@@ -1,5 +1,5 @@
-import { useBackupList } from "#hooks/queries/core/use-backup-list";
-import { useBackupId } from "#hooks/use-backup-id";
+import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
+import { useBackupId } from "@desktop/hooks/use-backup-id";
 import { useMemo } from "react";
 
 export function useBackup() {

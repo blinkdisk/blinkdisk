@@ -1,6 +1,9 @@
-import { Layout } from "#components/layout";
+import { Layout } from "@emails/components/layout";
 
-import { LocaleProps, useEmailTranslation } from "#hooks/use-email-translation";
+import {
+  LocaleProps,
+  useEmailTranslation,
+} from "@emails/hooks/use-email-translation";
 import { Heading, Text } from "@react-email/components";
 
 type StorageFullEmailProps = LocaleProps;

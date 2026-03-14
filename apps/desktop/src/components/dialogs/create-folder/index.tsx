@@ -1,7 +1,7 @@
-import { CreateFolderGeneral } from "#components/dialogs/create-folder/general";
-import { CreateFolderSettings } from "#components/dialogs/create-folder/settings";
-import { useCreateFolderForm } from "#hooks/forms/use-create-folder-form";
-import { useCreateFolderDialog } from "#hooks/state/use-create-folder-dialog";
+import { CreateFolderGeneral } from "@desktop/components/dialogs/create-folder/general";
+import { CreateFolderSettings } from "@desktop/components/dialogs/create-folder/settings";
+import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
+import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";

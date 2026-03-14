@@ -1,4 +1,4 @@
-import { Empty } from "#components/empty";
+import { Empty } from "@desktop/components/empty";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Dialog, DialogContent } from "@blinkdisk/ui/dialog";
 import { WifiOffIcon } from "lucide-react";

@@ -1,4 +1,4 @@
-import { fromBits, toBits } from "#lib/bandwith";
+import { fromBits, toBits } from "@desktop/lib/bandwith";
 import { ZVaultThrottleType } from "@blinkdisk/schemas/vault";
 
 export type CoreThrottle = {

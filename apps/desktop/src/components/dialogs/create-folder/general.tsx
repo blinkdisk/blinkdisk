@@ -1,4 +1,4 @@
-import { useCreateFolderForm } from "#hooks/forms/use-create-folder-form";
+import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";

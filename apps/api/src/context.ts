@@ -1,5 +1,5 @@
-import { auth } from "#auth";
-import type { HonoContextOptions } from "#index";
+import { auth } from "@api/auth";
+import type { HonoContextOptions } from "@api/index";
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { Context as HonoContext } from "hono";
 

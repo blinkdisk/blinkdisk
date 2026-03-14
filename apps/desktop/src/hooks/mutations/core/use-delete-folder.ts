@@ -1,8 +1,8 @@
-import { useProfile } from "#hooks/use-profile";
-import { useQueryKey } from "#hooks/use-query-key";
-import { useVaultId } from "#hooks/use-vault-id";
-import { showErrorToast } from "#lib/error";
-import { vaultApi } from "#lib/vault";
+import { useProfile } from "@desktop/hooks/use-profile";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { showErrorToast } from "@desktop/lib/error";
+import { vaultApi } from "@desktop/lib/vault";
 import { CustomError } from "@blinkdisk/utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

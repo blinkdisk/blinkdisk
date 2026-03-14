@@ -1,6 +1,6 @@
-import { useVaultProfiles } from "#hooks/queries/core/use-vault-profiles";
-import { useLocalProfile } from "#hooks/use-local-profile";
-import { useProfile } from "#hooks/use-profile";
+import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Badge } from "@blinkdisk/ui/badge";
 import {

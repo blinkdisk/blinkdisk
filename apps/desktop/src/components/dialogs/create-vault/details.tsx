@@ -1,5 +1,5 @@
-import { useCreateVaultForm } from "#hooks/forms/use-create-vault-form";
-import { useTheme } from "#hooks/use-theme";
+import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
+import { useTheme } from "@desktop/hooks/use-theme";
 import { ProviderType } from "@blinkdisk/config/providers";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";

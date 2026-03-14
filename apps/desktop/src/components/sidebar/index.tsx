@@ -1,14 +1,14 @@
-import { AccountMenuDropdown } from "#components/accounts/menu-dropdown";
-import { AccountPreview } from "#components/accounts/preview";
-import { AccountSelectDropdown } from "#components/accounts/select-dropdown";
-import { Logo } from "#components/logo";
-import { SidebarAddFolder } from "#components/sidebar/add-folder";
-import { SidebarSelects } from "#components/sidebar/dropdowns";
-import { SidebarFolderList } from "#components/sidebar/folder-list";
-import { SidebarSkeletonTheme } from "#components/sidebar/skeleton-theme";
-import { SidebarStorageAlert } from "#components/sidebar/storage-alert";
-import { useFolderList } from "#hooks/queries/core/use-folder-list";
-import { useAccount } from "#hooks/queries/use-account";
+import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
+import { AccountPreview } from "@desktop/components/accounts/preview";
+import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
+import { Logo } from "@desktop/components/logo";
+import { SidebarAddFolder } from "@desktop/components/sidebar/add-folder";
+import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
+import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
+import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
+import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
+import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
+import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {

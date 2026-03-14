@@ -1,5 +1,5 @@
-import { useLoginForm } from "#hooks/forms/use-login-form";
-import { useAuth } from "#hooks/use-auth";
+import { useLoginForm } from "@desktop/hooks/forms/use-login-form";
+import { useAuth } from "@desktop/hooks/use-auth";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   createFileRoute,

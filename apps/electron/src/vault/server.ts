@@ -1,11 +1,11 @@
-import { deleteVaultFromCache } from "#cache";
-import { log } from "#log";
-import { corePath, globalConfigDirectory } from "#path";
-import { vaults } from "#vault/manage";
-import { VaultServer, VaultStatus } from "#vault/types";
-import { sendWindow } from "#window";
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
+import { deleteVaultFromCache } from "@electron/cache";
+import { log } from "@electron/log";
+import { corePath, globalConfigDirectory } from "@electron/path";
+import { vaults } from "@electron/vault/manage";
+import { VaultServer, VaultStatus } from "@electron/vault/types";
+import { sendWindow } from "@electron/window";
 import { spawn } from "child_process";
 import { app } from "electron";
 import { existsSync, renameSync } from "fs";

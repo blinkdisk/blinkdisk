@@ -14,8 +14,8 @@ import {
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
-import { DefaultErrorPage } from "#components/errors/default";
-import { NotFoundPage } from "#components/errors/not-found";
+import { DefaultErrorPage } from "@desktop/components/errors/default";
+import { NotFoundPage } from "@desktop/components/errors/not-found";
 import { routeTree } from "./routeTree.gen";
 
 export const history = createHashHistory();

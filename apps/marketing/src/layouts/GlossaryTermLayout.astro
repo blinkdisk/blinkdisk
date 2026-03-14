@@ -1,10 +1,10 @@
 ---
-import DefaultLayout from "#layouts/DefaultLayout.astro";
-import TableOfContents from "#components/TableOfContents.astro";
-import RelatedTerms from "#components/RelatedTerms.astro";
-import Summary from "#components/Summary.astro";
-import CTA from "#components/CTA.astro";
-import { getCombinedStructuredData } from "#data/glossary";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import TableOfContents from "@marketing/components/TableOfContents.astro";
+import RelatedTerms from "@marketing/components/RelatedTerms.astro";
+import Summary from "@marketing/components/Summary.astro";
+import CTA from "@marketing/components/CTA.astro";
+import { getCombinedStructuredData } from "@marketing/data/glossary";
 import { MARKETING_URL } from "astro:env/server";
 
 type Heading = {

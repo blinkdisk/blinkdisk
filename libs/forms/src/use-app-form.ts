@@ -1,15 +1,15 @@
-import { Bandwith } from "#components/bandwith";
-import { Checkbox } from "#components/checkbox";
-import { Code } from "#components/code";
-import { Counter } from "#components/counter";
-import { Filesize } from "#components/filesize";
-import { Password } from "#components/password";
-import { Path } from "#components/path";
-import { Select } from "#components/select";
-import { Submit } from "#components/submit";
-import { Switch } from "#components/switch";
-import { Tabs } from "#components/tabs";
-import { Text } from "#components/text";
+import { Bandwith } from "@forms/components/bandwith";
+import { Checkbox } from "@forms/components/checkbox";
+import { Code } from "@forms/components/code";
+import { Counter } from "@forms/components/counter";
+import { Filesize } from "@forms/components/filesize";
+import { Password } from "@forms/components/password";
+import { Path } from "@forms/components/path";
+import { Select } from "@forms/components/select";
+import { Submit } from "@forms/components/submit";
+import { Switch } from "@forms/components/switch";
+import { Tabs } from "@forms/components/tabs";
+import { Text } from "@forms/components/text";
 import {
   createFormHook,
   createFormHookContexts,

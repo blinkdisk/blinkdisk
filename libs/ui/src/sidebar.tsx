@@ -5,12 +5,12 @@ import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
-import { Button } from "#button";
-import { Input } from "#input";
-import { Separator } from "#separator";
-import { Skeleton } from "#skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "#tooltip";
 import { cn } from "@blinkdisk/utils/class";
+import { Button } from "@ui/button";
+import { Input } from "@ui/input";
+import { Separator } from "@ui/separator";
+import { Skeleton } from "@ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { PanelLeftIcon } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";

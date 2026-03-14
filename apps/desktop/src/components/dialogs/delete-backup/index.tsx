@@ -1,5 +1,5 @@
-import { useDeleteBackup } from "#hooks/mutations/core/use-delete-backup";
-import { useDeleteBackupDialog } from "#hooks/state/use-delete-backup-dialog";
+import { useDeleteBackup } from "@desktop/hooks/mutations/core/use-delete-backup";
+import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";

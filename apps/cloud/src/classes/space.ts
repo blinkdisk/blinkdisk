@@ -1,7 +1,7 @@
-import { scheduleSpaceAlarm } from "#utils/alarm";
 import { database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { logsnag } from "@blinkdisk/utils/logsnag";
+import { scheduleSpaceAlarm } from "@cloud/utils/alarm";
 import { DurableObject } from "cloudflare:workers";
 
 export class Space extends DurableObject<Cloudflare.Env> {

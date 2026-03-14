@@ -1,6 +1,6 @@
-import { useSubscription } from "#hooks/queries/use-subscription";
-import { useAccountId } from "#hooks/use-account-id";
-import { usePlanChange } from "#hooks/use-plan-change";
+import { useSubscription } from "@desktop/hooks/queries/use-subscription";
+import { useAccountId } from "@desktop/hooks/use-account-id";
+import { usePlanChange } from "@desktop/hooks/use-plan-change";
 import { useEffect, useRef } from "react";
 
 export function useSubscriptionWatch() {

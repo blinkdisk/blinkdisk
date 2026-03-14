@@ -1,4 +1,4 @@
-import { useChangePlan } from "#hooks/mutations/use-change-plan";
+import { useChangePlan } from "@desktop/hooks/mutations/use-change-plan";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZChangePlanForm } from "@blinkdisk/schemas/payment";
 

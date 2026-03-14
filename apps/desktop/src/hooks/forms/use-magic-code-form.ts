@@ -1,4 +1,4 @@
-import { useMagicCode } from "#hooks/mutations/use-magic-code";
+import { useMagicCode } from "@desktop/hooks/mutations/use-magic-code";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZMagicCode } from "@blinkdisk/schemas/auth";
 

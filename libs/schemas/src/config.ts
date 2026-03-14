@@ -1,4 +1,4 @@
-import { ZVaultEncryptedConfig } from "#shared/vault";
+import { ZVaultEncryptedConfig } from "@schemas/shared/vault";
 import { z } from "zod";
 
 export const ZAddConfig = z.object({

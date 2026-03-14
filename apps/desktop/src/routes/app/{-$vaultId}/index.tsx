@@ -1,5 +1,5 @@
-import { VaultHome } from "#components/vaults/home";
-import { useLocalProfile } from "#hooks/use-local-profile";
+import { VaultHome } from "@desktop/components/vaults/home";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 

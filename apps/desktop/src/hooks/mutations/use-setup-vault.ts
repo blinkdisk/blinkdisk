@@ -1,7 +1,7 @@
-import { SetupStep } from "#components/vaults/setup";
-import { useQueryKey } from "#hooks/use-query-key";
-import { showErrorToast } from "#lib/error";
-import { trpc } from "#lib/trpc";
+import { SetupStep } from "@desktop/components/vaults/setup";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { showErrorToast } from "@desktop/lib/error";
+import { trpc } from "@desktop/lib/trpc";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CustomError } from "@blinkdisk/utils/error";

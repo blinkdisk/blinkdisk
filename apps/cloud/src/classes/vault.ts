@@ -1,10 +1,3 @@
-import { deleteBlob } from "#events/delete";
-import { getBlob } from "#events/get";
-import { listBlobs } from "#events/list";
-import { getMetadata } from "#events/metadata";
-import { putBlob } from "#events/put";
-import { scheduleVaultAlarm } from "#utils/alarm";
-import { pickS3Endpoint } from "#utils/server";
 import {
   DeleteObjectsCommand,
   ListObjectsCommand,
@@ -14,6 +7,13 @@ import {
 import { ZCloudBase } from "@blinkdisk/schemas/cloud";
 import { getVaultId } from "@blinkdisk/utils/token";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
+import { deleteBlob } from "@cloud/events/delete";
+import { getBlob } from "@cloud/events/get";
+import { listBlobs } from "@cloud/events/list";
+import { getMetadata } from "@cloud/events/metadata";
+import { putBlob } from "@cloud/events/put";
+import { scheduleVaultAlarm } from "@cloud/utils/alarm";
+import { pickS3Endpoint } from "@cloud/utils/server";
 import { DurableObject } from "cloudflare:workers";
 
 export class Vault extends DurableObject<Cloudflare.Env> {

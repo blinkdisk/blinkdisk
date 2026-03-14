@@ -1,4 +1,4 @@
-import { useEditBackup } from "#hooks/mutations/core/use-edit-backup";
+import { useEditBackup } from "@desktop/hooks/mutations/core/use-edit-backup";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { z } from "zod";
 

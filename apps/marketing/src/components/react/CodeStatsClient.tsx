@@ -1,9 +1,9 @@
-import { CodeStatsForm } from "#components/react/code/form";
-import { CodeStatsResult } from "#components/react/code/result";
+import { CodeStatsForm } from "@marketing/components/react/code/form";
+import { CodeStatsResult } from "@marketing/components/react/code/result";
 import type {
   CodeStatsFile,
   CodeStatsRepository,
-} from "#components/react/code/types";
+} from "@marketing/components/react/code/types";
 import { useState } from "react";
 
 export default function CodeStatsClient() {

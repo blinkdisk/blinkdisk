@@ -1,9 +1,4 @@
 import { ProviderType } from "@blinkdisk/config/providers";
-import { CreateVaultConfig } from "#components/dialogs/create-vault/config";
-import { CreateVaultDetails } from "#components/dialogs/create-vault/details";
-import { CreateVaultProviders } from "#components/dialogs/create-vault/providers";
-import { CreateVaultVariant } from "#components/dialogs/create-vault/variant";
-import { useCreateVaultDialog } from "#hooks/state/use-create-vault-dialog";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Button } from "@blinkdisk/ui/button";
@@ -13,6 +8,11 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { CreateVaultConfig } from "@desktop/components/dialogs/create-vault/config";
+import { CreateVaultDetails } from "@desktop/components/dialogs/create-vault/details";
+import { CreateVaultProviders } from "@desktop/components/dialogs/create-vault/providers";
+import { CreateVaultVariant } from "@desktop/components/dialogs/create-vault/variant";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { ArrowLeftIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 

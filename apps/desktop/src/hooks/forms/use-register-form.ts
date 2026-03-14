@@ -1,4 +1,4 @@
-import { useRegister } from "#hooks/mutations/use-register";
+import { useRegister } from "@desktop/hooks/mutations/use-register";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZRegisterForm, ZRegisterFormType } from "@blinkdisk/schemas/auth";
 

@@ -1,5 +1,5 @@
-import { openBrowser } from "#shell";
-import { getTheme } from "#theme";
+import { openBrowser } from "@electron/shell";
+import { getTheme } from "@electron/theme";
 import { BrowserWindow, app } from "electron";
 
 import { join } from "path";

@@ -2,7 +2,7 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { CustomSelect } from "#components/cron/fields/select";
+import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { UNITS } from "../constants";
 import { DEFAULT_LOCALE_EN } from "../locale";
 import { MonthsProps } from "../types";

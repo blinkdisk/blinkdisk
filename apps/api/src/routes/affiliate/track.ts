@@ -1,4 +1,4 @@
-import type { HonoContextOptions } from "#index";
+import type { HonoContextOptions } from "@api/index";
 import axios from "axios";
 import type { Context } from "hono";
 import type { BlankInput } from "hono/types";

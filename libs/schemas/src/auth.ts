@@ -1,8 +1,8 @@
-import { ZEmail } from "#shared/email";
-import { ZLanguage } from "#shared/language";
-import { ZCode } from "#shared/magic";
-import { ZFirstAndLastName, ZFirstName, ZLastName } from "#shared/name";
-import { ZTimezone } from "#shared/timezone";
+import { ZEmail } from "@schemas/shared/email";
+import { ZLanguage } from "@schemas/shared/language";
+import { ZCode } from "@schemas/shared/magic";
+import { ZFirstAndLastName, ZFirstName, ZLastName } from "@schemas/shared/name";
+import { ZTimezone } from "@schemas/shared/timezone";
 import { z } from "zod";
 
 export const ZLogin = z.object({

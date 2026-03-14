@@ -1,4 +1,4 @@
-import { useLocalProfile } from "#hooks/use-local-profile";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
 import { LockIcon } from "lucide-react";

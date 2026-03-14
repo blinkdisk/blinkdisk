@@ -1,15 +1,15 @@
 import { Command as CommandPrimitive } from "cmdk";
 import * as React from "react";
 
+import { cn } from "@blinkdisk/utils/class";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "#dialog";
-import { InputGroup, InputGroupAddon } from "#input-group";
-import { cn } from "@blinkdisk/utils/class";
+} from "@ui/dialog";
+import { InputGroup, InputGroupAddon } from "@ui/input-group";
 import { CheckIcon, SearchIcon } from "lucide-react";
 
 function Command({

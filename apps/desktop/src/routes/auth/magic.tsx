@@ -1,4 +1,4 @@
-import { useMagicCodeForm } from "#hooks/forms/use-magic-code-form";
+import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";

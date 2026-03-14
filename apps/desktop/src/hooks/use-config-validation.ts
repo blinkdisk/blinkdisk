@@ -1,4 +1,4 @@
-import { trpc } from "#lib/trpc";
+import { trpc } from "@desktop/lib/trpc";
 import { ProviderType } from "@blinkdisk/config/providers";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useCallback } from "react";

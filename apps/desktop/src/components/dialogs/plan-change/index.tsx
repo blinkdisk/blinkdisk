@@ -1,4 +1,4 @@
-import { useChangePlanForm } from "#hooks/forms/use-change-plan-form";
+import { useChangePlanForm } from "@desktop/hooks/forms/use-change-plan-form";
 import { plans } from "@blinkdisk/config/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription } from "@blinkdisk/ui/alert";

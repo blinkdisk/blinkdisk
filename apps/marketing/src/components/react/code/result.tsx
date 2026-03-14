@@ -1,11 +1,11 @@
-import type {
-  CodeStatsFile,
-  CodeStatsRepository,
-} from "#components/react/code/types";
 import { useIsMobile } from "@blinkdisk/hooks/use-mobile";
 import { Button } from "@blinkdisk/ui/button";
 import { Switch } from "@blinkdisk/ui/switch";
 import { cn } from "@blinkdisk/utils/class";
+import type {
+  CodeStatsFile,
+  CodeStatsRepository,
+} from "@marketing/components/react/code/types";
 import render from "dom-to-image";
 import {
   AlignLeftIcon,

@@ -1,5 +1,5 @@
-import { RemoteTooltip } from "#components/vaults/remote-tooltip";
-import { useLocalProfile } from "#hooks/use-local-profile";
+import { RemoteTooltip } from "@desktop/components/vaults/remote-tooltip";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { Button, ButtonProps } from "@blinkdisk/ui/button";
 
 export function LocalButton(props: ButtonProps) {

@@ -139,6 +139,7 @@ const config: KnipConfig = {
     "@config/*": ["./libs/config/src/*"],
     "@electron/*": ["./apps/electron/src/*"],
     "@cloud/*": ["./apps/cloud/src/*"],
+    "@forms/*": ["./apps/forms/src/*"],
   },
 };
 

@@ -1,5 +1,5 @@
-import { CloudBlinkIcon } from "#components/icons/cloudblink";
-import { formatSize } from "#lib/number";
+import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
+import { formatSize } from "@desktop/lib/number";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";

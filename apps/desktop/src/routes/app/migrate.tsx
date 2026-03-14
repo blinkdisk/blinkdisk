@@ -1,4 +1,4 @@
-import { Empty } from "#components/empty";
+import { Empty } from "@desktop/components/empty";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader } from "@blinkdisk/ui/loader";
 

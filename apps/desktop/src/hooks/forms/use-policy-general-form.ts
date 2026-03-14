@@ -1,4 +1,4 @@
-import { PolicyContext } from "#components/policy/context";
+import { PolicyContext } from "@desktop/components/policy/context";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZGeneralPolicyForm,

@@ -1,6 +1,6 @@
-import { useQueryKey } from "#hooks/use-query-key";
-import { showErrorToast } from "#lib/error";
-import { trpc } from "#lib/trpc";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { showErrorToast } from "@desktop/lib/error";
+import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useDeleteVault({ onSuccess }: { onSuccess?: () => void }) {

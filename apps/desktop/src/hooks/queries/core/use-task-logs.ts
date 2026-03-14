@@ -1,6 +1,6 @@
-import { useQueryKey } from "#hooks/use-query-key";
-import { useVaultId } from "#hooks/use-vault-id";
-import { vaultApi } from "#lib/vault";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type CoreTaskLogEntry = {

@@ -1,5 +1,5 @@
-import { Item } from "#components/directories/table";
-import { useStartRestore } from "#hooks/mutations/core/use-start-restore";
+import { Item } from "@desktop/components/directories/table";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useNavigate } from "@tanstack/react-router";
 import { flexRender, Row } from "@tanstack/react-table";
 import { VirtualItem } from "@tanstack/react-virtual";

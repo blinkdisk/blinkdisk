@@ -1,8 +1,8 @@
-import { Space } from "#classes/space";
-import { Vault } from "#classes/vault";
-import { consumeSpace } from "#utils/space";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { ZCloudDeleteBlob } from "@blinkdisk/schemas/cloud";
+import { Space } from "@cloud/classes/space";
+import { Vault } from "@cloud/classes/vault";
+import { consumeSpace } from "@cloud/utils/space";
 
 export async function deleteBlob(
   durableObject: InstanceType<typeof Vault>,

@@ -1,4 +1,4 @@
-import { buildExclusionRule, parseExclusionRule } from "#lib/exclusion";
+import { buildExclusionRule, parseExclusionRule } from "@desktop/lib/exclusion";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZExclusionForm, ZExclusionFormType } from "@blinkdisk/schemas/policy";
 import { useMemo } from "react";

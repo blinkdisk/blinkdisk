@@ -1,4 +1,4 @@
-import { VaultItem } from "#hooks/queries/use-vault";
+import { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { Link } from "@tanstack/react-router";
 import {
   Breadcrumb,

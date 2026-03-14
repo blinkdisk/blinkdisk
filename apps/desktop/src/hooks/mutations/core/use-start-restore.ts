@@ -1,8 +1,8 @@
-import { DirectoryItem } from "#hooks/queries/core/use-directory";
-import { useFolderId } from "#hooks/use-folder-id";
-import { useQueryKey } from "#hooks/use-query-key";
-import { useVaultId } from "#hooks/use-vault-id";
-import { showErrorToast } from "#lib/error";
+import { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
+import { useFolderId } from "@desktop/hooks/use-folder-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { showErrorToast } from "@desktop/lib/error";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

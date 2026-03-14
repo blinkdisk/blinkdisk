@@ -1,8 +1,8 @@
-import { useUpdateFolderPolicy } from "#hooks/mutations/core/use-update-folder-policy";
-import { useUpdateVaultPolicy } from "#hooks/mutations/core/use-update-vault-policy";
-import { useFolderPolicy } from "#hooks/queries/core/use-folder-policy";
-import { useVaultPolicy } from "#hooks/queries/core/use-vault-policy";
-import { useVault } from "#hooks/queries/use-vault";
+import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-folder-policy";
+import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
+import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
+import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
+import { useVault } from "@desktop/hooks/queries/use-vault";
 import { ZPolicyLevelType } from "@blinkdisk/schemas/policy";
 import { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";

@@ -1,9 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { useMemo } from "react";
 
-import { Label } from "#label";
-import { Separator } from "#separator";
 import { cn } from "@blinkdisk/utils/class";
+import { Label } from "@ui/label";
+import { Separator } from "@ui/separator";
 import { TriangleAlertIcon } from "lucide-react";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {

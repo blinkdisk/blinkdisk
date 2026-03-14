@@ -1,6 +1,6 @@
-import { useVaultStatus } from "#hooks/queries/use-vault-status";
-import { useFolderId } from "#hooks/use-folder-id";
-import { useQueryKey } from "#hooks/use-query-key";
+import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
+import { useFolderId } from "@desktop/hooks/use-folder-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useRestoreList() {

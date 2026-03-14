@@ -1,6 +1,6 @@
-import { useQueryKey } from "#hooks/use-query-key";
-import { useVaultId } from "#hooks/use-vault-id";
-import { trpc } from "#lib/trpc";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
 export type VaultItem = Awaited<ReturnType<typeof trpc.vault.get.query>>;

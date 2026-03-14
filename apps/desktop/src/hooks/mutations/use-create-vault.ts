@@ -1,7 +1,7 @@
-import { useQueryKey } from "#hooks/use-query-key";
-import { showErrorToast } from "#lib/error";
-import { convertPolicyToCore, defaultVaultPolicy } from "#lib/policy";
-import { trpc } from "#lib/trpc";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { showErrorToast } from "@desktop/lib/error";
+import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
+import { trpc } from "@desktop/lib/trpc";
 import { defaultVaultOptions } from "@blinkdisk/config/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";

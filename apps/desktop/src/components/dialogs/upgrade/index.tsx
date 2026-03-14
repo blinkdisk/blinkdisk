@@ -1,14 +1,14 @@
 import { BillingPeriod, Plan as PlanType, plans } from "@blinkdisk/config/plans";
-import { PendingCheckoutDialog } from "#components/dialogs/pending-checkout";
+import { PendingCheckoutDialog } from "@desktop/components/dialogs/pending-checkout";
 import {
   PlanChangeAction,
   PlanChangeDialog,
-} from "#components/dialogs/plan-change";
-import { useCheckout } from "#hooks/mutations/use-checkout";
-import { useOpenBillingPortal } from "#hooks/mutations/use-open-billing-portal";
-import { useSpace } from "#hooks/queries/use-space";
-import { useSubscription } from "#hooks/queries/use-subscription";
-import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
+} from "@desktop/components/dialogs/plan-change";
+import { useCheckout } from "@desktop/hooks/mutations/use-checkout";
+import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-portal";
+import { useSpace } from "@desktop/hooks/queries/use-space";
+import { useSubscription } from "@desktop/hooks/queries/use-subscription";
+import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { usePlanPrices } from "@blinkdisk/hooks/use-plan-prices";
 import { Badge } from "@blinkdisk/ui/badge";

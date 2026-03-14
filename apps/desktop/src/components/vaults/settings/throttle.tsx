@@ -1,5 +1,5 @@
-import { SettingsCategory } from "#components/policy/category";
-import { useUpdateThrottleForm } from "#hooks/forms/use-update-throttle-form";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { useUpdateThrottleForm } from "@desktop/hooks/forms/use-update-throttle-form";
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { GaugeIcon } from "lucide-react";

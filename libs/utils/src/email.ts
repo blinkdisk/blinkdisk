@@ -1,10 +1,10 @@
-import { locales } from "#locales";
 import CleanupEmail from "@blinkdisk/emails/cleanup";
 import MagicEmail from "@blinkdisk/emails/magic";
 import StorageFullEmail from "@blinkdisk/emails/storage-full";
 import StorageThresholdEmail from "@blinkdisk/emails/storage-threshold";
 import Plunk from "@plunk/node";
 import { pretty, render } from "@react-email/render";
+import { locales } from "@utils/locales";
 import nodemailer from "nodemailer";
 
 const templates = {

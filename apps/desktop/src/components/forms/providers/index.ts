@@ -1,13 +1,13 @@
-import { AmazonS3Form } from "#components/forms/providers/amazon-s3";
-import { AzureBlobStorageForm } from "#components/forms/providers/azure-blob-storage";
-import { BackblazeForm } from "#components/forms/providers/backblaze";
-import { FilesystemForm } from "#components/forms/providers/filesystem";
-import { GoogleCloudStorageForm } from "#components/forms/providers/google-cloud-storage";
-import { NetworkAttachedStorageForm } from "#components/forms/providers/network-attached-storage";
-import { RcloneForm } from "#components/forms/providers/rclone";
-import { S3CompatibleForm } from "#components/forms/providers/s3-compatible";
-import { SftpForm } from "#components/forms/providers/sftp";
-import { WebDavForm } from "#components/forms/providers/webdav";
+import { AmazonS3Form } from "@desktop/components/forms/providers/amazon-s3";
+import { AzureBlobStorageForm } from "@desktop/components/forms/providers/azure-blob-storage";
+import { BackblazeForm } from "@desktop/components/forms/providers/backblaze";
+import { FilesystemForm } from "@desktop/components/forms/providers/filesystem";
+import { GoogleCloudStorageForm } from "@desktop/components/forms/providers/google-cloud-storage";
+import { NetworkAttachedStorageForm } from "@desktop/components/forms/providers/network-attached-storage";
+import { RcloneForm } from "@desktop/components/forms/providers/rclone";
+import { S3CompatibleForm } from "@desktop/components/forms/providers/s3-compatible";
+import { SftpForm } from "@desktop/components/forms/providers/sftp";
+import { WebDavForm } from "@desktop/components/forms/providers/webdav";
 
 export const providerForms = {
   CLOUDBLINK: () => null,

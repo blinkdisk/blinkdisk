@@ -1,6 +1,6 @@
-import { useDeleteFolder } from "#hooks/mutations/core/use-delete-folder";
-import { useDeleteFolderDialog } from "#hooks/state/use-delete-folder-dialog";
-import { useFolder } from "#hooks/use-folder";
+import { useDeleteFolder } from "@desktop/hooks/mutations/core/use-delete-folder";
+import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
+import { useFolder } from "@desktop/hooks/use-folder";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";

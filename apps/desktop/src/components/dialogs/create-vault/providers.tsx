@@ -1,5 +1,5 @@
-import { providerIcons } from "#components/icons/providers/index";
-import { useProviderSearch } from "#hooks/use-provider-search";
+import { providerIcons } from "@desktop/components/icons/providers/index";
+import { useProviderSearch } from "@desktop/hooks/use-provider-search";
 import { ProviderType, providers } from "@blinkdisk/config/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";

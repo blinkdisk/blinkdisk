@@ -28,6 +28,7 @@
       "@emails/*": ["./libs/emails/src/*"],
       "@schemas/*": ["./libs/schemas/src/*"],
       "@config/*": ["./libs/config/src/*"],
+      "@forms/*": ["./libs/forms/src/*"],
       "@electron/*": ["./apps/electron/src/*"],
       "@cloud/*": ["./apps/cloud/src/*"]
     }

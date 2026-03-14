@@ -1,7 +1,7 @@
 import {
   CreateVaultResponse,
   useCreateVault,
-} from "#hooks/mutations/use-create-vault";
+} from "@desktop/hooks/mutations/use-create-vault";
 import { ProviderType } from "@blinkdisk/config/providers";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";

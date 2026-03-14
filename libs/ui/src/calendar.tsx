@@ -6,8 +6,8 @@ import {
   type Locale,
 } from "react-day-picker";
 
-import { Button, buttonVariants } from "#button";
 import { cn } from "@blinkdisk/utils/class";
+import { Button, buttonVariants } from "@ui/button";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,

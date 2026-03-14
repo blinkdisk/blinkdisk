@@ -1,17 +1,17 @@
-import { CodeStatsDropzone } from "#components/react/code/dropzone";
-import type {
-  CodeStatsFile,
-  CodeStatsRepository,
-} from "#components/react/code/types";
-import { useClipboard } from "#hooks/use-clipboard";
-import {
-  excludedExtensions,
-  extensionToLanguage,
-} from "#utils/extension";
 import { Alert, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { Input } from "@blinkdisk/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
+import { CodeStatsDropzone } from "@marketing/components/react/code/dropzone";
+import type {
+  CodeStatsFile,
+  CodeStatsRepository,
+} from "@marketing/components/react/code/types";
+import { useClipboard } from "@marketing/hooks/use-clipboard";
+import {
+  excludedExtensions,
+  extensionToLanguage,
+} from "@marketing/utils/extension";
 import JSZip from "jszip";
 import {
   ArchiveIcon,

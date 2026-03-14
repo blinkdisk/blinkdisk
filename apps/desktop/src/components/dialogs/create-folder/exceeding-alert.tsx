@@ -1,4 +1,4 @@
-import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
+import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import {

@@ -1,4 +1,4 @@
-import { getPostHog, posthog } from "#lib/posthog";
+import { getPostHog, posthog } from "@api/lib/posthog";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { ZLogin, ZRegisterServer } from "@blinkdisk/schemas/auth";

@@ -1,6 +1,6 @@
-import { useVaultList } from "#hooks/queries/use-vault-list";
-import { useCreateVaultDialog } from "#hooks/state/use-create-vault-dialog";
-import { useVaultId } from "#hooks/use-vault-id";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   DropdownMenu,

@@ -4,7 +4,7 @@
 
 import { MutableRefObject } from "react";
 
-import { SUPPORTED_SHORTCUTS, UNITS } from "#components/cron/constants";
+import { SUPPORTED_SHORTCUTS, UNITS } from "@desktop/components/cron/constants";
 import {
   AllowEmpty,
   ClockFormat,

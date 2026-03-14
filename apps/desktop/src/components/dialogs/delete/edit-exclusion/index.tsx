@@ -1,5 +1,5 @@
-import { useEditExclusionForm } from "#hooks/forms/use-edit-exclusion-form";
-import { useEditExclusionDialog } from "#hooks/state/use-edit-exclusion-dialog";
+import { useEditExclusionForm } from "@desktop/hooks/forms/use-edit-exclusion-form";
+import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {

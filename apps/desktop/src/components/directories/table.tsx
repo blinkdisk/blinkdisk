@@ -1,17 +1,17 @@
-import { DirectoryMount } from "#components/directories/mount";
-import { DirectoryNameCell } from "#components/directories/name";
-import { DirectoryItemRow } from "#components/directories/row";
-import { Empty } from "#components/empty";
-import { useStartMount } from "#hooks/mutations/core/use-start-mount";
-import { useStartRestore } from "#hooks/mutations/core/use-start-restore";
-import { DirectoryItem as DirectoryItemType } from "#hooks/queries/core/use-directory";
-import { usePlatform } from "#hooks/queries/use-platform";
-import { useRestoreDirectoryDialog } from "#hooks/state/use-restore-directory-dialog";
-import { useBackup } from "#hooks/use-backup";
-import { useDirectoryId } from "#hooks/use-directory-id";
-import { useFolder } from "#hooks/use-folder";
-import { useTheme } from "#hooks/use-theme";
-import { formatSize } from "#lib/number";
+import { DirectoryMount } from "@desktop/components/directories/mount";
+import { DirectoryNameCell } from "@desktop/components/directories/name";
+import { DirectoryItemRow } from "@desktop/components/directories/row";
+import { Empty } from "@desktop/components/empty";
+import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
+import { DirectoryItem as DirectoryItemType } from "@desktop/hooks/queries/core/use-directory";
+import { usePlatform } from "@desktop/hooks/queries/use-platform";
+import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
+import { useBackup } from "@desktop/hooks/use-backup";
+import { useDirectoryId } from "@desktop/hooks/use-directory-id";
+import { useFolder } from "@desktop/hooks/use-folder";
+import { useTheme } from "@desktop/hooks/use-theme";
+import { formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   ColumnFiltersState,

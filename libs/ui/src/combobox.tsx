@@ -1,14 +1,14 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
 import * as React from "react";
 
-import { Button } from "#button";
+import { cn } from "@blinkdisk/utils/class";
+import { Button } from "@ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "#input-group";
-import { cn } from "@blinkdisk/utils/class";
+} from "@ui/input-group";
 import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 
 const Combobox = ComboboxPrimitive.Root;

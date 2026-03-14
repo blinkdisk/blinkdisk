@@ -1,8 +1,8 @@
 ---
-import DefaultLayout from "#layouts/DefaultLayout.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
 import { getCollection } from "astro:content";
-import { getGlossaryIndexStructuredData } from "#data/glossary";
+import { getGlossaryIndexStructuredData } from "@marketing/data/glossary";
 import { MARKETING_URL } from "astro:env/server";
 
 const terms = await getCollection("glossary", ({ data }) => {

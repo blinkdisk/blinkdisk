@@ -1,5 +1,5 @@
-import { authedProcedure } from "#procedures/authed";
-import { router } from "#trpc";
+import { authedProcedure } from "@api/procedures/authed";
+import { router } from "@api/trpc";
 import { jsonArrayFrom } from "@blinkdisk/db/index";
 
 export const profileRouter = router({

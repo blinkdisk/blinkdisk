@@ -1,7 +1,7 @@
-import { ZEmail } from "#shared/email";
-import { ZLanguage } from "#shared/language";
-import { ZFirstAndLastName, ZFirstName, ZLastName } from "#shared/name";
-import { ZTheme } from "#shared/theme";
+import { ZEmail } from "@schemas/shared/email";
+import { ZLanguage } from "@schemas/shared/language";
+import { ZFirstAndLastName, ZFirstName, ZLastName } from "@schemas/shared/name";
+import { ZTheme } from "@schemas/shared/theme";
 import { z } from "zod";
 
 export const ZUpdateUser = z.object({

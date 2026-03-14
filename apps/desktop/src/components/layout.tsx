@@ -1,6 +1,6 @@
-import { CreateVaultDialog } from "#components/dialogs/create-vault/index";
-import { SettingsDialogs } from "#components/dialogs/settings/index";
-import { Sidebar } from "#components/sidebar/index";
+import { CreateVaultDialog } from "@desktop/components/dialogs/create-vault/index";
+import { SettingsDialogs } from "@desktop/components/dialogs/settings/index";
+import { Sidebar } from "@desktop/components/sidebar/index";
 import { SidebarInset } from "@blinkdisk/ui/sidebar";
 import { ReactNode } from "react";
 

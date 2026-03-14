@@ -1,4 +1,4 @@
-import { useRestoreList } from "#hooks/queries/use-restore-list";
+import { useRestoreList } from "@desktop/hooks/queries/use-restore-list";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { CircularProgress } from "@blinkdisk/ui/circular-progress";
