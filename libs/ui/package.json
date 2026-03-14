@@ -6,6 +6,9 @@
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
     "./*": "./src/*.tsx"
   },

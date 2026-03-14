@@ -2,6 +2,9 @@
   "name": "@blinkdisk/emails",
   "version": "0.0.0",
   "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
     "./*": "./src/*.tsx"
   },

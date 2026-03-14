@@ -9,6 +9,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
   "main": "./build/index.js",
   "exports": "./build/index.js",
   "scripts": {

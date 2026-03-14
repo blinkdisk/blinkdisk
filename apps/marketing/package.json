@@ -11,6 +11,9 @@
     "deploy": "wrangler deploy",
     "lint": "eslint . --max-warnings=0"
   },
+  "imports": {
+    "#*": "./src/*"
+  },
   "dependencies": {
     "@astrojs/check": "^0.9.5",
     "@astrojs/cloudflare": "^12.5.1",

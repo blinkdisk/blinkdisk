@@ -11,6 +11,9 @@
     "preview": "vite preview",
     "test": "vitest run"
   },
+  "imports": {
+    "#*": "./src/*"
+  },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.16.4",
     "@sentry/electron": "^7.9.0",

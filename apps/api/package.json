@@ -12,6 +12,9 @@
     "env:update": "node env.js && pnpm run typegen",
     "lint": "eslint . --max-warnings=0"
   },
+  "imports": {
+    "#*": "./src/*"
+  },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
