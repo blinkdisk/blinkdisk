@@ -1,5 +1,0 @@
-hooks:
-  post_create:
-    - type: copy
-      from: ".env"
-      to: ".env"
