@@ -6,19 +6,6 @@
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
-  "imports": {
-    "#*": [
-      "./src/*.ts",
-      "./src/*.tsx",
-      "./src/*.js",
-      "./src/*.jsx",
-      "./src/*/index.ts",
-      "./src/*/index.tsx",
-      "./src/*/index.js",
-      "./src/*/index.jsx",
-      "./src/*"
-    ]
-  },
   "exports": {
     "./*": "./src/*.ts"
   },

@@ -3,19 +3,6 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
-  "imports": {
-    "#*": [
-      "./src/*.ts",
-      "./src/*.tsx",
-      "./src/*.js",
-      "./src/*.jsx",
-      "./src/*/index.ts",
-      "./src/*/index.tsx",
-      "./src/*/index.js",
-      "./src/*/index.jsx",
-      "./src/*"
-    ]
-  },
   "exports": {
     "./*": "./*.mjs"
   },

@@ -12,19 +12,6 @@
     "env:update": "node env.js && pnpm run typegen",
     "lint": "eslint . --max-warnings=0"
   },
-  "imports": {
-    "#*": [
-      "./src/*.ts",
-      "./src/*.tsx",
-      "./src/*.js",
-      "./src/*.jsx",
-      "./src/*/index.ts",
-      "./src/*/index.tsx",
-      "./src/*/index.js",
-      "./src/*/index.jsx",
-      "./src/*"
-    ]
-  },
   "exports": {
     "./*": "./src/*.ts"
   },

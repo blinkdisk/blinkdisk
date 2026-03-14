@@ -2,21 +2,6 @@
   "name": "@blinkdisk/emails",
   "version": "0.0.0",
   "private": true,
-  "imports": {
-    "#*": [
-      "./src/*.ts",
-      "./src/*.tsx",
-      "./src/*.js",
-      "./src/*.jsx",
-      "./src/*/index.ts",
-      "./src/*/index.tsx",
-      "./src/*/index.js",
-      "./src/*/index.jsx",
-      "./src/*"
-    ],
-    "#components/*": "./src/components/*.tsx",
-    "#hooks/*": "./src/hooks/*.ts"
-  },
   "exports": {
     "./*": "./src/*.tsx"
   },

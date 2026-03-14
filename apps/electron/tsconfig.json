@@ -7,7 +7,7 @@
     "target": "ESNext",
     "sourceMap": false,
     "types": ["vitest/globals"],
-    "rootDir": "./src"
+    "baseUrl": "./src/"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
