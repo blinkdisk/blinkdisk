@@ -16,7 +16,6 @@ const config: KnipConfig = {
       project: ["turbo.json"],
     },
     "apps/api": {
-      entry: ["src/index.ts"],
       project: commonProject,
       ignore: commonIgnore,
     },
@@ -31,7 +30,6 @@ const config: KnipConfig = {
       ignore: commonIgnore,
     },
     "apps/electron": {
-      entry: ["src/index.ts"],
       project: commonProject,
       ignore: [...commonIgnore, "src/preload.ts"],
     },
