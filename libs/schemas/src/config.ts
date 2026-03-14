@@ -7,5 +7,3 @@ export const ZAddConfig = z.object({
   vaultId: z.string(),
   config: ZVaultEncryptedConfig,
 });
-
-export type ZAddConfigType = z.infer<typeof ZAddConfig>;

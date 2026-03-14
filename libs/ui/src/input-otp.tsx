@@ -2,7 +2,6 @@ import { OTPInput, OTPInputContext } from "input-otp";
 import * as React from "react";
 
 import { cn } from "@blinkdisk/utils/class";
-import { MinusIcon } from "lucide-react";
 
 export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {
   containerClassName?: string;
@@ -18,19 +17,6 @@ function InputOTP({ className, containerClassName, ...props }: InputOTPProps) {
       )}
       spellCheck={false}
       className={cn("disabled:cursor-not-allowed", className)}
-      {...props}
-    />
-  );
-}
-
-function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="input-otp-group"
-      className={cn(
-        "has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:border-destructive has-aria-invalid:ring-3 flex items-center rounded-lg",
-        className,
-      )}
       {...props}
     />
   );
@@ -75,17 +61,4 @@ function InputOTPSlot({
   );
 }
 
-function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="input-otp-separator"
-      className="flex items-center [&_svg:not([class*='size-'])]:size-4"
-      role="separator"
-      {...props}
-    >
-      <MinusIcon />
-    </div>
-  );
-}
-
-export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };
+export { InputOTP, InputOTPSlot };

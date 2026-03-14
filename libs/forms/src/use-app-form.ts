@@ -22,7 +22,7 @@ export const FormDisabledContext = createContext<boolean>(false);
 const { fieldContext, formContext, useFormContext, useFieldContext } =
   createFormHookContexts();
 
-const { useAppForm, withForm } = createFormHook({
+const { useAppForm } = createFormHook({
   fieldComponents: {
     Text,
     Password,
@@ -43,4 +43,4 @@ const { useAppForm, withForm } = createFormHook({
   formContext,
 });
 
-export { useAppForm, useFieldContext, useFormContext, useStore, withForm };
+export { useAppForm, useFieldContext, useFormContext, useStore };

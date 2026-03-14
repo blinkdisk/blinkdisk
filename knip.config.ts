@@ -46,8 +46,12 @@ const config: KnipConfig = {
       ignoreBinaries: ["eslint"],
     },
     "libs/*": {
+      includeEntryExports: true,
       project: commonProject,
       ignore: commonIgnore,
+    },
+    "libs/db": {
+      ignore: ["src/schema.ts"],
     },
     "libs/eslint": {
       entry: ["*.mjs"],

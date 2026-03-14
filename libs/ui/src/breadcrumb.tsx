@@ -3,7 +3,7 @@ import { useRender } from "@base-ui/react/use-render";
 import * as React from "react";
 
 import { cn } from "@blinkdisk/utils/class";
-import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -90,30 +90,8 @@ function BreadcrumbSeparator({
   );
 }
 
-function BreadcrumbEllipsis({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="breadcrumb-ellipsis"
-      role="presentation"
-      aria-hidden="true"
-      className={cn(
-        "flex size-5 items-center justify-center [&>svg]:size-4",
-        className,
-      )}
-      {...props}
-    >
-      <MoreHorizontalIcon />
-      <span className="sr-only">More</span>
-    </span>
-  );
-}
-
 export {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,

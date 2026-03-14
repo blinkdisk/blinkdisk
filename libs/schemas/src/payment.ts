@@ -18,5 +18,3 @@ export const ZChangePlanForm = z
     message: "plan_change",
     path: ["confirmed"],
   });
-
-export type ZChangePlanFormType = z.infer<typeof ZChangePlanForm>;

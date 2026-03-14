@@ -706,6 +706,9 @@ importers:
       lucide-react:
         specifier: ^0.483.0
         version: 0.483.0(react@19.0.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -719,9 +722,6 @@ importers:
       '@types/react':
         specifier: 19.0.10
         version: 19.0.10
-      '@types/react-dom':
-        specifier: 19.0.4
-        version: 19.0.4(@types/react@19.0.10)
       eslint:
         specifier: ^9.22.0
         version: 9.22.0
@@ -734,18 +734,12 @@ importers:
       '@blinkdisk/config':
         specifier: workspace:*
         version: link:../config
-      '@tanstack/react-form':
-        specifier: ^1.27.1
-        version: 1.27.1(react-dom@19.0.0)(react@19.0.0)
-      lucide-react:
-        specifier: ^0.483.0
-        version: 0.483.0(react@19.0.0)
       react:
         specifier: ^19.0.0
         version: 19.0.0
       react-i18next:
         specifier: ^15.4.1
-        version: 15.4.1(i18next@24.2.3)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.4.1(i18next@24.2.3)(react@19.0.0)
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -13094,6 +13088,18 @@ packages:
       typescript: 5.7.3
     dev: false
 
+  /i18next@24.2.3(typescript@5.8.2):
+    resolution: {integrity: sha512-lfbf80OzkocvX7nmZtu7nSTNbrTYR52sLWxPtlXX1zAhVw8WEnFk4puUkCR4B1dNQwbSpEHHHemcZu//7EcB7A==}
+    peerDependencies:
+      typescript: ^5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.26.10
+      typescript: 5.8.2
+    dev: false
+
   /iconv-corefoundation@1.1.7:
     resolution: {integrity: sha512-T10qvkw0zz4wnm560lOEg0PovVqUXuOFhhHAkixw8/sycy7TJt7v/RrkEKEQnAw2viPSJu6iAkErxnzR0g8PpQ==}
     engines: {node: ^8.11.2 || >=10}
@@ -16425,6 +16431,25 @@ packages:
       i18next: 24.2.3(typescript@5.7.3)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
+    dev: false
+
+  /react-i18next@15.4.1(i18next@24.2.3)(react@19.0.0):
+    resolution: {integrity: sha512-ahGab+IaSgZmNPYXdV1n+OYky95TGpFwnKRflX/16dY04DsYYKHtVLjeny7sBSCREEcoMbAgSkFiGLF5g5Oofw==}
+    peerDependencies:
+      i18next: '>= 23.2.3'
+      react: '>= 16.8.0'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.26.10
+      html-parse-stringify: 3.0.1
+      i18next: 24.2.3(typescript@5.8.2)
+      react: 19.0.0
     dev: false
 
   /react-is@16.13.1:

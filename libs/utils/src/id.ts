@@ -25,7 +25,7 @@ export type Prefix = keyof typeof prefixes;
 const salt = "blinkdisk:";
 const length = 21;
 
-export const codeGenerator = customAlphabet(
+const codeGenerator = customAlphabet(
   "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789",
   length,
 );

@@ -13,7 +13,7 @@ export type ProviderType =
   | "RCLONE"
   | "WEBDAV";
 
-export type Provider = {
+type Provider = {
   type: ProviderType;
   alias?: string[];
   coreType: string;

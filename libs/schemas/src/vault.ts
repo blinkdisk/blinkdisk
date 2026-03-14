@@ -25,13 +25,9 @@ export const ZCreateVaultDetails = z.object({
   confirmPassword: ZVaultPassword,
 });
 
-export type ZCreateVaultDetailsType = z.infer<typeof ZCreateVaultDetails>;
-
 export const ZGetVault = z.object({
   vaultId: z.string(),
 });
-
-export type ZGetVaultType = z.infer<typeof ZGetVault>;
 
 export const ZVaultPasswordForm = z.object({
   password: ZVaultPassword,
@@ -50,8 +46,6 @@ export const ZUpdateVault = z.object({
   name: ZVaultName.optional(),
   version: z.number().min(1).max(LATEST_VAULT_VERSION).optional(),
 });
-
-export type ZUpdateVaultType = z.infer<typeof ZUpdateVault>;
 
 export const ZBandwith = z.object({
   value: z.number().optional(),
@@ -76,5 +70,3 @@ export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
 export const ZDeleteVault = z.object({
   vaultId: z.string(),
 });
-
-export type ZDeleteVaultType = z.infer<typeof ZDeleteVault>;

@@ -17,8 +17,6 @@ export const ZUpdateUserServer = z.object({
   language: ZLanguage.optional(),
 });
 
-export type ZUpdateUserServerType = z.infer<typeof ZUpdateUserServer>;
-
 export const ZUpdatePreferences = z.object({
   theme: ZTheme,
   language: ZLanguage,

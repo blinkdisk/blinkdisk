@@ -15,7 +15,7 @@ export function formatSubscriptionEn(
   return `${plan?.storageGB.toLocaleString() || "?"} GB (${price ? formatAmount(price.amount, price.currency) : "?"}/${!price ? "?" : price.period === "MONTHLY" ? "mo" : price.period === "YEARLY" ? "yr" : "-"})`;
 }
 
-export function formatAmount(amount: string | number, currency: string) {
+function formatAmount(amount: string | number, currency: string) {
   return Number(amount).toLocaleString(undefined, {
     minimumFractionDigits: 0,
     style: "currency",

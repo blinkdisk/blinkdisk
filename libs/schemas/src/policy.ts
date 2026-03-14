@@ -37,13 +37,11 @@ export const ZFilesPolicy = z.object({
 
 export type ZFilesPolicyType = z.infer<typeof ZFilesPolicy>;
 
-export const ZErrorsPolicy = z.object({
+const ZErrorsPolicy = z.object({
   ignoreFile: z.boolean().optional(),
   ignoreDirectory: z.boolean().optional(),
   ignoreUnknown: z.boolean().optional(),
 });
-
-export type ZErrorsPolicyType = z.infer<typeof ZErrorsPolicy>;
 
 export const ZSchedulePolicy = z.object({
   trigger: z.enum(["SCHEDULE", "MANUAL"]).optional(),
@@ -84,13 +82,11 @@ export const ZCompressionPolicy = z.object({
 
 export type ZCompressionPolicyType = z.infer<typeof ZCompressionPolicy>;
 
-export const ZMetadataPolicy = z.object({
+const ZMetadataPolicy = z.object({
   algorithm: z.enum(["zstd-fastest"]).optional(),
 });
 
-export type ZMetadataPolicyType = z.infer<typeof ZMetadataPolicy>;
-
-export const ZSplitterPolicy = z.object({}).optional();
+const ZSplitterPolicy = z.object({}).optional();
 
 const ZScript = z.object({
   script: z.string().min(1).max(1024).optional(),
@@ -98,26 +94,20 @@ const ZScript = z.object({
   mode: z.enum(["essential", "optional", "async"]).optional(),
 });
 
-export type ZScriptType = z.infer<typeof ZScript>;
-
-export const ZScriptsPolicy = z.object({
+const ZScriptsPolicy = z.object({
   beforeFolder: ZScript.optional(),
   afterFolder: ZScript.optional(),
   beforeSnapshot: ZScript.optional(),
   afterSnapshot: ZScript.optional(),
 });
 
-export type ZScriptsPolicyType = z.infer<typeof ZScriptsPolicy>;
-
-export const ZOsSnapshotsPolicy = z.object({
+const ZOsSnapshotsPolicy = z.object({
   volumeShadowCopy: z.object({
     enable: z.number().int().min(0).optional(),
   }),
 });
 
-export type ZOsSnapshotsPolicyType = z.infer<typeof ZOsSnapshotsPolicy>;
-
-export const ZLoggingPolicy = z.object({
+const ZLoggingPolicy = z.object({
   directories: z.object({
     snapshotted: z.number().int().min(0).optional(),
     ignored: z.number().int().min(0).optional(),
@@ -132,19 +122,13 @@ export const ZLoggingPolicy = z.object({
   }),
 });
 
-export type ZLoggingPolicyType = z.infer<typeof ZLoggingPolicy>;
-
-export const ZUploadPolicy = z.object({
+const ZUploadPolicy = z.object({
   parallelBackups: z.number().int().positive().optional(),
   parallelFileReads: z.number().int().positive().optional(),
   parallelUploadMinSize: z.number().int().positive().optional(),
 });
 
-export type ZUploadPolicyType = z.infer<typeof ZUploadPolicy>;
-
-export const ZIgnoreParentPolicy = z.boolean().optional();
-
-export type ZIgnoreParentPolicyType = z.infer<typeof ZIgnoreParentPolicy>;
+const ZIgnoreParentPolicy = z.boolean().optional();
 
 export const ZGeneralPolicyForm = z.object({
   name: ZFolderName,
