@@ -95,12 +95,14 @@ export type ZWebDavConfigType = z.infer<typeof ZWebDavConfig>;
 
 export type ProviderConfig =
   | ZCloudBlinkConfigType
-  | ZS3CompatibleConfigType
+  | ZFilesystemConfigType
   | ZAmazonS3ConfigType
   | ZS3CompatibleConfigType
   | ZGoogleCloudStorageConfigType
   | ZBackblazeConfigType
   | ZAzureBlobStorageConfigType
+  | ZSftpConfigType
+  | ZRcloneConfigType
   | ZWebDavConfigType;
 
 export const ZProviderType = z.enum([
