@@ -39,7 +39,7 @@ export function PendingCheckoutDialog({
           onClick={() => url && window.electron.shell.open.browser(url)}
           disabled={!url}
           className="w-full"
-          variant="outline"
+          variant="secondary"
         >
           {t("open")}
         </Button>

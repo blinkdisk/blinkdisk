@@ -31,15 +31,18 @@ export function VaultBreadcrumb({ vault, breadcrumbs }: VaultBreadcrumbProps) {
     <Breadcrumb className="w-full min-w-0 overflow-x-auto">
       <BreadcrumbList className="flex flex-nowrap whitespace-nowrap">
         <BreadcrumbItem>
-          <BreadcrumbLink className="text-base" asChild>
-            {vault ? (
-              <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
-                {vault.name}
-              </Link>
-            ) : (
-              <Skeleton width={100} />
-            )}
-          </BreadcrumbLink>
+          <BreadcrumbLink
+            className="text-base"
+            render={
+              vault ? (
+                <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
+                  {vault.name}
+                </Link>
+              ) : (
+                <Skeleton width={100} />
+              )
+            }
+          />
         </BreadcrumbItem>
         {breadcrumbs?.length ? (
           <BreadcrumbSeparator className="[&>svg]:size-4" />
@@ -54,15 +57,18 @@ export function VaultBreadcrumb({ vault, breadcrumbs }: VaultBreadcrumbProps) {
               </BreadcrumbItem>
             ) : item.href ? (
               <BreadcrumbItem>
-                <BreadcrumbLink className="text-base" asChild>
-                  <Link
-                    to={item.href}
-                    params={item.params}
-                    search={item.search}
-                  >
-                    {item.text}
-                  </Link>
-                </BreadcrumbLink>
+                <BreadcrumbLink
+                  className="text-base"
+                  render={
+                    <Link
+                      to={item.href}
+                      params={item.params}
+                      search={item.search}
+                    >
+                      {item.text}
+                    </Link>
+                  }
+                />
               </BreadcrumbItem>
             ) : (
               <BreadcrumbItem>

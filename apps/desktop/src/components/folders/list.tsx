@@ -75,7 +75,7 @@ function Folder({ folder }: FolderProps) {
   return (
     <div
       role="link"
-      className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none focus-visible:ring-2"
+      className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2"
     >
       <Link
         to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
@@ -101,24 +101,32 @@ function Folder({ folder }: FolderProps) {
         ) : null}
         {folder ? (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon-sm" className="[&_svg]:size-5" variant="ghost">
-                <MoreVerticalIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48" align="end">
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
-                  params={(params) => ({
-                    ...params,
-                    folderId: folder?.id || "",
-                  })}
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  size="icon-sm"
+                  className="[&_svg]:size-5"
+                  variant="ghost"
                 >
-                  <FolderSearchIcon />
-                  {t("dropdown.browse")}
-                </Link>
-              </DropdownMenuItem>
+                  <MoreVerticalIcon />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="w-48" align="end">
+              <DropdownMenuItem
+                render={
+                  <Link
+                    to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
+                    params={(params) => ({
+                      ...params,
+                      folderId: folder?.id || "",
+                    })}
+                  >
+                    <FolderSearchIcon />
+                    {t("dropdown.browse")}
+                  </Link>
+                }
+              />
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 {folder.status === "UPLOADING" &&

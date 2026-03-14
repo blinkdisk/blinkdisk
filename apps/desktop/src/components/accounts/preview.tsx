@@ -22,7 +22,7 @@ export function AccountPreview({ account }: AccountPreviewProps) {
 
   return (
     <div className="flex items-center gap-2.5">
-      <Avatar className="size-9 rounded-lg">
+      <Avatar className="size-9 rounded-lg after:rounded-lg">
         <AvatarFallback className="rounded-lg">
           {initials ? initials : ""}
         </AvatarFallback>

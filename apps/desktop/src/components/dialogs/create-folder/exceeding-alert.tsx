@@ -38,7 +38,7 @@ export function ExceedingAlert({
         <DialogFooter className="mt-6">
           <Button
             onClick={() => submit()}
-            variant="outline"
+            variant="secondary"
             className="w-1/2"
             loading={loading}
           >

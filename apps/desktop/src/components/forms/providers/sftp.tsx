@@ -122,7 +122,7 @@ export function SftpForm({ action, config, onSubmit }: SftpFormProps) {
               </Alert>
             ) : null}
             <Button
-              variant="outline"
+              variant="secondary"
               disabled={disabledContext}
               onClick={() => scan()}
               loading={isPending}

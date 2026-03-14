@@ -74,17 +74,19 @@ export const auth = (
         session_data: cookieSettings,
         dont_remember: cookieSettings,
       },
-      generateId: ({ model }) => {
-        return generateId(
-          `${model === "session" ? "Session" : model === "user" ? "Account" : model === "account" ? "AuthMethod" : ""}` as Prefix,
-        );
-      },
       ipAddress: {
         ipAddressHeaders: [
           "cf-connecting-ip",
           "x-forwarded-for",
           "x-client-ip",
         ],
+      },
+      database: {
+        generateId: ({ model }) => {
+          return generateId(
+            `${model === "session" ? "Session" : model === "user" ? "Account" : model === "account" ? "AuthMethod" : ""}` as Prefix,
+          );
+        },
       },
     },
     plugins: [

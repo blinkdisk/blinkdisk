@@ -20,8 +20,7 @@ export function DownloadButton({ os }: Props) {
   return (
     <Button
       variant={isCurrentPlatform ? "default" : "outline"}
-      as="a"
-      href="/download"
+      render={<a href="/download" />}
     >
       Download
     </Button>

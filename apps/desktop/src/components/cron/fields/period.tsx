@@ -84,8 +84,8 @@ export function Period(props: PeriodProps) {
   }
 
   const handleChange = useCallback(
-    (newValue: PeriodType) => {
-      if (!readOnly) {
+    (newValue: PeriodType | null) => {
+      if (!readOnly && newValue) {
         setValue(newValue);
       }
     },
@@ -106,6 +106,7 @@ export function Period(props: PeriodProps) {
         disabled={disabled || readOnly}
         open={readOnly ? false : undefined}
         data-testid="select-period"
+        items={options}
       >
         <SelectTrigger className="h-10 gap-1 text-xs">
           <SelectValue placeholder={t("period")} />

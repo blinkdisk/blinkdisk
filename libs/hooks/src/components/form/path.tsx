@@ -1,15 +1,16 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { Button, ButtonProps } from "@ui/button";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
+import { Button } from "@ui/button";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { cn } from "@utils/class";
 import { FileIcon, FolderIcon, TrashIcon } from "lucide-react";
 import React, { useCallback, useContext, useState } from "react";
 
 const Path = React.forwardRef<
   HTMLButtonElement,
-  Omit<ButtonProps, "onClick" | "children"> & {
-    label: LabelContainerProps;
-  } & {
+  {
+    className?: string;
+    disabled?: boolean;
+    label: DynamicFieldProps;
     placeholder?: string;
     title: string;
     type: "directory" | "file";
@@ -69,7 +70,7 @@ const Path = React.forwardRef<
     }, [field]);
 
     return (
-      <LabelContainer
+      <DynamicField
         {...label}
         containerClassName={cn("w-full", label.containerClassName)}
         innerClassName={cn("relative", label.innerClassName)}
@@ -79,10 +80,7 @@ const Path = React.forwardRef<
         <Button
           type="button"
           variant="secondary"
-          className={cn(
-            "border-input bg-card hover:bg-card justify-start pl-4 pr-9",
-            className,
-          )}
+          className={cn("justify-start pl-4 pr-9", className)}
           innerClassName={cn(
             "truncate gap-3",
             !field.state.value
@@ -108,7 +106,7 @@ const Path = React.forwardRef<
             <TrashIcon className="size-4" />
           </button>
         ) : null}
-      </LabelContainer>
+      </DynamicField>
     );
   },
 );

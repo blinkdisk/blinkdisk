@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
 import { CheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -32,6 +33,15 @@ export default function ProPlanCard() {
     return `${gb.toLocaleString()} GB`;
   };
 
+  const planItems = useMemo(
+    () =>
+      availablePlans.map((plan, index) => ({
+        value: String(index),
+        label: formatStorage(plan.storageGB),
+      })),
+    [availablePlans],
+  );
+
   return (
     <div className="bg-card border-primary/50 relative flex flex-col rounded-2xl border-2 p-8">
       <div className="bg-primary text-primary-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-medium">
@@ -45,44 +55,35 @@ export default function ProPlanCard() {
       </div>
 
       <div className="mb-6">
-        <div className="bg-secondary mb-4 flex rounded-lg p-1">
-          <button
-            onClick={() => setPeriod("MONTHLY")}
-            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              period === "MONTHLY"
-                ? "bg-background shadow"
-                : "hover:bg-background/50"
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setPeriod("YEARLY")}
-            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              period === "YEARLY"
-                ? "bg-background shadow"
-                : "hover:bg-background/50"
-            }`}
-          >
-            Yearly
-            <span className="bg-primary/10 text-primary ml-1.5 rounded px-1.5 py-0.5 text-xs">
-              -25%
-            </span>
-          </button>
-        </div>
+        <Tabs
+          value={period}
+          onValueChange={(value) => setPeriod(value as BillingPeriod)}
+          className="mb-4"
+        >
+          <TabsList className="w-full">
+            <TabsTrigger value="MONTHLY">Monthly</TabsTrigger>
+            <TabsTrigger value="YEARLY">
+              Yearly
+              <span className="bg-primary/10 text-primary ml-1.5 rounded px-1.5 py-0.5 text-xs">
+                -25%
+              </span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
 
         <div className="mb-4">
           <Select
             value={String(planIndex)}
             onValueChange={(value) => setPlanIndex(Number(value))}
+            items={planItems}
           >
             <SelectTrigger className="bg-secondary">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="max-h-48">
-              {availablePlans.map((plan, index) => (
-                <SelectItem key={plan.id} value={String(index)}>
-                  {formatStorage(plan.storageGB)}
+              {planItems.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -12,10 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 import { UserPlusIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactElement } from "react";
 
 export type AccountSelectDropdownProps = {
-  children: ReactNode;
+  children: ReactElement;
 };
 
 export function AccountSelectDropdown({
@@ -29,7 +29,7 @@ export function AccountSelectDropdown({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+      <DropdownMenuTrigger render={children} />
       <DropdownMenuContent
         className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
         side="top"

@@ -1,6 +1,6 @@
 import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
-import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { CompressionSettings } from "@desktop/components/policy/compression";
+import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
@@ -32,10 +32,10 @@ export function FolderSettingsDialog() {
           <PolicyContextProvider level="FOLDER" folderId={options?.folderId}>
             {({ loading }) => (
               <Accordion
-                type="multiple"
                 className="w-full"
                 value={loading ? [] : open}
                 onValueChange={setOpen}
+                multiple
               >
                 <FolderGeneralSettings />
                 <ScheduleSettings />

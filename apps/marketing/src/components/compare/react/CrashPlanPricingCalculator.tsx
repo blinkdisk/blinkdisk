@@ -36,7 +36,7 @@ export default function CrashPlanPricingCalculator() {
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               type="button"
               size="icon-sm"
-              variant="outline"
+              variant="secondary"
               disabled={quantity <= 1}
             >
               <MinusIcon className="size-4" />
@@ -55,7 +55,7 @@ export default function CrashPlanPricingCalculator() {
               onClick={() => setQuantity(quantity + 1)}
               type="button"
               size="icon-sm"
-              variant="outline"
+              variant="secondary"
             >
               <PlusIcon className="size-4" />
             </Button>

@@ -10,8 +10,8 @@ import {
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
+import { DynamicField } from "@ui/dynamic-field";
 import { Input } from "@ui/input";
-import { LabelContainer } from "@ui/label";
 import { EditIcon, FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext, useMemo } from "react";
 
@@ -112,7 +112,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
   const value = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer title={label} description={description}>
+    <DynamicField title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
@@ -122,7 +122,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
                   <ExclusionPreview rule={subField.state.value as string} />
                   <div className="flex gap-2">
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       type="button"
                       size="icon-sm"
                       className="shrink-0"
@@ -139,7 +139,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
                       <EditIcon />
                     </Button>
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       type="button"
                       size="icon-sm"
                       className="shrink-0"
@@ -158,7 +158,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         disabled={disabledContext}
         onClick={() => {
@@ -175,7 +175,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
         <PlusIcon />
         {t("exclusions.add")}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }
 
@@ -191,12 +191,12 @@ function ExclusionPreview({ rule }: ExclusionPreviewProps) {
     <div className="flex flex-col">
       {parsed.type === "EXTENSION" ? (
         <>
-          <p className="text-muted-foreground text-xs">{t("extension")}</p>
+          <p className="text-muted-foreground m-0! text-xs">{t("extension")}</p>
           <p className="font-medium">{parsed.extension}</p>
         </>
       ) : (
         <>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground m-0! text-xs">
             {parsed.foldersOnly ? t("name.foldersOnly") : t("name.both")}{" "}
             {t("matchType." + parsed.matchType)}
           </p>
@@ -231,7 +231,7 @@ function ExclusionRuleFilesEditor({
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
+    <DynamicField
       title={label}
       description={
         <>
@@ -262,7 +262,7 @@ function ExclusionRuleFilesEditor({
                     disabled={disabledContext}
                   />
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     type="button"
                     size="icon"
                     className="shrink-0"
@@ -280,7 +280,7 @@ function ExclusionRuleFilesEditor({
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         disabled={disabledContext}
         onClick={() => {
@@ -292,6 +292,6 @@ function ExclusionRuleFilesEditor({
         <PlusIcon />
         {t("exclusionRuleFiles.add")}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }

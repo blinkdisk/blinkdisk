@@ -89,8 +89,10 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
               </Button>
             ) : (
               <Button
-                as={Link}
-                to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings"
+                render={
+                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
+                }
+                nativeButton={false}
                 variant="outline"
                 size="sm"
               >
@@ -106,7 +108,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
         </VaultTitlebar>
         <div className="flex flex-row gap-6">
           <Card className="grow">
-            <CardContent className="flex h-full items-center gap-7 p-6">
+            <CardContent className="flex h-full items-center gap-7 px-6 py-2">
               {vault ? (
                 <GaugeComponent
                   labels={{
@@ -154,7 +156,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             <>
               <Card
                 className={cn(
-                  "flex flex-shrink-0 items-center justify-center",
+                  "flex shrink-0 items-center justify-center",
                   (storagePercentage || 0) >= 0.9
                     ? "border-destructive/20 bg-destructive/10 text-destructive [&_.muted]:text-destructive/70"
                     : (storagePercentage || 0) >= 0.8
@@ -164,7 +166,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
                         : "",
                 )}
               >
-                <CardContent className="flex w-60 flex-col justify-between p-6">
+                <CardContent className="flex w-60 flex-col justify-between px-6 py-2">
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col">
                       <CardTitle className="text-sm font-medium">
@@ -233,7 +235,10 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
           <div className="flex items-center gap-3">
             {folders !== undefined ? (
               <>
-                <LocalButton onClick={openCreateFolder} variant="outline">
+                <LocalButton
+                  onClick={() => openCreateFolder()}
+                  variant="secondary"
+                >
                   <PlusIcon />
                   {t("folders.addFolder")}
                 </LocalButton>
@@ -261,7 +266,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             title={t("folders.empty.title")}
             description={t("folders.empty.description")}
           >
-            <LocalButton onClick={openCreateFolder} size="lg">
+            <LocalButton onClick={() => openCreateFolder()} size="lg">
               <PlusIcon />
               {t("folders.addFolder")}
             </LocalButton>

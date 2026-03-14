@@ -42,7 +42,7 @@ export function DeleteFolderDialog() {
             </AlertDescription>
           </Alert>
           <DialogFooter>
-            <Button onClick={() => setIsOpen(false)} variant="outline">
+            <Button onClick={() => setIsOpen(false)} variant="secondary">
               {t("cancel")}
             </Button>
             <Button

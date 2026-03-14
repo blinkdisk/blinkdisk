@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type PlanType = "home-mac" | "home-windows" | "workstation";
 type BillingPeriod = "1_YEAR" | "2_YEARS" | "LIFETIME";
@@ -64,20 +64,35 @@ export default function EaseUSTodoBackupPricingCalculator() {
     setPlanType(value);
   };
 
+  const planItems = useMemo(
+    () => [
+      { value: "home-mac", label: "Home for Mac" },
+      { value: "home-windows", label: "Home for Windows" },
+      { value: "workstation", label: "Workstation" },
+    ],
+    [],
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">EaseUS Todo Backup</p>
         <p className="text-muted-foreground text-sm">{plan.description}</p>
 
-        <Select value={planType} onValueChange={handlePlanChange}>
+        <Select
+          value={planType}
+          onValueChange={(to) => to && handlePlanChange(to)}
+          items={planItems}
+        >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="home-mac">Home for Mac</SelectItem>
-            <SelectItem value="home-windows">Home for Windows</SelectItem>
-            <SelectItem value="workstation">Workstation</SelectItem>
+            {planItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 

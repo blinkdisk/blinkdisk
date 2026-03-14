@@ -23,7 +23,7 @@ export function DefaultErrorPage() {
           />
         </p>
         <div>
-          <Button as={Link} to="/" className="mt-8">
+          <Button render={<Link to="/" />} nativeButton={false} className="mt-8">
             {t("button")}
           </Button>
         </div>

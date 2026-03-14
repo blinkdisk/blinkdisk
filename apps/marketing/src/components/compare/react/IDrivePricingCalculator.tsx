@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type PlanType = "basic" | "mini" | "personal";
 type BillingPeriod = "monthly" | "yearly";
@@ -73,35 +73,60 @@ export default function IDrivePricingCalculator() {
     setStorageIndex(0);
   };
 
+  const planItems = useMemo(
+    () => [
+      { value: "basic", label: "Basic" },
+      { value: "mini", label: "IDrive Mini" },
+      { value: "personal", label: "IDrive Personal" },
+    ],
+    [],
+  );
+
+  const storageItems = useMemo(
+    () =>
+      plan.storageOptions.map((option, index) => ({
+        value: index.toString(),
+        label: option.label,
+      })),
+    [plan.storageOptions],
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">{plan.name}</p>
         <p className="text-muted-foreground text-sm">{plan.description}</p>
 
-        <Select value={planType} onValueChange={handlePlanChange}>
+        <Select
+          value={planType}
+          onValueChange={(to) => to && handlePlanChange(to)}
+          items={planItems}
+        >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="basic">Basic</SelectItem>
-            <SelectItem value="mini">IDrive Mini</SelectItem>
-            <SelectItem value="personal">IDrive Personal</SelectItem>
+            {planItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
-        {plan.storageOptions.length > 1 && (
+        {storageItems.length > 1 && (
           <Select
             value={storageIndex.toString()}
-            onValueChange={(value) => setStorageIndex(parseInt(value))}
+            onValueChange={(value) => value && setStorageIndex(parseInt(value))}
+            items={storageItems}
           >
             <SelectTrigger className="bg-secondary mt-3 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {plan.storageOptions.map((option, index) => (
-                <SelectItem key={option.label} value={index.toString()}>
-                  {option.label}
+              {storageItems.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
                 </SelectItem>
               ))}
             </SelectContent>

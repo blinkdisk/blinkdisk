@@ -1,17 +1,17 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { InputOTP, InputOTPProps } from "@ui/input-otp";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
 import React, { useContext } from "react";
 
 const Code = React.forwardRef<
   HTMLInputElement,
-  { label?: LabelContainerProps } & InputOTPProps
+  { label?: DynamicFieldProps } & InputOTPProps
 >(({ className, label, maxLength, render, disabled }, ref) => {
   const field = useFieldContext<string>();
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...(label ?? {})}
       errors={field.state.meta.errors}
       name={field.name}
@@ -34,7 +34,7 @@ const Code = React.forwardRef<
         children={undefined}
         disabled={disabledContext || disabled}
       />
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

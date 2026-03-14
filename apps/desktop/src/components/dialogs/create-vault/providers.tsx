@@ -52,7 +52,7 @@ function Provider({ provider, selectProvider }: ProviderProps) {
 
   return (
     <Button
-      variant="outline"
+      variant="secondary"
       key={provider.type}
       className="h-auto shrink-0 py-4"
       innerClassName="justify-between w-full"

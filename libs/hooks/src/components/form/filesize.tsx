@@ -4,8 +4,8 @@ import {
   useStore,
 } from "@hooks/use-app-form";
 import { ZFileSizeType } from "@schemas/policy";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { Input, InputProps } from "@ui/input";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
 import {
   Select,
   SelectContent,
@@ -16,16 +16,24 @@ import {
 import { cn } from "@utils/class";
 import React, { useContext } from "react";
 
+const filesizeUnits = [
+  { value: "B", label: "Bytes" },
+  { value: "KB", label: "KB" },
+  { value: "MB", label: "MB" },
+  { value: "GB", label: "GB" },
+  { value: "TB", label: "TB" },
+] as const satisfies { value: string; label: string }[];
+
 const Filesize = React.forwardRef<
   HTMLInputElement,
-  InputProps & { label: LabelContainerProps }
+  InputProps & { label: DynamicFieldProps }
 >(({ className, label, disabled, ...props }, ref) => {
   const field = useFieldContext<ZFileSizeType | undefined>();
   const disabledContext = useContext(FormDisabledContext);
   const formValue = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...label}
       innerClassName={cn(
         "flex-row justify-between items-center",
@@ -70,20 +78,21 @@ const Filesize = React.forwardRef<
               unit: to as ZFileSizeType["unit"],
             })
           }
+          items={filesizeUnits}
         >
           <SelectTrigger className="gap-1">
             <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="B">Bytes</SelectItem>
-            <SelectItem value="KB">KB</SelectItem>
-            <SelectItem value="MB">MB</SelectItem>
-            <SelectItem value="GB">GB</SelectItem>
-            <SelectItem value="TB">TB</SelectItem>
+            {filesizeUnits.map((unit) => (
+              <SelectItem key={unit.value} value={unit.value}>
+                {unit.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

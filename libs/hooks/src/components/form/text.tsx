@@ -1,28 +1,24 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { Input, InputProps } from "@ui/input";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
 import React, { useContext } from "react";
 
 const Text = React.forwardRef<
   HTMLInputElement,
-  InputProps & { label: LabelContainerProps }
+  InputProps & { label: DynamicFieldProps }
 >(({ type, className, label, disabled, ...props }, ref) => {
   const field = useFieldContext<string | number>();
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
-      {...label}
-      errors={field.state.meta.errors}
-      name={field.name}
-    >
+    <DynamicField {...label} errors={field.state.meta.errors} name={field.name}>
       <Input
         className={className}
         ref={ref}
         type={type}
         id={field.name}
         name={field.name}
-        value={field.state.value}
+        value={field.state.value ?? ""}
         onBlur={() => field.handleBlur()}
         onChange={(
           e:
@@ -36,7 +32,7 @@ const Text = React.forwardRef<
         disabled={disabledContext || disabled}
         {...props}
       />
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

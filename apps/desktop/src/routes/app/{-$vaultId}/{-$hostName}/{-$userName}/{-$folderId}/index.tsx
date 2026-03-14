@@ -68,8 +68,8 @@ function RouteComponent() {
         }
       >
         <Button
-          as={Link}
-          to="/app/{-$vaultId}/{-$hostName}/{-$userName}"
+          render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
+          nativeButton={false}
           variant="outline"
           size="sm"
         >
@@ -84,7 +84,7 @@ function RouteComponent() {
           {backups !== null && backups !== undefined ? (
             <>
               <Button
-                variant="outline"
+                variant="secondary"
                 onClick={() =>
                   folder &&
                   openFolderSettings({
@@ -97,7 +97,7 @@ function RouteComponent() {
               </Button>
               {folder && folder.status === "UPLOADING" ? (
                 <LocalButton
-                  variant="outline"
+                  variant="secondary"
                   onClick={() =>
                     folder.currentTask &&
                     cancelBackup({ taskId: folder.currentTask })

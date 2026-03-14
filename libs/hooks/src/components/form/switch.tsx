@@ -1,18 +1,18 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { SwitchProps, Switch as SwitchRoot } from "@ui/switch";
 import { cn } from "@utils/class";
 import React, { useContext } from "react";
 
 const Switch = React.forwardRef<
   HTMLButtonElement,
-  SwitchProps & { label: LabelContainerProps }
+  SwitchProps & { label: DynamicFieldProps }
 >(({ className, disabled, label, ...props }, ref) => {
   const field = useFieldContext<boolean>();
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...label}
       innerClassName={cn(
         "flex-row justify-between items-center",
@@ -31,7 +31,7 @@ const Switch = React.forwardRef<
         id={field.name}
         disabled={disabledContext || disabled}
       />
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

@@ -1,9 +1,8 @@
-"use client";
-
 import {
   CircleCheckIcon,
-  CircleXIcon,
   InfoIcon,
+  Loader2Icon,
+  OctagonXIcon,
   TriangleAlertIcon,
 } from "lucide-react";
 import { Toaster as Sonner } from "sonner";
@@ -14,24 +13,25 @@ const Toaster = ({ ...props }: ToasterProps & { dark: boolean }) => {
   return (
     <Sonner
       className="toaster group"
-      duration={5000}
-      style={{ fontFamily: "inherit" }}
+      icons={{
+        success: <CircleCheckIcon className="size-4" />,
+        info: <InfoIcon className="size-4" />,
+        warning: <TriangleAlertIcon className="size-4" />,
+        error: <OctagonXIcon className="size-4" />,
+        loading: <Loader2Icon className="size-4 animate-spin" />,
+      }}
+      style={
+        {
+          "--normal-bg": "var(--popover)",
+          "--normal-text": "var(--popover-foreground)",
+          "--normal-border": "var(--border)",
+          "--border-radius": "var(--radius)",
+        } as React.CSSProperties
+      }
       toastOptions={{
         classNames: {
-          toast:
-            "group toast group-[.toaster]:!bg-card group-[.toaster]:!text-card-foreground group-[.toaster]:!border-border group-[.toaster]:shadow-lg",
-          description: "group-[.toast]:!text-muted-foreground text-xs",
-          actionButton:
-            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
-          cancelButton:
-            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
+          toast: "cn-toast",
         },
-      }}
-      icons={{
-        success: <CircleCheckIcon className="size-6 !pr-2 text-green-500" />,
-        info: <InfoIcon className="text-primary-600 size-6 !pr-2" />,
-        error: <CircleXIcon className="size-6 !pr-2 text-red-500" />,
-        warning: <TriangleAlertIcon className="size-6 !pr-2 text-amber-600" />,
       }}
       theme={props.theme === "dark" ? "dark" : "light"}
       {...props}

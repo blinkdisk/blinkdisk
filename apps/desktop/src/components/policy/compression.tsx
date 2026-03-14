@@ -9,8 +9,8 @@ import {
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
+import { DynamicField } from "@ui/dynamic-field";
 import { Input } from "@ui/input";
-import { LabelContainer } from "@ui/label";
 import {
   SelectContent,
   SelectItem,
@@ -159,17 +159,24 @@ function AlgorithmSelector() {
 
   const activeTab = useMemo(() => getTabFromAlgorithm(value), [value]);
 
-  const activePreset =
-    PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
+  const activePreset = PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
+
+  const algorithms = useMemo(() => {
+    return compressionAlgorithms.map((alg) => ({
+      value: alg,
+      label: t(`algorithm.items.${alg}`),
+    }));
+  }, [t]);
 
   return (
-    <LabelContainer
+    <DynamicField
       title={t("algorithm.label")}
       description={t("algorithm.description")}
       errors={field.state.meta.errors}
       name={field.name}
     >
       <Tabs
+        className="flex flex-col"
         value={activeTab}
         onValueChange={(tab) => {
           const tabId = tab as TabId;
@@ -222,24 +229,25 @@ function AlgorithmSelector() {
         </TabsContent>
         <TabsContent value="other">
           <SelectRoot
-            onValueChange={(val) => field.setValue(val)}
+            onValueChange={(val) => val && field.setValue(val)}
             value={value}
             disabled={disabledContext}
+            items={algorithms}
           >
             <SelectTrigger>
               <SelectValue placeholder={t("algorithm.placeholder")} />
             </SelectTrigger>
             <SelectContent className="max-h-64">
-              {compressionAlgorithms.map((alg) => (
-                <SelectItem key={alg} value={alg}>
-                  {t(`algorithm.items.${alg}`)}
+              {algorithms.map((alg) => (
+                <SelectItem key={alg.value} value={alg.value}>
+                  {alg.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </SelectRoot>
         </TabsContent>
       </Tabs>
-    </LabelContainer>
+    </DynamicField>
   );
 }
 
@@ -265,7 +273,7 @@ function ExtensionListEditor({
   const value = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer title={label} description={description}>
+    <DynamicField title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
@@ -279,7 +287,7 @@ function ExtensionListEditor({
                     disabled={disabledContext}
                   />
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     type="button"
                     size="icon"
                     className="shrink-0"
@@ -297,7 +305,7 @@ function ExtensionListEditor({
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         disabled={disabledContext}
         onClick={() => {
@@ -307,6 +315,6 @@ function ExtensionListEditor({
         <PlusIcon />
         {addLabel}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }

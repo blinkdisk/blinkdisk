@@ -9,7 +9,7 @@ import {
 } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
-import { LabelContainer } from "@ui/label";
+import { DynamicField } from "@ui/dynamic-field";
 import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
@@ -145,7 +145,7 @@ function CronEditor({ label, form }: CronEditorProps) {
   const value = useStore(field.store, (state) => state.value);
 
   return (
-    <LabelContainer title={label}>
+    <DynamicField title={label}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((cron, index) => (
@@ -164,7 +164,7 @@ function CronEditor({ label, form }: CronEditorProps) {
                       disabled={disabledContext}
                     />
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       type="button"
                       size="icon-sm"
                       className="shrink-0"
@@ -183,7 +183,7 @@ function CronEditor({ label, form }: CronEditorProps) {
         </div>
       ) : null}
       <Button
-        variant="outline"
+        variant="secondary"
         type="button"
         onClick={() => {
           field.pushValue({
@@ -196,6 +196,6 @@ function CronEditor({ label, form }: CronEditorProps) {
         <PlusIcon />
         {t("cron.add")}
       </Button>
-    </LabelContainer>
+    </DynamicField>
   );
 }

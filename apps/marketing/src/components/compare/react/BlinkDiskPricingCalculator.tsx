@@ -36,6 +36,17 @@ export default function BlinkDiskPricingCalculator() {
     return `${gb.toLocaleString()} GB`;
   };
 
+  const planItems = useMemo(
+    () => [
+      { value: "-1", label: `${formatStorage(FREE_TIER_GB)} (Free)` },
+      ...availablePlans.map((plan, index) => ({
+        value: String(index),
+        label: formatStorage(plan.storageGB),
+      })),
+    ],
+    [availablePlans],
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="border-primary/30 bg-primary/5 rounded-xl border-2 border-dashed p-4">
@@ -61,17 +72,15 @@ export default function BlinkDiskPricingCalculator() {
         <Select
           value={String(planIndex)}
           onValueChange={(value) => setPlanIndex(Number(value))}
+          items={planItems}
         >
           <SelectTrigger className="bg-secondary mt-5 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="max-h-48">
-            <SelectItem value="-1">
-              {formatStorage(FREE_TIER_GB)} (Free)
-            </SelectItem>
-            {availablePlans.map((plan, index) => (
-              <SelectItem key={plan.id} value={String(index)}>
-                {formatStorage(plan.storageGB)}
+            {planItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
               </SelectItem>
             ))}
           </SelectContent>

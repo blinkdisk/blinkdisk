@@ -1,20 +1,20 @@
 import { FormDisabledContext, useFieldContext } from "@hooks/use-app-form";
 import { Button } from "@ui/button";
+import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
 import { Input, InputProps } from "@ui/input";
-import { LabelContainer, LabelContainerProps } from "@ui/label";
 import { cn } from "@utils/class";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import React, { useContext } from "react";
 
 const Counter = React.forwardRef<
   HTMLInputElement,
-  InputProps & { label: LabelContainerProps }
+  InputProps & { label: DynamicFieldProps }
 >(({ className, label, disabled, ...props }, ref) => {
   const field = useFieldContext<number>();
   const disabledContext = useContext(FormDisabledContext);
 
   return (
-    <LabelContainer
+    <DynamicField
       {...label}
       innerClassName={cn(
         "flex-row justify-between items-center",
@@ -28,7 +28,7 @@ const Counter = React.forwardRef<
           onClick={() => field.handleChange((field.state.value || 0) - 1)}
           type="button"
           size="icon-sm"
-          variant="outline"
+          variant="secondary"
           disabled={disabledContext || disabled}
         >
           <MinusIcon />
@@ -39,7 +39,7 @@ const Counter = React.forwardRef<
           type="number"
           id={field.name}
           name={field.name}
-          value={field.state.value}
+          value={field.state.value ?? ""}
           onBlur={() => field.handleBlur()}
           onChange={(
             e:
@@ -59,13 +59,13 @@ const Counter = React.forwardRef<
           onClick={() => field.handleChange((field.state.value || 0) + 1)}
           type="button"
           size="icon-sm"
-          variant="outline"
+          variant="secondary"
           disabled={disabledContext || disabled}
         >
           <PlusIcon />
         </Button>
       </div>
-    </LabelContainer>
+    </DynamicField>
   );
 });
 

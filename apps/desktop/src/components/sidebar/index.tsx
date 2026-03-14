@@ -3,8 +3,8 @@ import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
 import { Logo } from "@desktop/components/logo";
 import { SidebarAddFolder } from "@desktop/components/sidebar/add-folder";
+import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
 import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
-import { SidebarSelects } from "@desktop/components/sidebar/selects";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
@@ -57,13 +57,13 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   isActive={
                     pathname === `/app/${vaultId}/${hostName}/${userName}`
                   }
-                  asChild
-                >
-                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
-                    <HomeIcon />
-                    {t("home")}
-                  </Link>
-                </SidebarMenuButton>
+                  render={
+                    <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
+                      <HomeIcon />
+                      {t("home")}
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
@@ -72,13 +72,13 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     pathname ===
                     `/app/${vaultId}/${hostName}/${userName}/settings`
                   }
-                  asChild
-                >
-                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings">
-                    <SettingsIcon />
-                    {t("settings")}
-                  </Link>
-                </SidebarMenuButton>
+                  render={
+                    <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                      <SettingsIcon />
+                      {t("settings")}
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
             </>
           ) : null}
@@ -90,18 +90,12 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
             <SidebarAddFolder />
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
+                <SidebarMenuButton size="lg">
                   <AccountPreview account={session} />
                 </SidebarMenuButton>
               </AccountSelectDropdown>
               <AccountMenuDropdown>
-                <SidebarMenuButton
-                  size="icon"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
+                <SidebarMenuButton size="icon">
                   <EllipsisVerticalIcon className="size-4" />
                 </SidebarMenuButton>
               </AccountMenuDropdown>

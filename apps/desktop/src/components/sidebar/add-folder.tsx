@@ -22,9 +22,9 @@ export function SidebarAddFolder() {
     return (
       <SidebarMenuItem>
         <LocalButton
-          className="bg-sidebar-muted border-sidebar-border w-full"
-          variant="outline"
-          onClick={openCreateFolder}
+          className="bg-sidebar-secondary border-sidebar-secondary-border hover:bg-sidebar-secondary-hover w-full"
+          variant="secondary"
+          onClick={() => openCreateFolder()}
         >
           <PlusIcon />
           <span>{t("addFolder")}</span>
