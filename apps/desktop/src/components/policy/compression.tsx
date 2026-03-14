@@ -1,6 +1,3 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyCompressionForm } from "@desktop/hooks/forms/use-policy-compression-form";
 import { compressionAlgorithms } from "@blinkdisk/config/algorithms";
 import {
   FormDisabledContext,
@@ -20,6 +17,9 @@ import {
 } from "@blinkdisk/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyField } from "@desktop/components/policy/field";
+import { usePolicyCompressionForm } from "@desktop/hooks/forms/use-policy-compression-form";
 import {
   GaugeIcon,
   Minimize2Icon,

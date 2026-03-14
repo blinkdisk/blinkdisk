@@ -1,9 +1,12 @@
-import { useConfigValidation, VaultAction } from "@desktop/hooks/use-config-validation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZAmazonS3Config,
   ZAmazonS3ConfigType,
 } from "@blinkdisk/schemas/providers";
+import {
+  useConfigValidation,
+  VaultAction,
+} from "@desktop/hooks/use-config-validation";
 
 export function useAmazonS3Form({
   action,

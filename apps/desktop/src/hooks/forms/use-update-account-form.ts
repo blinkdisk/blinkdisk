@@ -1,7 +1,7 @@
-import { useUpdateAccount } from "@desktop/hooks/mutations/use-update-account";
-import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZUpdateUser } from "@blinkdisk/schemas/settings";
+import { useUpdateAccount } from "@desktop/hooks/mutations/use-update-account";
+import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useMemo } from "react";
 
 export function useUpdateAccountForm() {

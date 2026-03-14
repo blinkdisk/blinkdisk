@@ -1,9 +1,9 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZS3CompatibleConfigType } from "@blinkdisk/schemas/providers";
 import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
 import { useS3CompatibleForm } from "@desktop/hooks/forms/providers/use-s3-compatible-form";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ZS3CompatibleConfigType } from "@blinkdisk/schemas/providers";
 
 export type S3CompatibleFormProps = {
   action: VaultAction;

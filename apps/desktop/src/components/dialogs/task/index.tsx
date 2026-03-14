@@ -1,10 +1,3 @@
-import { useCancelTask } from "@desktop/hooks/mutations/core/use-cancel-task";
-import { useTask } from "@desktop/hooks/queries/core/use-task";
-import {
-  CoreTaskLogEntry,
-  useTaskLogs,
-} from "@desktop/hooks/queries/core/use-task-logs";
-import { useTaskDialog } from "@desktop/hooks/state/use-task-dialog";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
@@ -16,6 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { useCancelTask } from "@desktop/hooks/mutations/core/use-cancel-task";
+import { useTask } from "@desktop/hooks/queries/core/use-task";
+import {
+  CoreTaskLogEntry,
+  useTaskLogs,
+} from "@desktop/hooks/queries/core/use-task-logs";
+import { useTaskDialog } from "@desktop/hooks/state/use-task-dialog";
 import { LoaderCircleIcon } from "lucide-react";
 import { memo } from "react";
 

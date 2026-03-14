@@ -1,6 +1,6 @@
+import { Loader } from "@blinkdisk/ui/loader";
 import { Empty } from "@desktop/components/empty";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader } from "@blinkdisk/ui/loader";
 
 export const Route = createFileRoute("/app/migrate")({
   component: RouteComponent,

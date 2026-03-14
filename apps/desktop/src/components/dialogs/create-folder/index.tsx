@@ -1,7 +1,3 @@
-import { CreateFolderGeneral } from "@desktop/components/dialogs/create-folder/general";
-import { CreateFolderSettings } from "@desktop/components/dialogs/create-folder/settings";
-import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
-import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
@@ -12,6 +8,10 @@ import {
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
 import { cn } from "@blinkdisk/utils/class";
+import { CreateFolderGeneral } from "@desktop/components/dialogs/create-folder/general";
+import { CreateFolderSettings } from "@desktop/components/dialogs/create-folder/settings";
+import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
+import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { ArrowLeftIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 

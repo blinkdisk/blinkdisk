@@ -1,8 +1,8 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useSetupPasswordForm } from "@desktop/hooks/forms/use-setup-password-form";
 import { useSetupVault } from "@desktop/hooks/mutations/use-setup-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { SettingsIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { providerForms } from "../forms/providers";

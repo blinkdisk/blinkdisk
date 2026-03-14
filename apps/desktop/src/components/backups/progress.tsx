@@ -1,9 +1,9 @@
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { formatInt, formatSize } from "@desktop/lib/number";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { CircularProgress } from "@blinkdisk/ui/circular-progress";
 import { Loader } from "@blinkdisk/ui/loader";
 import { cn } from "@blinkdisk/utils/class";
+import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import { formatInt, formatSize } from "@desktop/lib/number";
 import { useMemo } from "react";
 
 type BackupProgressProps = {

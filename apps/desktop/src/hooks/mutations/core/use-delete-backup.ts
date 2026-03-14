@@ -1,3 +1,4 @@
+import { CustomError } from "@blinkdisk/utils/error";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -5,7 +6,6 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@blinkdisk/utils/error";
 
 export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();

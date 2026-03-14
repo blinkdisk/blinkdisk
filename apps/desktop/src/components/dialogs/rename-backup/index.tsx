@@ -1,5 +1,3 @@
-import { useRenameBackupForm } from "@desktop/hooks/forms/use-rename-backup-form";
-import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Dialog,
@@ -9,6 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { useRenameBackupForm } from "@desktop/hooks/forms/use-rename-backup-form";
+import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
 import { useEffect } from "react";
 
 export function RenameBackupDialog() {

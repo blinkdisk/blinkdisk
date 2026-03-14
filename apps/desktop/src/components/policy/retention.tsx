@@ -1,9 +1,9 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyRetentionForm } from "@desktop/hooks/forms/use-policy-retention-form";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { SettingsCategory } from "@desktop/components/policy/category";
+import { PolicyField } from "@desktop/components/policy/field";
+import { usePolicyRetentionForm } from "@desktop/hooks/forms/use-policy-retention-form";
 import { ArchiveIcon, InfoIcon } from "lucide-react";
 
 export function RetentionSettings() {

@@ -78,9 +78,9 @@ describe("parseExclusionRule", () => {
 
 describe("buildExclusionRule", () => {
   it("builds extension rule", () => {
-    expect(
-      buildExclusionRule({ type: "EXTENSION", extension: "txt" }),
-    ).toBe("*.txt");
+    expect(buildExclusionRule({ type: "EXTENSION", extension: "txt" })).toBe(
+      "*.txt",
+    );
   });
 
   it("builds exact match", () => {
@@ -140,11 +140,16 @@ describe("buildExclusionRule", () => {
 });
 
 describe("roundtrip", () => {
-  it.each(["*.txt", "README", "logs*", "*backup", "*cache*", "logs/", "*cache*/"])(
-    "build(parse(%j)) === %j",
-    (rule) => {
-      const parsed = parseExclusionRule(rule);
-      expect(buildExclusionRule(parsed as any)).toBe(rule);
-    },
-  );
+  it.each([
+    "*.txt",
+    "README",
+    "logs*",
+    "*backup",
+    "*cache*",
+    "logs/",
+    "*cache*/",
+  ])("build(parse(%j)) === %j", (rule) => {
+    const parsed = parseExclusionRule(rule);
+    expect(buildExclusionRule(parsed as any)).toBe(rule);
+  });
 });

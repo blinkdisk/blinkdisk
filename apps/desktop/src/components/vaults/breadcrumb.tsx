@@ -1,5 +1,3 @@
-import { VaultItem } from "@desktop/hooks/queries/use-vault";
-import { Link } from "@tanstack/react-router";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,6 +7,8 @@ import {
   BreadcrumbSeparator,
 } from "@blinkdisk/ui/breadcrumb";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { VaultItem } from "@desktop/hooks/queries/use-vault";
+import { Link } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
 
 export type VaultBreadcrumbProps = {

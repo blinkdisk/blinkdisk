@@ -1,6 +1,3 @@
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
-import { useLocalProfile } from "@desktop/hooks/use-local-profile";
-import { useProfile } from "@desktop/hooks/use-profile";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Badge } from "@blinkdisk/ui/badge";
 import {
@@ -11,6 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { cn } from "@blinkdisk/utils/class";
+import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { useProfile } from "@desktop/hooks/use-profile";
 import { ChevronDownIcon, MonitorIcon } from "lucide-react";
 
 type SidebarHostNameSelectProps = {

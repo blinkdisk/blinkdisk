@@ -1,3 +1,4 @@
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -10,7 +11,6 @@ import {
 } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
-import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 export function useVaultPolicy() {
   const { profileFilter } = useProfile();

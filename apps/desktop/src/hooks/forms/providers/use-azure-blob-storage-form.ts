@@ -1,9 +1,12 @@
-import { useConfigValidation, VaultAction } from "@desktop/hooks/use-config-validation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZAzureBlobStorageConfig,
   ZAzureBlobStorageConfigType,
 } from "@blinkdisk/schemas/providers";
+import {
+  useConfigValidation,
+  VaultAction,
+} from "@desktop/hooks/use-config-validation";
 
 export function useAzureBlobStorageForm({
   action,

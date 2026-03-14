@@ -1,4 +1,3 @@
-import { useChangePlanForm } from "@desktop/hooks/forms/use-change-plan-form";
 import { plans } from "@blinkdisk/config/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription } from "@blinkdisk/ui/alert";
@@ -8,6 +7,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { useChangePlanForm } from "@desktop/hooks/forms/use-change-plan-form";
 import { useMemo } from "react";
 import { Trans } from "react-i18next";
 

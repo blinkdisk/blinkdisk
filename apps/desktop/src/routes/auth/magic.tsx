@@ -1,9 +1,9 @@
-import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { InputOTPSlot } from "@blinkdisk/ui/input-otp";
+import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
 import {
   createFileRoute,
   Link,

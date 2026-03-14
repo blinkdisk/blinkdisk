@@ -1,12 +1,12 @@
+import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 import { SidebarHostNameSelect } from "@desktop/components/sidebar/dropdowns/hostName";
 import { SidebarUserNameSelect } from "@desktop/components/sidebar/dropdowns/userName";
 import { SidebarVaultSelect } from "@desktop/components/sidebar/dropdowns/vault";
 import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useParams } from "@tanstack/react-router";
-import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
-import { Skeleton } from "@blinkdisk/ui/skeleton";
-import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
 
 export function SidebarSelects() {

@@ -1,7 +1,4 @@
-import { useSubscription } from "@desktop/hooks/queries/use-subscription";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
@@ -9,6 +6,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { useSubscription } from "@desktop/hooks/queries/use-subscription";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PendingCheckoutDialogProps = {
   isOpen: boolean;

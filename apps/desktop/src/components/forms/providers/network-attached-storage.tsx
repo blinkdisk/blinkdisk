@@ -1,9 +1,9 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZFilesystemConfigType } from "@blinkdisk/schemas/providers";
 import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
 import { useNetworkAttachedStorageForm } from "@desktop/hooks/forms/providers/use-network-attached-storage-form";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ZFilesystemConfigType } from "@blinkdisk/schemas/providers";
 
 export type NetworkAttachedStorageFormProps = {
   action: VaultAction;

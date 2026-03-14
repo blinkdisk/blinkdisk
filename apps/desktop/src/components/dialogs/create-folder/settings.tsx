@@ -1,3 +1,7 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import { Accordion } from "@blinkdisk/ui/accordion";
+import { Button } from "@blinkdisk/ui/button";
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
 import { FolderSize } from "@desktop/components/dialogs/create-folder/size";
 import { CompressionSettings } from "@desktop/components/policy/compression";
@@ -6,10 +10,6 @@ import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
-import { Accordion } from "@blinkdisk/ui/accordion";
-import { Button } from "@blinkdisk/ui/button";
 import { useState } from "react";
 
 type CreateFolderSettingsProps = {

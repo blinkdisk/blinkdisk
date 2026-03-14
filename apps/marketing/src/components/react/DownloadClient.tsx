@@ -4,7 +4,12 @@ import { useLogsnag } from "@marketing/hooks/use-logsnag";
 import { usePlatform } from "@marketing/hooks/use-platform";
 import type { Architecture } from "@marketing/utils/architecture";
 import { getArchitectureFromCpu } from "@marketing/utils/architecture";
-import { getDownloadUrl, linux, mac, windows } from "@marketing/utils/downloads";
+import {
+  getDownloadUrl,
+  linux,
+  mac,
+  windows,
+} from "@marketing/utils/downloads";
 import type { Platform } from "@marketing/utils/platform";
 import Confetti from "js-confetti";
 import {

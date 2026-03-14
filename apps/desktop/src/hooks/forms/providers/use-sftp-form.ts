@@ -1,6 +1,9 @@
-import { useConfigValidation, VaultAction } from "@desktop/hooks/use-config-validation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZSftpConfig, ZSftpConfigType } from "@blinkdisk/schemas/providers";
+import {
+  useConfigValidation,
+  VaultAction,
+} from "@desktop/hooks/use-config-validation";
 
 export function useSftpForm({
   action,

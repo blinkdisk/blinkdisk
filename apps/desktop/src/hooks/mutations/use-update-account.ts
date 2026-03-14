@@ -1,7 +1,7 @@
+import { ZUpdateUserType } from "@blinkdisk/schemas/settings";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { authClient } from "@desktop/lib/auth";
 import { showErrorToast } from "@desktop/lib/error";
-import { ZUpdateUserType } from "@blinkdisk/schemas/settings";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateAccount(onSuccess: () => void) {

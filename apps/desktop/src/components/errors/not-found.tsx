@@ -1,6 +1,6 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Link } from "@tanstack/react-router";
 import { Button } from "@blinkdisk/ui/button";
+import { Link } from "@tanstack/react-router";
 import { Trans } from "react-i18next";
 
 export function NotFoundPage() {
@@ -23,7 +23,11 @@ export function NotFoundPage() {
           />
         </p>
         <div>
-          <Button render={<Link to="/" />} nativeButton={false} className="mt-8">
+          <Button
+            render={<Link to="/" />}
+            nativeButton={false}
+            className="mt-8"
+          >
             {t("button")}
           </Button>
         </div>

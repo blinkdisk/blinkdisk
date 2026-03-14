@@ -1,6 +1,3 @@
-import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
-import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   DropdownMenu,
@@ -11,6 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { cn } from "@blinkdisk/utils/class";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { ChevronDownIcon, PlusIcon, VaultIcon } from "lucide-react";
 
 type SidebarVaultSelectProps = {
