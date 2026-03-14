@@ -1,4 +1,4 @@
-import { getVault } from "@electron/vault/manage";
+import { getVault } from "#vault/manage";
 import { app, net, protocol } from "electron";
 import path from "node:path";
 import { pathToFileURL } from "node:url";

@@ -2,7 +2,7 @@ import { ProviderType } from "@config/providers";
 import {
   CreateVaultResponse,
   useCreateVault,
-} from "@desktop/hooks/mutations/use-create-vault";
+} from "#hooks/mutations/use-create-vault";
 import { useAppForm } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";

@@ -1,7 +1,7 @@
-import { AccountPreview } from "@desktop/components/accounts/preview";
-import { useAccountList } from "@desktop/hooks/queries/use-account-list";
-import { useAccountId } from "@desktop/hooks/use-account-id";
-import { useAuth } from "@desktop/hooks/use-auth";
+import { AccountPreview } from "#components/accounts/preview";
+import { useAccountList } from "#hooks/queries/use-account-list";
+import { useAccountId } from "#hooks/use-account-id";
+import { useAuth } from "#hooks/use-auth";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import {
   DropdownMenu,

@@ -1,10 +1,10 @@
-import { LATEST_VAULT_VERSION } from "@config/vault";
-import { ZProviderType } from "@schemas/providers";
+import { ZProviderType } from "#providers";
 import {
   ZVaultEncryptedConfig,
   ZVaultName,
   ZVaultPassword,
-} from "@schemas/shared/vault";
+} from "#shared/vault";
+import { LATEST_VAULT_VERSION } from "@config/vault";
 import { z } from "zod";
 
 export const ZCreateVault = z.object({

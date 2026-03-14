@@ -1,6 +1,6 @@
-import { ConfigValidationError } from "@desktop/components/errors/config-validation";
-import { VaultExistsError } from "@desktop/components/errors/vault-exists";
-import { VaultAction } from "@desktop/hooks/use-config-validation";
+import { ConfigValidationError } from "#components/errors/config-validation";
+import { VaultExistsError } from "#components/errors/vault-exists";
+import { VaultAction } from "#hooks/use-config-validation";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { AnyFormApi } from "@tanstack/react-form";

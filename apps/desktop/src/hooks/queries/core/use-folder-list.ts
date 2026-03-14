@@ -1,10 +1,10 @@
-import { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
-import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useProfile } from "@desktop/hooks/use-profile";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { hashFolder } from "@desktop/lib/folder";
-import { vaultApi } from "@desktop/lib/vault";
+import { CoreBackupIncompleteReason } from "#hooks/queries/core/use-backup-list";
+import { useVaultStatus } from "#hooks/queries/use-vault-status";
+import { useProfile } from "#hooks/use-profile";
+import { useQueryKey } from "#hooks/use-query-key";
+import { useVaultId } from "#hooks/use-vault-id";
+import { hashFolder } from "#lib/folder";
+import { vaultApi } from "#lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";

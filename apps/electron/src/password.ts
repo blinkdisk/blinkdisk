@@ -1,9 +1,5 @@
-import {
-  decryptString,
-  EncryptedString,
-  encryptString,
-} from "@electron/encryption";
-import { store } from "@electron/store";
+import { decryptString, EncryptedString, encryptString } from "#encryption";
+import { store } from "#store";
 
 export function setPasswordCache({
   vaultId,

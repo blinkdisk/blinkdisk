@@ -1,8 +1,8 @@
-import { fileExists } from "@electron/fs";
-import { fetchVault } from "@electron/vault/fetch";
-import { getVault } from "@electron/vault/manage";
-import { VaultInstance } from "@electron/vault/types";
-import { window } from "@electron/window";
+import { fileExists } from "#fs";
+import { fetchVault } from "#vault/fetch";
+import { getVault } from "#vault/manage";
+import { VaultInstance } from "#vault/types";
+import { window } from "#window";
 import { ZRestoreDirectoryType } from "@schemas/directory";
 import { app, dialog } from "electron";
 import { chmod, readdir, symlink } from "fs/promises";

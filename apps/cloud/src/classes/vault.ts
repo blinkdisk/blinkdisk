@@ -1,16 +1,16 @@
+import { deleteBlob } from "#events/delete";
+import { getBlob } from "#events/get";
+import { listBlobs } from "#events/list";
+import { getMetadata } from "#events/metadata";
+import { putBlob } from "#events/put";
+import { scheduleVaultAlarm } from "#utils/alarm";
+import { pickS3Endpoint } from "#utils/server";
 import {
   DeleteObjectsCommand,
   ListObjectsCommand,
   ListObjectsCommandOutput,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { deleteBlob } from "@cloud/events/delete";
-import { getBlob } from "@cloud/events/get";
-import { listBlobs } from "@cloud/events/list";
-import { getMetadata } from "@cloud/events/metadata";
-import { putBlob } from "@cloud/events/put";
-import { scheduleVaultAlarm } from "@cloud/utils/alarm";
-import { pickS3Endpoint } from "@cloud/utils/server";
 import { ZCloudBase } from "@schemas/cloud";
 import { getVaultId } from "@utils/token";
 import { tryCatch } from "@utils/try-catch";

@@ -1,4 +1,4 @@
-import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
+import { useFolderList } from "#hooks/queries/core/use-folder-list";
 import { useEffect, useRef } from "react";
 
 export function useTaskbarProgress() {

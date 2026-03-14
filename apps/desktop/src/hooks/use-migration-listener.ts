@@ -1,7 +1,7 @@
-import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
-import { CorePolicy } from "@desktop/lib/policy";
-import { trpc } from "@desktop/lib/trpc";
-import { vaultApi } from "@desktop/lib/vault";
+import { useVaultList } from "#hooks/queries/use-vault-list";
+import { CorePolicy } from "#lib/policy";
+import { trpc } from "#lib/trpc";
+import { vaultApi } from "#lib/vault";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect } from "react";
 

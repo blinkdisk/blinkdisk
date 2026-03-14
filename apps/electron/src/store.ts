@@ -1,7 +1,7 @@
+import { EncryptedString } from "#encryption";
+import { sendWindow } from "#window";
 import { ProviderType } from "@config/providers";
 import { ConfigLevel } from "@db/enums";
-import { EncryptedString } from "@electron/encryption";
-import { sendWindow } from "@electron/window";
 import { ZVaultOptionsType } from "@schemas/shared/vault";
 import Store from "electron-store";
 

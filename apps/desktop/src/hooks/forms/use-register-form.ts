@@ -1,4 +1,4 @@
-import { useRegister } from "@desktop/hooks/mutations/use-register";
+import { useRegister } from "#hooks/mutations/use-register";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZRegisterForm, ZRegisterFormType } from "@schemas/auth";
 

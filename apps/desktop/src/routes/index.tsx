@@ -1,4 +1,4 @@
-import { useAuth } from "@desktop/hooks/use-auth";
+import { useAuth } from "#hooks/use-auth";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 

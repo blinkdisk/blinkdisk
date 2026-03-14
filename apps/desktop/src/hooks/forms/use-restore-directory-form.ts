@@ -1,4 +1,4 @@
-import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
+import { useStartRestore } from "#hooks/mutations/core/use-start-restore";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZRestoreDirectory, ZRestoreDirectoryType } from "@schemas/directory";
 

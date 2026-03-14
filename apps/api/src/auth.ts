@@ -1,4 +1,4 @@
-import { getPostHog, posthog } from "@api/lib/posthog";
+import { getPostHog, posthog } from "#lib/posthog";
 import { FREE_SPACE_AVAILABLE } from "@config/space";
 import { DB, dialect } from "@db";
 import { ZLogin, ZRegisterServer } from "@schemas/auth";

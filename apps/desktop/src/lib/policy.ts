@@ -1,4 +1,4 @@
-import { fromBytes, toBytes } from "@desktop/lib/filesize";
+import { fromBytes, toBytes } from "#lib/filesize";
 import { ZPolicyType } from "@schemas/policy";
 
 export type CorePolicy = {

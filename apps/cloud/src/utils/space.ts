@@ -1,4 +1,4 @@
-import { Space } from "@cloud/classes/space";
+import { Space } from "#classes/space";
 
 type FileCache = {
   size: number;

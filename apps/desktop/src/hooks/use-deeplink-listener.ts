@@ -1,4 +1,4 @@
-import { usePlanChange } from "@desktop/hooks/use-plan-change";
+import { usePlanChange } from "#hooks/use-plan-change";
 import { useEffect } from "react";
 
 export function useDeeplinkListener() {

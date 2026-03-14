@@ -1,4 +1,4 @@
-import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
+import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import {

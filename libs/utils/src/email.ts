@@ -1,10 +1,10 @@
+import { locales } from "#locales";
 import CleanupEmail from "@emails/cleanup";
 import MagicEmail from "@emails/magic";
 import StorageFullEmail from "@emails/storage-full";
 import StorageThresholdEmail from "@emails/storage-threshold";
 import Plunk from "@plunk/node";
 import { pretty, render } from "@react-email/render";
-import { locales } from "@utils/locales";
 import nodemailer from "nodemailer";
 
 const templates = {

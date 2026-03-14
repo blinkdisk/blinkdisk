@@ -1,5 +1,5 @@
-import { usePlatform } from "@marketing/hooks/use-platform";
-import type { Platform } from "@marketing/utils/platform";
+import { usePlatform } from "#hooks/use-platform";
+import type { Platform } from "#utils/platform";
 import { Button } from "@ui/button";
 import { useEffect, useState } from "react";
 

@@ -1,7 +1,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { Loader } from "@ui/loader";
+import { Loader } from "#loader";
 import { cn } from "@utils/class";
 
 const buttonVariants = cva(

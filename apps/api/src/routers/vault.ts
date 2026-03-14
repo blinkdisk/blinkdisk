@@ -1,6 +1,6 @@
-import { posthog } from "@api/lib/posthog";
-import { authedProcedure } from "@api/procedures/authed";
-import { router } from "@api/trpc";
+import { posthog } from "#lib/posthog";
+import { authedProcedure } from "#procedures/authed";
+import { router } from "#trpc";
 import { providers } from "@config/providers";
 import { defaultVaultOptions, LATEST_VAULT_VERSION } from "@config/vault";
 import { ZVaultOptionsType } from "@schemas/shared/vault";

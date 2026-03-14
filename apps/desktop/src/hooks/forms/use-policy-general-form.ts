@@ -1,4 +1,4 @@
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "#components/policy/context";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZGeneralPolicyForm, ZGeneralPolicyFormType } from "@schemas/policy";
 import { useContext } from "react";

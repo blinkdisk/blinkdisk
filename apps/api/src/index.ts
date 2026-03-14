@@ -1,10 +1,10 @@
-import { auth } from "@api/auth";
-import { createContext } from "@api/context";
-import { ratelimit } from "@api/middlewares/limit";
-import { appRouter } from "@api/router";
-import { affiliateLink } from "@api/routes/affiliate/link";
-import { affiliateTrack } from "@api/routes/affiliate/track";
-import { polarWebhook } from "@api/webhooks/polar";
+import { auth } from "#auth";
+import { createContext } from "#context";
+import { ratelimit } from "#middlewares/limit";
+import { appRouter } from "#router";
+import { affiliateLink } from "#routes/affiliate/link";
+import { affiliateTrack } from "#routes/affiliate/track";
+import { polarWebhook } from "#webhooks/polar";
 import type { DB } from "@db";
 import { database } from "@db/index";
 import { trpcServer } from "@hono/trpc-server";

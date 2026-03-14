@@ -1,6 +1,6 @@
 import { languageCodes, languages } from "@config/language";
-import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
-import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
+import { useUpdatePreferencesForm } from "#hooks/forms/use-update-preferences-form";
+import { usePreferencesSettingsDialog } from "#hooks/state/use-preferences-settings-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import {
   Dialog,

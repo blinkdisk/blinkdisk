@@ -1,4 +1,4 @@
-import { Empty } from "@desktop/components/empty";
+import { Empty } from "#components/empty";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Dialog, DialogContent } from "@ui/dialog";
 import { WifiOffIcon } from "lucide-react";

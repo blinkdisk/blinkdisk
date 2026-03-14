@@ -1,7 +1,7 @@
-import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/alerts";
-import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
-import { useFilesystemForm } from "@desktop/hooks/forms/providers/use-filesystem-form";
-import { VaultAction } from "@desktop/hooks/use-config-validation";
+import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
+import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
+import { useFilesystemForm } from "#hooks/forms/providers/use-filesystem-form";
+import { VaultAction } from "#hooks/use-config-validation";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZFilesystemConfigType } from "@schemas/providers";
 

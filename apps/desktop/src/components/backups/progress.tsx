@@ -1,5 +1,5 @@
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { formatInt, formatSize } from "@desktop/lib/number";
+import { CoreFolderItem } from "#hooks/queries/core/use-folder-list";
+import { formatInt, formatSize } from "#lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { CircularProgress } from "@ui/circular-progress";
 import { Loader } from "@ui/loader";

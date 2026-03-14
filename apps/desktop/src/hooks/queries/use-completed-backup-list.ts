@@ -1,4 +1,4 @@
-import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
+import { useBackupList } from "#hooks/queries/core/use-backup-list";
 import { useMemo } from "react";
 
 export function useCompletedBackupList() {

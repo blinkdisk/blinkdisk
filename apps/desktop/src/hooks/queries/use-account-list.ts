@@ -1,5 +1,5 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { authClient } from "@desktop/lib/auth";
+import { useQueryKey } from "#hooks/use-query-key";
+import { authClient } from "#lib/auth";
 import { useQuery } from "@tanstack/react-query";
 
 export function useAccountList(options?: { enabled: boolean }) {

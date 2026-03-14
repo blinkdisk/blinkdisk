@@ -1,6 +1,6 @@
-import { FolderPreview } from "@desktop/components/folders/preview";
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
+import { FolderPreview } from "#components/folders/preview";
+import { CoreFolderItem } from "#hooks/queries/core/use-folder-list";
+import { useVaultStatus } from "#hooks/queries/use-vault-status";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link, useParams } from "@tanstack/react-router";
 import { CircularProgress } from "@ui/circular-progress";

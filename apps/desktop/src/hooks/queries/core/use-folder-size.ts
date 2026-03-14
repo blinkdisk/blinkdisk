@@ -1,7 +1,7 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { convertPolicyToCore } from "@desktop/lib/policy";
-import { vaultApi } from "@desktop/lib/vault";
+import { useQueryKey } from "#hooks/use-query-key";
+import { useVaultId } from "#hooks/use-vault-id";
+import { convertPolicyToCore } from "#lib/policy";
+import { vaultApi } from "#lib/vault";
 import { ZPolicyType } from "@schemas/policy";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";

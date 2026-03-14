@@ -1,5 +1,5 @@
-import { showErrorToast } from "@desktop/lib/error";
-import { trpc } from "@desktop/lib/trpc";
+import { showErrorToast } from "#lib/error";
+import { trpc } from "#lib/trpc";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZCreateCheckoutType } from "@schemas/payment";
 import { useMutation } from "@tanstack/react-query";

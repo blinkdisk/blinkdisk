@@ -1,8 +1,8 @@
-import { SidebarHostNameSelect } from "@desktop/components/sidebar/dropdowns/hostName";
-import { SidebarUserNameSelect } from "@desktop/components/sidebar/dropdowns/userName";
-import { SidebarVaultSelect } from "@desktop/components/sidebar/dropdowns/vault";
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
-import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import { SidebarHostNameSelect } from "#components/sidebar/dropdowns/hostName";
+import { SidebarUserNameSelect } from "#components/sidebar/dropdowns/userName";
+import { SidebarVaultSelect } from "#components/sidebar/dropdowns/vault";
+import { useVaultProfiles } from "#hooks/queries/core/use-vault-profiles";
+import { useVaultList } from "#hooks/queries/use-vault-list";
 import { useParams } from "@tanstack/react-router";
 import { SidebarMenuItem } from "@ui/sidebar";
 import { Skeleton } from "@ui/skeleton";

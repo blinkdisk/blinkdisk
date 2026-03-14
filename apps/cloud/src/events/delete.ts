@@ -1,7 +1,7 @@
+import { Space } from "#classes/space";
+import { Vault } from "#classes/vault";
+import { consumeSpace } from "#utils/space";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { Space } from "@cloud/classes/space";
-import { Vault } from "@cloud/classes/vault";
-import { consumeSpace } from "@cloud/utils/space";
 import { ZCloudDeleteBlob } from "@schemas/cloud";
 
 export async function deleteBlob(

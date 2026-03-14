@@ -1,5 +1,5 @@
-import { useSpace } from "@desktop/hooks/queries/use-space";
-import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
+import { useSpace } from "#hooks/queries/use-space";
+import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";

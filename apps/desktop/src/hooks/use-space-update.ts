@@ -1,4 +1,4 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useQueryKey } from "#hooks/use-query-key";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 

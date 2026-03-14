@@ -1,9 +1,9 @@
 import { ProviderType } from "@config/providers";
-import { CreateVaultConfig } from "@desktop/components/dialogs/create-vault/config";
-import { CreateVaultDetails } from "@desktop/components/dialogs/create-vault/details";
-import { CreateVaultProviders } from "@desktop/components/dialogs/create-vault/providers";
-import { CreateVaultVariant } from "@desktop/components/dialogs/create-vault/variant";
-import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { CreateVaultConfig } from "#components/dialogs/create-vault/config";
+import { CreateVaultDetails } from "#components/dialogs/create-vault/details";
+import { CreateVaultProviders } from "#components/dialogs/create-vault/providers";
+import { CreateVaultVariant } from "#components/dialogs/create-vault/variant";
+import { useCreateVaultDialog } from "#hooks/state/use-create-vault-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ProviderConfig } from "@schemas/providers";
 import { Button } from "@ui/button";

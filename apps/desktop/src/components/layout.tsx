@@ -1,6 +1,6 @@
-import { CreateVaultDialog } from "@desktop/components/dialogs/create-vault";
-import { SettingsDialogs } from "@desktop/components/dialogs/settings";
-import { Sidebar } from "@desktop/components/sidebar";
+import { CreateVaultDialog } from "#components/dialogs/create-vault";
+import { SettingsDialogs } from "#components/dialogs/settings";
+import { Sidebar } from "#components/sidebar";
 import { SidebarInset } from "@ui/sidebar";
 import { ReactNode } from "react";
 

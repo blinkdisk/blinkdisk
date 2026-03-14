@@ -1,6 +1,6 @@
-import { useDeleteVault } from "@desktop/hooks/mutations/use-delete-vault";
-import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dialog";
+import { useDeleteVault } from "#hooks/mutations/use-delete-vault";
+import { useVault } from "#hooks/queries/use-vault";
+import { useDeleteVaultDialog } from "#hooks/state/use-delete-vault-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useNavigate } from "@tanstack/react-router";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";

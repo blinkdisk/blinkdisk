@@ -1,8 +1,8 @@
-import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useDirectoryId } from "@desktop/hooks/use-directory-id";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { vaultApi } from "@desktop/lib/vault";
+import { useVaultStatus } from "#hooks/queries/use-vault-status";
+import { useDirectoryId } from "#hooks/use-directory-id";
+import { useQueryKey } from "#hooks/use-query-key";
+import { useVaultId } from "#hooks/use-vault-id";
+import { vaultApi } from "#lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export type CoreDirectoryItem = {

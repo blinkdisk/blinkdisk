@@ -1,7 +1,7 @@
-import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/alerts";
-import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
-import { useSftpForm } from "@desktop/hooks/forms/providers/use-sftp-form";
-import { VaultAction } from "@desktop/hooks/use-config-validation";
+import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
+import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
+import { useSftpForm } from "#hooks/forms/providers/use-sftp-form";
+import { VaultAction } from "#hooks/use-config-validation";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { ZSftpConfigType } from "@schemas/providers";

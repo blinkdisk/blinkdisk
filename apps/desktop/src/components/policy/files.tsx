@@ -1,8 +1,8 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
-import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
-import { parseExclusionRule } from "@desktop/lib/exclusion";
+import { SettingsCategory } from "#components/policy/category";
+import { PolicyField } from "#components/policy/field";
+import { usePolicyFilesForm } from "#hooks/forms/use-policy-files-form";
+import { useEditExclusionDialog } from "#hooks/state/use-edit-exclusion-dialog";
+import { parseExclusionRule } from "#lib/exclusion";
 import {
   FormDisabledContext,
   useFieldContext,

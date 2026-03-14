@@ -1,7 +1,7 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyContext } from "@desktop/components/policy/context";
-import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { SettingsCategory } from "#components/policy/category";
+import { PolicyContext } from "#components/policy/context";
+import { usePolicyGeneralForm } from "#hooks/forms/use-policy-general-form";
+import { useFolder } from "#hooks/use-folder";
 import { FormDisabledContext, useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";

@@ -1,9 +1,9 @@
+import { fetchVault } from "#vault/fetch";
+import { mapConfigFields, mapProviderType } from "#vault/mapping";
+import { startVaultServer } from "#vault/server";
+import { VaultInstance } from "#vault/types";
 import { ProviderType } from "@config/providers";
 import { LATEST_VAULT_VERSION } from "@config/vault";
-import { fetchVault } from "@electron/vault/fetch";
-import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
-import { startVaultServer } from "@electron/vault/server";
-import { VaultInstance } from "@electron/vault/types";
 import { ProviderConfig } from "@schemas/providers";
 
 export let validationVault: VaultInstance | null = null;

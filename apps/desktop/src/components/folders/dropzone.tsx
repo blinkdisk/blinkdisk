@@ -1,5 +1,5 @@
-import { Empty } from "@desktop/components/empty";
-import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
+import { Empty } from "#components/empty";
+import { useCreateFolderDialog } from "#hooks/state/use-create-folder-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { FolderPlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";

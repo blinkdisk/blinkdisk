@@ -1,7 +1,7 @@
-import { Cron } from "@desktop/components/cron";
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
+import { Cron } from "#components/cron";
+import { SettingsCategory } from "#components/policy/category";
+import { PolicyField } from "#components/policy/field";
+import { usePolicyScheduleForm } from "#hooks/forms/use-policy-schedule-form";
 import {
   FormDisabledContext,
   useFieldContext,

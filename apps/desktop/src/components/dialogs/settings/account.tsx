@@ -1,5 +1,5 @@
-import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
-import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
+import { useUpdateAccountForm } from "#hooks/forms/use-update-account-form";
+import { useAccountSettingsDialog } from "#hooks/state/use-account-settings-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useStore } from "@tanstack/react-form";
 import {

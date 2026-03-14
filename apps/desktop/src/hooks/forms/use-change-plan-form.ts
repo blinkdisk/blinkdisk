@@ -1,4 +1,4 @@
-import { useChangePlan } from "@desktop/hooks/mutations/use-change-plan";
+import { useChangePlan } from "#hooks/mutations/use-change-plan";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZChangePlanForm } from "@schemas/payment";
 

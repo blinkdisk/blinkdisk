@@ -1,5 +1,5 @@
-import { PolicyContext } from "@desktop/components/policy/context";
-import { pickDefinedFields } from "@desktop/lib/policy";
+import { PolicyContext } from "#components/policy/context";
+import { pickDefinedFields } from "#lib/policy";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZCompressionPolicy, ZCompressionPolicyType } from "@schemas/policy";
 import { useContext } from "react";

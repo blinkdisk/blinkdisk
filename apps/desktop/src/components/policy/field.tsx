@@ -1,4 +1,4 @@
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "#components/policy/context";
 import { useFieldContext, useStore } from "@hooks/use-app-form";
 import { Checkbox } from "@ui/checkbox";
 import { cn } from "@utils/class";

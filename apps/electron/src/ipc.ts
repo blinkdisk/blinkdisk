@@ -1,27 +1,27 @@
-import { setVaultCache } from "@electron/cache";
-import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
-import { folderSize, isDirectory } from "@electron/fs";
-import { getPasswordCache, setPasswordCache } from "@electron/password";
-import { getHostName, getUserName } from "@electron/profile";
+import { setVaultCache } from "#cache";
+import { decryptVaultConfig, encryptVaultConfig } from "#encryption";
+import { folderSize, isDirectory } from "#fs";
+import { getPasswordCache, setPasswordCache } from "#password";
+import { getHostName, getUserName } from "#profile";
 import {
   checkEmpty,
   listRestores,
   restoreDirectory,
   restoreMultiple,
   restoreSingle,
-} from "@electron/restore";
-import { openBrowser } from "@electron/shell";
-import { sshKeyscan } from "@electron/ssh";
-import { store } from "@electron/store";
-import { getUpdateStatus, installUpdate } from "@electron/updater";
+} from "#restore";
+import { openBrowser } from "#shell";
+import { sshKeyscan } from "#ssh";
+import { store } from "#store";
+import { getUpdateStatus, installUpdate } from "#updater";
 import {
   connectVault,
   createVault,
   getVaultStatus,
   startAllVaults,
-} from "@electron/vault/manage";
-import { validateVaultConfig } from "@electron/vault/validate";
-import { setProgressBar, window } from "@electron/window";
+} from "#vault/manage";
+import { validateVaultConfig } from "#vault/validate";
+import { setProgressBar, window } from "#window";
 import { app, dialog, ipcMain, shell } from "electron";
 import { platform } from "node:os";
 import { basename, dirname, join } from "node:path";

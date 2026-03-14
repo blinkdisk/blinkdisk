@@ -1,4 +1,4 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useAccountId } from "#hooks/use-account-id";
 import { useMemo } from "react";
 import { ProfileFilter } from "./use-profile";
 

@@ -1,5 +1,5 @@
-import { useUpdateVault } from "@desktop/hooks/mutations/use-update-vault";
-import { useVault } from "@desktop/hooks/queries/use-vault";
+import { useUpdateVault } from "#hooks/mutations/use-update-vault";
+import { useVault } from "#hooks/queries/use-vault";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZUpdateVaultForm } from "@schemas/vault";
 

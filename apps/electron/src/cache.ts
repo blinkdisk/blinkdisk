@@ -1,9 +1,5 @@
-import { encryptString } from "@electron/encryption";
-import {
-  AccountStorageType,
-  GlobalStorageSchema,
-  store,
-} from "@electron/store";
+import { encryptString } from "#encryption";
+import { AccountStorageType, GlobalStorageSchema, store } from "#store";
 import { startAllVaults } from "./vault/manage";
 
 export type VaultCacheWithId = GlobalStorageSchema["vaults"][string] & {

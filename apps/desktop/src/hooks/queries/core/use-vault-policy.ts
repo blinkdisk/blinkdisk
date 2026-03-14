@@ -1,14 +1,14 @@
-import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useProfile } from "@desktop/hooks/use-profile";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { useVaultStatus } from "#hooks/queries/use-vault-status";
+import { useProfile } from "#hooks/use-profile";
+import { useQueryKey } from "#hooks/use-query-key";
+import { useVaultId } from "#hooks/use-vault-id";
 import {
   convertPolicyFromCore,
   convertPolicyToCore,
   CorePolicy,
   defaultVaultPolicy,
-} from "@desktop/lib/policy";
-import { vaultApi } from "@desktop/lib/vault";
+} from "#lib/policy";
+import { vaultApi } from "#lib/vault";
 import { useQuery } from "@tanstack/react-query";
 import { tryCatch } from "@utils/try-catch";
 

@@ -1,7 +1,7 @@
 import { compressionAlgorithms } from "@config/algorithms";
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyCompressionForm } from "@desktop/hooks/forms/use-policy-compression-form";
+import { SettingsCategory } from "#components/policy/category";
+import { PolicyField } from "#components/policy/field";
+import { usePolicyCompressionForm } from "#hooks/forms/use-policy-compression-form";
 import {
   FormDisabledContext,
   useFieldContext,

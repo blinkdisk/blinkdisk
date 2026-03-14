@@ -1,14 +1,14 @@
 ---
-import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import Hero from "@marketing/sections/Hero.astro";
-import Problems from "@marketing/sections/Problems.astro";
-import Solution from "@marketing/sections/Solution.astro";
-import Quote from "@marketing/sections/Quote.astro";
-import Features from "@marketing/sections/Features.astro";
-import Downloads from "@marketing/sections/Downloads.astro";
-import Storages from "@marketing/sections/Storages.astro";
-import Faq from "@marketing/sections/Faq.astro";
-import { getFaqStructuredData } from "@marketing/data/faqs";
+import DefaultLayout from "#layouts/DefaultLayout.astro";
+import Hero from "#sections/Hero.astro";
+import Problems from "#sections/Problems.astro";
+import Solution from "#sections/Solution.astro";
+import Quote from "#sections/Quote.astro";
+import Features from "#sections/Features.astro";
+import Downloads from "#sections/Downloads.astro";
+import Storages from "#sections/Storages.astro";
+import Faq from "#sections/Faq.astro";
+import { getFaqStructuredData } from "#data/faqs";
 import { MARKETING_URL } from "astro:env/server";
 
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";

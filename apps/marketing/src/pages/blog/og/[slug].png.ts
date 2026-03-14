@@ -1,7 +1,7 @@
 import {
   createOgImageResponse,
   generateOgImage,
-} from "@marketing/utils/og-image";
+} from "#utils/og-image";
 import type { APIRoute, GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
 

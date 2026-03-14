@@ -1,11 +1,11 @@
+import { getAccountCache, getVaultCache } from "#cache";
+import { log } from "#log";
+import { getHostName, getUserName } from "#profile";
+import { fetchVault } from "#vault/fetch";
+import { mapConfigFields, mapProviderType } from "#vault/mapping";
+import { startVaultServer } from "#vault/server";
 import { ProviderType } from "@config/providers";
 import { LATEST_VAULT_VERSION } from "@config/vault";
-import { getAccountCache, getVaultCache } from "@electron/cache";
-import { log } from "@electron/log";
-import { getHostName, getUserName } from "@electron/profile";
-import { fetchVault } from "@electron/vault/fetch";
-import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
-import { startVaultServer } from "@electron/vault/server";
 import { ProviderConfig } from "@schemas/providers";
 import { ZVaultOptionsType } from "@schemas/shared/vault";
 import { VaultInstance } from "./types";

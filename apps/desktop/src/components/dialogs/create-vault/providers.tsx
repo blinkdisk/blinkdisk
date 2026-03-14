@@ -1,6 +1,6 @@
 import { ProviderType, providers } from "@config/providers";
-import { providerIcons } from "@desktop/components/icons/providers";
-import { useProviderSearch } from "@desktop/hooks/use-provider-search";
+import { providerIcons } from "#components/icons/providers";
+import { useProviderSearch } from "#hooks/use-provider-search";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";

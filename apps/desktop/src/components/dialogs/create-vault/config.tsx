@@ -1,5 +1,5 @@
 import { ProviderType } from "@config/providers";
-import { providerForms } from "@desktop/components/forms/providers";
+import { providerForms } from "#components/forms/providers";
 import { ProviderConfig } from "@schemas/providers";
 import { useMemo } from "react";
 

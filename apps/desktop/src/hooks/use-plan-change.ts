@@ -1,6 +1,6 @@
-import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { queryClient } from "@desktop/routes/__root";
+import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
+import { useQueryKey } from "#hooks/use-query-key";
+import { queryClient } from "#routes/__root";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { useCallback } from "react";
 import { toast } from "sonner";

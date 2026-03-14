@@ -1,4 +1,4 @@
-import { log } from "@electron/log";
+import { log } from "#log";
 import { safeStorage } from "electron";
 
 export type EncryptedString = {

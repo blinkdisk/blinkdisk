@@ -1,5 +1,5 @@
 import { ProviderType } from "@config/providers";
-import { trpc } from "@desktop/lib/trpc";
+import { trpc } from "#lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { useCallback } from "react";
 

@@ -1,4 +1,4 @@
-import { focusWindow, sendWindow } from "@electron/window";
+import { focusWindow, sendWindow } from "#window";
 import { app } from "electron";
 import { resolve } from "path";
 

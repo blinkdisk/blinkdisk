@@ -1,4 +1,4 @@
-import { useRestoreList } from "@desktop/hooks/queries/use-restore-list";
+import { useRestoreList } from "#hooks/queries/use-restore-list";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { CircularProgress } from "@ui/circular-progress";

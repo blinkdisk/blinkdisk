@@ -1,8 +1,8 @@
-import { PinBadge } from "@desktop/components/backups/pin-badge";
-import { BackupProgress } from "@desktop/components/backups/progress";
-import { LocalButton } from "@desktop/components/vaults/local-button";
-import { useFolder } from "@desktop/hooks/use-folder";
-import { useRelativeTime } from "@desktop/hooks/use-relative-time";
+import { PinBadge } from "#components/backups/pin-badge";
+import { BackupProgress } from "#components/backups/progress";
+import { LocalButton } from "#components/vaults/local-button";
+import { useFolder } from "#hooks/use-folder";
+import { useRelativeTime } from "#hooks/use-relative-time";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 
-import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
-import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
-import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
-import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
-import { formatBackupDate } from "@desktop/lib/backup";
-import { formatSize } from "@desktop/lib/number";
+import { useStartBackup } from "#hooks/mutations/core/use-start-backup";
+import { useDeleteBackupDialog } from "#hooks/state/use-delete-backup-dialog";
+import { usePinBackupDialog } from "#hooks/state/use-pin-backup-dialog";
+import { useRenameBackupDialog } from "#hooks/state/use-rename-backup-dialog";
+import { formatBackupDate } from "#lib/backup";
+import { formatSize } from "#lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@ui/button";

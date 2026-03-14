@@ -1,13 +1,13 @@
-import { AmazonS3Icon } from "@desktop/components/icons/providers/amazon-s3";
-import { AzureBlobStorageIcon } from "@desktop/components/icons/providers/azure-blob-storage";
-import { BackblazeIcon } from "@desktop/components/icons/providers/backblaze";
-import { FilesystemIcon } from "@desktop/components/icons/providers/filesytem";
-import { GoogleCloudStorageIcon } from "@desktop/components/icons/providers/google-cloud-storage";
-import { NetworkAttachedStorageIcon } from "@desktop/components/icons/providers/network-attached-storage";
-import { RcloneIcon } from "@desktop/components/icons/providers/rclone";
-import { S3CompatibleIcon } from "@desktop/components/icons/providers/s3-compatible";
-import { SftpIcon } from "@desktop/components/icons/providers/sftp";
-import { WebdavIcon } from "@desktop/components/icons/providers/webdav";
+import { AmazonS3Icon } from "#components/icons/providers/amazon-s3";
+import { AzureBlobStorageIcon } from "#components/icons/providers/azure-blob-storage";
+import { BackblazeIcon } from "#components/icons/providers/backblaze";
+import { FilesystemIcon } from "#components/icons/providers/filesytem";
+import { GoogleCloudStorageIcon } from "#components/icons/providers/google-cloud-storage";
+import { NetworkAttachedStorageIcon } from "#components/icons/providers/network-attached-storage";
+import { RcloneIcon } from "#components/icons/providers/rclone";
+import { S3CompatibleIcon } from "#components/icons/providers/s3-compatible";
+import { SftpIcon } from "#components/icons/providers/sftp";
+import { WebdavIcon } from "#components/icons/providers/webdav";
 
 export const providerIcons = {
   CLOUDBLINK: () => null,

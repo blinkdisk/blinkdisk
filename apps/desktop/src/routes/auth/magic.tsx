@@ -1,4 +1,4 @@
-import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
+import { useMagicCodeForm } from "#hooks/forms/use-magic-code-form";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import {

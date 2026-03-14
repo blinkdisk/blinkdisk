@@ -1,4 +1,4 @@
-import { buildExclusionRule, parseExclusionRule } from "@desktop/lib/exclusion";
+import { buildExclusionRule, parseExclusionRule } from "#lib/exclusion";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZExclusionForm, ZExclusionFormType } from "@schemas/policy";
 import { useMemo } from "react";

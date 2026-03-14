@@ -1,8 +1,8 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { showErrorToast } from "@desktop/lib/error";
-import { convertThrottleToCore } from "@desktop/lib/throttle";
-import { vaultApi } from "@desktop/lib/vault";
+import { useQueryKey } from "#hooks/use-query-key";
+import { useVaultId } from "#hooks/use-vault-id";
+import { showErrorToast } from "#lib/error";
+import { convertThrottleToCore } from "#lib/throttle";
+import { vaultApi } from "#lib/vault";
 import { ZVaultThrottleType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

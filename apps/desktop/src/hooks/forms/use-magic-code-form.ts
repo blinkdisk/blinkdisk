@@ -1,4 +1,4 @@
-import { useMagicCode } from "@desktop/hooks/mutations/use-magic-code";
+import { useMagicCode } from "#hooks/mutations/use-magic-code";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZMagicCode } from "@schemas/auth";
 

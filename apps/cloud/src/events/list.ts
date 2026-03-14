@@ -1,5 +1,5 @@
+import { Vault } from "#classes/vault";
 import { ListObjectsCommand } from "@aws-sdk/client-s3";
-import { Vault } from "@cloud/classes/vault";
 import { ZCloudListBlobs } from "@schemas/cloud";
 
 export async function listBlobs(

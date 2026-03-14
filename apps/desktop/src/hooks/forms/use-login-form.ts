@@ -1,4 +1,4 @@
-import { useLogin } from "@desktop/hooks/mutations/use-login";
+import { useLogin } from "#hooks/mutations/use-login";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZLogin } from "@schemas/auth";
 

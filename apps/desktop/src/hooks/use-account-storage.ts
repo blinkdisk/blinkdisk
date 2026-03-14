@@ -1,5 +1,5 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
-import { useAppStorage } from "@desktop/hooks/use-app-storage";
+import { useAccountId } from "#hooks/use-account-id";
+import { useAppStorage } from "#hooks/use-app-storage";
 import { AccountStorageSchema } from "@electron/store";
 
 export function useAccountStorage<K extends keyof AccountStorageSchema>(

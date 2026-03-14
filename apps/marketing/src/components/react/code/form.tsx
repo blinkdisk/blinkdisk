@@ -1,13 +1,13 @@
-import { CodeStatsDropzone } from "@marketing/components/react/code/dropzone";
+import { CodeStatsDropzone } from "#components/react/code/dropzone";
 import type {
   CodeStatsFile,
   CodeStatsRepository,
-} from "@marketing/components/react/code/types";
-import { useClipboard } from "@marketing/hooks/use-clipboard";
+} from "#components/react/code/types";
+import { useClipboard } from "#hooks/use-clipboard";
 import {
   excludedExtensions,
   extensionToLanguage,
-} from "@marketing/utils/extension";
+} from "#utils/extension";
 import { Alert, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";

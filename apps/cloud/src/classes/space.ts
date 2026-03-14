@@ -1,4 +1,4 @@
-import { scheduleSpaceAlarm } from "@cloud/utils/alarm";
+import { scheduleSpaceAlarm } from "#utils/alarm";
 import { database } from "@db";
 import { sendEmail } from "@utils/email";
 import { logsnag } from "@utils/logsnag";

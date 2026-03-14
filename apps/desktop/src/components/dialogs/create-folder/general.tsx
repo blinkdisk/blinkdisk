@@ -1,4 +1,4 @@
-import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
+import { useCreateFolderForm } from "#hooks/forms/use-create-folder-form";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";

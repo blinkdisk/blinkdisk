@@ -1,4 +1,4 @@
-import { VaultAction } from "@desktop/hooks/use-config-validation";
+import { VaultAction } from "#hooks/use-config-validation";
 import { useAppTranslation } from "@hooks/use-app-translation";
 
 interface FormProps {

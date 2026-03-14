@@ -1,6 +1,6 @@
-import VaultIcon from "@desktop/components/icons/vault";
-import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useTaskDialog } from "@desktop/hooks/state/use-task-dialog";
+import VaultIcon from "#components/icons/vault";
+import { useVaultStatus } from "#hooks/queries/use-vault-status";
+import { useTaskDialog } from "#hooks/state/use-task-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 

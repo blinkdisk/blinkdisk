@@ -1,6 +1,6 @@
-import i18n from "@desktop/i18n";
-import { authClient } from "@desktop/lib/auth";
-import { showErrorToast } from "@desktop/lib/error";
+import i18n from "#i18n";
+import { authClient } from "#lib/auth";
+import { showErrorToast } from "#lib/error";
 import { ZLoginType } from "@schemas/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";

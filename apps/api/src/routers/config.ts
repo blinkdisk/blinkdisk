@@ -1,5 +1,5 @@
-import { authedProcedure } from "@api/procedures/authed";
-import { router } from "@api/trpc";
+import { authedProcedure } from "#procedures/authed";
+import { router } from "#trpc";
 import { ZAddConfig } from "@schemas/config";
 import { ZVaultEncryptedConfigType } from "@schemas/shared/vault";
 import { CustomError } from "@utils/error";

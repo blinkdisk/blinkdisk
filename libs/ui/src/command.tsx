@@ -7,8 +7,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@ui/dialog";
-import { InputGroup, InputGroupAddon } from "@ui/input-group";
+} from "#dialog";
+import { InputGroup, InputGroupAddon } from "#input-group";
 import { cn } from "@utils/class";
 import { CheckIcon, SearchIcon } from "lucide-react";
 

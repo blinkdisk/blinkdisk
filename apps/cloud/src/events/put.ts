@@ -1,8 +1,8 @@
+import { Space } from "#classes/space";
+import { Vault } from "#classes/vault";
+import { consumeSpace } from "#utils/space";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { Space } from "@cloud/classes/space";
-import { Vault } from "@cloud/classes/vault";
-import { consumeSpace } from "@cloud/utils/space";
 import { ZCloudPutBlob } from "@schemas/cloud";
 
 export async function putBlob(

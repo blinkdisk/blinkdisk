@@ -1,5 +1,5 @@
-import { log } from "@electron/log";
-import { sendWindow } from "@electron/window";
+import { log } from "#log";
+import { sendWindow } from "#window";
 import { app } from "electron";
 import type { ProgressInfo, UpdateInfo } from "electron-updater";
 import electronUpdater from "electron-updater";

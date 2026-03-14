@@ -1,6 +1,6 @@
-import { PinBadge } from "@desktop/components/backups/pin-badge";
-import { useEditBackup } from "@desktop/hooks/mutations/core/use-edit-backup";
-import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
+import { PinBadge } from "#components/backups/pin-badge";
+import { useEditBackup } from "#hooks/mutations/core/use-edit-backup";
+import { usePinBackupDialog } from "#hooks/state/use-pin-backup-dialog";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";

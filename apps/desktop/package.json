@@ -12,7 +12,10 @@
     "test": "vitest run"
   },
   "imports": {
-    "#*": "./src/*"
+    "#*": [
+      "./src/*.ts",
+      "./src/*.tsx"
+    ]
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.16.4",

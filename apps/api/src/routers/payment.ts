@@ -1,8 +1,8 @@
-import { getPolar } from "@api/lib/polar";
-import { posthog } from "@api/lib/posthog";
-import { getActiveSubscription } from "@api/lib/subscription";
-import { authedProcedure } from "@api/procedures/authed";
-import { router } from "@api/trpc";
+import { getPolar } from "#lib/polar";
+import { posthog } from "#lib/posthog";
+import { getActiveSubscription } from "#lib/subscription";
+import { authedProcedure } from "#procedures/authed";
+import { router } from "#trpc";
 import { plans } from "@config/plans";
 import { ZChangePlan, ZCreateCheckout } from "@schemas/payment";
 import { CustomError } from "@utils/error";

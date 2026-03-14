@@ -1,6 +1,6 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { authClient } from "@desktop/lib/auth";
-import { showErrorToast } from "@desktop/lib/error";
+import { useQueryKey } from "#hooks/use-query-key";
+import { authClient } from "#lib/auth";
+import { showErrorToast } from "#lib/error";
 import { ZUpdateUserType } from "@schemas/settings";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

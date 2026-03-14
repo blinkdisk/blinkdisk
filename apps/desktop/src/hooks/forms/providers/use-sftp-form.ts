@@ -1,7 +1,7 @@
 import {
   useConfigValidation,
   VaultAction,
-} from "@desktop/hooks/use-config-validation";
+} from "#hooks/use-config-validation";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZSftpConfig, ZSftpConfigType } from "@schemas/providers";
 

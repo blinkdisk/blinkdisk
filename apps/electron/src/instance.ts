@@ -1,5 +1,5 @@
-import { onDeeplinkOpen } from "@electron/deeplink";
-import { focusWindow } from "@electron/window";
+import { onDeeplinkOpen } from "#deeplink";
+import { focusWindow } from "#window";
 import { app } from "electron";
 
 const firstInstance = app.requestSingleInstanceLock();

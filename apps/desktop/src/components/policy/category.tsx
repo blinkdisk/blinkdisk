@@ -1,4 +1,4 @@
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "#components/policy/context";
 import { ZPolicyType } from "@schemas/policy";
 import {
   AccordionContent,

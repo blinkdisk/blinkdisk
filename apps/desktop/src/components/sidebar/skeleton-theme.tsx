@@ -1,4 +1,4 @@
-import { useTheme } from "@desktop/hooks/use-theme";
+import { useTheme } from "#hooks/use-theme";
 import { SkeletonTheme } from "@ui/skeleton";
 
 export type SidebarSkeletonThemeProps = {

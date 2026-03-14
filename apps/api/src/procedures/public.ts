@@ -1,3 +1,3 @@
-import { procedure } from "@api/trpc";
+import { procedure } from "#trpc";
 
 export const publicProcedure = procedure;

@@ -1,8 +1,8 @@
 import { defaultVaultOptions } from "@config/vault";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { showErrorToast } from "@desktop/lib/error";
-import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
-import { trpc } from "@desktop/lib/trpc";
+import { useQueryKey } from "#hooks/use-query-key";
+import { showErrorToast } from "#lib/error";
+import { convertPolicyToCore, defaultVaultPolicy } from "#lib/policy";
+import { trpc } from "#lib/trpc";
 import { ProviderConfig } from "@schemas/providers";
 import { ZCreateVaultType } from "@schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

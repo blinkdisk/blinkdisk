@@ -1,5 +1,5 @@
-import { platform } from "@electron/path";
-import { focusWindow } from "@electron/window";
+import { platform } from "#path";
+import { focusWindow } from "#window";
 import { Menu, Tray, app, nativeImage } from "electron";
 import { join } from "path";
 

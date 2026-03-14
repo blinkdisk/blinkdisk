@@ -4,32 +4,26 @@ Sentry.init({
   enabled: process.env.NODE_ENV !== "development",
 });
 
-import type { setVaultCache } from "@electron/cache";
-import type {
-  decryptVaultConfig,
-  encryptVaultConfig,
-} from "@electron/encryption";
-import type { getPasswordCache, setPasswordCache } from "@electron/password";
+import type { setVaultCache } from "#cache";
+import type { decryptVaultConfig, encryptVaultConfig } from "#encryption";
+import type { getPasswordCache, setPasswordCache } from "#password";
 import {
   checkEmpty,
   listRestores,
   restoreDirectory,
   restoreMultiple,
   restoreSingle,
-} from "@electron/restore";
-import type { sshKeyscan } from "@electron/ssh";
-import type {
-  AccountStorageSchema,
-  GlobalStorageSchema,
-} from "@electron/store";
-import type { UpdateStatus } from "@electron/updater";
+} from "#restore";
+import type { sshKeyscan } from "#ssh";
+import type { AccountStorageSchema, GlobalStorageSchema } from "#store";
+import type { UpdateStatus } from "#updater";
 import {
   connectVault,
   createVault,
   getVault,
   getVaultStatus,
-} from "@electron/vault/manage";
-import { validateVaultConfig } from "@electron/vault/validate";
+} from "#vault/manage";
+import { validateVaultConfig } from "#vault/validate";
 import {
   contextBridge,
   ipcRenderer,

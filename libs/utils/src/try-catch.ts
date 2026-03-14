@@ -1,4 +1,4 @@
-import { CoreError, CustomError } from "@utils/error";
+import { CoreError, CustomError } from "#error";
 
 type AnyError = Error | CustomError | CoreError;
 

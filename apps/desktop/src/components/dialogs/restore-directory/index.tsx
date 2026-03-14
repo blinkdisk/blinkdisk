@@ -1,6 +1,6 @@
-import { useRestoreDirectoryForm } from "@desktop/hooks/forms/use-restore-directory-form";
-import { useDirectoryEmpty } from "@desktop/hooks/queries/use-directory-empty";
-import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
+import { useRestoreDirectoryForm } from "#hooks/forms/use-restore-directory-form";
+import { useDirectoryEmpty } from "#hooks/queries/use-directory-empty";
+import { useRestoreDirectoryDialog } from "#hooks/state/use-restore-directory-dialog";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";

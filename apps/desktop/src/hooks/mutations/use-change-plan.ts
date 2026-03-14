@@ -1,6 +1,6 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { showErrorToast } from "@desktop/lib/error";
-import { trpc } from "@desktop/lib/trpc";
+import { useQueryKey } from "#hooks/use-query-key";
+import { showErrorToast } from "#lib/error";
+import { trpc } from "#lib/trpc";
 import { ZChangePlan } from "@schemas/payment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

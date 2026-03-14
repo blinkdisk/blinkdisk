@@ -1,4 +1,4 @@
-import { VaultHome } from "@desktop/components/vaults/home";
+import { VaultHome } from "#components/vaults/home";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/app/loading")({

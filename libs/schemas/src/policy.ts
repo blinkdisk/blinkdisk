@@ -1,5 +1,5 @@
+import { ZFolderEmoji, ZFolderName } from "#folder";
 import { compressionAlgorithms } from "@config/algorithms";
-import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 
 export const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);

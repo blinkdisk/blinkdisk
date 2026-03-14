@@ -1,6 +1,6 @@
-import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyRetentionForm } from "@desktop/hooks/forms/use-policy-retention-form";
+import { SettingsCategory } from "#components/policy/category";
+import { PolicyField } from "#components/policy/field";
+import { usePolicyRetentionForm } from "#hooks/forms/use-policy-retention-form";
 import { useStore } from "@hooks/use-app-form";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";

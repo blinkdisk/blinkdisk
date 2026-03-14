@@ -1,4 +1,4 @@
-import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { useLocalProfile } from "#hooks/use-local-profile";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { LockIcon } from "lucide-react";

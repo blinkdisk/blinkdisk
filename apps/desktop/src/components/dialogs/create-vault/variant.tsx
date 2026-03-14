@@ -1,6 +1,6 @@
 import { FREE_SPACE_AVAILABLE } from "@config/space";
-import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
-import { formatSize } from "@desktop/lib/number";
+import { CloudBlinkIcon } from "#components/icons/cloudblink";
+import { formatSize } from "#lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";

@@ -1,4 +1,4 @@
-import { cleanup, sendCleanupEmails } from "@cloud/utils/cleanup";
+import { cleanup, sendCleanupEmails } from "#utils/cleanup";
 import { database } from "@db/index";
 import * as Sentry from "@sentry/cloudflare";
 import { verifyServiceToken } from "@utils/token";
@@ -64,5 +64,5 @@ export default Sentry.withSentry(
   },
 );
 
-export { Space } from "@cloud/classes/space";
-export { Vault } from "@cloud/classes/vault";
+export { Space } from "#classes/space";
+export { Vault } from "#classes/vault";

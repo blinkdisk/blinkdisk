@@ -1,8 +1,8 @@
-import { configRouter } from "@api/routers/config";
-import { paymentRouter } from "@api/routers/payment";
-import { profileRouter } from "@api/routers/profile";
-import { vaultRouter } from "@api/routers/vault";
-import { router } from "@api/trpc";
+import { configRouter } from "#routers/config";
+import { paymentRouter } from "#routers/payment";
+import { profileRouter } from "#routers/profile";
+import { vaultRouter } from "#routers/vault";
+import { router } from "#trpc";
 
 export const appRouter = router({
   vault: vaultRouter,

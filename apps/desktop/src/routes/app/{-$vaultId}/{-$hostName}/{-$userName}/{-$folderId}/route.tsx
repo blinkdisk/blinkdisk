@@ -1,6 +1,6 @@
-import { DeleteBackupDialog } from "@desktop/components/dialogs/delete-backup";
-import { PinBackupDialog } from "@desktop/components/dialogs/pin-backup";
-import { RenameBackupDialog } from "@desktop/components/dialogs/rename-backup";
+import { DeleteBackupDialog } from "#components/dialogs/delete-backup";
+import { PinBackupDialog } from "#components/dialogs/pin-backup";
+import { RenameBackupDialog } from "#components/dialogs/rename-backup";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

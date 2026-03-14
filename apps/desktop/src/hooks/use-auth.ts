@@ -1,9 +1,9 @@
-import { useAccount } from "@desktop/hooks/queries/use-account";
-import { useAccountList } from "@desktop/hooks/queries/use-account-list";
-import { useAccountId } from "@desktop/hooks/use-account-id";
-import { useAppStorage } from "@desktop/hooks/use-app-storage";
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { authClient } from "@desktop/lib/auth";
+import { useAccount } from "#hooks/queries/use-account";
+import { useAccountList } from "#hooks/queries/use-account-list";
+import { useAccountId } from "#hooks/use-account-id";
+import { useAppStorage } from "#hooks/use-app-storage";
+import { useQueryKey } from "#hooks/use-query-key";
+import { authClient } from "#lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";

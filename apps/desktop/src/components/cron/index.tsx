@@ -5,13 +5,13 @@
 import {
   getCronStringFromValues,
   setValuesFromCronString,
-} from "@desktop/components/cron/converter";
-import { Hours } from "@desktop/components/cron/fields/hours";
-import { Minutes } from "@desktop/components/cron/fields/minutes";
-import { MonthDays } from "@desktop/components/cron/fields/month-days";
-import { Months } from "@desktop/components/cron/fields/months";
-import { Period } from "@desktop/components/cron/fields/period";
-import { WeekDays } from "@desktop/components/cron/fields/week-days";
+} from "#components/cron/converter";
+import { Hours } from "#components/cron/fields/hours";
+import { Minutes } from "#components/cron/fields/minutes";
+import { MonthDays } from "#components/cron/fields/month-days";
+import { Months } from "#components/cron/fields/months";
+import { Period } from "#components/cron/fields/period";
+import { WeekDays } from "#components/cron/fields/week-days";
 import { cn } from "@utils/class";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,7 +1,7 @@
 import { LanguageCode } from "@config/language";
-import { useUpdatePreferences } from "@desktop/hooks/mutations/use-update-preferences";
-import { useTheme } from "@desktop/hooks/use-theme";
-import i18n from "@desktop/i18n";
+import { useUpdatePreferences } from "#hooks/mutations/use-update-preferences";
+import { useTheme } from "#hooks/use-theme";
+import i18n from "#i18n";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZUpdatePreferences } from "@schemas/settings";
 

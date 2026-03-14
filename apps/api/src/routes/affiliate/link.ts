@@ -1,5 +1,5 @@
-import type { HonoContextOptions } from "@api/index";
-import { getPolar } from "@api/lib/polar";
+import type { HonoContextOptions } from "#index";
+import { getPolar } from "#lib/polar";
 import type { Context } from "hono";
 import type { BlankInput } from "hono/types";
 

@@ -1,6 +1,6 @@
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { useTheme } from "@desktop/hooks/use-theme";
-import { formatInt, formatSize } from "@desktop/lib/number";
+import { CoreFolderItem } from "#hooks/queries/core/use-folder-list";
+import { useTheme } from "#hooks/use-theme";
+import { formatInt, formatSize } from "#lib/number";
 import { useAppTranslation } from "@hooks/use-app-translation";
 import { EmojiCard } from "@ui/emoji-card";
 import { Skeleton } from "@ui/skeleton";

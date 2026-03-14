@@ -1,5 +1,5 @@
-import { authedProcedure } from "@api/procedures/authed";
-import { router } from "@api/trpc";
+import { authedProcedure } from "#procedures/authed";
+import { router } from "#trpc";
 import { jsonArrayFrom } from "@db/index";
 
 export const profileRouter = router({

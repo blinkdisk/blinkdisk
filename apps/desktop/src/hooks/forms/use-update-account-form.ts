@@ -1,5 +1,5 @@
-import { useUpdateAccount } from "@desktop/hooks/mutations/use-update-account";
-import { useAccount } from "@desktop/hooks/queries/use-account";
+import { useUpdateAccount } from "#hooks/mutations/use-update-account";
+import { useAccount } from "#hooks/queries/use-account";
 import { useAppForm } from "@hooks/use-app-form";
 import { ZUpdateUser } from "@schemas/settings";
 import { useMemo } from "react";

@@ -1,5 +1,5 @@
-import { HonoContextOptions } from "@api/index";
-import { posthog } from "@api/lib/posthog";
+import { HonoContextOptions } from "#index";
+import { posthog } from "#lib/posthog";
 import { plans } from "@config/plans";
 import { SubscriptionStatus } from "@db/enums";
 import { Order } from "@polar-sh/sdk/models/components/order.js";
