@@ -69,7 +69,7 @@ function RouteComponent() {
                   </div>
                   <div className="flex">
                     {slots.slice(5).map((slot, idx) => (
-                      <InputOTPSlot key={idx} index={idx} {...slot} />
+                      <InputOTPSlot key={idx + 5} index={idx + 5} {...slot} />
                     ))}
                   </div>
                 </div>

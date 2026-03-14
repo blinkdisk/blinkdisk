@@ -92,6 +92,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
                 render={
                   <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
                 }
+                nativeButton={false}
                 variant="outline"
                 size="sm"
               >
