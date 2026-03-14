@@ -45,38 +45,7 @@ const config: KnipConfig = {
       ],
       ignoreBinaries: ["eslint"],
     },
-    "libs/config": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/db": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/emails": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/hooks": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/schemas": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/ui": {
-      entry: commonProject,
-      project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/utils": {
-      entry: commonProject,
+    "libs/*": {
       project: commonProject,
       ignore: commonIgnore,
     },
