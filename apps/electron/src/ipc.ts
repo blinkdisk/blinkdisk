@@ -23,6 +23,7 @@ import {
 import { validateVaultConfig } from "@electron/vault/validate";
 import { setProgressBar, window } from "@electron/window";
 import { app, dialog, ipcMain, shell } from "electron";
+import { stat } from "node:fs";
 import { platform } from "node:os";
 import { basename, dirname, join } from "node:path";
 
@@ -42,7 +43,32 @@ ipcMain.on(
 );
 ipcMain.on("os.platform", (e) => (e.returnValue = platform()));
 
-ipcMain.handle("store.set", (_, key, value) => store.set(key, value));
+const ALLOWED_STORE_KEY_PREFIXES = [
+  "authenticated",
+  "currentAccountId",
+  "preferences",
+  "vaults",
+  "passwords",
+  "accounts",
+];
+
+ipcMain.handle("store.set", (_, key: string, value) => {
+  if (typeof key !== "string") throw new Error("Invalid store key");
+
+  const topLevelKey = key.split(".")[0];
+  if (!topLevelKey || !ALLOWED_STORE_KEY_PREFIXES.includes(topLevelKey))
+    throw new Error(`Store key not allowed: ${key}`);
+
+  if (
+    key === "__proto__" ||
+    key === "constructor" ||
+    key.includes("__proto__") ||
+    key.includes("constructor.prototype")
+  )
+    throw new Error("Invalid store key");
+
+  store.set(key, value);
+});
 ipcMain.handle("store.clear", () => store.clear());
 ipcMain.handle("path.basename", (_, path) => basename(path));
 ipcMain.handle("path.dirname", (_, path) => dirname(path));
@@ -78,8 +104,20 @@ ipcMain.handle("vault.config.decrypt", (_, payload) =>
 );
 ipcMain.handle("vault.password.set", (_, payload) => setPasswordCache(payload));
 ipcMain.handle("vault.password.get", (_, payload) => getPasswordCache(payload));
-ipcMain.handle("shell.open.file", (_, url) => shell.showItemInFolder(url));
-ipcMain.handle("shell.open.folder", (_, url) => shell.openPath(url));
+ipcMain.handle("shell.open.file", (_, filePath: string) => {
+  if (typeof filePath !== "string") throw new Error("Invalid path");
+  shell.showItemInFolder(filePath);
+});
+ipcMain.handle("shell.open.folder", (_, folderPath: string) => {
+  if (typeof folderPath !== "string") throw new Error("Invalid path");
+  return new Promise<string>((resolve, reject) => {
+    stat(folderPath, (err, stats) => {
+      if (err || !stats.isDirectory())
+        return reject(new Error("Path is not a directory"));
+      shell.openPath(folderPath).then(resolve);
+    });
+  });
+});
 ipcMain.handle("shell.open.browser", (_, url) => openBrowser(url));
 ipcMain.handle("fs.folderSize", (_, path) => folderSize(path));
 ipcMain.handle("fs.isDirectory", (_, path) => isDirectory(path));
