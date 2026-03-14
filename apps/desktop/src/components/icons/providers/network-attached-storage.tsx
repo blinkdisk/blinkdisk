@@ -1,4 +1,4 @@
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 export type NetworkAttachedStorageIconProps = {
   className?: string;

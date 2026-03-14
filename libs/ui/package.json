@@ -25,6 +25,9 @@
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
+    "@blinkdisk/utils": "workspace:*",
+    "@blinkdisk/hooks": "workspace:*",
+    "@blinkdisk/config": "workspace:*",
     "@types/node": "^22.13.9",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",

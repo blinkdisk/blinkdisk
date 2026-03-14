@@ -3,7 +3,7 @@ import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { convertThrottleToCore } from "#lib/throttle";
 import { vaultApi } from "#lib/vault";
-import { ZVaultThrottleType } from "@schemas/vault";
+import { ZVaultThrottleType } from "@blinkdisk/schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateThrottle(onSuccess?: () => void) {

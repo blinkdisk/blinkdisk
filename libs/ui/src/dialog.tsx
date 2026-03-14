@@ -2,7 +2,7 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import * as React from "react";
 
 import { Button } from "#button";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { XIcon } from "lucide-react";
 
 function Dialog({

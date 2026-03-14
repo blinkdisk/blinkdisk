@@ -2,8 +2,8 @@ import { Vault } from "#classes/vault";
 import { getFileCache } from "#utils/space";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { ZCloudGetBlob } from "@schemas/cloud";
-import { logsnag } from "@utils/logsnag";
+import { ZCloudGetBlob } from "@blinkdisk/schemas/cloud";
+import { logsnag } from "@blinkdisk/utils/logsnag";
 
 // 1GB Minimum egress limit
 const MINIMUM_EGRESS_LIMIT = 1000 * 1000 * 1000;

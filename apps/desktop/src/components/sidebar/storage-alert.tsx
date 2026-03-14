@@ -1,9 +1,9 @@
 import { useSpace } from "#hooks/queries/use-space";
 import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
-import { SidebarMenuItem } from "@ui/sidebar";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
+import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { useMemo } from "react";
 
 export function SidebarStorageAlert() {

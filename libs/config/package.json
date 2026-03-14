@@ -29,5 +29,7 @@
     "eslint": "^9.22.0",
     "typescript": "5.8.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@blinkdisk/db": "workspace:*"
+  }
 }

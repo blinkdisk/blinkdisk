@@ -4,7 +4,7 @@ import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { vaultApi } from "#lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@utils/error";
+import { CustomError } from "@blinkdisk/utils/error";
 
 export function useEditBackup({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();

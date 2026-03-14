@@ -1,13 +1,13 @@
-import { defaultVaultOptions } from "@config/vault";
 import { useQueryKey } from "#hooks/use-query-key";
 import { showErrorToast } from "#lib/error";
 import { convertPolicyToCore, defaultVaultPolicy } from "#lib/policy";
 import { trpc } from "#lib/trpc";
-import { ProviderConfig } from "@schemas/providers";
-import { ZCreateVaultType } from "@schemas/vault";
+import { defaultVaultOptions } from "@blinkdisk/config/vault";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { generateId } from "@utils/id";
-import { tryCatch } from "@utils/try-catch";
+import { generateId } from "@blinkdisk/utils/id";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 export type CreateVaultResponse = {
   vaultId: string;

@@ -6,10 +6,10 @@ import { FilesSettings } from "#components/policy/files";
 import { RetentionSettings } from "#components/policy/retention";
 import { ScheduleSettings } from "#components/policy/schedule";
 import { useCreateFolder } from "#hooks/mutations/core/use-create-folder";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZCreateFolderFormType } from "@schemas/folder";
-import { Accordion } from "@ui/accordion";
-import { Button } from "@ui/button";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import { Accordion } from "@blinkdisk/ui/accordion";
+import { Button } from "@blinkdisk/ui/button";
 import { useState } from "react";
 
 type CreateFolderSettingsProps = {

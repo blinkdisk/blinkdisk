@@ -2,9 +2,9 @@ import { fetchVault } from "#vault/fetch";
 import { mapConfigFields, mapProviderType } from "#vault/mapping";
 import { startVaultServer } from "#vault/server";
 import { VaultInstance } from "#vault/types";
-import { ProviderType } from "@config/providers";
-import { LATEST_VAULT_VERSION } from "@config/vault";
-import { ProviderConfig } from "@schemas/providers";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 
 export let validationVault: VaultInstance | null = null;
 

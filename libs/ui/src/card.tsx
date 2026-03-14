@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 function Card({
   className,

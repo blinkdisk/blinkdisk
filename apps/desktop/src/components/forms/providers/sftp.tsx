@@ -2,12 +2,12 @@ import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
 import { useSftpForm } from "#hooks/forms/providers/use-sftp-form";
 import { VaultAction } from "#hooks/use-config-validation";
-import { FormDisabledContext, useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZSftpConfigType } from "@schemas/providers";
+import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZSftpConfigType } from "@blinkdisk/schemas/providers";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
 import { TriangleAlertIcon } from "lucide-react";
 import { useContext } from "react";
 

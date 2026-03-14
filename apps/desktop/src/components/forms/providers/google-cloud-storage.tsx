@@ -2,8 +2,8 @@ import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
 import { useGoogleCloudStorageForm } from "#hooks/forms/providers/use-google-cloud-storage-form";
 import { VaultAction } from "#hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZGoogleCloudStorageConfigType } from "@schemas/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZGoogleCloudStorageConfigType } from "@blinkdisk/schemas/providers";
 
 export type GoogleCloudStorageFormProps = {
   action: VaultAction;

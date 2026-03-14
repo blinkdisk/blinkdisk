@@ -2,8 +2,8 @@ import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
 import { useAmazonS3Form } from "#hooks/forms/providers/use-amazon-s3-form";
 import { VaultAction } from "#hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZAmazonS3ConfigType } from "@schemas/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZAmazonS3ConfigType } from "@blinkdisk/schemas/providers";
 
 export type AmazonS3FormProps = {
   action: VaultAction;
@@ -11,11 +11,7 @@ export type AmazonS3FormProps = {
   onSubmit: (config: ZAmazonS3ConfigType) => void;
 };
 
-export function AmazonS3Form({
-  action,
-  config,
-  onSubmit,
-}: AmazonS3FormProps) {
+export function AmazonS3Form({ action, config, onSubmit }: AmazonS3FormProps) {
   const { t } = useAppTranslation("vault.providers.AMAZON_S3.fields");
 
   const form = useAmazonS3Form({

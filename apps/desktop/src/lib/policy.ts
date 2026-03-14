@@ -1,5 +1,5 @@
 import { fromBytes, toBytes } from "#lib/filesize";
-import { ZPolicyType } from "@schemas/policy";
+import { ZPolicyType } from "@blinkdisk/schemas/policy";
 
 export type CorePolicy = {
   name?: string;

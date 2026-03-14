@@ -4,10 +4,10 @@ import { getHostName, getUserName } from "#profile";
 import { fetchVault } from "#vault/fetch";
 import { mapConfigFields, mapProviderType } from "#vault/mapping";
 import { startVaultServer } from "#vault/server";
-import { ProviderType } from "@config/providers";
-import { LATEST_VAULT_VERSION } from "@config/vault";
-import { ProviderConfig } from "@schemas/providers";
-import { ZVaultOptionsType } from "@schemas/shared/vault";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import { VaultInstance } from "./types";
 import { validationVault } from "./validate";
 

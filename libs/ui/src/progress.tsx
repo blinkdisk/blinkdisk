@@ -1,6 +1,6 @@
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 function Progress({
   className,

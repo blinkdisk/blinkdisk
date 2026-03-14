@@ -1,4 +1,4 @@
-import { ConfigLevel } from "@db/enums";
+import { ConfigLevel } from "@blinkdisk/db/enums";
 
 export type ProviderType =
   | "CLOUDBLINK"

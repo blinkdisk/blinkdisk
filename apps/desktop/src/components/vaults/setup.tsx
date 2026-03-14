@@ -1,8 +1,8 @@
 import { useSetupPasswordForm } from "#hooks/forms/use-setup-password-form";
 import { useSetupVault } from "#hooks/mutations/use-setup-vault";
 import { useVault } from "#hooks/queries/use-vault";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ProviderConfig } from "@schemas/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { SettingsIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { providerForms } from "../forms/providers";

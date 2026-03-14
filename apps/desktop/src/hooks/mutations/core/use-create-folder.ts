@@ -6,11 +6,11 @@ import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { hashFolder } from "#lib/folder";
 import { vaultApi } from "#lib/vault";
-import { ZCreateFolderFormType } from "@schemas/folder";
+import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { CustomError } from "@utils/error";
-import { tryCatch } from "@utils/try-catch";
+import { CustomError } from "@blinkdisk/utils/error";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { usePostHog } from "posthog-js/react";
 
 export function useCreateFolder({

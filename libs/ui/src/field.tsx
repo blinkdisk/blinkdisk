@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 import { Label } from "#label";
 import { Separator } from "#separator";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { TriangleAlertIcon } from "lucide-react";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {

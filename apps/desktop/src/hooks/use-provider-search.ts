@@ -1,5 +1,5 @@
-import { providers } from "@config/providers";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { providers } from "@blinkdisk/config/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useMemo, useState } from "react";
 
 export function useProviderSearch() {

@@ -1,7 +1,7 @@
 import i18n from "#i18n";
 import { authClient } from "#lib/auth";
 import { showErrorToast } from "#lib/error";
-import { ZRegisterServerType, ZRegisterType } from "@schemas/auth";
+import { ZRegisterServerType, ZRegisterType } from "@blinkdisk/schemas/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 

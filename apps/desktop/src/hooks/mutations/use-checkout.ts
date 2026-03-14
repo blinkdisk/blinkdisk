@@ -1,7 +1,7 @@
 import { showErrorToast } from "#lib/error";
 import { trpc } from "#lib/trpc";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZCreateCheckoutType } from "@schemas/payment";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZCreateCheckoutType } from "@blinkdisk/schemas/payment";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 

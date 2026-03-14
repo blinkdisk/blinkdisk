@@ -11,12 +11,12 @@ import { useCompletedBackupList } from "#hooks/queries/use-completed-backup-list
 import { useVault } from "#hooks/queries/use-vault";
 import { useFolderSettingsDialog } from "#hooks/state/use-folder-settings-dialog";
 import { useFolder } from "#hooks/use-folder";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@ui/button";
-import { Skeleton } from "@ui/skeleton";
-import { cn } from "@utils/class";
+import { Button } from "@blinkdisk/ui/button";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 import {
   ArrowLeftIcon,
   ClockIcon,

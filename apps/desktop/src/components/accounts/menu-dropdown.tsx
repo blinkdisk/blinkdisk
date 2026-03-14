@@ -3,8 +3,8 @@ import { useBilling } from "#hooks/queries/use-billing";
 import { useAccountSettingsDialog } from "#hooks/state/use-account-settings-dialog";
 import { usePreferencesSettingsDialog } from "#hooks/state/use-preferences-settings-dialog";
 import { useAuth } from "#hooks/use-auth";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { useIsMobile } from "@hooks/use-mobile";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { useIsMobile } from "@blinkdisk/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
+} from "@blinkdisk/ui/dropdown-menu";
 import {
   CogIcon,
   CreditCardIcon,

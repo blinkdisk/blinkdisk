@@ -1,10 +1,10 @@
 import { useDeleteVault } from "#hooks/mutations/use-delete-vault";
 import { useVault } from "#hooks/queries/use-vault";
 import { useDeleteVaultDialog } from "#hooks/state/use-delete-vault-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useNavigate } from "@tanstack/react-router";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,9 +12,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@ui/dialog";
-import { DynamicField } from "@ui/dynamic-field";
-import { Input } from "@ui/input";
+} from "@blinkdisk/ui/dialog";
+import { DynamicField } from "@blinkdisk/ui/dynamic-field";
+import { Input } from "@blinkdisk/ui/input";
 import { InfoIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 

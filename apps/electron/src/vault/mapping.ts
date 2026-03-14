@@ -1,6 +1,6 @@
-import { providers, ProviderType } from "@config/providers";
-import { LATEST_VAULT_VERSION } from "@config/vault";
-import { ProviderConfig } from "@schemas/providers";
+import { providers, ProviderType } from "@blinkdisk/config/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 
 export function mapProviderType(providerType: ProviderType) {
   const provider = providers.find(

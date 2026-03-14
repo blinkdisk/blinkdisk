@@ -1,13 +1,16 @@
 import { FormDisabledContext, useFieldContext } from "#use-app-form";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { SwitchProps, Switch as SwitchRoot } from "@ui/switch";
-import { cn } from "@utils/class";
+import {
+  CheckboxProps,
+  Checkbox as CheckboxRoot,
+} from "@blinkdisk/ui/checkbox";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { cn } from "@blinkdisk/utils/class";
 import React, { useContext } from "react";
 
-const Switch = React.forwardRef<
+const Checkbox = React.forwardRef<
   HTMLButtonElement,
-  SwitchProps & { label: DynamicFieldProps }
->(({ className, disabled, label, ...props }, ref) => {
+  CheckboxProps & { label: DynamicFieldProps }
+>(({ label, className, disabled, ...props }, ref) => {
   const field = useFieldContext<boolean>();
   const disabledContext = useContext(FormDisabledContext);
 
@@ -15,17 +18,17 @@ const Switch = React.forwardRef<
     <DynamicField
       {...label}
       innerClassName={cn(
-        "flex-row justify-between items-center",
+        "flex-row-reverse justify-end items-center gap-3",
         label.innerClassName,
       )}
-      errors={field.state.meta.errors}
+      errors={label.errors || field.state.meta.errors}
       name={field.name}
     >
-      <SwitchRoot
+      <CheckboxRoot
         {...props}
         ref={ref}
         checked={field.state.value}
-        onCheckedChange={(to) => field.setValue(to)}
+        onCheckedChange={(to) => field.setValue(to as boolean)}
         className={className}
         name={field.name}
         id={field.name}
@@ -35,6 +38,6 @@ const Switch = React.forwardRef<
   );
 });
 
-Switch.displayName = "Switch";
+Checkbox.displayName = "Checkbox";
 
-export { Switch };
+export { Checkbox };

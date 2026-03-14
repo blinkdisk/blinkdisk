@@ -25,10 +25,16 @@
       "./src/*/index.jsx"
     ]
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
+    "@blinkdisk/db": "workspace:*",
+    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/utils": "workspace:*",
     "@sentry/cli": "^3.3.0",
     "@types/node": "^22.13.9",
     "dotenv": "^16.4.7",

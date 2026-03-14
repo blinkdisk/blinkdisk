@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
+} from "@blinkdisk/ui/select";
 import { useMemo, useState } from "react";
 
 type PlanType = "essentials" | "advanced" | "premium";

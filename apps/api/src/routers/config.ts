@@ -1,9 +1,9 @@
 import { authedProcedure } from "#procedures/authed";
 import { router } from "#trpc";
-import { ZAddConfig } from "@schemas/config";
-import { ZVaultEncryptedConfigType } from "@schemas/shared/vault";
-import { CustomError } from "@utils/error";
-import { generateId } from "@utils/id";
+import { ZAddConfig } from "@blinkdisk/schemas/config";
+import { ZVaultEncryptedConfigType } from "@blinkdisk/schemas/shared/vault";
+import { CustomError } from "@blinkdisk/utils/error";
+import { generateId } from "@blinkdisk/utils/id";
 
 export const configRouter = router({
   list: authedProcedure.query(async ({ ctx }) => {

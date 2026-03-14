@@ -4,7 +4,7 @@ import {
   ZVaultName,
   ZVaultPassword,
 } from "#shared/vault";
-import { LATEST_VAULT_VERSION } from "@config/vault";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
 import { z } from "zod";
 
 export const ZCreateVault = z.object({

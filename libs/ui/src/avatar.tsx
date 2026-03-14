@@ -1,7 +1,7 @@
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
 import * as React from "react";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 function Avatar({
   className,

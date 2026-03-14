@@ -1,7 +1,7 @@
 import { cleanup, sendCleanupEmails } from "#utils/cleanup";
-import { database } from "@db/index";
+import { database } from "@blinkdisk/db/index";
+import { verifyServiceToken } from "@blinkdisk/utils/token";
 import * as Sentry from "@sentry/cloudflare";
-import { verifyServiceToken } from "@utils/token";
 
 export default Sentry.withSentry(
   (env: CloudflareBindings) => ({

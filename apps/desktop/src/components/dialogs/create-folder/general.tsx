@@ -1,9 +1,9 @@
 import { useCreateFolderForm } from "#hooks/forms/use-create-folder-form";
-import { useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { EmojiCard } from "@ui/emoji-card";
-import { EmojiPicker } from "@ui/emoji-picker";
+import { useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { EmojiCard } from "@blinkdisk/ui/emoji-card";
+import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 
 type CreateFolderGeneralProps = {
   form: ReturnType<typeof useCreateFolderForm>;

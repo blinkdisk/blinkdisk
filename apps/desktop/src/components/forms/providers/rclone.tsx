@@ -2,8 +2,8 @@ import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
 import { useRcloneForm } from "#hooks/forms/providers/use-rclone-form";
 import { VaultAction } from "#hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZRcloneConfigType } from "@schemas/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZRcloneConfigType } from "@blinkdisk/schemas/providers";
 
 export type RcloneFormProps = {
   action: VaultAction;
@@ -11,11 +11,7 @@ export type RcloneFormProps = {
   onSubmit: (config: ZRcloneConfigType) => void;
 };
 
-export function RcloneForm({
-  action,
-  config,
-  onSubmit,
-}: RcloneFormProps) {
+export function RcloneForm({ action, config, onSubmit }: RcloneFormProps) {
   const { t } = useAppTranslation("vault.providers.RCLONE.fields");
 
   const form = useRcloneForm({

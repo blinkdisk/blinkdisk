@@ -1,9 +1,9 @@
 import { PolicyContext } from "#components/policy/context";
 import { useFolderSize } from "#hooks/queries/core/use-folder-size";
 import { formatInt, formatSize } from "#lib/number";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Alert, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
 import {
   AlertTriangleIcon,
   CheckIcon,

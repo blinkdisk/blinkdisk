@@ -1,20 +1,20 @@
 import { posthog } from "#lib/posthog";
 import { authedProcedure } from "#procedures/authed";
 import { router } from "#trpc";
-import { providers } from "@config/providers";
-import { defaultVaultOptions, LATEST_VAULT_VERSION } from "@config/vault";
-import { ZVaultOptionsType } from "@schemas/shared/vault";
+import { providers } from "@blinkdisk/config/providers";
+import { defaultVaultOptions, LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import {
   ZCreateVault,
   ZDeleteVault,
   ZGetVault,
   ZUpdateVault,
-} from "@schemas/vault";
-import { CustomError } from "@utils/error";
-import { generateId, verifyId } from "@utils/id";
-import { logsnag } from "@utils/logsnag";
-import { removeEmptyStrings } from "@utils/object";
-import { generateServiceToken } from "@utils/token";
+} from "@blinkdisk/schemas/vault";
+import { CustomError } from "@blinkdisk/utils/error";
+import { generateId, verifyId } from "@blinkdisk/utils/id";
+import { logsnag } from "@blinkdisk/utils/logsnag";
+import { removeEmptyStrings } from "@blinkdisk/utils/object";
+import { generateServiceToken } from "@blinkdisk/utils/token";
 
 export const vaultRouter = router({
   create: authedProcedure

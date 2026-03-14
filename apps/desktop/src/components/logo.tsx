@@ -1,5 +1,5 @@
 import { useTheme } from "#hooks/use-theme";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import logoDark from "/brand/logo-dark.svg";
 import logoLight from "/brand/logo-light.svg";
 

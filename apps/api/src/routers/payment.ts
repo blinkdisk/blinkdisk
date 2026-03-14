@@ -3,11 +3,11 @@ import { posthog } from "#lib/posthog";
 import { getActiveSubscription } from "#lib/subscription";
 import { authedProcedure } from "#procedures/authed";
 import { router } from "#trpc";
-import { plans } from "@config/plans";
-import { ZChangePlan, ZCreateCheckout } from "@schemas/payment";
-import { CustomError } from "@utils/error";
-import { formatSubscriptionEn } from "@utils/format";
-import { logsnag } from "@utils/logsnag";
+import { plans } from "@blinkdisk/config/plans";
+import { ZChangePlan, ZCreateCheckout } from "@blinkdisk/schemas/payment";
+import { CustomError } from "@blinkdisk/utils/error";
+import { formatSubscriptionEn } from "@blinkdisk/utils/format";
+import { logsnag } from "@blinkdisk/utils/logsnag";
 
 export const paymentRouter = router({
   checkout: authedProcedure

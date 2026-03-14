@@ -1,5 +1,5 @@
 import { fromBits, toBits } from "#lib/bandwith";
-import { ZVaultThrottleType } from "@schemas/vault";
+import { ZVaultThrottleType } from "@blinkdisk/schemas/vault";
 
 export type CoreThrottle = {
   readsPerSecond?: number;

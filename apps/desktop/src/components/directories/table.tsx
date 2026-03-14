@@ -12,7 +12,7 @@ import { useDirectoryId } from "#hooks/use-directory-id";
 import { useFolder } from "#hooks/use-folder";
 import { useTheme } from "#hooks/use-theme";
 import { formatSize } from "#lib/number";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -26,12 +26,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Button } from "@ui/button";
-import { Checkbox } from "@ui/checkbox";
-import { Input } from "@ui/input";
-import { Skeleton } from "@ui/skeleton";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/table";
-import { cn } from "@utils/class";
+import { Button } from "@blinkdisk/ui/button";
+import { Checkbox } from "@blinkdisk/ui/checkbox";
+import { Input } from "@blinkdisk/ui/input";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@blinkdisk/ui/table";
+import { cn } from "@blinkdisk/utils/class";
 import {
   ArrowDownIcon,
   ArrowUpIcon,

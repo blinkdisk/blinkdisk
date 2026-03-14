@@ -19,6 +19,9 @@
       "./src/*/index.jsx"
     ]
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
@@ -28,6 +31,8 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
+    "@blinkdisk/emails": "workspace:*",
+    "@blinkdisk/schemas": "workspace:*",
     "@plunk/node": "^3.0.3",
     "@react-email/render": "^2.0.1",
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",

@@ -12,7 +12,7 @@ import { MonthDays } from "#components/cron/fields/month-days";
 import { Months } from "#components/cron/fields/months";
 import { Period } from "#components/cron/fields/period";
 import { WeekDays } from "#components/cron/fields/week-days";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CronProps, Locale, PeriodType } from "./types";

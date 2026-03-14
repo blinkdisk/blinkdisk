@@ -1,12 +1,12 @@
-import { ProviderType } from "@config/providers";
 import {
   CreateVaultResponse,
   useCreateVault,
 } from "#hooks/mutations/use-create-vault";
-import { useAppForm } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ProviderConfig } from "@schemas/providers";
-import { ZCreateVaultDetails } from "@schemas/vault";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { ZCreateVaultDetails } from "@blinkdisk/schemas/vault";
 
 export function useCreateVaultForm({
   providerType,

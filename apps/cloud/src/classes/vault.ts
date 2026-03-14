@@ -11,9 +11,9 @@ import {
   ListObjectsCommandOutput,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { ZCloudBase } from "@schemas/cloud";
-import { getVaultId } from "@utils/token";
-import { tryCatch } from "@utils/try-catch";
+import { ZCloudBase } from "@blinkdisk/schemas/cloud";
+import { getVaultId } from "@blinkdisk/utils/token";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { DurableObject } from "cloudflare:workers";
 
 export class Vault extends DurableObject<Cloudflare.Env> {

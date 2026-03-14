@@ -1,13 +1,13 @@
 import { useRegisterForm } from "#hooks/forms/use-register-form";
 import { useAuth } from "#hooks/use-auth";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   createFileRoute,
   Link,
   useCanGoBack,
   useRouter,
 } from "@tanstack/react-router";
-import { Button } from "@ui/button";
+import { Button } from "@blinkdisk/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Trans } from "react-i18next";
 import { z } from "zod";

@@ -1,16 +1,16 @@
 import { useVaultProfiles } from "#hooks/queries/core/use-vault-profiles";
 import { useLocalProfile } from "#hooks/use-local-profile";
 import { useProfile } from "#hooks/use-profile";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Badge } from "@ui/badge";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Badge } from "@blinkdisk/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
-import { cn } from "@utils/class";
+} from "@blinkdisk/ui/dropdown-menu";
+import { cn } from "@blinkdisk/utils/class";
 import { ChevronDownIcon, UserIcon } from "lucide-react";
 import { useMemo } from "react";
 

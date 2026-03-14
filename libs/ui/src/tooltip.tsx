@@ -1,6 +1,6 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 function TooltipProvider({
   delay = 0,

@@ -1,25 +1,25 @@
-import { compressionAlgorithms } from "@config/algorithms";
 import { SettingsCategory } from "#components/policy/category";
 import { PolicyField } from "#components/policy/field";
 import { usePolicyCompressionForm } from "#hooks/forms/use-policy-compression-form";
+import { compressionAlgorithms } from "@blinkdisk/config/algorithms";
 import {
   FormDisabledContext,
   useFieldContext,
   useStore,
-} from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { DynamicField } from "@ui/dynamic-field";
-import { Input } from "@ui/input";
+} from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { DynamicField } from "@blinkdisk/ui/dynamic-field";
+import { Input } from "@blinkdisk/ui/input";
 import {
   SelectContent,
   SelectItem,
   Select as SelectRoot,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/tabs";
-import { cn } from "@utils/class";
+} from "@blinkdisk/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
+import { cn } from "@blinkdisk/utils/class";
 import {
   GaugeIcon,
   Minimize2Icon,

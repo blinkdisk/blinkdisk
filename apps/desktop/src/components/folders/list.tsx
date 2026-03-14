@@ -7,9 +7,9 @@ import { CoreFolderItem } from "#hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "#hooks/state/use-delete-folder-dialog";
 import { useFolderSettingsDialog } from "#hooks/state/use-folder-settings-dialog";
 import { useRelativeTime } from "#hooks/use-relative-time";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@ui/button";
+import { Button } from "@blinkdisk/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
-import { Skeleton } from "@ui/skeleton";
+} from "@blinkdisk/ui/dropdown-menu";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import {
   CloudUploadIcon,
   FolderSearchIcon,

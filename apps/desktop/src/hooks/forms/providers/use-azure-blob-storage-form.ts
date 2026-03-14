@@ -1,12 +1,9 @@
-import {
-  useConfigValidation,
-  VaultAction,
-} from "#hooks/use-config-validation";
-import { useAppForm } from "@hooks/use-app-form";
+import { useConfigValidation, VaultAction } from "#hooks/use-config-validation";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZAzureBlobStorageConfig,
   ZAzureBlobStorageConfigType,
-} from "@schemas/providers";
+} from "@blinkdisk/schemas/providers";
 
 export function useAzureBlobStorageForm({
   action,
@@ -17,10 +14,7 @@ export function useAzureBlobStorageForm({
   config?: ZAzureBlobStorageConfigType;
   onSubmit: (value: ZAzureBlobStorageConfigType) => void;
 }) {
-  const { onSubmitAsync } = useConfigValidation(
-    "AZURE_BLOB_STORAGE",
-    action,
-  );
+  const { onSubmitAsync } = useConfigValidation("AZURE_BLOB_STORAGE", action);
 
   return useAppForm({
     defaultValues: {

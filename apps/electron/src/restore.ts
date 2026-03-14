@@ -3,7 +3,7 @@ import { fetchVault } from "#vault/fetch";
 import { getVault } from "#vault/manage";
 import { VaultInstance } from "#vault/types";
 import { window } from "#window";
-import { ZRestoreDirectoryType } from "@schemas/directory";
+import { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
 import { app, dialog } from "electron";
 import { chmod, readdir, symlink } from "fs/promises";
 import pLimit from "p-limit";

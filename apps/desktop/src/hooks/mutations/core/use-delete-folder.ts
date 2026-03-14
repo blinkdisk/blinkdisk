@@ -3,8 +3,8 @@ import { useQueryKey } from "#hooks/use-query-key";
 import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { vaultApi } from "#lib/vault";
+import { CustomError } from "@blinkdisk/utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@utils/error";
 
 export function useDeleteFolder({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();

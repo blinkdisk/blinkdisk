@@ -1,13 +1,13 @@
-import { Button } from "@ui/button";
-import { Input } from "@ui/input";
+import { Button } from "@blinkdisk/ui/button";
+import { Input } from "@blinkdisk/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+} from "@blinkdisk/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 

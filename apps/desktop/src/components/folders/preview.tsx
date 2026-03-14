@@ -1,10 +1,10 @@
 import { CoreFolderItem } from "#hooks/queries/core/use-folder-list";
 import { useTheme } from "#hooks/use-theme";
 import { formatInt, formatSize } from "#lib/number";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { EmojiCard } from "@ui/emoji-card";
-import { Skeleton } from "@ui/skeleton";
-import { cn } from "@utils/class";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { EmojiCard } from "@blinkdisk/ui/emoji-card";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 
 type FolderPreviewProps = {
   folder?: CoreFolderItem;

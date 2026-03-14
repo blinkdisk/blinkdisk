@@ -2,16 +2,16 @@ import { CreateFolderGeneral } from "#components/dialogs/create-folder/general";
 import { CreateFolderSettings } from "#components/dialogs/create-folder/settings";
 import { useCreateFolderForm } from "#hooks/forms/use-create-folder-form";
 import { useCreateFolderDialog } from "#hooks/state/use-create-folder-dialog";
-import { useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
+import { useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@ui/dialog";
-import { cn } from "@utils/class";
+} from "@blinkdisk/ui/dialog";
+import { cn } from "@blinkdisk/utils/class";
 import { ArrowLeftIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 

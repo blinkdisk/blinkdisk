@@ -1,4 +1,4 @@
-import type { Plan } from "@config/plans";
+import type { Plan } from "@blinkdisk/config/plans";
 import { useMemo } from "react";
 
 export type BillingPeriod = "YEARLY" | "MONTHLY";

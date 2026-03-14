@@ -1,10 +1,10 @@
 import { ConfigValidationError } from "#components/errors/config-validation";
 import { VaultExistsError } from "#components/errors/vault-exists";
 import { VaultAction } from "#hooks/use-config-validation";
-import { useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { AnyFormApi } from "@tanstack/react-form";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { InfoIcon } from "lucide-react";
 
 type CreateVaultAlertsProps = {

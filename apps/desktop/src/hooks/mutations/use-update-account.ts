@@ -1,7 +1,7 @@
 import { useQueryKey } from "#hooks/use-query-key";
 import { authClient } from "#lib/auth";
 import { showErrorToast } from "#lib/error";
-import { ZUpdateUserType } from "@schemas/settings";
+import { ZUpdateUserType } from "@blinkdisk/schemas/settings";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateAccount(onSuccess: () => void) {

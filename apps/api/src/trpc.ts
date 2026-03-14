@@ -2,7 +2,7 @@ import { Context } from "#context";
 import * as Sentry from "@sentry/cloudflare";
 import { initTRPC } from "@trpc/server";
 import { TRPC_ERROR_CODES_BY_KEY } from "@trpc/server/rpc";
-import { CustomError } from "@utils/error";
+import { CustomError } from "@blinkdisk/utils/error";
 import { ZodError } from "zod";
 
 const t = initTRPC.context<Context>().create({

@@ -1,7 +1,7 @@
 import { CreateVaultDialog } from "#components/dialogs/create-vault";
 import { SettingsDialogs } from "#components/dialogs/settings";
 import { Sidebar } from "#components/sidebar";
-import { SidebarInset } from "@ui/sidebar";
+import { SidebarInset } from "@blinkdisk/ui/sidebar";
 import { ReactNode } from "react";
 
 export type LayoutProps = {

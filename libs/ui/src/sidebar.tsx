@@ -10,7 +10,7 @@ import { Input } from "#input";
 import { Separator } from "#separator";
 import { Skeleton } from "#skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "#tooltip";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { PanelLeftIcon } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";

@@ -1,6 +1,6 @@
 import { FormDisabledContext, useFieldContext } from "#use-app-form";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { InputOTP, InputOTPProps } from "@ui/input-otp";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { InputOTP, InputOTPProps } from "@blinkdisk/ui/input-otp";
 import React, { useContext } from "react";
 
 const Code = React.forwardRef<

@@ -1,7 +1,7 @@
 import { useRestoreList } from "#hooks/queries/use-restore-list";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { CircularProgress } from "@ui/circular-progress";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { CircularProgress } from "@blinkdisk/ui/circular-progress";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon } from "lucide-react";
 

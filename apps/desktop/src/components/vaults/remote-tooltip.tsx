@@ -1,6 +1,6 @@
 import { useLocalProfile } from "#hooks/use-local-profile";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
 import { LockIcon } from "lucide-react";
 
 type RemoteTooltipProps = {

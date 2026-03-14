@@ -5,14 +5,15 @@ import { useStorageListener } from "#hooks/use-app-storage";
 import { useDeeplinkListener } from "#hooks/use-deeplink-listener";
 import { useShortcutListener } from "#hooks/use-shortcut-listener";
 import { useTheme, useThemeListener } from "#hooks/use-theme";
-import "@desktop/i18n";
+import { SidebarProvider } from "@blinkdisk/ui/sidebar";
+import { SkeletonTheme } from "@blinkdisk/ui/skeleton";
+import { Toaster } from "@blinkdisk/ui/toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { SidebarProvider } from "@ui/sidebar";
-import { SkeletonTheme } from "@ui/skeleton";
-import { Toaster } from "@ui/toast";
 import { CaptureResult } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
+
+import "#i18n";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export const queryClient = new QueryClient();

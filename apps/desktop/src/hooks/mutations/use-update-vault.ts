@@ -3,7 +3,7 @@ import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { trpc } from "#lib/trpc";
 import { vaultApi } from "#lib/vault";
-import { ZUpdateVaultFormType } from "@schemas/vault";
+import { ZUpdateVaultFormType } from "@blinkdisk/schemas/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateVault(onSuccess: () => void) {

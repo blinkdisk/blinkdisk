@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "#dialog";
 import { InputGroup, InputGroupAddon } from "#input-group";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { CheckIcon, SearchIcon } from "lucide-react";
 
 function Command({

@@ -1,11 +1,11 @@
 import { PolicyContext } from "#components/policy/context";
 import { pickDefinedFields } from "#lib/policy";
-import { useAppForm } from "@hooks/use-app-form";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZPolicyType,
   ZSchedulePolicy,
   ZSchedulePolicyType,
-} from "@schemas/policy";
+} from "@blinkdisk/schemas/policy";
 import { useContext } from "react";
 
 export function usePolicyScheduleForm() {

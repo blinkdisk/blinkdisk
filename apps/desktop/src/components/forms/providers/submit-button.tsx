@@ -1,5 +1,5 @@
 import { VaultAction } from "#hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 
 interface FormProps {
   AppForm: React.ComponentType<{ children?: React.ReactNode }>;

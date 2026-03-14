@@ -1,4 +1,4 @@
-import { Toaster } from "@ui/toast";
+import { Toaster } from "@blinkdisk/ui/toast";
 import { useEffect, useState } from "react";
 
 export default function ToasterWrapper() {

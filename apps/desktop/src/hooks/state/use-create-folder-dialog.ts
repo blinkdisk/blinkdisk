@@ -1,4 +1,4 @@
-import { ZCreateFolderFormType } from "@schemas/folder";
+import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 

@@ -1,6 +1,6 @@
 import { useAccountId } from "#hooks/use-account-id";
 import { useAppStorage } from "#hooks/use-app-storage";
-import { AccountStorageSchema } from "@electron/store";
+import { AccountStorageSchema } from "@blinkdisk/electron/store";
 
 export function useAccountStorage<K extends keyof AccountStorageSchema>(
   key: K,

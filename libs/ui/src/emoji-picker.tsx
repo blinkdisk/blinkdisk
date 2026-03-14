@@ -1,7 +1,7 @@
 import { Input } from "#input";
 import { Loader } from "#loader";
 import { Popover, PopoverContent, PopoverTrigger } from "#popover";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   EmojiPickerListCategoryHeaderProps,
   EmojiPickerListEmojiProps,

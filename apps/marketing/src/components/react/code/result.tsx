@@ -2,10 +2,10 @@ import type {
   CodeStatsFile,
   CodeStatsRepository,
 } from "#components/react/code/types";
-import { useIsMobile } from "@hooks/use-mobile";
-import { Button } from "@ui/button";
-import { Switch } from "@ui/switch";
-import { cn } from "@utils/class";
+import { useIsMobile } from "@blinkdisk/hooks/use-mobile";
+import { Button } from "@blinkdisk/ui/button";
+import { Switch } from "@blinkdisk/ui/switch";
+import { cn } from "@blinkdisk/utils/class";
 import render from "dom-to-image";
 import {
   AlignLeftIcon,

@@ -3,10 +3,10 @@ import { useQueryKey } from "#hooks/use-query-key";
 import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { vaultApi } from "#lib/vault";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@utils/error";
-import { tryCatch } from "@utils/try-catch";
+import { CustomError } from "@blinkdisk/utils/error";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { toast } from "sonner";
 
 export function useStopMount() {

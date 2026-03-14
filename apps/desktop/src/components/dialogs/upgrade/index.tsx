@@ -1,4 +1,4 @@
-import { BillingPeriod, Plan as PlanType, plans } from "@config/plans";
+import { BillingPeriod, Plan as PlanType, plans } from "@blinkdisk/config/plans";
 import { PendingCheckoutDialog } from "#components/dialogs/pending-checkout";
 import {
   PlanChangeAction,
@@ -9,17 +9,17 @@ import { useOpenBillingPortal } from "#hooks/mutations/use-open-billing-portal";
 import { useSpace } from "#hooks/queries/use-space";
 import { useSubscription } from "#hooks/queries/use-subscription";
 import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { usePlanPrices } from "@hooks/use-plan-prices";
-import { Badge } from "@ui/badge";
-import { Button } from "@ui/button";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { usePlanPrices } from "@blinkdisk/hooks/use-plan-prices";
+import { Badge } from "@blinkdisk/ui/badge";
+import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@ui/dialog";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+} from "@blinkdisk/ui/dialog";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { ArrowLeftIcon, InfoIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";

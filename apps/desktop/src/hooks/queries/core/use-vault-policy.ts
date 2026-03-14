@@ -10,7 +10,7 @@ import {
 } from "#lib/policy";
 import { vaultApi } from "#lib/vault";
 import { useQuery } from "@tanstack/react-query";
-import { tryCatch } from "@utils/try-catch";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 export function useVaultPolicy() {
   const { profileFilter } = useProfile();

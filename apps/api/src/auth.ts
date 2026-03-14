@@ -1,11 +1,11 @@
 import { getPostHog, posthog } from "#lib/posthog";
-import { FREE_SPACE_AVAILABLE } from "@config/space";
-import { DB, dialect } from "@db";
-import { ZLogin, ZRegisterServer } from "@schemas/auth";
-import { ZUpdateUserServer } from "@schemas/settings";
-import { sendEmail } from "@utils/email";
-import { generateCode, generateId, Prefix } from "@utils/id";
-import { logsnag } from "@utils/logsnag";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import { DB, dialect } from "@blinkdisk/db/index";
+import { ZLogin, ZRegisterServer } from "@blinkdisk/schemas/auth";
+import { ZUpdateUserServer } from "@blinkdisk/schemas/settings";
+import { sendEmail } from "@blinkdisk/utils/email";
+import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";
+import { logsnag } from "@blinkdisk/utils/logsnag";
 import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink, multiSession } from "better-auth/plugins";

@@ -1,5 +1,5 @@
 import { FormDisabledContext, useFormContext } from "#use-app-form";
-import { Button } from "@ui/button";
+import { Button } from "@blinkdisk/ui/button";
 import React, { useContext } from "react";
 
 const Submit = React.forwardRef<

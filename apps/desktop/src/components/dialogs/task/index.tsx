@@ -5,9 +5,9 @@ import {
   useTaskLogs,
 } from "#hooks/queries/core/use-task-logs";
 import { useTaskDialog } from "#hooks/state/use-task-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Badge } from "@ui/badge";
-import { Button } from "@ui/button";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Badge } from "@blinkdisk/ui/badge";
+import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@ui/dialog";
+} from "@blinkdisk/ui/dialog";
 import { LoaderCircleIcon } from "lucide-react";
 import { memo } from "react";
 

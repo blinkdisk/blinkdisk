@@ -6,7 +6,7 @@ import { showErrorToast } from "#lib/error";
 import { vaultApi } from "#lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
-import { CustomError } from "@utils/error";
+import { CustomError } from "@blinkdisk/utils/error";
 
 export function useStartMount() {
   const queryClient = useQueryClient();

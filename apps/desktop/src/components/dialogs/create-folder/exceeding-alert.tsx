@@ -1,6 +1,6 @@
 import { useUpgradeDialog } from "#hooks/state/use-upgrade-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@ui/dialog";
+} from "@blinkdisk/ui/dialog";
 import { CircleFadingArrowUpIcon, PlusIcon } from "lucide-react";
 
 type ExceedingAlertProps = {

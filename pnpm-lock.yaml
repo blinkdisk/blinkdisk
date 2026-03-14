@@ -75,6 +75,12 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
+      '@blinkdisk/config':
+        specifier: workspace:*
+        version: link:../../libs/config
+      '@blinkdisk/db':
+        specifier: workspace:*
+        version: link:../../libs/db
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../../libs/eslint
@@ -84,6 +90,9 @@ importers:
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../../libs/typescript
+      '@blinkdisk/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
       '@sentry/cli':
         specifier: ^3.3.0
         version: 3.3.0
@@ -111,6 +120,18 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.886.0
         version: 3.886.0
+      '@blinkdisk/config':
+        specifier: workspace:*
+        version: link:../../libs/config
+      '@blinkdisk/db':
+        specifier: workspace:*
+        version: link:../../libs/db
+      '@blinkdisk/schemas':
+        specifier: workspace:*
+        version: link:../../libs/schemas
+      '@blinkdisk/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
       '@sentry/cloudflare':
         specifier: ^10.42.0
         version: 10.42.0
@@ -136,6 +157,30 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@blinkdisk/config':
+        specifier: workspace:*
+        version: link:../../libs/config
+      '@blinkdisk/electron':
+        specifier: workspace:*
+        version: link:../electron
+      '@blinkdisk/forms':
+        specifier: workspace:*
+        version: link:../../libs/forms
+      '@blinkdisk/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@blinkdisk/schemas':
+        specifier: workspace:*
+        version: link:../../libs/schemas
+      '@blinkdisk/styles':
+        specifier: workspace:*
+        version: link:../../libs/styles
+      '@blinkdisk/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@blinkdisk/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
       '@lottiefiles/dotlottie-react':
         specifier: ^0.16.4
         version: 0.16.4(react@19.0.0)
@@ -242,24 +287,15 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
-      '@blinkdisk/electron':
+      '@blinkdisk/api':
         specifier: workspace:*
-        version: link:../electron
+        version: link:../api
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../../libs/eslint
-      '@blinkdisk/schemas':
-        specifier: workspace:*
-        version: link:../../libs/schemas
-      '@blinkdisk/styles':
-        specifier: workspace:*
-        version: link:../../libs/styles
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../../libs/typescript
-      '@blinkdisk/ui':
-        specifier: workspace:*
-        version: link:../../libs/ui
       '@sentry/vite-plugin':
         specifier: ^5.1.1
         version: 5.1.1(rollup@4.52.4)
@@ -311,6 +347,18 @@ importers:
 
   apps/electron:
     dependencies:
+      '@blinkdisk/config':
+        specifier: workspace:*
+        version: link:../../libs/config
+      '@blinkdisk/db':
+        specifier: workspace:*
+        version: link:../../libs/db
+      '@blinkdisk/schemas':
+        specifier: workspace:*
+        version: link:../../libs/schemas
+      '@blinkdisk/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
       '@sentry/electron':
         specifier: ^7.9.0
         version: 7.9.0
@@ -519,6 +567,10 @@ importers:
         version: 4.62.0
 
   libs/config:
+    dependencies:
+      '@blinkdisk/db':
+        specifier: workspace:*
+        version: link:../db
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -557,9 +609,6 @@ importers:
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../typescript
-      '@blinkdisk/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@types/node':
         specifier: ^22.13.9
         version: 22.13.10
@@ -640,11 +689,51 @@ importers:
         specifier: ^8.26.0
         version: 8.26.1(eslint@9.22.0)(typescript@5.8.2)
 
-  libs/hooks:
+  libs/forms:
     dependencies:
+      '@blinkdisk/schemas':
+        specifier: workspace:*
+        version: link:../schemas
       '@blinkdisk/ui':
         specifier: workspace:*
         version: link:../ui
+      '@blinkdisk/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@tanstack/react-form':
+        specifier: ^1.27.1
+        version: 1.27.1(react-dom@19.0.0)(react@19.0.0)
+      lucide-react:
+        specifier: ^0.483.0
+        version: 0.483.0(react@19.0.0)
+    devDependencies:
+      '@blinkdisk/eslint':
+        specifier: workspace:*
+        version: link:../eslint
+      '@blinkdisk/typescript':
+        specifier: workspace:*
+        version: link:../typescript
+      '@types/node':
+        specifier: ^22.13.9
+        version: 22.13.10
+      '@types/react':
+        specifier: 19.0.10
+        version: 19.0.10
+      '@types/react-dom':
+        specifier: 19.0.4
+        version: 19.0.4(@types/react@19.0.10)
+      eslint:
+        specifier: ^9.22.0
+        version: 9.22.0
+      typescript:
+        specifier: 5.8.2
+        version: 5.8.2
+
+  libs/hooks:
+    dependencies:
+      '@blinkdisk/config':
+        specifier: workspace:*
+        version: link:../config
       '@tanstack/react-form':
         specifier: ^1.27.1
         version: 1.27.1(react-dom@19.0.0)(react@19.0.0)
@@ -752,12 +841,21 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0
     devDependencies:
+      '@blinkdisk/config':
+        specifier: workspace:*
+        version: link:../config
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../eslint
+      '@blinkdisk/hooks':
+        specifier: workspace:*
+        version: link:../hooks
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../typescript
+      '@blinkdisk/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/node':
         specifier: ^22.13.9
         version: 22.13.10
@@ -776,6 +874,12 @@ importers:
 
   libs/utils:
     dependencies:
+      '@blinkdisk/emails':
+        specifier: workspace:*
+        version: link:../emails
+      '@blinkdisk/schemas':
+        specifier: workspace:*
+        version: link:../schemas
       '@plunk/node':
         specifier: ^3.0.3
         version: 3.0.3

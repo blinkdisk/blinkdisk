@@ -28,7 +28,6 @@
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
-    "@blinkdisk/utils": "workspace:*",
     "@types/node": "^22.13.9",
     "@types/pg": "^8.11.11",
     "eslint": "^9.22.0",

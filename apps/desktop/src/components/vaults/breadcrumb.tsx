@@ -7,8 +7,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@ui/breadcrumb";
-import { Skeleton } from "@ui/skeleton";
+} from "@blinkdisk/ui/breadcrumb";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Fragment } from "react/jsx-runtime";
 
 export type VaultBreadcrumbProps = {

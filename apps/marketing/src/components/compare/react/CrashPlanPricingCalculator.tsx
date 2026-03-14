@@ -1,6 +1,6 @@
-import { Button } from "@ui/button";
-import { Input } from "@ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+import { Button } from "@blinkdisk/ui/button";
+import { Input } from "@blinkdisk/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
 

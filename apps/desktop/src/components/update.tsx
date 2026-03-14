@@ -1,8 +1,8 @@
-import type { UpdateStatus } from "@electron/updater";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
-import { Progress } from "@ui/progress";
+import type { UpdateStatus } from "@blinkdisk/electron/updater";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
+import { Progress } from "@blinkdisk/ui/progress";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 

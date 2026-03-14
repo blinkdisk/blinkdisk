@@ -3,7 +3,7 @@ import { Vault } from "#classes/vault";
 import { consumeSpace } from "#utils/space";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { ZCloudPutBlob } from "@schemas/cloud";
+import { ZCloudPutBlob } from "@blinkdisk/schemas/cloud";
 
 export async function putBlob(
   durableObject: InstanceType<typeof Vault>,

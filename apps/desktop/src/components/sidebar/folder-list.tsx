@@ -1,15 +1,15 @@
 import { FolderPreview } from "#components/folders/preview";
 import { CoreFolderItem } from "#hooks/queries/core/use-folder-list";
 import { useVaultStatus } from "#hooks/queries/use-vault-status";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Link, useParams } from "@tanstack/react-router";
-import { CircularProgress } from "@ui/circular-progress";
-import { Loader } from "@ui/loader";
+import { CircularProgress } from "@blinkdisk/ui/circular-progress";
+import { Loader } from "@blinkdisk/ui/loader";
 import {
   SidebarGroupLabel,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@ui/sidebar";
+} from "@blinkdisk/ui/sidebar";
 
 type SidebarFolderListProps = {
   folders: CoreFolderItem[] | undefined | null;

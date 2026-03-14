@@ -1,4 +1,4 @@
-import { CoreError } from "@utils/error";
+import { CoreError } from "@blinkdisk/utils/error";
 import xior from "xior";
 
 const client = xior.create({

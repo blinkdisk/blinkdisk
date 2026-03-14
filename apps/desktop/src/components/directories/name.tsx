@@ -1,10 +1,10 @@
 import { Item } from "#components/directories/table";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { CellContext } from "@tanstack/react-table";
-import { Loader } from "@ui/loader";
-import { Skeleton } from "@ui/skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
-import { cn } from "@utils/class";
+import { Loader } from "@blinkdisk/ui/loader";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
+import { cn } from "@blinkdisk/utils/class";
 import { FileSymlinkIcon, FolderIcon } from "lucide-react";
 import { useMemo } from "react";
 import seedrandom from "seedrandom";

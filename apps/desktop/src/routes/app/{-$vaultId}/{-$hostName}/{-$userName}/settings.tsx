@@ -8,11 +8,11 @@ import { VaultGeneralSettings } from "#components/vaults/settings/general";
 import { VaultThrottleSettings } from "#components/vaults/settings/throttle";
 import { VaultTitlebar } from "#components/vaults/titlebar";
 import { useVault } from "#hooks/queries/use-vault";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Accordion } from "@ui/accordion";
-import { Button } from "@ui/button";
-import { Skeleton } from "@ui/skeleton";
+import { Accordion } from "@blinkdisk/ui/accordion";
+import { Button } from "@blinkdisk/ui/button";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { HomeIcon } from "lucide-react";
 import { useState } from "react";
 

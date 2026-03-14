@@ -8,7 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
+} from "@blinkdisk/ui/dropdown-menu";
 
 import { useStartBackup } from "#hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "#hooks/state/use-delete-backup-dialog";
@@ -16,11 +16,11 @@ import { usePinBackupDialog } from "#hooks/state/use-pin-backup-dialog";
 import { useRenameBackupDialog } from "#hooks/state/use-rename-backup-dialog";
 import { formatBackupDate } from "#lib/backup";
 import { formatSize } from "#lib/number";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@ui/button";
-import { Skeleton } from "@ui/skeleton";
-import { cn } from "@utils/class";
+import { Button } from "@blinkdisk/ui/button";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 import {
   CalendarClockIcon,
   CalendarIcon,

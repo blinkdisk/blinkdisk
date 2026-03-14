@@ -1,7 +1,7 @@
 import { SettingsCategory } from "#components/policy/category";
 import { useUpdateThrottleForm } from "#hooks/forms/use-update-throttle-form";
-import { FormDisabledContext, useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { GaugeIcon } from "lucide-react";
 
 export function VaultThrottleSettings() {

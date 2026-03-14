@@ -5,14 +5,14 @@ import { FilesSettings } from "#components/policy/files";
 import { RetentionSettings } from "#components/policy/retention";
 import { ScheduleSettings } from "#components/policy/schedule";
 import { useFolderSettingsDialog } from "#hooks/state/use-folder-settings-dialog";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Accordion } from "@ui/accordion";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Accordion } from "@blinkdisk/ui/accordion";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@ui/dialog";
+} from "@blinkdisk/ui/dialog";
 import { useState } from "react";
 
 export function FolderSettingsDialog() {

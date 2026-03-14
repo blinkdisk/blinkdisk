@@ -1,5 +1,8 @@
-import { useAppForm } from "@hooks/use-app-form";
-import { ZCreateFolderForm, ZCreateFolderFormType } from "@schemas/folder";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import {
+  ZCreateFolderForm,
+  ZCreateFolderFormType,
+} from "@blinkdisk/schemas/folder";
 
 export function useCreateFolderForm({
   onSubmit,

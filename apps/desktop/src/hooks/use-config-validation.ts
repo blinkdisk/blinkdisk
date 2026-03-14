@@ -1,6 +1,6 @@
-import { ProviderType } from "@config/providers";
 import { trpc } from "#lib/trpc";
-import { ProviderConfig } from "@schemas/providers";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useCallback } from "react";
 
 export type VaultAction = "CREATE" | "SETUP" | "UPDATE";

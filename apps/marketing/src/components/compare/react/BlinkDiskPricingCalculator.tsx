@@ -1,14 +1,14 @@
-import type { BillingPeriod } from "@config/plans";
-import { plans } from "@config/plans";
-import { FREE_SPACE_AVAILABLE } from "@config/space";
+import type { BillingPeriod } from "@blinkdisk/config/plans";
+import { plans } from "@blinkdisk/config/plans";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+} from "@blinkdisk/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { useMemo, useState } from "react";
 
 const currency = "USD";

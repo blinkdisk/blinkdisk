@@ -1,7 +1,7 @@
 import { PolicyContext } from "#components/policy/context";
 import { pickDefinedFields } from "#lib/policy";
-import { useAppForm } from "@hooks/use-app-form";
-import { ZRetentionPolicy, ZRetentionPolicyType } from "@schemas/policy";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import { ZRetentionPolicy, ZRetentionPolicyType } from "@blinkdisk/schemas/policy";
 import { useContext } from "react";
 
 export function usePolicyRetentionForm() {

@@ -4,7 +4,7 @@ import { useQueryKey } from "#hooks/use-query-key";
 import { useVaultId } from "#hooks/use-vault-id";
 import { vaultApi } from "#lib/vault";
 import { useQuery } from "@tanstack/react-query";
-import { tryCatch } from "@utils/try-catch";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 export type CoreMountItem = {
   path: string;

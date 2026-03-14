@@ -1,15 +1,15 @@
 import { useRestoreDirectoryForm } from "#hooks/forms/use-restore-directory-form";
 import { useDirectoryEmpty } from "#hooks/queries/use-directory-empty";
 import { useRestoreDirectoryDialog } from "#hooks/state/use-restore-directory-dialog";
-import { useStore } from "@hooks/use-app-form";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
+import { useStore } from "@blinkdisk/forms/use-app-form";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@ui/dialog";
+} from "@blinkdisk/ui/dialog";
 import { AlertTriangleIcon } from "lucide-react";
 
 export function RestoreDirectoryDialog() {

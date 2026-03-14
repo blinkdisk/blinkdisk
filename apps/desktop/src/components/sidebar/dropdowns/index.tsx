@@ -4,9 +4,9 @@ import { SidebarVaultSelect } from "#components/sidebar/dropdowns/vault";
 import { useVaultProfiles } from "#hooks/queries/core/use-vault-profiles";
 import { useVaultList } from "#hooks/queries/use-vault-list";
 import { useParams } from "@tanstack/react-router";
-import { SidebarMenuItem } from "@ui/sidebar";
-import { Skeleton } from "@ui/skeleton";
-import { cn } from "@utils/class";
+import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
 
 export function SidebarSelects() {

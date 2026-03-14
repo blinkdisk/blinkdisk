@@ -1,5 +1,5 @@
 import { useTheme } from "#hooks/use-theme";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { PinIcon, XIcon } from "lucide-react";
 import seedrandom from "seedrandom";
 

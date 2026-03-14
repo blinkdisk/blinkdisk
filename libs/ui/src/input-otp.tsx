@@ -1,7 +1,7 @@
 import { OTPInput, OTPInputContext } from "input-otp";
 import * as React from "react";
 
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import { MinusIcon } from "lucide-react";
 
 export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {

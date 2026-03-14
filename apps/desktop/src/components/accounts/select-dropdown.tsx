@@ -2,7 +2,7 @@ import { AccountPreview } from "#components/accounts/preview";
 import { useAccountList } from "#hooks/queries/use-account-list";
 import { useAccountId } from "#hooks/use-account-id";
 import { useAuth } from "#hooks/use-auth";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
+} from "@blinkdisk/ui/dropdown-menu";
 import { UserPlusIcon } from "lucide-react";
 import { ReactElement } from "react";
 

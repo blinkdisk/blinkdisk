@@ -2,7 +2,7 @@ import { useConfigList } from "#hooks/queries/use-config-list";
 import { useVault } from "#hooks/queries/use-vault";
 import { useVaultPassword } from "#hooks/queries/use-vault-password";
 import { useQueryKey } from "#hooks/use-query-key";
-import { ProviderConfig } from "@schemas/providers";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultConfig() {

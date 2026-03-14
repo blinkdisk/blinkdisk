@@ -8,10 +8,10 @@ import {
   excludedExtensions,
   extensionToLanguage,
 } from "#utils/extension";
-import { Alert, AlertTitle } from "@ui/alert";
-import { Button } from "@ui/button";
-import { Input } from "@ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+import { Alert, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
+import { Input } from "@blinkdisk/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import JSZip from "jszip";
 import {
   ArchiveIcon,

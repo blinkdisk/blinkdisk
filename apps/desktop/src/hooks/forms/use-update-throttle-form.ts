@@ -1,7 +1,7 @@
 import { useUpdateThrottle } from "#hooks/mutations/core/use-update-throttle";
 import { useVaultThrottle } from "#hooks/queries/core/use-vault-throttle";
-import { useAppForm } from "@hooks/use-app-form";
-import { ZVaultThrottle, ZVaultThrottleType } from "@schemas/vault";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import { ZVaultThrottle, ZVaultThrottleType } from "@blinkdisk/schemas/vault";
 
 export function useUpdateThrottleForm() {
   const { data: throttle } = useVaultThrottle();

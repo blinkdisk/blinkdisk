@@ -1,6 +1,6 @@
 import { useRegister } from "#hooks/mutations/use-register";
-import { useAppForm } from "@hooks/use-app-form";
-import { ZRegisterForm, ZRegisterFormType } from "@schemas/auth";
+import { useAppForm } from "@blinkdisk/forms/use-app-form";
+import { ZRegisterForm, ZRegisterFormType } from "@blinkdisk/schemas/auth";
 
 type RegisterFormProps = {
   defaultValues?: Partial<ZRegisterFormType>;

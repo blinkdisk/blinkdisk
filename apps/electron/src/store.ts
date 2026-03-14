@@ -1,8 +1,8 @@
 import { EncryptedString } from "#encryption";
 import { sendWindow } from "#window";
-import { ProviderType } from "@config/providers";
-import { ConfigLevel } from "@db/enums";
-import { ZVaultOptionsType } from "@schemas/shared/vault";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { ConfigLevel } from "@blinkdisk/db/enums";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import Store from "electron-store";
 
 export type GlobalStorageType = {

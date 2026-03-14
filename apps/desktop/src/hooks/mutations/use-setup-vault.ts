@@ -2,10 +2,10 @@ import { SetupStep } from "#components/vaults/setup";
 import { useQueryKey } from "#hooks/use-query-key";
 import { showErrorToast } from "#lib/error";
 import { trpc } from "#lib/trpc";
-import { ProviderConfig } from "@schemas/providers";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@utils/error";
-import { tryCatch } from "@utils/try-catch";
+import { CustomError } from "@blinkdisk/utils/error";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { VaultItem } from "../queries/use-vault";
 
 export function useSetupVault({

@@ -1,6 +1,6 @@
-import { ProviderType } from "@config/providers";
 import { providerForms } from "#components/forms/providers";
-import { ProviderConfig } from "@schemas/providers";
+import { ProviderType } from "@blinkdisk/config/providers";
+import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useMemo } from "react";
 
 export type CreateVaultConfigProps = {

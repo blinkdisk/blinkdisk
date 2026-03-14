@@ -3,7 +3,7 @@ import { useTheme } from "#hooks/use-theme";
 import i18n from "#i18n";
 import { authClient } from "#lib/auth";
 import { showErrorToast } from "#lib/error";
-import { ZUpdatePreferencesType } from "@schemas/settings";
+import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdatePreferences(onSuccess: () => void) {

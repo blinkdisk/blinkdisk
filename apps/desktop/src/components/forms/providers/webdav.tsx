@@ -2,8 +2,8 @@ import { CreateVaultAlerts } from "#components/dialogs/create-vault/alerts";
 import { ProviderSubmitButton } from "#components/forms/providers/submit-button";
 import { useWebDavForm } from "#hooks/forms/providers/use-webdav-form";
 import { VaultAction } from "#hooks/use-config-validation";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { ZWebDavConfigType } from "@schemas/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { ZWebDavConfigType } from "@blinkdisk/schemas/providers";
 
 export type WebDavFormProps = {
   action: VaultAction;
@@ -11,11 +11,7 @@ export type WebDavFormProps = {
   onSubmit: (config: ZWebDavConfigType) => void;
 };
 
-export function WebDavForm({
-  action,
-  config,
-  onSubmit,
-}: WebDavFormProps) {
+export function WebDavForm({ action, config, onSubmit }: WebDavFormProps) {
   const { t } = useAppTranslation("vault.providers.WEBDAV.fields");
 
   const form = useWebDavForm({

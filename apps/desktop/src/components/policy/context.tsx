@@ -3,7 +3,7 @@ import { useUpdateVaultPolicy } from "#hooks/mutations/core/use-update-vault-pol
 import { useFolderPolicy } from "#hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "#hooks/queries/core/use-vault-policy";
 import { useVault } from "#hooks/queries/use-vault";
-import { ZPolicyLevelType } from "@schemas/policy";
+import { ZPolicyLevelType } from "@blinkdisk/schemas/policy";
 import { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";
 

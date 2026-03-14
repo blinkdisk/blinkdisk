@@ -1,7 +1,7 @@
 import { FormDisabledContext, useFieldContext } from "#use-app-form";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { Input } from "@ui/input";
-import { cn } from "@utils/class";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { Input } from "@blinkdisk/ui/input";
+import { cn } from "@blinkdisk/utils/class";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { useContext, useState } from "react";
 

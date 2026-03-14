@@ -25,6 +25,14 @@
     ]
   },
   "dependencies": {
+    "@blinkdisk/schemas": "workspace:*",
+    "@blinkdisk/styles": "workspace:*",
+    "@blinkdisk/ui": "workspace:*",
+    "@blinkdisk/utils": "workspace:*",
+    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/hooks": "workspace:*",
+    "@blinkdisk/forms": "workspace:*",
+    "@blinkdisk/electron": "workspace:*",
     "@lottiefiles/dotlottie-react": "^0.16.4",
     "@sentry/electron": "^7.9.0",
     "@sentry/react": "^10.40.0",
@@ -62,12 +70,9 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@blinkdisk/electron": "workspace:*",
     "@blinkdisk/eslint": "workspace:*",
-    "@blinkdisk/schemas": "workspace:*",
-    "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
-    "@blinkdisk/ui": "workspace:*",
+    "@blinkdisk/api": "workspace:*",
     "@sentry/vite-plugin": "^5.1.1",
     "@tanstack/react-router-devtools": "^1.114.25",
     "@tanstack/router-plugin": "^1.114.25",

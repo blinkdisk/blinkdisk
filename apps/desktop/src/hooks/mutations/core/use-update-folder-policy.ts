@@ -6,9 +6,9 @@ import { useVaultId } from "#hooks/use-vault-id";
 import { showErrorToast } from "#lib/error";
 import { convertPolicyToCore } from "#lib/policy";
 import { vaultApi } from "#lib/vault";
-import { ZPolicyType } from "@schemas/policy";
+import { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CustomError } from "@utils/error";
+import { CustomError } from "@blinkdisk/utils/error";
 
 export function useUpdateFolderPolicy({
   folderId,

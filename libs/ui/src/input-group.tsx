@@ -4,7 +4,7 @@ import * as React from "react";
 import { Button } from "#button";
 import { Input } from "#input";
 import { Textarea } from "#textarea";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

@@ -1,6 +1,6 @@
 import { authedProcedure } from "#procedures/authed";
 import { router } from "#trpc";
-import { jsonArrayFrom } from "@db/index";
+import { jsonArrayFrom } from "@blinkdisk/db/index";
 
 export const profileRouter = router({
   listLegacy: authedProcedure.query(async ({ ctx }) => {

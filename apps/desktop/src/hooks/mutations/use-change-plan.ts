@@ -1,7 +1,7 @@
 import { useQueryKey } from "#hooks/use-query-key";
 import { showErrorToast } from "#lib/error";
 import { trpc } from "#lib/trpc";
-import { ZChangePlan } from "@schemas/payment";
+import { ZChangePlan } from "@blinkdisk/schemas/payment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type UseChangePlan = {

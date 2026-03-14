@@ -1,6 +1,6 @@
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@ui/button";
+import { Button } from "@blinkdisk/ui/button";
 import { Trans } from "react-i18next";
 
 export function DefaultErrorPage() {

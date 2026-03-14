@@ -9,7 +9,7 @@ import { SidebarSkeletonTheme } from "#components/sidebar/skeleton-theme";
 import { SidebarStorageAlert } from "#components/sidebar/storage-alert";
 import { useFolderList } from "#hooks/queries/core/use-folder-list";
 import { useAccount } from "#hooks/queries/use-account";
-import { useAppTranslation } from "@hooks/use-app-translation";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   Sidebar as SidebarContainer,
@@ -19,7 +19,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@ui/sidebar";
+} from "@blinkdisk/ui/sidebar";
 import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { ComponentProps } from "react";
 

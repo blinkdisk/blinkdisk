@@ -1,15 +1,15 @@
 import { FormDisabledContext, useFieldContext, useStore } from "#use-app-form";
-import { ZBandwithType } from "@schemas/vault";
-import { DynamicField, DynamicFieldProps } from "@ui/dynamic-field";
-import { Input, InputProps } from "@ui/input";
+import { ZBandwithType } from "@blinkdisk/schemas/vault";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { Input, InputProps } from "@blinkdisk/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select";
-import { cn } from "@utils/class";
+} from "@blinkdisk/ui/select";
+import { cn } from "@blinkdisk/utils/class";
 import React, { useContext } from "react";
 
 const bandwidthUnits = [

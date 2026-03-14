@@ -1,9 +1,9 @@
-import { ProviderType, providers } from "@config/providers";
+import { ProviderType, providers } from "@blinkdisk/config/providers";
 import { providerIcons } from "#components/icons/providers";
 import { useProviderSearch } from "#hooks/use-provider-search";
-import { useAppTranslation } from "@hooks/use-app-translation";
-import { Button } from "@ui/button";
-import { Input } from "@ui/input";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import { Input } from "@blinkdisk/ui/input";
 import { ChevronRightIcon, SearchIcon } from "lucide-react";
 
 export type CreateVaultProvidersProps = {

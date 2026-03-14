@@ -1,6 +1,6 @@
 import { usePlatform } from "#hooks/use-platform";
 import type { Platform } from "#utils/platform";
-import { Button } from "@ui/button";
+import { Button } from "@blinkdisk/ui/button";
 import { useEffect, useState } from "react";
 
 type Props = {

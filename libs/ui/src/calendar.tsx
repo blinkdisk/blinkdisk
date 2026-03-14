@@ -7,7 +7,7 @@ import {
 } from "react-day-picker";
 
 import { Button, buttonVariants } from "#button";
-import { cn } from "@utils/class";
+import { cn } from "@blinkdisk/utils/class";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
