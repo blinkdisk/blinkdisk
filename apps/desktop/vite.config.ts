@@ -22,12 +22,12 @@ export default defineConfig({
   },
   server: { port: 3002 },
   plugins: [
-    paths(),
     devtools({
       eventBusConfig: {
         port: 5001,
       },
     }),
+    paths(),
     router({ target: "react", autoCodeSplitting: true }),
     react({
       babel: {

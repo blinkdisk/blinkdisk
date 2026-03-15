@@ -23,13 +23,13 @@ export default defineConfig({
   },
   server: { port: 3001 },
   plugins: [
-    cloudflare(),
-    paths(),
     devtools({
       eventBusConfig: {
         port: 5000,
       },
     }),
+    cloudflare(),
+    paths(),
     router({ target: "react", autoCodeSplitting: true }),
     react({
       babel: {
