@@ -2,7 +2,6 @@
   "name": "web",
   "compatibility_date": "2026-02-03",
   "assets": {
-    "binding": "ASSETS",
     "directory": "./dist",
   },
   "observability": {
