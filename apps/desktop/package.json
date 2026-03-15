@@ -33,7 +33,7 @@
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.12",
     "@trpc/client": "^10.45.2",
-    "better-auth": "^1.3.4",
+    "better-auth": "^1.5.5",
     "date-fns": "^4.1.0",
     "filesize": "^11.0.2",
     "framer-motion": "^12.5.0",
