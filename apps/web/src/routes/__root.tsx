@@ -31,7 +31,7 @@ function RootComponent() {
           apiKey={process.env.POSTHOG_KEY || ""}
           options={{
             api_host: process.env.POSTHOG_HOST || "https://eu.i.posthog.com",
-            ui_host: "https://eu.i.posthog.com",
+            ui_host: "https://eu.posthog.com",
             defaults: "2025-05-24",
             capture_exceptions: true,
             before_send: (
