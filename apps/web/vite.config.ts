@@ -39,11 +39,13 @@ export default defineConfig({
     tailwindcss(),
     env(
       {
+        API_URL: undefined,
         WEB_URL: undefined,
         MARKETING_URL: undefined,
         POSTHOG_KEY: null,
         POSTHOG_HOST: null,
         SENTRY_WEB_DSN: null,
+        ENDORSELY_PUBLIC_KEY: null,
       },
       {
         loadEnvFiles: false,

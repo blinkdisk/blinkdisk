@@ -21,6 +21,7 @@ function RouteComponent() {
         }
         size="xl"
         className="mt-8"
+        nativeButton={false}
       >
         <DownloadIcon />
         Download

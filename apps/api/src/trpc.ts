@@ -19,6 +19,8 @@ const t = initTRPC.context<Context>().create({
         },
       };
 
+    console.error(error);
+
     if (ctx)
       Sentry.captureException(error, {
         data: {

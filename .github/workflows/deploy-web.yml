@@ -28,6 +28,8 @@ jobs:
       - name: Build project
         env:
           WEB_URL: ${{ vars.WEB_URL }}
+          API_URL: ${{ vars.API_URL }}
+          ENDORSELY_PUBLIC_KEY: ${{ vars.ENDORSELY_PUBLIC_KEY }}
           MARKETING_URL: ${{ vars.MARKETING_URL }}
           POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
           POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}

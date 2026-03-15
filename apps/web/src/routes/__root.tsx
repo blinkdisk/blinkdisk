@@ -5,7 +5,7 @@ import { SkeletonTheme } from "@blinkdisk/ui/skeleton";
 import { Toaster } from "@blinkdisk/ui/toast";
 import { TooltipProvider } from "@blinkdisk/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
+import { HeadContent, Outlet, createRootRoute } from "@tanstack/react-router";
 import { useTheme } from "@web/hooks/use-theme";
 import { CaptureResult } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
@@ -17,6 +17,15 @@ const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
   component: RootComponent,
+  head: () => ({
+    scripts: [
+      {
+        src: "https://assets.endorsely.com/endorsely.js",
+        async: true,
+        "data-endorsely": process.env.ENDORSELY_PUBLIC_KEY || "",
+      },
+    ],
+  }),
 });
 
 function RootComponent() {
@@ -25,37 +34,40 @@ function RootComponent() {
   useThemeListener(theme);
 
   return (
-    <TooltipProvider>
-      <SidebarProvider>
-        <PostHogProvider
-          apiKey={process.env.POSTHOG_KEY || ""}
-          options={{
-            api_host: process.env.POSTHOG_HOST || "https://eu.i.posthog.com",
-            ui_host: "https://eu.posthog.com",
-            defaults: "2025-05-24",
-            capture_exceptions: true,
-            before_send: (
-              event: CaptureResult | null,
-            ): CaptureResult | null => {
-              if (event?.properties?.$current_url) {
-                const parsed = new URL(event.properties.$current_url);
-                if (parsed.hash)
-                  event.properties.$pathname = parsed.pathname + parsed.hash;
-              }
+    <>
+      <HeadContent />
+      <TooltipProvider>
+        <SidebarProvider>
+          <PostHogProvider
+            apiKey={process.env.POSTHOG_KEY || ""}
+            options={{
+              api_host: process.env.POSTHOG_HOST || "https://eu.i.posthog.com",
+              ui_host: "https://eu.posthog.com",
+              defaults: "2025-05-24",
+              capture_exceptions: true,
+              before_send: (
+                event: CaptureResult | null,
+              ): CaptureResult | null => {
+                if (event?.properties?.$current_url) {
+                  const parsed = new URL(event.properties.$current_url);
+                  if (parsed.hash)
+                    event.properties.$pathname = parsed.pathname + parsed.hash;
+                }
 
-              return event;
-            },
-          }}
-        >
-          <QueryClientProvider client={queryClient}>
-            <Devtools />
-            <SkeletonTheme dark={theme.dark}>
-              <Outlet />
-              <Toaster dark={theme.dark} />
-            </SkeletonTheme>
-          </QueryClientProvider>
-        </PostHogProvider>
-      </SidebarProvider>
-    </TooltipProvider>
+                return event;
+              },
+            }}
+          >
+            <QueryClientProvider client={queryClient}>
+              <Devtools />
+              <SkeletonTheme dark={theme.dark}>
+                <Outlet />
+                <Toaster dark={theme.dark} />
+              </SkeletonTheme>
+            </QueryClientProvider>
+          </PostHogProvider>
+        </SidebarProvider>
+      </TooltipProvider>
+    </>
   );
 }

@@ -38,6 +38,7 @@ export default defineConfig({
     env(
       {
         API_URL: undefined,
+        WEB_URL: undefined,
         MARKETING_URL: undefined,
         POSTHOG_KEY: null,
         SENTRY_DESKTOP_DSN: null,

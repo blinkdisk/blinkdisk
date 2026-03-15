@@ -9,6 +9,7 @@ config({
 const whitelist = [
   "NODE_ENV",
   "MARKETING_URL",
+  "WEB_URL",
   "BETTER_AUTH_SECRET",
   "CLOUD_JWT_PRIVATE_KEY",
   "LOGSNAG_PRIVATE_KEY",

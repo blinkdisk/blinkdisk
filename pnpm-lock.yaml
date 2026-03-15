@@ -559,6 +559,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@blinkdisk/api':
+        specifier: workspace:*
+        version: link:../api
       '@blinkdisk/components':
         specifier: workspace:*
         version: link:../../libs/components
@@ -601,6 +604,12 @@ importers:
       '@tanstack/react-router':
         specifier: 1.131.7
         version: 1.131.7(react-dom@19.0.0)(react@19.0.0)
+      '@trpc/client':
+        specifier: ^10.45.2
+        version: 10.45.2(@trpc/server@10.45.2)
+      js-confetti:
+        specifier: ^0.13.1
+        version: 0.13.1
       lucide-react:
         specifier: ^0.483.0
         version: 0.483.0(react@19.0.0)

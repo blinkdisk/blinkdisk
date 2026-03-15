@@ -12,12 +12,26 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as CheckoutSuccessImport } from './routes/checkout/success'
+import { Route as CheckoutRedirectImport } from './routes/checkout/redirect'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CheckoutSuccessRoute = CheckoutSuccessImport.update({
+  id: '/checkout/success',
+  path: '/checkout/success',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CheckoutRedirectRoute = CheckoutRedirectImport.update({
+  id: '/checkout/redirect',
+  path: '/checkout/redirect',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,6 +46,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/checkout/redirect': {
+      id: '/checkout/redirect'
+      path: '/checkout/redirect'
+      fullPath: '/checkout/redirect'
+      preLoaderRoute: typeof CheckoutRedirectImport
+      parentRoute: typeof rootRoute
+    }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout/redirect': typeof CheckoutRedirectRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout/redirect': typeof CheckoutRedirectRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/checkout/redirect': typeof CheckoutRedirectRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/checkout/redirect' | '/checkout/success'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/checkout/redirect' | '/checkout/success'
+  id: '__root__' | '/' | '/checkout/redirect' | '/checkout/success'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRedirectRoute: typeof CheckoutRedirectRoute
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRedirectRoute: CheckoutRedirectRoute,
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +115,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/checkout/redirect",
+        "/checkout/success"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/checkout/redirect": {
+      "filePath": "checkout/redirect.tsx"
+    },
+    "/checkout/success": {
+      "filePath": "checkout/success.tsx"
     }
   }
 }
