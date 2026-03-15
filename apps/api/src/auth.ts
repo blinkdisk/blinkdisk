@@ -91,22 +91,13 @@ export const auth = (
     },
     plugins: [
       magicLink({
-        sendMagicLink: (
-          {
-            email,
-            token,
-          }: {
-            email: string;
-            token: string;
-          },
-          req: Request | undefined,
-        ) =>
+        sendMagicLink: ({ email, token }, ctx) =>
           sendEmail(
             "magic",
             {
               email,
-              language: req?.headers.get("X-BlinkDisk-Language")
-                ? req?.headers.get("X-BlinkDisk-Language")
+              language: ctx?.request?.headers?.get("X-BlinkDisk-Language")
+                ? ctx.request.headers.get("X-BlinkDisk-Language")
                 : "en",
             },
             { code: [token.slice(0, 5), token.slice(5, 10)] },
