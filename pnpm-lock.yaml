@@ -864,6 +864,9 @@ importers:
 
   libs/forms:
     dependencies:
+      '@blinkdisk/components':
+        specifier: workspace:*
+        version: link:../components
       '@blinkdisk/schemas':
         specifier: workspace:*
         version: link:../schemas
@@ -883,9 +886,6 @@ importers:
         specifier: ^19.0.0
         version: 19.0.0
     devDependencies:
-      '@blinkdisk/components':
-        specifier: workspace:*
-        version: link:../components
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../eslint
