@@ -30,10 +30,7 @@ export function createWindow() {
   window.webContents.setWindowOpenHandler(({ url: rawUrl }) => {
     const url = new URL(rawUrl);
 
-    if (
-      url.protocol === "blinkdiskapp:" ||
-      (url.hostname === "localhost" && url.port === "5173")
-    )
+    if (url.protocol === "blinkdiskapp:" || url.hostname === "localhost")
       window?.loadURL(rawUrl);
     else if (
       url.protocol === "https:" ||
