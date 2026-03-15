@@ -6,7 +6,7 @@
   "compatibility_date": "2025-08-22",
   "upload_source_maps": true,
   "observability": {
-    "enabled": true,
+    "enabled": false,
   },
   "durable_objects": {
     "bindings": [
