@@ -24,7 +24,7 @@ export function createWindow() {
   window.setMenu(null);
 
   window.loadURL(
-    app.isPackaged ? "blinkdiskapp://frontend" : "http://localhost:5173",
+    app.isPackaged ? "blinkdiskapp://frontend" : process.env.DESKTOP_URL!,
   );
 
   window.webContents.setWindowOpenHandler(({ url: rawUrl }) => {

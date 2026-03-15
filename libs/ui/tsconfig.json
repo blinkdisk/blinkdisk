@@ -9,6 +9,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
   },
-  "include": ["src"],
+  "include": ["src", "../components/src/dynamic-field.tsx"],
   "exclude": ["node_modules", "dist"],
 }

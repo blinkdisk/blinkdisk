@@ -1,4 +1,8 @@
+import { readFileSync } from "fs";
 import type { KnipConfig } from "knip";
+
+const tsconfigRaw = readFileSync("./libs/typescript/base.json", "utf8");
+const tsconfig = JSON.parse(tsconfigRaw);
 
 const commonIgnore = [
   "src/**/*.test.{ts,tsx}",
@@ -80,8 +84,6 @@ const config: KnipConfig = {
     "*.d.ts",
   ],
   ignoreUnresolved: [
-    // Used in the global.css file, required when imported in apps
-    "../../ui/src",
     // Vite allows adding "?url" to an import
     /.+\?url$/,
   ],
@@ -95,23 +97,7 @@ const config: KnipConfig = {
     "@sentry/cloudflare",
     "@sentry/cli",
   ],
-  paths: {
-    "@ui/*": ["./libs/ui/src/*"],
-    "@api/*": ["./apps/api/src/*"],
-    "@marketing/*": ["./apps/marketing/src/*"],
-    "@styles/*": ["./libs/styles/*"],
-    "@utils/*": ["./libs/utils/src/*"],
-    "@desktop/*": ["./apps/desktop/src/*"],
-    "@hooks/*": ["./libs/hooks/src/*"],
-    "@db/*": ["./libs/db/src/*"],
-    "@db": ["./libs/db/src/index.ts"],
-    "@emails/*": ["./libs/emails/src/*"],
-    "@schemas/*": ["./libs/schemas/src/*"],
-    "@config/*": ["./libs/config/src/*"],
-    "@electron/*": ["./apps/electron/src/*"],
-    "@cloud/*": ["./apps/cloud/src/*"],
-    "@forms/*": ["./apps/forms/src/*"],
-  },
+  paths: tsconfig.compilerOptions.paths,
 };
 
 export default config;

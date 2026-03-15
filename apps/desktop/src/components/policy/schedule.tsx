@@ -1,3 +1,4 @@
+import { DynamicField } from "@blinkdisk/components/dynamic-field";
 import {
   FormDisabledContext,
   useFieldContext,
@@ -5,7 +6,6 @@ import {
 } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
-import { DynamicField } from "@blinkdisk/ui/dynamic-field";
 import { Cron } from "@desktop/components/cron";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";

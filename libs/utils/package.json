@@ -20,14 +20,20 @@
   "dependencies": {
     "@blinkdisk/emails": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
+    "@blinkdisk/config": "workspace:*",
     "@plunk/node": "^3.0.3",
     "@react-email/render": "^2.0.1",
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "i18next": "^24.2.3",
+    "i18next-browser-languagedetector": "^8.0.4",
+    "i18next-http-backend": "^3.0.2",
     "legid-sync": "^0.2.1",
     "nanoid": "^5.1.5",
     "nodemailer": "^7.0.11",
+    "react-i18next": "^15.4.1",
     "tailwind-merge": "^3.0.2"
   }
 }

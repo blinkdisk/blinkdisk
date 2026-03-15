@@ -1,0 +1,9 @@
+@import "../../../libs/styles/globals.css";
+@import "../../../libs/styles/inter.css";
+
+.disable-transitions * {
+  -o-transition: none !important;
+  -moz-transition: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
+}

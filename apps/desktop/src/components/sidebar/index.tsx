@@ -1,3 +1,4 @@
+import { Logo } from "@blinkdisk/components/logo";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Sidebar as SidebarContainer,
@@ -11,7 +12,6 @@ import {
 import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
-import { Logo } from "@desktop/components/logo";
 import { SidebarAddFolder } from "@desktop/components/sidebar/add-folder";
 import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
 import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";

@@ -1,0 +1,37 @@
+{
+  "name": "@blinkdisk/components",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "exports": {
+    "./*": "./src/*.tsx"
+  },
+  "devDependencies": {
+    "@blinkdisk/eslint": "workspace:*",
+    "@blinkdisk/typescript": "workspace:*",
+    "@blinkdisk/utils": "workspace:*",
+    "@blinkdisk/hooks": "workspace:*",
+    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/ui": "workspace:*",
+    "@types/node": "^22.13.9",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "eslint": "^9.22.0",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {
+    "@types/twemoji-parser": "^13.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "twemoji-parser": "^14.0.0",
+    "@tanstack/react-devtools": "^0.9.2",
+    "@tanstack/react-form-devtools": "^0.2.4",
+    "@tanstack/react-query-devtools": "5.69.0",
+    "@tanstack/react-router-devtools": "^1.114.25",
+    "react-i18next": "^15.4.1",
+    "@tanstack/react-router": "1.131.7"
+  }
+}

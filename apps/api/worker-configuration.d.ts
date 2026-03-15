@@ -11,7 +11,7 @@ declare namespace Cloudflare {
     POLAR_ENVIRONMENT: string;
     POLAR_TOKEN: string;
     POLAR_WEBHOOK_SECRET: string;
-    POSTHOG_DESKTOP_KEY: string;
+    POSTHOG_KEY: string;
     ENDORSELY_ORGANIZATION_ID: string;
     ENDORSELY_PRIVATE_KEY: string;
     EMAIL_PROVIDER: string;
@@ -46,7 +46,7 @@ declare namespace NodeJS {
         | "POLAR_ENVIRONMENT"
         | "POLAR_TOKEN"
         | "POLAR_WEBHOOK_SECRET"
-        | "POSTHOG_DESKTOP_KEY"
+        | "POSTHOG_KEY"
         | "ENDORSELY_ORGANIZATION_ID"
         | "ENDORSELY_PRIVATE_KEY"
         | "EMAIL_PROVIDER"

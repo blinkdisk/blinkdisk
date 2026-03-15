@@ -11,6 +11,7 @@ import esbuild from "esbuild";
 
 const ENV_WHITELIST = [
   "NODE_ENV",
+  "DESKTOP_URL",
   "API_URL",
   "CLOUD_URL",
   "SENTRY_DESKTOP_DSN",
