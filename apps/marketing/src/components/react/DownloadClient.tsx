@@ -32,11 +32,7 @@ declare global {
 
 type Extension = "AppImage" | "deb" | "rpm";
 
-type Props = {
-  apiUrl: string;
-};
-
-export default function DownloadClient({ apiUrl }: Props) {
+export default function DownloadClient() {
   const { logsnag } = useLogsnag();
   const { copy } = useClipboard();
   const { addToCalendar } = useCalendar();
@@ -92,17 +88,6 @@ export default function DownloadClient({ apiUrl }: Props) {
       if (!logged) {
         localStorage.setItem("download.logged", "true");
 
-        if (window.endorsely_referral)
-          fetch(`${apiUrl}/affiliate/track`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              referralId: window.endorsely_referral,
-            }),
-          });
-
         logsnag({
           channel: "downloads",
           title: "Download started",
@@ -119,7 +104,7 @@ export default function DownloadClient({ apiUrl }: Props) {
           });
       }
     },
-    [logsnag, apiUrl, platform, architecture, extension],
+    [logsnag, platform, architecture, extension],
   );
 
   useEffect(() => {

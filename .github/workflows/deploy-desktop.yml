@@ -13,6 +13,7 @@ env:
   # Required by Makefile
   UNIX_SHELL_ON_WINDOWS: true
   API_URL: ${{ vars.API_URL }}
+  WEB_URL: ${{ vars.WEB_URL }}
   DESKTOP_URL: ${{ vars.DESKTOP_URL }}
   MARKETING_URL: ${{ vars.MARKETING_URL }}
   CLOUD_URL: ${{ vars.CLOUD_URL }}

@@ -2,8 +2,6 @@ import { auth } from "@api/auth";
 import { createContext } from "@api/context";
 import { ratelimit } from "@api/middlewares/limit";
 import { appRouter } from "@api/router";
-import { affiliateLink } from "@api/routes/affiliate/link";
-import { affiliateTrack } from "@api/routes/affiliate/track";
 import { polarWebhook } from "@api/webhooks/polar";
 import type { DB } from "@blinkdisk/db/index";
 import { database } from "@blinkdisk/db/index";
@@ -28,8 +26,7 @@ app.use(
     origin: (origin, c) => {
       if (c.env.DESKTOP_URL && origin === c.env.DESKTOP_URL)
         return c.env.DESKTOP_URL;
-      if (c.env.MARKETING_URL && origin === c.env.MARKETING_URL)
-        return c.env.MARKETING_URL;
+      if (c.env.WEB_URL && origin === c.env.WEB_URL) return c.env.WEB_URL;
       if (origin === "blinkdiskapp://frontend")
         return "blinkdiskapp://frontend";
       return null;
@@ -59,9 +56,6 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 });
 
 app.post("/webhook/polar", polarWebhook);
-
-app.post("/affiliate/track", affiliateTrack);
-app.post("/affiliate/link", affiliateLink);
 
 app.use(
   "/trpc/*",
