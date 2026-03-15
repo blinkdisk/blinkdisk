@@ -1,8 +1,11 @@
 import {
+  DynamicField,
+  DynamicFieldProps,
+} from "@blinkdisk/components/dynamic-field";
+import {
   CheckboxProps,
   Checkbox as CheckboxRoot,
 } from "@blinkdisk/ui/checkbox";
-import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
 import { cn } from "@blinkdisk/utils/class";
 import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import React, { useContext } from "react";

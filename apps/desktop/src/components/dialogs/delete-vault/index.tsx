@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
-import { DynamicField } from "@blinkdisk/ui/dynamic-field";
+import { DynamicField } from "@blinkdisk/components/dynamic-field";
 import { Input } from "@blinkdisk/ui/input";
 import { useDeleteVault } from "@desktop/hooks/mutations/use-delete-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";

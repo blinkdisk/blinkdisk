@@ -21,6 +21,7 @@
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
+    "@blinkdisk/components": "workspace:*",
     "@tanstack/react-form": "^1.27.1",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0"

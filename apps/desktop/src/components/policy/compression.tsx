@@ -1,3 +1,4 @@
+import { DynamicField } from "@blinkdisk/components/dynamic-field";
 import { compressionAlgorithms } from "@blinkdisk/config/algorithms";
 import {
   FormDisabledContext,
@@ -6,7 +7,6 @@ import {
 } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
-import { DynamicField } from "@blinkdisk/ui/dynamic-field";
 import { Input } from "@blinkdisk/ui/input";
 import {
   SelectContent,

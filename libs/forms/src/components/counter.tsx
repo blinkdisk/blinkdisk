@@ -1,5 +1,8 @@
+import {
+  DynamicField,
+  DynamicFieldProps,
+} from "@blinkdisk/components/dynamic-field";
 import { Button } from "@blinkdisk/ui/button";
-import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
 import { Input, InputProps } from "@blinkdisk/ui/input";
 import { cn } from "@blinkdisk/utils/class";
 import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";

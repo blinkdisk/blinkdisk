@@ -29,8 +29,8 @@ jobs:
         env:
           API_URL: ${{ vars.API_URL }}
           MARKETING_URL: ${{ vars.MARKETING_URL }}
-          POSTHOG_API_HOST: ${{ vars.POSTHOG_API_HOST }}
-          POSTHOG_MARKETING_KEY: ${{ vars.POSTHOG_MARKETING_KEY }}
+          POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
+          POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
           LOGSNAG_PUBLIC_KEY: ${{ vars.LOGSNAG_PUBLIC_KEY }}
           ENDORSELY_PUBLIC_KEY: ${{ vars.ENDORSELY_PUBLIC_KEY }}
           CRISP_KEY: ${{ vars.CRISP_KEY }}

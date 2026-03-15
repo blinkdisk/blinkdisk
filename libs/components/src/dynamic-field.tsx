@@ -1,7 +1,12 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@blinkdisk/ui/field";
 import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
-import { Field, FieldDescription, FieldError, FieldLabel } from "./field";
 
 export type DynamicFieldProps = {
   title?: string | React.ReactNode;

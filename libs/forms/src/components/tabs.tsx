@@ -1,4 +1,4 @@
-import { DynamicField, DynamicFieldProps } from "@blinkdisk/ui/dynamic-field";
+import { DynamicField, DynamicFieldProps } from "@blinkdisk/components/dynamic-field";
 import {
   TabsList,
   TabsProps,

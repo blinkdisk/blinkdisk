@@ -1,4 +1,4 @@
-import email from "../../locales/en/email.json";
+import email from "../../../../locales/en/email.json";
 
 type TranslationValue = string | { [key: string]: string | TranslationValue };
 type Namespace = { [key: string]: TranslationValue };

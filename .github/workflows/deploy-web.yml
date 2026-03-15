@@ -1,0 +1,44 @@
+name: Deploy Web
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v5.0.0
+
+      - name: Set up node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        env:
+          WEB_URL: ${{ vars.WEB_URL }}
+          MARKETING_URL: ${{ vars.MARKETING_URL }}
+          POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
+          POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORGANIZATION: ${{ vars.SENTRY_ORGANIZATION }}
+          SENTRY_WEB_PROJECT: ${{ vars.SENTRY_WEB_PROJECT }}
+          SENTRY_WEB_DSN: ${{ vars.SENTRY_WEB_DSN }}
+        run: pnpm --filter web build
+
+      - name: Deploy project
+        run: pnpm --filter web run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

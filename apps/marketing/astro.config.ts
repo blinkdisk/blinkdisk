@@ -97,12 +97,12 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
-      POSTHOG_MARKETING_KEY: envField.string({
+      POSTHOG_KEY: envField.string({
         context: "server",
         access: "public",
         optional: true,
       }),
-      POSTHOG_API_HOST: envField.string({
+      POSTHOG_HOST: envField.string({
         context: "server",
         access: "public",
         optional: true,

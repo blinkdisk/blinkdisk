@@ -1,8 +1,8 @@
+import { DynamicField } from "@blinkdisk/components/dynamic-field";
+import { EmojiCard } from "@blinkdisk/components/emoji-card";
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
-import { DynamicField } from "@blinkdisk/ui/dynamic-field";
-import { EmojiCard } from "@blinkdisk/ui/emoji-card";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import { Input } from "@blinkdisk/ui/input";
 import { SettingsCategory } from "@desktop/components/policy/category";

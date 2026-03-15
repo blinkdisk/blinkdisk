@@ -1,4 +1,4 @@
-import en from "../../../libs/emails/locales/en/email.json";
+import en from "../../../locales/en/email.json";
 
 export const locales = {
   en: {

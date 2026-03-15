@@ -1,5 +1,5 @@
+import { EmojiCard } from "@blinkdisk/components/emoji-card";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { EmojiCard } from "@blinkdisk/ui/emoji-card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";

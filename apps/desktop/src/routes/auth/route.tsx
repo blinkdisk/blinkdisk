@@ -1,4 +1,4 @@
-import { Logo } from "@desktop/components/logo";
+import { Logo } from "@blinkdisk/components/logo";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import image from "../../../public/images/auth.jpg";
 

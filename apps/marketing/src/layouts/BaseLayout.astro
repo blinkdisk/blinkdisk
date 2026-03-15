@@ -1,7 +1,7 @@
 ---
 import "@marketing/styles.css";
 import ThemeScript from "@marketing/components/ThemeScript.astro";
-import { MARKETING_URL, POSTHOG_MARKETING_KEY, POSTHOG_API_HOST, ENDORSELY_PUBLIC_KEY, CRISP_KEY } from "astro:env/server";
+import { MARKETING_URL, POSTHOG_KEY, POSTHOG_HOST, ENDORSELY_PUBLIC_KEY, CRISP_KEY } from "astro:env/server";
 
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
@@ -37,8 +37,8 @@ const ogImage = og?.image ? `${siteUrl}${og.image}` : pageImage;
 
 const canonicalUrl = `${siteUrl}${Astro.url.pathname}`;
 
-const posthogKey = POSTHOG_MARKETING_KEY ?? "";
-const posthogHost = POSTHOG_API_HOST ?? "";
+const posthogKey = POSTHOG_KEY ?? "";
+const posthogHost = POSTHOG_HOST ?? "";
 const endorselyKey = ENDORSELY_PUBLIC_KEY ?? "";
 const crispKey = CRISP_KEY ?? "";
 

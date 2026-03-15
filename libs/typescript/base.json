@@ -23,6 +23,7 @@
       "@utils/*": ["./libs/utils/src/*"],
       "@desktop/*": ["./apps/desktop/src/*"],
       "@hooks/*": ["./libs/hooks/src/*"],
+      "@components/*": ["./libs/components/src/*"],
       "@db/*": ["./libs/db/src/*"],
       "@db": ["./libs/db/src/index.ts"],
       "@emails/*": ["./libs/emails/src/*"],
@@ -30,7 +31,8 @@
       "@config/*": ["./libs/config/src/*"],
       "@forms/*": ["./libs/forms/src/*"],
       "@electron/*": ["./apps/electron/src/*"],
-      "@cloud/*": ["./apps/cloud/src/*"]
+      "@cloud/*": ["./apps/cloud/src/*"],
+      "@web/*": ["./apps/web/src/*"]
     }
   }
 }
