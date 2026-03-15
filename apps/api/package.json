@@ -29,8 +29,6 @@
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/db": "workspace:*",
     "@blinkdisk/config": "workspace:*",
-    "@blinkdisk/db": "workspace:*",
-    "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
     "@hono/trpc-server": "^0.4.0",
     "@polar-sh/sdk": "^0.35.4",
