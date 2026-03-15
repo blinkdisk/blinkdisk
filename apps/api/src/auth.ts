@@ -1,8 +1,6 @@
 import { getPostHog, posthog } from "@api/lib/posthog";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { DB, dialect } from "@blinkdisk/db/index";
-import { ZLogin, ZRegisterServer } from "@blinkdisk/schemas/auth";
-import { ZUpdateUserServer } from "@blinkdisk/schemas/settings";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
@@ -10,7 +8,6 @@ import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink, multiSession } from "better-auth/plugins";
 import { Kysely } from "kysely";
-import { StandardAdapter, validator } from "validation-better-auth";
 
 const cookieSettings = {
   attributes: {
@@ -109,11 +106,6 @@ export const auth = (
       multiSession({
         maximumSessions: 100,
       }),
-      validator([
-        { path: "/sign-up/email", adapter: StandardAdapter(ZRegisterServer) },
-        { path: "/sign-in/email", adapter: StandardAdapter(ZLogin) },
-        { path: "/update-user", adapter: StandardAdapter(ZUpdateUserServer) },
-      ]),
     ],
     hooks: {
       before: createAuthMiddleware(async (ctx) => {
