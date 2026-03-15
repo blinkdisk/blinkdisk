@@ -5,10 +5,6 @@ export const ZAffiliateLinkCheckout = z.object({
   affiliateId: z.string(),
 });
 
-export type ZAffiliateLinkCheckoutType = z.infer<typeof ZAffiliateLinkCheckout>;
-
 export const ZAffiliateTrack = z.object({
   referralId: z.string(),
 });
-
-export type ZAffiliateTrackType = z.infer<typeof ZAffiliateTrack>;
