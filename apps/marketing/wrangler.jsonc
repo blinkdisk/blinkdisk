@@ -6,6 +6,7 @@
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist",
+    "html_handling": "drop-trailing-slash",
   },
   "observability": {
     "enabled": false,
