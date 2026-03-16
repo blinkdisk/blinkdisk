@@ -1,8 +1,8 @@
 import { APP_SCHEME, APP_SCHEME_PROTOCOL } from "@blinkdisk/config/app";
+import { authenticateToken } from "@electron/auth";
 import { focusWindow, sendWindow } from "@electron/window";
 import { app } from "electron";
 import { resolve } from "path";
-import { authClient } from "./auth";
 
 let hasRegistered = false;
 if (process.defaultApp) {
@@ -41,7 +41,7 @@ export async function onDeeplinkOpen(rawUrl: string) {
       if (!url.hash.startsWith("#token=")) return;
       const token = url.hash.substring("#token=".length);
 
-      await authClient.authenticate({
+      await authenticateToken({
         token,
       });
     }

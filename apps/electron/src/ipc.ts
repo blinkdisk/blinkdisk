@@ -1,4 +1,6 @@
+import { readClipboard } from "@electron/clipboard";
 import {
+  authenticateToken,
   getSession,
   listSessions,
   logout,
@@ -95,8 +97,11 @@ ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
 ipcMain.handle("update.status", () => getUpdateStatus());
 ipcMain.handle("update.install", () => installUpdate());
 
+ipcMain.handle("clipboard.read", () => readClipboard());
+
 ipcMain.handle("auth.open", () => openAuth());
 ipcMain.handle("auth.logout", () => logout());
+ipcMain.handle("auth.token", (_, payload) => authenticateToken(payload));
 ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
 ipcMain.handle("auth.session.list", () => listSessions());
 ipcMain.handle("auth.session.get", () => getSession());

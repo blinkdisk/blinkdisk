@@ -33,9 +33,13 @@ function RouteComponent() {
   }, []);
 
   useEffect(() => {
+    // Only listen while waiting to prevent
+    // other tabs catching the code
+    if (!waiting) return;
+
     const id = authClient.ensureElectronRedirect();
     return () => clearInterval(id);
-  }, []);
+  }, [waiting]);
 
   const handleCopy = async () => {
     if (!code) return;

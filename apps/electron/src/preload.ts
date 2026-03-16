@@ -8,7 +8,9 @@ import { setupRenderer } from "@better-auth/electron/preload";
 
 setupRenderer();
 
+import type { readClipboard } from "@electron/clipboard";
 import type {
+  authenticateToken,
   getSession,
   listSessions,
   logout,
@@ -95,6 +97,12 @@ const api = {
         capacity: number;
       };
     }>("space.update"),
+  },
+  clipboard: {
+    read: () =>
+      ipcRenderer.invoke("clipboard.read") as Promise<
+        ReturnType<typeof readClipboard>
+      >,
   },
   zoom: (level: number) => webFrame.setZoomFactor(level),
   os: {
@@ -216,6 +224,10 @@ const api = {
       ipcRenderer.invoke("auth.open") as Promise<ReturnType<typeof openAuth>>,
     logout: () =>
       ipcRenderer.invoke("auth.logout") as Promise<ReturnType<typeof logout>>,
+    token: (payload: Parameters<typeof authenticateToken>[0]) =>
+      ipcRenderer.invoke("auth.token", payload) as Promise<
+        ReturnType<typeof authenticateToken>
+      >,
     user: {
       update: (payload: Parameters<typeof updateUser>[0]) =>
         ipcRenderer.invoke("auth.user.update", payload) as Promise<

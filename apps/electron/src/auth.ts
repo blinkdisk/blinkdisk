@@ -23,7 +23,7 @@ export const authClient = createAuthClient({
         scheme: APP_ID,
       },
       cookiePrefix: ELECTRON_COOKIE_PREFIX,
-      clientId: ELECTRON_CLIENT_ID,
+      clientID: ELECTRON_CLIENT_ID,
       storagePrefix: "auth",
       storage: {
         getItem: async (key: string) => {
@@ -88,4 +88,8 @@ export async function openAuth() {
 
 export async function logout() {
   return await authClient.signOut();
+}
+
+export async function authenticateToken({ token }: { token: string }) {
+  return await authClient.authenticate({ token });
 }
