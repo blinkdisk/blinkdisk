@@ -2,15 +2,13 @@
   "name": "marketing",
   "compatibility_date": "2026-02-03",
   "main": "dist/_worker.js/index.js",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist"
+    "directory": "./dist",
+    "html_handling": "drop-trailing-slash",
   },
   "observability": {
-    "enabled": true
-  }
+    "enabled": true,
+  },
 }
