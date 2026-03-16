@@ -13,6 +13,7 @@
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "^22.13.9",
+    "date-fns": "^4.1.0",
     "eslint": "^9.22.0",
     "typescript": "5.8.2"
   },

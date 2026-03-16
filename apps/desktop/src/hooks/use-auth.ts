@@ -75,7 +75,7 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     if (account) {
-      window.signOut();
+      await window.electron.auth.logout();
 
       await window.electron.store.set(
         `accounts.${account?.user.id}.active`,

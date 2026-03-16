@@ -1,5 +1,10 @@
 import { getPostHog, posthog } from "@api/lib/posthog";
 import { electron } from "@better-auth/electron";
+import { PROTOCOL_FRONTEND_URL } from "@blinkdisk/config/app";
+import {
+  ELECTRON_CLIENT_ID,
+  ELECTRON_COOKIE_PREFIX,
+} from "@blinkdisk/config/auth";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
@@ -16,12 +21,9 @@ const cookieSettings = {
   },
 } as const;
 
-export const auth = (
-  databaseUrl: string,
-  space: DurableObjectNamespace<undefined>,
-  db: Kysely<DB>,
-) => {
+export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
   return betterAuth({
+    baseURL: env.API_URL,
     appName: "BlinkDisk",
     basePath: "/api/auth",
     account: {
@@ -60,10 +62,14 @@ export const auth = (
       modelName: "Verification",
     },
     database: {
-      dialect: dialect(databaseUrl),
+      dialect: dialect(env.HYPERDRIVE.connectionString),
       type: "postgres",
     },
-    trustedOrigins: [process.env.DESKTOP_URL!, "blinkdiskapp://frontend"],
+    trustedOrigins: [
+      process.env.WEB_URL,
+      process.env.DESKTOP_URL!,
+      PROTOCOL_FRONTEND_URL,
+    ],
     advanced: {
       cookiePrefix: "blinkdisk",
       useSecureCookies: true,
@@ -88,7 +94,11 @@ export const auth = (
       },
     },
     plugins: [
-      electron() as Omit<ReturnType<typeof electron>, "hooks">,
+      electron({
+        disableOriginOverride: true,
+        cookiePrefix: ELECTRON_COOKIE_PREFIX,
+        clientID: ELECTRON_CLIENT_ID,
+      }) as Omit<ReturnType<typeof electron>, "hooks">,
       magicLink({
         sendMagicLink: ({ email, token }, ctx) =>
           sendEmail(
@@ -174,7 +184,7 @@ export const auth = (
               })
               .execute();
 
-            const stub = space.getByName(spaceId);
+            const stub = env.SPACE.getByName(spaceId);
             await (
               stub as unknown as {
                 init: (id: string, capacity: number) => Promise<void>;

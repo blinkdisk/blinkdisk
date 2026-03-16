@@ -4,6 +4,7 @@ config({
   path: "../../.env",
 });
 
+import { INTERNAL_PROTOCOL } from "@blinkdisk/config/app";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
@@ -12,7 +13,17 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import env from "vite-plugin-environment";
 import { viteStaticCopy as copy } from "vite-plugin-static-copy";
+import type { Plugin } from "vite";
 import paths from "vite-tsconfig-paths";
+
+function injectAppConfig(): Plugin {
+  return {
+    name: "inject-app-config",
+    transformIndexHtml(html) {
+      return html.replaceAll("__INTERNAL_PROTOCOL__", INTERNAL_PROTOCOL);
+    },
+  };
+}
 
 export default defineConfig({
   clearScreen: false,
@@ -27,6 +38,7 @@ export default defineConfig({
         port: 5001,
       },
     }),
+    injectAppConfig(),
     paths(),
     router({ target: "react", autoCodeSplitting: true }),
     react({

@@ -1,3 +1,5 @@
+import { APP_SCHEME } from "@blinkdisk/config/app";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
 import Confetti from "js-confetti";
@@ -9,6 +11,8 @@ export const Route = createFileRoute("/checkout/success")({
 });
 
 function RouteComponent() {
+  const { t } = useAppTranslation("subscription.checkoutSuccess");
+
   useEffect(() => {
     const confetti = new Confetti();
     confetti.addConfetti({ confettiNumber: 100 });
@@ -22,17 +26,16 @@ function RouteComponent() {
           <CheckIcon className="size-6" />
         </div>
         <h1 className="mt-10 text-center text-4xl font-bold">
-          Subscribed successfully!
+          {t("title")}
         </h1>
         <p className="text-muted-foreground mt-4 max-w-sm text-center text-sm">
-          Your subscription has been successfully started. You can now close
-          this window and return to your desktop app.
+          {t("description")}
         </p>
         <Button
           className="mt-10"
-          onClick={() => window.open("blinkdisk://checkout_completed")}
+          onClick={() => window.open(`${APP_SCHEME}://checkout_completed`)}
         >
-          Open Desktop App
+          {t("openApp")}
         </Button>
       </div>
       <div className="mb-auto" />

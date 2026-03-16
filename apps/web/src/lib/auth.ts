@@ -1,4 +1,9 @@
 import { electronProxyClient } from "@better-auth/electron/proxy";
+import { APP_ID_ORIGIN, APP_SCHEME } from "@blinkdisk/config/app";
+import {
+  ELECTRON_CLIENT_ID,
+  ELECTRON_COOKIE_PREFIX,
+} from "@blinkdisk/config/auth";
 import {
   inferAdditionalFields,
   magicLinkClient,
@@ -9,12 +14,14 @@ import { createAuthClient } from "better-auth/react";
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
   basePath: "/api/auth",
-  trustedOrigins: ["com.blinkdisk.app:/"],
+  trustedOrigins: [APP_ID_ORIGIN],
   plugins: [
     electronProxyClient({
       protocol: {
-        scheme: "com.blinkdisk.app",
+        scheme: APP_SCHEME,
       },
+      cookiePrefix: ELECTRON_COOKIE_PREFIX,
+      clientID: ELECTRON_CLIENT_ID,
     }) as Omit<ReturnType<typeof electronProxyClient>, "$InferServerPlugin">,
     magicLinkClient(),
     multiSessionClient(),

@@ -8,6 +8,8 @@ export const Route = createFileRoute("/auth/login")({
 });
 
 function RouteComponent() {
+  const search = Route.useSearch();
+
   const { t } = useAppTranslation("auth.login");
   const form = useLoginForm();
 
@@ -19,7 +21,12 @@ function RouteComponent() {
           <Trans
             i18nKey="auth:login.registerText"
             components={[
-              <Link key={0} to="/auth/register" className="link-primary" />,
+              <Link
+                key={0}
+                to="/auth/register"
+                search={search}
+                className="link-primary"
+              />,
             ]}
           />
         </div>

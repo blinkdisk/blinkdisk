@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as CheckoutSuccessImport } from './routes/checkout/success'
 import { Route as CheckoutRedirectImport } from './routes/checkout/redirect'
+import { Route as AuthSuccessImport } from './routes/auth/success'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthMagicImport } from './routes/auth/magic'
 import { Route as AuthLoginImport } from './routes/auth/login'
@@ -43,6 +44,12 @@ const CheckoutRedirectRoute = CheckoutRedirectImport.update({
   id: '/checkout/redirect',
   path: '/checkout/redirect',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthSuccessRoute = AuthSuccessImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AuthRegisterRoute = AuthRegisterImport.update({
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof AuthRouteImport
     }
+    '/auth/success': {
+      id: '/auth/success'
+      path: '/success'
+      fullPath: '/auth/success'
+      preLoaderRoute: typeof AuthSuccessImport
+      parentRoute: typeof AuthRouteImport
+    }
     '/checkout/redirect': {
       id: '/checkout/redirect'
       path: '/checkout/redirect'
@@ -125,12 +139,14 @@ interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthMagicRoute: typeof AuthMagicRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthSuccessRoute: typeof AuthSuccessRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthMagicRoute: AuthMagicRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  AuthSuccessRoute: AuthSuccessRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
@@ -143,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/success': typeof AuthSuccessRoute
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
@@ -153,6 +170,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/success': typeof AuthSuccessRoute
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
@@ -164,6 +182,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/magic': typeof AuthMagicRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/success': typeof AuthSuccessRoute
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
@@ -176,6 +195,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
+    | '/auth/success'
     | '/checkout/redirect'
     | '/checkout/success'
   fileRoutesByTo: FileRoutesByTo
@@ -185,6 +205,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
+    | '/auth/success'
     | '/checkout/redirect'
     | '/checkout/success'
   id:
@@ -194,6 +215,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/magic'
     | '/auth/register'
+    | '/auth/success'
     | '/checkout/redirect'
     | '/checkout/success'
   fileRoutesById: FileRoutesById
@@ -237,7 +259,8 @@ export const routeTree = rootRoute
       "children": [
         "/auth/login",
         "/auth/magic",
-        "/auth/register"
+        "/auth/register",
+        "/auth/success"
       ]
     },
     "/auth/login": {
@@ -250,6 +273,10 @@ export const routeTree = rootRoute
     },
     "/auth/register": {
       "filePath": "auth/register.tsx",
+      "parent": "/auth"
+    },
+    "/auth/success": {
+      "filePath": "auth/success.tsx",
       "parent": "/auth"
     },
     "/checkout/redirect": {

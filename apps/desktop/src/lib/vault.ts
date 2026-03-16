@@ -1,8 +1,9 @@
+import { PROTOCOL_VAULT_URL } from "@blinkdisk/config/app";
 import { CoreError } from "@blinkdisk/utils/error";
 import xior from "xior";
 
 const client = xior.create({
-  baseURL: "blinkdiskapp://vault/",
+  baseURL: PROTOCOL_VAULT_URL,
 });
 
 client.interceptors.response.use(

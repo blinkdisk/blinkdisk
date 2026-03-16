@@ -30,7 +30,12 @@ function RouteComponent() {
           <Trans
             i18nKey="auth:register.loginText"
             components={[
-              <Link key={0} to="/auth/login" className="link-primary" />,
+              <Link
+                key={0}
+                to="/auth/login"
+                search={search}
+                className="link-primary"
+              />,
             ]}
           />
         </div>
@@ -95,7 +100,6 @@ function RouteComponent() {
                 ),
                 labelClassName: "text-xs font-normal",
               }}
-              className="mt-0.5"
             />
           )}
         </form.AppField>

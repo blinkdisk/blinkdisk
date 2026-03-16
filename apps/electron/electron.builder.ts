@@ -1,11 +1,10 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
+import { APP_ID, APP_SCHEME } from "@blinkdisk/config/app";
 import { Configuration } from "electron-builder";
-
-const appId = "com.blinkdisk.app";
 
 export default {
   productName: "BlinkDisk",
-  appId,
+  appId: APP_ID,
   files: ["build/**", "frontend/**"],
   directories: {
     buildResources: "icon",
@@ -24,14 +23,14 @@ export default {
   protocols: [
     {
       name: "BlinkDisk",
-      schemes: ["blinkdisk", "com.blinkdisk.app"],
+      schemes: [APP_SCHEME],
       role: "Editor",
     },
   ],
   // Used for MacOS .zip files
   artifactName: "BlinkDisk-MacOS.${ext}",
   win: {
-    appId,
+    appId: APP_ID,
     target: ["nsis"],
     ...(process.env.CERTUM_CERTIFICATE_SHA1 && {
       signtoolOptions: {
@@ -51,7 +50,7 @@ export default {
     artifactName: "BlinkDisk-Windows.${ext}",
   },
   mac: {
-    appId,
+    appId: APP_ID,
     hardenedRuntime: true,
     notarize: true,
     category: "public.app-category.utilities",
@@ -80,7 +79,7 @@ export default {
     artifactName: "BlinkDisk-macOS.${ext}",
   },
   linux: {
-    appId,
+    appId: APP_ID,
     category: "Utility",
     executableName: "blinkdisk",
     target: [

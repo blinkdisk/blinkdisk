@@ -11,6 +11,8 @@ setupRenderer();
 import type {
   getSession,
   listSessions,
+  logout,
+  openAuth,
   setSession,
   updateUser,
 } from "@electron/auth";
@@ -210,6 +212,10 @@ const api = {
     install: () => ipcRenderer.invoke("update.install") as Promise<void>,
   },
   auth: {
+    open: () =>
+      ipcRenderer.invoke("auth.open") as Promise<ReturnType<typeof openAuth>>,
+    logout: () =>
+      ipcRenderer.invoke("auth.logout") as Promise<ReturnType<typeof logout>>,
     user: {
       update: (payload: Parameters<typeof updateUser>[0]) =>
         ipcRenderer.invoke("auth.user.update", payload) as Promise<

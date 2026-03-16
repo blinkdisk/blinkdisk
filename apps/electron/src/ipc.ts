@@ -1,6 +1,8 @@
 import {
   getSession,
   listSessions,
+  logout,
+  openAuth,
   setSession,
   updateUser,
 } from "@electron/auth";
@@ -93,7 +95,9 @@ ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
 ipcMain.handle("update.status", () => getUpdateStatus());
 ipcMain.handle("update.install", () => installUpdate());
 
+ipcMain.handle("auth.open", () => openAuth());
+ipcMain.handle("auth.logout", () => logout());
 ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
-ipcMain.handle("auth.session.list", (_) => listSessions());
-ipcMain.handle("auth.session.get", (_) => getSession());
+ipcMain.handle("auth.session.list", () => listSessions());
+ipcMain.handle("auth.session.get", () => getSession());
 ipcMain.handle("auth.session.set", (_, payload) => setSession(payload));

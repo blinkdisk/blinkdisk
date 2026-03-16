@@ -2,12 +2,15 @@ import { LanguageCode } from "@blinkdisk/config/language";
 import { ZMagicCodeType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import i18n from "@web/i18n";
 import { authClient } from "@web/lib/auth";
 import { usePostHog } from "posthog-js/react";
 
 export function useMagicCode() {
   const posthog = usePostHog();
+  const search = useSearch({ strict: false });
+  const navigate = useNavigate();
 
   return useMutation({
     mutationKey: ["auth", "magic"],
@@ -18,6 +21,7 @@ export function useMagicCode() {
         query: {
           token: values.code,
         },
+        fetchOptions: { query: search },
       });
 
       if (error && "statusText" in error && error.statusText === "Not Found")
@@ -37,6 +41,11 @@ export function useMagicCode() {
     },
     onSuccess: async (res) => {
       posthog.identify(res.user.id);
+
+      await navigate({
+        to: "/auth/success",
+        search,
+      });
     },
   });
 }

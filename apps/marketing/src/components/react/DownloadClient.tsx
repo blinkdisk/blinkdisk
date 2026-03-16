@@ -1,5 +1,5 @@
+import { useClipboard } from "@blinkdisk/hooks/use-clipboard";
 import { useCalendar } from "@marketing/hooks/use-calendar";
-import { useClipboard } from "@marketing/hooks/use-clipboard";
 import { useLogsnag } from "@marketing/hooks/use-logsnag";
 import { usePlatform } from "@marketing/hooks/use-platform";
 import type { Architecture } from "@marketing/utils/architecture";

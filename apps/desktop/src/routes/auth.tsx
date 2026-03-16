@@ -8,7 +8,7 @@ export const Route = createFileRoute("/auth")({
 function RouteComponent() {
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <Button onClick={() => window.requestAuth()} size="xl">
+      <Button onClick={() => window.electron.auth.open()} size="xl">
         Register
       </Button>
     </div>

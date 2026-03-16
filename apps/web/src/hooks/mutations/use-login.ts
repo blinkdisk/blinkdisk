@@ -1,12 +1,13 @@
 import { ZLoginType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import i18n from "@web/i18n";
 import { authClient } from "@web/lib/auth";
 
 export function useLogin() {
   const navigate = useNavigate();
+  const search = useSearch({ strict: false });
 
   return useMutation({
     mutationKey: ["auth", "login"],
@@ -14,6 +15,7 @@ export function useLogin() {
       const { data, error } = await authClient.signIn.magicLink(
         {
           email: values.email,
+          fetchOptions: { query: search },
         },
         {
           headers: {
@@ -42,6 +44,7 @@ export function useLogin() {
     onSuccess: async () => {
       await navigate({
         to: "/auth/magic",
+        search,
       });
     },
   });

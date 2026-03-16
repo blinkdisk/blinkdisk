@@ -1,4 +1,4 @@
-import i18n from "@utils/i18n";
+import i18n from "i18next";
 import { toast } from "sonner";
 
 export type CustomErrorCode =

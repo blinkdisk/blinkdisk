@@ -1,3 +1,9 @@
+import {
+  INTERNAL_SCHEME,
+  PROTOCOL_API_NS,
+  PROTOCOL_FRONTEND_NS,
+  PROTOCOL_VAULT_NS,
+} from "@blinkdisk/config/app";
 import { getVault } from "@electron/vault/manage";
 import { app, net, protocol } from "electron";
 import path from "node:path";
@@ -11,7 +17,7 @@ export function registerProtcol() {
       privileges: { bypassCSP: true, corsEnabled: true, supportFetchAPI: true },
     },
     {
-      scheme: "blinkdiskapp",
+      scheme: INTERNAL_SCHEME,
       privileges: {
         standard: true,
         secure: true,
@@ -22,10 +28,10 @@ export function registerProtcol() {
 }
 
 export function listenProtocol() {
-  protocol.handle("blinkdiskapp", async (req) => {
+  protocol.handle(INTERNAL_SCHEME, async (req) => {
     const { host, pathname, search } = new URL(req.url);
 
-    if (host === "frontend") {
+    if (host === PROTOCOL_FRONTEND_NS) {
       const baseDir = !app.isPackaged
         ? path.join(import.meta.dirname, "..", "frontend")
         : path.join(process.resourcesPath, "app.asar", "frontend");
@@ -50,12 +56,12 @@ export function listenProtocol() {
       }
 
       return net.fetch(pathToFileURL(pathToServe).toString());
-    } else if (host === "api") {
+    } else if (host === PROTOCOL_API_NS) {
       return net.fetch(
         `${process.env.API_URL}${pathname}${search ? search : ""}`,
         req,
       );
-    } else if (host.startsWith("vault")) {
+    } else if (host === PROTOCOL_VAULT_NS) {
       const vaultId = req.headers.get("vault-id") || "";
       const vault = getVault(vaultId);
 

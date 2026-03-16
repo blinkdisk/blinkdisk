@@ -3,6 +3,8 @@ import {
   ZUpdatePreferencesType,
   ZUpdateUserType,
 } from "@blinkdisk/schemas/settings";
+import { APP_ID } from "@config/app";
+import { ELECTRON_CLIENT_ID, ELECTRON_COOKIE_PREFIX } from "@config/auth";
 import { store } from "@electron/store";
 import {
   inferAdditionalFields,
@@ -18,8 +20,11 @@ export const authClient = createAuthClient({
     electronClient({
       signInURL: `${process.env.WEB_URL}/auth/register`,
       protocol: {
-        scheme: "com.blinkdisk.app",
+        scheme: APP_ID,
       },
+      cookiePrefix: ELECTRON_COOKIE_PREFIX,
+      clientId: ELECTRON_CLIENT_ID,
+      storagePrefix: "auth",
       storage: {
         getItem: async (key: string) => {
           return store.get(key);
@@ -27,6 +32,9 @@ export const authClient = createAuthClient({
         setItem: async (key: string, value: unknown) => {
           return store.set(key, value);
         },
+      },
+      userImageProxy: {
+        enabled: false,
       },
     }),
     magicLinkClient(),
@@ -72,4 +80,12 @@ export async function getSession() {
 
 export async function setSession({ sessionToken }: { sessionToken: string }) {
   return await authClient.multiSession.setActive({ sessionToken });
+}
+
+export async function openAuth() {
+  return await authClient.requestAuth();
+}
+
+export async function logout() {
+  return await authClient.signOut();
 }
