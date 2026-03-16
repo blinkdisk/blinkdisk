@@ -1,14 +1,6 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Button } from "@blinkdisk/ui/button";
-import { useRegisterForm } from "@desktop/hooks/forms/use-register-form";
-import { useAuth } from "@desktop/hooks/use-auth";
-import {
-  createFileRoute,
-  Link,
-  useCanGoBack,
-  useRouter,
-} from "@tanstack/react-router";
-import { ArrowLeftIcon } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRegisterForm } from "@web/hooks/forms/use-register-form";
 import { Trans } from "react-i18next";
 import { z } from "zod";
 
@@ -21,10 +13,7 @@ export const Route = createFileRoute("/auth/register")({
 
 function RouteComponent() {
   const { t } = useAppTranslation("auth.register");
-  const { authenticated } = useAuth();
 
-  const router = useRouter();
-  const canGoBack = useCanGoBack();
   const search = Route.useSearch();
 
   const form = useRegisterForm({
@@ -35,17 +24,6 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-8">
-      {authenticated && canGoBack && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="fixed right-10 top-10"
-          onClick={() => router.history.back()}
-        >
-          <ArrowLeftIcon />
-          {t("auth:goBack")}
-        </Button>
-      )}
       <div className="flex flex-col gap-y-3 text-center">
         <h1 className="text-4xl font-extrabold">{t("title")}</h1>
         <div className="text-muted-foreground text-center text-sm">

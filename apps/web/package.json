@@ -12,6 +12,8 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
+    "@better-auth/electron": "1.5.5",
+    "@blinkdisk/api": "workspace:*",
     "@blinkdisk/components": "workspace:*",
     "@blinkdisk/config": "workspace:*",
     "@blinkdisk/forms": "workspace:*",
@@ -20,7 +22,6 @@
     "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
-    "@blinkdisk/api": "workspace:*",
     "@cloudflare/vite-plugin": "^1.28.0",
     "@sentry/react": "^10.40.0",
     "@tailwindcss/vite": "^4.0.14",
@@ -28,14 +29,18 @@
     "@tanstack/react-query": "^5.69.0",
     "@tanstack/react-router": "1.131.7",
     "@trpc/client": "^10.45.2",
+    "better-auth": "1.5.5",
     "js-confetti": "^0.13.1",
     "lucide-react": "^0.483.0",
     "posthog-js": "^1.270.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-i18next": "^15.4.1",
     "react-loading-skeleton": "^3.5.0",
+    "sonner": "^2.0.1",
     "usehooks-ts": "^3.1.1",
-    "vite-plugin-static-copy": "^3.3.0"
+    "vite-plugin-static-copy": "^3.3.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",

@@ -18,9 +18,9 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
+    "@blinkdisk/config": "workspace:*",
     "@blinkdisk/emails": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
-    "@blinkdisk/config": "workspace:*",
     "@plunk/node": "^3.0.3",
     "@react-email/render": "^2.0.1",
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",
@@ -34,6 +34,7 @@
     "nanoid": "^5.1.5",
     "nodemailer": "^7.0.11",
     "react-i18next": "^15.4.1",
+    "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.2"
   }
 }

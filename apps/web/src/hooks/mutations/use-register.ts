@@ -1,9 +1,9 @@
 import { ZRegisterServerType, ZRegisterType } from "@blinkdisk/schemas/auth";
-import i18n from "@desktop/i18n";
-import { authClient } from "@desktop/lib/auth";
-import { showErrorToast } from "@desktop/lib/error";
+import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import i18n from "@web/i18n";
+import { authClient } from "@web/lib/auth";
 
 export function useRegister() {
   const navigate = useNavigate();

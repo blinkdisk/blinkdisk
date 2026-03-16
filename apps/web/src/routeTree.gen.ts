@@ -11,11 +11,21 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as CheckoutSuccessImport } from './routes/checkout/success'
 import { Route as CheckoutRedirectImport } from './routes/checkout/redirect'
+import { Route as AuthRegisterImport } from './routes/auth/register'
+import { Route as AuthMagicImport } from './routes/auth/magic'
+import { Route as AuthLoginImport } from './routes/auth/login'
 
 // Create/Update Routes
+
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -35,6 +45,24 @@ const CheckoutRedirectRoute = CheckoutRedirectImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthRegisterRoute = AuthRegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AuthMagicRoute = AuthMagicImport.update({
+  id: '/magic',
+  path: '/magic',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -45,6 +73,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/auth/magic': {
+      id: '/auth/magic'
+      path: '/magic'
+      fullPath: '/auth/magic'
+      preLoaderRoute: typeof AuthMagicImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof AuthRouteImport
     }
     '/checkout/redirect': {
       id: '/checkout/redirect'
@@ -65,14 +121,38 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthMagicRoute: typeof AuthMagicRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthMagicRoute: AuthMagicRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/magic': typeof AuthMagicRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/magic': typeof AuthMagicRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
@@ -80,27 +160,55 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/magic': typeof AuthMagicRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout/redirect' | '/checkout/success'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/auth/login'
+    | '/auth/magic'
+    | '/auth/register'
+    | '/checkout/redirect'
+    | '/checkout/success'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout/redirect' | '/checkout/success'
-  id: '__root__' | '/' | '/checkout/redirect' | '/checkout/success'
+  to:
+    | '/'
+    | '/auth'
+    | '/auth/login'
+    | '/auth/magic'
+    | '/auth/register'
+    | '/checkout/redirect'
+    | '/checkout/success'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/auth/login'
+    | '/auth/magic'
+    | '/auth/register'
+    | '/checkout/redirect'
+    | '/checkout/success'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   CheckoutRedirectRoute: typeof CheckoutRedirectRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   CheckoutRedirectRoute: CheckoutRedirectRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
 }
@@ -116,12 +224,33 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auth",
         "/checkout/redirect",
         "/checkout/success"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/auth": {
+      "filePath": "auth/route.tsx",
+      "children": [
+        "/auth/login",
+        "/auth/magic",
+        "/auth/register"
+      ]
+    },
+    "/auth/login": {
+      "filePath": "auth/login.tsx",
+      "parent": "/auth"
+    },
+    "/auth/magic": {
+      "filePath": "auth/magic.tsx",
+      "parent": "/auth"
+    },
+    "/auth/register": {
+      "filePath": "auth/register.tsx",
+      "parent": "/auth"
     },
     "/checkout/redirect": {
       "filePath": "checkout/redirect.tsx"

@@ -1,9 +1,8 @@
-import { CustomError } from "@blinkdisk/utils/error";
+import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
 import { CoreMountItem, useMount } from "@desktop/hooks/queries/core/use-mount";
 import { useBackup } from "@desktop/hooks/use-backup";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { showErrorToast } from "@desktop/lib/error";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";

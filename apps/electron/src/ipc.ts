@@ -1,3 +1,9 @@
+import {
+  getSession,
+  listSessions,
+  setSession,
+  updateUser,
+} from "@electron/auth";
 import { setVaultCache } from "@electron/cache";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
@@ -86,3 +92,8 @@ ipcMain.handle("fs.isDirectory", (_, path) => isDirectory(path));
 ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
 ipcMain.handle("update.status", () => getUpdateStatus());
 ipcMain.handle("update.install", () => installUpdate());
+
+ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
+ipcMain.handle("auth.session.list", (_) => listSessions());
+ipcMain.handle("auth.session.get", (_) => getSession());
+ipcMain.handle("auth.session.set", (_, payload) => setSession(payload));

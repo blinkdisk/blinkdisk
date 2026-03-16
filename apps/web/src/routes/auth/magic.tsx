@@ -1,16 +1,10 @@
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
-import { Button } from "@blinkdisk/ui/button";
 import { InputOTPSlot } from "@blinkdisk/ui/input-otp";
-import { useMagicCodeForm } from "@desktop/hooks/forms/use-magic-code-form";
-import {
-  createFileRoute,
-  Link,
-  useCanGoBack,
-  useRouter,
-} from "@tanstack/react-router";
-import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMagicCodeForm } from "@web/hooks/forms/use-magic-code-form";
+import { AlertTriangleIcon } from "lucide-react";
 import { Trans } from "react-i18next";
 
 export const Route = createFileRoute("/auth/magic")({
@@ -19,25 +13,12 @@ export const Route = createFileRoute("/auth/magic")({
 
 function RouteComponent() {
   const { t } = useAppTranslation("auth.magic");
-  const router = useRouter();
-  const canGoBack = useCanGoBack();
 
   const form = useMagicCodeForm();
   const errors = useStore(form.store, (state) => state.errorMap);
 
   return (
     <div className="max-w-84 flex flex-col gap-y-8">
-      {canGoBack && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="fixed right-10 top-10"
-          onClick={() => router.history.back()}
-        >
-          <ArrowLeftIcon />
-          {t("auth:goBack")}
-        </Button>
-      )}
       <div className="flex flex-col gap-y-3 text-center">
         <h1 className="text-4xl font-extrabold">{t("title")}</h1>
         <div className="text-muted-foreground text-center text-sm">

@@ -1,18 +1,39 @@
 import { Logo } from "@blinkdisk/components/logo";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import image from "../../../public/images/auth.jpg";
-
+import { ManualToast } from "@web/components/auth/manual";
+import { authClient } from "@web/lib/auth";
+import { useEffect } from "react";
+import { toast } from "sonner";
 export const Route = createFileRoute("/auth")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  useEffect(() => {
+    const authorizationCode = authClient.electron.getAuthorizationCode();
+    if (authorizationCode) {
+      setTimeout(() => {
+        toast.custom(
+          (t) => <ManualToast t={t} authorizationCode={authorizationCode} />,
+          {
+            duration: 4_000,
+          },
+        );
+      }, 1000);
+    }
+  }, []);
+
+  useEffect(() => {
+    const id = authClient.ensureElectronRedirect();
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div className="flex min-h-screen w-screen">
       <div className="w-1/2 2xl:w-[40vw]">
         <div
           style={{
-            backgroundImage: `url("${image}")`,
+            backgroundImage: `url("/images/auth.jpg")`,
             backgroundSize: "contain",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

@@ -1,17 +1,12 @@
 import { LanguageCode } from "@blinkdisk/config/language";
 import { ZMagicCodeType } from "@blinkdisk/schemas/auth";
-import { useAuth } from "@desktop/hooks/use-auth";
-import i18n from "@desktop/i18n";
-import { authClient } from "@desktop/lib/auth";
-import { showErrorToast } from "@desktop/lib/error";
+import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import i18n from "@web/i18n";
+import { authClient } from "@web/lib/auth";
 import { usePostHog } from "posthog-js/react";
 
 export function useMagicCode() {
-  const { setAuthenticated, accountChanged } = useAuth();
-
-  const navigate = useNavigate();
   const posthog = usePostHog();
 
   return useMutation({
@@ -42,11 +37,6 @@ export function useMagicCode() {
     },
     onSuccess: async (res) => {
       posthog.identify(res.user.id);
-
-      setAuthenticated(true);
-
-      await accountChanged();
-      await navigate({ to: "/" });
     },
   });
 }

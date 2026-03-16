@@ -20,9 +20,5 @@
     "noUncheckedSideEffectImports": true,
     "types": ["../api/worker-configuration.d.ts", "vitest/globals"],
   },
-  "include": [
-    "src",
-    "../../libs/hooks/src/use-app-translation.ts",
-    "../../libs/components/src/logo.tsx",
-  ],
+  "include": ["src"],
 }

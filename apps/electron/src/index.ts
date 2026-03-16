@@ -1,6 +1,7 @@
 // App should be imported before sentry
 import { app } from "electron";
 // But sentry should be imported directly after
+import { authClient } from "@electron/auth";
 import { listenProtocol, registerProtcol } from "@electron/protocol";
 import * as Sentry from "@sentry/electron/main";
 
@@ -12,6 +13,8 @@ Sentry.init({
 // Registering must happen after Sentry,
 // but before the app ready event.
 registerProtcol();
+
+authClient.setupMain();
 
 import "@electron/deeplink";
 import "@electron/instance";

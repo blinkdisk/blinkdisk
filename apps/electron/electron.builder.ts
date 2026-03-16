@@ -24,7 +24,7 @@ export default {
   protocols: [
     {
       name: "BlinkDisk",
-      schemes: ["blinkdisk"],
+      schemes: ["blinkdisk", "com.blinkdisk.app"],
       role: "Editor",
     },
   ],

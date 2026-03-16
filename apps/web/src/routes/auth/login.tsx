@@ -1,14 +1,6 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Button } from "@blinkdisk/ui/button";
-import { useLoginForm } from "@desktop/hooks/forms/use-login-form";
-import { useAuth } from "@desktop/hooks/use-auth";
-import {
-  createFileRoute,
-  Link,
-  useCanGoBack,
-  useRouter,
-} from "@tanstack/react-router";
-import { ArrowLeftIcon } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useLoginForm } from "@web/hooks/forms/use-login-form";
 import { Trans } from "react-i18next";
 
 export const Route = createFileRoute("/auth/login")({
@@ -17,25 +9,10 @@ export const Route = createFileRoute("/auth/login")({
 
 function RouteComponent() {
   const { t } = useAppTranslation("auth.login");
-  const { authenticated } = useAuth();
-
-  const router = useRouter();
-  const canGoBack = useCanGoBack();
   const form = useLoginForm();
 
   return (
     <div className="flex flex-col gap-y-8">
-      {authenticated && canGoBack && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="fixed right-10 top-10"
-          onClick={() => router.history.back()}
-        >
-          <ArrowLeftIcon />
-          {t("auth:goBack")}
-        </Button>
-      )}
       <div className="flex flex-col gap-y-3 text-center">
         <h1 className="text-4xl font-extrabold">{t("title")}</h1>
         <div className="text-muted-foreground text-center text-sm">

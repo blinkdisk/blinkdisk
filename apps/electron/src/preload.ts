@@ -4,6 +4,16 @@ Sentry.init({
   enabled: process.env.NODE_ENV !== "development",
 });
 
+import { setupRenderer } from "@better-auth/electron/preload";
+
+setupRenderer();
+
+import type {
+  getSession,
+  listSessions,
+  setSession,
+  updateUser,
+} from "@electron/auth";
 import type { setVaultCache } from "@electron/cache";
 import type {
   decryptVaultConfig,
@@ -198,6 +208,28 @@ const api = {
     change: listener<UpdateStatus>("update.available"),
     status: () => ipcRenderer.invoke("update.status") as Promise<UpdateStatus>,
     install: () => ipcRenderer.invoke("update.install") as Promise<void>,
+  },
+  auth: {
+    user: {
+      update: (payload: Parameters<typeof updateUser>[0]) =>
+        ipcRenderer.invoke("auth.user.update", payload) as Promise<
+          ReturnType<typeof updateUser>
+        >,
+    },
+    session: {
+      list: () =>
+        ipcRenderer.invoke("auth.session.list") as Promise<
+          ReturnType<typeof listSessions>
+        >,
+      get: () =>
+        ipcRenderer.invoke("auth.session.get") as Promise<
+          ReturnType<typeof getSession>
+        >,
+      set: (payload: Parameters<typeof setSession>[0]) =>
+        ipcRenderer.invoke("auth.session.set", payload) as Promise<
+          ReturnType<typeof setSession>
+        >,
+    },
   },
 };
 

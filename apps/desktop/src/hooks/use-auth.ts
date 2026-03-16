@@ -1,9 +1,9 @@
+import type { getSession } from "@blinkdisk/electron/auth";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { authClient } from "@desktop/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
@@ -29,15 +29,13 @@ export function useAuth() {
   });
 
   const addAccount = useCallback(async () => {
-    navigate({ to: "/auth/login" });
+    navigate({ to: "/auth" });
   }, [navigate]);
 
   const accountChanged = useCallback(
-    async (
-      session?: Awaited<ReturnType<typeof authClient.getSession>>["data"],
-    ) => {
+    async (session?: Awaited<ReturnType<typeof getSession>>["data"]) => {
       if (!session) {
-        const { data, error } = await authClient.getSession();
+        const { data, error } = await window.electron.auth.session.get();
         if (error || !data) return;
         session = data;
       }
@@ -62,7 +60,7 @@ export function useAuth() {
 
   const selectAccount = useCallback(
     async (sessionToken: string) => {
-      const { data, error } = await authClient.multiSession.setActive({
+      const { data, error } = await window.electron.auth.session.set({
         sessionToken,
       });
 
@@ -77,9 +75,7 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     if (account) {
-      await authClient.multiSession.revoke({
-        sessionToken: account?.session.token,
-      });
+      window.signOut();
 
       await window.electron.store.set(
         `accounts.${account?.user.id}.active`,
@@ -95,7 +91,7 @@ export function useAuth() {
       selectAccount(remainingSessions[0].session.token);
     } else {
       setAuthenticated(false);
-      navigate({ to: "/auth/login" });
+      navigate({ to: "/auth" });
     }
   }, [navigate, account, accounts, selectAccount, setAuthenticated]);
 

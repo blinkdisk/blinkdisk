@@ -1,7 +1,6 @@
 import { ZUpdateUserType } from "@blinkdisk/schemas/settings";
+import { showErrorToast } from "@blinkdisk/utils/error";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { authClient } from "@desktop/lib/auth";
-import { showErrorToast } from "@desktop/lib/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateAccount(onSuccess: () => void) {
@@ -11,12 +10,7 @@ export function useUpdateAccount(onSuccess: () => void) {
   return useMutation({
     mutationKey: ["account", "details"],
     mutationFn: async (values: ZUpdateUserType) => {
-      const { data, error } = await authClient.updateUser({
-        name: `${values.firstName.replace(/\s+/g, "")} ${values.lastName.replace(
-          /\s+/g,
-          "",
-        )}`,
-      });
+      const { data, error } = await window.electron.auth.user.update(values);
 
       if (error) throw error;
       return data;

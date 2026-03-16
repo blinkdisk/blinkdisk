@@ -1,9 +1,8 @@
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import { showErrorToast } from "@blinkdisk/utils/error";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useTheme } from "@desktop/hooks/use-theme";
 import i18n from "@desktop/i18n";
-import { authClient } from "@desktop/lib/auth";
-import { showErrorToast } from "@desktop/lib/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdatePreferences(onSuccess: () => void) {
@@ -17,7 +16,7 @@ export function useUpdatePreferences(onSuccess: () => void) {
       setTheme(values.theme);
       i18n.changeLanguage(values.language);
 
-      const { data, error } = await authClient.updateUser({
+      const { data, error } = await window.electron.auth.user.update({
         language: values.language,
       });
 

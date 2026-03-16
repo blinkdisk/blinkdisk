@@ -1,4 +1,5 @@
 import { getPostHog, posthog } from "@api/lib/posthog";
+import { electron } from "@better-auth/electron";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
@@ -87,6 +88,7 @@ export const auth = (
       },
     },
     plugins: [
+      electron() as Omit<ReturnType<typeof electron>, "hooks">,
       magicLink({
         sendMagicLink: ({ email, token }, ctx) =>
           sendEmail(
