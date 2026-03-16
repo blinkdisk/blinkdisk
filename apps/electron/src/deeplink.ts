@@ -32,7 +32,7 @@ export async function onDeeplinkOpen(rawUrl: string) {
 
   if (url.protocol !== APP_SCHEME_PROTOCOL) return;
 
-  sendWindow("deeplink.open", {
+  sendWindow("deeplink.onOpen", {
     event: url.host,
   });
 

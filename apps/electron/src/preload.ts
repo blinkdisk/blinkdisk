@@ -8,7 +8,6 @@ import { setupRenderer } from "@better-auth/electron/preload";
 
 setupRenderer();
 
-import type { readClipboard } from "@electron/clipboard";
 import type {
   authenticateToken,
   getSession,
@@ -19,6 +18,7 @@ import type {
   updateUser,
 } from "@electron/auth";
 import type { setVaultCache } from "@electron/cache";
+import type { readClipboard } from "@electron/clipboard";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
@@ -208,7 +208,7 @@ const api = {
     },
   },
   deeplink: {
-    open: listener<{ event: string }>("deeplink.open"),
+    onOpen: listener<{ event: string }>("deeplink.onOpen"),
   },
   ssh: {
     keyscan: (form: Parameters<typeof sshKeyscan>[0]) =>
@@ -248,6 +248,7 @@ const api = {
           ReturnType<typeof setSession>
         >,
     },
+    onAccountChange: listener<{ token: string }>("auth.onAccountChange"),
   },
 };
 

@@ -4,11 +4,12 @@ import {
   PROTOCOL_FRONTEND_NS,
   PROTOCOL_VAULT_NS,
 } from "@blinkdisk/config/app";
+import { authClient } from "@electron/auth";
+import { fetchVaultRaw } from "@electron/vault/fetch";
 import { getVault } from "@electron/vault/manage";
 import { app, net, protocol } from "electron";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { fetchVaultRaw } from "./vault/fetch";
 
 export function registerProtcol() {
   protocol.registerSchemesAsPrivileged([
@@ -57,9 +58,19 @@ export function listenProtocol() {
 
       return net.fetch(pathToFileURL(pathToServe).toString());
     } else if (host === PROTOCOL_API_NS) {
-      return net.fetch(
+      req.headers.set(
+        "cookie",
+        `${req.headers.get("cookie") || ""}${authClient.getCookie()}`,
+      );
+
+      return await fetch(
         `${process.env.API_URL}${pathname}${search ? search : ""}`,
-        req,
+        {
+          method: req.method,
+          signal: req.signal,
+          headers: req.headers as any,
+          body: req.body,
+        },
       );
     } else if (host === PROTOCOL_VAULT_NS) {
       const vaultId = req.headers.get("vault-id") || "";

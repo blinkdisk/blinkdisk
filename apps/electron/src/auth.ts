@@ -1,11 +1,15 @@
 import { electronClient } from "@better-auth/electron/client";
+import { APP_ID, APP_ID_ORIGIN } from "@blinkdisk/config/app";
+import {
+  ELECTRON_CLIENT_ID,
+  ELECTRON_COOKIE_PREFIX,
+} from "@blinkdisk/config/auth";
 import {
   ZUpdatePreferencesType,
   ZUpdateUserType,
 } from "@blinkdisk/schemas/settings";
-import { APP_ID } from "@config/app";
-import { ELECTRON_CLIENT_ID, ELECTRON_COOKIE_PREFIX } from "@config/auth";
 import { store } from "@electron/store";
+import { sendWindow } from "@electron/window";
 import {
   inferAdditionalFields,
   magicLinkClient,
@@ -16,6 +20,11 @@ import { createAuthClient } from "better-auth/react";
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
   basePath: "/api/auth",
+  fetchOptions: {
+    headers: {
+      origin: APP_ID_ORIGIN,
+    },
+  },
   plugins: [
     electronClient({
       signInURL: `${process.env.WEB_URL}/auth/register`,
@@ -26,10 +35,10 @@ export const authClient = createAuthClient({
       clientID: ELECTRON_CLIENT_ID,
       storagePrefix: "auth",
       storage: {
-        getItem: async (key: string) => {
+        getItem: (key: string) => {
           return store.get(key);
         },
-        setItem: async (key: string, value: unknown) => {
+        setItem: (key: string, value: unknown) => {
           return store.set(key, value);
         },
       },
@@ -87,9 +96,18 @@ export async function openAuth() {
 }
 
 export async function logout() {
-  return await authClient.signOut();
+  const session = await getSession();
+  if (!session.data) throw new Error("No session found");
+  return await authClient.revokeSession({ token: session.data?.session.token });
 }
 
 export async function authenticateToken({ token }: { token: string }) {
-  return await authClient.authenticate({ token });
+  const res = await authClient.authenticate({
+    token,
+  });
+
+  if (res.error) throw new Error(res.error.message);
+
+  sendWindow("auth.onAccountChange");
+  return res;
 }

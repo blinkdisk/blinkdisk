@@ -1,6 +1,6 @@
 import { getPostHog, posthog } from "@api/lib/posthog";
 import { electron } from "@better-auth/electron";
-import { PROTOCOL_FRONTEND_URL } from "@blinkdisk/config/app";
+import { APP_ID_ORIGIN } from "@blinkdisk/config/app";
 import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
@@ -68,10 +68,10 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
     trustedOrigins: [
       process.env.WEB_URL,
       process.env.DESKTOP_URL!,
-      PROTOCOL_FRONTEND_URL,
+      APP_ID_ORIGIN,
     ],
     advanced: {
-      cookiePrefix: "blinkdisk",
+      cookiePrefix: ELECTRON_COOKIE_PREFIX,
       useSecureCookies: true,
       cookies: {
         session_token: cookieSettings,
