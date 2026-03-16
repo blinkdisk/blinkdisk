@@ -84,4 +84,4 @@ For information on how to set up a local development environment, check out the 
 
 BlinkDisk's [core](https://github.com/blinkdisk/core) is built on top of [Kopia](https://kopia.io/), which handles the heavy lifting behind BlinkDisk.
 
->  **A huge thank you to the Kopia team.** This project would not be possible without their amazing work. Kopia is one of the most thoughtfully designed backup tools out there, and we're proud to build on top of it.
+> ❤️ **A huge thank you to the Kopia team.** This project would not be possible without their amazing work. Kopia is one of the most thoughtfully designed backup tools out there, and we're proud to build on top of it.
