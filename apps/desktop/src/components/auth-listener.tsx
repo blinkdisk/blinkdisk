@@ -16,4 +16,6 @@ export function AuthListener() {
   useEffect(() => {
     return window.electron.auth.onAccountChange(onAccountChange);
   }, [onAccountChange]);
+
+  return null;
 }

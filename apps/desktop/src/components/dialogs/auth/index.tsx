@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { Loader } from "@blinkdisk/ui/loader";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
-import { Loader } from "@ui/loader";
 import { AlertCircleIcon, ClipboardPasteIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 

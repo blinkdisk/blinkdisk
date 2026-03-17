@@ -68,7 +68,7 @@ export function listenProtocol() {
         {
           method: req.method,
           signal: req.signal,
-          headers: req.headers as any,
+          headers: req.headers,
           body: req.body,
           duplex: "half",
         } as RequestInit,
