@@ -1,4 +1,5 @@
 import { HonoContextOptions } from "@api/index";
+import { trackAffiliatePayment } from "@api/lib/affiliate";
 import { posthog } from "@api/lib/posthog";
 import { plans } from "@blinkdisk/config/plans";
 import { SubscriptionStatus } from "@blinkdisk/db/enums";
@@ -11,7 +12,6 @@ import {
   validateEvent,
   WebhookVerificationError,
 } from "@polar-sh/sdk/webhooks";
-import axios from "axios";
 import { Context } from "hono";
 import { BlankInput } from "hono/types";
 
@@ -285,26 +285,15 @@ export async function polarWebhook(
 
         if (!subscription)
           return c.json({ error: "Subscription not found" }, 400);
-        if (!subscription.affiliateId)
-          return c.json({ message: "Affiliate id not found" }, 202);
+        if (!subscription.affiliateId) return c.json({ success: true }, 202);
 
-        await axios.post(
-          "https://app.endorsely.com/api/public/refer",
-          {
-            referralId: subscription.affiliateId,
-            email: subscription.email,
-            amount: order.netAmount,
-            name: subscription.name,
-            customerId: subscription.accountId,
-            organizationId: process.env.ENDORSELY_ORGANIZATION_ID,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.ENDORSELY_PRIVATE_KEY}`,
-            },
-          },
-        );
+        await trackAffiliatePayment(c.env, {
+          referralId: subscription.affiliateId,
+          email: subscription.email,
+          amount: order.netAmount,
+          name: subscription.name,
+          customerId: subscription.accountId,
+        });
       }
     }
 

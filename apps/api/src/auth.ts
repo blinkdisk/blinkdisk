@@ -14,6 +14,7 @@ import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink, multiSession } from "better-auth/plugins";
 import { Kysely } from "kysely";
+import { trackAffiliateSignup } from "./lib/affiliate";
 
 const cookieSettings = {
   attributes: {
@@ -143,7 +144,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
     databaseHooks: {
       user: {
         create: {
-          after: async (account) => {
+          after: async (account, ctx) => {
             const posthog = getPostHog();
 
             posthog.identify({
@@ -190,6 +191,10 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
                 init: (id: string, capacity: number) => Promise<void>;
               }
             ).init(spaceId, FREE_SPACE_AVAILABLE);
+
+            console.log("got id", ctx?.headers?.get("X-Endorsely-Id"));
+            const referralId = ctx?.headers?.get("X-Endorsely-Id");
+            if (referralId) await trackAffiliateSignup(env, referralId);
           },
         },
       },

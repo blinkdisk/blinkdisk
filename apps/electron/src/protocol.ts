@@ -70,7 +70,8 @@ export function listenProtocol() {
           signal: req.signal,
           headers: req.headers as any,
           body: req.body,
-        },
+          duplex: "half",
+        } as RequestInit,
       );
     } else if (host === PROTOCOL_VAULT_NS) {
       const vaultId = req.headers.get("vault-id") || "";

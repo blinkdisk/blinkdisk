@@ -12,24 +12,22 @@ export function useRegister() {
   return useMutation({
     mutationKey: ["auth", "register"],
     mutationFn: async (values: ZRegisterType) => {
-      const { data, error } = await authClient.signIn.magicLink(
-        {
-          ...({
-            name: `${values.firstName.replace(/\s+/g, "")} ${values.lastName.replace(
-              /\s+/g,
-              "",
-            )}`,
-            email: values.email,
-            // @ts-expect-error Additional fields are inferred incorrectly.
-          } satisfies ZRegisterServerType),
-          fetchOptions: { query: search },
-        },
-        {
-          headers: {
+      const { data, error } = await authClient.signIn.magicLink({
+        ...({
+          name: `${values.firstName.replace(/\s+/g, "")} ${values.lastName.replace(
+            /\s+/g,
+            "",
+          )}`,
+          email: values.email,
+          // @ts-expect-error Additional fields are inferred incorrectly.
+        } satisfies ZRegisterServerType),
+        fetchOptions: {
+          query: search,
+          headers2: {
             "X-BlinkDisk-Language": i18n.language,
           },
         },
-      );
+      });
 
       if (error) throw error;
 

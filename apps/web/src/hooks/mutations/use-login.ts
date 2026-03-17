@@ -12,17 +12,15 @@ export function useLogin() {
   return useMutation({
     mutationKey: ["auth", "login"],
     mutationFn: async (values: ZLoginType) => {
-      const { data, error } = await authClient.signIn.magicLink(
-        {
-          email: values.email,
-          fetchOptions: { query: search },
-        },
-        {
+      const { data, error } = await authClient.signIn.magicLink({
+        email: values.email,
+        fetchOptions: {
+          query: search,
           headers: {
             "X-BlinkDisk-Language": i18n.language,
           },
         },
-      );
+      });
 
       if (error) throw error;
       return data;

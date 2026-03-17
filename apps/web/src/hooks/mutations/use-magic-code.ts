@@ -21,7 +21,16 @@ export function useMagicCode() {
         query: {
           token: values.code,
         },
-        fetchOptions: { query: search },
+        fetchOptions: {
+          query: search,
+          headers: {
+            ...("endorsely_referral" in window && window.endorsely_referral
+              ? {
+                  "X-Endorsely-Id": window.endorsely_referral as string,
+                }
+              : {}),
+          },
+        },
       });
 
       if (error && "statusText" in error && error.statusText === "Not Found")
