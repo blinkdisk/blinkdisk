@@ -192,7 +192,6 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
               }
             ).init(spaceId, FREE_SPACE_AVAILABLE);
 
-            console.log("got id", ctx?.headers?.get("X-Endorsely-Id"));
             const referralId = ctx?.headers?.get("X-Endorsely-Id");
             if (referralId) await trackAffiliateSignup(env, referralId);
           },
