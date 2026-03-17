@@ -1,3 +1,4 @@
+import { LANGUAGE_HEADER } from "@blinkdisk/config/header";
 import { ZRegisterServerType, ZRegisterType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
@@ -23,8 +24,8 @@ export function useRegister() {
         } satisfies ZRegisterServerType),
         fetchOptions: {
           query: search,
-          headers2: {
-            "X-BlinkDisk-Language": i18n.language,
+          headers: {
+            [LANGUAGE_HEADER]: i18n.language,
           },
         },
       });

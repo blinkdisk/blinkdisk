@@ -1,3 +1,8 @@
+import {
+  ENDORSELY_HEADER,
+  LANGUAGE_HEADER,
+  TIMEZONE_HEADER,
+} from "@blinkdisk/config/header";
 import { LanguageCode } from "@blinkdisk/config/language";
 import { ZMagicCodeType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error";
@@ -26,9 +31,11 @@ export function useMagicCode() {
           headers: {
             ...("endorsely_referral" in window && window.endorsely_referral
               ? {
-                  "X-Endorsely-Id": window.endorsely_referral as string,
+                  [ENDORSELY_HEADER]: window.endorsely_referral as string,
                 }
               : {}),
+            ...(timeZone ? { [TIMEZONE_HEADER]: timeZone } : {}),
+            [LANGUAGE_HEADER]: i18n.language as LanguageCode,
           },
         },
       });
@@ -37,11 +44,6 @@ export function useMagicCode() {
         throw new Error("INVALID_CODE");
       if (error) throw error;
 
-      await authClient.updateUser({
-        language: i18n.language as LanguageCode,
-        ...(timeZone && { timeZone }),
-      });
-
       return data;
     },
     onError: (error) => {
@@ -49,6 +51,9 @@ export function useMagicCode() {
       showErrorToast(error);
     },
     onSuccess: async (res) => {
+      // End the last session
+      posthog.reset();
+      // Start a new session
       posthog.identify(res.user.id);
 
       await navigate({

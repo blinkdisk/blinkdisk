@@ -1,3 +1,4 @@
+import { LANGUAGE_HEADER } from "@blinkdisk/config/header";
 import { ZLoginType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ export function useLogin() {
         fetchOptions: {
           query: search,
           headers: {
-            "X-BlinkDisk-Language": i18n.language,
+            [LANGUAGE_HEADER]: i18n.language,
           },
         },
       });

@@ -5,6 +5,12 @@ import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
 } from "@blinkdisk/config/auth";
+import {
+  ENDORSELY_HEADER,
+  LANGUAGE_HEADER,
+  TIMEZONE_HEADER,
+} from "@blinkdisk/config/header";
+import { defaultLanguageCode } from "@blinkdisk/config/language";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
@@ -106,9 +112,9 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
             "magic",
             {
               email,
-              language: ctx?.request?.headers?.get("X-BlinkDisk-Language")
-                ? ctx.request.headers.get("X-BlinkDisk-Language")
-                : "en",
+              language: ctx?.request?.headers?.get(LANGUAGE_HEADER)
+                ? ctx.request.headers.get(LANGUAGE_HEADER)
+                : defaultLanguageCode,
             },
             { code: [token.slice(0, 5), token.slice(5, 10)] },
           ),
@@ -145,6 +151,39 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       user: {
         create: {
           after: async (account, ctx) => {
+            const spaceId = generateId("Space");
+
+            await db
+              .insertInto("Space")
+              .values({
+                id: spaceId,
+                capacity: FREE_SPACE_AVAILABLE.toString(),
+                used: "0",
+                accountId: account.id,
+              })
+              .execute();
+
+            const stub = env.SPACE.getByName(spaceId);
+            await (
+              stub as unknown as {
+                init: (id: string, capacity: number) => Promise<void>;
+              }
+            ).init(spaceId, FREE_SPACE_AVAILABLE);
+
+            const language = ctx?.request?.headers?.get(LANGUAGE_HEADER);
+            const timeZone = ctx?.request?.headers?.get(TIMEZONE_HEADER);
+
+            if (language || timeZone) {
+              await db
+                .updateTable("Account")
+                .set({
+                  ...(language ? { language } : {}),
+                  ...(timeZone ? { timeZone } : {}),
+                })
+                .where("id", "=", account.id)
+                .execute();
+            }
+
             const posthog = getPostHog();
 
             posthog.identify({
@@ -173,26 +212,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
               channel: "accounts",
             });
 
-            const spaceId = generateId("Space");
-
-            await db
-              .insertInto("Space")
-              .values({
-                id: spaceId,
-                capacity: FREE_SPACE_AVAILABLE.toString(),
-                used: "0",
-                accountId: account.id,
-              })
-              .execute();
-
-            const stub = env.SPACE.getByName(spaceId);
-            await (
-              stub as unknown as {
-                init: (id: string, capacity: number) => Promise<void>;
-              }
-            ).init(spaceId, FREE_SPACE_AVAILABLE);
-
-            const referralId = ctx?.headers?.get("X-Endorsely-Id");
+            const referralId = ctx?.headers?.get(ENDORSELY_HEADER);
             if (referralId) await trackAffiliateSignup(env, referralId);
           },
         },

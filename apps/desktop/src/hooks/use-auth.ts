@@ -6,10 +6,12 @@ import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
 export function useAuth() {
   const navigate = useNavigate();
+  const posthog = usePostHog();
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
 
@@ -54,8 +56,13 @@ export function useAuth() {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.account.detail(),
       });
+
+      // End the last session
+      posthog.reset();
+      // Start a new session
+      posthog.identify(session.user.id);
     },
-    [queryClient, setAccountId, queryKeys],
+    [queryClient, setAccountId, queryKeys, posthog],
   );
 
   const selectAccount = useCallback(
