@@ -1,4 +1,4 @@
-export const exampleFolders = [
+export const EXAMPLE_FOLDERS = [
   { emoji: "📸", name: "Family Photos 2005–2024", files: 18450, size: 96.3 },
   { emoji: "🥧", name: "Grandma’s Recipes", files: 136, size: 0.4 },
   { emoji: "💼", name: "Work Projects", files: 3270, size: 42.7 },

@@ -1,4 +1,4 @@
-export const coloServerMapping = {
+export const COLO_SERVER_MAPPING = {
   ASK: "LUX",
   NAG: "AMS",
   BNU: "YUL",

@@ -18,12 +18,12 @@ import HardDriveIcon from "@lucide/astro/icons/hard-drive";
 import InfoIcon from "@lucide/astro/icons/info";
 import MailIcon from "@lucide/astro/icons/mail";
 import {
-  allTools,
-  generalLabels,
-  featureLabels,
-  privacyLabels,
-  platformLabels,
-  storageLabels,
+  COMPARISON_TOOLS,
+  COMPARISON_GENERAL_LABELS,
+  COMPARISON_FEATURE_LABELS,
+  COMPARISON_PRIVACY_LABELS,
+  COMPARISON_PLATFORM_LABELS,
+  COMPARISON_STORAGE_LABELS,
   type BackupTool,
 } from "@blinkdisk/config/comparison";
 
@@ -49,35 +49,35 @@ const tableSections = [
     id: "general",
     title: "General",
     category: "general" as const,
-    labels: generalLabels,
+    labels: COMPARISON_GENERAL_LABELS,
     description: "Basic info and backup types supported.",
   },
   {
     id: "features",
     title: "Features",
     category: "features" as const,
-    labels: featureLabels,
+    labels: COMPARISON_FEATURE_LABELS,
     description: "Core backup capabilities.",
   },
   {
     id: "privacy",
     title: "Privacy & Security",
     category: "privacy" as const,
-    labels: privacyLabels,
+    labels: COMPARISON_PRIVACY_LABELS,
     description: "Encryption and data protection.",
   },
   {
     id: "platforms",
     title: "Platform Support",
     category: "platforms" as const,
-    labels: platformLabels,
+    labels: COMPARISON_PLATFORM_LABELS,
     description: "Supported operating systems.",
   },
   {
     id: "storages",
     title: "Storage Options",
     category: "storages" as const,
-    labels: storageLabels,
+    labels: COMPARISON_STORAGE_LABELS,
     description: "Where you can store your backups.",
   },
 ];
@@ -88,7 +88,7 @@ const allSections = [
   ...tableSections.slice(2).map(({ id, title }) => ({ id, title })),
 ];
 
-const toolOptions = allTools.map((tool) => ({
+const toolOptions = COMPARISON_TOOLS.map((tool) => ({
   value: tool.slug,
   label: tool.name,
 }));

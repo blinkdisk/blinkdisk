@@ -1,6 +1,6 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import { plans } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
 import {
   ArrowRightIcon,
   ClockIcon,
@@ -11,17 +11,15 @@ import {
 const commission = 0.3;
 const duration = 12;
 
-const mostExpensivePlan = plans
-  .map((plan) =>
-    plan.prices
-      .filter((plan) => plan.period === "MONTHLY")
-      .reduce((a, b) => {
-        return a.amount > b.amount ? a : b;
-      }),
-  )
-  .reduce((a, b) => {
-    return a.amount > b.amount ? a : b;
-  });
+const mostExpensivePlan = SUBSCRIPTION_PLANS.map((plan) =>
+  plan.prices
+    .filter((plan) => plan.period === "MONTHLY")
+    .reduce((a, b) => {
+      return a.amount > b.amount ? a : b;
+    }),
+).reduce((a, b) => {
+  return a.amount > b.amount ? a : b;
+});
 
 const maxEarnings = Math.floor(mostExpensivePlan.amount * 12 * commission);
 const formattedEarnings = maxEarnings.toLocaleString("en-US", {

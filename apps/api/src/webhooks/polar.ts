@@ -1,7 +1,7 @@
 import { HonoContextOptions } from "@api/index";
 import { trackAffiliatePayment } from "@api/lib/affiliate";
 import { posthog } from "@api/lib/posthog";
-import { plans } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
 import { SubscriptionStatus } from "@blinkdisk/db/enums";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
 import { generateId } from "@blinkdisk/utils/id";
@@ -41,7 +41,7 @@ export async function polarWebhook(
       )
         subscription.status = "active";
 
-      const plan = plans.find((plan) =>
+      const plan = SUBSCRIPTION_PLANS.find((plan) =>
         plan.prices.find(
           (p) =>
             p.polarId?.[

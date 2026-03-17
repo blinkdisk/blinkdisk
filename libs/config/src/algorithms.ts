@@ -1,4 +1,4 @@
-export const compressionAlgorithms = [
+export const COMPRESSION_ALGORITHMS = [
   "none",
   "gzip",
   "gzip-best-compression",

@@ -1,4 +1,4 @@
-import { ProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/config/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Button } from "@blinkdisk/ui/button";
@@ -29,7 +29,7 @@ export function CreateVaultDialog() {
   const { t } = useAppTranslation("vault.createDialog");
 
   const [step, setStep] = useState<CreateVaultStep>("VARIANT");
-  const [provider, setProvider] = useState<ProviderType | undefined>();
+  const [provider, setProvider] = useState<StorageProviderType | undefined>();
   const [config, setConfig] = useState<ProviderConfig | undefined>();
   const { isOpen, setIsOpen } = useCreateVaultDialog();
 

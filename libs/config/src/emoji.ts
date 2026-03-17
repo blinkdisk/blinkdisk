@@ -1,4 +1,4 @@
-export const emojiToHue = {
+export const EMOJI_TO_HUE = {
   "2049": 351,
   "2122": 210,
   "2139": 205,

@@ -1,6 +1,6 @@
 import { ConfigLevel } from "@blinkdisk/db/enums";
 
-export type ProviderType =
+export type StorageProviderType =
   | "CLOUDBLINK"
   | "FILESYSTEM"
   | "NETWORK_ATTACHED_STORAGE"
@@ -13,8 +13,8 @@ export type ProviderType =
   | "RCLONE"
   | "WEBDAV";
 
-type Provider = {
-  type: ProviderType;
+type StorageProvider = {
+  type: StorageProviderType;
   alias?: string[];
   coreType: string;
   level: ConfigLevel;
@@ -36,7 +36,7 @@ const s3Base = {
   },
 };
 
-export const providers: Provider[] = [
+export const STORAGE_PROVIDERS: StorageProvider[] = [
   {
     type: "CLOUDBLINK",
     alias: ["BLINKDISK_CLOUD", "BLINKCLOUD"],

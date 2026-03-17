@@ -1,4 +1,4 @@
-import { ProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/config/providers";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
@@ -13,7 +13,7 @@ export function useCreateVaultForm({
   onSuccess,
   config,
 }: {
-  providerType?: ProviderType;
+  providerType?: StorageProviderType;
   onSuccess?: (res: CreateVaultResponse) => void;
   config?: ProviderConfig;
 }) {

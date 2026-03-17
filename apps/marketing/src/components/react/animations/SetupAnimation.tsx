@@ -1,14 +1,14 @@
 import { EmojiCard } from "@blinkdisk/components/emoji-card";
-import { exampleFolders } from "@blinkdisk/config/folder";
+import { EXAMPLE_FOLDERS } from "@blinkdisk/config/folder";
 import { CheckIcon, LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-function pickRandomFolders(): typeof exampleFolders {
-  const result = new Set<(typeof exampleFolders)[number]>();
+function pickRandomFolders(): typeof EXAMPLE_FOLDERS {
+  const result = new Set<(typeof EXAMPLE_FOLDERS)[number]>();
 
   while (result.size < 3) {
-    const randomIndex = Math.floor(Math.random() * exampleFolders.length);
-    result.add(exampleFolders[randomIndex]!);
+    const randomIndex = Math.floor(Math.random() * EXAMPLE_FOLDERS.length);
+    result.add(EXAMPLE_FOLDERS[randomIndex]!);
   }
 
   return Array.from(result);
@@ -19,7 +19,7 @@ function sleep(ms: number) {
 }
 
 export default function SetupAnimation() {
-  const [folders, setFolders] = useState<typeof exampleFolders>([]);
+  const [folders, setFolders] = useState<typeof EXAMPLE_FOLDERS>([]);
   const [completed, setCompleted] = useState(false);
   const [style, setStyle] = useState<React.CSSProperties | undefined>(
     undefined,

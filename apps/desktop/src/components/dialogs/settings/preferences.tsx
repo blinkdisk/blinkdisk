@@ -1,4 +1,4 @@
-import { languageCodes, languages } from "@blinkdisk/config/language";
+import { LANGUAGE_CODES, LANGUAGE_NAMES } from "@blinkdisk/config/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Dialog,
@@ -71,9 +71,9 @@ export function PreferencesSettingsDialog() {
               <field.Select
                 label={{ title: t("language.label") }}
                 placeholder={t("language.description")}
-                items={languageCodes.map((code) => ({
+                items={LANGUAGE_CODES.map((code) => ({
                   value: code,
-                  label: languages[code].name,
+                  label: LANGUAGE_NAMES[code].name,
                 }))}
               />
             )}

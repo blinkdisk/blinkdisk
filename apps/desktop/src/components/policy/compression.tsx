@@ -1,5 +1,5 @@
 import { DynamicField } from "@blinkdisk/components/dynamic-field";
-import { compressionAlgorithms } from "@blinkdisk/config/algorithms";
+import { COMPRESSION_ALGORITHMS } from "@blinkdisk/config/algorithms";
 import {
   FormDisabledContext,
   useFieldContext,
@@ -162,7 +162,7 @@ function AlgorithmSelector() {
   const activePreset = PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
 
   const algorithms = useMemo(() => {
-    return compressionAlgorithms.map((alg) => ({
+    return COMPRESSION_ALGORITHMS.map((alg) => ({
       value: alg,
       label: t(`algorithm.items.${alg}`),
     }));

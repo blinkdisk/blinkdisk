@@ -1,4 +1,4 @@
-import { ProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/config/providers";
 import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
@@ -17,7 +17,7 @@ export async function createVault(payload: {
   vault: {
     id: string;
     name: string;
-    provider: ProviderType;
+    provider: StorageProviderType;
     config: ProviderConfig;
     options: ZVaultOptionsType;
     password: string;
@@ -96,7 +96,7 @@ export async function connectVault({
 }: {
   id: string;
   name: string;
-  provider: ProviderType;
+  provider: StorageProviderType;
   config: ProviderConfig;
   password: string;
   version?: number;

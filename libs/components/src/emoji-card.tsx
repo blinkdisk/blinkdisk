@@ -1,4 +1,4 @@
-import { emojiToHue } from "@blinkdisk/config/emoji";
+import { EMOJI_TO_HUE } from "@blinkdisk/config/emoji";
 import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
 import { parse } from "twemoji-parser";
@@ -22,7 +22,7 @@ export function EmojiCard({
     const parsed = parse(emoji);
     const url = parsed[0]?.url;
     const code = url?.split("/").pop()?.replace(".svg", "") || "";
-    const hue = emojiToHue[code as keyof typeof emojiToHue];
+    const hue = EMOJI_TO_HUE[code as keyof typeof EMOJI_TO_HUE];
     return {
       color:
         hue !== undefined

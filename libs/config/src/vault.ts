@@ -1,4 +1,4 @@
-export const defaultVaultOptions = {
+export const DEFAULT_VAULT_OPTIONS = {
   version: 2,
   encryption: "AES256-GCM-HMAC-SHA256",
   hash: "BLAKE2B-256-128",

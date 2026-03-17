@@ -1,5 +1,5 @@
 ---
-import { emojiToHue } from "@blinkdisk/config/emoji";
+import { EMOJI_TO_HUE } from "@blinkdisk/config/emoji";
 import { parse } from "twemoji-parser";
 
 type Props = {
@@ -15,7 +15,7 @@ const defaultColor = "0deg 0% 39%";
 const parsed = parse(emoji);
 const emojiUrl = parsed[0]?.url;
 const emojiCode = emojiUrl?.split("/").pop()?.replace(".svg", "") || "";
-const hue = emojiToHue[emojiCode as keyof typeof emojiToHue];
+const hue = EMOJI_TO_HUE[emojiCode as keyof typeof EMOJI_TO_HUE];
 const color = hue !== undefined ? `${hue}deg 100% 60%` : defaultColor;
 
 const sizeClasses = {

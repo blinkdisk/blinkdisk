@@ -10,7 +10,7 @@ import {
   LANGUAGE_HEADER,
   TIMEZONE_HEADER,
 } from "@blinkdisk/config/header";
-import { defaultLanguageCode } from "@blinkdisk/config/language";
+import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/config/language";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
@@ -114,7 +114,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
               email,
               language: ctx?.request?.headers?.get(LANGUAGE_HEADER)
                 ? ctx.request.headers.get(LANGUAGE_HEADER)
-                : defaultLanguageCode,
+                : DEFAULT_LANGUAGE_CODE,
             },
             { code: [token.slice(0, 5), token.slice(5, 10)] },
           ),

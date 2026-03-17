@@ -1,6 +1,6 @@
 ---
 import Folder from "@marketing/components/Folder.astro";
-import { exampleFolders } from "@blinkdisk/config/folder";
+import { EXAMPLE_FOLDERS } from "@blinkdisk/config/folder";
 import LockIcon from "@lucide/astro/icons/lock";
 
 const steps = [
@@ -82,14 +82,14 @@ const steps = [
     <div class="marquee flex w-max">
       <div class="flex items-center gap-8 pl-8">
         {
-          exampleFolders.map((folder) => (
+          EXAMPLE_FOLDERS.map((folder) => (
             <Folder folder={{ ...folder, emoji: "📁" }} />
           ))
         }
       </div>
       <div class="flex items-center gap-8 pl-8">
         {
-          exampleFolders.map((folder) => (
+          EXAMPLE_FOLDERS.map((folder) => (
             <Folder folder={{ ...folder, emoji: "📁" }} />
           ))
         }

@@ -1,4 +1,7 @@
-import { ProviderType, providers } from "@blinkdisk/config/providers";
+import {
+  STORAGE_PROVIDERS,
+  StorageProviderType,
+} from "@blinkdisk/config/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { Input } from "@blinkdisk/ui/input";
@@ -7,7 +10,7 @@ import { useProviderSearch } from "@desktop/hooks/use-provider-search";
 import { ChevronRightIcon, SearchIcon } from "lucide-react";
 
 export type CreateVaultProvidersProps = {
-  selectProvider: (provider: ProviderType) => void;
+  selectProvider: (provider: StorageProviderType) => void;
 };
 
 export function CreateVaultProviders({
@@ -41,8 +44,8 @@ export function CreateVaultProviders({
 }
 
 type ProviderProps = {
-  provider: (typeof providers)[number] & { name: string };
-  selectProvider: (provider: ProviderType) => void;
+  provider: (typeof STORAGE_PROVIDERS)[number] & { name: string };
+  selectProvider: (provider: StorageProviderType) => void;
 };
 
 function Provider({ provider, selectProvider }: ProviderProps) {

@@ -1,5 +1,5 @@
 import type { BillingPeriod } from "@blinkdisk/config/plans";
-import { plans } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
 import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
 import {
   Select,
@@ -19,7 +19,7 @@ export default function BlinkDiskPricingCalculator() {
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
   const [planIndex, setPlanIndex] = useState(-1);
 
-  const availablePlans = useMemo(() => plans, []);
+  const availablePlans = useMemo(() => SUBSCRIPTION_PLANS, []);
   const isFreeTier = planIndex === -1;
   const selectedPlan = isFreeTier ? null : availablePlans[planIndex];
 

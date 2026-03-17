@@ -1,4 +1,4 @@
-import { ProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/config/providers";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
@@ -10,7 +10,7 @@ import { AlertTriangleIcon } from "lucide-react";
 import PasswordStrengthBar from "react-password-strength-bar";
 
 type CreateVaultDetailsProps = {
-  providerType?: ProviderType;
+  providerType?: StorageProviderType;
   onSubmit?: () => void;
   config?: ProviderConfig;
 };

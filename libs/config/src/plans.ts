@@ -18,7 +18,7 @@ export type Plan = {
   group?: boolean;
 };
 
-export const plans: Plan[] = [
+export const SUBSCRIPTION_PLANS: Plan[] = [
   {
     id: "cloud-200-gb",
     storageGB: 200,

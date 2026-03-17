@@ -1,4 +1,4 @@
-import { compressionAlgorithms } from "@blinkdisk/config/algorithms";
+import { COMPRESSION_ALGORITHMS } from "@blinkdisk/config/algorithms";
 import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 
@@ -71,7 +71,7 @@ export const ZCompressionPolicy = z.object({
       // Not sure why this is here, but it is.
       // I'm scared to touch it.
       "",
-      ...compressionAlgorithms,
+      ...COMPRESSION_ALGORITHMS,
     ])
     .optional(),
   extensionAllowlist: z.string().array().optional(),

@@ -1,4 +1,4 @@
-import { defaultVaultOptions } from "@blinkdisk/config/vault";
+import { DEFAULT_VAULT_OPTIONS } from "@blinkdisk/config/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
 import { showErrorToast } from "@blinkdisk/utils/error";
@@ -76,7 +76,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
               name: values.name,
               provider: values.provider,
               config: values.config,
-              options: defaultVaultOptions,
+              options: DEFAULT_VAULT_OPTIONS,
               password: values.password,
               ...(token ? { token } : {}),
             },
