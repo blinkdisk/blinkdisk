@@ -3,7 +3,7 @@ import {
   PROTOCOL_API_NS,
   PROTOCOL_FRONTEND_NS,
   PROTOCOL_VAULT_NS,
-} from "@blinkdisk/config/app";
+} from "@blinkdisk/constants/app";
 import { authClient } from "@electron/auth";
 import { fetchVaultRaw } from "@electron/vault/fetch";
 import { getVault } from "@electron/vault/manage";

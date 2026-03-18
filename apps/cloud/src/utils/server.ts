@@ -1,4 +1,4 @@
-import { COLO_SERVER_MAPPING } from "@blinkdisk/config/server";
+import { COLO_SERVER_MAPPING } from "@blinkdisk/constants/server";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 const withTimeout = async (url: string, timeout = 1000) => {

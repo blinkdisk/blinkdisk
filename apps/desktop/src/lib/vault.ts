@@ -1,4 +1,4 @@
-import { PROTOCOL_VAULT_URL } from "@blinkdisk/config/app";
+import { PROTOCOL_VAULT_URL } from "@blinkdisk/constants/app";
 import { CoreError } from "@blinkdisk/utils/error";
 import xior from "xior";
 

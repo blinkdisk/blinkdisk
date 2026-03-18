@@ -15,7 +15,7 @@
     "@better-auth/electron": "1.5.5",
     "@blinkdisk/api": "workspace:*",
     "@blinkdisk/components": "workspace:*",
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/forms": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",

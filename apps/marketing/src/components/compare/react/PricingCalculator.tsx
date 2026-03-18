@@ -1,4 +1,4 @@
-import type { BackupTool } from "@blinkdisk/config/comparison";
+import type { BackupTool } from "@blinkdisk/constants/comparison";
 import AcronisPricingCalculator from "./AcronisPricingCalculator";
 import BackblazePricingCalculator from "./BackblazePricingCalculator";
 import BlinkDiskPricingCalculator from "./BlinkDiskPricingCalculator";

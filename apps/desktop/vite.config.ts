@@ -4,7 +4,7 @@ config({
   path: "../../.env",
 });
 
-import { INTERNAL_PROTOCOL } from "@blinkdisk/config/app";
+import { INTERNAL_PROTOCOL } from "@blinkdisk/constants/app";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";

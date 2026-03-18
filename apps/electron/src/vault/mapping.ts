@@ -1,8 +1,8 @@
 import {
   STORAGE_PROVIDERS,
   StorageProviderType,
-} from "@blinkdisk/config/providers";
-import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+} from "@blinkdisk/constants/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 
 export function mapProviderType(providerType: StorageProviderType) {

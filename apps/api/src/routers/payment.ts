@@ -3,7 +3,7 @@ import { posthog } from "@api/lib/posthog";
 import { getActiveSubscription } from "@api/lib/subscription";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
-import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { ZChangePlan, ZCreateCheckout } from "@blinkdisk/schemas/payment";
 import { CustomError } from "@blinkdisk/utils/error";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";

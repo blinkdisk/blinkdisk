@@ -3,7 +3,7 @@ import { createContext } from "@api/context";
 import { ratelimit } from "@api/middlewares/limit";
 import { appRouter } from "@api/router";
 import { polarWebhook } from "@api/webhooks/polar";
-import { PROTOCOL_FRONTEND_URL } from "@blinkdisk/config/app";
+import { PROTOCOL_FRONTEND_URL } from "@blinkdisk/constants/app";
 import type { DB } from "@blinkdisk/db/index";
 import { database } from "@blinkdisk/db/index";
 import { trpcServer } from "@hono/trpc-server";

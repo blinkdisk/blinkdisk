@@ -1,4 +1,4 @@
-import { DEFAULT_VAULT_OPTIONS } from "@blinkdisk/config/vault";
+import { DEFAULT_VAULT_OPTIONS } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
 import { showErrorToast } from "@blinkdisk/utils/error";

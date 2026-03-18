@@ -1,4 +1,4 @@
-import { LanguageCode } from "@blinkdisk/config/language";
+import { LanguageCode } from "@blinkdisk/constants/language";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZUpdatePreferences } from "@blinkdisk/schemas/settings";
 import { useUpdatePreferences } from "@desktop/hooks/mutations/use-update-preferences";

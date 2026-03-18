@@ -18,7 +18,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "react": "^19.0.0",
     "react-i18next": "^15.4.1"
   }

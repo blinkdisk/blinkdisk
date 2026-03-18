@@ -1,4 +1,4 @@
-import { LANGUAGE_DATE_LOCALES } from "@blinkdisk/config/language";
+import { LANGUAGE_DATE_LOCALES } from "@blinkdisk/constants/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { formatDistanceToNow } from "date-fns";
 import { useCallback, useEffect, useState } from "react";

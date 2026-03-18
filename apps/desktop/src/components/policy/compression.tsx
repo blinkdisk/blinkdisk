@@ -1,5 +1,5 @@
 import { DynamicField } from "@blinkdisk/components/dynamic-field";
-import { COMPRESSION_ALGORITHMS } from "@blinkdisk/config/algorithms";
+import { COMPRESSION_ALGORITHMS } from "@blinkdisk/constants/algorithms";
 import {
   FormDisabledContext,
   useFieldContext,

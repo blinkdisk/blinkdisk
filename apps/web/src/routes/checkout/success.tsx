@@ -1,4 +1,4 @@
-import { APP_SCHEME } from "@blinkdisk/config/app";
+import { APP_SCHEME } from "@blinkdisk/constants/app";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
@@ -25,9 +25,7 @@ function RouteComponent() {
         <div className="flex size-14 items-center justify-center rounded-xl border border-lime-500/30 bg-lime-500/10 text-lime-600 dark:text-lime-500">
           <CheckIcon className="size-6" />
         </div>
-        <h1 className="mt-10 text-center text-4xl font-bold">
-          {t("title")}
-        </h1>
+        <h1 className="mt-10 text-center text-4xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground mt-4 max-w-sm text-center text-sm">
           {t("description")}
         </p>

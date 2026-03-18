@@ -18,7 +18,7 @@
     "@astrojs/react": "^4.2.1",
     "@astrojs/sitemap": "^3.3.1",
     "@blinkdisk/components": "workspace:*",
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
     "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/ui": "workspace:*",

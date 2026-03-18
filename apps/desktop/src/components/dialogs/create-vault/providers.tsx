@@ -1,7 +1,7 @@
 import {
   STORAGE_PROVIDERS,
   StorageProviderType,
-} from "@blinkdisk/config/providers";
+} from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { Input } from "@blinkdisk/ui/input";

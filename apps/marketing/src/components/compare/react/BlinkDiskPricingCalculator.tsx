@@ -1,6 +1,6 @@
-import type { BillingPeriod } from "@blinkdisk/config/plans";
-import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import type { BillingPeriod } from "@blinkdisk/constants/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import {
   Select,
   SelectContent,

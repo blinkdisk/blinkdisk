@@ -1,5 +1,5 @@
 import { EmojiCard } from "@blinkdisk/components/emoji-card";
-import { EXAMPLE_FOLDERS } from "@blinkdisk/config/folder";
+import { EXAMPLE_FOLDERS } from "@blinkdisk/constants/folder";
 import { useMemo } from "react";
 
 export default function DeduplicationAnimation() {

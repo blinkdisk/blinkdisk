@@ -1,4 +1,4 @@
-import { StorageProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Button } from "@blinkdisk/ui/button";

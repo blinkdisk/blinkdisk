@@ -1,4 +1,4 @@
-import { LANGUAGE_CODES, LANGUAGE_NAMES } from "@blinkdisk/config/language";
+import { LANGUAGE_CODES, LANGUAGE_NAMES } from "@blinkdisk/constants/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Dialog,

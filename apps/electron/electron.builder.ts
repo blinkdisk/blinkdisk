@@ -1,5 +1,5 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
-import { APP_ID, APP_SCHEME } from "@blinkdisk/config/app";
+import { APP_ID, APP_SCHEME } from "@blinkdisk/constants/app";
 import { Configuration } from "electron-builder";
 
 export default {

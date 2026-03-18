@@ -1,4 +1,4 @@
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import {

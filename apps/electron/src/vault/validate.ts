@@ -1,5 +1,5 @@
-import { StorageProviderType } from "@blinkdisk/config/providers";
-import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { StorageProviderType } from "@blinkdisk/constants/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";

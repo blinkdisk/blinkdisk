@@ -1,11 +1,11 @@
 import { posthog } from "@api/lib/posthog";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
-import { STORAGE_PROVIDERS } from "@blinkdisk/config/providers";
+import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import {
   DEFAULT_VAULT_OPTIONS,
   LATEST_VAULT_VERSION,
-} from "@blinkdisk/config/vault";
+} from "@blinkdisk/constants/vault";
 import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import {
   ZCreateVault,

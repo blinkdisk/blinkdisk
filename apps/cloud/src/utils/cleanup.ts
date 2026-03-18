@@ -1,4 +1,4 @@
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import { Database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
 

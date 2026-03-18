@@ -1,7 +1,7 @@
 import {
   INTERNAL_PROTOCOL,
   PROTOCOL_FRONTEND_URL,
-} from "@blinkdisk/config/app";
+} from "@blinkdisk/constants/app";
 import { openBrowser } from "@electron/shell";
 import { getTheme } from "@electron/theme";
 import { BrowserWindow, app } from "electron";

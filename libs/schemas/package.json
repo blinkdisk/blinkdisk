@@ -17,7 +17,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "zod": "^3.24.2"
   }
 }

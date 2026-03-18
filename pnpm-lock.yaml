@@ -44,9 +44,9 @@ importers:
       '@better-auth/electron':
         specifier: 1.5.5
         version: 1.5.5(@better-auth/core@1.5.5)(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-auth@1.5.5)(better-call@1.3.2)
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../../libs/config
+        version: link:../../libs/constants
       '@blinkdisk/db':
         specifier: workspace:*
         version: link:../../libs/db
@@ -120,9 +120,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.886.0
         version: 3.886.0
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../../libs/config
+        version: link:../../libs/constants
       '@blinkdisk/db':
         specifier: workspace:*
         version: link:../../libs/db
@@ -160,9 +160,9 @@ importers:
       '@blinkdisk/components':
         specifier: workspace:*
         version: link:../../libs/components
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../../libs/config
+        version: link:../../libs/constants
       '@blinkdisk/electron':
         specifier: workspace:*
         version: link:../electron
@@ -341,9 +341,9 @@ importers:
       '@better-auth/electron':
         specifier: 1.5.5
         version: 1.5.5(@better-auth/core@1.5.5)(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-auth@1.5.5)(better-call@1.3.2)(electron@38.1.2)
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../../libs/config
+        version: link:../../libs/constants
       '@blinkdisk/db':
         specifier: workspace:*
         version: link:../../libs/db
@@ -453,9 +453,9 @@ importers:
       '@blinkdisk/components':
         specifier: workspace:*
         version: link:../../libs/components
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../../libs/config
+        version: link:../../libs/constants
       '@blinkdisk/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
@@ -577,9 +577,9 @@ importers:
       '@blinkdisk/components':
         specifier: workspace:*
         version: link:../../libs/components
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../../libs/config
+        version: link:../../libs/constants
       '@blinkdisk/forms':
         specifier: workspace:*
         version: link:../../libs/forms
@@ -716,9 +716,9 @@ importers:
 
   libs/components:
     dependencies:
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../config
+        version: link:../constants
       '@blinkdisk/hooks':
         specifier: workspace:*
         version: link:../hooks
@@ -781,7 +781,7 @@ importers:
         specifier: 5.8.2
         version: 5.8.2
 
-  libs/config:
+  libs/constants:
     dependencies:
       '@blinkdisk/db':
         specifier: workspace:*
@@ -952,9 +952,9 @@ importers:
 
   libs/hooks:
     dependencies:
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../config
+        version: link:../constants
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -983,9 +983,9 @@ importers:
 
   libs/schemas:
     dependencies:
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../config
+        version: link:../constants
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -1050,9 +1050,9 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0
     devDependencies:
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../config
+        version: link:../constants
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../eslint
@@ -1083,9 +1083,9 @@ importers:
 
   libs/utils:
     dependencies:
-      '@blinkdisk/config':
+      '@blinkdisk/constants':
         specifier: workspace:*
-        version: link:../config
+        version: link:../constants
       '@blinkdisk/emails':
         specifier: workspace:*
         version: link:../emails

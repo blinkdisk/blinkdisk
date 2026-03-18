@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@blinkdisk/components": "workspace:*",
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/electron": "workspace:*",
     "@blinkdisk/forms": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",

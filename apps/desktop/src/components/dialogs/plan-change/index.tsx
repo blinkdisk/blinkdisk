@@ -1,4 +1,4 @@
-import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription } from "@blinkdisk/ui/alert";
 import {

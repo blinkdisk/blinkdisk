@@ -1,17 +1,17 @@
 import { getPostHog, posthog } from "@api/lib/posthog";
 import { electron } from "@better-auth/electron";
-import { APP_ID_ORIGIN } from "@blinkdisk/config/app";
+import { APP_ID_ORIGIN } from "@blinkdisk/constants/app";
 import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
-} from "@blinkdisk/config/auth";
+} from "@blinkdisk/constants/auth";
 import {
   ENDORSELY_HEADER,
   LANGUAGE_HEADER,
   TIMEZONE_HEADER,
-} from "@blinkdisk/config/header";
-import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/config/language";
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+} from "@blinkdisk/constants/header";
+import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/constants/language";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";

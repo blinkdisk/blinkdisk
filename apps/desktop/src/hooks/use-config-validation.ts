@@ -1,4 +1,4 @@
-import { StorageProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { trpc } from "@desktop/lib/trpc";
 import { useCallback } from "react";

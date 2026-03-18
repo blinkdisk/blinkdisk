@@ -1,9 +1,9 @@
 import { electronClient } from "@better-auth/electron/client";
-import { APP_ID, APP_ID_ORIGIN } from "@blinkdisk/config/app";
+import { APP_ID, APP_ID_ORIGIN } from "@blinkdisk/constants/app";
 import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
-} from "@blinkdisk/config/auth";
+} from "@blinkdisk/constants/auth";
 import {
   ZUpdatePreferencesType,
   ZUpdateUserType,

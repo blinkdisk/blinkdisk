@@ -1,9 +1,9 @@
 import { electronProxyClient } from "@better-auth/electron/proxy";
-import { APP_ID_ORIGIN, APP_SCHEME } from "@blinkdisk/config/app";
+import { APP_ID_ORIGIN, APP_SCHEME } from "@blinkdisk/constants/app";
 import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
-} from "@blinkdisk/config/auth";
+} from "@blinkdisk/constants/auth";
 import {
   inferAdditionalFields,
   magicLinkClient,

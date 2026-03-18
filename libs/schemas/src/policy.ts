@@ -1,4 +1,4 @@
-import { COMPRESSION_ALGORITHMS } from "@blinkdisk/config/algorithms";
+import { COMPRESSION_ALGORITHMS } from "@blinkdisk/constants/algorithms";
 import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 

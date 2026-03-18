@@ -1,7 +1,7 @@
 import { HonoContextOptions } from "@api/index";
 import { trackAffiliatePayment } from "@api/lib/affiliate";
 import { posthog } from "@api/lib/posthog";
-import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { SubscriptionStatus } from "@blinkdisk/db/enums";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
 import { generateId } from "@blinkdisk/utils/id";

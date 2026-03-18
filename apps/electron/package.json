@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@better-auth/electron": "1.5.5",
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/db": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/utils": "workspace:*",

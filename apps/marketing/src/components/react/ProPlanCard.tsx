@@ -1,5 +1,5 @@
-import type { BillingPeriod } from "@blinkdisk/config/plans";
-import { SUBSCRIPTION_PLANS } from "@blinkdisk/config/plans";
+import type { BillingPeriod } from "@blinkdisk/constants/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import {
   Select,
   SelectContent,

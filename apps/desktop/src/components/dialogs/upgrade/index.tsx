@@ -2,7 +2,7 @@ import {
   BillingPeriod,
   Plan as PlanType,
   SUBSCRIPTION_PLANS,
-} from "@blinkdisk/config/plans";
+} from "@blinkdisk/constants/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { usePlanPrices } from "@blinkdisk/hooks/use-plan-prices";
 import { Badge } from "@blinkdisk/ui/badge";

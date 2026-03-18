@@ -1,4 +1,4 @@
-import { APP_SCHEME, APP_SCHEME_PROTOCOL } from "@blinkdisk/config/app";
+import { APP_SCHEME, APP_SCHEME_PROTOCOL } from "@blinkdisk/constants/app";
 import { authenticateToken } from "@electron/auth";
 import { focusWindow, sendWindow } from "@electron/window";
 import { app } from "electron";
