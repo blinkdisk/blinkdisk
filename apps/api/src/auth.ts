@@ -212,7 +212,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
               channel: "accounts",
             });
 
-            const referralId = ctx?.headers?.get(ENDORSELY_HEADER);
+            const referralId = ctx?.request?.headers?.get(ENDORSELY_HEADER);
             if (referralId) await trackAffiliateSignup(env, referralId);
           },
         },

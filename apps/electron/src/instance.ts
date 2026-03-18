@@ -21,7 +21,7 @@ if (!firstInstance) {
       }
     }
 
-    if (process.platform === "darwin" || typeof url === "string") return;
+    if (process.platform === "darwin" || typeof url !== "string") return;
 
     onDeeplinkOpen((url as string).toString());
   });
