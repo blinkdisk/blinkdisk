@@ -1,11 +1,10 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
-import { CustomError } from "@blinkdisk/utils/error";
+import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
 import { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
 import { useFolderId } from "@desktop/hooks/use-folder-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { showErrorToast } from "@desktop/lib/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useStartRestore(options?: { onSuccess?: () => void }) {

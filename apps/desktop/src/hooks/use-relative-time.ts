@@ -1,5 +1,5 @@
+import { LANGUAGE_DATE_LOCALES } from "@blinkdisk/constants/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { dateLocales } from "@blinkdisk/utils/i18n";
 import { formatDistanceToNow } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 
@@ -14,9 +14,12 @@ export function useRelativeTime(
         ? ""
         : formatDistanceToNow(new Date(date), {
             addSuffix: true,
-            ...(language in dateLocales
+            ...(language in LANGUAGE_DATE_LOCALES
               ? {
-                  locale: dateLocales[language as keyof typeof dateLocales],
+                  locale:
+                    LANGUAGE_DATE_LOCALES[
+                      language as keyof typeof LANGUAGE_DATE_LOCALES
+                    ],
                 }
               : {}),
           }),

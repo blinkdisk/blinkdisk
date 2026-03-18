@@ -1,6 +1,6 @@
 import { ZChangePlan } from "@blinkdisk/schemas/payment";
+import { showErrorToast } from "@blinkdisk/utils/error";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

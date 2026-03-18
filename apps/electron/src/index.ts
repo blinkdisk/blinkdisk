@@ -20,18 +20,24 @@ import "@electron/log";
 import "@electron/startup";
 import "@electron/updater";
 
+import { checkDeepLink } from "@electron/deeplink";
+import { initEncryption } from "@electron/encryption";
 import { createTray } from "@electron/tray";
 import { startAllVaults, stopAllVaults } from "@electron/vault/manage";
 import { createWindow } from "@electron/window";
 
 app.on("ready", () => {
+  initEncryption();
   listenProtocol();
   createTray();
 
   startAllVaults();
 
-  if (process.argv.includes("--hidden")) return;
-  createWindow();
+  if (!process.argv.includes("--hidden")) createWindow();
+
+  // Deeplinks might send messages to the window
+  // so it should be called after createWindow
+  checkDeepLink();
 });
 
 app.on("will-quit", function () {

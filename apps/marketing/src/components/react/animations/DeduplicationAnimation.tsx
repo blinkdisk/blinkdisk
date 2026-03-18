@@ -1,16 +1,16 @@
 import { EmojiCard } from "@blinkdisk/components/emoji-card";
-import { exampleFolders } from "@blinkdisk/config/folder";
+import { EXAMPLE_FOLDERS } from "@blinkdisk/constants/folder";
 import { useMemo } from "react";
 
 export default function DeduplicationAnimation() {
   const files = 8472;
 
   const marquees = useMemo(() => {
-    const half = Math.round(exampleFolders.length / 2);
+    const half = Math.round(EXAMPLE_FOLDERS.length / 2);
 
     return [
-      exampleFolders.slice(0, half),
-      exampleFolders.slice(half, exampleFolders.length),
+      EXAMPLE_FOLDERS.slice(0, half),
+      EXAMPLE_FOLDERS.slice(half, EXAMPLE_FOLDERS.length),
     ];
   }, []);
 

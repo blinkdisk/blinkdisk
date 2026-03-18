@@ -1,8 +1,8 @@
 import {
   BillingPeriod,
   Plan as PlanType,
-  plans,
-} from "@blinkdisk/config/plans";
+  SUBSCRIPTION_PLANS,
+} from "@blinkdisk/constants/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { usePlanPrices } from "@blinkdisk/hooks/use-plan-prices";
 import { Badge } from "@blinkdisk/ui/badge";
@@ -50,7 +50,10 @@ export function UpgradeDialog() {
   const [changeOpen, setChangeOpen] = useState(false);
   const [change, setChange] = useState<Change | null>(null);
 
-  const groupPlans = useMemo(() => plans.filter((plan) => plan.group), []);
+  const groupPlans = useMemo(
+    () => SUBSCRIPTION_PLANS.filter((plan) => plan.group),
+    [],
+  );
   const groupPlan = useMemo(
     () => groupPlans[groupIndex],
     [groupPlans, groupIndex],
@@ -107,21 +110,19 @@ export function UpgradeDialog() {
             </Tabs>
           </div>
           <div className="mt-8 flex gap-5">
-            {plans
-              .filter((plan) => !plan.group)
-              .map((plan) => (
-                <Plan
-                  key={plan.id}
-                  plan={plan}
-                  period={period}
-                  currency={currency}
-                  setPending={(url) => setPending({ url })}
-                  setChange={(change) => {
-                    setChange(change);
-                    setChangeOpen(true);
-                  }}
-                />
-              ))}
+            {SUBSCRIPTION_PLANS.filter((plan) => !plan.group).map((plan) => (
+              <Plan
+                key={plan.id}
+                plan={plan}
+                period={period}
+                currency={currency}
+                setPending={(url) => setPending({ url })}
+                setChange={(change) => {
+                  setChange(change);
+                  setChangeOpen(true);
+                }}
+              />
+            ))}
             {groupPlan && (
               <Plan
                 plan={groupPlan}
@@ -183,7 +184,9 @@ function Plan({
   );
 
   const action = useMemo(() => {
-    const currentPlan = plans.find((p) => p.id === subscription?.planId);
+    const currentPlan = SUBSCRIPTION_PLANS.find(
+      (p) => p.id === subscription?.planId,
+    );
     if (!currentPlan) return "UPGRADE";
     if (plan.id === currentPlan.id && price?.id === subscription?.priceId)
       return "MANAGE";

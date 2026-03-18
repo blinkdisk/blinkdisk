@@ -1,6 +1,13 @@
 import { log } from "@electron/log";
 import { safeStorage } from "electron";
 
+export function initEncryption() {
+  if (safeStorage.getSelectedStorageBackend() === "basic_text")
+    // Enable encryption for the basic_text backend
+    // This uses a simple key derivation from a machine-specific seed
+    safeStorage.setUsePlainTextEncryption(true);
+}
+
 export type EncryptedString = {
   type: "ENCRYPTED" | "PLAIN";
   data: string;

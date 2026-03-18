@@ -3,6 +3,7 @@ import { createContext } from "@api/context";
 import { ratelimit } from "@api/middlewares/limit";
 import { appRouter } from "@api/router";
 import { polarWebhook } from "@api/webhooks/polar";
+import { PROTOCOL_FRONTEND_URL } from "@blinkdisk/constants/app";
 import type { DB } from "@blinkdisk/db/index";
 import { database } from "@blinkdisk/db/index";
 import { trpcServer } from "@hono/trpc-server";
@@ -27,8 +28,7 @@ app.use(
       if (c.env.DESKTOP_URL && origin === c.env.DESKTOP_URL)
         return c.env.DESKTOP_URL;
       if (c.env.WEB_URL && origin === c.env.WEB_URL) return c.env.WEB_URL;
-      if (origin === "blinkdiskapp://frontend")
-        return "blinkdiskapp://frontend";
+      if (origin === PROTOCOL_FRONTEND_URL) return PROTOCOL_FRONTEND_URL;
       return null;
     },
     credentials: true,
@@ -48,11 +48,7 @@ app.use(async (c, next) => {
 });
 
 app.on(["POST", "GET"], "/api/auth/*", (c) => {
-  return auth(
-    c.env.HYPERDRIVE.connectionString,
-    c.env.SPACE,
-    c.get("db"),
-  ).handler(c.req.raw);
+  return auth(c.env, c.get("db")).handler(c.req.raw);
 });
 
 app.post("/webhook/polar", polarWebhook);

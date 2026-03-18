@@ -79,6 +79,11 @@
       "description": "Please try again later."
     }
   },
+  "checkoutSuccess": {
+    "title": "Subscribed successfully!",
+    "description": "Your subscription has been successfully started. You can now close this window and return to your desktop app.",
+    "openApp": "Open Desktop App"
+  },
   "planChangeToast": {
     "START": {
       "title": "Subscribed successfully",

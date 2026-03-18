@@ -1,3 +1,4 @@
+import { useClipboard } from "@blinkdisk/hooks/use-clipboard";
 import { Alert, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { Input } from "@blinkdisk/ui/input";
@@ -7,7 +8,6 @@ import type {
   CodeStatsFile,
   CodeStatsRepository,
 } from "@marketing/components/react/code/types";
-import { useClipboard } from "@marketing/hooks/use-clipboard";
 import {
   excludedExtensions,
   extensionToLanguage,

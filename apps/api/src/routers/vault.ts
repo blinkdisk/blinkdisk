@@ -1,11 +1,11 @@
 import { posthog } from "@api/lib/posthog";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
-import { providers } from "@blinkdisk/config/providers";
+import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import {
-  defaultVaultOptions,
+  DEFAULT_VAULT_OPTIONS,
   LATEST_VAULT_VERSION,
-} from "@blinkdisk/config/vault";
+} from "@blinkdisk/constants/vault";
 import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import {
   ZCreateVault,
@@ -45,10 +45,10 @@ export const vaultRouter = router({
 
       if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
 
-      const provider = providers.find((p) => p.type === input.provider);
+      const provider = STORAGE_PROVIDERS.find((p) => p.type === input.provider);
       if (!provider) throw new CustomError("PROVIDER_NOT_FOUND");
 
-      const options = defaultVaultOptions;
+      const options = DEFAULT_VAULT_OPTIONS;
 
       let spaceId: string | null = null;
       if (input.provider === "CLOUDBLINK") {

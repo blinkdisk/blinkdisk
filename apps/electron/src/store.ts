@@ -1,4 +1,4 @@
-import { ProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { ConfigLevel } from "@blinkdisk/db/enums";
 import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import { EncryptedString } from "@electron/encryption";
@@ -19,7 +19,7 @@ export type GlobalStorageType = {
       options: ZVaultOptionsType;
       token?: EncryptedString;
       version: number;
-      provider: ProviderType;
+      provider: StorageProviderType;
     };
   };
   passwords: {

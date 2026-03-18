@@ -4,7 +4,21 @@ Sentry.init({
   enabled: process.env.NODE_ENV !== "development",
 });
 
+import { setupRenderer } from "@better-auth/electron/preload";
+
+setupRenderer();
+
+import type {
+  authenticateToken,
+  getSession,
+  listSessions,
+  logout,
+  openAuth,
+  setSession,
+  updateUser,
+} from "@electron/auth";
 import type { setVaultCache } from "@electron/cache";
+import type { readClipboard } from "@electron/clipboard";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
@@ -83,6 +97,12 @@ const api = {
         capacity: number;
       };
     }>("space.update"),
+  },
+  clipboard: {
+    read: () =>
+      ipcRenderer.invoke("clipboard.read") as Promise<
+        ReturnType<typeof readClipboard>
+      >,
   },
   zoom: (level: number) => webFrame.setZoomFactor(level),
   os: {
@@ -188,7 +208,7 @@ const api = {
     },
   },
   deeplink: {
-    open: listener<{ event: string }>("deeplink.open"),
+    onOpen: listener<{ event: string }>("deeplink.onOpen"),
   },
   ssh: {
     keyscan: (form: Parameters<typeof sshKeyscan>[0]) =>
@@ -198,6 +218,37 @@ const api = {
     change: listener<UpdateStatus>("update.available"),
     status: () => ipcRenderer.invoke("update.status") as Promise<UpdateStatus>,
     install: () => ipcRenderer.invoke("update.install") as Promise<void>,
+  },
+  auth: {
+    open: () =>
+      ipcRenderer.invoke("auth.open") as Promise<ReturnType<typeof openAuth>>,
+    logout: () =>
+      ipcRenderer.invoke("auth.logout") as Promise<ReturnType<typeof logout>>,
+    token: (payload: Parameters<typeof authenticateToken>[0]) =>
+      ipcRenderer.invoke("auth.token", payload) as Promise<
+        ReturnType<typeof authenticateToken>
+      >,
+    user: {
+      update: (payload: Parameters<typeof updateUser>[0]) =>
+        ipcRenderer.invoke("auth.user.update", payload) as Promise<
+          ReturnType<typeof updateUser>
+        >,
+    },
+    session: {
+      list: () =>
+        ipcRenderer.invoke("auth.session.list") as Promise<
+          ReturnType<typeof listSessions>
+        >,
+      get: () =>
+        ipcRenderer.invoke("auth.session.get") as Promise<
+          ReturnType<typeof getSession>
+        >,
+      set: (payload: Parameters<typeof setSession>[0]) =>
+        ipcRenderer.invoke("auth.session.set", payload) as Promise<
+          ReturnType<typeof setSession>
+        >,
+    },
+    onAccountChange: listener<{ token: string }>("auth.onAccountChange"),
   },
 };
 

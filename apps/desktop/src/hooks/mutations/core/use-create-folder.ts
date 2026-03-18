@@ -1,12 +1,11 @@
 import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
-import { CustomError } from "@blinkdisk/utils/error";
+import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { showErrorToast } from "@desktop/lib/error";
 import { hashFolder } from "@desktop/lib/folder";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

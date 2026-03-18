@@ -1,11 +1,10 @@
 import { ZPolicyType } from "@blinkdisk/schemas/policy";
-import { CustomError } from "@blinkdisk/utils/error";
+import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { showErrorToast } from "@desktop/lib/error";
 import { convertPolicyToCore } from "@desktop/lib/policy";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

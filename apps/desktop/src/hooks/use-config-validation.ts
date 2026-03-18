@@ -1,4 +1,4 @@
-import { ProviderType } from "@blinkdisk/config/providers";
+import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { trpc } from "@desktop/lib/trpc";
 import { useCallback } from "react";
@@ -6,7 +6,7 @@ import { useCallback } from "react";
 export type VaultAction = "CREATE" | "SETUP" | "UPDATE";
 
 export function useConfigValidation(
-  providerType: ProviderType,
+  providerType: StorageProviderType,
   action: VaultAction,
 ) {
   const onSubmitAsync = useCallback(

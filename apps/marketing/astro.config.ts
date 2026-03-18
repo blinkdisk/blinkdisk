@@ -2,13 +2,14 @@ import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import { getComparisonSitemap } from "@blinkdisk/constants/comparison";
 import sentry from "@sentry/astro";
 import tailwindcss from "@tailwindcss/vite";
 import mermaid from "astro-mermaid";
 import { defineConfig, envField } from "astro/config";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getComparisonSitemap } from "../../libs/config/src/comparison";
+import { viteStaticCopy as copy } from "vite-plugin-static-copy";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -120,7 +121,17 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      copy({
+        targets: [
+          {
+            src: ["../../libs/assets/favicon/"],
+            dest: ".",
+          },
+        ],
+      }),
+    ],
     resolve: {
       alias: {
         "@marketing": path.resolve(__dirname, "./src"),

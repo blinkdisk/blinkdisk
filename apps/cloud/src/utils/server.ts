@@ -1,4 +1,4 @@
-import { coloServerMapping } from "@blinkdisk/config/server";
+import { COLO_SERVER_MAPPING } from "@blinkdisk/constants/server";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 
 const withTimeout = async (url: string, timeout = 1000) => {
@@ -20,10 +20,12 @@ export async function pickS3Endpoint(env: Cloudflare.Env) {
 
   if (!res) return env.CLOUD_S3_ENDPOINT;
 
-  const colo = res.match(/^colo=(.+)/m)?.[1] as keyof typeof coloServerMapping;
+  const colo = res.match(
+    /^colo=(.+)/m,
+  )?.[1] as keyof typeof COLO_SERVER_MAPPING;
   if (!colo) return env.CLOUD_S3_ENDPOINT;
 
-  const server = coloServerMapping[colo];
+  const server = COLO_SERVER_MAPPING[colo];
   if (!server) return env.CLOUD_S3_ENDPOINT;
 
   const override = env[`CLOUD_S3_ENDPOINT_${server}`];

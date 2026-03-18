@@ -1,4 +1,4 @@
-import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ZProviderType } from "@schemas/providers";
 import {
   ZVaultEncryptedConfig,

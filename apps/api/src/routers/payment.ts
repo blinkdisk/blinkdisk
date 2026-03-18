@@ -3,7 +3,7 @@ import { posthog } from "@api/lib/posthog";
 import { getActiveSubscription } from "@api/lib/subscription";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
-import { plans } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { ZChangePlan, ZCreateCheckout } from "@blinkdisk/schemas/payment";
 import { CustomError } from "@blinkdisk/utils/error";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
@@ -19,7 +19,7 @@ export const paymentRouter = router({
 
       if (subscription) throw new CustomError("SUBSCRIPTION_EXISTS");
 
-      const plan = plans.find((plan) =>
+      const plan = SUBSCRIPTION_PLANS.find((plan) =>
         plan.prices.find((p) => p.id === input.priceId),
       );
 
@@ -139,7 +139,7 @@ export const paymentRouter = router({
   changePlan: authedProcedure
     .input(ZChangePlan)
     .mutation(async ({ input, ctx }) => {
-      const plan = plans.find((plan) =>
+      const plan = SUBSCRIPTION_PLANS.find((plan) =>
         plan.prices.find((p) => p.id === input.priceId),
       );
       if (!plan) throw new CustomError("PRICE_NOT_FOUND");
@@ -153,7 +153,7 @@ export const paymentRouter = router({
 
       if (!current) throw new CustomError("SUBSCRIPTION_NOT_FOUND");
 
-      const currentPlan = plans.find((p) =>
+      const currentPlan = SUBSCRIPTION_PLANS.find((p) =>
         p.prices.find((price) => price.id === current.priceId),
       );
 

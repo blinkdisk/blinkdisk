@@ -1,9 +1,8 @@
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
-import { CustomError } from "@blinkdisk/utils/error";
+import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { SetupStep } from "@desktop/components/vaults/setup";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { showErrorToast } from "@desktop/lib/error";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { VaultItem } from "../queries/use-vault";

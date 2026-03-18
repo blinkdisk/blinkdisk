@@ -66,6 +66,10 @@ export default defineConfig({
           src: ["../../libs/styles/fonts/"],
           dest: ".",
         },
+        {
+          src: ["../../libs/assets/favicon/"],
+          dest: ".",
+        },
       ],
     }),
   ],

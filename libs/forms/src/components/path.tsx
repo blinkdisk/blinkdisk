@@ -43,7 +43,8 @@ const Path = React.forwardRef<
       setLoading(true);
 
       if (mode === "save") {
-        const result = await window.electron?.dialog.save({
+        // eslint-disable-next-line
+        const result = await (window as any).electron?.dialog.save({
           title,
           defaultFileName,
         });
@@ -51,7 +52,8 @@ const Path = React.forwardRef<
         if (!result.canceled && result.filePath)
           field.handleChange(result.filePath);
       } else {
-        const result = await window.electron?.dialog.open({
+        // eslint-disable-next-line
+        const result = await (window as any).electron?.dialog.open({
           properties:
             type === "directory"
               ? ["openDirectory", "createDirectory"]

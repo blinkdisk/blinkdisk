@@ -4,6 +4,7 @@ import { SidebarProvider } from "@blinkdisk/ui/sidebar";
 import { SkeletonTheme } from "@blinkdisk/ui/skeleton";
 import { Toaster } from "@blinkdisk/ui/toast";
 import { TooltipProvider } from "@blinkdisk/ui/tooltip";
+import { AuthListener } from "@desktop/components/auth-listener";
 import { OfflineDialog } from "@desktop/components/offline-dialog";
 import { Update } from "@desktop/components/update";
 import { useStorageListener } from "@desktop/hooks/use-app-storage";
@@ -61,6 +62,7 @@ function RootComponent() {
                 <Outlet />
                 <Toaster dark={theme.dark} />
                 <OfflineDialog />
+                <AuthListener />
               </Update>
             </SkeletonTheme>
           </QueryClientProvider>

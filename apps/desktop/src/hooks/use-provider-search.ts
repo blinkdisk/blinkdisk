@@ -1,4 +1,4 @@
-import { providers } from "@blinkdisk/config/providers";
+import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useMemo, useState } from "react";
 
@@ -7,12 +7,12 @@ export function useProviderSearch() {
   const [search, setSearch] = useState("");
 
   const providersWithName = useMemo(() => {
-    return providers
-      .filter((provider) => !provider.hidden)
-      .map((provider) => ({
+    return STORAGE_PROVIDERS.filter((provider) => !provider.hidden).map(
+      (provider) => ({
         ...provider,
         name: t(`providers.${provider.type}.name`),
-      }));
+      }),
+    );
   }, [t]);
 
   const filteredProviders = useMemo(() => {

@@ -1,4 +1,4 @@
-import { plans } from "@blinkdisk/config/plans";
+import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription } from "@blinkdisk/ui/alert";
 import {
@@ -32,7 +32,7 @@ export function PlanChangeDialog({
 
   const plan = useMemo(() => {
     if (!priceId) return null;
-    return plans.find((plan) =>
+    return SUBSCRIPTION_PLANS.find((plan) =>
       plan.prices.find((price) => price.id === priceId),
     );
   }, [priceId]);

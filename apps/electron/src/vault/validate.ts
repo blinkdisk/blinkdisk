@@ -1,5 +1,5 @@
-import { ProviderType } from "@blinkdisk/config/providers";
-import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import { StorageProviderType } from "@blinkdisk/constants/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
@@ -9,7 +9,7 @@ import { VaultInstance } from "@electron/vault/types";
 export let validationVault: VaultInstance | null = null;
 
 export async function validateVaultConfig(vault: {
-  type: ProviderType;
+  type: StorageProviderType;
   config: ProviderConfig;
   version?: number;
   password?: string;

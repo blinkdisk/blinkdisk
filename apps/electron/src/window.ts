@@ -1,3 +1,7 @@
+import {
+  INTERNAL_PROTOCOL,
+  PROTOCOL_FRONTEND_URL,
+} from "@blinkdisk/constants/app";
 import { openBrowser } from "@electron/shell";
 import { getTheme } from "@electron/theme";
 import { BrowserWindow, app } from "electron";
@@ -24,15 +28,16 @@ export function createWindow() {
   window.setMenu(null);
 
   window.loadURL(
-    app.isPackaged ? "blinkdiskapp://frontend" : process.env.DESKTOP_URL!,
+    app.isPackaged ? PROTOCOL_FRONTEND_URL : process.env.DESKTOP_URL!,
   );
 
   window.webContents.setWindowOpenHandler(({ url: rawUrl }) => {
     const url = new URL(rawUrl);
 
     if (
-      url.protocol === "blinkdiskapp:" ||
-      (!app.isPackaged && url.origin === new URL(process.env.DESKTOP_URL!).origin)
+      url.protocol === INTERNAL_PROTOCOL ||
+      (!app.isPackaged &&
+        url.origin === new URL(process.env.DESKTOP_URL!).origin)
     )
       window?.loadURL(rawUrl);
     else if (

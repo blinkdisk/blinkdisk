@@ -13,7 +13,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (!authenticated) {
-      navigate({ to: "/auth/register", replace: true });
+      navigate({ to: "/auth", replace: true });
     } else {
       navigate({ to: "/app", replace: true });
     }

@@ -1,5 +1,4 @@
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { authClient } from "@desktop/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 
 export function useAccountList(options?: { enabled: boolean }) {
@@ -8,8 +7,7 @@ export function useAccountList(options?: { enabled: boolean }) {
   return useQuery({
     queryKey: queryKeys.account.list(),
     queryFn: async () => {
-      const { data, error } =
-        await authClient.multiSession.listDeviceSessions();
+      const { data, error } = await window.electron.auth.session.list();
       if (error) throw error;
 
       return data.sort(

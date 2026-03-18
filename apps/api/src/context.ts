@@ -7,11 +7,7 @@ export const createContext = async (
   _: FetchCreateContextFnOptions,
   c: HonoContext<HonoContextOptions>,
 ) => {
-  const session = await auth(
-    c.env.HYPERDRIVE.connectionString,
-    c.env.SPACE,
-    c.get("db"),
-  ).api.getSession({
+  const session = await auth(c.env, c.get("db")).api.getSession({
     headers: c.req.raw.headers,
   });
 

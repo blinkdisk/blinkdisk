@@ -1,9 +1,12 @@
-import { providers, ProviderType } from "@blinkdisk/config/providers";
-import { LATEST_VAULT_VERSION } from "@blinkdisk/config/vault";
+import {
+  STORAGE_PROVIDERS,
+  StorageProviderType,
+} from "@blinkdisk/constants/providers";
+import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 
-export function mapProviderType(providerType: ProviderType) {
-  const provider = providers.find(
+export function mapProviderType(providerType: StorageProviderType) {
+  const provider = STORAGE_PROVIDERS.find(
     (p) => p.type === providerType || p.alias?.includes(providerType),
   );
   if (!provider) throw new Error(`Provider ${providerType} not found`);
@@ -11,7 +14,7 @@ export function mapProviderType(providerType: ProviderType) {
 }
 
 export function mapConfigFields(
-  providerType: ProviderType,
+  providerType: StorageProviderType,
   config: ProviderConfig,
   version?: number,
   token?: string | null,
@@ -23,7 +26,7 @@ export function mapConfigFields(
       version: version || LATEST_VAULT_VERSION,
     };
 
-  const provider = providers.find(
+  const provider = STORAGE_PROVIDERS.find(
     (p) => p.type === providerType || p.alias?.includes(providerType),
   );
   if (!provider) throw new Error(`Provider ${providerType} not found`);

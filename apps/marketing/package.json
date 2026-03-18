@@ -18,7 +18,7 @@
     "@astrojs/react": "^4.2.1",
     "@astrojs/sitemap": "^3.3.1",
     "@blinkdisk/components": "workspace:*",
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
     "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
@@ -45,9 +45,11 @@
     "sharp": "^0.34.5",
     "sonner": "^2.0.1",
     "twemoji-parser": "^14.0.0",
-    "ua-parser-js": "^2.0.5"
+    "ua-parser-js": "^2.0.5",
+    "vite-plugin-static-copy": "^3.3.0"
   },
   "devDependencies": {
+    "@blinkdisk/assets": "workspace:*",
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/dom-to-image": "^2.6.7",

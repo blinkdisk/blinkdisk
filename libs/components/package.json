@@ -21,7 +21,7 @@
   "dependencies": {
     "@blinkdisk/utils": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
-    "@blinkdisk/config": "workspace:*",
+    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@types/twemoji-parser": "^13.1.4",
     "react": "^19.0.0",

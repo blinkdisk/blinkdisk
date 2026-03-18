@@ -70,6 +70,10 @@ const config: KnipConfig = {
       entry: ["*.json"],
       project: ["*.json"],
     },
+    "libs/assets": {
+      entry: [],
+      project: [],
+    },
   },
   ignore: [
     "node_modules/**",

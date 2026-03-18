@@ -1,8 +1,18 @@
 import { getPostHog, posthog } from "@api/lib/posthog";
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/config/space";
+import { electron } from "@better-auth/electron";
+import { APP_ID_ORIGIN } from "@blinkdisk/constants/app";
+import {
+  ELECTRON_CLIENT_ID,
+  ELECTRON_COOKIE_PREFIX,
+} from "@blinkdisk/constants/auth";
+import {
+  ENDORSELY_HEADER,
+  LANGUAGE_HEADER,
+  TIMEZONE_HEADER,
+} from "@blinkdisk/constants/header";
+import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/constants/language";
+import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import { DB, dialect } from "@blinkdisk/db/index";
-import { ZLogin, ZRegisterServer } from "@blinkdisk/schemas/auth";
-import { ZUpdateUserServer } from "@blinkdisk/schemas/settings";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
@@ -10,7 +20,7 @@ import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink, multiSession } from "better-auth/plugins";
 import { Kysely } from "kysely";
-import { StandardAdapter, validator } from "validation-better-auth";
+import { trackAffiliateSignup } from "./lib/affiliate";
 
 const cookieSettings = {
   attributes: {
@@ -18,12 +28,9 @@ const cookieSettings = {
   },
 } as const;
 
-export const auth = (
-  databaseUrl: string,
-  space: DurableObjectNamespace<undefined>,
-  db: Kysely<DB>,
-) => {
+export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
   return betterAuth({
+    baseURL: env.API_URL,
     appName: "BlinkDisk",
     basePath: "/api/auth",
     account: {
@@ -62,12 +69,16 @@ export const auth = (
       modelName: "Verification",
     },
     database: {
-      dialect: dialect(databaseUrl),
+      dialect: dialect(env.HYPERDRIVE.connectionString),
       type: "postgres",
     },
-    trustedOrigins: [process.env.DESKTOP_URL!, "blinkdiskapp://frontend"],
+    trustedOrigins: [
+      process.env.WEB_URL,
+      process.env.DESKTOP_URL!,
+      APP_ID_ORIGIN,
+    ],
     advanced: {
-      cookiePrefix: "blinkdisk",
+      cookiePrefix: ELECTRON_COOKIE_PREFIX,
       useSecureCookies: true,
       cookies: {
         session_token: cookieSettings,
@@ -90,24 +101,20 @@ export const auth = (
       },
     },
     plugins: [
+      electron({
+        disableOriginOverride: true,
+        cookiePrefix: ELECTRON_COOKIE_PREFIX,
+        clientID: ELECTRON_CLIENT_ID,
+      }) as Omit<ReturnType<typeof electron>, "hooks">,
       magicLink({
-        sendMagicLink: (
-          {
-            email,
-            token,
-          }: {
-            email: string;
-            token: string;
-          },
-          req: Request | undefined,
-        ) =>
+        sendMagicLink: ({ email, token }, ctx) =>
           sendEmail(
             "magic",
             {
               email,
-              language: req?.headers.get("X-BlinkDisk-Language")
-                ? req?.headers.get("X-BlinkDisk-Language")
-                : "en",
+              language: ctx?.request?.headers?.get(LANGUAGE_HEADER)
+                ? ctx.request.headers.get(LANGUAGE_HEADER)
+                : DEFAULT_LANGUAGE_CODE,
             },
             { code: [token.slice(0, 5), token.slice(5, 10)] },
           ),
@@ -118,11 +125,6 @@ export const auth = (
       multiSession({
         maximumSessions: 100,
       }),
-      validator([
-        { path: "/sign-up/email", adapter: StandardAdapter(ZRegisterServer) },
-        { path: "/sign-in/email", adapter: StandardAdapter(ZLogin) },
-        { path: "/update-user", adapter: StandardAdapter(ZUpdateUserServer) },
-      ]),
     ],
     hooks: {
       before: createAuthMiddleware(async (ctx) => {
@@ -148,7 +150,40 @@ export const auth = (
     databaseHooks: {
       user: {
         create: {
-          after: async (account) => {
+          after: async (account, ctx) => {
+            const spaceId = generateId("Space");
+
+            await db
+              .insertInto("Space")
+              .values({
+                id: spaceId,
+                capacity: FREE_SPACE_AVAILABLE.toString(),
+                used: "0",
+                accountId: account.id,
+              })
+              .execute();
+
+            const stub = env.SPACE.getByName(spaceId);
+            await (
+              stub as unknown as {
+                init: (id: string, capacity: number) => Promise<void>;
+              }
+            ).init(spaceId, FREE_SPACE_AVAILABLE);
+
+            const language = ctx?.request?.headers?.get(LANGUAGE_HEADER);
+            const timeZone = ctx?.request?.headers?.get(TIMEZONE_HEADER);
+
+            if (language || timeZone) {
+              await db
+                .updateTable("Account")
+                .set({
+                  ...(language ? { language } : {}),
+                  ...(timeZone ? { timeZone } : {}),
+                })
+                .where("id", "=", account.id)
+                .execute();
+            }
+
             const posthog = getPostHog();
 
             posthog.identify({
@@ -177,24 +212,8 @@ export const auth = (
               channel: "accounts",
             });
 
-            const spaceId = generateId("Space");
-
-            await db
-              .insertInto("Space")
-              .values({
-                id: spaceId,
-                capacity: FREE_SPACE_AVAILABLE.toString(),
-                used: "0",
-                accountId: account.id,
-              })
-              .execute();
-
-            const stub = space.getByName(spaceId);
-            await (
-              stub as unknown as {
-                init: (id: string, capacity: number) => Promise<void>;
-              }
-            ).init(spaceId, FREE_SPACE_AVAILABLE);
+            const referralId = ctx?.request?.headers?.get(ENDORSELY_HEADER);
+            if (referralId) await trackAffiliateSignup(env, referralId);
           },
         },
       },
