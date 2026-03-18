@@ -9,6 +9,7 @@ import mermaid from "astro-mermaid";
 import { defineConfig, envField } from "astro/config";
 import path from "path";
 import { fileURLToPath } from "url";
+import { viteStaticCopy as copy } from "vite-plugin-static-copy";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -120,7 +121,17 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      copy({
+        targets: [
+          {
+            src: ["../../libs/assets/favicon/"],
+            dest: ".",
+          },
+        ],
+      }),
+    ],
     resolve: {
       alias: {
         "@marketing": path.resolve(__dirname, "./src"),

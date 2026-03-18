@@ -537,7 +537,13 @@ importers:
       ua-parser-js:
         specifier: ^2.0.5
         version: 2.0.5
+      vite-plugin-static-copy:
+        specifier: ^3.3.0
+        version: 3.3.0(vite@6.4.1)
     devDependencies:
+      '@blinkdisk/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../../libs/eslint
@@ -665,6 +671,9 @@ importers:
         specifier: ^3.24.2
         version: 3.25.76
     devDependencies:
+      '@blinkdisk/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
       '@blinkdisk/eslint':
         specifier: workspace:*
         version: link:../../libs/eslint
@@ -713,6 +722,8 @@ importers:
       wrangler:
         specifier: ^4.62.0
         version: 4.73.0
+
+  libs/assets: {}
 
   libs/components:
     dependencies:
