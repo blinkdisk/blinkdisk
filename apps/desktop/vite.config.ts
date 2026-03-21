@@ -4,17 +4,19 @@ config({
   path: "../../.env",
 });
 
-import { INTERNAL_PROTOCOL } from "@blinkdisk/constants/app";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
+import type { Plugin } from "vite";
 import { defineConfig } from "vite";
 import env from "vite-plugin-environment";
 import { viteStaticCopy as copy } from "vite-plugin-static-copy";
-import type { Plugin } from "vite";
 import paths from "vite-tsconfig-paths";
+
+// Path alias seems to break build in CI
+import { INTERNAL_PROTOCOL } from "../../libs/constants/src/app";
 
 function injectAppConfig(): Plugin {
   return {
