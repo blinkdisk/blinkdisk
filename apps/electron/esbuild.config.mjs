@@ -14,6 +14,7 @@ const ENV_WHITELIST = [
   "DESKTOP_URL",
   "API_URL",
   "CLOUD_URL",
+  "WEB_URL",
   "SENTRY_DESKTOP_DSN",
 ];
 
