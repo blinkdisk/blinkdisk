@@ -1,5 +1,6 @@
 import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
-import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
+import { CustomError } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";

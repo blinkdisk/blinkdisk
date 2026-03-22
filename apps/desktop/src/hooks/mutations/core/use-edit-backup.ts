@@ -1,4 +1,5 @@
-import { CustomError, showErrorToast } from "@blinkdisk/utils/error";
+import { CustomError } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
