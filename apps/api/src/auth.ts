@@ -87,7 +87,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       },
       crossSubDomainCookies: {
         enabled: true,
-        domain: new URL(env.WEB_URL).hostname,
+        domain: new URL(env.WEB_URL).hostname.split(".").slice(-2).join('.'),
       },
       ipAddress: {
         ipAddressHeaders: [
