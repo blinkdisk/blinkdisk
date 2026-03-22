@@ -11,7 +11,7 @@ import {
 } from "@blinkdisk/ui/select";
 import { useCallback } from "react";
 
-import { useTranslation } from "react-i18next";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { DEFAULT_LOCALE_EN } from "../locale";
 import { PeriodProps, PeriodType } from "../types";
 
@@ -26,7 +26,7 @@ export function Period(props: PeriodProps) {
     allowedPeriods,
   } = props;
 
-  const { t } = useTranslation("cron");
+  const { t } = useAppTranslation("cron");
 
   const options: { value: string; label: string }[] = [];
 

@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@blinkdisk/constants": "workspace:*",
-    "react": "^19.0.0",
-    "react-i18next": "^15.4.1"
+    "@blinkdisk/utils": "workspace:*",
+    "react": "^19.0.0"
   }
 }

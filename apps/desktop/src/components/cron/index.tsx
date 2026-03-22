@@ -2,6 +2,7 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { cn } from "@blinkdisk/utils/class";
 import {
   getCronStringFromValues,
@@ -14,12 +15,11 @@ import { Months } from "@desktop/components/cron/fields/months";
 import { Period } from "@desktop/components/cron/fields/period";
 import { WeekDays } from "@desktop/components/cron/fields/week-days";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { CronProps, Locale, PeriodType } from "./types";
 import { usePrevious } from "./utils";
 
 export function Cron(props: CronProps) {
-  const { t } = useTranslation("cron");
+  const { t } = useAppTranslation("cron");
 
   const locale = t("component", {
     returnObjects: true,

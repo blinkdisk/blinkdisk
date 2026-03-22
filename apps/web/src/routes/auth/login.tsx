@@ -1,7 +1,7 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Trans } from "@blinkdisk/utils/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLoginForm } from "@web/hooks/forms/use-login-form";
-import { Trans } from "react-i18next";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,

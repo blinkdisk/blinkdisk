@@ -31,7 +31,6 @@
     "@tanstack/react-form-devtools": "^0.2.4",
     "@tanstack/react-query-devtools": "5.69.0",
     "@tanstack/react-router-devtools": "^1.114.25",
-    "react-i18next": "^15.4.1",
     "@tanstack/react-router": "1.131.7"
   }
 }

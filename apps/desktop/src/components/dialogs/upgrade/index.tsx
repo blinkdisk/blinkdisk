@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
+import { Trans } from "@blinkdisk/utils/i18n";
 import { PendingCheckoutDialog } from "@desktop/components/dialogs/pending-checkout";
 import {
   PlanChangeAction,
@@ -26,7 +27,6 @@ import { useSubscription } from "@desktop/hooks/queries/use-subscription";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { ArrowLeftIcon, InfoIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Trans } from "react-i18next";
 
 const currency = "USD";
 

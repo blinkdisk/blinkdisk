@@ -7,9 +7,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
+import { Trans } from "@blinkdisk/utils/i18n";
 import { useChangePlanForm } from "@desktop/hooks/forms/use-change-plan-form";
 import { useMemo } from "react";
-import { Trans } from "react-i18next";
 
 export type PlanChangeAction = "UPGRADE" | "DOWNGRADE" | "PERIOD_CHANGE";
 

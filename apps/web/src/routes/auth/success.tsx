@@ -2,11 +2,11 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useClipboard } from "@blinkdisk/hooks/use-clipboard";
 import { Button } from "@blinkdisk/ui/button";
 import { Loader } from "@blinkdisk/ui/loader";
+import { Trans } from "@blinkdisk/utils/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { authClient } from "@web/lib/auth";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Trans } from "react-i18next";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth/success")({

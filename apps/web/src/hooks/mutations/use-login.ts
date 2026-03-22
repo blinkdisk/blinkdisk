@@ -3,7 +3,7 @@ import { ZLoginType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import i18n from "@web/i18n";
+import { i18n } from "@web/i18n";
 import { authClient } from "@web/lib/auth";
 
 export function useLogin() {

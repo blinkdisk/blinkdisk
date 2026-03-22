@@ -3,7 +3,7 @@ import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZUpdatePreferences } from "@blinkdisk/schemas/settings";
 import { useUpdatePreferences } from "@desktop/hooks/mutations/use-update-preferences";
 import { useTheme } from "@desktop/hooks/use-theme";
-import i18n from "@desktop/i18n";
+import { i18n } from "@desktop/i18n";
 
 export function useUpdatePreferencesForm() {
   const { theme } = useTheme();

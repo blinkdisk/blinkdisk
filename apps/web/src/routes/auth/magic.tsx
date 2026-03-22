@@ -2,10 +2,10 @@ import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { InputOTPSlot } from "@blinkdisk/ui/input-otp";
+import { Trans } from "@blinkdisk/utils/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMagicCodeForm } from "@web/hooks/forms/use-magic-code-form";
 import { AlertTriangleIcon } from "lucide-react";
-import { Trans } from "react-i18next";
 
 export const Route = createFileRoute("/auth/magic")({
   component: RouteComponent,
