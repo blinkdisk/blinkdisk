@@ -1,13 +1,22 @@
 import { store } from "@electron/store";
+import { captureException } from "@sentry/electron/main";
+
 import { safeStorage, session } from "electron";
 
 export async function runMigrations() {
-  await migrateAuthV1();
+  try {
+    await migrateAuthV1();
+  } catch (e) {
+    captureException(e);
+  }
 }
 
 async function migrateAuthV1() {
   if (store.get("migrations.auth_v1")) return;
-  if (store.get("auth.cookie")) return;
+  if (store.get("auth.cookie")) {
+    store.set("migrations.auth_v1", true);
+    return;
+  }
 
   const cookies = await session.defaultSession.cookies.get({});
 
