@@ -1,5 +1,5 @@
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
-import { showErrorToast } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { i18n } from "@desktop/i18n";

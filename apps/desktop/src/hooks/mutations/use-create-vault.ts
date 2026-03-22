@@ -1,7 +1,7 @@
 import { DEFAULT_VAULT_OPTIONS } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
-import { showErrorToast } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useQueryKey } from "@desktop/hooks/use-query-key";

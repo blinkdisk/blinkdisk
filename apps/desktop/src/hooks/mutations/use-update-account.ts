@@ -1,5 +1,5 @@
 import { ZUpdateUserType } from "@blinkdisk/schemas/settings";
-import { showErrorToast } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

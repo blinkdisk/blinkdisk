@@ -1,5 +1,5 @@
 import { ZVaultThrottleType } from "@blinkdisk/schemas/vault";
-import { showErrorToast } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertThrottleToCore } from "@desktop/lib/throttle";
