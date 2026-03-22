@@ -17,7 +17,7 @@ import paths from "vite-tsconfig-paths";
 
 export default defineConfig({
   clearScreen: false,
-  base: "./",
+  base: "/",
   build: {
     sourcemap: true,
   },
