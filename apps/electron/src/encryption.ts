@@ -2,7 +2,10 @@ import { log } from "@electron/log";
 import { safeStorage } from "electron";
 
 export function initEncryption() {
-  if (process.platform === "linux" && safeStorage.getSelectedStorageBackend() === "basic_text")
+  if (
+    safeStorage.getSelectedStorageBackend &&
+    safeStorage.getSelectedStorageBackend() === "basic_text"
+  )
     // Enable encryption for the basic_text backend
     // This uses a simple key derivation from a machine-specific seed
     safeStorage.setUsePlainTextEncryption(true);
