@@ -31,7 +31,8 @@ const base = {
   bundle: true,
   outdir: "build",
   target: "node16",
-  sourcemap: true,
+  // Set to hidden to reduce bundle size
+  sourcemap: "hidden",
   plugins: [
     TsconfigPathsPlugin({ tsconfig: "./tsconfig.json" }),
     ...(!isDev
@@ -40,6 +41,14 @@ const base = {
             org: process.env.SENTRY_ORGANIZATION,
             project: process.env.SENTRY_DESKTOP_PROJECT,
             authToken: process.env.SENTRY_AUTH_TOKEN,
+            sourcemaps: {
+              // Removing to reduce bundle size
+              filesToDeleteAfterUpload: [
+                "./**/*.map",
+                ".*/**/public/**/*.map",
+                "./dist/**/client/**/*.map",
+              ],
+            },
           }),
         ]
       : []),

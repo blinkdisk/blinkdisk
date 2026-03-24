@@ -19,7 +19,7 @@ export default defineConfig({
   clearScreen: false,
   base: "/",
   build: {
-    sourcemap: true,
+    sourcemap: "hidden",
   },
   server: { port: 3001 },
   plugins: [
@@ -55,6 +55,14 @@ export default defineConfig({
       org: process.env.SENTRY_ORGANIZATION,
       project: process.env.SENTRY_WEB_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
+      sourcemaps: {
+        // Remove to reduce bundle size
+        filesToDeleteAfterUpload: [
+          "./**/*.map",
+          ".*/**/public/**/*.map",
+          "./dist/**/client/**/*.map",
+        ],
+      },
     }),
     copy({
       targets: [
