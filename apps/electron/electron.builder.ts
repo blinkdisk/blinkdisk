@@ -7,7 +7,7 @@ import { APP_ID, APP_SCHEME } from "../../libs/constants/src/app";
 export default {
   productName: "BlinkDisk",
   appId: APP_ID,
-  files: ["build/**", "frontend/**"],
+  files: ["build/**", "frontend/**", "!node_modules/**/*"],
   directories: {
     buildResources: "icon",
   },
