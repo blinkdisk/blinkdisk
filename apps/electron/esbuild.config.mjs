@@ -31,8 +31,7 @@ const base = {
   bundle: true,
   outdir: "build",
   target: "node16",
-  // Set to hidden to reduce bundle size
-  sourcemap: "hidden",
+  sourcemap: true,
   plugins: [
     TsconfigPathsPlugin({ tsconfig: "./tsconfig.json" }),
     ...(!isDev
