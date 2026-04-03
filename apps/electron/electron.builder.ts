@@ -39,6 +39,7 @@ export default {
         signingHashAlgorithms: ["sha256"],
         certificateSha1: process.env.CERTUM_CERTIFICATE_SHA1,
         timeStampServer: process.env.CERTUM_TIMESTAMP_SERVER,
+        additionalCertificateFile: process.env.CERTUM_INTERMEDIATE_CRT,
       },
     }),
     extraResources: [
