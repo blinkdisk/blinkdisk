@@ -111,7 +111,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CERTUM_CERTIFICATE_SHA1: ${{ secrets.CERTUM_CERTIFICATE_SHA1 }}
           CERTUM_TIMESTAMP_SERVER: ${{ vars.CERTUM_TIMESTAMP_SERVER }}
-          CERTUM_INTERMEDIATE_CRT: ./certum.cer
+          CERTUM_INTERMEDIATE_CRT: ${{ github.workspace }}/apps/electron/certum.cer
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
           curl -o "$env:CERTUM_INTERMEDIATE_CRT" https://repository.certum.pl/ccsca2021.cer
