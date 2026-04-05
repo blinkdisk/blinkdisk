@@ -28,7 +28,7 @@ import {
 import animation from "/animations/backup.lottie?url";
 
 export const Route = createFileRoute(
-  "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
+  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
 )({
   component: RouteComponent,
 });
@@ -68,7 +68,9 @@ function RouteComponent() {
         }
       >
         <Button
-          render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
+          render={
+            <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}" />
+          }
           nativeButton={false}
           variant="outline"
           size="sm"

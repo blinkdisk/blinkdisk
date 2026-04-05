@@ -1,3 +1,4 @@
+import { DynamicField } from "@blinkdisk/components/dynamic-field";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
@@ -9,7 +10,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
-import { DynamicField } from "@blinkdisk/components/dynamic-field";
 import { Input } from "@blinkdisk/ui/input";
 import { useDeleteVault } from "@desktop/hooks/mutations/use-delete-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
@@ -44,7 +44,7 @@ export function DeleteVaultDialog() {
     setIsOpen(false);
 
     await navigate({
-      to: "/app",
+      to: "/{-$accountId}",
     });
   }, [navigate, setIsOpen]);
 

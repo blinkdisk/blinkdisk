@@ -1,6 +1,6 @@
-import { useAppStorage } from "@desktop/hooks/use-app-storage";
+import { useParams } from "@tanstack/react-router";
 
 export function useAccountId() {
-  const [accountId, setAccountId] = useAppStorage("currentAccountId");
-  return { accountId, setAccountId };
+  const { accountId } = useParams({ strict: false });
+  return { accountId };
 }

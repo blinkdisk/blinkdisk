@@ -8,7 +8,7 @@ export function useVaultId() {
   const changeVault = useCallback(
     (id: string) => {
       navigate({
-        to: "/app/{-$vaultId}",
+        to: "/{-$accountId}/{-$vaultId}",
         params: {
           vaultId: id,
         },

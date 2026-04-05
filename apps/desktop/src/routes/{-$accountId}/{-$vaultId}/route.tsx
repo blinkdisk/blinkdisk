@@ -7,7 +7,7 @@ import { useAccountStorage } from "@desktop/hooks/use-account-storage";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const Route = createFileRoute("/app/{-$vaultId}")({
+export const Route = createFileRoute("/{-$accountId}/{-$vaultId}")({
   component: RouteComponent,
 });
 

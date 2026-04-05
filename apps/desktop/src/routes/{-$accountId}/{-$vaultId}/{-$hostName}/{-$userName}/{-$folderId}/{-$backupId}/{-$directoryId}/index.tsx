@@ -15,7 +15,7 @@ import { useRef } from "react";
 import { z } from "zod";
 
 export const Route = createFileRoute(
-  "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/",
+  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/",
 )({
   component: RouteComponent,
   validateSearch: z.object({
@@ -55,7 +55,7 @@ function RouteComponent() {
                 {
                   id: "folder",
                   text: folder.name || "",
-                  href: "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
+                  href: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
                 },
                 {
                   id: "backup",
@@ -63,7 +63,7 @@ function RouteComponent() {
                   href:
                     !path || !path.length
                       ? undefined
-                      : "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+                      : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                   params: (params) => ({
                     ...params,
                     directoryId: backup.rootID,
@@ -76,7 +76,7 @@ function RouteComponent() {
                       href:
                         index === path.length - 1
                           ? undefined
-                          : "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+                          : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                       params: (params: Record<string, string>) => ({
                         ...params,
                         directoryId: objectId,
@@ -94,7 +94,7 @@ function RouteComponent() {
           onClick={() => {
             if (path && path.length)
               navigate({
-                to: "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+                to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                 params: (params) => ({
                   ...params,
                   directoryId:
@@ -106,7 +106,7 @@ function RouteComponent() {
               });
             else
               navigate({
-                to: "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
+                to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
               });
           }}
           size="sm"

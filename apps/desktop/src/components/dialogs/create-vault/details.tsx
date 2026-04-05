@@ -30,7 +30,7 @@ export function CreateVaultDetails({
     providerType,
     onSuccess: async (res) => {
       await navigate({
-        to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
+        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
         params: {
           vaultId: res.vaultId,
           hostName: window.electron.os.hostName(res.vaultId),

@@ -1,7 +1,6 @@
 import type { getSession } from "@blinkdisk/electron/auth";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,8 +18,6 @@ export function useAuth() {
     "authenticated",
     false,
   );
-
-  const { setAccountId } = useAccountId();
 
   const { data: accounts } = useAccountList({
     enabled: authenticated,
@@ -42,6 +39,8 @@ export function useAuth() {
         session = data;
       }
 
+      if (!session) throw new Error("Failed to get session");
+
       await window.electron.store.set(
         `accounts.${session?.user.id}.active`,
         true,
@@ -51,7 +50,7 @@ export function useAuth() {
       // maybe the account was inactive.
       await window.electron.vault.start.all();
 
-      await setAccountId(session.user.id);
+      await window.electron.store.set("currentAccountId", session.user.id);
 
       await queryClient.invalidateQueries({
         queryKey: queryKeys.account.detail(),
@@ -61,8 +60,10 @@ export function useAuth() {
       posthog.reset();
       // Start a new session
       posthog.identify(session.user.id);
+
+      return session;
     },
-    [queryClient, setAccountId, queryKeys, posthog],
+    [queryClient, queryKeys, posthog],
   );
 
   const selectAccount = useCallback(
@@ -73,9 +74,15 @@ export function useAuth() {
 
       if (error || !data) throw error;
 
-      navigate({ to: "/app/loading" });
-      await accountChanged(data);
-      navigate({ to: "/app" });
+      navigate({ to: "/{-$accountId}/loading" });
+
+      const session = await accountChanged(data);
+      if (!session) return;
+
+      navigate({
+        to: "/{-$accountId}",
+        params: { accountId: session.user.id },
+      });
     },
     [accountChanged, navigate],
   );
@@ -97,6 +104,7 @@ export function useAuth() {
     if (remainingSessions?.length && remainingSessions[0]) {
       selectAccount(remainingSessions[0].session.token);
     } else {
+      await window.electron.store.set("currentAccountId", null);
       setAuthenticated(false);
       navigate({ to: "/auth" });
     }
