@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { hostname, userInfo } from "node:os";
 import { resolve } from "node:path";
-import { globalConfigDirectory } from "./path";
+import { globalVaultDirectory } from "./path";
 
 export function getUserName(vaultId: string) {
   try {
@@ -26,7 +26,7 @@ export function getHostName(vaultId: string) {
 }
 
 function parseConfig(vaultId: string) {
-  const path = resolve(globalConfigDirectory(), `${vaultId}.config`);
+  const path = resolve(globalVaultDirectory(), `${vaultId}.config`);
   if (existsSync(path)) {
     const raw = readFileSync(path, "utf8");
     const config = JSON.parse(raw);

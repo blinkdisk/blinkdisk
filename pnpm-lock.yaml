@@ -338,6 +338,9 @@ importers:
       '@blinkdisk/schemas':
         specifier: workspace:*
         version: link:../../libs/schemas
+      '@blinkdisk/signaldb-electron':
+        specifier: ^1.0.2
+        version: 1.0.2(@signaldb/core@1.8.1)(electron@38.1.2)
       '@blinkdisk/utils':
         specifier: workspace:*
         version: link:../../libs/utils
@@ -347,6 +350,12 @@ importers:
       '@sentry/electron':
         specifier: ^7.9.0
         version: 7.9.0
+      '@signaldb/core':
+        specifier: ^1.8.1
+        version: 1.8.1
+      '@signaldb/fs':
+        specifier: ^1.0.1
+        version: 1.0.1(@signaldb/core@1.8.1)
       auto-launch:
         specifier: ^5.0.6
         version: 5.0.6
@@ -3121,6 +3130,19 @@ packages:
 
   /@better-fetch/fetch@1.1.21:
     resolution: {integrity: sha512-/ImESw0sskqlVR94jB+5+Pxjf+xBwDZF/N5+y2/q4EqD7IARUTSpPfIo8uf39SYpCxyOCtbyYpUrZ3F/k0zT4A==}
+    dev: false
+
+  /@blinkdisk/signaldb-electron@1.0.2(@signaldb/core@1.8.1)(electron@38.1.2):
+    resolution: {integrity: sha512-lFjU4B8vLh43DeJwSj9y9nNiIVWBgVbOhHWhDigvg8KXCThoSJymeIuktnaBUwVcRjssD6JSgtDmbnWKIJsBGw==}
+    peerDependencies:
+      '@signaldb/core': 1.x
+      electron: '>=20.0.0'
+    peerDependenciesMeta:
+      electron:
+        optional: true
+    dependencies:
+      '@signaldb/core': 1.8.1
+      electron: 38.1.2
     dev: false
 
   /@braintree/sanitize-url@7.1.2:
@@ -6653,6 +6675,21 @@ packages:
     dependencies:
       fflate: 0.7.4
       string.prototype.codepointat: 0.2.1
+    dev: false
+
+  /@signaldb/core@1.8.1:
+    resolution: {integrity: sha512-85+ehSokMaKrPue42wPLmF+tU2jfky99kC2UlamfYS64I1YMMCWDeOdx17PNMpTxLdGFlCgnDEpTZB5XO3HFyQ==}
+    dependencies:
+      fast-sort: 3.4.1
+      mingo: 7.2.1
+    dev: false
+
+  /@signaldb/fs@1.0.1(@signaldb/core@1.8.1):
+    resolution: {integrity: sha512-swa1xkVoBuObgKZlcpPC5U6WpIawyXnyyyGsWdB8Tpgcw7l9Rq+KG+4f2Vbe7tGm/LdQnUFMgJ44gEbjlSzvDQ==}
+    peerDependencies:
+      '@signaldb/core': 1.x
+    dependencies:
+      '@signaldb/core': 1.8.1
     dev: false
 
   /@sindresorhus/is@4.6.0:
@@ -12407,6 +12444,10 @@ packages:
     resolution: {integrity: sha512-n11RGP/lrWEFI/bWdygLxhI+pVeo1ZYIVwvvPkW7azl/rOy+F3HYRZ2K5zeE9mmkhQppyv9sQFx0JM9UabnpPQ==}
     dev: false
 
+  /fast-sort@3.4.1:
+    resolution: {integrity: sha512-76uvGPsF6So53sZAqenP9UVT3p5l7cyTHkLWVCMinh41Y8NDrK1IYXJgaBMfc1gk7nJiSRZp676kddFG2Aa5+A==}
+    dev: false
+
   /fast-uri@3.0.6:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
 
@@ -15187,6 +15228,10 @@ packages:
   /min-indent@1.0.1:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
+    dev: false
+
+  /mingo@7.2.1:
+    resolution: {integrity: sha512-MEIQPOSJS2sVCueyQeE2rzgEeW3HpIIhizPbeuwD4v7+miVj7NI3ZVPqqw8t3YPIWCivpIaXA4KsoRI7koyNOA==}
     dev: false
 
   /miniflare@4.20250816.1:

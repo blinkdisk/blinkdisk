@@ -20,6 +20,7 @@ import "@electron/log";
 import "@electron/startup";
 import "@electron/updater";
 
+import { setupDB } from "@electron/db";
 import { checkDeepLink } from "@electron/deeplink";
 import { initEncryption } from "@electron/encryption";
 import { runMigrations } from "@electron/migration";
@@ -30,6 +31,7 @@ import { createWindow } from "@electron/window";
 app.on("ready", async () => {
   initEncryption();
   await runMigrations();
+  setupDB();
 
   listenProtocol();
   createTray();

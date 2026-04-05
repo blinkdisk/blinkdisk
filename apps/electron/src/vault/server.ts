@@ -2,7 +2,7 @@ import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { deleteVaultFromCache } from "@electron/cache";
 import { log } from "@electron/log";
-import { corePath, globalConfigDirectory } from "@electron/path";
+import { corePath, globalVaultDirectory } from "@electron/path";
 import { vaults } from "@electron/vault/manage";
 import { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
@@ -48,7 +48,7 @@ export function startVaultServer(id: string, pollStatus = true) {
       // class, so no csrf should be possible.
       "--disable-csrf-token-checks",
       "--config-file",
-      resolve(globalConfigDirectory(), `${id}.config`),
+      resolve(globalVaultDirectory(), `${id}.config`),
     ];
 
     const process = spawn(corePath(), args, {});
@@ -150,12 +150,12 @@ export function startVaultServer(id: string, pollStatus = true) {
 function migratePasswordFile(id: string) {
   try {
     const oldPasswordFile = resolve(
-      globalConfigDirectory(),
+      globalVaultDirectory(),
       `${id}.config.blinkdisk-password`,
     );
 
     const newPasswordFile = resolve(
-      globalConfigDirectory(),
+      globalVaultDirectory(),
       `${id}.config.kopia-password`,
     );
 
