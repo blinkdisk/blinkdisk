@@ -9,7 +9,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CloudAlertIcon, PlusIcon } from "lucide-react";
 import { useEffect } from "react";
 
-export const Route = createFileRoute("/app/")({
+export const Route = createFileRoute("/{-$accountId}/")({
   component: RouteComponent,
 });
 
@@ -34,7 +34,7 @@ function RouteComponent() {
     }
 
     navigate({
-      to: "/app/{-$vaultId}",
+      to: "/{-$accountId}/{-$vaultId}",
       params: (params) => ({
         ...params,
         vaultId: lastUsedVaultId || vaults[0]?.id || "",

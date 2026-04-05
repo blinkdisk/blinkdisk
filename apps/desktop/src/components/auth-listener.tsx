@@ -8,9 +8,12 @@ export function AuthListener() {
 
   const onAccountChange = useCallback(async () => {
     await setAuthenticated(true);
-    await navigate({ to: "/app/loading" });
-    await accountChanged();
-    navigate({ to: "/app" });
+    await navigate({ to: "/{-$accountId}/loading" });
+
+    const session = await accountChanged();
+    if (!session) return navigate({ to: "/" });
+
+    navigate({ to: "/{-$accountId}", params: { accountId: session.user.id } });
   }, [setAuthenticated, accountChanged, navigate]);
 
   useEffect(() => {

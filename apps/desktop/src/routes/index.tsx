@@ -12,11 +12,21 @@ function RouteComponent() {
   const { authenticated } = useAuth();
 
   useEffect(() => {
-    if (!authenticated) {
+    const accountId = window.electron.store.get("currentAccountId") as
+      | string
+      | undefined
+      | null;
+
+    if (!authenticated || !accountId) {
       navigate({ to: "/auth", replace: true });
-    } else {
-      navigate({ to: "/app", replace: true });
+      return;
     }
+
+    navigate({
+      to: "/{-$accountId}",
+      params: { accountId },
+      replace: true,
+    });
   }, [navigate, authenticated]);
 
   return null;

@@ -17,7 +17,7 @@ import { HomeIcon } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute(
-  "/app/{-$vaultId}/{-$hostName}/{-$userName}/settings",
+  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings",
 )({
   component: RouteComponent,
 });
@@ -45,7 +45,7 @@ function RouteComponent() {
       >
         {vault ? (
           <Button
-            render={<Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}" />}
+            render={<Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}" />}
             nativeButton={false}
             variant="outline"
             size="sm"

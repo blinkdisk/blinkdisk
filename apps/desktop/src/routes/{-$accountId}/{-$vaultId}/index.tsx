@@ -3,7 +3,7 @@ import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const Route = createFileRoute("/app/{-$vaultId}/")({
+export const Route = createFileRoute("/{-$accountId}/{-$vaultId}/")({
   component: RouteComponent,
 });
 
@@ -16,7 +16,7 @@ function RouteComponent() {
     if (!localHostName) return;
 
     navigate({
-      to: "/app/{-$vaultId}/{-$hostName}",
+      to: "/{-$accountId}/{-$vaultId}/{-$hostName}",
       params: (params) => ({
         ...params,
         hostName: localHostName,

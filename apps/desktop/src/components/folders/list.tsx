@@ -78,7 +78,7 @@ function Folder({ folder }: FolderProps) {
       className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2"
     >
       <Link
-        to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
+        to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
         params={(params) => ({
           ...params,
           folderId: folder?.id || "",
@@ -116,7 +116,7 @@ function Folder({ folder }: FolderProps) {
               <DropdownMenuItem
                 render={
                   <Link
-                    to="/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
+                    to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
                     params={(params) => ({
                       ...params,
                       folderId: folder?.id || "",

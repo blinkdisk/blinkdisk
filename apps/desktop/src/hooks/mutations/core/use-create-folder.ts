@@ -101,7 +101,7 @@ export function useCreateFolder({
       ]);
 
       await navigate({
-        to: "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
+        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
           folderId: res.id,

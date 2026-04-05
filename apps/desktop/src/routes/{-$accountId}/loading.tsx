@@ -1,7 +1,7 @@
 import { VaultHome } from "@desktop/components/vaults/home";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/app/loading")({
+export const Route = createFileRoute("/{-$accountId}/loading")({
   component: RouteComponent,
 });
 

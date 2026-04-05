@@ -5,7 +5,7 @@ import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/app/{-$vaultId}/{-$hostName}/{-$userName}/",
+  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/",
 )({
   component: RouteComponent,
 });

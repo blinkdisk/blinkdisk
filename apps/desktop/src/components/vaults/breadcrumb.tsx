@@ -35,7 +35,7 @@ export function VaultBreadcrumb({ vault, breadcrumbs }: VaultBreadcrumbProps) {
             className="text-base"
             render={
               vault ? (
-                <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
+                <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
                   {vault.name}
                 </Link>
               ) : (

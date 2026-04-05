@@ -4,7 +4,7 @@ import { RenameBackupDialog } from "@desktop/components/dialogs/rename-backup";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
+  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
 )({
   component: RouteComponent,
 });

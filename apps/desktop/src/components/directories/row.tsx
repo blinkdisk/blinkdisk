@@ -30,7 +30,7 @@ export function DirectoryItemRow({
           reset();
 
           navigate({
-            to: "/app/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+            to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
             params: (params) => ({
               ...params,
               directoryId: row.original.objectId || "",
