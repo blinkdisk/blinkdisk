@@ -11,7 +11,7 @@ export function AuthListener() {
     await navigate({ to: "/{-$accountId}/loading" });
 
     const session = await accountChanged();
-    if (!session) return;
+    if (!session) return navigate({ to: "/" });
 
     navigate({ to: "/{-$accountId}", params: { accountId: session.user.id } });
   }, [setAuthenticated, accountChanged, navigate]);
