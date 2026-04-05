@@ -1,20 +1,10 @@
-import { ZEmail } from "@schemas/shared/email";
-import { ZLanguage } from "@schemas/shared/language";
-import { ZFirstName, ZLastName } from "@schemas/shared/name";
+import { ZAccountLanguage } from "@schemas/accounts";
 import { ZTheme } from "@schemas/shared/theme";
 import { z } from "zod";
 
-export const ZUpdateUser = z.object({
-  firstName: ZFirstName,
-  lastName: ZLastName,
-  email: ZEmail,
-});
-
-export type ZUpdateUserType = z.infer<typeof ZUpdateUser>;
-
 export const ZUpdatePreferences = z.object({
   theme: ZTheme,
-  language: ZLanguage,
+  language: ZAccountLanguage,
 });
 
 export type ZUpdatePreferencesType = z.infer<typeof ZUpdatePreferences>;

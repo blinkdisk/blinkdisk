@@ -1,6 +1,6 @@
 import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { ConfigLevel } from "@blinkdisk/db/enums";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
 import { EncryptedString } from "@electron/encryption";
 import { sendWindow } from "@electron/window";
 import Store from "electron-store";

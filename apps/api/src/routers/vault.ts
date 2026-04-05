@@ -6,12 +6,12 @@ import {
   DEFAULT_VAULT_OPTIONS,
   LATEST_VAULT_VERSION,
 } from "@blinkdisk/constants/vault";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import {
   ZCreateVault,
   ZDeleteVault,
   ZGetVault,
   ZUpdateVault,
+  ZVaultOptionsType,
 } from "@blinkdisk/schemas/vault";
 import { CustomError } from "@blinkdisk/utils/error";
 import { generateId, verifyId } from "@blinkdisk/utils/id";
