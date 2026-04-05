@@ -1,4 +1,3 @@
-import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAuth } from "@desktop/hooks/use-auth";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -10,7 +9,6 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   const navigate = useNavigate();
 
-  const { accountId } = useAccountId();
   const { authenticated } = useAuth();
 
   useEffect(() => {
@@ -29,7 +27,7 @@ function RouteComponent() {
       params: { accountId },
       replace: true,
     });
-  }, [navigate, authenticated, accountId]);
+  }, [navigate, authenticated]);
 
   return null;
 }
