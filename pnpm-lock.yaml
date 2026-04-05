@@ -979,6 +979,9 @@ importers:
       '@blinkdisk/constants':
         specifier: workspace:*
         version: link:../constants
+      '@blinkdisk/db':
+        specifier: workspace:*
+        version: link:../db
       zod:
         specifier: ^3.24.2
         version: 3.24.2

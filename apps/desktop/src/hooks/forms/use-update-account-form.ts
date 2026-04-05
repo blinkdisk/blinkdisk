@@ -1,5 +1,5 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
-import { ZUpdateUser } from "@blinkdisk/schemas/settings";
+import { ZUpdateAccount } from "@blinkdisk/schemas/accounts";
 import { useUpdateAccount } from "@desktop/hooks/mutations/use-update-account";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useMemo } from "react";
@@ -30,7 +30,7 @@ export function useUpdateAccountForm() {
       email: user?.email || "",
     },
     validators: {
-      onSubmit: ZUpdateUser,
+      onSubmit: ZUpdateAccount,
     },
     onSubmit: async ({ value }) => await mutateAsync(value),
   });

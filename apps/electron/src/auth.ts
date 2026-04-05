@@ -4,10 +4,8 @@ import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
 } from "@blinkdisk/constants/auth";
-import {
-  ZUpdatePreferencesType,
-  ZUpdateUserType,
-} from "@blinkdisk/schemas/settings";
+import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
+import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { store } from "@electron/store";
 import { sendWindow } from "@electron/window";
 import {
@@ -64,7 +62,7 @@ export const authClient = createAuthClient({
 });
 
 export async function updateUser(
-  user: ZUpdateUserType | Pick<ZUpdatePreferencesType, "language">,
+  user: ZUpdateAccountType | Pick<ZUpdatePreferencesType, "language">,
 ) {
   return await authClient.updateUser({
     ...("firstName" in user && user.firstName && user.lastName

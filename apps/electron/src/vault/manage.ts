@@ -1,7 +1,7 @@
 import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
 import { getAccountCache, getVaultCache } from "@electron/cache";
 import { log } from "@electron/log";
 import { getHostName, getUserName } from "@electron/profile";
