@@ -86,7 +86,7 @@ const ZMetadataPolicy = z.object({
   algorithm: z.enum(["zstd-fastest"]).optional(),
 });
 
-const ZSplitterPolicy = z.object({}).optional();
+const ZSplitterPolicy = z.any().optional();
 
 const ZScript = z.object({
   script: z.string().min(1).max(1024).optional(),

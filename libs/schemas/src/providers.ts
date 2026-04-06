@@ -18,18 +18,18 @@ const ZS3Config = z.object({
   prefix: z.string().max(128).optional(),
 });
 
-export const ZAmazonS3Config = ZS3Config.merge(
-  z.object({ region: z.string().min(1).max(128) }),
+export const ZAmazonS3Config = ZS3Config.extend(
+  z.object({ region: z.string().min(1).max(128) }).shape,
 );
 
 export type ZAmazonS3ConfigType = z.infer<typeof ZAmazonS3Config>;
 
-export const ZS3CompatibleConfig = ZS3Config.merge(
+export const ZS3CompatibleConfig = ZS3Config.extend(
   z.object({
     region: z.string().max(128).optional(),
     disableTls: z.boolean(),
     disableSsl: z.boolean(),
-  }),
+  }).shape,
 );
 
 export type ZS3CompatibleConfigType = z.infer<typeof ZS3CompatibleConfig>;
@@ -86,7 +86,7 @@ export const ZRcloneConfig = z.object({
 export type ZRcloneConfigType = z.infer<typeof ZRcloneConfig>;
 
 export const ZWebDavConfig = z.object({
-  url: z.string().url().min(1).max(2048),
+  url: z.url().min(1).max(2048),
   user: z.string().max(128).optional(),
   password: z.string().max(128).optional(),
 });

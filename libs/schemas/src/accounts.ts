@@ -1,9 +1,7 @@
 import { LANGUAGE_CODES } from "@blinkdisk/constants/language";
 import { z } from "zod";
 
-export const ZAccountId = z.string().min(1);
-
-export const ZAccountEmail = z.string().email();
+export const ZAccountEmail = z.email();
 
 export const ZAccountFirstName = z.string().min(1).max(50);
 

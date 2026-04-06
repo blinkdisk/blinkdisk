@@ -102,8 +102,8 @@ export function RestoreDirectoryDialog() {
                             errors.onSubmit.code === "CONFIRMATION_REQUIRED"
                               ? [
                                   {
-                                    type: "restore_confirmation",
-                                    code: "required",
+                                    code: "custom",
+                                    message: "restore_confirmation",
                                   },
                                 ]
                               : undefined,
