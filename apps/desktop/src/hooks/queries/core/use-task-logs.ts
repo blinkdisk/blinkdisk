@@ -12,7 +12,7 @@ export type CoreTaskLogEntry = {
 };
 
 export function useTaskLogs(taskId?: string, enabled = true) {
-  const { accountId, queryKeys } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useQuery({
@@ -24,6 +24,6 @@ export function useTaskLogs(taskId?: string, enabled = true) {
       return res.data.logs;
     },
     refetchInterval: 2000,
-    enabled: enabled && !!accountId && !!vaultId && !!taskId,
+    enabled: enabled && !!vaultId && !!taskId,
   });
 }

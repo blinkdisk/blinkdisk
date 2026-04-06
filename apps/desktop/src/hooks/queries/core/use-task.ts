@@ -22,7 +22,7 @@ export type CoreTask = {
 };
 
 export function useTask(taskId?: string, enabled = true) {
-  const { accountId, queryKeys } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useQuery({
@@ -38,6 +38,6 @@ export function useTask(taskId?: string, enabled = true) {
       if (status === "RUNNING" || status === "CANCELING") return 1000;
       return false;
     },
-    enabled: enabled && !!accountId && !!vaultId && !!taskId,
+    enabled: enabled && !!vaultId && !!taskId,
   });
 }

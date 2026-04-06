@@ -15,7 +15,7 @@ type Profile = {
 
 export function useVaultProfiles() {
   const { running } = useVaultStatus();
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useQuery({
@@ -96,6 +96,6 @@ export function useVaultProfiles() {
 
       return profiles;
     },
-    enabled: !!accountId && !!vaultId && running,
+    enabled: !!vaultId && running,
   });
 }

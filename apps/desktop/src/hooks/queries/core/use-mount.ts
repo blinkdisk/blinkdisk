@@ -12,7 +12,7 @@ export type CoreMountItem = {
 };
 
 export function useMount() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { running } = useVaultStatus();
   const { vaultId } = useVaultId();
   const { data: backup } = useBackup();
@@ -31,6 +31,6 @@ export function useMount() {
 
       return res.data as CoreMountItem;
     },
-    enabled: !!accountId && !!vaultId && !!backup && running,
+    enabled: !!vaultId && !!backup && running,
   });
 }

@@ -3,13 +3,12 @@ import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultList() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
 
   return useQuery({
     queryKey: queryKeys.vault.list(),
     queryFn: () => {
       return trpc.vault.list.query();
     },
-    enabled: !!accountId,
   });
 }

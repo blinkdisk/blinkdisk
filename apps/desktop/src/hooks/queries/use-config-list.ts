@@ -3,13 +3,12 @@ import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
 
 export function useConfigList() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
 
   return useQuery({
     queryKey: queryKeys.config.list(),
     queryFn: () => {
       return trpc.config.list.query();
     },
-    enabled: !!accountId,
   });
 }

@@ -47,7 +47,7 @@ export type DirectoryItem = {
 };
 
 export function useDirectory() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { directoryId } = useDirectoryId();
   const { running } = useVaultStatus();
@@ -104,6 +104,6 @@ export function useDirectory() {
           }) satisfies DirectoryItem,
       );
     },
-    enabled: !!accountId && !!vaultId && !!directoryId && running,
+    enabled: !!vaultId && !!directoryId && running,
   });
 }

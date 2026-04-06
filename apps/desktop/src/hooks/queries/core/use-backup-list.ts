@@ -32,7 +32,7 @@ export type CoreBackupItem = {
 
 export function useBackupList() {
   const { profileFilter } = useProfile();
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
   const { data: folder } = useFolder();
@@ -56,6 +56,6 @@ export function useBackupList() {
       return res.data.snapshots.reverse();
     },
     refetchInterval: 1000,
-    enabled: !!accountId && !!vaultId && !!folder && running,
+    enabled: !!vaultId && !!folder && running,
   });
 }

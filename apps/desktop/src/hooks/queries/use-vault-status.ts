@@ -3,7 +3,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultStatus() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   const query = useQuery({
@@ -14,7 +14,7 @@ export function useVaultStatus() {
       if (!res) return null;
       return res;
     },
-    enabled: !!accountId && !!vaultId,
+    enabled: !!vaultId,
     retry: true,
     refetchInterval: 1000,
   });

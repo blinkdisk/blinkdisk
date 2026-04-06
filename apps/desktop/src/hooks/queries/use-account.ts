@@ -1,7 +1,9 @@
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useAccount(options?: { enabled: boolean }) {
+  const { isOnlineAccount } = useAccountId();
   const { queryKeys } = useQueryKey();
 
   return useQuery({
@@ -10,9 +12,8 @@ export function useAccount(options?: { enabled: boolean }) {
       const { data, error } = await window.electron.auth.session.get();
 
       if (error) throw error;
-
       return data;
     },
-    enabled: options?.enabled,
+    enabled: !!isOnlineAccount && options?.enabled,
   });
 }

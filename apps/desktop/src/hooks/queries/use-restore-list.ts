@@ -4,7 +4,7 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useRestoreList() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { folderId } = useFolderId();
   const { running } = useVaultStatus();
 
@@ -16,6 +16,6 @@ export function useRestoreList() {
       });
     },
     refetchInterval: 1000,
-    enabled: !!accountId && !!folderId && running,
+    enabled: !!folderId && running,
   });
 }

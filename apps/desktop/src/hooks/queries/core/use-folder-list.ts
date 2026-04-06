@@ -91,7 +91,7 @@ export type CoreFolderItem = {
 
 export function useFolderList() {
   const { profileFilter } = useProfile();
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
@@ -132,6 +132,6 @@ export function useFolderList() {
       return folders;
     },
     refetchInterval: 1000,
-    enabled: !!accountId && !!vaultId && !!profileFilter && running,
+    enabled: !!vaultId && !!profileFilter && running,
   });
 }
