@@ -28,6 +28,8 @@ export const ZConfig = z.object({
   createdAt: ZDateString,
 });
 
+export type ZConfigType = z.infer<typeof ZConfig>;
+
 export const ZAddConfig = z.object({
   userName: ZProfileUserName,
   hostName: ZProfileHostName,

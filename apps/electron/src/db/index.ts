@@ -1,7 +1,9 @@
+import { ZConfig, ZConfigType } from "@blinkdisk/schemas/config";
+import { ZVault, ZVaultType } from "@blinkdisk/schemas/vault";
 import { setupSignalDBMain } from "@blinkdisk/signaldb-electron/main";
+import { SchemaCollection } from "@electron/db/schema";
 import { globalAccountDirectory } from "@electron/path";
 import { AccountStorageType, store } from "@electron/store";
-import { Collection } from "@signaldb/core";
 import createFilesystemAdapter from "@signaldb/fs";
 import { ipcMain } from "electron";
 import { existsSync, mkdirSync } from "node:fs";
@@ -12,6 +14,8 @@ const bridge = setupSignalDBMain(ipcMain);
 export function setupDB() {
   if (!existsSync(globalAccountDirectory()))
     mkdirSync(globalAccountDirectory(), { recursive: true });
+
+  initAccountDB("local");
 
   const accounts = store.get("accounts") as Record<string, AccountStorageType>;
 
@@ -25,12 +29,18 @@ export function initAccountDB(accountId: string) {
   const directory = join(globalAccountDirectory(), accountId);
   if (!existsSync(directory)) mkdirSync(directory, { recursive: true });
 
-  const vault = new Collection({
-    persistence: createFilesystemAdapter(join(directory, "vault.json")),
+  const vault = new SchemaCollection({
+    persistence: createFilesystemAdapter<ZVaultType, string>(
+      join(directory, "vault.json"),
+    ),
+    schema: ZVault,
   });
 
-  const config = new Collection({
-    persistence: createFilesystemAdapter(join(directory, "config.json")),
+  const config = new SchemaCollection({
+    persistence: createFilesystemAdapter<ZConfigType, string>(
+      join(directory, "config.json"),
+    ),
+    schema: ZConfig,
   });
 
   bridge.addCollection(vault, { name: `${accountId}/vault` });

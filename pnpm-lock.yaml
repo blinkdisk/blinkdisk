@@ -380,6 +380,9 @@ importers:
       tough-cookie:
         specifier: ^5.1.2
         version: 5.1.2
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*

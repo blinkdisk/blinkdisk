@@ -84,6 +84,8 @@ export const ZVault = z.object({
   createdAt: ZDateString,
 });
 
+export type ZVaultType = z.infer<typeof ZVault>;
+
 export const ZCreateVault = z.object({
   id: ZVaultId,
   coreId: ZVaultCoreId.optional(),

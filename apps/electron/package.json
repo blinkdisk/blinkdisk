@@ -45,7 +45,8 @@
     "electron-updater": "^6.6.2",
     "get-folder-size": "^5.0.0",
     "p-limit": "^7.1.0",
-    "tough-cookie": "^5.1.2"
+    "tough-cookie": "^5.1.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@blinkdisk/eslint": "workspace:*",
