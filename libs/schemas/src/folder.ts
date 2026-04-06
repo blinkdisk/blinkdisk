@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const ZFolderName = z.string().min(1).max(100);
-export const ZFolderEmoji = z.string().emoji().min(1);
+export const ZFolderEmoji = z.emoji().min(1);
 
 export const ZCreateFolderForm = z.object({
   name: ZFolderName,

@@ -22,10 +22,10 @@ export const ZRegister = z.object({
 
 export type ZRegisterType = z.infer<typeof ZRegister>;
 
-export const ZRegisterForm = ZRegister.merge(
-  z.object({ terms: z.boolean() }),
+export const ZRegisterForm = ZRegister.extend(
+  z.object({ terms: z.boolean() }).shape,
 ).refine((val) => !!val.terms, {
-  message: "terms_required",
+  error: "terms_required",
   path: ["terms"],
 });
 

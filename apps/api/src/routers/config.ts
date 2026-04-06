@@ -1,7 +1,7 @@
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { ZAddConfig } from "@blinkdisk/schemas/config";
-import { ZVaultEncryptedConfigType } from "@blinkdisk/schemas/vault";
+import { ZVaultEncryptedConfigType } from "@blinkdisk/schemas/config";
 import { CustomError } from "@blinkdisk/utils/error";
 import { generateId } from "@blinkdisk/utils/id";
 

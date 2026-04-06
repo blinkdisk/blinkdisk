@@ -16,6 +16,6 @@ export type ZChangePlan = z.infer<typeof ZCreateCheckout>;
 export const ZChangePlanForm = z
   .object({ confirmed: z.boolean() })
   .refine((val) => !!val.confirmed, {
-    message: "plan_change",
+    error: "plan_change",
     path: ["confirmed"],
   });

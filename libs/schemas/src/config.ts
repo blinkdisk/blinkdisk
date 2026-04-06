@@ -1,13 +1,21 @@
 import { ConfigLevel } from "@blinkdisk/db/enums";
-import { ZAccountId } from "@schemas/accounts";
+import { ZAccountId } from "@schemas/shared/id";
 import { ZDateString } from "@schemas/shared/date";
 import { ZProfileHostName, ZProfileUserName } from "@schemas/shared/profile";
-import { ZVaultEncryptedConfig, ZVaultId } from "@schemas/vault";
+import { ZVaultId } from "@schemas/shared/id";
 import { z } from "zod";
 
 const ZConfigId = z.string().min(1);
 
-export const ZConfigLevel = z.nativeEnum(ConfigLevel);
+export const ZConfigLevel = z.enum(ConfigLevel);
+
+export const ZVaultEncryptedConfig = z.object({
+  iv: z.string().min(1),
+  salt: z.string().min(1),
+  cipher: z.string().min(1).max(10000),
+});
+
+export type ZVaultEncryptedConfigType = z.infer<typeof ZVaultEncryptedConfig>;
 
 export const ZConfig = z.object({
   id: ZConfigId,

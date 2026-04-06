@@ -1,25 +1,16 @@
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { VaultStatus } from "@blinkdisk/db/enums";
-import { ZAccountId } from "@schemas/accounts";
-import { ZConfigLevel } from "@schemas/config";
+import { ZAccountId } from "@schemas/shared/id";
+import { ZConfigLevel, ZVaultEncryptedConfig } from "@schemas/config";
 import { ZProviderType } from "@schemas/providers";
 import { ZDateString } from "@schemas/shared/date";
 import { ZProfileHostName, ZProfileUserName } from "@schemas/shared/profile";
 import { z } from "zod";
+import { ZVaultId } from "@schemas/shared/id";
 
 const ZVaultName = z.string().min(1).max(30);
 
-export const ZVaultEncryptedConfig = z.object({
-  iv: z.string().min(1),
-  salt: z.string().min(1),
-  cipher: z.string().min(1).max(10000),
-});
-
-export type ZVaultEncryptedConfigType = z.infer<typeof ZVaultEncryptedConfig>;
-
-export const ZVaultId = z.string().min(1);
-
-const ZVaultStatus = z.nativeEnum(VaultStatus);
+const ZVaultStatus = z.enum(VaultStatus);
 
 const ZVaultPassword = z.string().min(1).max(128);
 
@@ -134,7 +125,7 @@ export const ZUpdateVault = z.object({
 });
 
 export const ZBandwith = z.object({
-  value: z.number().optional(),
+  value: z.number().min(1).optional(),
   unit: z.enum(["bps", "Kbps", "Mbps", "Gbps"]),
 });
 

@@ -88,7 +88,7 @@ export function CreateVaultDetails({
           onChangeListenTo: ["password"],
           onChange: ({ value, fieldApi }) => {
             if (value !== fieldApi.form.getFieldValue("password"))
-              return { type: "custom", code: "password_mismatch" };
+              return { code: "custom", message: "password_mismatch" };
 
             return undefined;
           },
