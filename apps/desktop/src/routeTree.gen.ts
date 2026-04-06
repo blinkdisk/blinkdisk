@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AuthImport } from './routes/auth'
 import { Route as AccountIdRouteImport } from './routes/{-$accountId}/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AccountIdIndexImport } from './routes/{-$accountId}/index'
@@ -28,12 +27,6 @@ import { Route as AccountIdVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRou
 import { Route as AccountIdVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexImport } from './routes/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/index'
 
 // Create/Update Routes
-
-const AuthRoute = AuthImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AccountIdRouteRoute = AccountIdRouteImport.update({
   id: '/{-$accountId}',
@@ -148,13 +141,6 @@ declare module '@tanstack/react-router' {
       path: '/{-$accountId}'
       fullPath: '/{-$accountId}'
       preLoaderRoute: typeof AccountIdRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
     '/{-$accountId}/{-$vaultId}': {
@@ -337,7 +323,6 @@ const AccountIdRouteRouteWithChildren = AccountIdRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/{-$accountId}': typeof AccountIdRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
@@ -354,7 +339,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdIndexRoute
@@ -369,7 +353,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/{-$accountId}': typeof AccountIdRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
@@ -389,7 +372,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/{-$accountId}'
-    | '/auth'
     | '/{-$accountId}/{-$vaultId}'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
@@ -405,7 +387,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/{-$accountId}/loading'
     | '/{-$accountId}'
     | '/{-$accountId}/{-$vaultId}'
@@ -418,7 +399,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/{-$accountId}'
-    | '/auth'
     | '/{-$accountId}/{-$vaultId}'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
@@ -437,13 +417,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountIdRouteRoute: typeof AccountIdRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountIdRouteRoute: AccountIdRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
 }
 
 export const routeTree = rootRoute
@@ -457,8 +435,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/{-$accountId}",
-        "/auth"
+        "/{-$accountId}"
       ]
     },
     "/": {
@@ -471,9 +448,6 @@ export const routeTree = rootRoute
         "/{-$accountId}/loading",
         "/{-$accountId}/"
       ]
-    },
-    "/auth": {
-      "filePath": "auth.tsx"
     },
     "/{-$accountId}/{-$vaultId}": {
       "filePath": "{-$accountId}/{-$vaultId}/route.tsx",

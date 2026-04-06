@@ -1,10 +1,12 @@
 import type { getSession } from "@blinkdisk/electron/auth";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
+import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
@@ -13,6 +15,7 @@ export function useAuth() {
   const posthog = usePostHog();
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
+  const { openAuthDialog } = useAuthDialog();
 
   const [authenticated, setAuthenticated] = useAppStorage(
     "authenticated",
@@ -28,8 +31,8 @@ export function useAuth() {
   });
 
   const addAccount = useCallback(async () => {
-    navigate({ to: "/auth" });
-  }, [navigate]);
+    openAuthDialog();
+  }, [openAuthDialog]);
 
   const accountChanged = useCallback(
     async (session?: Awaited<ReturnType<typeof getSession>>["data"]) => {
@@ -106,7 +109,11 @@ export function useAuth() {
     } else {
       await window.electron.store.set("currentAccountId", null);
       setAuthenticated(false);
-      navigate({ to: "/auth" });
+
+      navigate({
+        to: "/{-$accountId}",
+        params: { accountId: LOCAL_ACCOUNT_ID },
+      });
     }
   }, [navigate, account, accounts, selectAccount, setAuthenticated]);
 

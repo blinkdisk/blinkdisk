@@ -1,4 +1,4 @@
-import { useAuth } from "@desktop/hooks/use-auth";
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -9,25 +9,18 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   const navigate = useNavigate();
 
-  const { authenticated } = useAuth();
-
   useEffect(() => {
     const accountId = window.electron.store.get("currentAccountId") as
       | string
       | undefined
       | null;
 
-    if (!authenticated || !accountId) {
-      navigate({ to: "/auth", replace: true });
-      return;
-    }
-
     navigate({
       to: "/{-$accountId}",
-      params: { accountId },
+      params: { accountId: accountId || LOCAL_ACCOUNT_ID },
       replace: true,
     });
-  }, [navigate, authenticated]);
+  }, [navigate]);
 
   return null;
 }
