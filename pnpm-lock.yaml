@@ -175,6 +175,9 @@ importers:
       '@blinkdisk/schemas':
         specifier: workspace:*
         version: link:../../libs/schemas
+      '@blinkdisk/signaldb-electron':
+        specifier: ^1.0.2
+        version: 1.0.2(@signaldb/core@1.8.1)(electron@38.1.2)
       '@blinkdisk/styles':
         specifier: workspace:*
         version: link:../../libs/styles
@@ -187,12 +190,21 @@ importers:
       '@lottiefiles/dotlottie-react':
         specifier: ^0.16.4
         version: 0.16.4(react@19.0.0)
+      '@maverick-js/signals':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@sentry/electron':
         specifier: ^7.9.0
         version: 7.9.0
       '@sentry/react':
         specifier: ^10.40.0
         version: 10.40.0(react@19.0.0)
+      '@signaldb/maverickjs':
+        specifier: ^1.0.0
+        version: 1.0.0(@maverick-js/signals@6.0.0)(@signaldb/core@1.8.1)
+      '@signaldb/react':
+        specifier: ^1.0.1
+        version: 1.0.1(@signaldb/core@1.8.1)(react-dom@19.0.0)(react@19.0.0)
       '@tailwindcss/vite':
         specifier: ^4.0.14
         version: 4.0.14(vite@6.2.2)
@@ -4559,6 +4571,10 @@ packages:
       - supports-color
     dev: true
 
+  /@maverick-js/signals@6.0.0:
+    resolution: {integrity: sha512-aPAxQOjxcGaLpjMcfE0mRuMgnCVLfdPSGINYmKDjTbTfY37lZdz9CGnVDrkr+svNSADZbUVk7oPVjXA2+vtxYg==}
+    dev: false
+
   /@mdx-js/mdx@3.1.1:
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
     dependencies:
@@ -6696,6 +6712,28 @@ packages:
       '@signaldb/core': 1.x
     dependencies:
       '@signaldb/core': 1.8.1
+    dev: false
+
+  /@signaldb/maverickjs@1.0.0(@maverick-js/signals@6.0.0)(@signaldb/core@1.8.1):
+    resolution: {integrity: sha512-fjO0KzQXN8GmtRZ5vMaGa/vFDiMgNz5bh9ri/c8/UsJ6AgV5fnhWn3LKhfUpPjrdJjiC4JsBVUkF37MnKInBQQ==}
+    peerDependencies:
+      '@maverick-js/signals': 5.x.x || 6.x
+      '@signaldb/core': 1.x
+    dependencies:
+      '@maverick-js/signals': 6.0.0
+      '@signaldb/core': 1.8.1
+    dev: false
+
+  /@signaldb/react@1.0.1(@signaldb/core@1.8.1)(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-OpeNn92+Lpa5YJZDTv9CjN08HAD6g8mQ5YcrrJEHW5H8m9C0a27/95S2Wo1gtPxqtVQ4Fb1k8bqxQssp5THA8A==}
+    peerDependencies:
+      '@signaldb/core': 1.x
+      react: '>=16 || >=17 || >= 18 || >= 19'
+      react-dom: '>=16 || >=17 || >= 18 || >= 19'
+    dependencies:
+      '@signaldb/core': 1.8.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
     dev: false
 
   /@sindresorhus/is@4.6.0:

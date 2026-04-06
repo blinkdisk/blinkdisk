@@ -5,8 +5,10 @@ Sentry.init({
 });
 
 import { setupRenderer } from "@better-auth/electron/preload";
+import { setupSignalDBPreload } from "@blinkdisk/signaldb-electron/preload";
 
 setupRenderer();
+setupSignalDBPreload(ipcRenderer, contextBridge);
 
 import type {
   authenticateToken,
@@ -17,7 +19,6 @@ import type {
   setSession,
   updateUser,
 } from "@electron/auth";
-import type { setVaultCache } from "@electron/cache";
 import type { readClipboard } from "@electron/clipboard";
 import type {
   decryptVaultConfig,
@@ -149,10 +150,6 @@ const api = {
     connect: (payload: Parameters<typeof connectVault>[0]) =>
       ipcRenderer.invoke("vault.connect", payload) as Promise<
         Awaited<ReturnType<typeof connectVault>>
-      >,
-    cache: (payload: Parameters<typeof setVaultCache>[0]) =>
-      ipcRenderer.invoke("vault.cache", payload) as Promise<
-        ReturnType<typeof setVaultCache>
       >,
     status: (payload: Parameters<typeof getVault>[0]) =>
       ipcRenderer.invoke("vault.status", payload) as Promise<

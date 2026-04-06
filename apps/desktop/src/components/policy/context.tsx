@@ -3,7 +3,6 @@ import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-
 import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
 import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
-import { useVault } from "@desktop/hooks/queries/use-vault";
 import { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";
 
@@ -16,8 +15,6 @@ function usePolicyContext({
   folderId?: string;
   mock?: { path: string };
 }) {
-  const { isPending: isVaultPending } = useVault();
-
   const { data: vaultPolicy, isPending: isVaultPolicyPending } =
     useVaultPolicy();
   const { data: folderPolicy, isPending: isFolderPolicyPending } =
@@ -36,11 +33,8 @@ function usePolicyContext({
   );
 
   const loading = useMemo(
-    () =>
-      level === "FOLDER"
-        ? isFolderPolicyPending
-        : isVaultPolicyPending || isVaultPending,
-    [level, isFolderPolicyPending, isVaultPolicyPending, isVaultPending],
+    () => (level === "FOLDER" ? isFolderPolicyPending : isVaultPolicyPending),
+    [level, isFolderPolicyPending, isVaultPolicyPending],
   );
 
   const definedFields = useMemo(

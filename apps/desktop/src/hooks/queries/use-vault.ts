@@ -1,21 +1,16 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { ZVaultType } from "@blinkdisk/schemas/vault";
+import { useAccountReactivity } from "@desktop/hooks/use-reactivity";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { trpc } from "@desktop/lib/trpc";
-import { useQuery } from "@tanstack/react-query";
+import { getVaultCollection } from "@desktop/lib/db";
 
-export type VaultItem = Awaited<ReturnType<typeof trpc.vault.get.query>>;
+export type VaultItem = ZVaultType;
 
 export function useVault(vaultId?: string) {
-  const { queryKeys } = useQueryKey();
   const { vaultId: defaultVaultId } = useVaultId();
 
-  return useQuery({
-    queryKey: queryKeys.vault.detail(vaultId || defaultVaultId),
-    queryFn: () => {
-      return trpc.vault.get.query({
-        vaultId: vaultId || defaultVaultId || "",
-      });
-    },
-    enabled: !!(vaultId || defaultVaultId),
-  });
+  const data = useAccountReactivity((accountId) =>
+    getVaultCollection(accountId).findOne({ id: vaultId || defaultVaultId }),
+  );
+
+  return { data };
 }

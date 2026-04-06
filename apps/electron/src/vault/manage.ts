@@ -2,7 +2,8 @@ import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
-import { getAccountCache, getVaultCache } from "@electron/cache";
+import { getAccountCache } from "@electron/cache";
+import { collections } from "@electron/db";
 import { log } from "@electron/log";
 import { getHostName, getUserName } from "@electron/profile";
 import { fetchVault } from "@electron/vault/fetch";
@@ -136,30 +137,33 @@ export async function connectVault({
 }
 
 export async function startAllVaults() {
-  const vaultCache = getVaultCache();
   const accounts = getAccountCache();
 
-  for (const vault of vaultCache) {
-    const account = accounts.find((account) => account.id === vault.accountId);
+  for (const [accountId, collection] of Object.entries(collections)) {
+    const account = accounts.find((account) => account.id === accountId);
 
     if (!account) {
-      log.error(`Account ${vault.accountId} not found, skipping.`);
+      log.error(`Account ${accountId} not found, skipping.`);
       continue;
     }
 
     if (!account.active) {
-      log.info(`Account ${vault.accountId} is not active, skipping.`);
+      log.info(`Account ${accountId} is not active, skipping.`);
       continue;
     }
 
-    // Already running
-    if (vaults[vault.id]) continue;
+    const vaultCache = collection.vault.find().fetch();
 
-    vaults[vault.id] = {
-      id: vault.id,
-      status: "STARTING",
-      server: await startVaultServer(vault.id),
-    };
+    for (const vault of vaultCache) {
+      // Already running
+      if (vaults[vault.id]) continue;
+
+      vaults[vault.id] = {
+        id: vault.id,
+        status: "STARTING",
+        server: await startVaultServer(vault.id),
+      };
+    }
   }
 }
 

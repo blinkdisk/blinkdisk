@@ -1,6 +1,5 @@
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
-import { deleteVaultFromCache } from "@electron/cache";
 import { log } from "@electron/log";
 import { corePath, globalVaultDirectory } from "@electron/path";
 import { vaults } from "@electron/vault/manage";
@@ -94,7 +93,7 @@ export function startVaultServer(id: string, pollStatus = true) {
             break;
 
           case "BDC VAULT DELETED":
-            deleteVaultFromCache(id);
+            // TODO: Clean up vault
             break;
 
           // TODO: Handle notification events

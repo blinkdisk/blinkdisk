@@ -1,4 +1,3 @@
-import { readClipboard } from "@electron/clipboard";
 import {
   authenticateToken,
   getSession,
@@ -8,7 +7,7 @@ import {
   setSession,
   updateUser,
 } from "@electron/auth";
-import { setVaultCache } from "@electron/cache";
+import { readClipboard } from "@electron/clipboard";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
 import { getPasswordCache, setPasswordCache } from "@electron/password";
@@ -65,7 +64,6 @@ ipcMain.handle("dialog.save", (_, { defaultFileName, ...options }) =>
       : {}),
   }),
 );
-ipcMain.handle("vault.cache", (_, payload) => setVaultCache(payload));
 ipcMain.handle("vault.validate", (_, config) => validateVaultConfig(config));
 ipcMain.handle("vault.create", (_, config) => createVault(config));
 ipcMain.handle("vault.connect", (_, config) => connectVault(config));

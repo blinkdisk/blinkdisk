@@ -17,7 +17,7 @@ function RouteComponent() {
   const { t } = useAppTranslation("vault");
   const { accountId } = useAccountId();
   const { openCreateVault } = useCreateVaultDialog();
-  const { data: vaults, isPending } = useVaultList();
+  const { data: vaults } = useVaultList();
 
   const navigate = Route.useNavigate();
 
@@ -43,7 +43,7 @@ function RouteComponent() {
     });
   }, [accountId, vaults, navigate]);
 
-  if (!isPending && !vaults?.length)
+  if (!vaults?.length)
     return (
       <Empty
         title={t("noVaults.title")}

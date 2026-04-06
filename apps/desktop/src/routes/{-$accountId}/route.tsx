@@ -1,6 +1,5 @@
 import { Layout } from "@desktop/components/layout";
 import { useSubscriptionWatch } from "@desktop/hooks/use-subscription-watch";
-import { useVaultCache } from "@desktop/hooks/use-vault-cache";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/{-$accountId}")({
@@ -8,7 +7,6 @@ export const Route = createFileRoute("/{-$accountId}")({
 });
 
 function RouteComponent() {
-  useVaultCache();
   useSubscriptionWatch();
 
   return (

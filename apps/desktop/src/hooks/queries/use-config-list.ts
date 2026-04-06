@@ -1,14 +1,10 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { trpc } from "@desktop/lib/trpc";
-import { useQuery } from "@tanstack/react-query";
+import { getConfigCollection } from "@desktop/lib/db";
+import { useAccountReactivity } from "../use-reactivity";
 
 export function useConfigList() {
-  const { queryKeys } = useQueryKey();
+  const data = useAccountReactivity((accountId) =>
+    getConfigCollection(accountId).find({}).fetch(),
+  );
 
-  return useQuery({
-    queryKey: queryKeys.config.list(),
-    queryFn: () => {
-      return trpc.config.list.query();
-    },
-  });
+  return { data };
 }
