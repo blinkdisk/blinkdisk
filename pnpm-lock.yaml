@@ -242,8 +242,8 @@ importers:
         specifier: ^12.5.0
         version: 12.5.0(react-dom@19.0.0)(react@19.0.0)
       lucide-react:
-        specifier: ^0.483.0
-        version: 0.483.0(react@19.0.0)
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.0.0)
       posthog-js:
         specifier: ^1.270.1
         version: 1.270.1
@@ -14483,6 +14483,14 @@ packages:
 
   /lucide-react@0.483.0(react@19.0.0):
     resolution: {integrity: sha512-WldsY17Qb/T3VZdMnVQ9C3DDIP7h1ViDTHVdVGnLZcvHNg30zH/MTQ04RTORjexoGmpsXroiQXZ4QyR0kBy0FA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      react: 19.0.0
+    dev: false
+
+  /lucide-react@1.7.0(react@19.0.0):
+    resolution: {integrity: sha512-yI7BeItCLZJTXikmK4KNUGCKoGzSvbKlfCvw44bU4fXAL6v3gYS4uHD1jzsLkfwODYwI6Drw5Tu9Z5ulDe0TSg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:

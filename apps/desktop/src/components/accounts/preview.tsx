@@ -1,7 +1,7 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Avatar, AvatarFallback } from "@blinkdisk/ui/avatar";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
-import { CloudOffIcon } from "lucide-react";
+import { HatGlassesIcon } from "lucide-react";
 import { useMemo } from "react";
 
 type AccountPreviewProps = {
@@ -29,7 +29,7 @@ export function AccountPreview({ account, local }: AccountPreviewProps) {
     <div className="flex items-center gap-2.5">
       <Avatar className="size-9 rounded-lg after:rounded-lg">
         <AvatarFallback className="rounded-lg">
-          {local ? <CloudOffIcon /> : initials ? initials : ""}
+          {local ? <HatGlassesIcon /> : initials ? initials : ""}
         </AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left leading-tight">

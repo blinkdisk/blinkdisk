@@ -40,7 +40,7 @@
     "date-fns": "^4.1.0",
     "filesize": "^11.0.2",
     "framer-motion": "^12.5.0",
-    "lucide-react": "^0.483.0",
+    "lucide-react": "^1.7.0",
     "posthog-js": "^1.270.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
