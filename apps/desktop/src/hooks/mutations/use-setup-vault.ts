@@ -68,14 +68,27 @@ export function useSetupVault({
         }
       }
 
+      let token: string | undefined;
+      if (values.vault.provider === "CLOUDBLINK") {
+        const [res, err] = await tryCatch(
+          trpc.cloudblink.getVaultToken.query({
+            vaultId: values.vault.id,
+          }),
+        );
+
+        if (err) throw err;
+
+        token = res.token;
+      }
+
       // This shouldn't happen in theory
       if (!config) return setStep("CONFIG");
 
       const validateRes = await window.electron.vault.validate({
         type: values.vault.provider,
-        token: values.vault.token,
         version: values.vault.version,
         password: values.password,
+        token,
         config,
       });
 
@@ -100,8 +113,8 @@ export function useSetupVault({
         name: values.vault.name,
         provider: values.vault.provider,
         version: values.vault.version,
-        token: values.vault.token,
         password: values.password,
+        token,
         config,
       });
 

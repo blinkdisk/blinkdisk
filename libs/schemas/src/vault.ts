@@ -1,12 +1,11 @@
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { VaultStatus } from "@blinkdisk/db/enums";
-import { ZAccountId } from "@schemas/shared/id";
 import { ZConfigLevel, ZVaultEncryptedConfig } from "@schemas/config";
 import { ZProviderType } from "@schemas/providers";
 import { ZDateString } from "@schemas/shared/date";
+import { ZAccountId, ZVaultId } from "@schemas/shared/id";
 import { ZProfileHostName, ZProfileUserName } from "@schemas/shared/profile";
 import { z } from "zod";
-import { ZVaultId } from "@schemas/shared/id";
 
 const ZVaultName = z.string().min(1).max(30);
 
@@ -147,5 +146,9 @@ export const ZVaultThrottle = z.object({
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
 
 export const ZDeleteVault = z.object({
+  vaultId: ZVaultId,
+});
+
+export const ZGetVaultToken = z.object({
   vaultId: ZVaultId,
 });
