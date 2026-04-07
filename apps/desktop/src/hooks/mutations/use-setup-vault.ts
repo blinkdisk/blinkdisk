@@ -1,6 +1,7 @@
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { SetupStep } from "@desktop/components/vaults/setup";
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
@@ -9,7 +10,6 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { getConfigCollection } from "@desktop/lib/db";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { generateId } from "@utils/id";
 import { STORAGE_PROVIDERS } from "libs/constants/src/providers";
 
 export function useSetupVault({
