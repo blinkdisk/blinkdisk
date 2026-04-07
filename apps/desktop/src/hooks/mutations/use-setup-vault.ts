@@ -3,10 +3,14 @@ import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { SetupStep } from "@desktop/components/vaults/setup";
+import { VaultItem } from "@desktop/hooks/queries/use-vault";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { getConfigCollection } from "@desktop/lib/db";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { VaultItem } from "../queries/use-vault";
+import { generateId } from "@utils/id";
+import { STORAGE_PROVIDERS } from "libs/constants/src/providers";
 
 export function useSetupVault({
   onSuccess,
@@ -20,6 +24,7 @@ export function useSetupVault({
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
+  const { accountId } = useAccountId();
 
   return useMutation({
     mutationKey: ["vault", "setup"],
@@ -30,10 +35,16 @@ export function useSetupVault({
     }) => {
       let config = values.config;
 
+      const provider = STORAGE_PROVIDERS.find(
+        (p) => p.type === values.vault.provider,
+      );
+
+      if (!provider) throw new Error("Invalid provider");
+
       if (!config) {
-        if (values.vault.provider === "CLOUDBLINK") config = {};
+        if (provider.type === "CLOUDBLINK") config = {};
         else {
-          const configs = await trpc.config.list.query();
+          const configs = getConfigCollection(accountId).find().fetch();
 
           // Pick the newest config for the vault
           const encryptedConfig = configs
@@ -68,8 +79,8 @@ export function useSetupVault({
         }
       }
 
-      let token: string | undefined;
-      if (values.vault.provider === "CLOUDBLINK") {
+      let cloudBlinkToken: string | undefined;
+      if (provider.type === "CLOUDBLINK") {
         const [res, err] = await tryCatch(
           trpc.cloudblink.getVaultToken.query({
             vaultId: values.vault.id,
@@ -78,7 +89,7 @@ export function useSetupVault({
 
         if (err) throw err;
 
-        token = res.token;
+        cloudBlinkToken = res.token;
       }
 
       // This shouldn't happen in theory
@@ -88,7 +99,7 @@ export function useSetupVault({
         type: values.vault.provider,
         version: values.vault.version,
         password: values.password,
-        token,
+        token: cloudBlinkToken,
         config,
       });
 
@@ -114,7 +125,7 @@ export function useSetupVault({
         provider: values.vault.provider,
         version: values.vault.version,
         password: values.password,
-        token,
+        token: cloudBlinkToken,
         config,
       });
 
@@ -132,14 +143,17 @@ export function useSetupVault({
         password: values.password,
       });
 
-      return await trpc.config.add.mutate({
-        vaultId: values.vault.id,
-        userName: window.electron.os.userName(values.vault.id),
-        hostName: window.electron.os.hostName(values.vault.id),
-        config: await window.electron.vault.config.encrypt({
+      getConfigCollection(accountId).insert({
+        id: generateId("Config"),
+        data: await window.electron.vault.config.encrypt({
           password: values.password,
           config,
         }),
+        level: provider.level,
+        vaultId: values.vault.id,
+        userName: window.electron.os.userName(values.vault.id),
+        hostName: window.electron.os.hostName(values.vault.id),
+        createdAt: new Date().toISOString(),
       });
     },
     onError: showErrorToast,

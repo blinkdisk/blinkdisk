@@ -9,6 +9,26 @@ import { generateId } from "@blinkdisk/utils/id";
 import { generateServiceToken } from "@blinkdisk/utils/token";
 
 export const cloudblinkRouter = router({
+  space: authedProcedure.query(async ({ ctx }) => {
+    const space = await ctx.db
+      .selectFrom("Space")
+      .select(["id", "capacity"])
+      .where("Space.accountId", "=", ctx.account.id)
+      .executeTakeFirst();
+
+    if (!space) throw new CustomError("SPACE_NOT_FOUND");
+
+    const stub = ctx.env.SPACE.getByName(space.id);
+
+    const used = await (
+      stub as unknown as { getUsed: () => Promise<number> }
+    ).getUsed();
+
+    return {
+      used,
+      capacity: parseInt(space.capacity),
+    };
+  }),
   initVault: authedProcedure.mutation(async ({ ctx }) => {
     const vaultId = generateId("Vault");
 

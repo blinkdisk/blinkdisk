@@ -10,7 +10,7 @@ export function useSpace() {
   return useQuery({
     queryKey: queryKeys.space,
     queryFn: () => {
-      return trpc.vault.space.query();
+      return trpc.cloudblink.space.query();
     },
     refetchOnMount: false,
     enabled: !!isOnlineAccount,

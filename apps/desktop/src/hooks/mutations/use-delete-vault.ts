@@ -1,18 +1,28 @@
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { trpc } from "@desktop/lib/trpc";
+import { getVaultCollection } from "@desktop/lib/db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useDeleteVault({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();
+
   const { queryKeys } = useQueryKey();
+  const { accountId } = useAccountId();
 
   return useMutation({
-    mutationKey: ["core", "vault", "delete"],
+    mutationKey: ["vault", "delete"],
     mutationFn: async ({ vaultId }: { vaultId: string }) => {
-      await trpc.vault.delete.mutate({
-        vaultId,
-      });
+      getVaultCollection(accountId).updateOne(
+        {
+          id: vaultId,
+        },
+        {
+          $set: {
+            status: "DELETED",
+          },
+        },
+      );
     },
     onError: showErrorToast,
     onSuccess: async () => {
