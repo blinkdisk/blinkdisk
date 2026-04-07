@@ -15,8 +15,6 @@ export function useQueryKey() {
       space: [accountId, "space"],
       vault: {
         all: [accountId, "vault"],
-        list: () => [...keys.vault.all, "list"],
-        detail: (vaultId?: string) => [...keys.vault.all, vaultId, "details"],
         status: (vaultId?: string) => [...keys.vault.all, vaultId, "status"],
         config: (vaultId?: string, password?: string | null) => [
           ...keys.vault.all,
@@ -47,10 +45,6 @@ export function useQueryKey() {
       subscription: {
         all: [accountId, "subscription"],
         detail: () => [...keys.subscription.all],
-      },
-      config: {
-        all: [accountId, "config"],
-        list: () => [...keys.config.all, "list"],
       },
       directory: {
         all: ["directory"],

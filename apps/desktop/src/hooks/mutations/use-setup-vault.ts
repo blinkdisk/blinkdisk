@@ -158,15 +158,10 @@ export function useSetupVault({
       });
     },
     onError: showErrorToast,
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.config.all,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.vault.all,
-        }),
-      ]);
+    onSuccess: async (_, values) => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.vault.status(values.vault.id),
+      });
 
       onSuccess?.();
     },

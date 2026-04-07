@@ -155,11 +155,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
     onError: showErrorToast,
     onSuccess: async (res) => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.config.all,
-      });
-
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.vault.all,
+        queryKey: queryKeys.vault.status(res.vaultId),
       });
 
       onSuccess?.(res);
