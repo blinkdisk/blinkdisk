@@ -6,6 +6,7 @@ import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
+import { removeEmptyStrings } from "@blinkdisk/utils/object";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -71,7 +72,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
       const encryptedConfig = await window.electron.vault.config.encrypt({
         password: values.password,
-        config: values.config,
+        config: removeEmptyStrings(values.config),
       });
 
       if (!initialised) {

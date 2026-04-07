@@ -2,6 +2,7 @@ import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
+import { removeEmptyStrings } from "@blinkdisk/utils/object";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { SetupStep } from "@desktop/components/vaults/setup";
 import { VaultItem } from "@desktop/hooks/queries/use-vault";
@@ -147,7 +148,7 @@ export function useSetupVault({
         id: generateId("Config"),
         data: await window.electron.vault.config.encrypt({
           password: values.password,
-          config,
+          config: removeEmptyStrings(config),
         }),
         level: provider.level,
         vaultId: values.vault.id,

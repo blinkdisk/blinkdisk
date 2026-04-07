@@ -102,10 +102,6 @@ export const ZCreateVaultDetails = z.object({
   confirmPassword: ZVaultPassword,
 });
 
-export const ZGetVault = z.object({
-  vaultId: ZVaultId,
-});
-
 export const ZVaultPasswordForm = z.object({
   password: ZVaultPassword,
 });
@@ -117,12 +113,6 @@ export const ZUpdateVaultForm = z.object({
 });
 
 export type ZUpdateVaultFormType = z.infer<typeof ZUpdateVaultForm>;
-
-export const ZUpdateVault = z.object({
-  vaultId: ZVaultId,
-  name: ZVaultName.optional(),
-  version: ZVaultVersion.optional(),
-});
 
 export const ZBandwith = z.object({
   value: z.number().min(1).optional(),
@@ -143,7 +133,3 @@ export const ZVaultThrottle = z.object({
 });
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
-
-export const ZDeleteVault = z.object({
-  vaultId: ZVaultId,
-});

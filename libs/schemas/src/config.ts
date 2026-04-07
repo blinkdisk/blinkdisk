@@ -14,8 +14,6 @@ export const ZVaultEncryptedConfig = z.object({
   cipher: z.string().min(1).max(10000),
 });
 
-export type ZVaultEncryptedConfigType = z.infer<typeof ZVaultEncryptedConfig>;
-
 export const ZConfig = z.object({
   id: ZConfigId,
   data: ZVaultEncryptedConfig,
@@ -27,10 +25,3 @@ export const ZConfig = z.object({
 });
 
 export type ZConfigType = z.infer<typeof ZConfig>;
-
-export const ZAddConfig = z.object({
-  userName: ZProfileUserName,
-  hostName: ZProfileHostName,
-  vaultId: ZVaultId,
-  config: ZVaultEncryptedConfig,
-});
