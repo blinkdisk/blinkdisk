@@ -1,8 +1,7 @@
 import { ConfigLevel } from "@blinkdisk/db/enums";
-import { ZAccountId } from "@schemas/shared/id";
 import { ZDateString } from "@schemas/shared/date";
-import { ZProfileHostName, ZProfileUserName } from "@schemas/shared/profile";
 import { ZVaultId } from "@schemas/shared/id";
+import { ZProfileHostName, ZProfileUserName } from "@schemas/shared/profile";
 import { z } from "zod";
 
 const ZConfigId = z.string().min(1);
@@ -24,7 +23,6 @@ export const ZConfig = z.object({
   userName: ZProfileUserName.optional(),
   hostName: ZProfileHostName.optional(),
   vaultId: ZVaultId,
-  accountId: ZAccountId,
   createdAt: ZDateString,
 });
 

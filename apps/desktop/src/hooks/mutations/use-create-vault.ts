@@ -1,13 +1,19 @@
-import { DEFAULT_VAULT_OPTIONS } from "@blinkdisk/constants/vault";
+import {
+  DEFAULT_VAULT_OPTIONS,
+  LATEST_VAULT_VERSION,
+} from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { getConfigCollection, getVaultCollection } from "@desktop/lib/db";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { STORAGE_PROVIDERS } from "libs/constants/src/providers";
 
 export type CreateVaultResponse = {
   vaultId: string;
@@ -16,6 +22,7 @@ export type CreateVaultResponse = {
 export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
 
+  const { accountId } = useAccountId();
   const { queryKeys } = useQueryKey();
 
   return useMutation({
@@ -26,59 +33,58 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         config: ProviderConfig;
       },
     ) => {
-      const validation = await window.electron.vault.validate({
-        type: values.provider,
-        config: values.config,
-        password: values.password,
-      });
+      const provider = STORAGE_PROVIDERS.find(
+        (p) => p.type === values.provider,
+      );
 
-      if (validation.code === "INVALID_PASSWORD")
-        throw { code: "INVALID_PASSWORD" };
+      if (!provider) throw new Error("Invalid provider");
 
-      const initialised = !!validation.uniqueID;
+      let initialised = false;
+      let coreId: string | undefined;
+      if (provider.type !== "CLOUDBLINK") {
+        const validation = await window.electron.vault.validate({
+          type: provider.type,
+          config: values.config,
+          password: values.password,
+        });
+
+        if (validation.code === "INVALID_PASSWORD")
+          throw { code: "INVALID_PASSWORD" };
+
+        initialised = !!validation.uniqueID;
+        if (validation.uniqueID) coreId = atob(validation.uniqueID);
+      }
+
+      let vaultId: string;
+      let cloudBlinkToken: string | undefined;
+      let spaceId: string | undefined;
+      if (provider.type === "CLOUDBLINK") {
+        const [res, err] = await tryCatch(trpc.cloudblink.initVault.mutate());
+        if (err) throw err;
+
+        vaultId = res.vaultId;
+        cloudBlinkToken = res.token;
+        spaceId = res.spaceId;
+      } else {
+        vaultId = generateId("Vault");
+      }
 
       const encryptedConfig = await window.electron.vault.config.encrypt({
         password: values.password,
         config: values.config,
       });
 
-      const vaultId = generateId("Vault");
-
-      const createOptions = {
-        id: vaultId,
-        name: values.name,
-        provider: values.provider,
-        config: encryptedConfig,
-        userName: window.electron.os.userName(vaultId),
-        hostName: window.electron.os.hostName(vaultId),
-        ...(validation.uniqueID
-          ? {
-              coreId: atob(validation.uniqueID || ""),
-            }
-          : {}),
-      };
-
-      let created = false;
       if (!initialised) {
-        let token: string | null | undefined = null;
-        if (values.provider === "CLOUDBLINK") {
-          // For CloudBlink, we need to create the vault in the API
-          // first to get the token and initialize the durable object.
-          const res = await trpc.vault.create.mutate(createOptions);
-          token = res.vault.token;
-          created = true;
-        }
-
         const [res, error] = await tryCatch(
           window.electron.vault.create({
             vault: {
               id: vaultId,
               name: values.name,
-              provider: values.provider,
+              provider: provider.type,
               config: values.config,
               options: DEFAULT_VAULT_OPTIONS,
               password: values.password,
-              ...(token ? { token } : {}),
+              ...(cloudBlinkToken ? { token: cloudBlinkToken } : {}),
             },
             userPolicy: convertPolicyToCore(defaultVaultPolicy),
             globalPolicy: {},
@@ -87,7 +93,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
         if (error || res.error) {
           // Clean up vault if it was created
-          if (created) await tryCatch(trpc.vault.delete.mutate({ vaultId }));
+          if (provider.type === "CLOUDBLINK")
+            await tryCatch(trpc.cloudblink.deleteVault.mutate({ vaultId }));
 
           throw error || new Error(res.error?.toString());
         }
@@ -99,22 +106,43 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
           window.electron.vault.connect({
             id: vaultId,
             name: values.name,
-            provider: values.provider,
+            provider: provider.type,
             config: values.config,
             password: values.password,
           }),
         );
 
-        if (error || (res.error && res.error !== "ALREADY_CONNECTED")) {
-          // Clean up vault if it was created
-          if (created) await tryCatch(trpc.vault.delete.mutate({ vaultId }));
-
+        if (error || (res.error && res.error !== "ALREADY_CONNECTED"))
+          // CloudBlink clean up not necessary here since
+          // these vaults can't be initialised already
           throw error || new Error(res.error?.toString());
-        }
       }
 
-      // Vault not created yet, create it (for all but CloudBlink)
-      if (!created) await trpc.vault.create.mutate(createOptions);
+      const userName = window.electron.os.userName(vaultId);
+      const hostName = window.electron.os.hostName(vaultId);
+
+      getVaultCollection(accountId).insert({
+        id: vaultId,
+        name: values.name,
+        provider: provider.type,
+        coreId: coreId || vaultId,
+        configLevel: provider.level,
+        spaceId,
+        status: "ACTIVE",
+        options: DEFAULT_VAULT_OPTIONS,
+        version: LATEST_VAULT_VERSION,
+        createdAt: new Date().toISOString(),
+      });
+
+      getConfigCollection(accountId).insert({
+        id: generateId("Config"),
+        data: encryptedConfig,
+        level: provider.level,
+        userName,
+        hostName,
+        vaultId,
+        createdAt: new Date().toISOString(),
+      });
 
       await window.electron.vault.password.set({
         vaultId,

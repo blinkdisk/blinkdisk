@@ -22,6 +22,12 @@
       },
     ],
   },
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "b92b3a36b9f244f8bb703455e2093269",
+    },
+  ],
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
