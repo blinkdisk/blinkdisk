@@ -6,6 +6,7 @@ import {
 } from "@blinkdisk/constants/auth";
 import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import { initAccountCollections } from "@electron/db";
 import { store } from "@electron/store";
 import { sendWindow } from "@electron/window";
 import {
@@ -106,6 +107,8 @@ export async function authenticateToken({ token }: { token: string }) {
 
   if (res.error) throw new Error(res.error.message);
 
-  sendWindow("auth.onAccountChange");
+  await initAccountCollections(res.data.user.id);
+
+  sendWindow("auth.onAccountAdd");
   return res;
 }

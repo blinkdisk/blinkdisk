@@ -145,6 +145,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         createdAt: new Date().toISOString(),
       });
 
+      await window.electron.vault.start.all();
+
       await window.electron.vault.password.set({
         vaultId,
         password: values.password,

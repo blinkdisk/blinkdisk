@@ -1,6 +1,5 @@
 import type { getSession } from "@blinkdisk/electron/auth";
 import { useAccount } from "@desktop/hooks/queries/use-account";
-import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -22,10 +21,6 @@ export function useAuth() {
     false,
   );
 
-  const { data: accounts } = useAccountList({
-    enabled: authenticated,
-  });
-
   const { data: account } = useAccount({
     enabled: authenticated,
   });
@@ -35,34 +30,42 @@ export function useAuth() {
   }, [openAuthDialog]);
 
   const accountChanged = useCallback(
-    async (session?: Awaited<ReturnType<typeof getSession>>["data"]) => {
-      if (!session) {
+    async (
+      local: boolean,
+      session?: Awaited<ReturnType<typeof getSession>>["data"],
+    ) => {
+      if (!local && !session) {
         const { data, error } = await window.electron.auth.session.get();
         if (error || !data) return;
         session = data;
       }
 
-      if (!session) throw new Error("Failed to get session");
+      if (!local && !session) throw new Error("Failed to get session");
+
+      if (!local) {
+        await window.electron.store.set(
+          `accounts.${session?.user.id}.active`,
+          true,
+        );
+
+        // We need to make sure all vaults are started,
+        // maybe the account was inactive.
+        await window.electron.vault.start.all();
+
+        // End the last session
+        posthog.reset();
+        // Start a new session
+        posthog.identify(session!.user.id);
+      }
 
       await window.electron.store.set(
-        `accounts.${session?.user.id}.active`,
-        true,
+        "currentAccountId",
+        local ? LOCAL_ACCOUNT_ID : session!.user.id,
       );
-
-      // We need to make sure all vaults are started,
-      // maybe the account was inactive.
-      await window.electron.vault.start.all();
-
-      await window.electron.store.set("currentAccountId", session.user.id);
 
       await queryClient.invalidateQueries({
         queryKey: queryKeys.account.detail(),
       });
-
-      // End the last session
-      posthog.reset();
-      // Start a new session
-      posthog.identify(session.user.id);
 
       return session;
     },
@@ -71,21 +74,30 @@ export function useAuth() {
 
   const selectAccount = useCallback(
     async (sessionToken: string) => {
-      const { data, error } = await window.electron.auth.session.set({
-        sessionToken,
-      });
+      if (sessionToken !== LOCAL_ACCOUNT_ID) {
+        const { data, error } = await window.electron.auth.session.set({
+          sessionToken,
+        });
 
-      if (error || !data) throw error;
+        if (error || !data) throw error;
 
-      navigate({ to: "/{-$accountId}/loading" });
+        navigate({ to: "/{-$accountId}/loading" });
 
-      const session = await accountChanged(data);
-      if (!session) return;
+        const session = await accountChanged(false, data);
+        if (!session) return;
 
-      navigate({
-        to: "/{-$accountId}",
-        params: { accountId: session.user.id },
-      });
+        navigate({
+          to: "/{-$accountId}",
+          params: { accountId: session.user.id },
+        });
+      } else {
+        await accountChanged(true);
+
+        navigate({
+          to: "/{-$accountId}",
+          params: { accountId: LOCAL_ACCOUNT_ID },
+        });
+      }
     },
     [accountChanged, navigate],
   );
@@ -100,9 +112,8 @@ export function useAuth() {
       );
     }
 
-    const remainingSessions = accounts?.filter(
-      (s) => s.session.id !== account?.session.id,
-    );
+    const { data: remainingSessions } =
+      await window.electron.auth.session.list();
 
     if (remainingSessions?.length && remainingSessions[0]) {
       selectAccount(remainingSessions[0].session.token);
@@ -115,7 +126,7 @@ export function useAuth() {
         params: { accountId: LOCAL_ACCOUNT_ID },
       });
     }
-  }, [navigate, account, accounts, selectAccount, setAuthenticated]);
+  }, [navigate, account, selectAccount, setAuthenticated]);
 
   return {
     logout,

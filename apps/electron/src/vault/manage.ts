@@ -9,6 +9,7 @@ import { getHostName, getUserName } from "@electron/profile";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 import { startVaultServer } from "@electron/vault/server";
+import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { VaultInstance } from "./types";
 import { validationVault } from "./validate";
 
@@ -140,14 +141,16 @@ export async function startAllVaults() {
   const accounts = getAccountCache();
 
   for (const [accountId, collection] of Object.entries(collections)) {
+    const isLocalAccount = accountId === LOCAL_ACCOUNT_ID;
+
     const account = accounts.find((account) => account.id === accountId);
 
-    if (!account) {
+    if (!isLocalAccount && !account) {
       log.error(`Account ${accountId} not found, skipping.`);
       continue;
     }
 
-    if (!account.active) {
+    if (!isLocalAccount && !account?.active) {
       log.info(`Account ${accountId} is not active, skipping.`);
       continue;
     }

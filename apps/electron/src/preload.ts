@@ -245,7 +245,7 @@ const api = {
           ReturnType<typeof setSession>
         >,
     },
-    onAccountChange: listener<{ token: string }>("auth.onAccountChange"),
+    onAccountAdd: listener<{ token: string }>("auth.onAccountAdd"),
   },
 };
 

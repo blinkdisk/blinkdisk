@@ -11,41 +11,51 @@ import { join } from "node:path";
 
 const bridge = setupSignalDBMain(ipcMain);
 
-export function setupCollections() {
+export async function setupCollections() {
   if (!existsSync(globalAccountDirectory()))
     mkdirSync(globalAccountDirectory(), { recursive: true });
 
-  initAccountCollections("local");
+  await initAccountCollections("local");
 
   const accounts = getAccountCache();
 
   for (const account of accounts) {
     if (!account.active) continue;
-    initAccountCollections(account.id);
+    await initAccountCollections(account.id);
   }
 }
 
-function createVaultCollection(directory: string) {
-  return new SchemaCollection({
+async function createVaultCollection(directory: string) {
+  const collection = new SchemaCollection({
+    name: "vault",
     persistence: createFilesystemAdapter<ZVaultType, string>(
       join(directory, "vault.json"),
     ),
     schema: ZVault,
   });
+
+  await collection.isReady();
+  return collection;
 }
 
-export type VaultCollection = ReturnType<typeof createVaultCollection>;
+export type VaultCollection = Awaited<ReturnType<typeof createVaultCollection>>;
 
-function createConfigCollection(directory: string) {
-  return new SchemaCollection({
+async function createConfigCollection(directory: string) {
+  const collection = new SchemaCollection({
+    name: "config",
     persistence: createFilesystemAdapter<ZConfigType, string>(
       join(directory, "config.json"),
     ),
     schema: ZConfig,
   });
+
+  await collection.isReady();
+  return collection;
 }
 
-export type ConfigCollection = ReturnType<typeof createConfigCollection>;
+export type ConfigCollection = Awaited<
+  ReturnType<typeof createConfigCollection>
+>;
 
 export const collections: Record<
   string,
@@ -55,12 +65,14 @@ export const collections: Record<
   }
 > = {};
 
-export function initAccountCollections(accountId: string) {
+export async function initAccountCollections(accountId: string) {
+  if (collections[accountId]) return;
+
   const directory = join(globalAccountDirectory(), accountId);
   if (!existsSync(directory)) mkdirSync(directory, { recursive: true });
 
-  const vault = createVaultCollection(directory);
-  const config = createConfigCollection(directory);
+  const vault = await createVaultCollection(directory);
+  const config = await createConfigCollection(directory);
 
   bridge.addCollection(vault, { name: `${accountId}/vault` });
   bridge.addCollection(config, { name: `${accountId}/config` });

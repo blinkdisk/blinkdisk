@@ -3,7 +3,9 @@ import { ConfigLevel } from "@blinkdisk/db/enums";
 import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
 import { EncryptedString } from "@electron/encryption";
 import { sendWindow } from "@electron/window";
+import { app } from "electron";
 import Store from "electron-store";
+import { globalConfigDirectory } from "./path";
 
 export type GlobalStorageType = {
   authenticated: boolean;
@@ -72,6 +74,11 @@ export type AccountStorageSchema = UnionToIntersection<
 >;
 
 export const store = new Store({
+  ...(!app.isPackaged
+    ? {
+        cwd: globalConfigDirectory(),
+      }
+    : {}),
   migrations: {
     ">0.7.0": (store) => {
       const accounts = store.get("accounts") || {};

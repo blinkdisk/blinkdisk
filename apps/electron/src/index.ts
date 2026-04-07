@@ -31,7 +31,7 @@ import { createWindow } from "@electron/window";
 app.on("ready", async () => {
   initEncryption();
   await runMigrations();
-  setupCollections();
+  await setupCollections();
 
   listenProtocol();
   createTray();

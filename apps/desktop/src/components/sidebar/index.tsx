@@ -19,11 +19,13 @@ import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
+  const { isLocalAccount } = useAccountId();
   const { data: session } = useAccount();
   const { data: folders } = useFolderList();
 
@@ -94,7 +96,10 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
                 <SidebarMenuButton size="lg">
-                  <AccountPreview account={session} />
+                  <AccountPreview
+                    account={session}
+                    local={isLocalAccount || false}
+                  />
                 </SidebarMenuButton>
               </AccountSelectDropdown>
               <AccountMenuDropdown>

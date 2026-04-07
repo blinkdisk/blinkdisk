@@ -4,11 +4,14 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { i18n } from "@desktop/i18n";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAccountId } from "../use-account-id";
 
 export function useUpdatePreferences(onSuccess: () => void) {
-  const { setTheme } = useTheme();
   const queryClient = useQueryClient();
+
+  const { setTheme } = useTheme();
   const { queryKeys } = useQueryKey();
+  const { isOnlineAccount } = useAccountId();
 
   return useMutation({
     mutationKey: ["user", "preferences"],
@@ -16,12 +19,13 @@ export function useUpdatePreferences(onSuccess: () => void) {
       setTheme(values.theme);
       i18n.changeLanguage(values.language);
 
-      const { data, error } = await window.electron.auth.user.update({
-        language: values.language,
-      });
+      if (isOnlineAccount) {
+        const { error } = await window.electron.auth.user.update({
+          language: values.language,
+        });
 
-      if (error) throw error;
-      return data;
+        if (error) throw error;
+      }
     },
     onError: showErrorToast,
     onSuccess: async () => {

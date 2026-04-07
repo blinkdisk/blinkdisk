@@ -6,19 +6,19 @@ export function AuthListener() {
   const { setAuthenticated, accountChanged } = useAuth();
   const navigate = useNavigate();
 
-  const onAccountChange = useCallback(async () => {
+  const onAccountAdd = useCallback(async () => {
     await setAuthenticated(true);
     await navigate({ to: "/{-$accountId}/loading" });
 
-    const session = await accountChanged();
+    const session = await accountChanged(false);
     if (!session) return navigate({ to: "/" });
 
     navigate({ to: "/{-$accountId}", params: { accountId: session.user.id } });
   }, [setAuthenticated, accountChanged, navigate]);
 
   useEffect(() => {
-    return window.electron.auth.onAccountChange(onAccountChange);
-  }, [onAccountChange]);
+    return window.electron.auth.onAccountAdd(onAccountAdd);
+  }, [onAccountAdd]);
 
   return null;
 }

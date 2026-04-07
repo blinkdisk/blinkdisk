@@ -11,6 +11,7 @@ import { AccountPreview } from "@desktop/components/accounts/preview";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAuth } from "@desktop/hooks/use-auth";
+import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { UserPlusIcon } from "lucide-react";
 import { ReactElement } from "react";
 
@@ -37,8 +38,21 @@ export function AccountSelectDropdown({
         sideOffset={4}
       >
         <DropdownMenuGroup>
+          <DropdownMenuItem
+            onClick={() =>
+              accountId !== LOCAL_ACCOUNT_ID && selectAccount(LOCAL_ACCOUNT_ID)
+            }
+          >
+            <AccountPreview local />
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        {isPending || accounts?.length ? <DropdownMenuSeparator /> : null}
+        <DropdownMenuGroup>
           {(!isPending ? accounts : new Array(2).fill(undefined))?.map(
-            (account, index) => (
+            (
+              account: Exclude<typeof accounts, undefined>[number] | undefined,
+              index,
+            ) => (
               <DropdownMenuItem
                 key={account ? account.user.id : index}
                 onClick={() =>
