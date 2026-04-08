@@ -28,7 +28,7 @@ export const ZS3CompatibleConfig = ZS3Config.merge(
   z.object({
     region: z.string().max(128).optional(),
     disableTls: z.boolean(),
-    disableSsl: z.boolean(),
+    disableTlsVerification: z.boolean(),
   }),
 );
 
