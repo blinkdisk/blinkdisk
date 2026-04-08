@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@better-auth/electron": "1.5.5",
+    "@blinkdisk/api": "workspace:*",
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/db": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
@@ -38,12 +39,15 @@
     "@sentry/electron": "^7.9.0",
     "@signaldb/core": "^1.8.1",
     "@signaldb/fs": "^1.0.1",
+    "@signaldb/sync": "^1.3.1",
+    "@trpc/client": "^10.45.2",
     "auto-launch": "^5.0.6",
     "better-auth": "1.5.5",
     "electron-log": "^5.3.2",
     "electron-store": "^10.0.1",
     "electron-updater": "^6.6.2",
     "get-folder-size": "^5.0.0",
+    "node-fetch": "^3.3.2",
     "p-limit": "^7.1.0",
     "tough-cookie": "^5.1.2",
     "zod": "^4.3.6"

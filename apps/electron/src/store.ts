@@ -1,6 +1,3 @@
-import { StorageProviderType } from "@blinkdisk/constants/providers";
-import { ConfigLevel } from "@blinkdisk/db/enums";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
 import { EncryptedString } from "@electron/encryption";
 import { sendWindow } from "@electron/window";
 import { app } from "electron";
@@ -13,19 +10,14 @@ export type GlobalStorageType = {
   preferences: {
     theme: "system" | "dark" | "light";
   };
-  vaults: {
-    [id: string]: {
-      name: string;
-      accountId: string;
-      configLevel: ConfigLevel;
-      options: ZVaultOptionsType;
-      token?: EncryptedString;
-      version: number;
-      provider: StorageProviderType;
-    };
-  };
   passwords: {
     [vaultId: string]: EncryptedString;
+  };
+  auth: {
+    // Managed by better-auth
+    cookie: string;
+    // Managed by better-auth
+    local_cache: string;
   };
 };
 
@@ -113,6 +105,9 @@ export const store = new Store({
     },
     ">1.3.0": (store) => {
       store.delete("configs");
+    },
+    ">1.7.0": (store) => {
+      store.delete("vaults");
     },
   },
 });
