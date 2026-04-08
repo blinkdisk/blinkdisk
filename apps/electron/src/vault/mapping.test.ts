@@ -59,7 +59,7 @@ describe("mapConfigFields", () => {
       bucket: "my-bucket",
       region: "us-east-1",
       doNotUseTLS: true,
-      doNotVerifySSL: false,
+      doNotVerifyTLS: false,
     });
   });
 
