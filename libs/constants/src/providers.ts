@@ -32,7 +32,7 @@ const s3Base = {
     accessKeyType: "accessKeyID",
     accessKeySecret: "secretAccessKey",
     disableTls: "doNotUseTLS",
-    disableSsl: "doNotVerifyTLS",
+    disableTlsVerification: "doNotVerifyTLS",
   },
 };
 

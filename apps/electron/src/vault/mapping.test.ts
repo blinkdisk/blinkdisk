@@ -50,7 +50,7 @@ describe("mapConfigFields", () => {
       bucket: "my-bucket",
       region: "us-east-1",
       disableTls: true,
-      disableSsl: false,
+      disableTlsVerification: false,
     });
 
     expect(result).toEqual({

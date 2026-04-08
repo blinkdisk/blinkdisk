@@ -139,7 +139,7 @@
         "disableTls": {
           "label": "Disable TLS"
         },
-        "disableSsl": {
+        "disableTlsVerification": {
           "label": "Disable SSL Verification"
         }
       }
@@ -179,7 +179,7 @@
         "disableTls": {
           "label": "Disable TLS"
         },
-        "disableSsl": {
+        "disableTlsVerification": {
           "label": "Disable SSL Verification"
         }
       }

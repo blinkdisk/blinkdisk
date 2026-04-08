@@ -91,8 +91,10 @@ export function S3CompatibleForm({
       <form.AppField name="disableTls">
         {(field) => <field.Switch label={{ title: t("disableTls.label") }} />}
       </form.AppField>
-      <form.AppField name="disableSsl">
-        {(field) => <field.Switch label={{ title: t("disableSsl.label") }} />}
+      <form.AppField name="disableTlsVerification">
+        {(field) => (
+          <field.Switch label={{ title: t("disableTlsVerification.label") }} />
+        )}
       </form.AppField>
       <CreateVaultAlerts form={form} action={action} />
       <ProviderSubmitButton action={action} form={form} />
