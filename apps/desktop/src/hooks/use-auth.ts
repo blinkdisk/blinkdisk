@@ -43,15 +43,6 @@ export function useAuth() {
       if (!local && !session) throw new Error("Failed to get session");
 
       if (!local) {
-        await window.electron.store.set(
-          `accounts.${session?.user.id}.active`,
-          true,
-        );
-
-        // We need to make sure all vaults are started,
-        // maybe the account was inactive.
-        await window.electron.vault.start.all();
-
         // End the last session
         posthog.reset();
         // Start a new session
@@ -103,14 +94,7 @@ export function useAuth() {
   );
 
   const logout = useCallback(async () => {
-    if (account) {
-      await window.electron.auth.logout();
-
-      await window.electron.store.set(
-        `accounts.${account?.user.id}.active`,
-        false,
-      );
-    }
+    if (account) await window.electron.auth.logout();
 
     const { data: remainingSessions } =
       await window.electron.auth.session.list();

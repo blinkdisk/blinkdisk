@@ -171,9 +171,6 @@ const api = {
           ReturnType<typeof getPasswordCache>
         >,
     },
-    start: {
-      all: () => ipcRenderer.invoke("vault.start.all"),
-    },
     restore: {
       single: (payload: Parameters<typeof restoreSingle>[0]) =>
         ipcRenderer.invoke("vault.restore.single", payload) as Promise<

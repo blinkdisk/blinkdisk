@@ -8,6 +8,7 @@ import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { initAccountCollections } from "@electron/db";
 import { store } from "@electron/store";
+import { syncVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
 import {
   inferAdditionalFields,
@@ -97,18 +98,28 @@ export async function openAuth() {
 export async function logout() {
   const session = await getSession();
   if (!session.data) throw new Error("No session found");
+
+  store.set(`accounts.${session.data.user.id}.active`, false);
+
   return await authClient.revokeSession({ token: session.data?.session.token });
 }
 
 export async function authenticateToken({ token }: { token: string }) {
-  const res = await authClient.authenticate({
+  const { data, error } = await authClient.authenticate({
     token,
   });
 
-  if (res.error) throw new Error(res.error.message);
+  if (error) throw new Error(error.message);
 
-  await initAccountCollections(res.data.user.id);
+  await initAccountCollections(data.user.id);
+
+  store.set(`accounts.${data?.user.id}.active`, true);
+
+  // We need to sync all vaults as the
+  // account may have been inactive before
+  await syncVaults();
 
   sendWindow("auth.onAccountAdd");
-  return res;
+
+  return data;
 }

@@ -137,7 +137,7 @@ export async function connectVault({
   }
 }
 
-export async function startAllVaults() {
+export async function syncVaults() {
   const accounts = getAccountCache();
 
   for (const [accountId, collection] of Object.entries(collections)) {

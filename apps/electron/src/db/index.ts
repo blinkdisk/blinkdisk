@@ -4,6 +4,7 @@ import { setupSignalDBMain } from "@blinkdisk/signaldb-electron/main";
 import { getAccountCache } from "@electron/cache";
 import { SchemaCollection } from "@electron/db/schema";
 import { globalAccountDirectory } from "@electron/path";
+import { syncVaults } from "@electron/vault/manage";
 import createFilesystemAdapter from "@signaldb/fs";
 import { ipcMain } from "electron";
 import { existsSync, mkdirSync } from "node:fs";
@@ -76,6 +77,14 @@ export async function initAccountCollections(accountId: string) {
 
   bridge.addCollection(vault, { name: `${accountId}/vault` });
   bridge.addCollection(config, { name: `${accountId}/config` });
+
+  function onChange() {
+    syncVaults();
+  }
+
+  vault.on("added", onChange);
+  vault.on("changed", onChange);
+  vault.on("removed", onChange);
 
   collections[accountId] = { vault, config };
 }
