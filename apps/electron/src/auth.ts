@@ -125,7 +125,8 @@ export async function logout(accountId: string) {
       },
     });
 
-  store.delete(`accounts.${accountId}`);
+  store.set(`accounts.${accountId}.active`, false);
+  store.set(`accounts.${accountId}.secret`, null);
 }
 
 export async function authenticateToken({ token }: { token: string }) {
@@ -138,10 +139,9 @@ export async function authenticateToken({ token }: { token: string }) {
   const accountId = data?.user?.id;
   if (!accountId) throw new Error("No account ID found");
 
-  await initAccountCollections(accountId);
+  store.set(`accounts.${accountId}.active`, true);
 
-  if (!store.get(`accounts.${accountId}`))
-    store.set(`accounts.${accountId}`, {});
+  await initAccountCollections(accountId);
 
   sendWindow("auth.onAccountAdd", {
     accountId,

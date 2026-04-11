@@ -7,8 +7,10 @@ export type AccountCacheWithId = AccountStorageType & {
 export function getAccountCache() {
   const accounts = store.get("accounts") || {};
 
-  return Object.entries(accounts).map(([id, account]) => ({
-    id,
-    ...account,
-  })) as AccountCacheWithId[];
+  return Object.entries(accounts)
+    .map(([id, account]) => ({
+      id,
+      ...account,
+    }))
+    .filter((a) => !!a.active) as AccountCacheWithId[];
 }

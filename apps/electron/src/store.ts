@@ -23,6 +23,7 @@ export type GlobalStorageType = {
 };
 
 export type AccountStorageType = {
+  active: boolean;
   lastUsedVaultId?: string | null;
   session?: {
     id: string;
