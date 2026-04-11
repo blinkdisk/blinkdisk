@@ -11,7 +11,7 @@ export function useUpdatePreferences(onSuccess: () => void) {
 
   const { setTheme } = useTheme();
   const { queryKeys } = useQueryKey();
-  const { isOnlineAccount } = useAccountId();
+  const { isOnlineAccount, accountId } = useAccountId();
 
   return useMutation({
     mutationKey: ["user", "preferences"],
@@ -19,9 +19,10 @@ export function useUpdatePreferences(onSuccess: () => void) {
       setTheme(values.theme);
       i18n.changeLanguage(values.language);
 
-      if (isOnlineAccount) {
+      if (isOnlineAccount && accountId) {
         const { error } = await window.electron.auth.user.update({
           language: values.language,
+          id: accountId,
         });
 
         if (error) throw error;

@@ -1,5 +1,3 @@
-import type { getSession } from "@blinkdisk/electron/auth";
-import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -8,11 +6,16 @@ import { useNavigate } from "@tanstack/react-router";
 import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
+import { useAccountList } from "./queries/use-account-list";
+import { useAccountId } from "./use-account-id";
 
 export function useAuth() {
   const navigate = useNavigate();
   const posthog = usePostHog();
   const queryClient = useQueryClient();
+
+  const { accounts } = useAccountList();
+  const { accountId } = useAccountId();
   const { queryKeys } = useQueryKey();
   const { openAuthDialog } = useAuthDialog();
 
@@ -21,86 +24,53 @@ export function useAuth() {
     false,
   );
 
-  const { data: account } = useAccount({
-    enabled: authenticated,
-  });
-
   const addAccount = useCallback(async () => {
     openAuthDialog();
   }, [openAuthDialog]);
 
   const accountChanged = useCallback(
-    async (
-      local: boolean,
-      session?: Awaited<ReturnType<typeof getSession>>["data"],
-    ) => {
-      if (!local && !session) {
-        const { data, error } = await window.electron.auth.session.get();
-        if (error || !data) return;
-        session = data;
-      }
-
-      if (!local && !session) throw new Error("Failed to get session");
+    async (accountId: string) => {
+      const local = accountId === LOCAL_ACCOUNT_ID;
 
       if (!local) {
         // End the last session
         posthog.reset();
         // Start a new session
-        posthog.identify(session!.user.id);
+        posthog.identify(accountId);
       }
 
-      await window.electron.store.set(
-        "currentAccountId",
-        local ? LOCAL_ACCOUNT_ID : session!.user.id,
-      );
+      await window.electron.store.set("currentAccountId", accountId);
 
       await queryClient.invalidateQueries({
         queryKey: queryKeys.account.detail(),
       });
-
-      return session;
     },
     [queryClient, queryKeys, posthog],
   );
 
   const selectAccount = useCallback(
-    async (sessionToken: string) => {
-      if (sessionToken !== LOCAL_ACCOUNT_ID) {
-        const { data, error } = await window.electron.auth.session.set({
-          sessionToken,
-        });
+    async (accountId: string) => {
+      navigate({ to: "/{-$accountId}/loading" });
 
-        if (error || !data) throw error;
+      await accountChanged(accountId);
 
-        navigate({ to: "/{-$accountId}/loading" });
-
-        const session = await accountChanged(false, data);
-        if (!session) return;
-
-        navigate({
-          to: "/{-$accountId}",
-          params: { accountId: session.user.id },
-        });
-      } else {
-        await accountChanged(true);
-
-        navigate({
-          to: "/{-$accountId}",
-          params: { accountId: LOCAL_ACCOUNT_ID },
-        });
-      }
+      navigate({
+        to: "/{-$accountId}",
+        params: { accountId },
+      });
     },
     [accountChanged, navigate],
   );
 
   const logout = useCallback(async () => {
-    if (account) await window.electron.auth.logout();
+    if (accountId) await window.electron.auth.logout(accountId);
 
-    const { data: remainingSessions } =
-      await window.electron.auth.session.list();
+    const remainingSessions = accounts.filter(
+      (account) => account.id !== accountId,
+    );
 
     if (remainingSessions?.length && remainingSessions[0]) {
-      selectAccount(remainingSessions[0].session.token);
+      selectAccount(remainingSessions[0].id);
     } else {
       await window.electron.store.set("currentAccountId", null);
       setAuthenticated(false);
@@ -110,7 +80,7 @@ export function useAuth() {
         params: { accountId: LOCAL_ACCOUNT_ID },
       });
     }
-  }, [navigate, account, selectAccount, setAuthenticated]);
+  }, [navigate, accountId, accounts, selectAccount, setAuthenticated]);
 
   return {
     logout,

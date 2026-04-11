@@ -6,10 +6,8 @@ import { useMemo } from "react";
 
 type AccountPreviewProps = {
   account?: {
-    user: {
-      name: string;
-      email: string;
-    };
+    name: string | null | undefined;
+    email: string | null | undefined;
   } | null;
   local?: boolean;
 };
@@ -18,7 +16,7 @@ export function AccountPreview({ account, local }: AccountPreviewProps) {
   const { t } = useAppTranslation("auth.account");
 
   const initials = useMemo(() => {
-    return account?.user.name
+    return (account?.name || "")
       .split(" ")
       .slice(0, 2)
       .map((p) => p[0])
@@ -36,8 +34,8 @@ export function AccountPreview({ account, local }: AccountPreviewProps) {
         <span className="truncate text-[0.875rem] font-semibold">
           {local ? (
             t("local.name")
-          ) : account?.user ? (
-            account.user.name
+          ) : account?.name ? (
+            account.name
           ) : (
             <Skeleton width={130} />
           )}
@@ -45,8 +43,8 @@ export function AccountPreview({ account, local }: AccountPreviewProps) {
         <span className="truncate text-xs">
           {local ? (
             t("local.description")
-          ) : account?.user ? (
-            account.user.email
+          ) : account?.email ? (
+            account.email
           ) : (
             <Skeleton width={100} />
           )}

@@ -97,7 +97,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
               <AccountSelectDropdown>
                 <SidebarMenuButton size="lg">
                   <AccountPreview
-                    account={session}
+                    account={session?.user}
                     local={isLocalAccount || false}
                   />
                 </SidebarMenuButton>

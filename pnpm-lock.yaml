@@ -401,6 +401,9 @@ importers:
       p-limit:
         specifier: ^7.1.0
         version: 7.1.0
+      set-cookie-parser:
+        specifier: ^3.1.0
+        version: 3.1.0
       tough-cookie:
         specifier: ^5.1.2
         version: 5.1.2
@@ -10169,7 +10172,7 @@ packages:
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
       rou3: 0.7.12
-      set-cookie-parser: 3.0.1
+      set-cookie-parser: 3.1.0
       zod: 4.3.6
     dev: false
 
@@ -17573,8 +17576,8 @@ packages:
       - supports-color
     dev: false
 
-  /set-cookie-parser@3.0.1:
-    resolution: {integrity: sha512-n7Z7dXZhJbwuAHhNzkTti6Aw9QDDjZtm3JTpTGATIdNzdQz5GuFs22w90BcvF4INfnrL5xrX3oGsuqO5Dx3A1Q==}
+  /set-cookie-parser@3.1.0:
+    resolution: {integrity: sha512-kjnC1DXBHcxaOaOXBHBeRtltsDG2nUiUni+jP92M9gYdW12rsmx92UsfpH7o5tDRs7I1ZZPSQJQGv3UaRfCiuw==}
     dev: false
 
   /set-function-length@1.2.2:

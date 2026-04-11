@@ -26,7 +26,7 @@ export function AccountSelectDropdown({
 
   const { accountId } = useAccountId();
   const { addAccount, selectAccount } = useAuth();
-  const { data: accounts, isPending } = useAccountList();
+  const { accounts } = useAccountList();
 
   return (
     <DropdownMenu>
@@ -46,19 +46,16 @@ export function AccountSelectDropdown({
             <AccountPreview local />
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        {isPending || accounts?.length ? <DropdownMenuSeparator /> : null}
+        {accounts?.length ? <DropdownMenuSeparator /> : null}
         <DropdownMenuGroup>
-          {(!isPending ? accounts : new Array(2).fill(undefined))?.map(
-            (
-              account: Exclude<typeof accounts, undefined>[number] | undefined,
-              index,
-            ) => (
+          {accounts.map(
+            (account: Exclude<typeof accounts, undefined>[number], index) => (
               <DropdownMenuItem
-                key={account ? account.user.id : index}
+                key={account ? account.id : index}
                 onClick={() =>
                   account &&
-                  account.user.id !== accountId &&
-                  selectAccount(account.session.token)
+                  account.id !== accountId &&
+                  selectAccount(account.id)
                 }
               >
                 <AccountPreview account={account} />

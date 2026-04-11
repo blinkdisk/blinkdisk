@@ -1,10 +1,8 @@
 import {
   authenticateToken,
   getSession,
-  listSessions,
   logout,
   openAuth,
-  setSession,
   updateUser,
 } from "@electron/auth";
 import { readClipboard } from "@electron/clipboard";
@@ -97,11 +95,9 @@ ipcMain.handle("update.install", () => installUpdate());
 ipcMain.handle("clipboard.read", () => readClipboard());
 
 ipcMain.handle("auth.open", () => openAuth());
-ipcMain.handle("auth.logout", () => logout());
+ipcMain.handle("auth.logout", (_, accountId) => logout(accountId));
 ipcMain.handle("auth.token", (_, payload) => authenticateToken(payload));
 ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
-ipcMain.handle("auth.session.list", () => listSessions());
-ipcMain.handle("auth.session.get", () => getSession());
-ipcMain.handle("auth.session.set", (_, payload) => setSession(payload));
+ipcMain.handle("auth.session.get", (_, accountId) => getSession(accountId));
 
 ipcMain.handle("sync.account", (_, accountId) => syncAccount(accountId));

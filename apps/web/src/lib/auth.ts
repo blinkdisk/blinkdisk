@@ -7,7 +7,6 @@ import {
 import {
   inferAdditionalFields,
   magicLinkClient,
-  multiSessionClient,
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
@@ -24,7 +23,6 @@ export const authClient = createAuthClient({
       clientID: ELECTRON_CLIENT_ID,
     }) as Omit<ReturnType<typeof electronProxyClient>, "$InferServerPlugin">,
     magicLinkClient(),
-    multiSessionClient(),
     inferAdditionalFields({
       user: {
         language: {

@@ -9,8 +9,7 @@ export function useQueryKey() {
     const keys = {
       account: {
         all: ["account"],
-        list: () => [...keys.account.all, "list"],
-        detail: () => [...keys.account.all],
+        detail: (accountId?: string) => [...keys.account.all, accountId],
       },
       space: [accountId, "space"],
       vault: {

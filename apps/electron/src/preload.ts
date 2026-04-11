@@ -13,10 +13,8 @@ setupSignalDBPreload(ipcRenderer, contextBridge);
 import type {
   authenticateToken,
   getSession,
-  listSessions,
   logout,
   openAuth,
-  setSession,
   updateUser,
 } from "@electron/auth";
 import type { readClipboard } from "@electron/clipboard";
@@ -217,8 +215,10 @@ const api = {
   auth: {
     open: () =>
       ipcRenderer.invoke("auth.open") as Promise<ReturnType<typeof openAuth>>,
-    logout: () =>
-      ipcRenderer.invoke("auth.logout") as Promise<ReturnType<typeof logout>>,
+    logout: (accountId: string) =>
+      ipcRenderer.invoke("auth.logout", accountId) as Promise<
+        ReturnType<typeof logout>
+      >,
     token: (payload: Parameters<typeof authenticateToken>[0]) =>
       ipcRenderer.invoke("auth.token", payload) as Promise<
         ReturnType<typeof authenticateToken>
@@ -230,20 +230,12 @@ const api = {
         >,
     },
     session: {
-      list: () =>
-        ipcRenderer.invoke("auth.session.list") as Promise<
-          ReturnType<typeof listSessions>
-        >,
-      get: () =>
-        ipcRenderer.invoke("auth.session.get") as Promise<
+      get: (accountId: string) =>
+        ipcRenderer.invoke("auth.session.get", accountId) as Promise<
           ReturnType<typeof getSession>
         >,
-      set: (payload: Parameters<typeof setSession>[0]) =>
-        ipcRenderer.invoke("auth.session.set", payload) as Promise<
-          ReturnType<typeof setSession>
-        >,
     },
-    onAccountAdd: listener<{ token: string }>("auth.onAccountAdd"),
+    onAccountAdd: listener<{ accountId: string }>("auth.onAccountAdd"),
   },
   sync: {
     account: (payload: Parameters<typeof syncAccount>[0]) =>
