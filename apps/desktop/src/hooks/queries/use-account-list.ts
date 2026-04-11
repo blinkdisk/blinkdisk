@@ -13,7 +13,7 @@ export function useAccountList() {
     if (!accountStorage) return [];
 
     return Object.entries(accountStorage)
-      .filter(([id, account]) => id !== LOCAL_ACCOUNT_ID && !!account.active)
+      .filter(([id]) => id !== LOCAL_ACCOUNT_ID)
       .map(([accountId, account]) => ({
         id: accountId,
         name: account.data?.name,

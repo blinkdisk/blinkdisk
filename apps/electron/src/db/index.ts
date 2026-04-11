@@ -5,7 +5,7 @@ import { getAccountCache } from "@electron/cache";
 import { SchemaCollection } from "@electron/db/schema";
 import { log } from "@electron/log";
 import { globalAccountDirectory } from "@electron/path";
-import { syncVaults } from "@electron/vault/manage";
+import { initVaults } from "@electron/vault/manage";
 import createFilesystemAdapter from "@signaldb/fs";
 import { ipcMain } from "electron";
 import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
@@ -24,7 +24,6 @@ export async function setupCollections() {
   const accounts = getAccountCache();
 
   for (const account of accounts) {
-    if (!account.active) continue;
     await initAccountCollections(account.id);
   }
 }
@@ -85,11 +84,12 @@ export async function initAccountCollections(accountId: string) {
   bridge.addCollection(config, { name: configName });
 
   function onChange() {
-    syncVaults();
+    initVaults();
   }
 
   vault.on("added", onChange);
-  vault.on("changed", onChange);
+  vault.on("updateOne", onChange);
+  vault.on("updateMany", onChange);
   vault.on("removed", onChange);
 
   if (accountId !== LOCAL_ACCOUNT_ID) {

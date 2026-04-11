@@ -51,14 +51,9 @@ export function useDeleteVault({ onSuccess }: { onSuccess?: () => void }) {
     },
     onError: showErrorToast,
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.vault.all,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.space,
-        }),
-      ]);
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.space,
+      });
 
       onSuccess?.();
     },

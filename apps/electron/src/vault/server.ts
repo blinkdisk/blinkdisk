@@ -166,7 +166,7 @@ function migratePasswordFile(id: string) {
 }
 
 function logFormatted(id: string, data: string) {
-  if (!app.isPackaged) return console.log(`[${id}] ${data}`);
+  if (!app.isPackaged) return console.info(`[${id}] ${data}`);
   log.info(`[${id}] ${data}`);
 }
 

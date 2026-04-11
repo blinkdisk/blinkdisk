@@ -137,27 +137,23 @@ export async function connectVault({
   }
 }
 
-export async function syncVaults() {
+export async function initVaults() {
   const accounts = getAccountCache();
+
+  const activeVaultIds: string[] = [];
 
   for (const [accountId, collection] of Object.entries(collections)) {
     const isLocalAccount = accountId === LOCAL_ACCOUNT_ID;
 
     const account = accounts.find((account) => account.id === accountId);
 
-    if (!isLocalAccount && !account) {
-      log.error(`Account ${accountId} not found, skipping.`);
-      continue;
-    }
+    if (!isLocalAccount && !account) continue;
 
-    if (!isLocalAccount && !account?.active) {
-      log.info(`Account ${accountId} is not active, skipping.`);
-      continue;
-    }
-
-    const vaultCache = collection.vault.find().fetch();
+    const vaultCache = collection.vault.find({ status: "ACTIVE" }).fetch();
 
     for (const vault of vaultCache) {
+      activeVaultIds.push(vault.id);
+
       // Already running
       if (vaults[vault.id]) continue;
 
@@ -167,6 +163,11 @@ export async function syncVaults() {
         server: await startVaultServer(vault.id),
       };
     }
+  }
+
+  for (const vaultId of Object.keys(vaults)) {
+    if (activeVaultIds.includes(vaultId)) continue;
+    stopVault(vaultId);
   }
 }
 

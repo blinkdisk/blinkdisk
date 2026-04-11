@@ -6,11 +6,10 @@ import {
 } from "@blinkdisk/constants/auth";
 import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { initAccountCollections } from "@electron/db";
 import { AccountStorageType, store } from "@electron/store";
-import { syncVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
-import { tryCatch } from "@utils/try-catch";
 import {
   inferAdditionalFields,
   magicLinkClient,
@@ -126,7 +125,7 @@ export async function logout(accountId: string) {
       },
     });
 
-  store.set(`accounts.${accountId}.active`, false);
+  store.delete(`accounts.${accountId}`);
 }
 
 export async function authenticateToken({ token }: { token: string }) {
@@ -141,11 +140,8 @@ export async function authenticateToken({ token }: { token: string }) {
 
   await initAccountCollections(accountId);
 
-  store.set(`accounts.${accountId}.active`, true);
-
-  // We need to sync all vaults as the
-  // account may have been inactive before
-  await syncVaults();
+  if (!store.get(`accounts.${accountId}`))
+    store.set(`accounts.${accountId}`, {});
 
   sendWindow("auth.onAccountAdd", {
     accountId,

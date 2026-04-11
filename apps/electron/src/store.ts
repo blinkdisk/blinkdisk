@@ -1,4 +1,5 @@
 import { EncryptedString } from "@electron/encryption";
+import { initVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
 import { app } from "electron";
 import Store from "electron-store";
@@ -22,7 +23,6 @@ export type GlobalStorageType = {
 };
 
 export type AccountStorageType = {
-  active: boolean;
   lastUsedVaultId?: string | null;
   session?: {
     id: string;
@@ -136,4 +136,13 @@ export const store = new Store({
 
 store.onDidAnyChange(() => {
   sendWindow("store.change");
+});
+
+store.onDidChange("accounts", (newValue, oldValue) => {
+  if (
+    !newValue ||
+    !oldValue ||
+    Object.keys(oldValue).length !== Object.keys(newValue).length
+  )
+    initVaults();
 });

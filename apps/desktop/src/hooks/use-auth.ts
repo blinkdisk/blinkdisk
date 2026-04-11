@@ -63,6 +63,10 @@ export function useAuth() {
   );
 
   const logout = useCallback(async () => {
+    await navigate({
+      to: "/{-$accountId}/loading",
+    });
+
     if (accountId) await window.electron.auth.logout(accountId);
 
     const remainingSessions = accounts.filter(

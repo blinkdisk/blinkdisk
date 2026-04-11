@@ -8,8 +8,10 @@ export type VaultItem = ZVaultType;
 export function useVault(vaultId?: string) {
   const { vaultId: defaultVaultId } = useVaultId();
 
-  const data = useAccountReactivity((accountId) =>
-    getVaultCollection(accountId).findOne({ id: vaultId || defaultVaultId }),
+  const data = useAccountReactivity(
+    (accountId) =>
+      getVaultCollection(accountId).findOne({ id: vaultId || defaultVaultId }),
+    [vaultId, defaultVaultId],
   );
 
   return { data };
