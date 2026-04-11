@@ -1,5 +1,6 @@
 import { store } from "@electron/store";
 import { captureException } from "@sentry/electron/main";
+import { SessionResponse } from "better-auth/client";
 import { safeStorage, session } from "electron";
 import { storeToken } from "./auth";
 import { log } from "./log";
@@ -90,9 +91,9 @@ async function migrateAuthV2() {
 
       if (!res.ok) continue;
 
-      const data = await res.json();
+      const data = (await res.json()) as SessionResponse;
 
-      const accountId = data?.user.id;
+      const accountId = data?.user?.id;
       if (!accountId) continue;
 
       storeToken(accountId, cookie.value);

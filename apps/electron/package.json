@@ -47,7 +47,6 @@
     "electron-store": "^10.0.1",
     "electron-updater": "^6.6.2",
     "get-folder-size": "^5.0.0",
-    "node-fetch": "^3.3.2",
     "p-limit": "^7.1.0",
     "set-cookie-parser": "^3.1.0",
     "tough-cookie": "^5.1.2",
