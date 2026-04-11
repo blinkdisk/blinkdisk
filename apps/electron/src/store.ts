@@ -140,10 +140,18 @@ store.onDidAnyChange(() => {
 });
 
 store.onDidChange("accounts", (newValue, oldValue) => {
-  if (
-    !newValue ||
-    !oldValue ||
-    Object.keys(oldValue).length !== Object.keys(newValue).length
-  )
+  if (!newValue || !oldValue) {
     initVaults();
+    return;
+  }
+
+  const oldActiveCount = Object.values(oldValue).filter(
+    (a) => !!a.active,
+  ).length;
+
+  const newActiveCount = Object.values(oldValue).filter(
+    (a) => !!a.active,
+  ).length;
+
+  if (oldActiveCount !== newActiveCount) initVaults();
 });
