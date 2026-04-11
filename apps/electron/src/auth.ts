@@ -122,6 +122,9 @@ export async function authenticateToken({ token }: { token: string }) {
 
   if (error) throw new Error(error.message);
 
+  // Update the cached sessions
+  await listSessions();
+
   await initAccountCollections(data.user.id);
 
   store.set(`accounts.${data?.user.id}.active`, true);
