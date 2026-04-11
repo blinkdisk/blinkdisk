@@ -13,10 +13,12 @@ export async function runMigrations() {
 
 async function migrateAuthV1() {
   if (store.get("migrations.auth_v1")) return;
-  if (store.get("auth.cookie")) {
+
+  function complete() {
     store.set("migrations.auth_v1", true);
-    return;
   }
+
+  if (store.get("auth.cookie")) return complete();
 
   const cookies = await session.defaultSession.cookies.get({});
 
@@ -24,10 +26,7 @@ async function migrateAuthV1() {
     c.name.startsWith("__Secure-blinkdisk.session_token"),
   );
 
-  if (sessionCookies.length === 0) {
-    store.set("migrations.auth_v1", true);
-    return;
-  }
+  if (sessionCookies.length === 0) return complete();
 
   const cookieData: Record<string, { value: string; expires: string }> = {};
 
@@ -49,5 +48,6 @@ async function migrateAuthV1() {
     .toString("base64");
 
   store.set("auth.cookie", encrypted);
-  store.set("migrations.auth_v1", true);
+
+  complete();
 }
