@@ -4,6 +4,7 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLogsnag } from "@desktop/hooks/use-logsnag";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { getVaultCollection } from "@desktop/lib/db";
+import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostHog } from "posthog-js/react";
 
@@ -20,6 +21,9 @@ export function useDeleteVault({ onSuccess }: { onSuccess?: () => void }) {
     mutationFn: async ({ vaultId }: { vaultId: string }) => {
       const vault = getVaultCollection(accountId).findOne({ id: vaultId });
       if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+
+      if (vault.provider === "CLOUDBLINK")
+        await trpc.cloudblink.deleteVault.mutate({ vaultId });
 
       getVaultCollection(accountId).updateOne(
         {
