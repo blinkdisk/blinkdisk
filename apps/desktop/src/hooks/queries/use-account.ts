@@ -11,11 +11,7 @@ export function useAccount(options?: { enabled: boolean }) {
     queryKey: queryKeys.account.detail(accountId),
     queryFn: async () => {
       if (!accountId) throw new CustomError("MISSING_REQUIRED_VALUE");
-
-      const { data, error } = await window.electron.auth.session.get(accountId);
-
-      if (error) throw error;
-      return data;
+      return await window.electron.auth.account.get(accountId);
     },
     enabled: !!isOnlineAccount && !!accountId && options?.enabled,
   });

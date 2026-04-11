@@ -7,9 +7,10 @@ import {
 import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { initAccountCollections } from "@electron/db";
-import { store } from "@electron/store";
+import { AccountStorageType, store } from "@electron/store";
 import { syncVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
+import { tryCatch } from "@utils/try-catch";
 import {
   inferAdditionalFields,
   magicLinkClient,
@@ -67,7 +68,7 @@ export const authClient = createAuthClient({
   ],
 });
 
-export async function updateUser(
+export async function updateAccount(
   user: (ZUpdateAccountType | Pick<ZUpdatePreferencesType, "language">) & {
     id: string;
   },
@@ -88,12 +89,24 @@ export async function updateUser(
   });
 }
 
-export async function getSession(accountId: string) {
-  return await authClient.getSession({
-    fetchOptions: {
-      headers: getAccountHeaders(accountId),
-    },
-  });
+export async function getAccount(accountId: string) {
+  const [res] = await tryCatch(
+    authClient.getSession({
+      fetchOptions: {
+        headers: getAccountHeaders(accountId),
+      },
+    }),
+  );
+
+  if (res?.data?.user) return res.data.user;
+
+  const cached = store.get(
+    `accounts.${accountId}.data`,
+  ) as AccountStorageType["data"];
+
+  if (cached) return cached;
+
+  return null;
 }
 
 export async function openAuth() {

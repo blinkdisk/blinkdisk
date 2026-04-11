@@ -5,29 +5,24 @@ import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useMemo } from "react";
 
 export function useUpdateAccountForm() {
-  const { data: session } = useAccount();
+  const { data: account } = useAccount();
   const { mutateAsync } = useUpdateAccount(() => form.reset());
 
-  const user = useMemo(() => {
-    if (!session) return null;
-    return session.user;
-  }, [session]);
-
   const [firstName, lastName] = useMemo(() => {
-    if (!user) return [null, null];
-    const parts = user.name.split(" ");
+    if (!account) return [null, null];
+    const parts = account.name.split(" ");
 
     return [parts[0] ?? "", parts.length > 1 ? (parts[1] ?? "") : ""] as [
       string,
       string,
     ];
-  }, [user]);
+  }, [account]);
 
   const form = useAppForm({
     defaultValues: {
       firstName: firstName || "",
       lastName: lastName || "",
-      email: user?.email || "",
+      email: account?.email || "",
     },
     validators: {
       onSubmit: ZUpdateAccount,

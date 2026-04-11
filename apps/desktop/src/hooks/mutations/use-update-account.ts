@@ -15,7 +15,7 @@ export function useUpdateAccount(onSuccess: () => void) {
     mutationFn: async (values: ZUpdateAccountType) => {
       if (!accountId) throw new CustomError("MISSING_REQUIRED_VALUE");
 
-      const { data, error } = await window.electron.auth.user.update({
+      const { data, error } = await window.electron.auth.account.update({
         ...values,
         id: accountId,
       });

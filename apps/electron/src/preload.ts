@@ -12,10 +12,10 @@ setupSignalDBPreload(ipcRenderer, contextBridge);
 
 import type {
   authenticateToken,
-  getSession,
+  getAccount,
   logout,
   openAuth,
-  updateUser,
+  updateAccount,
 } from "@electron/auth";
 import type { readClipboard } from "@electron/clipboard";
 import type { syncAccount } from "@electron/db/sync";
@@ -223,16 +223,14 @@ const api = {
       ipcRenderer.invoke("auth.token", payload) as Promise<
         ReturnType<typeof authenticateToken>
       >,
-    user: {
-      update: (payload: Parameters<typeof updateUser>[0]) =>
-        ipcRenderer.invoke("auth.user.update", payload) as Promise<
-          ReturnType<typeof updateUser>
+    account: {
+      update: (payload: Parameters<typeof updateAccount>[0]) =>
+        ipcRenderer.invoke("auth.account.update", payload) as Promise<
+          ReturnType<typeof updateAccount>
         >,
-    },
-    session: {
       get: (accountId: string) =>
-        ipcRenderer.invoke("auth.session.get", accountId) as Promise<
-          ReturnType<typeof getSession>
+        ipcRenderer.invoke("auth.account.get", accountId) as Promise<
+          ReturnType<typeof getAccount>
         >,
     },
     onAccountAdd: listener<{ accountId: string }>("auth.onAccountAdd"),

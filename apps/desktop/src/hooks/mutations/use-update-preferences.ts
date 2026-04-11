@@ -20,7 +20,7 @@ export function useUpdatePreferences(onSuccess: () => void) {
       i18n.changeLanguage(values.language);
 
       if (isOnlineAccount && accountId) {
-        const { error } = await window.electron.auth.user.update({
+        const { error } = await window.electron.auth.account.update({
           language: values.language,
           id: accountId,
         });

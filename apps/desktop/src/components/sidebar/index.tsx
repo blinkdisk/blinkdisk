@@ -26,7 +26,7 @@ import { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount } = useAccountId();
-  const { data: session } = useAccount();
+  const { data: account } = useAccount();
   const { data: folders } = useFolderList();
 
   const { accountId, vaultId, hostName, userName } = useParams({
@@ -97,7 +97,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
               <AccountSelectDropdown>
                 <SidebarMenuButton size="lg">
                   <AccountPreview
-                    account={session?.user}
+                    account={account}
                     local={isLocalAccount || false}
                   />
                 </SidebarMenuButton>

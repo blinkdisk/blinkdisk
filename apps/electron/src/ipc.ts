@@ -1,9 +1,9 @@
 import {
   authenticateToken,
-  getSession,
+  getAccount,
   logout,
   openAuth,
-  updateUser,
+  updateAccount,
 } from "@electron/auth";
 import { readClipboard } from "@electron/clipboard";
 import { syncAccount } from "@electron/db/sync";
@@ -97,7 +97,7 @@ ipcMain.handle("clipboard.read", () => readClipboard());
 ipcMain.handle("auth.open", () => openAuth());
 ipcMain.handle("auth.logout", (_, accountId) => logout(accountId));
 ipcMain.handle("auth.token", (_, payload) => authenticateToken(payload));
-ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
-ipcMain.handle("auth.session.get", (_, accountId) => getSession(accountId));
+ipcMain.handle("auth.account.update", (_, payload) => updateAccount(payload));
+ipcMain.handle("auth.account.get", (_, accountId) => getAccount(accountId));
 
 ipcMain.handle("sync.account", (_, accountId) => syncAccount(accountId));
