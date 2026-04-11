@@ -12,7 +12,9 @@ export type CustomErrorCode =
   | "MISSING_REQUIRED_VALUE"
   | "INVALID_ID"
   | "INVALID_PASSWORD"
-  | "INCORRECT_VAULT";
+  | "INCORRECT_VAULT"
+  | "INCORRECT_CONFIG"
+  | "CONFIG_NOT_FOUND";
 
 export class CustomError extends Error {
   code: CustomErrorCode;

@@ -6,12 +6,6 @@ export const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpLink({
       url: `${process.env.API_URL}/trpc`,
-      // fetch(url, options) {
-      //   return fetch(url, {
-      //     ...options,
-      //     credentials: "include",
-      //   });
-      // },
       headers: async (opts) =>
         opts.op.context.accountId
           ? {

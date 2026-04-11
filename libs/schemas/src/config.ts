@@ -18,10 +18,15 @@ export const ZConfig = z.object({
   id: ZConfigId,
   data: ZVaultEncryptedConfig,
   level: ZConfigLevel,
-  userName: ZProfileUserName.optional(),
-  hostName: ZProfileHostName.optional(),
+  userName: ZProfileUserName.nullable().optional(),
+  hostName: ZProfileHostName.nullable().optional(),
   vaultId: ZVaultId,
   createdAt: ZDateString,
 });
 
 export type ZConfigType = z.infer<typeof ZConfig>;
+
+export const ZPushConfigs = z.object({
+  added: z.array(ZConfig),
+  modified: z.array(ZConfig),
+});

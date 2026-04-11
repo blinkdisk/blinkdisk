@@ -78,7 +78,7 @@ export const ZVault = z.object({
   provider: ZProviderType,
   configLevel: ZConfigLevel,
   options: ZVaultOptions,
-  spaceId: ZVaultSpaceId.optional(),
+  spaceId: ZVaultSpaceId.nullable().optional(),
   createdAt: ZDateString,
 });
 
@@ -133,3 +133,8 @@ export const ZVaultThrottle = z.object({
 });
 
 export type ZVaultThrottleType = z.infer<typeof ZVaultThrottle>;
+
+export const ZPushVaults = z.object({
+  added: z.array(ZVault),
+  modified: z.array(ZVault),
+});

@@ -7,8 +7,10 @@ import { globalAccountDirectory } from "@electron/path";
 import { syncVaults } from "@electron/vault/manage";
 import createFilesystemAdapter from "@signaldb/fs";
 import { ipcMain } from "electron";
+import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { syncManager } from "./sync";
 
 const bridge = setupSignalDBMain(ipcMain);
 
@@ -75,8 +77,11 @@ export async function initAccountCollections(accountId: string) {
   const vault = await createVaultCollection(directory);
   const config = await createConfigCollection(directory);
 
-  bridge.addCollection(vault, { name: `${accountId}/vault` });
-  bridge.addCollection(config, { name: `${accountId}/config` });
+  const vaultName = `${accountId}/vault`;
+  const configName = `${accountId}/config`;
+
+  bridge.addCollection(vault, { name: vaultName });
+  bridge.addCollection(config, { name: configName });
 
   function onChange() {
     syncVaults();
@@ -85,6 +90,20 @@ export async function initAccountCollections(accountId: string) {
   vault.on("added", onChange);
   vault.on("changed", onChange);
   vault.on("removed", onChange);
+
+  if (accountId !== LOCAL_ACCOUNT_ID) {
+    syncManager.addCollection(vault, {
+      name: vaultName,
+      type: "VAULT",
+      accountId,
+    });
+
+    syncManager.addCollection(config, {
+      name: configName,
+      type: "CONFIG",
+      accountId,
+    });
+  }
 
   collections[accountId] = { vault, config };
 }

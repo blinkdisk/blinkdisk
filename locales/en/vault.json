@@ -33,10 +33,6 @@
     },
     "config": {
       "submit": "Continue",
-      "info": {
-        "title": "End-to-end encrypted configuration",
-        "description": "Your configuration is encrypted with AES-256 using your encryption password and securely stored on our servers."
-      },
       "validationError": {
         "title": "Failed to create vault"
       },
