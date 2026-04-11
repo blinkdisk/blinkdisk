@@ -112,6 +112,9 @@ export async function logout() {
 
   store.set(`accounts.${session.data.user.id}.active`, false);
 
+  // Update the cached sessions
+  await listSessions();
+
   return await authClient.revokeSession({ token: session.data?.session.token });
 }
 
