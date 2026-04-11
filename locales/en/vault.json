@@ -16,7 +16,8 @@
           "noSetup": "No setup required",
           "cheaper": "80% cheaper than S3"
         },
-        "button": "Continue"
+        "continue": "Continue",
+        "signIn": "Sign in"
       },
       "custom": {
         "title": "Custom storage provider",

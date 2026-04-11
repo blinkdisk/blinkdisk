@@ -9,8 +9,11 @@ import {
   CardTitle,
 } from "@blinkdisk/ui/card";
 import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
+import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { formatSize } from "@desktop/lib/number";
 import { CheckIcon, ExternalLinkIcon, XIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export type CreateVaultVariantProps = {
   selectCloud: () => void;
@@ -22,6 +25,16 @@ export function CreateVaultVariant({
   selectCustom,
 }: CreateVaultVariantProps) {
   const { t } = useAppTranslation("vault.createDialog.variant");
+  const { isOnlineAccount } = useAccountId();
+  const { openAuthDialog } = useAuthDialog();
+  const waitingForAuth = useRef(false);
+
+  useEffect(() => {
+    if (waitingForAuth.current && isOnlineAccount) {
+      waitingForAuth.current = false;
+      selectCloud();
+    }
+  }, [isOnlineAccount, selectCloud]);
 
   return (
     <div className="mt-8 flex flex-col gap-5">
@@ -31,7 +44,7 @@ export function CreateVaultVariant({
           <Button
             variant="ghost"
             size="sm"
-            className="text-muted-foreground"
+            className="text-muted-foreground px-3"
             onClick={() =>
               window.open(`${process.env.MARKETING_URL}/cloudblink?ref=desktop`)
             }
@@ -57,8 +70,20 @@ export function CreateVaultVariant({
           </p>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={selectCloud}>
-            {t("cloudblink.button")}
+          <Button
+            className="w-full"
+            onClick={() => {
+              if (isOnlineAccount) {
+                selectCloud();
+              } else {
+                waitingForAuth.current = true;
+                openAuthDialog();
+              }
+            }}
+          >
+            {isOnlineAccount
+              ? t("cloudblink.continue")
+              : t("cloudblink.signIn")}
           </Button>
         </CardFooter>
       </Card>
