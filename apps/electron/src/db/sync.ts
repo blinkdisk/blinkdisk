@@ -6,6 +6,7 @@ import { globalAccountDirectory } from "@electron/path";
 import { trpc } from "@electron/trpc";
 import createFilesystemAdapter from "@signaldb/fs";
 import { SyncManager } from "@signaldb/sync";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 export type SyncOptions = {
@@ -15,12 +16,12 @@ export type SyncOptions = {
 };
 
 export const syncManager = new SyncManager({
-  id: "sync-manager",
+  id: "sync",
   persistenceAdapter: (name: string) =>
     createFilesystemAdapter(
       join(
         globalAccountDirectory(),
-        `${name.replace("sync-manager-", "")}.sync.json`,
+        `${name.replace("sync-sync-", "sync-")}.json`,
       ),
     ),
   pull: async (options: SyncOptions) => {
@@ -90,4 +91,29 @@ export async function syncAccount(accountId: string) {
     syncManager.sync(`${accountId}/vault`),
     syncManager.sync(`${accountId}/config`),
   ]);
+}
+
+export function getLastSync(collectionName: string) {
+  const path = join(globalAccountDirectory(), "sync-operations.json");
+  if (!existsSync(path)) return null;
+
+  const raw = readFileSync(path, "utf8");
+  if (!raw) return null;
+
+  const operations = JSON.parse(raw) as {
+    start: string;
+    collectionName: string;
+  }[];
+  if (!operations.length) return null;
+
+  const filtered = operations.filter(
+    (op) => op.collectionName === collectionName,
+  );
+  if (!filtered.length) return null;
+
+  const sorted = filtered.sort((a, b) => {
+    return new Date(b.start).getTime() - new Date(a.start).getTime();
+  });
+
+  return sorted[0]?.start || null;
 }

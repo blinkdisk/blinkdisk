@@ -11,7 +11,7 @@ import { ipcMain } from "electron";
 import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { syncManager } from "./sync";
+import { getLastSync, syncManager } from "./sync";
 
 const bridge = setupSignalDBMain(ipcMain);
 
@@ -105,11 +105,10 @@ export async function initAccountCollections(accountId: string) {
       accountId,
     });
 
-    const vaults = vault.find().fetch();
-    const configs = config.find().fetch();
+    const lastSync = getLastSync(vaultName);
 
-    if (vaults.length === 0 && configs.length === 0) {
-      log.info(accountId, "No vaults or configs found, syncing...");
+    if (!lastSync) {
+      log.info(accountId, "not synced yet, syncing...");
       syncManager.sync(vaultName);
       syncManager.sync(configName);
     }
