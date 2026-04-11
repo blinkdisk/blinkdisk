@@ -1,5 +1,6 @@
 import { EncryptedString } from "@electron/encryption";
 import { sendWindow } from "@electron/window";
+import { BaseSession, BaseUser } from "better-auth";
 import { app } from "electron";
 import Store from "electron-store";
 import { globalConfigDirectory } from "./path";
@@ -13,6 +14,12 @@ export type GlobalStorageType = {
   passwords: {
     [vaultId: string]: EncryptedString;
   };
+  sessions:
+    | {
+        session: BaseSession;
+        user: BaseUser;
+      }[]
+    | null;
   auth: {
     // Managed by better-auth
     cookie: string;

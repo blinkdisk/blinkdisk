@@ -7,7 +7,7 @@ import {
 import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { initAccountCollections } from "@electron/db";
-import { store } from "@electron/store";
+import { GlobalStorageType, store } from "@electron/store";
 import { syncVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
 import {
@@ -16,6 +16,7 @@ import {
   multiSessionClient,
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+import { safeStorage } from "electron";
 
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
@@ -80,7 +81,17 @@ export async function updateUser(
 }
 
 export async function listSessions() {
-  return await authClient.multiSession.listDeviceSessions();
+  const sessions = await authClient.multiSession.listDeviceSessions();
+  if (sessions.data) store.set("sessions", sessions.data);
+  return sessions;
+}
+
+export async function listCachedSessions() {
+  const cached = store.get("sessions") as GlobalStorageType["sessions"];
+  if (cached) return cached;
+
+  const sessions = await listSessions();
+  return sessions.data;
 }
 
 export async function getSession() {
@@ -122,4 +133,44 @@ export async function authenticateToken({ token }: { token: string }) {
   sendWindow("auth.onAccountAdd");
 
   return data;
+}
+
+function getCookies() {
+  if (!safeStorage.isEncryptionAvailable()) return null;
+
+  const encrypted = store.get("auth.cookie") as string;
+  if (!encrypted) return null;
+
+  const decrypted = safeStorage.decryptString(Buffer.from(encrypted, "base64"));
+  if (!decrypted) return null;
+
+  const parsed = JSON.parse(decrypted);
+
+  return parsed as {
+    [name: string]: {
+      value: string;
+      expires: string;
+    };
+  };
+}
+
+export async function getAccountCookie(accountId: string) {
+  const sessions = await listCachedSessions();
+  if (!sessions) return null;
+
+  const session = sessions.find((s) => s.user.id === accountId);
+  if (!session) return null;
+
+  const cookies = getCookies();
+  if (!cookies) return null;
+
+  for (const [name, cookie] of Object.entries(cookies)) {
+    if (
+      name.toLowerCase() ===
+      `__Secure-${ELECTRON_COOKIE_PREFIX}.session_token_multi-${session.session.token}`.toLowerCase()
+    )
+      return `__Secure-${ELECTRON_COOKIE_PREFIX}.session_token=${cookie.value}`;
+  }
+
+  return null;
 }

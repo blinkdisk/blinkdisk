@@ -1,18 +1,27 @@
 import type { AppRouter } from "@blinkdisk/api/router";
-import { PROTOCOL_API_URL } from "@blinkdisk/constants/app";
 import { createTRPCProxyClient, httpLink } from "@trpc/client";
+import { authClient, getAccountCookie } from "./auth";
 
 export const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpLink({
-      url: `${PROTOCOL_API_URL}/trpc`,
+      url: `${process.env.API_URL}/trpc`,
       // fetch(url, options) {
       //   return fetch(url, {
       //     ...options,
       //     credentials: "include",
       //   });
       // },
-      // headers:(opts) => {opts.op.context}
+      headers: async (opts) =>
+        opts.op.context.accountId
+          ? {
+              Cookie:
+                (await getAccountCookie(opts.op.context.accountId as string)) ||
+                "",
+            }
+          : {
+              Cookie: authClient.getCookie(),
+            },
     }),
   ],
 });
