@@ -10,7 +10,9 @@
   },
   "selectVault": {
     "empty": "Select vault",
-    "createVault": "Create vault"
+    "createVault": "Create vault",
+    "refresh": "Refresh vaults",
+    "refreshing": "Refreshing..."
   },
   "accountMenu": {
     "account": "Account",

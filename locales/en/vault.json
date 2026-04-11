@@ -2,7 +2,8 @@
   "noVaults": {
     "title": "Create your vault",
     "description": "You haven't created any vaults yet. Get started by pressing the button below.",
-    "button": "Add vault"
+    "refresh": "Refresh vaults",
+    "add": "Add vault"
   },
   "createDialog": {
     "title": "Create new vault",
@@ -376,5 +377,9 @@
     },
     "cancel": "Cancel",
     "continue": "Delete vault"
+  },
+  "syncedToast": {
+    "title": "Successfully synced vaults",
+    "description": "Your vaults have been successfully synced."
   }
 }

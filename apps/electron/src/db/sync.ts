@@ -84,3 +84,10 @@ export const syncManager = new SyncManager({
     }
   },
 });
+
+export async function syncAccount(accountId: string) {
+  return await Promise.all([
+    syncManager.sync(`${accountId}/vault`),
+    syncManager.sync(`${accountId}/config`),
+  ]);
+}

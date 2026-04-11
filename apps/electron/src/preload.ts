@@ -20,6 +20,7 @@ import type {
   updateUser,
 } from "@electron/auth";
 import type { readClipboard } from "@electron/clipboard";
+import type { syncAccount } from "@electron/db/sync";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
@@ -243,6 +244,12 @@ const api = {
         >,
     },
     onAccountAdd: listener<{ token: string }>("auth.onAccountAdd"),
+  },
+  sync: {
+    account: (payload: Parameters<typeof syncAccount>[0]) =>
+      ipcRenderer.invoke("sync.account", payload) as Promise<
+        ReturnType<typeof syncAccount>
+      >,
   },
 };
 

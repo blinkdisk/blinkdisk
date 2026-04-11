@@ -8,6 +8,7 @@ import {
   updateUser,
 } from "@electron/auth";
 import { readClipboard } from "@electron/clipboard";
+import { syncAccount } from "@electron/db/sync";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
 import { getPasswordCache, setPasswordCache } from "@electron/password";
@@ -102,3 +103,5 @@ ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
 ipcMain.handle("auth.session.list", () => listSessions());
 ipcMain.handle("auth.session.get", () => getSession());
 ipcMain.handle("auth.session.set", (_, payload) => setSession(payload));
+
+ipcMain.handle("sync.account", (_, accountId) => syncAccount(accountId));
