@@ -1,20 +1,23 @@
+import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import {
   DEFAULT_VAULT_OPTIONS,
   LATEST_VAULT_VERSION,
 } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
+import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { removeEmptyStrings } from "@blinkdisk/utils/object";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useLogsnag } from "@desktop/hooks/use-logsnag";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { getConfigCollection, getVaultCollection } from "@desktop/lib/db";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { STORAGE_PROVIDERS } from "libs/constants/src/providers";
+import { usePostHog } from "posthog-js/react";
 
 export type CreateVaultResponse = {
   vaultId: string;
@@ -22,9 +25,11 @@ export type CreateVaultResponse = {
 
 export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
+  const posthog = usePostHog();
 
   const { accountId } = useAccountId();
   const { queryKeys } = useQueryKey();
+  const { logsnag } = useLogsnag();
 
   return useMutation({
     mutationKey: ["vault", "create"],
@@ -56,9 +61,15 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         if (validation.uniqueID) coreId = atob(validation.uniqueID);
       }
 
+      if (coreId) {
+        const existing = getVaultCollection(accountId).findOne({ coreId });
+        if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
+      }
+
       let vaultId: string;
       let cloudBlinkToken: string | undefined;
       let spaceId: string | undefined;
+
       if (provider.type === "CLOUDBLINK") {
         const [res, err] = await tryCatch(trpc.cloudblink.initVault.mutate());
         if (err) throw err;
@@ -148,6 +159,19 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       await window.electron.vault.password.set({
         vaultId,
         password: values.password,
+      });
+
+      logsnag({
+        icon: "🔒",
+        title: "Vault created",
+        description: `(${provider.type}) ${values.name} just got created.`,
+        channel: "vaults",
+      });
+
+      posthog.capture("vault_create", {
+        provider: provider.type,
+        name: values.name,
+        vaultId,
       });
 
       return { vaultId };

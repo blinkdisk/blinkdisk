@@ -15,10 +15,6 @@
     "title": "Something went wrong",
     "description": "If this error persists, please contact support@blinkdisk.com"
   },
-  "offline": {
-    "title": "You're offline",
-    "description": "Please check your internet connection and try again. BlinkDisk is not available while your device is offline."
-  },
   "INTERNAL_SERVER_ERROR": {
     "title": "Something went wrong",
     "description": "An unexpected error has occurred. If this error persists, please contact support@blinkdisk.com."

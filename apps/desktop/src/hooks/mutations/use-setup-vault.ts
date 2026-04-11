@@ -144,18 +144,41 @@ export function useSetupVault({
         password: values.password,
       });
 
-      getConfigCollection(accountId).insert({
-        id: generateId("Config"),
-        data: await window.electron.vault.config.encrypt({
-          password: values.password,
-          config: removeEmptyStrings(config),
-        }),
-        level: provider.level,
-        vaultId: values.vault.id,
-        userName: window.electron.os.userName(values.vault.id),
-        hostName: window.electron.os.hostName(values.vault.id),
-        createdAt: new Date().toISOString(),
+      const userName = window.electron.os.userName(values.vault.id);
+      const hostName = window.electron.os.hostName(values.vault.id);
+
+      const data = await window.electron.vault.config.encrypt({
+        password: values.password,
+        config: removeEmptyStrings(config),
       });
+
+      const existing = getConfigCollection(accountId).findOne({
+        vaultId: values.vault.id,
+        level: "PROFILE",
+        userName,
+        hostName,
+      });
+
+      if (existing) {
+        getConfigCollection(accountId).updateOne(
+          { id: existing.id },
+          {
+            $set: {
+              data,
+            },
+          },
+        );
+      } else {
+        getConfigCollection(accountId).insert({
+          id: generateId("Config"),
+          data,
+          level: "PROFILE",
+          vaultId: values.vault.id,
+          userName,
+          hostName,
+          createdAt: new Date().toISOString(),
+        });
+      }
     },
     onError: showErrorToast,
     onSuccess: async (_, values) => {

@@ -41,5 +41,9 @@
       "description": "Please upgrade your storage to continue using BlinkDisk."
     },
     "button": "Upgrade storage"
+  },
+  "offlineAlert": {
+    "title": "You're offline",
+    "description": "Some features may not work while your device is offline."
   }
 }
