@@ -3,6 +3,7 @@ import { ZVault, ZVaultType } from "@blinkdisk/schemas/vault";
 import { setupSignalDBMain } from "@blinkdisk/signaldb-electron/main";
 import { getAccountCache } from "@electron/cache";
 import { SchemaCollection } from "@electron/db/schema";
+import { log } from "@electron/log";
 import { globalAccountDirectory } from "@electron/path";
 import { syncVaults } from "@electron/vault/manage";
 import createFilesystemAdapter from "@signaldb/fs";
@@ -103,6 +104,15 @@ export async function initAccountCollections(accountId: string) {
       type: "CONFIG",
       accountId,
     });
+
+    const vaults = vault.find().fetch();
+    const configs = config.find().fetch();
+
+    if (vaults.length === 0 && configs.length === 0) {
+      log.info(accountId, "No vaults or configs found, syncing...");
+      syncManager.sync(vaultName);
+      syncManager.sync(configName);
+    }
   }
 
   collections[accountId] = { vault, config };

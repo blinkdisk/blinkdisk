@@ -15,10 +15,13 @@ export type SyncOptions = {
 };
 
 export const syncManager = new SyncManager({
-  id: "sync",
+  id: "sync-manager",
   persistenceAdapter: (name: string) =>
     createFilesystemAdapter(
-      join(globalAccountDirectory(), `${name}.sync.json`),
+      join(
+        globalAccountDirectory(),
+        `${name.replace("sync-manager-", "")}.sync.json`,
+      ),
     ),
   pull: async (options: SyncOptions) => {
     let items: { id: string }[] = [];
