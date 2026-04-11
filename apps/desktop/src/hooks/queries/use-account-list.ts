@@ -18,7 +18,14 @@ export function useAccountList() {
         id: accountId,
         name: account.data?.name,
         email: account.data?.email,
-      }));
+        createdAt: account.data?.createdAt,
+      }))
+      .sort((a, b) => {
+        if (!a.createdAt || !b.createdAt) return 0;
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      });
   }, [accountStorage]);
 
   return { accounts };

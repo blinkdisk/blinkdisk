@@ -5,7 +5,6 @@ import {
 } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
-import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { removeEmptyStrings } from "@blinkdisk/utils/object";
@@ -59,11 +58,6 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
         initialised = !!validation.uniqueID;
         if (validation.uniqueID) coreId = atob(validation.uniqueID);
-      }
-
-      if (coreId) {
-        const existing = getVaultCollection(accountId).findOne({ coreId });
-        if (existing) throw new CustomError("VAULT_ALREADY_EXISTS");
       }
 
       let vaultId: string;

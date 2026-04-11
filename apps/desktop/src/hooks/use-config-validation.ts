@@ -39,7 +39,9 @@ export function useConfigValidation(
 
       const vaults = getVaultCollection(accountId).find().fetch();
 
-      const existing = vaults.find((v) => v.coreId === storedId);
+      const existing = vaults.find(
+        (v) => v.coreId === storedId && v.status === "ACTIVE",
+      );
       if (existing)
         return {
           code: "VAULT_ALREADY_EXISTS",
