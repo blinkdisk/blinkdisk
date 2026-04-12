@@ -134,12 +134,6 @@
         "prefix": {
           "label": "Key prefix",
           "placeholder": "backup/"
-        },
-        "disableTls": {
-          "label": "Disable TLS"
-        },
-        "disableSsl": {
-          "label": "Disable SSL Verification"
         }
       }
     },
@@ -176,10 +170,10 @@
           "placeholder": "backup/"
         },
         "disableTls": {
-          "label": "Disable TLS"
+          "label": "Use insecure HTTP connection"
         },
-        "disableSsl": {
-          "label": "Disable SSL Verification"
+        "disableTlsVerification": {
+          "label": "Disable TLS certificate verification"
         }
       }
     },

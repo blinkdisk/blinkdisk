@@ -28,8 +28,8 @@ export const ZS3CompatibleConfig = ZS3Config.extend(
   z.object({
     region: z.string().max(128).optional(),
     disableTls: z.boolean(),
-    disableSsl: z.boolean(),
-  }).shape,
+    disableTlsVerification: z.boolean(),
+  }),
 );
 
 export type ZS3CompatibleConfigType = z.infer<typeof ZS3CompatibleConfig>;

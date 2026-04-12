@@ -28,7 +28,7 @@ export function useS3CompatibleForm({
       sessionToken: "",
       prefix: "",
       region: "",
-      disableSsl: false,
+      disableTlsVerification: false,
       disableTls: false,
       ...config,
     } as ZS3CompatibleConfigType,
