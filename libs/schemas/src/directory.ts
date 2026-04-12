@@ -7,7 +7,7 @@ export const ZRestoreDirectory = z.discriminatedUnion("type", [
       .string()
       .min(1)
       .refine((path) => path.endsWith(".zip"), {
-        message: "invalid_zip_extension",
+        error: "invalid_zip_extension",
       }),
     compress: z.boolean(),
   }),

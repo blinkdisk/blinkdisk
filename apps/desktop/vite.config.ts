@@ -57,6 +57,7 @@ export default defineConfig({
         MARKETING_URL: undefined,
         POSTHOG_KEY: null,
         SENTRY_DESKTOP_DSN: null,
+        LOGSNAG_PUBLIC_KEY: null,
       },
       {
         loadEnvFiles: false,

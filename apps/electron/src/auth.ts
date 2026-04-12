@@ -4,18 +4,19 @@ import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
 } from "@blinkdisk/constants/auth";
-import {
-  ZUpdatePreferencesType,
-  ZUpdateUserType,
-} from "@blinkdisk/schemas/settings";
-import { store } from "@electron/store";
+import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
+import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
+import { initAccountCollections } from "@electron/db";
+import { AccountStorageType, store } from "@electron/store";
 import { sendWindow } from "@electron/window";
 import {
   inferAdditionalFields,
   magicLinkClient,
-  multiSessionClient,
 } from "better-auth/client/plugins";
-import { createAuthClient } from "better-auth/react";
+import { createAuthClient, SuccessContext } from "better-auth/react";
+import { parseSetCookie } from "set-cookie-parser";
+import { decryptString, EncryptedString, encryptString } from "./encryption";
 
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
@@ -23,6 +24,10 @@ export const authClient = createAuthClient({
   fetchOptions: {
     headers: {
       origin: APP_ID_ORIGIN,
+    },
+    onSuccess: (context) => {
+      parseCookies(context);
+      parseAccount(context);
     },
   },
   plugins: [
@@ -47,7 +52,6 @@ export const authClient = createAuthClient({
       },
     }),
     magicLinkClient(),
-    multiSessionClient(),
     inferAdditionalFields({
       user: {
         language: {
@@ -63,8 +67,10 @@ export const authClient = createAuthClient({
   ],
 });
 
-export async function updateUser(
-  user: ZUpdateUserType | Pick<ZUpdatePreferencesType, "language">,
+export async function updateAccount(
+  user: (ZUpdateAccountType | Pick<ZUpdatePreferencesType, "language">) & {
+    id: string;
+  },
 ) {
   return await authClient.updateUser({
     ...("firstName" in user && user.firstName && user.lastName
@@ -76,38 +82,130 @@ export async function updateUser(
         }
       : {}),
     ...("language" in user && user.language ? { language: user.language } : {}),
+    fetchOptions: {
+      headers: getAccountHeaders(user.id),
+    },
   });
 }
 
-export async function listSessions() {
-  return await authClient.multiSession.listDeviceSessions();
-}
+export async function getAccount(accountId: string) {
+  const [res] = await tryCatch(
+    authClient.getSession({
+      fetchOptions: {
+        headers: getAccountHeaders(accountId),
+      },
+    }),
+  );
 
-export async function getSession() {
-  return await authClient.getSession();
-}
+  if (res?.data?.user) return res.data.user;
 
-export async function setSession({ sessionToken }: { sessionToken: string }) {
-  return await authClient.multiSession.setActive({ sessionToken });
+  const cached = store.get(
+    `accounts.${accountId}.data`,
+  ) as AccountStorageType["data"];
+
+  if (cached) return cached;
+
+  return null;
 }
 
 export async function openAuth() {
   return await authClient.requestAuth();
 }
 
-export async function logout() {
-  const session = await getSession();
-  if (!session.data) throw new Error("No session found");
-  return await authClient.revokeSession({ token: session.data?.session.token });
+export async function logout(accountId: string) {
+  const session = store.get(`accounts.${accountId}.session.token`) as
+    | string
+    | null;
+
+  if (session)
+    await authClient.revokeSession({
+      token: session,
+      fetchOptions: {
+        headers: getAccountHeaders(accountId),
+      },
+    });
+
+  store.set(`accounts.${accountId}.active`, false);
+  store.set(`accounts.${accountId}.secret`, null);
 }
 
 export async function authenticateToken({ token }: { token: string }) {
-  const res = await authClient.authenticate({
+  const { data, error } = await authClient.authenticate({
     token,
   });
 
-  if (res.error) throw new Error(res.error.message);
+  if (error) throw new Error(error.message);
 
-  sendWindow("auth.onAccountChange");
-  return res;
+  const accountId = data?.user?.id;
+  if (!accountId) throw new Error("No account ID found");
+
+  store.set(`accounts.${accountId}.active`, true);
+
+  await initAccountCollections(accountId);
+
+  sendWindow("auth.onAccountAdd", {
+    accountId,
+  });
+
+  return data;
+}
+
+export function getAccountCookie(accountId: string) {
+  const encrypted = store.get(
+    `accounts.${accountId}.secret`,
+  ) as EncryptedString | null;
+  if (!encrypted) return null;
+
+  const decrypted = decryptString(encrypted, null);
+  if (!decrypted) return null;
+
+  return `__Secure-${ELECTRON_COOKIE_PREFIX}.session_token=${decrypted}`;
+}
+
+function getAccountHeaders(accountId: string) {
+  return {
+    origin: APP_ID_ORIGIN,
+    Cookie: getAccountCookie(accountId) || "",
+  };
+}
+
+export function storeToken(accountId: string, token: string) {
+  const session = token.split(".")[0];
+  store.set(`accounts.${accountId}.session`, session);
+  store.set(`accounts.${accountId}.secret`, encryptString(token));
+}
+
+function parseAccount(
+  // eslint-disable-next-line
+  context: SuccessContext<any>,
+) {
+  if (!context.data?.user?.id) return;
+
+  const account = context.data?.user;
+  store.set(`accounts.${account.id}.data`, account);
+
+  const session = context.data?.session;
+  if (!session) return;
+
+  store.set(`accounts.${account.id}.session`, session);
+}
+
+function parseCookies(
+  // eslint-disable-next-line
+  context: SuccessContext<any>,
+) {
+  const setCookie = context.response.headers.get("set-cookie");
+  if (!setCookie) return;
+
+  const parsed = parseSetCookie(setCookie);
+
+  const cookie = parsed.find(
+    (c) => c.name === `__Secure-${ELECTRON_COOKIE_PREFIX}.session_token`,
+  );
+  if (!cookie) return;
+
+  const accountId = context.data?.user?.id;
+  if (!accountId) return;
+
+  storeToken(accountId, cookie.value);
 }

@@ -2,7 +2,8 @@
   "noVaults": {
     "title": "Create your vault",
     "description": "You haven't created any vaults yet. Get started by pressing the button below.",
-    "button": "Add vault"
+    "refresh": "Reload vaults",
+    "add": "Add vault"
   },
   "createDialog": {
     "title": "Create new vault",
@@ -15,7 +16,9 @@
           "noSetup": "No setup required",
           "cheaper": "80% cheaper than S3"
         },
-        "button": "Continue"
+        "continue": "Continue",
+        "signIn": "Sign in",
+        "selectAccount": "Select account"
       },
       "custom": {
         "title": "Custom storage provider",
@@ -33,10 +36,6 @@
     },
     "config": {
       "submit": "Continue",
-      "info": {
-        "title": "End-to-end encrypted configuration",
-        "description": "Your configuration is encrypted with AES-256 using your encryption password and securely stored on our servers."
-      },
       "validationError": {
         "title": "Failed to create vault"
       },
@@ -357,6 +356,16 @@
     "title": "Remote profile",
     "description": "You are viewing a vault from a different profile or device. You can't perform this action."
   },
+  "moveDialog": {
+    "title": "Move vaults",
+    "description": "Move selected vaults to a different account.",
+    "vaults": "Select vaults",
+    "from": "From account",
+    "to": "To account",
+    "selectAccount": "Select account",
+    "changeAccount": "Change",
+    "submit": "Move vaults"
+  },
   "deleteDialog": {
     "title": "Delete vault",
     "description": "Are you sure you want to delete this vault? This action cannot be undone.",
@@ -374,5 +383,9 @@
     },
     "cancel": "Cancel",
     "continue": "Delete vault"
+  },
+  "syncedToast": {
+    "title": "Successfully synced vaults",
+    "description": "Your vaults have been successfully synced."
   }
 }

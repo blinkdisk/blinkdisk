@@ -6,7 +6,7 @@ import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
 export function useVaultThrottle() {
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
@@ -23,6 +23,6 @@ export function useVaultThrottle() {
 
       return convertThrottleFromCore(res.data);
     },
-    enabled: !!accountId && !!vaultId && running,
+    enabled: !!vaultId && running,
   });
 }

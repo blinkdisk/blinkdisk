@@ -84,8 +84,8 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       zod:
-        specifier: ^3.24.2
-        version: 3.24.2
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -175,6 +175,9 @@ importers:
       '@blinkdisk/schemas':
         specifier: workspace:*
         version: link:../../libs/schemas
+      '@blinkdisk/signaldb-electron':
+        specifier: ^1.0.2
+        version: 1.0.2(@signaldb/core@1.8.1)(electron@38.1.2)
       '@blinkdisk/styles':
         specifier: workspace:*
         version: link:../../libs/styles
@@ -187,12 +190,21 @@ importers:
       '@lottiefiles/dotlottie-react':
         specifier: ^0.16.4
         version: 0.16.4(react@19.0.0)
+      '@maverick-js/signals':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@sentry/electron':
         specifier: ^7.9.0
         version: 7.9.0
       '@sentry/react':
         specifier: ^10.40.0
         version: 10.40.0(react@19.0.0)
+      '@signaldb/maverickjs':
+        specifier: ^1.0.0
+        version: 1.0.0(@maverick-js/signals@6.0.0)(@signaldb/core@1.8.1)
+      '@signaldb/react':
+        specifier: ^1.0.1
+        version: 1.0.1(@signaldb/core@1.8.1)(react-dom@19.0.0)(react@19.0.0)
       '@tailwindcss/vite':
         specifier: ^4.0.14
         version: 4.0.14(vite@6.2.2)
@@ -230,8 +242,8 @@ importers:
         specifier: ^12.5.0
         version: 12.5.0(react-dom@19.0.0)(react@19.0.0)
       lucide-react:
-        specifier: ^0.483.0
-        version: 0.483.0(react@19.0.0)
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.0.0)
       posthog-js:
         specifier: ^1.270.1
         version: 1.270.1
@@ -266,8 +278,8 @@ importers:
         specifier: 0.8.2-alpha.1
         version: 0.8.2-alpha.1
       zod:
-        specifier: ^3.24.2
-        version: 3.24.2
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@blinkdisk/api':
         specifier: workspace:*
@@ -329,6 +341,9 @@ importers:
       '@better-auth/electron':
         specifier: 1.5.5
         version: 1.5.5(@better-auth/core@1.5.5)(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-auth@1.5.5)(better-call@1.3.2)(electron@38.1.2)
+      '@blinkdisk/api':
+        specifier: workspace:*
+        version: link:../api
       '@blinkdisk/constants':
         specifier: workspace:*
         version: link:../../libs/constants
@@ -338,6 +353,9 @@ importers:
       '@blinkdisk/schemas':
         specifier: workspace:*
         version: link:../../libs/schemas
+      '@blinkdisk/signaldb-electron':
+        specifier: ^1.0.2
+        version: 1.0.2(@signaldb/core@1.8.1)(electron@38.1.2)
       '@blinkdisk/utils':
         specifier: workspace:*
         version: link:../../libs/utils
@@ -347,6 +365,18 @@ importers:
       '@sentry/electron':
         specifier: ^7.9.0
         version: 7.9.0
+      '@signaldb/core':
+        specifier: ^1.8.1
+        version: 1.8.1
+      '@signaldb/fs':
+        specifier: ^1.0.1
+        version: 1.0.1(@signaldb/core@1.8.1)
+      '@signaldb/sync':
+        specifier: ^1.3.1
+        version: 1.3.1(@signaldb/core@1.8.1)
+      '@trpc/client':
+        specifier: ^10.45.2
+        version: 10.45.2(@trpc/server@10.45.2)
       auto-launch:
         specifier: ^5.0.6
         version: 5.0.6
@@ -368,9 +398,15 @@ importers:
       p-limit:
         specifier: ^7.1.0
         version: 7.1.0
+      set-cookie-parser:
+        specifier: ^3.1.0
+        version: 3.1.0
       tough-cookie:
         specifier: ^5.1.2
         version: 5.1.2
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -644,8 +680,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0(vite@6.4.1)
       zod:
-        specifier: ^3.24.2
-        version: 3.25.76
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@blinkdisk/assets':
         specifier: workspace:*
@@ -970,9 +1006,12 @@ importers:
       '@blinkdisk/constants':
         specifier: workspace:*
         version: link:../constants
+      '@blinkdisk/db':
+        specifier: workspace:*
+        version: link:../db
       zod:
-        specifier: ^3.24.2
-        version: 3.24.2
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@blinkdisk/eslint':
         specifier: workspace:*
@@ -2958,7 +2997,7 @@ packages:
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
       '@standard-schema/spec': 1.1.0
-      better-call: 1.3.2(zod@3.24.2)
+      better-call: 1.3.2(zod@4.3.6)
       jose: 6.2.1
       kysely: 0.27.6
       nanostores: 1.2.0
@@ -2982,7 +3021,7 @@ packages:
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
       '@standard-schema/spec': 1.1.0
-      better-call: 1.3.2(zod@3.25.76)
+      better-call: 1.3.2(zod@4.3.6)
       jose: 6.2.1
       kysely: 0.28.12
       nanostores: 1.2.0
@@ -3024,7 +3063,7 @@ packages:
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
       better-auth: 1.5.5(mongodb@7.1.0)(react-dom@19.0.0)(react@19.0.0)
-      better-call: 1.3.2(zod@3.24.2)
+      better-call: 1.3.2(zod@4.3.6)
       zod: 4.3.6
     dev: false
 
@@ -3049,7 +3088,7 @@ packages:
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
       better-auth: 1.5.5(mongodb@7.1.0)(vitest@4.0.18)
-      better-call: 1.3.2(zod@3.25.76)
+      better-call: 1.3.2(zod@4.3.6)
       electron: 38.1.2
       zod: 4.3.6
     dev: false
@@ -3121,6 +3160,19 @@ packages:
 
   /@better-fetch/fetch@1.1.21:
     resolution: {integrity: sha512-/ImESw0sskqlVR94jB+5+Pxjf+xBwDZF/N5+y2/q4EqD7IARUTSpPfIo8uf39SYpCxyOCtbyYpUrZ3F/k0zT4A==}
+    dev: false
+
+  /@blinkdisk/signaldb-electron@1.0.2(@signaldb/core@1.8.1)(electron@38.1.2):
+    resolution: {integrity: sha512-lFjU4B8vLh43DeJwSj9y9nNiIVWBgVbOhHWhDigvg8KXCThoSJymeIuktnaBUwVcRjssD6JSgtDmbnWKIJsBGw==}
+    peerDependencies:
+      '@signaldb/core': 1.x
+      electron: '>=20.0.0'
+    peerDependenciesMeta:
+      electron:
+        optional: true
+    dependencies:
+      '@signaldb/core': 1.8.1
+      electron: 38.1.2
     dev: false
 
   /@braintree/sanitize-url@7.1.2:
@@ -4530,6 +4582,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@maverick-js/signals@6.0.0:
+    resolution: {integrity: sha512-aPAxQOjxcGaLpjMcfE0mRuMgnCVLfdPSGINYmKDjTbTfY37lZdz9CGnVDrkr+svNSADZbUVk7oPVjXA2+vtxYg==}
+    dev: false
 
   /@mdx-js/mdx@3.1.1:
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
@@ -6653,6 +6709,51 @@ packages:
     dependencies:
       fflate: 0.7.4
       string.prototype.codepointat: 0.2.1
+    dev: false
+
+  /@signaldb/core@1.8.1:
+    resolution: {integrity: sha512-85+ehSokMaKrPue42wPLmF+tU2jfky99kC2UlamfYS64I1YMMCWDeOdx17PNMpTxLdGFlCgnDEpTZB5XO3HFyQ==}
+    dependencies:
+      fast-sort: 3.4.1
+      mingo: 7.2.1
+    dev: false
+
+  /@signaldb/fs@1.0.1(@signaldb/core@1.8.1):
+    resolution: {integrity: sha512-swa1xkVoBuObgKZlcpPC5U6WpIawyXnyyyGsWdB8Tpgcw7l9Rq+KG+4f2Vbe7tGm/LdQnUFMgJ44gEbjlSzvDQ==}
+    peerDependencies:
+      '@signaldb/core': 1.x
+    dependencies:
+      '@signaldb/core': 1.8.1
+    dev: false
+
+  /@signaldb/maverickjs@1.0.0(@maverick-js/signals@6.0.0)(@signaldb/core@1.8.1):
+    resolution: {integrity: sha512-fjO0KzQXN8GmtRZ5vMaGa/vFDiMgNz5bh9ri/c8/UsJ6AgV5fnhWn3LKhfUpPjrdJjiC4JsBVUkF37MnKInBQQ==}
+    peerDependencies:
+      '@maverick-js/signals': 5.x.x || 6.x
+      '@signaldb/core': 1.x
+    dependencies:
+      '@maverick-js/signals': 6.0.0
+      '@signaldb/core': 1.8.1
+    dev: false
+
+  /@signaldb/react@1.0.1(@signaldb/core@1.8.1)(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-OpeNn92+Lpa5YJZDTv9CjN08HAD6g8mQ5YcrrJEHW5H8m9C0a27/95S2Wo1gtPxqtVQ4Fb1k8bqxQssp5THA8A==}
+    peerDependencies:
+      '@signaldb/core': 1.x
+      react: '>=16 || >=17 || >= 18 || >= 19'
+      react-dom: '>=16 || >=17 || >= 18 || >= 19'
+    dependencies:
+      '@signaldb/core': 1.8.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    dev: false
+
+  /@signaldb/sync@1.3.1(@signaldb/core@1.8.1):
+    resolution: {integrity: sha512-qAKkWAfPtEobZJ3yNqtOKZd1uCzXxIKpz3P1BL1WLSzteGpcVSRYHGKEmQ180572K8n2Sz2nRoOAwqbjEkJEbQ==}
+    peerDependencies:
+      '@signaldb/core': ^1.4.0
+    dependencies:
+      '@signaldb/core': 1.8.1
     dev: false
 
   /@sindresorhus/is@4.6.0:
@@ -10057,36 +10158,6 @@ packages:
       - '@cloudflare/workers-types'
     dev: false
 
-  /better-call@1.3.2(zod@3.24.2):
-    resolution: {integrity: sha512-4cZIfrerDsNTn3cm+MhLbUePN0gdwkhSXEuG7r/zuQ8c/H7iU0/jSK5TD3FW7U0MgKHce/8jGpPYNO4Ve+4NBw==}
-    peerDependencies:
-      zod: ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
-    dependencies:
-      '@better-auth/utils': 0.3.1
-      '@better-fetch/fetch': 1.1.21
-      rou3: 0.7.12
-      set-cookie-parser: 3.0.1
-      zod: 3.24.2
-    dev: false
-
-  /better-call@1.3.2(zod@3.25.76):
-    resolution: {integrity: sha512-4cZIfrerDsNTn3cm+MhLbUePN0gdwkhSXEuG7r/zuQ8c/H7iU0/jSK5TD3FW7U0MgKHce/8jGpPYNO4Ve+4NBw==}
-    peerDependencies:
-      zod: ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
-    dependencies:
-      '@better-auth/utils': 0.3.1
-      '@better-fetch/fetch': 1.1.21
-      rou3: 0.7.12
-      set-cookie-parser: 3.0.1
-      zod: 3.25.76
-    dev: false
-
   /better-call@1.3.2(zod@4.3.6):
     resolution: {integrity: sha512-4cZIfrerDsNTn3cm+MhLbUePN0gdwkhSXEuG7r/zuQ8c/H7iU0/jSK5TD3FW7U0MgKHce/8jGpPYNO4Ve+4NBw==}
     peerDependencies:
@@ -10098,7 +10169,7 @@ packages:
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
       rou3: 0.7.12
-      set-cookie-parser: 3.0.1
+      set-cookie-parser: 3.1.0
       zod: 4.3.6
     dev: false
 
@@ -12407,6 +12478,10 @@ packages:
     resolution: {integrity: sha512-n11RGP/lrWEFI/bWdygLxhI+pVeo1ZYIVwvvPkW7azl/rOy+F3HYRZ2K5zeE9mmkhQppyv9sQFx0JM9UabnpPQ==}
     dev: false
 
+  /fast-sort@3.4.1:
+    resolution: {integrity: sha512-76uvGPsF6So53sZAqenP9UVT3p5l7cyTHkLWVCMinh41Y8NDrK1IYXJgaBMfc1gk7nJiSRZp676kddFG2Aa5+A==}
+    dev: false
+
   /fast-uri@3.0.6:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
 
@@ -14434,6 +14509,14 @@ packages:
       react: 19.0.0
     dev: false
 
+  /lucide-react@1.7.0(react@19.0.0):
+    resolution: {integrity: sha512-yI7BeItCLZJTXikmK4KNUGCKoGzSvbKlfCvw44bU4fXAL6v3gYS4uHD1jzsLkfwODYwI6Drw5Tu9Z5ulDe0TSg==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      react: 19.0.0
+    dev: false
+
   /magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
     dependencies:
@@ -15187,6 +15270,10 @@ packages:
   /min-indent@1.0.1:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
+    dev: false
+
+  /mingo@7.2.1:
+    resolution: {integrity: sha512-MEIQPOSJS2sVCueyQeE2rzgEeW3HpIIhizPbeuwD4v7+miVj7NI3ZVPqqw8t3YPIWCivpIaXA4KsoRI7koyNOA==}
     dev: false
 
   /miniflare@4.20250816.1:
@@ -17451,8 +17538,8 @@ packages:
       - supports-color
     dev: false
 
-  /set-cookie-parser@3.0.1:
-    resolution: {integrity: sha512-n7Z7dXZhJbwuAHhNzkTti6Aw9QDDjZtm3JTpTGATIdNzdQz5GuFs22w90BcvF4INfnrL5xrX3oGsuqO5Dx3A1Q==}
+  /set-cookie-parser@3.1.0:
+    resolution: {integrity: sha512-kjnC1DXBHcxaOaOXBHBeRtltsDG2nUiUni+jP92M9gYdW12rsmx92UsfpH7o5tDRs7I1ZZPSQJQGv3UaRfCiuw==}
     dev: false
 
   /set-function-length@1.2.2:
@@ -19944,10 +20031,6 @@ packages:
 
   /zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
-
-  /zod@3.24.2:
-    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
-    dev: false
 
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}

@@ -1,13 +1,15 @@
 import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
-import { getAccountCache, getVaultCache } from "@electron/cache";
+import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
+import { getAccountCache } from "@electron/cache";
+import { collections } from "@electron/db";
 import { log } from "@electron/log";
 import { getHostName, getUserName } from "@electron/profile";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 import { startVaultServer } from "@electron/vault/server";
+import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { VaultInstance } from "./types";
 import { validationVault } from "./validate";
 
@@ -135,31 +137,37 @@ export async function connectVault({
   }
 }
 
-export async function startAllVaults() {
-  const vaultCache = getVaultCache();
+export async function initVaults() {
   const accounts = getAccountCache();
 
-  for (const vault of vaultCache) {
-    const account = accounts.find((account) => account.id === vault.accountId);
+  const activeVaultIds: string[] = [];
 
-    if (!account) {
-      log.error(`Account ${vault.accountId} not found, skipping.`);
-      continue;
+  for (const [accountId, collection] of Object.entries(collections)) {
+    const isLocalAccount = accountId === LOCAL_ACCOUNT_ID;
+
+    const account = accounts.find((account) => account.id === accountId);
+
+    if (!isLocalAccount && !account) continue;
+
+    const vaultCache = collection.vault.find({ status: "ACTIVE" }).fetch();
+
+    for (const vault of vaultCache) {
+      activeVaultIds.push(vault.id);
+
+      // Already running
+      if (vaults[vault.id]) continue;
+
+      vaults[vault.id] = {
+        id: vault.id,
+        status: "STARTING",
+        server: await startVaultServer(vault.id),
+      };
     }
+  }
 
-    if (!account.active) {
-      log.info(`Account ${vault.accountId} is not active, skipping.`);
-      continue;
-    }
-
-    // Already running
-    if (vaults[vault.id]) continue;
-
-    vaults[vault.id] = {
-      id: vault.id,
-      status: "STARTING",
-      server: await startVaultServer(vault.id),
-    };
+  for (const vaultId of Object.keys(vaults)) {
+    if (activeVaultIds.includes(vaultId)) continue;
+    stopVault(vaultId);
   }
 }
 

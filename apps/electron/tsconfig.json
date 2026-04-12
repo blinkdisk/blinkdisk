@@ -5,8 +5,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ESNext",
+    "jsx": "react-jsx",
     "sourceMap": false,
-    "types": ["vitest/globals"]
+    "types": ["../api/worker-configuration.d.ts", "vitest/globals"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

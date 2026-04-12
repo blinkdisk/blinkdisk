@@ -5,20 +5,20 @@ Sentry.init({
 });
 
 import { setupRenderer } from "@better-auth/electron/preload";
+import { setupSignalDBPreload } from "@blinkdisk/signaldb-electron/preload";
 
 setupRenderer();
+setupSignalDBPreload(ipcRenderer, contextBridge);
 
 import type {
   authenticateToken,
-  getSession,
-  listSessions,
+  getAccount,
   logout,
   openAuth,
-  setSession,
-  updateUser,
+  updateAccount,
 } from "@electron/auth";
-import type { setVaultCache } from "@electron/cache";
 import type { readClipboard } from "@electron/clipboard";
+import type { syncAccount } from "@electron/db/sync";
 import type {
   decryptVaultConfig,
   encryptVaultConfig,
@@ -150,10 +150,6 @@ const api = {
       ipcRenderer.invoke("vault.connect", payload) as Promise<
         Awaited<ReturnType<typeof connectVault>>
       >,
-    cache: (payload: Parameters<typeof setVaultCache>[0]) =>
-      ipcRenderer.invoke("vault.cache", payload) as Promise<
-        ReturnType<typeof setVaultCache>
-      >,
     status: (payload: Parameters<typeof getVault>[0]) =>
       ipcRenderer.invoke("vault.status", payload) as Promise<
         ReturnType<typeof getVaultStatus>
@@ -173,9 +169,6 @@ const api = {
         ipcRenderer.invoke("vault.password.get", payload) as Promise<
           ReturnType<typeof getPasswordCache>
         >,
-    },
-    start: {
-      all: () => ipcRenderer.invoke("vault.start.all"),
     },
     restore: {
       single: (payload: Parameters<typeof restoreSingle>[0]) =>
@@ -222,33 +215,31 @@ const api = {
   auth: {
     open: () =>
       ipcRenderer.invoke("auth.open") as Promise<ReturnType<typeof openAuth>>,
-    logout: () =>
-      ipcRenderer.invoke("auth.logout") as Promise<ReturnType<typeof logout>>,
+    logout: (accountId: string) =>
+      ipcRenderer.invoke("auth.logout", accountId) as Promise<
+        ReturnType<typeof logout>
+      >,
     token: (payload: Parameters<typeof authenticateToken>[0]) =>
       ipcRenderer.invoke("auth.token", payload) as Promise<
         ReturnType<typeof authenticateToken>
       >,
-    user: {
-      update: (payload: Parameters<typeof updateUser>[0]) =>
-        ipcRenderer.invoke("auth.user.update", payload) as Promise<
-          ReturnType<typeof updateUser>
+    account: {
+      update: (payload: Parameters<typeof updateAccount>[0]) =>
+        ipcRenderer.invoke("auth.account.update", payload) as Promise<
+          ReturnType<typeof updateAccount>
+        >,
+      get: (accountId: string) =>
+        ipcRenderer.invoke("auth.account.get", accountId) as Promise<
+          ReturnType<typeof getAccount>
         >,
     },
-    session: {
-      list: () =>
-        ipcRenderer.invoke("auth.session.list") as Promise<
-          ReturnType<typeof listSessions>
-        >,
-      get: () =>
-        ipcRenderer.invoke("auth.session.get") as Promise<
-          ReturnType<typeof getSession>
-        >,
-      set: (payload: Parameters<typeof setSession>[0]) =>
-        ipcRenderer.invoke("auth.session.set", payload) as Promise<
-          ReturnType<typeof setSession>
-        >,
-    },
-    onAccountChange: listener<{ token: string }>("auth.onAccountChange"),
+    onAccountAdd: listener<{ accountId: string }>("auth.onAccountAdd"),
+  },
+  sync: {
+    account: (payload: Parameters<typeof syncAccount>[0]) =>
+      ipcRenderer.invoke("sync.account", payload) as Promise<
+        ReturnType<typeof syncAccount>
+      >,
   },
 };
 

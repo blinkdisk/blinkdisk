@@ -1,44 +1,47 @@
-import { ZEmail } from "@schemas/shared/email";
-import { ZLanguage } from "@schemas/shared/language";
-import { ZCode } from "@schemas/shared/magic";
-import { ZFirstAndLastName, ZFirstName, ZLastName } from "@schemas/shared/name";
-import { ZTimezone } from "@schemas/shared/timezone";
+import {
+  ZAccountEmail,
+  ZAccountFirstName,
+  ZAccountFullName,
+  ZAccountLanguage,
+  ZAccountLastName,
+  ZAccountTimeZone,
+} from "@schemas/accounts";
 import { z } from "zod";
 
 export const ZLogin = z.object({
-  email: ZEmail,
+  email: ZAccountEmail,
 });
 
 export type ZLoginType = z.infer<typeof ZLogin>;
 
 export const ZRegister = z.object({
-  firstName: ZFirstName,
-  lastName: ZLastName,
-  email: ZEmail,
+  firstName: ZAccountFirstName,
+  lastName: ZAccountLastName,
+  email: ZAccountEmail,
 });
 
 export type ZRegisterType = z.infer<typeof ZRegister>;
 
-export const ZRegisterForm = ZRegister.merge(
-  z.object({ terms: z.boolean() }),
+export const ZRegisterForm = ZRegister.extend(
+  z.object({ terms: z.boolean() }).shape,
 ).refine((val) => !!val.terms, {
-  message: "terms_required",
+  error: "terms_required",
   path: ["terms"],
 });
 
 export type ZRegisterFormType = z.infer<typeof ZRegisterForm>;
 
 export const ZRegisterServer = z.object({
-  name: ZFirstAndLastName,
-  email: ZEmail,
-  language: ZLanguage,
-  timeZone: ZTimezone.optional(),
+  name: ZAccountFullName,
+  email: ZAccountEmail,
+  language: ZAccountLanguage,
+  timeZone: ZAccountTimeZone.optional(),
 });
 
 export type ZRegisterServerType = z.infer<typeof ZRegisterServer>;
 
 export const ZMagicCode = z.object({
-  code: ZCode,
+  code: z.string().min(10).max(10),
 });
 
 export type ZMagicCodeType = z.infer<typeof ZMagicCode>;

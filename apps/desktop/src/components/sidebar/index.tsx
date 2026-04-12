@@ -19,15 +19,22 @@ import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
+import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useOffline } from "@desktop/hooks/use-offline";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { ComponentProps } from "react";
+import { SidebarOfflineAlert } from "./offline-alert";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
-  const { data: session } = useAccount();
+  const { isLocalAccount } = useAccountId();
+  const { isOffline } = useOffline();
+  const { data: account } = useAccount();
   const { data: folders } = useFolderList();
 
-  const { vaultId, hostName, userName } = useParams({ strict: false });
+  const { accountId, vaultId, hostName, userName } = useParams({
+    strict: false,
+  });
 
   const { t } = useAppTranslation("sidebar.links");
 
@@ -41,7 +48,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem className="pl-2 pt-1">
-              <Link to="/app" tabIndex={-1}>
+              <Link to="/{-$accountId}" tabIndex={-1}>
                 <Logo />
               </Link>
             </SidebarMenuItem>
@@ -55,10 +62,11 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 <SidebarMenuButton
                   className="px-3"
                   isActive={
-                    pathname === `/app/${vaultId}/${hostName}/${userName}`
+                    pathname ===
+                    `/${accountId}/${vaultId}/${hostName}/${userName}`
                   }
                   render={
-                    <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}">
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
                       <HomeIcon />
                       {t("home")}
                     </Link>
@@ -70,10 +78,10 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={
                     pathname ===
-                    `/app/${vaultId}/${hostName}/${userName}/settings`
+                    `/${accountId}/${vaultId}/${hostName}/${userName}/settings`
                   }
                   render={
-                    <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
                       <SettingsIcon />
                       {t("settings")}
                     </Link>
@@ -86,12 +94,15 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu className="gap-4">
-            <SidebarStorageAlert />
+            {isOffline ? <SidebarOfflineAlert /> : <SidebarStorageAlert />}
             <SidebarAddFolder />
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
                 <SidebarMenuButton size="lg">
-                  <AccountPreview account={session} />
+                  <AccountPreview
+                    account={account}
+                    local={isLocalAccount || false}
+                  />
                 </SidebarMenuButton>
               </AccountSelectDropdown>
               <AccountMenuDropdown>

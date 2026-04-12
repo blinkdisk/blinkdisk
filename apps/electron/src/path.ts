@@ -16,7 +16,13 @@ export const platform = (() => {
 })();
 
 export const globalConfigDirectory = () =>
-  join(app.getPath("appData"), "blinkdisk", "vaults");
+  join(app.getPath("appData"), app.isPackaged ? "blinkdisk" : "blinkdisk-dev");
+
+export const globalVaultDirectory = () =>
+  join(globalConfigDirectory(), "vaults");
+
+export const globalAccountDirectory = () =>
+  join(globalConfigDirectory(), "accounts");
 
 export const corePath = () => {
   if (!app.isPackaged) return join(os.homedir(), "go", "bin", "core");

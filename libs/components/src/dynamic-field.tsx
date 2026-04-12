@@ -14,6 +14,8 @@ export type DynamicFieldProps = {
   name?: string;
   children?: React.ReactNode;
   errors?: {
+    format?: string;
+    origin?: string;
     type?: string;
     validation?: string;
     code?: string;
@@ -41,10 +43,11 @@ export function DynamicField({
 
   const errorMessages = useMemo(() => {
     return errors?.flat().map(({ translated, ...error }) =>
-      translated
-        ? error.message
-        : t(
-            `validation:${error.type || error.validation || error.message}_${error.code}`,
+      !translated && error.code
+        ? t(
+            error.code === "custom"
+              ? `custom_${error.message}`
+              : `validation:${error.format || error.origin ? `${error.format || error.origin}_` : ""}${error.code}`,
             {
               ...error,
               field:
@@ -52,7 +55,8 @@ export function DynamicField({
                   ? props.title
                   : props.name || error.path || "",
             },
-          ),
+          )
+        : error.message,
     );
   }, [errors, props, t]);
 

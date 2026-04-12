@@ -1,9 +1,9 @@
-import { StorageProviderType } from "@blinkdisk/constants/providers";
-import { ConfigLevel } from "@blinkdisk/db/enums";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/shared/vault";
 import { EncryptedString } from "@electron/encryption";
+import { initVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
+import { app } from "electron";
 import Store from "electron-store";
+import { globalConfigDirectory } from "./path";
 
 export type GlobalStorageType = {
   authenticated: boolean;
@@ -11,25 +11,42 @@ export type GlobalStorageType = {
   preferences: {
     theme: "system" | "dark" | "light";
   };
-  vaults: {
-    [id: string]: {
-      name: string;
-      accountId: string;
-      configLevel: ConfigLevel;
-      options: ZVaultOptionsType;
-      token?: EncryptedString;
-      version: number;
-      provider: StorageProviderType;
-    };
-  };
   passwords: {
     [vaultId: string]: EncryptedString;
+  };
+  auth: {
+    // Managed by better-auth
+    cookie: string;
+    // Managed by better-auth
+    local_cache: string;
   };
 };
 
 export type AccountStorageType = {
   active: boolean;
   lastUsedVaultId?: string | null;
+  session?: {
+    id: string;
+    userId: string;
+    token: string;
+    expiresAt: string | Date;
+    createdAt: string | Date;
+    updatedAt: string | Date;
+    ipAddress: string;
+    userAgent: string;
+  } | null;
+  data?: {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image?: string | null;
+    language?: string | null;
+    timeZone?: string | null;
+    createdAt: string | Date;
+    updatedAt: string | Date;
+  } | null;
+  secret?: EncryptedString | null;
 };
 
 Store.initRenderer();
@@ -72,6 +89,11 @@ export type AccountStorageSchema = UnionToIntersection<
 >;
 
 export const store = new Store({
+  ...(!app.isPackaged
+    ? {
+        cwd: globalConfigDirectory(),
+      }
+    : {}),
   migrations: {
     ">0.7.0": (store) => {
       const accounts = store.get("accounts") || {};
@@ -107,9 +129,29 @@ export const store = new Store({
     ">1.3.0": (store) => {
       store.delete("configs");
     },
+    ">1.7.0": (store) => {
+      store.delete("vaults");
+    },
   },
 });
 
 store.onDidAnyChange(() => {
   sendWindow("store.change");
+});
+
+store.onDidChange("accounts", (newValue, oldValue) => {
+  if (!newValue || !oldValue) {
+    initVaults();
+    return;
+  }
+
+  const oldActiveCount = Object.values(oldValue).filter(
+    (a) => !!a.active,
+  ).length;
+
+  const newActiveCount = Object.values(newValue).filter(
+    (a) => !!a.active,
+  ).length;
+
+  if (oldActiveCount !== newActiveCount) initVaults();
 });

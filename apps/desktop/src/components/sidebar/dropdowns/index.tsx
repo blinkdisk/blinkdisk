@@ -1,5 +1,4 @@
 import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
-import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { SidebarHostNameSelect } from "@desktop/components/sidebar/dropdowns/hostName";
 import { SidebarUserNameSelect } from "@desktop/components/sidebar/dropdowns/userName";
@@ -10,7 +9,7 @@ import { useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
 
 export function SidebarSelects() {
-  const { data: vaults, isPending: isVaultsPending } = useVaultList();
+  const { data: vaults } = useVaultList();
   const { data: profiles } = useVaultProfiles();
 
   const { hostName } = useParams({ strict: false });
@@ -30,8 +29,6 @@ export function SidebarSelects() {
     ];
   }, [profiles, vaults, userNames]);
 
-  if (isVaultsPending)
-    return <Skeleton className="mt-8 h-11 w-full !rounded-lg" />;
   if (!sections.length) return null;
   return (
     <SidebarMenuItem className="mt-8 flex w-full flex-col">

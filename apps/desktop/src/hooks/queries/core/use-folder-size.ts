@@ -59,7 +59,7 @@ export function useFolderSize({
   enabled?: boolean;
 }) {
   const { vaultId } = useVaultId();
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const queryClient = useQueryClient();
 
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -99,12 +99,7 @@ export function useFolderSize({
 
       return res.data;
     },
-    enabled:
-      enabled &&
-      !!accountId &&
-      !!vaultId &&
-      !!taskId &&
-      startEstimation.isSuccess,
+    enabled: enabled && !!vaultId && !!taskId && startEstimation.isSuccess,
     refetchInterval: (query) => {
       const data = query.state.data;
       if (data?.status === "RUNNING") return 1000;

@@ -1,21 +1,32 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useQuery } from "@tanstack/react-query";
+import { AccountStorageType } from "@blinkdisk/electron/store";
+import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
+import { useMemo } from "react";
+import { useAppStorage } from "../use-app-storage";
 
-export function useAccountList(options?: { enabled: boolean }) {
-  const { queryKeys } = useQueryKey();
+export function useAccountList() {
+  // @ts-expect-error Accounts not typed here
+  const [accountStorage] = useAppStorage("accounts") as [
+    Record<string, AccountStorageType>,
+  ];
 
-  return useQuery({
-    queryKey: queryKeys.account.list(),
-    queryFn: async () => {
-      const { data, error } = await window.electron.auth.session.list();
-      if (error) throw error;
+  const accounts = useMemo(() => {
+    if (!accountStorage) return [];
 
-      return data.sort(
-        (a, b) =>
-          new Date(a.user.createdAt).getTime() -
-          new Date(b.user.createdAt).getTime(),
-      );
-    },
-    enabled: options?.enabled,
-  });
+    return Object.entries(accountStorage)
+      .filter(([id, account]) => id !== LOCAL_ACCOUNT_ID && !!account.active)
+      .map(([accountId, account]) => ({
+        id: accountId,
+        name: account.data?.name,
+        email: account.data?.email,
+        createdAt: account.data?.createdAt,
+      }))
+      .sort((a, b) => {
+        if (!a.createdAt || !b.createdAt) return 0;
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      });
+  }, [accountStorage]);
+
+  return { accounts };
 }

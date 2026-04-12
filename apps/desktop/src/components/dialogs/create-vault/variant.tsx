@@ -9,8 +9,14 @@ import {
   CardTitle,
 } from "@blinkdisk/ui/card";
 import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
+import { useAccountList } from "@desktop/hooks/queries/use-account-list";
+import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
+import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useAuth } from "@desktop/hooks/use-auth";
 import { formatSize } from "@desktop/lib/number";
 import { CheckIcon, ExternalLinkIcon, XIcon } from "lucide-react";
+import { useCallback, useEffect, useRef } from "react";
 
 export type CreateVaultVariantProps = {
   selectCloud: () => void;
@@ -22,6 +28,28 @@ export function CreateVaultVariant({
   selectCustom,
 }: CreateVaultVariantProps) {
   const { t } = useAppTranslation("vault.createDialog.variant");
+  const { isOnlineAccount } = useAccountId();
+  const { openAuthDialog } = useAuthDialog();
+  const { openSelectAccountDialog } = useSelectAccountDialog();
+  const { selectAccount } = useAuth();
+  const { accounts } = useAccountList();
+  const waitingForAuth = useRef(false);
+
+  const handleSelectAccount = useCallback(() => {
+    openSelectAccountDialog({
+      onSelect: async (accountId) => {
+        await selectAccount(accountId);
+        selectCloud();
+      },
+    });
+  }, [openSelectAccountDialog, selectAccount, selectCloud]);
+
+  useEffect(() => {
+    if (waitingForAuth.current && isOnlineAccount) {
+      waitingForAuth.current = false;
+      selectCloud();
+    }
+  }, [isOnlineAccount, selectCloud]);
 
   return (
     <div className="mt-8 flex flex-col gap-5">
@@ -31,7 +59,7 @@ export function CreateVaultVariant({
           <Button
             variant="ghost"
             size="sm"
-            className="text-muted-foreground"
+            className="text-muted-foreground px-3"
             onClick={() =>
               window.open(`${process.env.MARKETING_URL}/cloudblink?ref=desktop`)
             }
@@ -57,8 +85,24 @@ export function CreateVaultVariant({
           </p>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={selectCloud}>
-            {t("cloudblink.button")}
+          <Button
+            className="w-full"
+            onClick={() => {
+              if (isOnlineAccount) {
+                selectCloud();
+              } else if (accounts.length > 0) {
+                handleSelectAccount();
+              } else {
+                waitingForAuth.current = true;
+                openAuthDialog();
+              }
+            }}
+          >
+            {isOnlineAccount
+              ? t("cloudblink.continue")
+              : accounts.length > 0
+                ? t("cloudblink.selectAccount")
+                : t("cloudblink.signIn")}
           </Button>
         </CardFooter>
       </Card>

@@ -12,6 +12,7 @@ import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-
 import { useBilling } from "@desktop/hooks/queries/use-billing";
 import { useAccountSettingsDialog } from "@desktop/hooks/state/use-account-settings-dialog";
 import { usePreferencesSettingsDialog } from "@desktop/hooks/state/use-preferences-settings-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAuth } from "@desktop/hooks/use-auth";
 import {
   CogIcon,
@@ -32,6 +33,7 @@ export function AccountMenuDropdown({ children }: AccountMenuDropdownProps) {
   const isMobile = useIsMobile();
 
   const { addAccount, logout } = useAuth();
+  const { isOnlineAccount } = useAccountId();
 
   const { data: billing } = useBilling();
   const { mutate: openBillingPortal } = useOpenBillingPortal();
@@ -49,10 +51,12 @@ export function AccountMenuDropdown({ children }: AccountMenuDropdownProps) {
         sideOffset={4}
       >
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={openAccountSettings}>
-            <UserIcon />
-            {t("accountMenu.account")}
-          </DropdownMenuItem>
+          {isOnlineAccount ? (
+            <DropdownMenuItem onClick={openAccountSettings}>
+              <UserIcon />
+              {t("accountMenu.account")}
+            </DropdownMenuItem>
+          ) : null}
           <DropdownMenuItem onClick={openPreferencesSettings}>
             <CogIcon />
             {t("accountMenu.preferences")}

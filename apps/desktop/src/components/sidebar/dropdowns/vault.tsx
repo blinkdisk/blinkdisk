@@ -8,10 +8,17 @@ import {
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { cn } from "@blinkdisk/utils/class";
+import { useSync } from "@desktop/hooks/mutations/use-sync";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { ChevronDownIcon, PlusIcon, VaultIcon } from "lucide-react";
+import {
+  ChevronDownIcon,
+  PlusIcon,
+  RefreshCwIcon,
+  VaultIcon,
+} from "lucide-react";
 
 type SidebarVaultSelectProps = {
   className?: string;
@@ -24,6 +31,8 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
   const { vaultId, changeVault } = useVaultId();
 
   const { openCreateVault } = useCreateVaultDialog();
+  const { isOnlineAccount } = useAccountId();
+  const { mutate: sync, isPending: isSyncing } = useSync();
 
   return (
     <DropdownMenu>
@@ -54,6 +63,18 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          {isOnlineAccount && (
+            <DropdownMenuItem
+              closeOnClick={false}
+              onClick={() => sync()}
+              disabled={isSyncing}
+            >
+              <RefreshCwIcon
+                className={cn("size-4", isSyncing && "animate-spin")}
+              />
+              {isSyncing ? t("refreshing") : t("refresh")}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={openCreateVault}>
             <PlusIcon className="size-4" />
             {t("createVault")}

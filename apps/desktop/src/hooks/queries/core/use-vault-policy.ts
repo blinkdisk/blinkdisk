@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useVaultPolicy() {
   const { profileFilter } = useProfile();
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
@@ -61,6 +61,6 @@ export function useVaultPolicy() {
         effective: policy,
       };
     },
-    enabled: !!accountId && !!vaultId && !!profileFilter && running,
+    enabled: !!vaultId && !!profileFilter && running,
   });
 }

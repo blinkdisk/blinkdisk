@@ -29,7 +29,7 @@ export function useFolderPolicy({
   };
 }) {
   const { profileFilter } = useProfile();
-  const { queryKeys, accountId } = useQueryKey();
+  const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
@@ -77,11 +77,6 @@ export function useFolderPolicy({
         definedFields,
       };
     },
-    enabled:
-      !!accountId &&
-      !!vaultId &&
-      !!vaultPolicy &&
-      running &&
-      (!!folder || !!mock),
+    enabled: !!vaultId && !!vaultPolicy && running && (!!folder || !!mock),
   });
 }

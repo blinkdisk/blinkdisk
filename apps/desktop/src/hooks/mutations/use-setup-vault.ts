@@ -1,12 +1,17 @@
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { generateId } from "@blinkdisk/utils/id";
+import { removeEmptyStrings } from "@blinkdisk/utils/object";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { SetupStep } from "@desktop/components/vaults/setup";
+import { VaultItem } from "@desktop/hooks/queries/use-vault";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { getConfigCollection } from "@desktop/lib/db";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { VaultItem } from "../queries/use-vault";
+import { STORAGE_PROVIDERS } from "libs/constants/src/providers";
 
 export function useSetupVault({
   onSuccess,
@@ -20,6 +25,7 @@ export function useSetupVault({
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
+  const { accountId } = useAccountId();
 
   return useMutation({
     mutationKey: ["vault", "setup"],
@@ -30,10 +36,16 @@ export function useSetupVault({
     }) => {
       let config = values.config;
 
+      const provider = STORAGE_PROVIDERS.find(
+        (p) => p.type === values.vault.provider,
+      );
+
+      if (!provider) throw new Error("Invalid provider");
+
       if (!config) {
-        if (values.vault.provider === "CLOUDBLINK") config = {};
+        if (provider.type === "CLOUDBLINK") config = {};
         else {
-          const configs = await trpc.config.list.query();
+          const configs = getConfigCollection(accountId).find().fetch();
 
           // Pick the newest config for the vault
           const encryptedConfig = configs
@@ -68,14 +80,27 @@ export function useSetupVault({
         }
       }
 
+      let cloudBlinkToken: string | undefined;
+      if (provider.type === "CLOUDBLINK") {
+        const [res, err] = await tryCatch(
+          trpc.cloudblink.getVaultToken.query({
+            vaultId: values.vault.id,
+          }),
+        );
+
+        if (err) throw err;
+
+        cloudBlinkToken = res.token;
+      }
+
       // This shouldn't happen in theory
       if (!config) return setStep("CONFIG");
 
       const validateRes = await window.electron.vault.validate({
         type: values.vault.provider,
-        token: values.vault.token,
         version: values.vault.version,
         password: values.password,
+        token: cloudBlinkToken,
         config,
       });
 
@@ -100,8 +125,8 @@ export function useSetupVault({
         name: values.vault.name,
         provider: values.vault.provider,
         version: values.vault.version,
-        token: values.vault.token,
         password: values.password,
+        token: cloudBlinkToken,
         config,
       });
 
@@ -119,26 +144,47 @@ export function useSetupVault({
         password: values.password,
       });
 
-      return await trpc.config.add.mutate({
-        vaultId: values.vault.id,
-        userName: window.electron.os.userName(values.vault.id),
-        hostName: window.electron.os.hostName(values.vault.id),
-        config: await window.electron.vault.config.encrypt({
-          password: values.password,
-          config,
-        }),
+      const userName = window.electron.os.userName(values.vault.id);
+      const hostName = window.electron.os.hostName(values.vault.id);
+
+      const data = await window.electron.vault.config.encrypt({
+        password: values.password,
+        config: removeEmptyStrings(config),
       });
+
+      const existing = getConfigCollection(accountId).findOne({
+        vaultId: values.vault.id,
+        level: "PROFILE",
+        userName,
+        hostName,
+      });
+
+      if (existing) {
+        getConfigCollection(accountId).updateOne(
+          { id: existing.id },
+          {
+            $set: {
+              data,
+            },
+          },
+        );
+      } else {
+        getConfigCollection(accountId).insert({
+          id: generateId("Config"),
+          data,
+          level: "PROFILE",
+          vaultId: values.vault.id,
+          userName,
+          hostName,
+          createdAt: new Date().toISOString(),
+        });
+      }
     },
     onError: showErrorToast,
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.config.all,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.vault.all,
-        }),
-      ]);
+    onSuccess: async (_, values) => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.vault.status(values.vault.id),
+      });
 
       onSuccess?.();
     },

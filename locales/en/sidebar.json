@@ -10,7 +10,9 @@
   },
   "selectVault": {
     "empty": "Select vault",
-    "createVault": "Create vault"
+    "createVault": "Create vault",
+    "refresh": "Reload vaults",
+    "refreshing": "Refreshing..."
   },
   "accountMenu": {
     "account": "Account",
@@ -20,7 +22,7 @@
     "addAccount": "Add account"
   },
   "accountListMenu": {
-    "addAccount": "Add new account"
+    "addAccount": "Add account"
   },
   "links": {
     "home": "Home",
@@ -39,5 +41,9 @@
       "description": "Please upgrade your storage to continue using BlinkDisk."
     },
     "button": "Upgrade storage"
+  },
+  "offlineAlert": {
+    "title": "You're offline",
+    "description": "Some features may not work while your device is offline."
   }
 }

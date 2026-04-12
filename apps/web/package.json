@@ -39,12 +39,12 @@
     "sonner": "^2.0.1",
     "usehooks-ts": "^3.1.1",
     "vite-plugin-static-copy": "^3.3.0",
-    "zod": "^3.24.2"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@blinkdisk/assets": "workspace:*",
     "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
-    "@blinkdisk/assets": "workspace:*",
     "@sentry/vite-plugin": "^5.1.1",
     "@tanstack/router-plugin": "^1.114.25",
     "@types/node": "^22.13.9",

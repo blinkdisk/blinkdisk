@@ -90,7 +90,7 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
             ) : (
               <Button
                 render={
-                  <Link to="/app/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
+                  <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
                 }
                 nativeButton={false}
                 variant="outline"

@@ -4,10 +4,11 @@ import {
   PROTOCOL_FRONTEND_NS,
   PROTOCOL_VAULT_NS,
 } from "@blinkdisk/constants/app";
-import { authClient } from "@electron/auth";
+import { getAccountCookie } from "@electron/auth";
 import { fetchVaultRaw } from "@electron/vault/fetch";
 import { getVault } from "@electron/vault/manage";
 import { app, net, protocol } from "electron";
+import { ACCOUNT_ID_HEADER } from "libs/constants/src/header";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -58,10 +59,12 @@ export function listenProtocol() {
 
       return net.fetch(pathToFileURL(pathToServe).toString());
     } else if (host === PROTOCOL_API_NS) {
-      req.headers.set(
-        "cookie",
-        `${req.headers.get("cookie") || ""}${authClient.getCookie()}`,
-      );
+      const accountId = req.headers.get(ACCOUNT_ID_HEADER);
+      if (accountId)
+        req.headers.set(
+          "cookie",
+          `${req.headers.get("cookie") || ""}${getAccountCookie(accountId)}`,
+        );
 
       return await fetch(
         `${process.env.API_URL}${pathname}${search ? search : ""}`,

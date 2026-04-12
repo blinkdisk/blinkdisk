@@ -1,15 +1,10 @@
-import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { trpc } from "@desktop/lib/trpc";
-import { useQuery } from "@tanstack/react-query";
+import { getVaultCollection } from "@desktop/lib/db";
+import { useAccountReactivity } from "../use-reactivity";
 
 export function useVaultList() {
-  const { queryKeys, accountId } = useQueryKey();
+  const data = useAccountReactivity((accountId) =>
+    getVaultCollection(accountId).find({ status: "ACTIVE" }).fetch(),
+  );
 
-  return useQuery({
-    queryKey: queryKeys.vault.list(),
-    queryFn: () => {
-      return trpc.vault.list.query();
-    },
-    enabled: !!accountId,
-  });
+  return { data };
 }

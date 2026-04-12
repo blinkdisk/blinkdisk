@@ -1,11 +1,8 @@
 import { useStore } from "@blinkdisk/forms/use-app-form";
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { ConfigValidationError } from "@desktop/components/errors/config-validation";
 import { VaultExistsError } from "@desktop/components/errors/vault-exists";
 import { VaultAction } from "@desktop/hooks/use-config-validation";
 import { AnyFormApi } from "@tanstack/react-form";
-import { InfoIcon } from "lucide-react";
 
 type CreateVaultAlertsProps = {
   form: AnyFormApi;
@@ -13,8 +10,6 @@ type CreateVaultAlertsProps = {
 };
 
 export function CreateVaultAlerts({ form, action }: CreateVaultAlertsProps) {
-  const { t } = useAppTranslation("vault.createDialog.config.info");
-
   const errors = useStore(form.store, (store) => store.errorMap);
 
   if (action === "UPDATE") return null;
@@ -31,13 +26,5 @@ export function CreateVaultAlerts({ form, action }: CreateVaultAlertsProps) {
   )
     return <VaultExistsError name={errors.onSubmit.name} />;
 
-  return (
-    <Alert variant="info">
-      <InfoIcon />
-      <AlertTitle>{t("title")}</AlertTitle>
-      <AlertDescription className="text-xs">
-        {t("description")}
-      </AlertDescription>
-    </Alert>
-  );
+  return null;
 }

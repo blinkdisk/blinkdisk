@@ -30,7 +30,7 @@ export function CreateVaultDetails({
     providerType,
     onSuccess: async (res) => {
       await navigate({
-        to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
+        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
         params: {
           vaultId: res.vaultId,
           hostName: window.electron.os.hostName(res.vaultId),
@@ -88,7 +88,7 @@ export function CreateVaultDetails({
           onChangeListenTo: ["password"],
           onChange: ({ value, fieldApi }) => {
             if (value !== fieldApi.form.getFieldValue("password"))
-              return { type: "custom", code: "password_mismatch" };
+              return { code: "custom", message: "password_mismatch" };
 
             return undefined;
           },

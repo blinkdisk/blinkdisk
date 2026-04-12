@@ -1,14 +1,12 @@
-import { readClipboard } from "@electron/clipboard";
 import {
   authenticateToken,
-  getSession,
-  listSessions,
+  getAccount,
   logout,
   openAuth,
-  setSession,
-  updateUser,
+  updateAccount,
 } from "@electron/auth";
-import { setVaultCache } from "@electron/cache";
+import { readClipboard } from "@electron/clipboard";
+import { syncAccount } from "@electron/db/sync";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 import { folderSize, isDirectory } from "@electron/fs";
 import { getPasswordCache, setPasswordCache } from "@electron/password";
@@ -28,7 +26,6 @@ import {
   connectVault,
   createVault,
   getVaultStatus,
-  startAllVaults,
 } from "@electron/vault/manage";
 import { validateVaultConfig } from "@electron/vault/validate";
 import { setProgressBar, window } from "@electron/window";
@@ -65,12 +62,10 @@ ipcMain.handle("dialog.save", (_, { defaultFileName, ...options }) =>
       : {}),
   }),
 );
-ipcMain.handle("vault.cache", (_, payload) => setVaultCache(payload));
 ipcMain.handle("vault.validate", (_, config) => validateVaultConfig(config));
 ipcMain.handle("vault.create", (_, config) => createVault(config));
 ipcMain.handle("vault.connect", (_, config) => connectVault(config));
 ipcMain.handle("vault.status", (_, payload) => getVaultStatus(payload));
-ipcMain.handle("vault.start.all", () => startAllVaults());
 ipcMain.handle("vault.restore.single", (_, payload) => restoreSingle(payload));
 ipcMain.handle("vault.restore.multiple", (_, payload) =>
   restoreMultiple(payload),
@@ -100,9 +95,9 @@ ipcMain.handle("update.install", () => installUpdate());
 ipcMain.handle("clipboard.read", () => readClipboard());
 
 ipcMain.handle("auth.open", () => openAuth());
-ipcMain.handle("auth.logout", () => logout());
+ipcMain.handle("auth.logout", (_, accountId) => logout(accountId));
 ipcMain.handle("auth.token", (_, payload) => authenticateToken(payload));
-ipcMain.handle("auth.user.update", (_, payload) => updateUser(payload));
-ipcMain.handle("auth.session.list", () => listSessions());
-ipcMain.handle("auth.session.get", () => getSession());
-ipcMain.handle("auth.session.set", (_, payload) => setSession(payload));
+ipcMain.handle("auth.account.update", (_, payload) => updateAccount(payload));
+ipcMain.handle("auth.account.get", (_, accountId) => getAccount(accountId));
+
+ipcMain.handle("sync.account", (_, accountId) => syncAccount(accountId));

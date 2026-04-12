@@ -15,12 +15,12 @@ export function useProfile() {
     (userName: string | undefined, hostNameOverride?: string) => {
       if (userName)
         navigate({
-          to: "/app/{-$vaultId}/{-$hostName}/{-$userName}",
+          to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
           params: { hostName: hostNameOverride || hostName, userName },
         });
       else
         navigate({
-          to: "/app/{-$vaultId}/{-$hostName}",
+          to: "/{-$accountId}/{-$vaultId}/{-$hostName}",
           params: { hostName: hostNameOverride || hostName },
         });
     },
@@ -30,7 +30,7 @@ export function useProfile() {
   const changeHostName = useCallback(
     (hostName: string) => {
       navigate({
-        to: "/app/{-$vaultId}/{-$hostName}",
+        to: "/{-$accountId}/{-$vaultId}/{-$hostName}",
         params: { hostName: hostName },
       });
     },

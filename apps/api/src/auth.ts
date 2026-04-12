@@ -18,7 +18,7 @@ import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
 import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
-import { magicLink, multiSession } from "better-auth/plugins";
+import { magicLink } from "better-auth/plugins";
 import { Kysely } from "kysely";
 import { trackAffiliateSignup } from "./lib/affiliate";
 
@@ -87,7 +87,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       },
       crossSubDomainCookies: {
         enabled: true,
-        domain: new URL(env.WEB_URL).hostname.split(".").slice(-2).join('.'),
+        domain: new URL(env.WEB_URL).hostname.split(".").slice(-2).join("."),
       },
       ipAddress: {
         ipAddressHeaders: [
@@ -125,9 +125,6 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
         expiresIn: 60 * 60,
         generateToken: () => generateCode(10),
         storeToken: "hashed",
-      }),
-      multiSession({
-        maximumSessions: 100,
       }),
     ],
     hooks: {

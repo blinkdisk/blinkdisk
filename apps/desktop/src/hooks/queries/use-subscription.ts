@@ -1,13 +1,15 @@
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
+import { useAccountId } from "../use-account-id";
 
 type UseSubscriptionOptions = {
   refetchInterval?: number;
 };
 
 export function useSubscription(options?: UseSubscriptionOptions) {
-  const { queryKeys, accountId } = useQueryKey();
+  const { isOnlineAccount } = useAccountId();
+  const { queryKeys } = useQueryKey();
 
   return useQuery({
     queryKey: queryKeys.subscription.detail(),
@@ -15,6 +17,6 @@ export function useSubscription(options?: UseSubscriptionOptions) {
       return trpc.payment.getSubscription.query();
     },
     refetchInterval: options?.refetchInterval,
-    enabled: !!accountId,
+    enabled: !!isOnlineAccount,
   });
 }
