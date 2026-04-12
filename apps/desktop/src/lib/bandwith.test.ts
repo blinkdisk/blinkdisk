@@ -1,4 +1,4 @@
-import { fromBits, toBits } from "./bandwith";
+import { fromBits, toBits } from "@desktop/lib/bandwith";
 
 describe("fromBits", () => {
   it("returns bps for values under 1000", () => {

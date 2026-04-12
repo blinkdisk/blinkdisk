@@ -1,7 +1,7 @@
+import { globalVaultDirectory } from "@electron/path";
 import { existsSync, readFileSync } from "node:fs";
 import { hostname, userInfo } from "node:os";
 import { resolve } from "node:path";
-import { globalVaultDirectory } from "./path";
 
 export function getUserName(vaultId: string) {
   try {

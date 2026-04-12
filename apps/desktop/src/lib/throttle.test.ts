@@ -1,4 +1,7 @@
-import { convertThrottleFromCore, convertThrottleToCore } from "./throttle";
+import {
+  convertThrottleFromCore,
+  convertThrottleToCore,
+} from "@desktop/lib/throttle";
 
 describe("convertThrottleFromCore", () => {
   it("returns null for falsy input", () => {

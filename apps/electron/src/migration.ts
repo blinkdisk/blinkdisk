@@ -1,9 +1,9 @@
+import { storeToken } from "@electron/auth";
+import { log } from "@electron/log";
 import { store } from "@electron/store";
 import { captureException } from "@sentry/electron/main";
 import { SessionResponse } from "better-auth/client";
 import { safeStorage, session } from "electron";
-import { storeToken } from "./auth";
-import { log } from "./log";
 
 export async function runMigrations() {
   try {

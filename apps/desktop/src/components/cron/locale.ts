@@ -2,7 +2,7 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { DefaultLocale } from "./types";
+import { DefaultLocale } from "@desktop/components/cron/types";
 
 export const DEFAULT_LOCALE_EN: DefaultLocale = {
   everyText: "every",

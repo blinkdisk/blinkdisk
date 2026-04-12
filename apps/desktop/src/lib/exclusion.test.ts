@@ -1,4 +1,4 @@
-import { buildExclusionRule, parseExclusionRule } from "./exclusion";
+import { buildExclusionRule, parseExclusionRule } from "@desktop/lib/exclusion";
 
 describe("parseExclusionRule", () => {
   describe("extension patterns", () => {

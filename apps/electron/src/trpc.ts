@@ -1,6 +1,6 @@
 import type { AppRouter } from "@blinkdisk/api/router";
+import { authClient, getAccountCookie } from "@electron/auth";
 import { createTRPCProxyClient, httpLink } from "@trpc/client";
-import { authClient, getAccountCookie } from "./auth";
 
 export const trpc = createTRPCProxyClient<AppRouter>({
   links: [

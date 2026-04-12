@@ -1,11 +1,11 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { providerForms } from "@desktop/components/forms/providers";
 import { useSetupPasswordForm } from "@desktop/hooks/forms/use-setup-password-form";
 import { useSetupVault } from "@desktop/hooks/mutations/use-setup-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { SettingsIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { providerForms } from "../forms/providers";
 
 export type SetupStep = "PASSWORD" | "CONFIG";
 

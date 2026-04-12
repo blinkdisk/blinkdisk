@@ -3,7 +3,7 @@ import {
   ZVaultPasswordForm,
   ZVaultPasswordFormType,
 } from "@blinkdisk/schemas/vault";
-import { useVaultPassword } from "../queries/use-vault-password";
+import { useVaultPassword } from "@desktop/hooks/queries/use-vault-password";
 
 export function useSetupPasswordForm({
   vaultId,

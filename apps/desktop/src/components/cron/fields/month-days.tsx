@@ -4,10 +4,10 @@
 
 import { useMemo } from "react";
 
+import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
-import { UNITS } from "../constants";
-import { DEFAULT_LOCALE_EN } from "../locale";
-import { MonthDaysProps } from "../types";
+import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
+import { MonthDaysProps } from "@desktop/components/cron/types";
 
 export function MonthDays(props: MonthDaysProps) {
   const {

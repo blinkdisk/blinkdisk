@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@blinkdisk/ui/select";
+import { formatValue } from "@desktop/components/cron/converter";
+import { CustomSelectProps } from "@desktop/components/cron/types";
 import { useCallback, useMemo } from "react";
-import { formatValue } from "../converter";
-import { CustomSelectProps } from "../types";
 
 export function CustomSelect(props: CustomSelectProps) {
   const {

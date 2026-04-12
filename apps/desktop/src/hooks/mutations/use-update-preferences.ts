@@ -1,10 +1,10 @@
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { i18n } from "@desktop/i18n";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAccountId } from "../use-account-id";
 
 export function useUpdatePreferences(onSuccess: () => void) {
   const queryClient = useQueryClient();

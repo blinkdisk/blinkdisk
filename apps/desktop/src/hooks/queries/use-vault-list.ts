@@ -1,5 +1,5 @@
+import { useAccountReactivity } from "@desktop/hooks/use-reactivity";
 import { getVaultCollection } from "@desktop/lib/db";
-import { useAccountReactivity } from "../use-reactivity";
 
 export function useVaultList() {
   const data = useAccountReactivity((accountId) =>

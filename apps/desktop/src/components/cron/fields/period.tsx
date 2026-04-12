@@ -12,8 +12,8 @@ import {
 import { useCallback } from "react";
 
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { DEFAULT_LOCALE_EN } from "../locale";
-import { PeriodProps, PeriodType } from "../types";
+import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
+import { PeriodProps, PeriodType } from "@desktop/components/cron/types";
 
 export function Period(props: PeriodProps) {
   const {

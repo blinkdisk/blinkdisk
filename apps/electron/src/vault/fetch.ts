@@ -1,8 +1,8 @@
+import { VaultInstance } from "@electron/vault/types";
 import { createWriteStream } from "fs";
 import { rename } from "fs/promises";
 import https from "https";
 import { Cookie } from "tough-cookie";
-import { VaultInstance } from "./types";
 
 export async function fetchVault(
   vault: VaultInstance,

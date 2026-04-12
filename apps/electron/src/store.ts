@@ -1,9 +1,9 @@
 import { EncryptedString } from "@electron/encryption";
+import { globalConfigDirectory } from "@electron/path";
 import { initVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
 import { app } from "electron";
 import Store from "electron-store";
-import { globalConfigDirectory } from "./path";
 
 export type GlobalStorageType = {
   authenticated: boolean;

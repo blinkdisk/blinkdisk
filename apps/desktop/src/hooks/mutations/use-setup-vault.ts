@@ -1,3 +1,4 @@
+import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
@@ -11,7 +12,6 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { getConfigCollection } from "@desktop/lib/db";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { STORAGE_PROVIDERS } from "libs/constants/src/providers";
 
 export function useSetupVault({
   onSuccess,

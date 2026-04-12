@@ -4,8 +4,8 @@
 
 import { useEffect, useRef } from "react";
 
-import { DEFAULT_LOCALE_EN } from "./locale";
-import { Locale, OnError } from "./types";
+import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
+import { Locale, OnError } from "@desktop/components/cron/types";
 
 /**
  * Creates an array of integers from start to end, inclusive

@@ -1,4 +1,4 @@
-import { mapConfigFields, mapProviderType } from "./mapping";
+import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 
 describe("mapProviderType", () => {
   it("maps standard provider types to core types", () => {

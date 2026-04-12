@@ -1,6 +1,6 @@
+import { useProfile } from "@desktop/hooks/use-profile";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useMemo } from "react";
-import { useProfile } from "./use-profile";
-import { useVaultId } from "./use-vault-id";
 
 export function useLocalProfile() {
   const { vaultId } = useVaultId();

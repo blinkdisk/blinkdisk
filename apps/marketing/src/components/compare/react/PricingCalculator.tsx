@@ -1,11 +1,11 @@
 import type { BackupTool } from "@blinkdisk/constants/comparison";
-import AcronisPricingCalculator from "./AcronisPricingCalculator";
-import BackblazePricingCalculator from "./BackblazePricingCalculator";
-import BlinkDiskPricingCalculator from "./BlinkDiskPricingCalculator";
-import CarbonitePricingCalculator from "./CarbonitePricingCalculator";
-import CrashPlanPricingCalculator from "./CrashPlanPricingCalculator";
-import EaseUSTodoBackupPricingCalculator from "./EaseUSTodoBackupPricingCalculator";
-import IDrivePricingCalculator from "./IDrivePricingCalculator";
+import AcronisPricingCalculator from "@marketing/components/compare/react/AcronisPricingCalculator";
+import BackblazePricingCalculator from "@marketing/components/compare/react/BackblazePricingCalculator";
+import BlinkDiskPricingCalculator from "@marketing/components/compare/react/BlinkDiskPricingCalculator";
+import CarbonitePricingCalculator from "@marketing/components/compare/react/CarbonitePricingCalculator";
+import CrashPlanPricingCalculator from "@marketing/components/compare/react/CrashPlanPricingCalculator";
+import EaseUSTodoBackupPricingCalculator from "@marketing/components/compare/react/EaseUSTodoBackupPricingCalculator";
+import IDrivePricingCalculator from "@marketing/components/compare/react/IDrivePricingCalculator";
 
 type Props = {
   tool: BackupTool;

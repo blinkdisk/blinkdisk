@@ -2,6 +2,7 @@ import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
 import { corePath, globalVaultDirectory } from "@electron/path";
+import { fetchVault } from "@electron/vault/fetch";
 import { vaults } from "@electron/vault/manage";
 import { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
@@ -10,7 +11,6 @@ import { app } from "electron";
 import { existsSync, renameSync } from "fs";
 import { resolve } from "path";
 import { CookieJar } from "tough-cookie";
-import { fetchVault } from "./fetch";
 
 export function startVaultServer(id: string, pollStatus = true) {
   return new Promise<VaultServer>((res) => {

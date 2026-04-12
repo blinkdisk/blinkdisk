@@ -1,3 +1,4 @@
+import { trackAffiliateSignup } from "@api/lib/affiliate";
 import { getPostHog, posthog } from "@api/lib/posthog";
 import { electron } from "@better-auth/electron";
 import { APP_ID_ORIGIN } from "@blinkdisk/constants/app";
@@ -20,7 +21,6 @@ import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink } from "better-auth/plugins";
 import { Kysely } from "kysely";
-import { trackAffiliateSignup } from "./lib/affiliate";
 
 const cookieSettings = {
   attributes: {

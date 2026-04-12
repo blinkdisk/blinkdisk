@@ -4,11 +4,11 @@ import {
   PROTOCOL_FRONTEND_NS,
   PROTOCOL_VAULT_NS,
 } from "@blinkdisk/constants/app";
+import { ACCOUNT_ID_HEADER } from "@blinkdisk/constants/header";
 import { getAccountCookie } from "@electron/auth";
 import { fetchVaultRaw } from "@electron/vault/fetch";
 import { getVault } from "@electron/vault/manage";
 import { app, net, protocol } from "electron";
-import { ACCOUNT_ID_HEADER } from "libs/constants/src/header";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 

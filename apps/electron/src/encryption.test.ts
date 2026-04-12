@@ -1,4 +1,4 @@
-import { decryptVaultConfig, encryptVaultConfig } from "./encryption";
+import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
 
 describe("encryptVaultConfig / decryptVaultConfig", () => {
   it("roundtrips a simple object", async () => {
