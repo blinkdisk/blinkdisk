@@ -14,10 +14,10 @@ export function RemoteTooltip({ children }: RemoteTooltipProps) {
   if (!remote) return children;
   return (
     <Tooltip>
-      <TooltipContent className="max-w-55 rounded-lg p-4">
+      <TooltipContent className="max-w-55 flex-col items-start rounded-lg p-4">
         <div className="flex items-center gap-1">
           <LockIcon className="mr-1 size-4" />
-          <p className="font-medium">{t("title")}</p>
+          <p className="text-sm font-medium">{t("title")}</p>
         </div>
         <p className="text-muted-foreground mt-1 text-xs">{t("description")}</p>
       </TooltipContent>
