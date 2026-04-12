@@ -20,6 +20,10 @@ export type GlobalStorageType = {
     // Managed by better-auth
     local_cache: string;
   };
+  migrations: {
+    id: string;
+    completedAt: string | Date;
+  }[];
 };
 
 export type AccountStorageType = {
@@ -94,45 +98,6 @@ export const store = new Store({
         cwd: globalConfigDirectory(),
       }
     : {}),
-  migrations: {
-    ">0.7.0": (store) => {
-      const accounts = store.get("accounts") || {};
-
-      Object.entries(accounts).forEach(([id, account]) => {
-        delete account.profileId;
-        delete account.deviceId;
-
-        if (
-          account.lastUsedVaultId &&
-          account.lastUsedVaultId.startsWith("strg_")
-        )
-          account.lastUsedVaultId = account.lastUsedVaultId.replace(
-            /^strg_/,
-            "vlt_",
-          );
-
-        store.set(`accounts.${id}`, account);
-      });
-
-      const passwords = store.get("passwords") || {};
-      store.set("passwords", {});
-
-      Object.entries(passwords).forEach(([id, password]) => {
-        if (id.startsWith("strg_")) id = id.replace(/^strg_/, "vlt_");
-        store.set(`passwords.${id}`, password);
-      });
-
-      store.delete("storages");
-      store.delete("configs");
-      store.delete("vaults");
-    },
-    ">1.3.0": (store) => {
-      store.delete("configs");
-    },
-    ">1.7.0": (store) => {
-      store.delete("vaults");
-    },
-  },
 });
 
 store.onDidAnyChange(() => {
