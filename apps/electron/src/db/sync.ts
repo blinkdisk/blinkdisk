@@ -6,7 +6,7 @@ import { globalAccountDirectory } from "@electron/path";
 import { trpc } from "@electron/trpc";
 import createFilesystemAdapter from "@signaldb/fs";
 import { SyncManager } from "@signaldb/sync";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export type SyncOptions = {
@@ -17,13 +17,18 @@ export type SyncOptions = {
 
 export const syncManager = new SyncManager({
   id: "sync",
-  persistenceAdapter: (name: string) =>
-    createFilesystemAdapter(
-      join(
-        globalAccountDirectory(),
-        `${name.replace("sync-sync-", "sync-")}.json`,
-      ),
-    ),
+  persistenceAdapter: (name: string) => {
+    const path = join(
+      globalAccountDirectory(),
+      `${name.replace("sync-sync-", "sync-")}.json`,
+    );
+
+    if (!existsSync(globalAccountDirectory()))
+      mkdirSync(globalAccountDirectory(), { recursive: true });
+    if (!existsSync(path)) writeFileSync(path, "[]");
+
+    return createFilesystemAdapter(path);
+  },
   pull: async (options: SyncOptions) => {
     let items: { id: string }[] = [];
 
