@@ -7,6 +7,7 @@ import { TooltipProvider } from "@blinkdisk/ui/tooltip";
 import { I18nextProvider } from "@blinkdisk/utils/i18n";
 import { AuthListener } from "@desktop/components/auth-listener";
 import { AuthDialog } from "@desktop/components/dialogs/auth";
+import { SelectAccountDialog } from "@desktop/components/dialogs/select-account";
 import { Update } from "@desktop/components/update";
 import { useStorageListener } from "@desktop/hooks/use-app-storage";
 import { useDeeplinkListener } from "@desktop/hooks/use-deeplink-listener";
@@ -64,6 +65,7 @@ function RootComponent() {
                   <Outlet />
                   <Toaster dark={theme.dark} />
                   <AuthDialog />
+                  <SelectAccountDialog />
                   <AuthListener />
                 </Update>
               </SkeletonTheme>

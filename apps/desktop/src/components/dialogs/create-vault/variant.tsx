@@ -9,11 +9,14 @@ import {
   CardTitle,
 } from "@blinkdisk/ui/card";
 import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
+import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
+import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useAuth } from "@desktop/hooks/use-auth";
 import { formatSize } from "@desktop/lib/number";
 import { CheckIcon, ExternalLinkIcon, XIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export type CreateVaultVariantProps = {
   selectCloud: () => void;
@@ -27,7 +30,19 @@ export function CreateVaultVariant({
   const { t } = useAppTranslation("vault.createDialog.variant");
   const { isOnlineAccount } = useAccountId();
   const { openAuthDialog } = useAuthDialog();
+  const { openSelectAccountDialog } = useSelectAccountDialog();
+  const { selectAccount } = useAuth();
+  const { accounts } = useAccountList();
   const waitingForAuth = useRef(false);
+
+  const handleSelectAccount = useCallback(() => {
+    openSelectAccountDialog({
+      onSelect: async (accountId) => {
+        await selectAccount(accountId);
+        selectCloud();
+      },
+    });
+  }, [openSelectAccountDialog, selectAccount, selectCloud]);
 
   useEffect(() => {
     if (waitingForAuth.current && isOnlineAccount) {
@@ -75,6 +90,8 @@ export function CreateVaultVariant({
             onClick={() => {
               if (isOnlineAccount) {
                 selectCloud();
+              } else if (accounts.length > 0) {
+                handleSelectAccount();
               } else {
                 waitingForAuth.current = true;
                 openAuthDialog();
@@ -83,7 +100,9 @@ export function CreateVaultVariant({
           >
             {isOnlineAccount
               ? t("cloudblink.continue")
-              : t("cloudblink.signIn")}
+              : accounts.length > 0
+                ? t("cloudblink.selectAccount")
+                : t("cloudblink.signIn")}
           </Button>
         </CardFooter>
       </Card>

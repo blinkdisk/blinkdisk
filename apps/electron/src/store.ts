@@ -149,7 +149,7 @@ store.onDidChange("accounts", (newValue, oldValue) => {
     (a) => !!a.active,
   ).length;
 
-  const newActiveCount = Object.values(oldValue).filter(
+  const newActiveCount = Object.values(newValue).filter(
     (a) => !!a.active,
   ).length;
 

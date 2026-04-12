@@ -17,7 +17,8 @@
           "cheaper": "80% cheaper than S3"
         },
         "continue": "Continue",
-        "signIn": "Sign in"
+        "signIn": "Sign in",
+        "selectAccount": "Select account"
       },
       "custom": {
         "title": "Custom storage provider",
