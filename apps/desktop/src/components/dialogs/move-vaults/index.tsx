@@ -37,11 +37,15 @@ export function MoveVaultsDialog() {
 
   const { mutate, isPending } = useMoveVaults({
     onSuccess: async (values) => {
-      setIsOpen(false);
       await navigate({
         to: "/{-$accountId}/{-$vaultId}",
-        params: { accountId: values.toAccountId, vaultId: values.vaultIds[0] },
+        params: {
+          accountId: values.toAccountId,
+          vaultId: values.vaultIds.at(-1),
+        },
       });
+
+      setIsOpen(false);
     },
   });
 
