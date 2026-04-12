@@ -1,3 +1,4 @@
+import { MoveVaultsDialog } from "@desktop/components/dialogs/move-vaults";
 import { Layout } from "@desktop/components/layout";
 import { useSubscriptionWatch } from "@desktop/hooks/use-subscription-watch";
 import { useSyncListener } from "@desktop/hooks/use-sync-listener";
@@ -13,6 +14,7 @@ function RouteComponent() {
 
   return (
     <Layout>
+      <MoveVaultsDialog />
       <Outlet />
     </Layout>
   );

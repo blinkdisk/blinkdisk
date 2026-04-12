@@ -27,7 +27,13 @@ export function AccountPreview({ account, local }: AccountPreviewProps) {
     <div className="flex items-center gap-2.5">
       <Avatar className="size-9 rounded-lg after:rounded-lg">
         <AvatarFallback className="rounded-lg">
-          {local ? <HatGlassesIcon /> : initials ? initials : ""}
+          {local ? (
+            <HatGlassesIcon className="size-4" />
+          ) : initials ? (
+            initials
+          ) : (
+            ""
+          )}
         </AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left leading-tight">

@@ -55,7 +55,7 @@ export function SelectAccountDialog() {
           </DialogDescription>
         </DialogHeader>
         <RadioGroup
-          className="mt-6"
+          className="mt-6 gap-3"
           value={accountId}
           onValueChange={setAccountId}
         >
