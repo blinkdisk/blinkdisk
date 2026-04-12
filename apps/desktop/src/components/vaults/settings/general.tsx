@@ -43,7 +43,7 @@ export function VaultGeneralSettings() {
           <form.Submit disabled={!isDirty}>{t("save")}</form.Submit>
         </form.AppForm>
       </form>
-      <div className="border-destructive/30 relative mt-8 flex justify-between rounded-xl border-2 border-dashed p-4">
+      <div className="mt-8 flex justify-between">
         <div>
           <p className="m-0! font-medium">{t("delete.title")}</p>
           <p className="text-muted-foreground text-xs">
