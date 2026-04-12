@@ -2,10 +2,10 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
+import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
-import { UNITS } from "../constants";
-import { DEFAULT_LOCALE_EN } from "../locale";
-import { MonthsProps } from "../types";
+import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
+import { MonthsProps } from "@desktop/components/cron/types";
 
 export function Months(props: MonthsProps) {
   const {

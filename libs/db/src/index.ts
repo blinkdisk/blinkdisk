@@ -1,8 +1,8 @@
 import { Kysely, PostgresDialect } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/postgres";
 
+import { DB as Schema } from "@db/schema";
 import { Pool } from "pg";
-import { DB as Schema } from "./schema";
 
 export const dialect = (databaseUrl: string) =>
   new PostgresDialect({

@@ -15,6 +15,7 @@ import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropd
 import { SidebarAddFolder } from "@desktop/components/sidebar/add-folder";
 import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
 import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
+import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
@@ -24,7 +25,6 @@ import { useOffline } from "@desktop/hooks/use-offline";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import { ComponentProps } from "react";
-import { SidebarOfflineAlert } from "./offline-alert";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount } = useAccountId();

@@ -1,4 +1,4 @@
-import { fromBytes, toBytes } from "./filesize";
+import { fromBytes, toBytes } from "@desktop/lib/filesize";
 
 describe("fromBytes", () => {
   it("returns bytes for values under 1000", () => {

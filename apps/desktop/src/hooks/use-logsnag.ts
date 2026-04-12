@@ -1,5 +1,5 @@
+import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useCallback } from "react";
-import { useAccount } from "./queries/use-account";
 
 type LogsnagOptions = {
   channel: string;

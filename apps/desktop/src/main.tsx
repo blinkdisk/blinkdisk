@@ -16,7 +16,7 @@ import ReactDOM from "react-dom/client";
 
 import { DefaultErrorPage } from "@blinkdisk/components/errors/default";
 import { NotFoundPage } from "@blinkdisk/components/errors/not-found";
-import { routeTree } from "./routeTree.gen";
+import { routeTree } from "@desktop/routeTree.gen";
 
 export const history = createHashHistory();
 

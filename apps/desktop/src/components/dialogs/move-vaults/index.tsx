@@ -1,3 +1,4 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
@@ -18,7 +19,6 @@ import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-
 import { useReactivity } from "@desktop/hooks/use-reactivity";
 import { getVaultCollection } from "@desktop/lib/db";
 import { useNavigate } from "@tanstack/react-router";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 

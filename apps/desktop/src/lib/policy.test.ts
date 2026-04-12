@@ -6,7 +6,7 @@ import {
   emptyPolicy,
   getDefinedFields,
   pickDefinedFields,
-} from "./policy";
+} from "@desktop/lib/policy";
 
 describe("pickDefinedFields", () => {
   it("picks only the listed keys", () => {

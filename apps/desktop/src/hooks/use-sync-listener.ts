@@ -1,5 +1,5 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useAccountId } from "@desktop/hooks/use-account-id";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { useEffect } from "react";
 
 export function useSyncListener() {

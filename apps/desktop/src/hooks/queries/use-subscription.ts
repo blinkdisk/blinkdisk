@@ -1,7 +1,7 @@
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
 import { useQuery } from "@tanstack/react-query";
-import { useAccountId } from "../use-account-id";
 
 type UseSubscriptionOptions = {
   refetchInterval?: number;

@@ -2,7 +2,7 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { ShortcutsValues, Unit } from "./types";
+import { ShortcutsValues, Unit } from "@desktop/components/cron/types";
 
 export const SUPPORTED_SHORTCUTS: ShortcutsValues[] = [
   {

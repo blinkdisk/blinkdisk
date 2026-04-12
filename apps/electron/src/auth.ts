@@ -8,6 +8,11 @@ import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { initAccountCollections } from "@electron/db";
+import {
+  decryptString,
+  EncryptedString,
+  encryptString,
+} from "@electron/encryption";
 import { AccountStorageType, store } from "@electron/store";
 import { sendWindow } from "@electron/window";
 import {
@@ -16,7 +21,6 @@ import {
 } from "better-auth/client/plugins";
 import { createAuthClient, SuccessContext } from "better-auth/react";
 import { parseSetCookie } from "set-cookie-parser";
-import { decryptString, EncryptedString, encryptString } from "./encryption";
 
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,

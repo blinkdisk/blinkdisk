@@ -1,5 +1,5 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useParams } from "@tanstack/react-router";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { useMemo } from "react";
 
 export function useAccountId() {

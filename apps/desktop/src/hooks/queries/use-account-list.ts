@@ -1,7 +1,7 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { AccountStorageType } from "@blinkdisk/electron/store";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
+import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useMemo } from "react";
-import { useAppStorage } from "../use-app-storage";
 
 export function useAccountList() {
   // @ts-expect-error Accounts not typed here

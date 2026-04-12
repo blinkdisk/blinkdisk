@@ -1,5 +1,5 @@
+import { useAccountReactivity } from "@desktop/hooks/use-reactivity";
 import { getConfigCollection } from "@desktop/lib/db";
-import { useAccountReactivity } from "../use-reactivity";
 
 export function useConfigList() {
   const data = useAccountReactivity((accountId) =>

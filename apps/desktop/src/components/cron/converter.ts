@@ -21,8 +21,14 @@ import {
   Shortcuts,
   ShortcutsType,
   Unit,
-} from "./types";
-import { convertStringToNumber, dedup, range, setError, sort } from "./utils";
+} from "@desktop/components/cron/types";
+import {
+  convertStringToNumber,
+  dedup,
+  range,
+  setError,
+  sort,
+} from "@desktop/components/cron/utils";
 
 /**
  * Set values from cron string

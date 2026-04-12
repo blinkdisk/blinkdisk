@@ -1,3 +1,4 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import {
@@ -13,7 +14,6 @@ import { RadioGroup, RadioGroupItem } from "@blinkdisk/ui/radio-group";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-dialog";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { useCallback, useState } from "react";
 
 export function SelectAccountDialog() {

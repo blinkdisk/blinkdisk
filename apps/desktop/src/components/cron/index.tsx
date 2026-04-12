@@ -14,9 +14,9 @@ import { MonthDays } from "@desktop/components/cron/fields/month-days";
 import { Months } from "@desktop/components/cron/fields/months";
 import { Period } from "@desktop/components/cron/fields/period";
 import { WeekDays } from "@desktop/components/cron/fields/week-days";
+import { CronProps, Locale, PeriodType } from "@desktop/components/cron/types";
+import { usePrevious } from "@desktop/components/cron/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CronProps, Locale, PeriodType } from "./types";
-import { usePrevious } from "./utils";
 
 export function Cron(props: CronProps) {
   const { t } = useAppTranslation("cron");

@@ -1,7 +1,7 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { getConfigCollection, getVaultCollection } from "@desktop/lib/db";
 import { useMutation } from "@tanstack/react-query";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 
 type MoveVaultsInput = {
   vaultIds: string[];

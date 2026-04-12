@@ -10,7 +10,7 @@ import type {
   SubscriptionStatus,
   VaultProvider,
   VaultStatus,
-} from "./enums";
+} from "@db/enums";
 
 export type Account = {
   id: Generated<string>;

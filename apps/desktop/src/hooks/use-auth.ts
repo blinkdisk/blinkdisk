@@ -1,13 +1,13 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
+import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
-import { useAccountList } from "./queries/use-account-list";
-import { useAccountId } from "./use-account-id";
 
 export function useAuth() {
   const navigate = useNavigate();

@@ -1,3 +1,4 @@
+import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import { AccountPreview } from "@desktop/components/accounts/preview";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAuth } from "@desktop/hooks/use-auth";
-import { LOCAL_ACCOUNT_ID } from "libs/constants/src/account";
 import { UserPlusIcon } from "lucide-react";
 import { ReactElement } from "react";
 
