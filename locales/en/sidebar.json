@@ -11,7 +11,7 @@
   "selectVault": {
     "empty": "Select vault",
     "createVault": "Create vault",
-    "refresh": "Refresh vaults",
+    "refresh": "Reload vaults",
     "refreshing": "Refreshing..."
   },
   "accountMenu": {
