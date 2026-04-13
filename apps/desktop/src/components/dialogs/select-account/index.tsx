@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@blinkdisk/ui/radio-group";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-dialog";
+import { UserRoundIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
 export function SelectAccountDialog() {
@@ -54,34 +55,51 @@ export function SelectAccountDialog() {
             {t("description")}
           </DialogDescription>
         </DialogHeader>
-        <RadioGroup
-          className="mt-6 gap-3"
-          value={accountId}
-          onValueChange={setAccountId}
-        >
-          {allAccounts.map((entry) => (
-            <FieldLabel key={entry.id} htmlFor={`account-${entry.id}`}>
-              <Field orientation="horizontal" className="items-center">
-                <div className="flex-1">
-                  <AccountPreview
-                    account={entry.local ? undefined : entry.account}
-                    local={entry.local}
-                  />
-                </div>
-                <RadioGroupItem value={entry.id} id={`account-${entry.id}`} />
-              </Field>
-            </FieldLabel>
-          ))}
-        </RadioGroup>
-        <DialogFooter className="mt-6">
-          <Button
-            className="w-full"
-            onClick={handleSelect}
-            disabled={!accountId}
-          >
-            {t("select")}
-          </Button>
-        </DialogFooter>
+        {allAccounts.length === 0 ? (
+          <div className="mb-4 mt-10 flex flex-col items-center">
+            <div className="bg-card text-muted-foreground flex size-12 items-center justify-center rounded-xl border">
+              <UserRoundIcon className="size-5" />
+            </div>
+            <p className="mt-4 text-base font-medium">{t("empty.title")}</p>
+            <p className="text-muted-foreground mt-1 text-center text-sm">
+              {t("empty.description")}
+            </p>
+          </div>
+        ) : (
+          <>
+            <RadioGroup
+              className="mt-6 gap-3"
+              value={accountId}
+              onValueChange={setAccountId}
+            >
+              {allAccounts.map((entry) => (
+                <FieldLabel key={entry.id} htmlFor={`account-${entry.id}`}>
+                  <Field orientation="horizontal" className="items-center">
+                    <div className="flex-1">
+                      <AccountPreview
+                        account={entry.local ? undefined : entry.account}
+                        local={entry.local}
+                      />
+                    </div>
+                    <RadioGroupItem
+                      value={entry.id}
+                      id={`account-${entry.id}`}
+                    />
+                  </Field>
+                </FieldLabel>
+              ))}
+            </RadioGroup>
+            <DialogFooter className="mt-6">
+              <Button
+                className="w-full"
+                onClick={handleSelect}
+                disabled={!accountId}
+              >
+                {t("select")}
+              </Button>
+            </DialogFooter>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
