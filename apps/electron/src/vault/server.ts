@@ -207,3 +207,54 @@ async function startStatusPool(id: string) {
     await new Promise((res) => setTimeout(res, delay));
   }
 }
+
+export type ParsedServerLine =
+  | { key: "SERVER ADDRESS"; value: string }
+  | { key: "SERVER PASSWORD"; value: string }
+  | { key: "SERVER CONTROL PASSWORD"; value: string }
+  | { key: "SERVER CERT SHA256"; value: string }
+  | { key: "SERVER CERTIFICATE"; value: string; decoded: string }
+  | { key: "BDC SPACE UPDATE"; value: string; parsed: unknown }
+  | { key: "BDC VAULT DELETED" }
+  | { key: "NOTIFICATION" }
+  | { key: "unknown"; raw: string }
+  | null;
+
+export function parseServerLine(line: string): ParsedServerLine {
+  const delimiter = line.indexOf(": ");
+  if (delimiter < 0) return null;
+
+  const key = line.substring(0, delimiter);
+  const value = line.substring(delimiter + 2) || "";
+
+  switch (key) {
+    case "SERVER ADDRESS":
+    case "SERVER PASSWORD":
+    case "SERVER CONTROL PASSWORD":
+    case "SERVER CERT SHA256":
+      return { key, value };
+
+    case "SERVER CERTIFICATE":
+      return {
+        key,
+        value,
+        decoded: Buffer.from(value, "base64").toString("ascii"),
+      };
+
+    case "BDC SPACE UPDATE":
+      return { key, value, parsed: JSON.parse(value) };
+
+    case "BDC VAULT DELETED":
+      return { key: "BDC VAULT DELETED" };
+
+    case "NOTIFICATION":
+      return { key: "NOTIFICATION" };
+
+    default:
+      return { key: "unknown", raw: line };
+  }
+}
+
+export function calculateStatusPollDelay(iteration: number): number {
+  return iteration < 10 ? 100 * iteration : 1000;
+}

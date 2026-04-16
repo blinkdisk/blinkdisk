@@ -27,6 +27,28 @@ export type RestoreItem = {
   type: "FILE" | "SYMLINK" | "DIRECTORY";
 };
 
+export function splitFileName(name: string): {
+  baseName: string;
+  extension: string;
+} {
+  const parts = name.split(".");
+  if (parts.length > 1) {
+    return {
+      baseName: parts.slice(0, -1).join("."),
+      extension: parts.at(-1) || "",
+    };
+  }
+  return { baseName: name, extension: "" };
+}
+
+export function generateDuplicateName(
+  baseName: string,
+  extension: string,
+  counter: number,
+): string {
+  return `${baseName} (${counter})${extension ? `.${extension}` : ""}`;
+}
+
 async function restore(
   item: RestoreItem,
   directory: string,
@@ -37,18 +59,13 @@ async function restore(
   const pathExists = await fileExists(path);
 
   if (pathExists) {
-    const fileNameParts = item.name.split(".");
-    const fileExtension = fileNameParts.length > 1 ? fileNameParts.at(-1) : "";
-    const fileBaseName =
-      fileNameParts.length > 1
-        ? fileNameParts.slice(0, -1).join(".")
-        : item.name;
+    const { baseName: fileBaseName, extension: fileExtension } = splitFileName(item.name);
 
     let counter = 1;
     while (true) {
       const newPath = join(
         directory,
-        `${fileBaseName} (${counter++})${fileExtension ? `.${fileExtension}` : ""}`,
+        generateDuplicateName(fileBaseName, fileExtension, counter++),
       );
 
       const exists = await fileExists(newPath);
