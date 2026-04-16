@@ -28,6 +28,22 @@ export const paymentRouter = router({
       const price = plan.prices.find((p) => p.id === input.priceId);
       if (!price || !price.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
+      const space = await ctx.db
+        .selectFrom("Space")
+        .select(["id"])
+        .where("accountId", "=", ctx.account.id)
+        .executeTakeFirst();
+
+      if (space) {
+        const stub = ctx.env.SPACE.getByName(space.id);
+        const used = await (
+          stub as unknown as { getUsed: () => Promise<number> }
+        ).getUsed();
+
+        const bytes = plan.storageGB * 1000 * 1000 * 1000;
+        if (used > bytes) throw new CustomError("NOT_ALLOWED");
+      }
+
       const account = await ctx.db
         .selectFrom("Account")
         .select(["polarId"])

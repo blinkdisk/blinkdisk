@@ -56,11 +56,9 @@ export class Space extends DurableObject<Cloudflare.Env> {
     return (await this.ctx.storage.get<number>("usedBytes")) || 0;
   }
 
-  async updateCapacity(capacity: number, used?: number) {
+  async updateCapacity(capacity: number) {
     await this.ctx.storage.put("capacity", capacity);
     await this.ctx.storage.put("notifications", []);
-
-    if (used !== undefined) await this.ctx.storage.put("usedBytes", used);
   }
 
   async alarm() {
