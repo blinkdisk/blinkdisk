@@ -501,9 +501,6 @@ importers:
       '@lucide/astro':
         specifier: ^1.7.0
         version: 1.7.0(astro@6.1.4)
-      '@resvg/resvg-wasm':
-        specifier: ^2.6.2
-        version: 2.6.2
       '@sentry/astro':
         specifier: ^10.42.0
         version: 10.42.0(astro@6.1.4)(rollup@4.52.4)
@@ -5795,11 +5792,6 @@ packages:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
     dependencies:
       react: 19.0.0
-    dev: false
-
-  /@resvg/resvg-wasm@2.6.2:
-    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
-    engines: {node: '>= 10'}
     dev: false
 
   /@rolldown/pluginutils@1.0.0-beta.27:

@@ -26,7 +26,6 @@
     "@fontsource/inter": "^5.2.8",
     "@fontsource/space-mono": "^5.2.9",
     "@lucide/astro": "^1.7.0",
-    "@resvg/resvg-wasm": "^2.6.2",
     "@sentry/astro": "^10.42.0",
     "@sentry/cloudflare": "^10.42.0",
     "@tailwindcss/typography": "^0.5.19",
