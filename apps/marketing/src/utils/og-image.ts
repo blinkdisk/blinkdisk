@@ -1,31 +1,13 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { ReactNode } from "react";
-import { initWasm, Resvg } from "@resvg/resvg-wasm";
 import satori from "satori";
+import sharp from "sharp";
 
-const FONT_CDN = "https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files";
-const WASM_CDN =
-  "https://cdn.jsdelivr.net/npm/@resvg/resvg-wasm@2/index_bg.wasm";
+const fontsDir = join(process.cwd(), "public/fonts");
 
-let fontsCache: { inter400: ArrayBuffer; inter700: ArrayBuffer } | null = null;
-let wasmInitialized = false;
-
-async function ensureInit() {
-  if (!fontsCache) {
-    const [inter400, inter700] = await Promise.all([
-      fetch(`${FONT_CDN}/inter-latin-400-normal.woff`).then((r) =>
-        r.arrayBuffer(),
-      ),
-      fetch(`${FONT_CDN}/inter-latin-700-normal.woff`).then((r) =>
-        r.arrayBuffer(),
-      ),
-    ]);
-    fontsCache = { inter400, inter700 };
-  }
-  if (!wasmInitialized) {
-    await initWasm(fetch(WASM_CDN));
-    wasmInitialized = true;
-  }
-}
+const inter400 = readFileSync(join(fontsDir, "inter-latin-400-normal.woff"));
+const inter700 = readFileSync(join(fontsDir, "inter-latin-700-normal.woff"));
 
 const logoSvg = `<svg viewBox="0 0 2794 415" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="153.987" y="47.9989" width="226.258" height="226.258" rx="42.4234" transform="rotate(45 153.987 47.9989)" stroke="white" stroke-width="21.2117" stroke-miterlimit="1" stroke-dasharray="45.96 45.96"/>
@@ -156,29 +138,26 @@ export async function generateOgImage({
     },
   };
 
-  await ensureInit();
-
   const svg = await satori(element as ReactNode, {
     width: 1200,
     height: 630,
     fonts: [
       {
         name: "Inter",
-        data: fontsCache!.inter400,
+        data: inter400,
         weight: 400,
         style: "normal",
       },
       {
         name: "Inter",
-        data: fontsCache!.inter700,
+        data: inter700,
         weight: 700,
         style: "normal",
       },
     ],
   });
 
-  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } });
-  return Buffer.from(resvg.render().asPng());
+  return sharp(Buffer.from(svg)).png().toBuffer();
 }
 
 export function createOgImageResponse(png: Buffer): Response {

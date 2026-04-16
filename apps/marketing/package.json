@@ -43,6 +43,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "satori": "^0.19.1",
+    "sharp": "^0.34.5",
     "sonner": "^2.0.1",
     "twemoji-parser": "^14.0.0",
     "ua-parser-js": "^2.0.5",
