@@ -62,12 +62,12 @@ import XIcon from "@lucide/astro/icons/x";
   </div>
   <div
     id="hero-video-trigger"
-    class="lg:rounded-4xl relative mt-16 cursor-pointer overflow-hidden rounded-xl sm:mt-20 sm:rounded-2xl md:rounded-3xl"
+    class="lg:rounded-4xl relative mt-16 cursor-pointer overflow-hidden rounded-xl border shadow sm:mt-20 sm:rounded-2xl md:rounded-3xl dark:shadow-lg"
   >
     <Image
       src={screenshotLight}
       alt="Screenshot of the BlinkDisk desktop app"
-      class="w-content border shadow dark:hidden"
+      class="w-content dark:hidden"
       widths={[640, 960, 1280, 1600]}
       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 90vw, 1024px"
       loading="eager"
@@ -77,7 +77,7 @@ import XIcon from "@lucide/astro/icons/x";
     <Image
       src={screenshotDark}
       alt="Screenshot of the BlinkDisk desktop app"
-      class="w-content hidden border shadow dark:block"
+      class="w-content hidden dark:block"
       widths={[640, 960, 1280, 1600]}
       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 90vw, 1024px"
       loading="eager"
