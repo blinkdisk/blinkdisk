@@ -10,7 +10,7 @@
 </p>
 
 <a href="https://blinkdisk.com/?utm_source=github">
-  <img src="https://blinkdisk.com/brand/social.jpg" alt="BlinkDisk Banner">
+  <img src="https://github.com/blinkdisk/blinkdisk/blob/main/apps/marketing/src/assets/screenshots/dark.png?raw=true" alt="BlinkDisk Banner">
 </a>
 
 ## 💡 What is BlinkDisk?
