@@ -1,5 +1,7 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
+import { DEMO_ACCOUNT } from "@blinkdisk/constants/demo";
 import { AccountStorageType } from "@blinkdisk/electron/store";
+import { isDemoMode } from "@desktop/lib/demo";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useMemo } from "react";
 
@@ -10,6 +12,17 @@ export function useAccountList() {
   ];
 
   const accounts = useMemo(() => {
+    if (isDemoMode) {
+      return [
+        {
+          id: DEMO_ACCOUNT.id,
+          name: DEMO_ACCOUNT.name,
+          email: DEMO_ACCOUNT.email,
+          createdAt: "2025-01-15T10:00:00.000Z",
+        },
+      ];
+    }
+
     if (!accountStorage) return [];
 
     return Object.entries(accountStorage)

@@ -42,7 +42,8 @@
     "SENTRY_CLOUD_PROJECT",
     "SENTRY_CLOUD_DSN",
     "SENTRY_WEB_PROJECT",
-    "SENTRY_WEB_DSN"
+    "SENTRY_WEB_DSN",
+    "DEMO"
   ],
   "tasks": {
     "build": {

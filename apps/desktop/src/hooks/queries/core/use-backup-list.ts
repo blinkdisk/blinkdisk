@@ -1,4 +1,6 @@
+import { DEMO_BACKUPS } from "@blinkdisk/constants/demo";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
+import { isDemoMode } from "@desktop/lib/demo";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -40,6 +42,8 @@ export function useBackupList() {
   return useQuery({
     queryKey: queryKeys.backup.list(folder?.id),
     queryFn: async () => {
+      if (isDemoMode) return DEMO_BACKUPS as CoreBackupItem[];
+
       const res = await vaultApi(vaultId).get<{
         snapshots: CoreBackupItem[];
         unfilteredCount: number;
@@ -55,7 +59,7 @@ export function useBackupList() {
 
       return res.data.snapshots.reverse();
     },
-    refetchInterval: 1000,
-    enabled: !!vaultId && !!folder && running,
+    refetchInterval: isDemoMode ? false : 1000,
+    enabled: isDemoMode || (!!vaultId && !!folder && running),
   });
 }

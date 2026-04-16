@@ -58,6 +58,7 @@ export default defineConfig({
         POSTHOG_KEY: null,
         SENTRY_DESKTOP_DSN: null,
         LOGSNAG_PUBLIC_KEY: null,
+        DEMO: null,
       },
       {
         loadEnvFiles: false,

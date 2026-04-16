@@ -1,3 +1,4 @@
+import { isDemoMode } from "@desktop/lib/demo";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useQuery } from "@tanstack/react-query";
@@ -14,10 +15,19 @@ export function useVaultStatus() {
       if (!res) return null;
       return res;
     },
-    enabled: !!vaultId,
+    enabled: !isDemoMode && !!vaultId,
     retry: true,
-    refetchInterval: 1000,
+    refetchInterval: isDemoMode ? false : 1000,
   });
+
+  if (isDemoMode) {
+    return {
+      ...query,
+      status: "RUNNING" as const,
+      initTask: undefined,
+      running: true,
+    };
+  }
 
   return {
     ...query,

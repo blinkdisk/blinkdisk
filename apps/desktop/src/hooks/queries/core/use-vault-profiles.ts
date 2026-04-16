@@ -1,4 +1,6 @@
+import { DEMO_PROFILES } from "@blinkdisk/constants/demo";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
+import { isDemoMode } from "@desktop/lib/demo";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
@@ -21,6 +23,8 @@ export function useVaultProfiles() {
   return useQuery({
     queryKey: queryKeys.vault.profiles(vaultId),
     queryFn: async () => {
+      if (isDemoMode) return DEMO_PROFILES as Profile[];
+
       if (!vaultId) return null;
 
       const res = await vaultApi(vaultId).get<{
@@ -96,6 +100,6 @@ export function useVaultProfiles() {
 
       return profiles;
     },
-    enabled: !!vaultId && running,
+    enabled: isDemoMode || (!!vaultId && running),
   });
 }

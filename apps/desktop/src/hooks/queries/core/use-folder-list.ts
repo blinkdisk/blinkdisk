@@ -1,5 +1,7 @@
+import { DEMO_FOLDERS } from "@blinkdisk/constants/demo";
 import { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
+import { isDemoMode } from "@desktop/lib/demo";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -98,6 +100,8 @@ export function useFolderList() {
   return useQuery({
     queryKey: queryKeys.folder.list(vaultId, profileFilter),
     queryFn: async () => {
+      if (isDemoMode) return DEMO_FOLDERS as CoreFolderItem[];
+
       if (!profileFilter) return null;
 
       const res = await vaultApi(vaultId).get<{
@@ -131,7 +135,7 @@ export function useFolderList() {
 
       return folders;
     },
-    refetchInterval: 1000,
-    enabled: !!vaultId && !!profileFilter && running,
+    refetchInterval: isDemoMode ? false : 1000,
+    enabled: isDemoMode || (!!vaultId && !!profileFilter && running),
   });
 }
