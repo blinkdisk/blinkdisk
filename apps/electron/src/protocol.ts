@@ -29,6 +29,25 @@ export function registerProtcol() {
   ]);
 }
 
+export function resolveProtocolPath(
+  baseDir: string,
+  pathname: string,
+): string {
+  return path.resolve(
+    baseDir,
+    pathname === "/" ? "index.html" : pathname.slice(1),
+  );
+}
+
+export function isPathSafe(baseDir: string, filePath: string): boolean {
+  const relativePath = path.relative(baseDir, filePath);
+  return (
+    !!relativePath &&
+    !relativePath.startsWith("..") &&
+    !path.isAbsolute(relativePath)
+  );
+}
+
 export function listenProtocol() {
   protocol.handle(INTERNAL_SCHEME, async (req) => {
     const { host, pathname, search } = new URL(req.url);
@@ -38,17 +57,8 @@ export function listenProtocol() {
         ? path.join(import.meta.dirname, "..", "frontend")
         : path.join(process.resourcesPath, "app.asar", "frontend");
 
-      const pathToServe = path.resolve(
-        baseDir,
-        pathname === "/" ? "index.html" : pathname.slice(1),
-      );
-
-      const relativePath = path.relative(baseDir, pathToServe);
-
-      const isSafe =
-        relativePath &&
-        !relativePath.startsWith("..") &&
-        !path.isAbsolute(relativePath);
+      const pathToServe = resolveProtocolPath(baseDir, pathname);
+      const isSafe = isPathSafe(baseDir, pathToServe);
 
       if (!isSafe) {
         return new Response("Path not allowed", {
