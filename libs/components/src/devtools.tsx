@@ -4,7 +4,7 @@ import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 export function Devtools() {
-  if (!import.meta.env.DEV) return null;
+  if (!import.meta.env.DEV || process.env.DEMO === "true") return null;
   return (
     <TanStackDevtools
       plugins={[
