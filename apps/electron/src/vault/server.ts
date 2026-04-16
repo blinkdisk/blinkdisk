@@ -57,38 +57,35 @@ export function startVaultServer(id: string, pollStatus = true) {
     process?.stderr.on("data", (data) => {
       const lines = (data + "").split("\n");
 
-      for (let i = 0; i < lines.length; i++) {
-        const delimiter = lines[i]?.indexOf(": ") || 0;
-        if (delimiter < 0) continue;
+      for (const line of lines) {
+        const parsed = parseServerLine(line);
+        if (!parsed) continue;
 
-        const key = lines[i]?.substring(0, delimiter);
-        const value = lines[i]?.substring(delimiter + 2) || "";
-
-        switch (key) {
+        switch (parsed.key) {
           case "SERVER ADDRESS":
-            address = value;
+            address = parsed.value;
             break;
 
           case "SERVER PASSWORD":
-            password = value;
+            password = parsed.value;
             break;
 
           case "SERVER CONTROL PASSWORD":
-            controlPassword = value;
+            controlPassword = parsed.value;
             break;
 
           case "SERVER CERT SHA256":
-            certificateHash = value;
+            certificateHash = parsed.value;
             break;
 
           case "SERVER CERTIFICATE":
-            certificate = Buffer.from(value, "base64").toString("ascii");
+            certificate = parsed.decoded;
             break;
 
           case "BDC SPACE UPDATE":
             sendWindow("space.update", {
               vaultId: id,
-              space: JSON.parse(value),
+              space: parsed.parsed,
             });
             break;
 
@@ -99,14 +96,6 @@ export function startVaultServer(id: string, pollStatus = true) {
           // TODO: Handle notification events
           case "NOTIFICATION":
             break;
-
-          //   const [notification, parseError] = tryCatch(() => JSON.parse(value));
-          //   if (parseError)
-          //      return log.error(
-          //        `Failed to parse notification for ${this.id}: ${parseError}`,
-          //      );
-          //   this.handleNotification(notification);
-          //   break;
 
           default:
             logFormatted(id, data);
@@ -197,7 +186,7 @@ async function startStatusPool(id: string) {
     else vaultStatus = "SETUP";
 
     i = i + 1;
-    const delay = i < 10 ? 100 * i : 1000;
+    const delay = calculateStatusPollDelay(i);
 
     if (vaults[id]) {
       vaults[id].status = vaultStatus;
