@@ -35,7 +35,11 @@ describe("getAccountCache", () => {
     });
     const result = getAccountCache();
     expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({ id: "acc-1", active: true, name: "Active" });
+    expect(result[0]).toMatchObject({
+      id: "acc-1",
+      active: true,
+      name: "Active",
+    });
   });
 
   it("adds id field from object keys", () => {
@@ -43,7 +47,7 @@ describe("getAccountCache", () => {
       "my-account-id": { active: true },
     });
     const result = getAccountCache();
-    expect(result[0].id).toBe("my-account-id");
+    expect(result[0]?.id).toBe("my-account-id");
   });
 
   it("handles multiple accounts, some active some not", () => {
