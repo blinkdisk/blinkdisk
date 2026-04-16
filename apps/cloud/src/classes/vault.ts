@@ -167,7 +167,7 @@ export class Vault extends DurableObject<Cloudflare.Env> {
     this.sessions.delete(ws);
   }
 
-  async delete(vaultId: string, updateSpace: boolean) {
+  async delete(vaultId: string) {
     let marker: string | null = null;
     while (true) {
       const res = (await this.s3.send(
@@ -197,15 +197,13 @@ export class Vault extends DurableObject<Cloudflare.Env> {
       else break;
     }
 
-    if (updateSpace) {
-      const spaceId = await this.ctx.storage.get<string>("spaceId");
-      const currentBytes =
-        (await this.ctx.storage.get<number>("currentBytes")) || 0;
+    const spaceId = await this.ctx.storage.get<string>("spaceId");
+    const currentBytes =
+      (await this.ctx.storage.get<number>("currentBytes")) || 0;
 
-      if (spaceId && currentBytes) {
-        const stub = this.env.SPACE.getByName(spaceId);
-        await stub.subtract(currentBytes);
-      }
+    if (spaceId && currentBytes) {
+      const stub = this.env.SPACE.getByName(spaceId);
+      await stub.subtract(currentBytes);
     }
 
     // Delete this durable object itself

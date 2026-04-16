@@ -18,6 +18,7 @@
       "manage": "Manage subscription",
       "periodChange": "Switch to {{period}} plan",
       "downgradeNotPossible": "Downgrade not possible",
+      "insufficientStorage": "Your current usage exceeds {{storageGB}} GB. Free up storage to select this plan.",
       "period": {
         "monthly": "Monthly",
         "yearly": "Yearly"

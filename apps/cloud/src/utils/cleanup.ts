@@ -67,12 +67,12 @@ export async function cleanup(
 
   for (const space of spaces) {
     const stub = env.SPACE.getByName(space.id);
-    await stub.updateCapacity(FREE_SPACE_AVAILABLE, 0);
+    await stub.updateCapacity(FREE_SPACE_AVAILABLE);
   }
 
   await db
     .updateTable("Space")
-    .set({ used: String(0), capacity: FREE_SPACE_AVAILABLE.toString() })
+    .set({ capacity: FREE_SPACE_AVAILABLE.toString() })
     .where(
       "id",
       "in",
@@ -92,6 +92,6 @@ export async function cleanup(
 
   for (const vault of vaults) {
     const stub = env.VAULT.getByName(vault.id);
-    await stub.delete(vault.id, false);
+    await stub.delete(vault.id);
   }
 }

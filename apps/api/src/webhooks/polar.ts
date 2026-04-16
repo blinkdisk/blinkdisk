@@ -81,6 +81,14 @@ export async function polarWebhook(
 
         if (!account) return c.json({ error: "Account not found" }, 400);
 
+        // Clear cleanupAt on any previous subscriptions for this account
+        // to prevent stale cleanup emails and data deletion
+        await db
+          .updateTable("Subscription")
+          .set({ cleanupAt: null })
+          .where("accountId", "=", account.id)
+          .execute();
+
         accountId = account.id;
         subscriptionId = generateId("Subscription");
         planUpdated = true;

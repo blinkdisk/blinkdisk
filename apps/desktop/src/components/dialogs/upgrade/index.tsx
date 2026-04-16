@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
 import { Trans } from "@blinkdisk/utils/i18n";
 import { PendingCheckoutDialog } from "@desktop/components/dialogs/pending-checkout";
 import {
@@ -196,11 +197,11 @@ function Plan({
     return "UPGRADE";
   }, [plan, price, subscription]);
 
-  const isDowngradePossible = useMemo(() => {
-    if (action !== "DOWNGRADE" || !space) return true;
+  const hasInsufficientStorage = useMemo(() => {
+    if (!space) return false;
     const bytes = plan.storageGB * 1000 * 1000 * 1000;
-    return space.used < bytes;
-  }, [plan, action, space]);
+    return space.used >= bytes;
+  }, [plan, space]);
 
   if (!price) return null;
   return (
@@ -310,7 +311,7 @@ function Plan({
           </p>
         </div>
       )}
-      <div className="mt-2 [&>button]:w-full">
+      <div className="mt-2 [&_button]:w-full">
         {contact ? (
           <Button onClick={() => window.open("mailto:cloud@blinkdisk.com")}>
             {t("contact.button")}
@@ -324,35 +325,49 @@ function Plan({
             {t("manage")}
           </Button>
         ) : action === "UPGRADE" ? (
-          <Button
-            loading={isCheckoutPending}
-            onClick={() =>
-              subscription
-                ? setChange({ action: "UPGRADE", priceId: price.id })
-                : checkout({
-                    priceId: price.id,
-                  })
-            }
+          <InsufficientStorageTooltip
+            disabled={hasInsufficientStorage}
+            storageGB={plan.storageGB}
           >
-            {t("upgrade", {
-              storageGB: plan.storageGB.toLocaleString(),
-            })}
-          </Button>
+            <Button
+              loading={isCheckoutPending}
+              disabled={hasInsufficientStorage}
+              onClick={() =>
+                subscription
+                  ? setChange({ action: "UPGRADE", priceId: price.id })
+                  : checkout({
+                      priceId: price.id,
+                    })
+              }
+            >
+              {t("upgrade", {
+                storageGB: plan.storageGB.toLocaleString(),
+              })}
+            </Button>
+          </InsufficientStorageTooltip>
         ) : action === "DOWNGRADE" ? (
-          <Button
-            onClick={() => {
-              setChange({
-                action: "DOWNGRADE",
-                priceId: price.id,
-              });
-            }}
-            disabled={!isDowngradePossible}
-            variant="secondary"
+          <InsufficientStorageTooltip
+            disabled={hasInsufficientStorage}
+            storageGB={plan.storageGB}
           >
-            {t(isDowngradePossible ? "downgrade" : "downgradeNotPossible", {
-              storageGB: plan.storageGB.toLocaleString(),
-            })}
-          </Button>
+            <Button
+              onClick={() => {
+                setChange({
+                  action: "DOWNGRADE",
+                  priceId: price.id,
+                });
+              }}
+              disabled={hasInsufficientStorage}
+              variant="secondary"
+            >
+              {t(
+                hasInsufficientStorage ? "downgradeNotPossible" : "downgrade",
+                {
+                  storageGB: plan.storageGB.toLocaleString(),
+                },
+              )}
+            </Button>
+          </InsufficientStorageTooltip>
         ) : (
           <Button
             onClick={() => {
@@ -370,5 +385,31 @@ function Plan({
         )}
       </div>
     </div>
+  );
+}
+
+type InsufficientStorageTooltipProps = {
+  children: React.ReactNode;
+  disabled: boolean;
+  storageGB: number;
+};
+
+function InsufficientStorageTooltip({
+  children,
+  disabled,
+  storageGB,
+}: InsufficientStorageTooltipProps) {
+  const { t } = useAppTranslation("subscription.upgradeDialog.plan");
+
+  if (!disabled) return children;
+  return (
+    <Tooltip>
+      <TooltipContent>
+        {t("insufficientStorage", {
+          storageGB: storageGB.toLocaleString(),
+        })}
+      </TooltipContent>
+      <TooltipTrigger render={<span tabIndex={0} />}>{children}</TooltipTrigger>
+    </Tooltip>
   );
 }
