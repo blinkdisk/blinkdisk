@@ -14,6 +14,7 @@ export type CellValue = SupportedValue | TextValue | null;
 
 export type BackupTool = {
   slug: string;
+  aliases?: string[];
   name: string;
   website: string;
   pricingUrl?: string;
@@ -222,7 +223,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
   },
   {
     slug: "backblaze",
-    name: "Backblaze",
+    name: "Backblaze Computer Backup",
     website: "https://www.backblaze.com/cloud-backup/personal",
     pricingUrl: "https://www.backblaze.com/cloud-backup/pricing",
     general: {
@@ -338,8 +339,9 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     },
   },
   {
-    slug: "acronis",
-    name: "Acronis",
+    slug: "acronis-true-image",
+    aliases: ["acronis"],
+    name: "Acronis True Image",
     website: "https://www.acronis.com/en/products/true-image/",
     pricingUrl: "https://www.acronis.com/en/products/true-image/purchasing/",
     general: {

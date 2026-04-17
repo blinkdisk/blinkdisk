@@ -12,11 +12,11 @@ type Props = {
 };
 
 const calculators: Record<string, React.ComponentType> = {
-  acronis: AcronisPricingCalculator,
   blinkdisk: BlinkDiskPricingCalculator,
   backblaze: BackblazePricingCalculator,
   carbonite: CarbonitePricingCalculator,
   crashplan: CrashPlanPricingCalculator,
+  "acronis-true-image": AcronisPricingCalculator,
   "easeus-todo-backup": EaseUSTodoBackupPricingCalculator,
   idrive: IDrivePricingCalculator,
 };
