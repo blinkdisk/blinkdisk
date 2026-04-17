@@ -5,6 +5,8 @@ import BlinkDiskPricingCalculator from "@marketing/components/compare/react/Blin
 import CarbonitePricingCalculator from "@marketing/components/compare/react/CarbonitePricingCalculator";
 import CrashPlanPricingCalculator from "@marketing/components/compare/react/CrashPlanPricingCalculator";
 import EaseUSTodoBackupPricingCalculator from "@marketing/components/compare/react/EaseUSTodoBackupPricingCalculator";
+import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
+import FreemiumPricingCalculator from "@marketing/components/compare/react/FreemiumPricingCalculator";
 import IDrivePricingCalculator from "@marketing/components/compare/react/IDrivePricingCalculator";
 
 type Props = {
@@ -21,16 +23,26 @@ const calculators: Record<string, React.ComponentType> = {
   idrive: IDrivePricingCalculator,
 };
 
+const pricingCalculators: Record<
+  BackupTool["pricing"],
+  React.ComponentType | null
+> = {
+  free: FreePricingCalculator,
+  freemium: FreemiumPricingCalculator,
+  custom: null,
+};
+
+function resolveCalculator(tool: BackupTool): React.ComponentType | null {
+  if (tool.slug in calculators) return calculators[tool.slug] ?? null;
+  return pricingCalculators[tool.pricing] ?? null;
+}
+
 export default function PricingCalculator({ tool }: Props) {
-  const Calculator = calculators[tool.slug];
+  const Calculator = resolveCalculator(tool);
 
   if (!Calculator) {
     return null;
   }
 
   return <Calculator />;
-}
-
-export function hasCalculator(slug: string): boolean {
-  return slug in calculators;
 }

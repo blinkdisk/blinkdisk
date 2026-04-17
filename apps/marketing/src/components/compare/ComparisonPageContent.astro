@@ -2,9 +2,7 @@
 import Button from "@marketing/components/Button.astro";
 import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
 import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
-import PricingCalculator, {
-  hasCalculator,
-} from "@marketing/components/compare/react/PricingCalculator";
+import PricingCalculator from "@marketing/components/compare/react/PricingCalculator";
 import {
   ToolSelector,
   AddToolButton,
@@ -246,9 +244,7 @@ const paddedTools: (BackupTool | null)[] =
           {tools.map((tool) => (
             <div class="flex flex-col gap-4">
               <h4 class="text-center text-sm font-semibold">{tool.name}</h4>
-              {hasCalculator(tool.slug) ? (
-                <PricingCalculator client:load tool={tool} />
-              ) : null}
+              <PricingCalculator client:load tool={tool} />
               {tool.pricingUrl && (
                 <Button
                   href={tool.pricingUrl}

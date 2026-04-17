@@ -18,6 +18,7 @@ export type BackupTool = {
   name: string;
   website: string;
   pricingUrl?: string;
+  pricing: "free" | "freemium" | "custom";
   general: {
     folderBackups: CellValue;
     imageBackups: CellValue;
@@ -188,8 +189,9 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "BlinkDisk",
     website: "https://blinkdisk.com?utm_source=compare",
     pricingUrl: "/cloudblink#pricing",
+    pricing: "custom",
     general: {
-      releaseYear: { text: "2025", note: "Built on Kopia, released in 2021" },
+      releaseYear: { text: "2025", note: "Built on Kopia, released in 2019" },
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: true },
@@ -226,6 +228,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Backblaze Computer Backup",
     website: "https://www.backblaze.com/cloud-backup/personal",
     pricingUrl: "https://www.backblaze.com/cloud-backup/pricing",
+    pricing: "custom",
     general: {
       releaseYear: { text: "2008" },
       folderBackups: { supported: true },
@@ -267,6 +270,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Carbonite",
     website: "https://carbonite.com",
     pricingUrl: "https://www.carbonite.com/personal/backup/#priceplans",
+    pricing: "custom",
     general: {
       releaseYear: { text: "2006" },
       folderBackups: { supported: true },
@@ -305,6 +309,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "CrashPlan",
     website: "https://crashplan.com",
     pricingUrl: "https://smb.crashplan.com/smb-pricing/",
+    pricing: "custom",
     general: {
       releaseYear: { text: "2007" },
       folderBackups: { supported: true },
@@ -344,6 +349,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Acronis True Image",
     website: "https://www.acronis.com/en/products/true-image/",
     pricingUrl: "https://www.acronis.com/en/products/true-image/purchasing/",
+    pricing: "custom",
     general: {
       releaseYear: { text: "2003" },
       folderBackups: { supported: true },
@@ -382,6 +388,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "IDrive",
     website: "https://www.idrive.com",
     pricingUrl: "https://www.idrive.com/pricing",
+    pricing: "custom",
     general: {
       releaseYear: { text: "1995" },
       folderBackups: { supported: true },
@@ -420,6 +427,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "EaseUS Todo Backup",
     website: "https://www.easeus.com/backup-software/",
     pricingUrl: "https://www.easeus.com/store/backup.html",
+    pricing: "custom",
     general: {
       releaseYear: { text: "2009" },
       folderBackups: { supported: true },
