@@ -461,4 +461,42 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       rclone: { supported: false },
     },
   },
+  {
+    slug: "kopia",
+    name: "Kopia",
+    website: "https://kopia.io",
+    pricing: "free",
+    general: {
+      releaseYear: { text: "2019" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: true },
+      rclone: { supported: "partial", note: "Experimental" },
+    },
+  },
 ];
