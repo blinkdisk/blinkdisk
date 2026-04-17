@@ -8,9 +8,19 @@ export const prerender = false;
 const slug = Astro.params.slug;
 if (!slug) return Astro.redirect("/404");
 
-const toolsOrUndefined = slug
-  .split("-vs-")
-  .map((slug) => COMPARISON_TOOLS.find((t) => t.slug === slug));
+const slugParts = slug.split("-vs-");
+
+const canonicalParts = slugParts.map((part) => {
+  const aliasMatch = COMPARISON_TOOLS.find((t) => t.aliases?.includes(part));
+  return aliasMatch?.slug ?? part;
+});
+
+if (canonicalParts.some((part, i) => part !== slugParts[i]))
+  return Astro.redirect(`/compare/${canonicalParts.join("-vs-")}`, 301);
+
+const toolsOrUndefined = slugParts.map((slug) =>
+  COMPARISON_TOOLS.find((t) => t.slug === slug),
+);
 
 if (
   toolsOrUndefined.some((tool) => tool === undefined) ||
