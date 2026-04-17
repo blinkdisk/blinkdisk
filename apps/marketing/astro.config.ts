@@ -23,7 +23,6 @@ export default defineConfig({
   server: { port: 3000 },
   adapter: cloudflare({
     imageService: "compile",
-    prerenderEnvironment: "node",
   }),
   redirects: {
     "/pricing": {
