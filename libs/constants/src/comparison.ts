@@ -734,4 +734,42 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       rclone: { supported: true },
     },
   },
+  {
+    slug: "msp360-free",
+    name: "MSP360 Backup Free",
+    website: "https://www.msp360.com/",
+    pricing: "freemium",
+    general: {
+      releaseYear: { text: "2011" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: "partial" },
+      zeroKnowledge: { supported: "partial" },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: true },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: null,
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
 ];
