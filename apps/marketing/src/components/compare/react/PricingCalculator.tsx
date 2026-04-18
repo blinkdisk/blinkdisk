@@ -8,6 +8,7 @@ import EaseUSTodoBackupPricingCalculator from "@marketing/components/compare/rea
 import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
 import FreemiumPricingCalculator from "@marketing/components/compare/react/FreemiumPricingCalculator";
 import IDrivePricingCalculator from "@marketing/components/compare/react/IDrivePricingCalculator";
+import MacriumReflectHomePricingCalculator from "@marketing/components/compare/react/MacriumReflectHomePricingCalculator";
 
 type Props = {
   tool: BackupTool;
@@ -21,6 +22,7 @@ const calculators: Record<string, React.ComponentType> = {
   "acronis-true-image": AcronisPricingCalculator,
   "easeus-todo-backup": EaseUSTodoBackupPricingCalculator,
   idrive: IDrivePricingCalculator,
+  "macrium-reflect-home": MacriumReflectHomePricingCalculator,
 };
 
 const pricingCalculators: Record<

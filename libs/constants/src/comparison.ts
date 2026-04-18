@@ -500,6 +500,46 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     },
   },
   {
+    slug: "macrium-reflect-home",
+    name: "Macrium Reflect X Home",
+    website: "https://www.macrium.com/products/home",
+    pricingUrl:
+      "https://www.macrium.com/products/home#protect-what-matters-most",
+    pricing: "custom",
+    general: {
+      releaseYear: { text: "2006" },
+      folderBackups: { supported: false },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: true },
+      versioning: { supported: "partial", note: "Differential only" },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: false },
+      zeroKnowledge: { supported: false },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: false },
+      linux: { supported: false },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: false },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
+  {
     slug: "kopia",
     name: "Kopia",
     website: "https://kopia.io",
