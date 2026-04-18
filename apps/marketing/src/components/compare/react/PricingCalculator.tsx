@@ -5,15 +5,11 @@ import BackblazePricingCalculator from "@marketing/components/compare/react/Back
 import BlinkDiskPricingCalculator from "@marketing/components/compare/react/BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "@marketing/components/compare/react/CarbonitePricingCalculator";
 import CrashPlanPricingCalculator from "@marketing/components/compare/react/CrashPlanPricingCalculator";
-<<<<<<< HEAD
 import DuplicacyPricingCalculator from "@marketing/components/compare/react/DuplicacyPricingCalculator";
-||||||| parent of 84af3d4 (feat(marketing): add duplicati to comparison)
-=======
 import DuplicatiPricingCalculator from "@marketing/components/compare/react/DuplicatiPricingCalculator";
->>>>>>> 84af3d4 (feat(marketing): add duplicati to comparison)
 import EaseUSTodoBackupPricingCalculator from "@marketing/components/compare/react/EaseUSTodoBackupPricingCalculator";
-import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
 import FreemiumPricingCalculator from "@marketing/components/compare/react/FreemiumPricingCalculator";
+import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
 import IDrivePricingCalculator from "@marketing/components/compare/react/IDrivePricingCalculator";
 import MacriumReflectHomePricingCalculator from "@marketing/components/compare/react/MacriumReflectHomePricingCalculator";
 import UraniumBackupPricingCalculator from "@marketing/components/compare/react/UraniumBackupPricingCalculator";
