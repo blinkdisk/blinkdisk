@@ -120,6 +120,12 @@ const allStructuredData = [
 
     <ThemeScript />
 
+    <!-- Country flag emoji polyfill (Windows doesn't ship color flag glyphs) -->
+    <script>
+      import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+      polyfillCountryFlagEmojis();
+    </script>
+
     <!-- Endorsely -->
     {endorselyKey && (
       <script is:inline src="https://assets.endorsely.com/endorsely.js" data-endorsely={endorselyKey} async></script>
