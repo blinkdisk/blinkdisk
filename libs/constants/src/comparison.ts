@@ -18,7 +18,7 @@ export type BackupTool = {
   name: string;
   website: string;
   pricingUrl?: string;
-  pricing: "free" | "freemium" | "custom";
+  pricing: "free" | "freemium" | "paid";
   publishedAt?: string;
   general: {
     folderBackups: CellValue;
@@ -161,13 +161,16 @@ export const COMPARISON_STORAGE_LABELS: Record<
   },
 };
 
-export function getComparisonSitemap(baseUrl: string) {
-  const paths: string[] = [];
-  const now = Date.now();
-
-  const publishedTools = COMPARISON_TOOLS.filter(
+export function getPublishedComparisonTools(now: number = Date.now()) {
+  return COMPARISON_TOOLS.filter(
     (tool) => !tool.publishedAt || new Date(tool.publishedAt).getTime() <= now,
   );
+}
+
+export function getComparisonSitemap(baseUrl: string) {
+  const paths: string[] = [];
+
+  const publishedTools = getPublishedComparisonTools();
 
   // for (const tool of allTools) {
   //   if (tool.slug === "blinkdisk") continue;
@@ -197,7 +200,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "BlinkDisk",
     website: "https://blinkdisk.com?utm_source=compare",
     pricingUrl: "/cloudblink#pricing",
-    pricing: "custom",
+    pricing: "free",
     general: {
       releaseYear: { text: "2025", note: "Built on Kopia, released in 2019" },
       folderBackups: { supported: true },
@@ -237,7 +240,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Backblaze Computer Backup",
     website: "https://www.backblaze.com/cloud-backup/personal",
     pricingUrl: "https://www.backblaze.com/cloud-backup/pricing",
-    pricing: "custom",
+    pricing: "paid",
     general: {
       releaseYear: { text: "2008" },
       folderBackups: { supported: true },
@@ -280,7 +283,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Carbonite",
     website: "https://carbonite.com",
     pricingUrl: "https://www.carbonite.com/personal/backup/#priceplans",
-    pricing: "custom",
+    pricing: "paid",
     general: {
       releaseYear: { text: "2006" },
       folderBackups: { supported: true },
@@ -320,7 +323,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "CrashPlan",
     website: "https://crashplan.com",
     pricingUrl: "https://smb.crashplan.com/smb-pricing/",
-    pricing: "custom",
+    pricing: "paid",
     general: {
       releaseYear: { text: "2007" },
       folderBackups: { supported: true },
@@ -361,7 +364,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Acronis True Image",
     website: "https://www.acronis.com/en/products/true-image/",
     pricingUrl: "https://www.acronis.com/en/products/true-image/purchasing/",
-    pricing: "custom",
+    pricing: "paid",
     general: {
       releaseYear: { text: "2003" },
       folderBackups: { supported: true },
@@ -401,7 +404,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "IDrive",
     website: "https://www.idrive.com",
     pricingUrl: "https://www.idrive.com/pricing",
-    pricing: "custom",
+    pricing: "freemium",
     general: {
       releaseYear: { text: "1995" },
       folderBackups: { supported: true },
@@ -485,7 +488,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "EaseUS Todo Backup",
     website: "https://www.easeus.com/backup-software/",
     pricingUrl: "https://www.easeus.com/store/backup.html",
-    pricing: "custom",
+    pricing: "freemium",
     general: {
       releaseYear: { text: "2009" },
       folderBackups: { supported: true },
@@ -566,7 +569,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     website: "https://www.macrium.com/products/home",
     pricingUrl:
       "https://www.macrium.com/products/home#protect-what-matters-most",
-    pricing: "custom",
+    pricing: "paid",
     publishedAt: "2026-04-22",
     general: {
       releaseYear: { text: "2006" },
@@ -807,7 +810,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     slug: "duplicati",
     name: "Duplicati",
     website: "https://duplicati.com",
-    pricing: "custom",
+    pricing: "freemium",
     publishedAt: "2026-04-28",
     general: {
       releaseYear: { text: "2009" },

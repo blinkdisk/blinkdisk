@@ -39,7 +39,7 @@ const pricingCalculators: Record<
 > = {
   free: FreePricingCalculator,
   freemium: FreemiumPricingCalculator,
-  custom: null,
+  paid: null,
 };
 
 function resolveCalculator(tool: BackupTool): React.ComponentType | null {
