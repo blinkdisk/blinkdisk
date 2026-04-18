@@ -423,6 +423,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     },
   },
   {
+    slug: "duplicacy",
+    name: "Duplicacy",
+    website: "https://duplicacy.com",
+    pricingUrl: "https://duplicacy.com/buy.html",
+    pricing: "freemium",
+    general: {
+      releaseYear: { text: "2016" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: {
+        supported: "partial",
+        note: "CLI source-available, GUI proprietary",
+      },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: "partial", note: "Web GUI only" },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: false },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: true },
+      rclone: { supported: false },
+    },
+  },
+  {
     slug: "easeus-todo-backup",
     name: "EaseUS Todo Backup",
     website: "https://www.easeus.com/backup-software/",

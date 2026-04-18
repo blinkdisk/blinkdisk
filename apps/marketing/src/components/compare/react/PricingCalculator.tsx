@@ -4,6 +4,7 @@ import BackblazePricingCalculator from "@marketing/components/compare/react/Back
 import BlinkDiskPricingCalculator from "@marketing/components/compare/react/BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "@marketing/components/compare/react/CarbonitePricingCalculator";
 import CrashPlanPricingCalculator from "@marketing/components/compare/react/CrashPlanPricingCalculator";
+import DuplicacyPricingCalculator from "@marketing/components/compare/react/DuplicacyPricingCalculator";
 import EaseUSTodoBackupPricingCalculator from "@marketing/components/compare/react/EaseUSTodoBackupPricingCalculator";
 import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
 import FreemiumPricingCalculator from "@marketing/components/compare/react/FreemiumPricingCalculator";
@@ -19,6 +20,7 @@ const calculators: Record<string, React.ComponentType> = {
   backblaze: BackblazePricingCalculator,
   carbonite: CarbonitePricingCalculator,
   crashplan: CrashPlanPricingCalculator,
+  duplicacy: DuplicacyPricingCalculator,
   "acronis-true-image": AcronisPricingCalculator,
   "easeus-todo-backup": EaseUSTodoBackupPricingCalculator,
   idrive: IDrivePricingCalculator,
