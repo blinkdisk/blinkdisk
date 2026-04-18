@@ -4,7 +4,12 @@ import BackblazePricingCalculator from "@marketing/components/compare/react/Back
 import BlinkDiskPricingCalculator from "@marketing/components/compare/react/BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "@marketing/components/compare/react/CarbonitePricingCalculator";
 import CrashPlanPricingCalculator from "@marketing/components/compare/react/CrashPlanPricingCalculator";
+<<<<<<< HEAD
 import DuplicacyPricingCalculator from "@marketing/components/compare/react/DuplicacyPricingCalculator";
+||||||| parent of 84af3d4 (feat(marketing): add duplicati to comparison)
+=======
+import DuplicatiPricingCalculator from "@marketing/components/compare/react/DuplicatiPricingCalculator";
+>>>>>>> 84af3d4 (feat(marketing): add duplicati to comparison)
 import EaseUSTodoBackupPricingCalculator from "@marketing/components/compare/react/EaseUSTodoBackupPricingCalculator";
 import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
 import FreemiumPricingCalculator from "@marketing/components/compare/react/FreemiumPricingCalculator";
@@ -27,6 +32,7 @@ const calculators: Record<string, React.ComponentType> = {
   idrive: IDrivePricingCalculator,
   "macrium-reflect-home": MacriumReflectHomePricingCalculator,
   "uranium-backup": UraniumBackupPricingCalculator,
+  duplicati: DuplicatiPricingCalculator,
 };
 
 const pricingCalculators: Record<
