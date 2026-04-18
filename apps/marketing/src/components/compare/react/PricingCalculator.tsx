@@ -1,5 +1,6 @@
 import type { BackupTool } from "@blinkdisk/constants/comparison";
 import AcronisPricingCalculator from "@marketing/components/compare/react/AcronisPricingCalculator";
+import AOMEIBackupperPricingCalculator from "@marketing/components/compare/react/AOMEIBackupperPricingCalculator";
 import BackblazePricingCalculator from "@marketing/components/compare/react/BackblazePricingCalculator";
 import BlinkDiskPricingCalculator from "@marketing/components/compare/react/BlinkDiskPricingCalculator";
 import CarbonitePricingCalculator from "@marketing/components/compare/react/CarbonitePricingCalculator";
@@ -28,6 +29,7 @@ const calculators: Record<string, React.ComponentType> = {
   crashplan: CrashPlanPricingCalculator,
   duplicacy: DuplicacyPricingCalculator,
   "acronis-true-image": AcronisPricingCalculator,
+  "aomei-backupper": AOMEIBackupperPricingCalculator,
   "easeus-todo-backup": EaseUSTodoBackupPricingCalculator,
   idrive: IDrivePricingCalculator,
   "macrium-reflect-home": MacriumReflectHomePricingCalculator,
