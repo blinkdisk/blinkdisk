@@ -887,4 +887,45 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       rclone: { supported: false },
     },
   },
+  {
+    slug: "plakar",
+    name: "Plakar",
+    website: "https://plakar.io",
+    pricing: "free",
+    general: {
+      releaseYear: { text: "2025" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: {
+        supported: "partial",
+        note: "Via WSL",
+      },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
 ];
