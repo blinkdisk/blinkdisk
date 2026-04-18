@@ -19,6 +19,7 @@ export type BackupTool = {
   website: string;
   pricingUrl?: string;
   pricing: "free" | "freemium" | "custom";
+  publishedAt?: string;
   general: {
     folderBackups: CellValue;
     imageBackups: CellValue;
@@ -160,20 +161,25 @@ export const COMPARISON_STORAGE_LABELS: Record<
 
 export function getComparisonSitemap(baseUrl: string) {
   const paths: string[] = [];
+  const now = Date.now();
+
+  const publishedTools = COMPARISON_TOOLS.filter(
+    (tool) => !tool.publishedAt || new Date(tool.publishedAt).getTime() <= now,
+  );
 
   // for (const tool of allTools) {
   //   if (tool.slug === "blinkdisk") continue;
   //   paths.push(`/compare/${tool.slug}-vs-blinkdisk`);
   // }
 
-  for (let i = 0; i < COMPARISON_TOOLS.length; i++) {
-    for (let j = i + 1; j < COMPARISON_TOOLS.length; j++) {
+  for (let i = 0; i < publishedTools.length; i++) {
+    for (let j = i + 1; j < publishedTools.length; j++) {
       if (
-        COMPARISON_TOOLS[i]?.slug === "blinkdisk" ||
-        COMPARISON_TOOLS[j]?.slug === "blinkdisk"
+        publishedTools[i]?.slug === "blinkdisk" ||
+        publishedTools[j]?.slug === "blinkdisk"
       )
         continue;
-      const [first, second] = [COMPARISON_TOOLS[i], COMPARISON_TOOLS[j]].sort(
+      const [first, second] = [publishedTools[i], publishedTools[j]].sort(
         (a, b) => a?.slug.localeCompare(b?.slug || "") || 0,
       );
       paths.push(`/compare/${first?.slug}-vs-${second?.slug}-vs-blinkdisk`);
@@ -423,6 +429,49 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     },
   },
   {
+    slug: "duplicacy",
+    name: "Duplicacy",
+    website: "https://duplicacy.com",
+    pricingUrl: "https://duplicacy.com/buy.html",
+    pricing: "freemium",
+    publishedAt: "2026-04-24",
+    general: {
+      releaseYear: { text: "2016" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: {
+        supported: "partial",
+        note: "CLI source-available, GUI proprietary",
+      },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: "partial", note: "Web GUI only" },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: false },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: true },
+      rclone: { supported: false },
+    },
+  },
+  {
     slug: "easeus-todo-backup",
     name: "EaseUS Todo Backup",
     website: "https://www.easeus.com/backup-software/",
@@ -462,6 +511,205 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     },
   },
   {
+    slug: "veeam-agent",
+    name: "Veeam Agent",
+    website: "https://www.veeam.com/products/free/microsoft-windows.html",
+    pricing: "freemium",
+    publishedAt: "2026-04-18",
+    general: {
+      releaseYear: { text: "2017" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: "partial", note: "Windows & Linux" },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: null,
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: null,
+      webdav: null,
+      rclone: { supported: false },
+    },
+  },
+  {
+    slug: "macrium-reflect-home",
+    name: "Macrium Reflect X Home",
+    website: "https://www.macrium.com/products/home",
+    pricingUrl:
+      "https://www.macrium.com/products/home#protect-what-matters-most",
+    pricing: "custom",
+    publishedAt: "2026-04-22",
+    general: {
+      releaseYear: { text: "2006" },
+      folderBackups: { supported: false },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: true },
+      versioning: { supported: "partial", note: "Differential only" },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: false },
+      zeroKnowledge: { supported: false },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: false },
+      linux: { supported: false },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: false },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
+  {
+    slug: "uranium-backup",
+    name: "Uranium Backup",
+    website: "https://www.uranium-backup.com",
+    pricingUrl: "https://www.uranium-backup.com/purchase-uranium-backup/",
+    pricing: "freemium",
+    publishedAt: "2026-04-26",
+    general: {
+      releaseYear: null,
+      folderBackups: { supported: true },
+      imageBackups: { supported: "partial", note: "Paid only" },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: true },
+      versioning: null,
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: null,
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: false },
+      linux: { supported: false },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: null,
+      rclone: { supported: false },
+    },
+  },
+  {
+    slug: "aomei-backupper",
+    name: "AOMEI Backupper",
+    website: "https://www.aomeitech.com/ab/",
+    pricingUrl: "https://www.aomeitech.com/ab/comparison.html",
+    pricing: "freemium",
+    publishedAt: "2026-05-02",
+    general: {
+      releaseYear: { text: "2012" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: "partial", note: "Sync only" },
+      linux: { supported: false },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: true },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: null,
+      webdav: null,
+      rclone: { supported: false },
+    },
+  },
+  {
+    slug: "paragon-backup-recovery",
+    name: "Paragon Backup & Recovery",
+    website: "https://www.paragon-software.com/free/br-free/",
+    pricing: "freemium",
+    publishedAt: "2026-05-06",
+    general: {
+      releaseYear: null,
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: null,
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: false },
+      linux: { supported: false },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: false },
+      webdav: { supported: true },
+      rclone: { supported: false },
+    },
+  },
+  {
     slug: "kopia",
     name: "Kopia",
     website: "https://kopia.io",
@@ -497,6 +745,204 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       sftp: { supported: true },
       webdav: { supported: true },
       rclone: { supported: "partial", note: "Experimental" },
+    },
+  },
+  {
+    slug: "restic",
+    name: "Restic",
+    website: "https://restic.net",
+    pricing: "free",
+    publishedAt: "2026-04-20",
+    general: {
+      releaseYear: { text: "2015" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: false },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: false },
+      rclone: { supported: true },
+    },
+  },
+  {
+    slug: "duplicati",
+    name: "Duplicati",
+    website: "https://duplicati.com",
+    pricing: "custom",
+    publishedAt: "2026-04-28",
+    general: {
+      releaseYear: { text: "2009" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: true },
+      rclone: { supported: true },
+    },
+  },
+  {
+    slug: "msp360-free",
+    name: "MSP360 Backup Free",
+    website: "https://www.msp360.com/",
+    pricing: "freemium",
+    publishedAt: "2026-04-30",
+    general: {
+      releaseYear: { text: "2011" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: false },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: "partial" },
+      zeroKnowledge: { supported: "partial" },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: true },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: null,
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
+  {
+    slug: "urbackup",
+    name: "UrBackup",
+    website: "https://www.urbackup.org",
+    pricing: "free",
+    publishedAt: "2026-05-04",
+    general: {
+      releaseYear: { text: "2011" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: false },
+      zeroKnowledge: { supported: false },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: false },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
+  {
+    slug: "plakar",
+    name: "Plakar",
+    website: "https://plakar.io",
+    pricing: "free",
+    publishedAt: "2026-05-08",
+    general: {
+      releaseYear: { text: "2025" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: true },
+      zeroKnowledge: { supported: true },
+    },
+    platforms: {
+      windows: {
+        supported: "partial",
+        note: "Via WSL",
+      },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: true },
+      sftp: { supported: true },
+      webdav: { supported: false },
+      rclone: { supported: false },
     },
   },
 ];
