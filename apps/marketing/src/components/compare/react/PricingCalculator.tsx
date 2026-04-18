@@ -10,6 +10,7 @@ import FreePricingCalculator from "@marketing/components/compare/react/FreePrici
 import FreemiumPricingCalculator from "@marketing/components/compare/react/FreemiumPricingCalculator";
 import IDrivePricingCalculator from "@marketing/components/compare/react/IDrivePricingCalculator";
 import MacriumReflectHomePricingCalculator from "@marketing/components/compare/react/MacriumReflectHomePricingCalculator";
+import UraniumBackupPricingCalculator from "@marketing/components/compare/react/UraniumBackupPricingCalculator";
 
 type Props = {
   tool: BackupTool;
@@ -25,6 +26,7 @@ const calculators: Record<string, React.ComponentType> = {
   "easeus-todo-backup": EaseUSTodoBackupPricingCalculator,
   idrive: IDrivePricingCalculator,
   "macrium-reflect-home": MacriumReflectHomePricingCalculator,
+  "uranium-backup": UraniumBackupPricingCalculator,
 };
 
 const pricingCalculators: Record<
