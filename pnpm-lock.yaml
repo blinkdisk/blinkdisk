@@ -519,6 +519,9 @@ importers:
       astro-mermaid:
         specifier: ^1.3.1
         version: 1.3.1(astro@5.17.1)(mermaid@11.12.2)
+      country-flag-emoji-polyfill:
+        specifier: ^0.1.8
+        version: 0.1.8
       dom-to-image:
         specifier: ^2.6.0
         version: 2.6.0
@@ -10971,6 +10974,10 @@ packages:
     resolution: {integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==}
     dependencies:
       layout-base: 2.0.1
+    dev: false
+
+  /country-flag-emoji-polyfill@0.1.8:
+    resolution: {integrity: sha512-Mbah52sADS3gshUYhK5142gtUuJpHYOXlXtLFI3Ly4RqgkmPMvhX9kMZSTqDM8P7UqtSW99eHKFphhQSGXA3Cg==}
     dev: false
 
   /crc-32@1.2.2:

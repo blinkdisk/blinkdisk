@@ -85,7 +85,8 @@ body {
 }
 
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family:
+    "Twemoji Country Flags", Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
 @keyframes marquee {

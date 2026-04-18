@@ -25,6 +25,7 @@ export type BackupTool = {
     imageBackups: CellValue;
     openSource: CellValue;
     releaseYear: CellValue;
+    originCountry: CellValue;
   };
   features: {
     deduplication: CellValue;
@@ -77,6 +78,7 @@ export const COMPARISON_GENERAL_LABELS: Record<
     srText: { true: "Yes", false: "No", partial: "Partially" },
   },
   releaseYear: { text: "Release Year" },
+  originCountry: { text: "Country of Origin" },
 };
 
 export const COMPARISON_FEATURE_LABELS: Record<
@@ -201,6 +203,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: true },
+      originCountry: { text: "🇦🇹 Austria" },
     },
     features: {
       deduplication: { supported: true },
@@ -240,6 +243,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: false },
+      originCountry: { text: "🇺🇸 United States" },
     },
     features: {
       deduplication: { supported: true },
@@ -282,6 +286,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: false },
+      originCountry: { text: "🇺🇸 United States" },
     },
     features: {
       deduplication: { supported: true },
@@ -321,6 +326,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: false },
+      originCountry: { text: "🇺🇸 United States" },
     },
     features: {
       deduplication: { supported: true },
@@ -361,6 +367,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
       openSource: { supported: false },
+      originCountry: { text: "🇨🇭 Switzerland" },
     },
     features: {
       deduplication: { supported: true },
@@ -400,6 +407,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Via IDrive Mirror" },
       openSource: { supported: false },
+      originCountry: { text: "🇺🇸 United States" },
     },
     features: {
       deduplication: null,
@@ -443,6 +451,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
         supported: "partial",
         note: "CLI source-available, GUI proprietary",
       },
+      originCountry: { text: "🇺🇸 United States" },
     },
     features: {
       deduplication: { supported: true },
@@ -482,6 +491,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
       openSource: { supported: false },
+      originCountry: { text: "🇨🇳 China" },
     },
     features: {
       deduplication: null,
@@ -521,6 +531,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Windows & Linux" },
       openSource: { supported: false },
+      originCountry: { text: "🇺🇸 United States", note: "HQ moved from Switzerland in 2020" },
     },
     features: {
       deduplication: { supported: true },
@@ -562,6 +573,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: false },
       imageBackups: { supported: true },
       openSource: { supported: false },
+      originCountry: { text: "🇬🇧 United Kingdom" },
     },
     features: {
       deduplication: null,
@@ -602,6 +614,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Paid only" },
       openSource: { supported: false },
+      originCountry: { text: "🇮🇹 Italy" },
     },
     features: {
       deduplication: null,
@@ -642,6 +655,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
       openSource: { supported: false },
+      originCountry: { text: "🇨🇳 China" },
     },
     features: {
       deduplication: null,
@@ -681,6 +695,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
       openSource: { supported: false },
+      originCountry: { text: "🇩🇪 Germany" },
     },
     features: {
       deduplication: null,
@@ -719,6 +734,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: true },
+      originCountry: null,
     },
     features: {
       deduplication: { supported: true },
@@ -758,6 +774,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: true },
+      originCountry: { text: "🇩🇪 Germany" },
     },
     features: {
       deduplication: { supported: true },
@@ -797,6 +814,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: true },
+      originCountry: { text: "🇩🇰 Denmark" },
     },
     features: {
       deduplication: { supported: true },
@@ -836,6 +854,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
       openSource: { supported: false },
+      originCountry: { text: "🇺🇸 United States" },
     },
     features: {
       deduplication: { supported: true },
@@ -875,6 +894,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
       openSource: { supported: true },
+      originCountry: { text: "🇩🇪 Germany" },
     },
     features: {
       deduplication: { supported: true },
@@ -914,6 +934,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
       openSource: { supported: true },
+      originCountry: { text: "🇫🇷 France" },
     },
     features: {
       deduplication: { supported: true },
