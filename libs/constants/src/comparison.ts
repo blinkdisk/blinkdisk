@@ -811,4 +811,42 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       rclone: { supported: false },
     },
   },
+  {
+    slug: "urbackup",
+    name: "UrBackup",
+    website: "https://www.urbackup.org",
+    pricing: "free",
+    general: {
+      releaseYear: { text: "2011" },
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
+      openSource: { supported: true },
+    },
+    features: {
+      deduplication: { supported: true },
+      compression: { supported: true },
+      versioning: { supported: true },
+      scheduling: { supported: true },
+    },
+    privacy: {
+      endToEndEncryption: { supported: false },
+      zeroKnowledge: { supported: false },
+    },
+    platforms: {
+      windows: { supported: true },
+      macos: { supported: true },
+      linux: { supported: true },
+      android: { supported: false },
+      ios: { supported: false },
+    },
+    storages: {
+      managedCloud: { supported: false },
+      localFilesystem: { supported: true },
+      nas: { supported: true },
+      s3Compatible: { supported: false },
+      sftp: { supported: false },
+      webdav: { supported: false },
+      rclone: { supported: false },
+    },
+  },
 ];
