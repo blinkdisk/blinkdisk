@@ -19,6 +19,7 @@ export type BackupTool = {
   website: string;
   pricingUrl?: string;
   pricing: "free" | "freemium" | "custom";
+  publishedAt?: string;
   general: {
     folderBackups: CellValue;
     imageBackups: CellValue;
@@ -160,20 +161,25 @@ export const COMPARISON_STORAGE_LABELS: Record<
 
 export function getComparisonSitemap(baseUrl: string) {
   const paths: string[] = [];
+  const now = Date.now();
+
+  const publishedTools = COMPARISON_TOOLS.filter(
+    (tool) => !tool.publishedAt || new Date(tool.publishedAt).getTime() <= now,
+  );
 
   // for (const tool of allTools) {
   //   if (tool.slug === "blinkdisk") continue;
   //   paths.push(`/compare/${tool.slug}-vs-blinkdisk`);
   // }
 
-  for (let i = 0; i < COMPARISON_TOOLS.length; i++) {
-    for (let j = i + 1; j < COMPARISON_TOOLS.length; j++) {
+  for (let i = 0; i < publishedTools.length; i++) {
+    for (let j = i + 1; j < publishedTools.length; j++) {
       if (
-        COMPARISON_TOOLS[i]?.slug === "blinkdisk" ||
-        COMPARISON_TOOLS[j]?.slug === "blinkdisk"
+        publishedTools[i]?.slug === "blinkdisk" ||
+        publishedTools[j]?.slug === "blinkdisk"
       )
         continue;
-      const [first, second] = [COMPARISON_TOOLS[i], COMPARISON_TOOLS[j]].sort(
+      const [first, second] = [publishedTools[i], publishedTools[j]].sort(
         (a, b) => a?.slug.localeCompare(b?.slug || "") || 0,
       );
       paths.push(`/compare/${first?.slug}-vs-${second?.slug}-vs-blinkdisk`);
@@ -428,6 +434,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     website: "https://duplicacy.com",
     pricingUrl: "https://duplicacy.com/buy.html",
     pricing: "freemium",
+    publishedAt: "2026-04-24",
     general: {
       releaseYear: { text: "2016" },
       folderBackups: { supported: true },
@@ -508,6 +515,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Veeam Agent",
     website: "https://www.veeam.com/products/free/microsoft-windows.html",
     pricing: "freemium",
+    publishedAt: "2026-04-18",
     general: {
       releaseYear: { text: "2017" },
       folderBackups: { supported: true },
@@ -548,6 +556,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl:
       "https://www.macrium.com/products/home#protect-what-matters-most",
     pricing: "custom",
+    publishedAt: "2026-04-22",
     general: {
       releaseYear: { text: "2006" },
       folderBackups: { supported: false },
@@ -587,6 +596,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     website: "https://www.uranium-backup.com",
     pricingUrl: "https://www.uranium-backup.com/purchase-uranium-backup/",
     pricing: "freemium",
+    publishedAt: "2026-04-26",
     general: {
       releaseYear: null,
       folderBackups: { supported: true },
@@ -626,6 +636,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     website: "https://www.aomeitech.com/ab/",
     pricingUrl: "https://www.aomeitech.com/ab/comparison.html",
     pricing: "freemium",
+    publishedAt: "2026-05-02",
     general: {
       releaseYear: { text: "2012" },
       folderBackups: { supported: true },
@@ -664,6 +675,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Paragon Backup & Recovery",
     website: "https://www.paragon-software.com/free/br-free/",
     pricing: "freemium",
+    publishedAt: "2026-05-06",
     general: {
       releaseYear: null,
       folderBackups: { supported: true },
@@ -740,6 +752,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Restic",
     website: "https://restic.net",
     pricing: "free",
+    publishedAt: "2026-04-20",
     general: {
       releaseYear: { text: "2015" },
       folderBackups: { supported: true },
@@ -778,6 +791,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Duplicati",
     website: "https://duplicati.com",
     pricing: "custom",
+    publishedAt: "2026-04-28",
     general: {
       releaseYear: { text: "2009" },
       folderBackups: { supported: true },
@@ -816,6 +830,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "MSP360 Backup Free",
     website: "https://www.msp360.com/",
     pricing: "freemium",
+    publishedAt: "2026-04-30",
     general: {
       releaseYear: { text: "2011" },
       folderBackups: { supported: true },
@@ -854,6 +869,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "UrBackup",
     website: "https://www.urbackup.org",
     pricing: "free",
+    publishedAt: "2026-05-04",
     general: {
       releaseYear: { text: "2011" },
       folderBackups: { supported: true },
@@ -892,6 +908,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     name: "Plakar",
     website: "https://plakar.io",
     pricing: "free",
+    publishedAt: "2026-05-08",
     general: {
       releaseYear: { text: "2025" },
       folderBackups: { supported: true },
