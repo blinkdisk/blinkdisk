@@ -10,7 +10,7 @@ type Props = {
   tools: (BackupTool | null)[];
   category: keyof Pick<
     BackupTool,
-    "general" | "features" | "privacy" | "platforms" | "storages"
+    "general" | "level" | "features" | "privacy" | "platforms" | "storages"
   >;
   labels: Record<string, LabelConfig>;
 };

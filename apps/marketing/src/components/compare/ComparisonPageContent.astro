@@ -9,6 +9,7 @@ import {
 } from "@marketing/components/react/ToolSelector";
 import ExternalLinkIcon from "@lucide/astro/icons/external-link";
 import ListChecksIcon from "@lucide/astro/icons/list-checks";
+import LayersIcon from "@lucide/astro/icons/layers";
 import TagIcon from "@lucide/astro/icons/tag";
 import ShieldIcon from "@lucide/astro/icons/shield";
 import MonitorIcon from "@lucide/astro/icons/monitor";
@@ -19,6 +20,7 @@ import {
   COMPARISON_TOOLS,
   COMPARISON_GENERAL_LABELS,
   COMPARISON_FEATURE_LABELS,
+  COMPARISON_LEVEL_LABELS,
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_PLATFORM_LABELS,
   COMPARISON_STORAGE_LABELS,
@@ -35,6 +37,7 @@ const { tools, title, description } = Astro.props;
 
 const sectionIcons: Record<string, typeof ListChecksIcon> = {
   general: InfoIcon,
+  level: LayersIcon,
   features: ListChecksIcon,
   pricing: TagIcon,
   privacy: ShieldIcon,
@@ -48,7 +51,14 @@ const tableSections = [
     title: "General",
     category: "general" as const,
     labels: COMPARISON_GENERAL_LABELS,
-    description: "Basic info and backup types supported.",
+    description: "Basic info about each tool.",
+  },
+  {
+    id: "level",
+    title: "Level",
+    category: "level" as const,
+    labels: COMPARISON_LEVEL_LABELS,
+    description: "What level of backup each tool supports.",
   },
   {
     id: "features",
@@ -81,9 +91,9 @@ const tableSections = [
 ];
 
 const allSections = [
-  ...tableSections.slice(0, 2).map(({ id, title }) => ({ id, title })),
+  ...tableSections.slice(0, 3).map(({ id, title }) => ({ id, title })),
   { id: "pricing", title: "Pricing" },
-  ...tableSections.slice(2).map(({ id, title }) => ({ id, title })),
+  ...tableSections.slice(3).map(({ id, title }) => ({ id, title })),
 ];
 
 const toolOptions = COMPARISON_TOOLS.map((tool) => ({
@@ -211,7 +221,7 @@ const paddedTools: (BackupTool | null)[] =
           })}
         </nav>
 
-        {tableSections.slice(0, 2).map((section) => {
+        {tableSections.slice(0, 3).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
             <>
@@ -274,7 +284,7 @@ const paddedTools: (BackupTool | null)[] =
           )}
         </div>
 
-        {tableSections.slice(2).map((section) => {
+        {tableSections.slice(3).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
             <>

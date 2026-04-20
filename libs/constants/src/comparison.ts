@@ -21,11 +21,13 @@ export type BackupTool = {
   pricing: "free" | "freemium" | "paid";
   publishedAt?: string;
   general: {
-    folderBackups: CellValue;
-    imageBackups: CellValue;
     openSource: CellValue;
     releaseYear: CellValue;
     originCountry: CellValue;
+  };
+  level: {
+    folderBackups: CellValue;
+    imageBackups: CellValue;
   };
   features: {
     deduplication: CellValue;
@@ -71,14 +73,20 @@ export const COMPARISON_GENERAL_LABELS: Record<
   keyof BackupTool["general"],
   LabelConfig
 > = {
-  folderBackups: { text: "File/Folder Backups" },
-  imageBackups: { text: "Disk Image Backups" },
   openSource: {
     text: "Open Source",
     srText: { true: "Yes", false: "No", partial: "Partially" },
   },
   releaseYear: { text: "Release Year" },
   originCountry: { text: "Country of Origin" },
+};
+
+export const COMPARISON_LEVEL_LABELS: Record<
+  keyof BackupTool["level"],
+  LabelConfig
+> = {
+  folderBackups: { text: "File/Folder Backups" },
+  imageBackups: { text: "Disk Image Backups" },
 };
 
 export const COMPARISON_FEATURE_LABELS: Record<
@@ -203,10 +211,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "free",
     general: {
       releaseYear: { text: "2025", note: "Built on Kopia, released in 2019" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: true },
       originCountry: { text: "🇦🇹 Austria" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -243,10 +253,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "paid",
     general: {
       releaseYear: { text: "2008" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: false },
       originCountry: { text: "🇺🇸 United States" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -286,10 +298,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "paid",
     general: {
       releaseYear: { text: "2006" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: false },
       originCountry: { text: "🇺🇸 United States" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -326,10 +340,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "paid",
     general: {
       releaseYear: { text: "2007" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: false },
       originCountry: { text: "🇺🇸 United States" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -367,10 +383,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "paid",
     general: {
       releaseYear: { text: "2003" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
       openSource: { supported: false },
       originCountry: { text: "🇨🇭 Switzerland" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: { supported: true },
@@ -407,10 +425,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     general: {
       releaseYear: { text: "1995" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: "partial", note: "Via IDrive Mirror" },
       openSource: { supported: false },
       originCountry: { text: "🇺🇸 United States" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: "partial", note: "Via IDrive Mirror" },
     },
     features: {
       deduplication: null,
@@ -448,13 +468,15 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-24",
     general: {
       releaseYear: { text: "2016" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: {
         supported: "partial",
         note: "CLI source-available, GUI proprietary",
       },
       originCountry: { text: "🇺🇸 United States" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -491,10 +513,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     general: {
       releaseYear: { text: "2009" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
       openSource: { supported: false },
       originCountry: { text: "🇨🇳 China" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: null,
@@ -531,10 +555,15 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-18",
     general: {
       releaseYear: { text: "2017" },
+      openSource: { supported: false },
+      originCountry: {
+        text: "🇺🇸 United States",
+        note: "HQ moved from Switzerland in 2020",
+      },
+    },
+    level: {
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Windows & Linux" },
-      openSource: { supported: false },
-      originCountry: { text: "🇺🇸 United States", note: "HQ moved from Switzerland in 2020" },
     },
     features: {
       deduplication: { supported: true },
@@ -573,10 +602,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-22",
     general: {
       releaseYear: { text: "2006" },
-      folderBackups: { supported: false },
-      imageBackups: { supported: true },
       openSource: { supported: false },
       originCountry: { text: "🇬🇧 United Kingdom" },
+    },
+    level: {
+      folderBackups: { supported: false },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: null,
@@ -614,10 +645,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-26",
     general: {
       releaseYear: null,
-      folderBackups: { supported: true },
-      imageBackups: { supported: "partial", note: "Paid only" },
       openSource: { supported: false },
       originCountry: { text: "🇮🇹 Italy" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: "partial", note: "Paid only" },
     },
     features: {
       deduplication: null,
@@ -655,10 +688,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-05-02",
     general: {
       releaseYear: { text: "2012" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
       openSource: { supported: false },
       originCountry: { text: "🇨🇳 China" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: null,
@@ -695,10 +730,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-05-06",
     general: {
       releaseYear: null,
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
       openSource: { supported: false },
       originCountry: { text: "🇩🇪 Germany" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: null,
@@ -734,10 +771,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "free",
     general: {
       releaseYear: { text: "2019" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: true },
       originCountry: null,
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -774,10 +813,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-20",
     general: {
       releaseYear: { text: "2015" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: true },
       originCountry: { text: "🇩🇪 Germany" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -814,10 +855,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-28",
     general: {
       releaseYear: { text: "2009" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: true },
       originCountry: { text: "🇩🇰 Denmark" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -854,10 +897,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-30",
     general: {
       releaseYear: { text: "2011" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
       openSource: { supported: false },
       originCountry: { text: "🇺🇸 United States" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: { supported: true },
@@ -894,10 +939,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-05-04",
     general: {
       releaseYear: { text: "2011" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
       openSource: { supported: true },
       originCountry: { text: "🇩🇪 Germany" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: true },
     },
     features: {
       deduplication: { supported: true },
@@ -934,10 +981,12 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-05-08",
     general: {
       releaseYear: { text: "2025" },
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
       openSource: { supported: true },
       originCountry: { text: "🇫🇷 France" },
+    },
+    level: {
+      folderBackups: { supported: true },
+      imageBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },

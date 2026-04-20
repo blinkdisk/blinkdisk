@@ -12,6 +12,7 @@ import type { ComponentProps, ReactElement, SVGProps } from "react";
 export type SelectedKey = {
   category:
     | "general"
+    | "level"
     | "features"
     | "privacy"
     | "platforms"
@@ -105,8 +106,8 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
       ? tool.general.originCountry.text
       : null;
 
-  const folderBackups = supportState(tool.general.folderBackups);
-  const imageBackups = supportState(tool.general.imageBackups);
+  const folderBackups = supportState(tool.level.folderBackups);
+  const imageBackups = supportState(tool.level.imageBackups);
   const backupKinds: string[] = [];
   if (folderBackups === "full" || folderBackups === "partial") {
     backupKinds.push(folderBackups === "partial" ? "Files (partial)" : "Files");
@@ -121,7 +122,7 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
     <div className="bg-card flex flex-col gap-4 overflow-hidden rounded-lg border p-4 transition-colors sm:flex-row sm:items-stretch sm:gap-5 sm:p-5">
       <a
         href={compareHref}
-        className="group relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-md bg-muted sm:aspect-auto sm:h-auto sm:w-44 md:w-56"
+        className="bg-muted group relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-md sm:aspect-auto sm:h-auto sm:w-44 md:w-56"
         aria-label={`Compare ${tool.name}`}
         data-astro-prefetch
       >
@@ -133,7 +134,7 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
         />
       </a>
 
-      <div className="flex flex-1 flex-col gap-3 min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <h3 className="text-foreground text-lg font-semibold leading-tight">
@@ -246,15 +247,14 @@ function PlatformPill({ label, state, Icon }: PlatformPillProps) {
         state === "none" &&
           "border-border bg-muted/40 text-muted-foreground/40",
         state === "unknown" &&
-          "border-dashed border-border bg-transparent text-muted-foreground/40",
+          "border-border text-muted-foreground/40 border-dashed bg-transparent",
       )}
     >
       <Icon className="size-3.5" />
       <span className="sr-only">{title}</span>
       {state === "none" && (
-        <XIcon className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full bg-card p-0.5 text-muted-foreground/70" />
+        <XIcon className="bg-card text-muted-foreground/70 absolute -bottom-0.5 -right-0.5 size-3 rounded-full p-0.5" />
       )}
     </span>
   );
 }
-

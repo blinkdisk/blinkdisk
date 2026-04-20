@@ -1,6 +1,7 @@
 import {
   COMPARISON_FEATURE_LABELS,
   COMPARISON_GENERAL_LABELS,
+  COMPARISON_LEVEL_LABELS,
   COMPARISON_PLATFORM_LABELS,
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_STORAGE_LABELS,
@@ -14,8 +15,13 @@ import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
 import { cn } from "@blinkdisk/utils/class";
 import {
+  FinderResultCard,
+  type SelectedKey,
+} from "@marketing/components/finder/react/FinderResultCard";
+import {
   HardDriveIcon,
   InfoIcon,
+  LayersIcon,
   ListChecksIcon,
   MonitorIcon,
   RotateCcwIcon,
@@ -26,10 +32,6 @@ import {
   XIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  FinderResultCard,
-  type SelectedKey,
-} from "@marketing/components/finder/react/FinderResultCard";
 
 type FilterCategory = SelectedKey["category"];
 
@@ -46,6 +48,12 @@ const SECTIONS: SectionConfig[] = [
     title: "General",
     icon: InfoIcon,
     labels: COMPARISON_GENERAL_LABELS,
+  },
+  {
+    id: "level",
+    title: "Level",
+    icon: LayersIcon,
+    labels: COMPARISON_LEVEL_LABELS,
   },
   {
     id: "features",
@@ -74,11 +82,7 @@ const SECTIONS: SectionConfig[] = [
 ];
 
 // Only filter on "supported"-style general fields; release year + country are text.
-const GENERAL_FILTER_KEYS = new Set([
-  "folderBackups",
-  "imageBackups",
-  "openSource",
-]);
+const GENERAL_FILTER_KEYS = new Set(["openSource"]);
 
 const PRICING_OPTIONS: {
   value: BackupTool["pricing"];
@@ -100,6 +104,7 @@ function emptyFilters(): Filters {
     pricing: new Set(),
     byCategory: {
       general: new Set(),
+      level: new Set(),
       features: new Set(),
       privacy: new Set(),
       platforms: new Set(),
@@ -134,6 +139,7 @@ function toolMatchesFilters(
   let partialCount = 0;
   const categories: FilterCategory[] = [
     "general",
+    "level",
     "features",
     "privacy",
     "platforms",
@@ -188,6 +194,7 @@ function parseFromParams(params: URLSearchParams): Filters {
   }
   const categories: FilterCategory[] = [
     "general",
+    "level",
     "features",
     "privacy",
     "platforms",
@@ -199,9 +206,7 @@ function parseFromParams(params: URLSearchParams): Filters {
     const validKeys = new Set(
       cat === "general"
         ? Array.from(GENERAL_FILTER_KEYS)
-        : Object.keys(
-            SECTIONS.find((s) => s.id === cat)?.labels ?? {},
-          ),
+        : Object.keys(SECTIONS.find((s) => s.id === cat)?.labels ?? {}),
     );
     for (const key of raw.split(",")) {
       if (validKeys.has(key)) filters.byCategory[cat].add(key);
@@ -296,7 +301,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-[18rem_1fr] lg:grid-cols-[20rem_1fr] md:gap-8">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-[18rem_1fr] md:gap-8 lg:grid-cols-[20rem_1fr]">
       {/* Mobile toolbar */}
       <div className="flex items-center justify-between md:hidden">
         <Button
@@ -322,7 +327,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
         className={cn(
           "md:block",
           mobileFiltersOpen
-            ? "fixed inset-0 z-[1020] flex flex-col overflow-y-auto bg-background p-4 md:static md:z-auto md:p-0"
+            ? "bg-background fixed inset-0 z-[1020] flex flex-col overflow-y-auto p-4 md:static md:z-auto md:p-0"
             : "hidden",
         )}
       >
@@ -424,7 +429,10 @@ export function BackupFinder({ tools }: BackupFinderProps) {
       <section>
         <div className="mb-6 hidden items-center justify-between md:flex">
           <p className="text-muted-foreground text-sm">
-            Showing <span className="text-foreground font-medium">{results.length}</span>{" "}
+            Showing{" "}
+            <span className="text-foreground font-medium">
+              {results.length}
+            </span>{" "}
             {results.length === 1 ? "tool" : "tools"}
             {activeCount > 0 && <> matching your requirements</>}
           </p>
