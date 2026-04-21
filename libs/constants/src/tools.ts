@@ -1,6 +1,6 @@
 import type { CountryCode } from "./countries";
 
-export type FieldValue = boolean | "partial" | string;
+export type FieldValue = boolean | "partial" | string | number;
 
 export type CellValue =
   | FieldValue
@@ -80,7 +80,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "/cloudblink#pricing",
     pricing: "free",
     general: {
-      releaseYear: { value: "2025", note: "Built on Kopia, released in 2019" },
+      releaseYear: { value: 2025, note: "Built on Kopia, released in 2019" },
       openSource: true,
       originCountry: "AT",
     },
@@ -134,7 +134,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.backblaze.com/cloud-backup/pricing",
     pricing: "paid",
     general: {
-      releaseYear: "2008",
+      releaseYear: 2008,
       openSource: false,
       originCountry: "US",
     },
@@ -188,7 +188,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.carbonite.com/personal/backup/#priceplans",
     pricing: "paid",
     general: {
-      releaseYear: "2006",
+      releaseYear: 2006,
       openSource: false,
       originCountry: "US",
     },
@@ -239,7 +239,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "https://smb.crashplan.com/smb-pricing/",
     pricing: "paid",
     general: {
-      releaseYear: "2007",
+      releaseYear: 2007,
       openSource: false,
       originCountry: "US",
     },
@@ -291,7 +291,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.acronis.com/en/products/true-image/purchasing/",
     pricing: "paid",
     general: {
-      releaseYear: "2003",
+      releaseYear: 2003,
       openSource: false,
       originCountry: "CH",
     },
@@ -342,7 +342,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.idrive.com/pricing",
     pricing: "freemium",
     general: {
-      releaseYear: "1995",
+      releaseYear: 1995,
       openSource: false,
       originCountry: "US",
     },
@@ -394,7 +394,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-24",
     general: {
-      releaseYear: "2016",
+      releaseYear: 2016,
       openSource: {
         value: "partial",
         note: "CLI source-available, GUI proprietary",
@@ -448,7 +448,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.easeus.com/store/backup.html",
     pricing: "freemium",
     general: {
-      releaseYear: "2009",
+      releaseYear: 2009,
       openSource: false,
       originCountry: "CN",
     },
@@ -499,7 +499,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-18",
     general: {
-      releaseYear: "2017",
+      releaseYear: 2017,
       openSource: false,
       originCountry: {
         value: "US",
@@ -555,7 +555,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "paid",
     publishedAt: "2026-04-22",
     general: {
-      releaseYear: "2006",
+      releaseYear: 2006,
       openSource: false,
       originCountry: "GB",
     },
@@ -659,7 +659,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-05-02",
     general: {
-      releaseYear: "2012",
+      releaseYear: 2012,
       openSource: false,
       originCountry: "CN",
     },
@@ -760,7 +760,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     website: "https://kopia.io",
     pricing: "free",
     general: {
-      releaseYear: "2019",
+      releaseYear: 2019,
       openSource: true,
       originCountry: null,
     },
@@ -811,7 +811,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "free",
     publishedAt: "2026-04-20",
     general: {
-      releaseYear: "2015",
+      releaseYear: 2015,
       openSource: true,
       originCountry: "DE",
     },
@@ -862,7 +862,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-28",
     general: {
-      releaseYear: "2009",
+      releaseYear: 2009,
       openSource: true,
       originCountry: "DK",
     },
@@ -913,7 +913,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-30",
     general: {
-      releaseYear: "2011",
+      releaseYear: 2011,
       openSource: false,
       originCountry: "US",
     },
@@ -964,7 +964,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "free",
     publishedAt: "2026-05-04",
     general: {
-      releaseYear: "2011",
+      releaseYear: 2011,
       openSource: true,
       originCountry: "DE",
     },
@@ -1015,7 +1015,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     pricing: "free",
     publishedAt: "2026-05-08",
     general: {
-      releaseYear: "2025",
+      releaseYear: 2025,
       openSource: true,
       originCountry: "FR",
     },

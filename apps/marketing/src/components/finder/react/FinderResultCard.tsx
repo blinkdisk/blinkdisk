@@ -97,7 +97,8 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
   const compareHref = `/compare/${tool.slug}`;
 
   const releaseYear =
-    typeof tool.general.releaseYear.value === "string"
+    typeof tool.general.releaseYear.value === "string" ||
+    typeof tool.general.releaseYear.value === "number"
       ? tool.general.releaseYear.value
       : null;
   const originCountry =
