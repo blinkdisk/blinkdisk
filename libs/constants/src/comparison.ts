@@ -614,7 +614,7 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     },
     interface: {
       cli: { supported: true },
-      gui: { supported: true },
+      gui: { supported: "partial", note: "GUI is paid" },
     },
     privacy: {
       endToEndEncryption: { supported: true },
