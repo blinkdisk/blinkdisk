@@ -1,6 +1,7 @@
 import {
   COMPARISON_FEATURE_LABELS,
   COMPARISON_GENERAL_LABELS,
+  COMPARISON_INTERFACE_LABELS,
   COMPARISON_LEVEL_LABELS,
   COMPARISON_PLATFORM_LABELS,
   COMPARISON_PRIVACY_LABELS,
@@ -20,6 +21,7 @@ import {
   type SelectedKey,
 } from "@marketing/components/finder/react/FinderResultCard";
 import {
+  AppWindowIcon,
   HardDriveIcon,
   InfoIcon,
   LayersIcon,
@@ -69,6 +71,12 @@ const SECTIONS: SectionConfig[] = [
     labels: COMPARISON_FEATURE_LABELS,
   },
   {
+    id: "interface",
+    title: "Interface",
+    icon: AppWindowIcon,
+    labels: COMPARISON_INTERFACE_LABELS,
+  },
+  {
     id: "privacy",
     title: "Privacy & Security",
     icon: ShieldIcon,
@@ -114,6 +122,7 @@ function emptyFilters(): Filters {
       level: new Set(),
       strategies: new Set(),
       features: new Set(),
+      interface: new Set(),
       privacy: new Set(),
       platforms: new Set(),
       storages: new Set(),
@@ -150,6 +159,7 @@ function toolMatchesFilters(
     "level",
     "strategies",
     "features",
+    "interface",
     "privacy",
     "platforms",
     "storages",
@@ -159,7 +169,8 @@ function toolMatchesFilters(
     const selected = filters.byCategory[cat];
     if (selected.size === 0) continue;
     for (const key of selected) {
-      const cell = (tool[cat] as Record<string, CellValue>)[key];
+      const cell =
+        ((tool[cat] ?? {}) as Record<string, CellValue>)[key] ?? null;
       const { matches, partial } = cellMatches(cell);
       if (!matches) {
         return { matches: false, fullCount: 0, partialCount: 0 };
@@ -206,6 +217,7 @@ function parseFromParams(params: URLSearchParams): Filters {
     "level",
     "strategies",
     "features",
+    "interface",
     "privacy",
     "platforms",
     "storages",

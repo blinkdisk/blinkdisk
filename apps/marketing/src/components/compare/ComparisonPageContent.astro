@@ -16,11 +16,13 @@ import ShieldIcon from "@lucide/astro/icons/shield";
 import MonitorIcon from "@lucide/astro/icons/monitor";
 import HardDriveIcon from "@lucide/astro/icons/hard-drive";
 import InfoIcon from "@lucide/astro/icons/info";
+import AppWindowIcon from "@lucide/astro/icons/app-window";
 import MailIcon from "@lucide/astro/icons/mail";
 import {
   COMPARISON_TOOLS,
   COMPARISON_GENERAL_LABELS,
   COMPARISON_FEATURE_LABELS,
+  COMPARISON_INTERFACE_LABELS,
   COMPARISON_LEVEL_LABELS,
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_PLATFORM_LABELS,
@@ -42,6 +44,7 @@ const sectionIcons: Record<string, typeof ListChecksIcon> = {
   level: LayersIcon,
   strategies: RotateCcwIcon,
   features: ListChecksIcon,
+  interface: AppWindowIcon,
   privacy: ShieldIcon,
   platforms: MonitorIcon,
   storages: HardDriveIcon,
@@ -75,6 +78,13 @@ const tableSections = [
     category: "features" as const,
     labels: COMPARISON_FEATURE_LABELS,
     description: "Core backup capabilities.",
+  },
+  {
+    id: "interface",
+    title: "Interface",
+    category: "interface" as const,
+    labels: COMPARISON_INTERFACE_LABELS,
+    description: "How you interact with each backup tool.",
   },
   {
     id: "privacy",

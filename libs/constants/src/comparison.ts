@@ -40,6 +40,10 @@ export type BackupTool = {
     versioning: CellValue;
     scheduling: CellValue;
   };
+  interface?: {
+    cli: CellValue;
+    gui: CellValue;
+  };
   privacy: {
     endToEndEncryption: CellValue;
     zeroKnowledge: CellValue;
@@ -136,6 +140,20 @@ export const COMPARISON_FEATURE_LABELS: Record<
   scheduling: {
     text: "Scheduled Backups",
     description: "Automatic backups on a schedule",
+  },
+};
+
+export const COMPARISON_INTERFACE_LABELS: Record<
+  keyof NonNullable<BackupTool["interface"]>,
+  LabelConfig
+> = {
+  cli: {
+    text: "Command Line Interface",
+    description: "Can be operated from a terminal or shell",
+  },
+  gui: {
+    text: "Graphical User Interface",
+    description: "Provides a desktop app or visual interface",
   },
 };
 
@@ -260,6 +278,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: false },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -312,6 +334,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: "partial", note: "Opt-in" },
@@ -361,6 +387,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true, note: "Max. 3 months" },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: false },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: "partial", note: "Opt-in" },
@@ -409,6 +439,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: true },
       versioning: { supported: true },
       scheduling: { supported: true },
+    },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: true },
     },
     privacy: {
       endToEndEncryption: { supported: true },
@@ -464,6 +498,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: false },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -514,6 +552,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: false },
       versioning: { supported: true },
       scheduling: { supported: true },
+    },
+    interface: {
+      cli: { supported: "partial", note: "Linux only" },
+      gui: { supported: true },
     },
     privacy: {
       endToEndEncryption: { supported: true },
@@ -570,6 +612,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: "partial", note: "Web GUI only" },
     },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -622,6 +668,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: true },
       versioning: { supported: true },
       scheduling: { supported: true },
+    },
+    interface: {
+      cli: { supported: "partial", note: "Windows only" },
+      gui: { supported: true },
     },
     privacy: {
       endToEndEncryption: { supported: true, note: "AES 256-bit" },
@@ -679,6 +729,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: {
+        supported: "partial",
+        note: "Linux only",
+      },
+      gui: { supported: true, note: "Windows, Linux and macOS agents" },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: "partial", note: "Opt-in" },
@@ -734,6 +791,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: "partial", note: "Differential only" },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: false },
       zeroKnowledge: { supported: false },
@@ -787,6 +848,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: true },
       versioning: null,
       scheduling: { supported: true },
+    },
+    interface: {
+      cli: { supported: false },
+      gui: { supported: true },
     },
     privacy: {
       endToEndEncryption: { supported: true },
@@ -842,6 +907,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: "partial", note: "Windows only" },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -895,6 +964,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: false },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -947,6 +1020,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -995,6 +1072,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: true },
       versioning: { supported: true },
       scheduling: { supported: false },
+    },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: "partial", note: "Inofficial only" },
     },
     privacy: {
       endToEndEncryption: { supported: true },
@@ -1047,6 +1128,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: true },
+    },
     privacy: {
       endToEndEncryption: { supported: true },
       zeroKnowledge: { supported: true },
@@ -1097,6 +1182,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: true },
       versioning: { supported: true },
       scheduling: { supported: true },
+    },
+    interface: {
+      cli: { supported: true },
+      gui: {
+        supported: "partial",
+        note: "Windows & macOS only",
+      },
     },
     privacy: {
       endToEndEncryption: { supported: "partial" },
@@ -1151,6 +1243,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       versioning: { supported: true },
       scheduling: { supported: true },
     },
+    interface: {
+      cli: {
+        supported: "partial",
+        note: "Linux only",
+      },
+      gui: { supported: true, note: "Windows & macOS only" },
+    },
     privacy: {
       endToEndEncryption: { supported: false },
       zeroKnowledge: { supported: false },
@@ -1203,6 +1302,10 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       compression: { supported: true },
       versioning: { supported: true },
       scheduling: { supported: true },
+    },
+    interface: {
+      cli: { supported: true },
+      gui: { supported: "partial", note: "Limited features" },
     },
     privacy: {
       endToEndEncryption: { supported: true },

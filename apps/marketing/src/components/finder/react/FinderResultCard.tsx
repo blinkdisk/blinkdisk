@@ -15,6 +15,7 @@ export type SelectedKey = {
     | "level"
     | "strategies"
     | "features"
+    | "interface"
     | "privacy"
     | "platforms"
     | "storages";
