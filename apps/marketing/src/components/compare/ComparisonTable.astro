@@ -1,15 +1,15 @@
 ---
 import type {
-  BackupTool,
-  CellValue,
   LabelConfig,
+  NormalizedBackupTool,
+  NormalizedCellValue,
 } from "@blinkdisk/constants/comparison";
 import ComparisonRow from "@marketing/components/compare/ComparisonRow.astro";
 
 type Props = {
-  tools: (BackupTool | null)[];
+  tools: (NormalizedBackupTool | null)[];
   category: keyof Pick<
-    BackupTool,
+    NormalizedBackupTool,
     | "general"
     | "level"
     | "strategies"
@@ -66,9 +66,19 @@ const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[25%]";
             srText={labels[key].srText}
             values={tools.map((tool) =>
               tool
-                ? (((tool[category] ?? {}) as Record<string, CellValue>)[key] ??
-                  null)
-                : null,
+                ? ((
+                    (tool[category] ?? {}) as Record<
+                      string,
+                      NormalizedCellValue
+                    >
+                  )[key] ?? {
+                    value: null,
+                    note: null,
+                  })
+                : {
+                    value: null,
+                    note: null,
+                  },
             )}
           />
         ))

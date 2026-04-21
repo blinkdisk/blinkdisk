@@ -1,14 +1,17 @@
-export type SupportedValue = {
-  supported: boolean | "partial";
-  note?: string;
-};
+export type FieldValue = boolean | "partial" | string;
 
-export type TextValue = {
-  text: string;
-  note?: string;
-};
+export type CellValue =
+  | FieldValue
+  | {
+      value: FieldValue;
+      note: string;
+    }
+  | null;
 
-export type CellValue = SupportedValue | TextValue | null;
+export type NormalizedCellValue = {
+  value: FieldValue | null;
+  note: string | null;
+};
 
 export type BackupTool = {
   slug: string;
@@ -62,6 +65,31 @@ export type BackupTool = {
     webdav: CellValue;
     rclone: CellValue;
   };
+};
+
+type NormalizeCellRecord<T extends Record<string, CellValue>> = {
+  [K in keyof T]: NormalizedCellValue;
+};
+
+export type NormalizedBackupTool = Omit<
+  BackupTool,
+  | "general"
+  | "level"
+  | "strategies"
+  | "features"
+  | "interface"
+  | "privacy"
+  | "platforms"
+  | "storages"
+> & {
+  general: NormalizeCellRecord<BackupTool["general"]>;
+  level: NormalizeCellRecord<BackupTool["level"]>;
+  strategies: NormalizeCellRecord<BackupTool["strategies"]>;
+  features: NormalizeCellRecord<BackupTool["features"]>;
+  interface?: NormalizeCellRecord<NonNullable<BackupTool["interface"]>>;
+  privacy: NormalizeCellRecord<BackupTool["privacy"]>;
+  platforms: NormalizeCellRecord<BackupTool["platforms"]>;
+  storages: NormalizeCellRecord<BackupTool["storages"]>;
 };
 
 export type LabelConfig = {
@@ -217,6 +245,46 @@ export function getPublishedComparisonTools(now: number = Date.now()) {
   );
 }
 
+export function normalizeCellValue(cell: CellValue): NormalizedCellValue {
+  if (cell === null) return { value: null, note: null };
+  if (typeof cell === "object") {
+    return { value: cell.value, note: cell.note };
+  }
+  return { value: cell, note: null };
+}
+
+function normalizeCellRecord<T extends Record<string, CellValue>>(
+  record: T,
+): NormalizeCellRecord<T> {
+  const normalized = {} as NormalizeCellRecord<T>;
+
+  for (const key of Object.keys(record) as (keyof T)[]) {
+    normalized[key] = normalizeCellValue(record[key] ?? null);
+  }
+
+  return normalized;
+}
+
+export function normalizeBackupTool(tool: BackupTool): NormalizedBackupTool {
+  return {
+    ...tool,
+    general: normalizeCellRecord(tool.general),
+    level: normalizeCellRecord(tool.level),
+    strategies: normalizeCellRecord(tool.strategies),
+    features: normalizeCellRecord(tool.features),
+    interface: tool.interface ? normalizeCellRecord(tool.interface) : undefined,
+    privacy: normalizeCellRecord(tool.privacy),
+    platforms: normalizeCellRecord(tool.platforms),
+    storages: normalizeCellRecord(tool.storages),
+  };
+}
+
+export function normalizeComparisonTools(
+  tools: readonly BackupTool[],
+): NormalizedBackupTool[] {
+  return tools.map(normalizeBackupTool);
+}
+
 export function getComparisonSitemap(baseUrl: string) {
   const paths: string[] = [];
 
@@ -252,53 +320,51 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "/cloudblink#pricing",
     pricing: "free",
     general: {
-      releaseYear: { text: "2025", note: "Built on Kopia, released in 2019" },
-      openSource: { supported: true },
-      originCountry: { text: "🇦🇹 Austria" },
+      releaseYear: { value: "2025", note: "Built on Kopia, released in 2019" },
+      openSource: true,
+      originCountry: "🇦🇹 Austria",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
       incrementalBackups: {
-        supported: true,
+        value: true,
         note: "Built on Kopia's always-incremental snapshots",
       },
-      fullBackups: { supported: "partial" },
-      differentialBackups: {
-        supported: "partial",
-      },
+      fullBackups: "partial",
+      differentialBackups: "partial",
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: false },
-      gui: { supported: true },
+      cli: false,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: true, note: "CloudBlink" },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
-      webdav: { supported: true },
-      rclone: { supported: "partial", note: "Experimental" },
+      managedCloud: { value: true, note: "CloudBlink" },
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
+      webdav: true,
+      rclone: { value: "partial", note: "Experimental" },
     },
   },
   {
@@ -308,53 +374,51 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.backblaze.com/cloud-backup/pricing",
     pricing: "paid",
     general: {
-      releaseYear: { text: "2008" },
-      openSource: { supported: false },
-      originCountry: { text: "🇺🇸 United States" },
+      releaseYear: "2008",
+      openSource: false,
+      originCountry: "🇺🇸 United States",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: { supported: false },
-      differentialBackups: { supported: false },
+      incrementalBackups: true,
+      fullBackups: false,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
+      deduplication: true,
       compression: null,
       versioning: {
-        supported: true,
+        value: true,
         note: "30 days or 1 year | Forever costs $6/TB",
       },
-      scheduling: { supported: true },
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: true },
+      cli: true,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+      endToEndEncryption: true,
+      zeroKnowledge: { value: "partial", note: "Opt-in" },
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: false },
-      android: { supported: "partial", note: "Restore only" },
-      ios: { supported: "partial", note: "Restore only" },
+      windows: true,
+      macos: true,
+      linux: false,
+      android: { value: "partial", note: "Restore only" },
+      ios: { value: "partial", note: "Restore only" },
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: false },
-      nas: { supported: false },
-      s3Compatible: { supported: false },
-      sftp: { supported: false },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: true,
+      localFilesystem: false,
+      nas: false,
+      s3Compatible: false,
+      sftp: false,
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -364,50 +428,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.carbonite.com/personal/backup/#priceplans",
     pricing: "paid",
     general: {
-      releaseYear: { text: "2006" },
-      openSource: { supported: false },
-      originCountry: { text: "🇺🇸 United States" },
+      releaseYear: "2006",
+      openSource: false,
+      originCountry: "🇺🇸 United States",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: { supported: false },
-      differentialBackups: { supported: false },
+      incrementalBackups: true,
+      fullBackups: false,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true, note: "Max. 3 months" },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: { value: true, note: "Max. 3 months" },
+      scheduling: true,
     },
     interface: {
-      cli: { supported: false },
-      gui: { supported: true },
+      cli: false,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+      endToEndEncryption: true,
+      zeroKnowledge: { value: "partial", note: "Opt-in" },
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: false },
-      android: { supported: "partial", note: "Restore only" },
-      ios: { supported: "partial", note: "Restore only" },
+      windows: true,
+      macos: true,
+      linux: false,
+      android: { value: "partial", note: "Restore only" },
+      ios: { value: "partial", note: "Restore only" },
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: false },
-      nas: { supported: false },
-      s3Compatible: { supported: false },
-      sftp: { supported: false },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: true,
+      localFilesystem: false,
+      nas: false,
+      s3Compatible: false,
+      sftp: false,
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -417,47 +479,45 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "https://smb.crashplan.com/smb-pricing/",
     pricing: "paid",
     general: {
-      releaseYear: { text: "2007" },
-      openSource: { supported: false },
-      originCountry: { text: "🇺🇸 United States" },
+      releaseYear: "2007",
+      openSource: false,
+      originCountry: "🇺🇸 United States",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: { supported: false },
-      differentialBackups: { supported: false },
+      incrementalBackups: true,
+      fullBackups: false,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: true },
+      cli: true,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+      endToEndEncryption: true,
+      zeroKnowledge: { value: "partial", note: "Opt-in" },
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
+      managedCloud: true,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
       sftp: null,
       webdav: null,
       rclone: null,
@@ -471,54 +531,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.acronis.com/en/products/true-image/purchasing/",
     pricing: "paid",
     general: {
-      releaseYear: { text: "2003" },
-      openSource: { supported: false },
-      originCountry: { text: "🇨🇭 Switzerland" },
+      releaseYear: "2003",
+      openSource: false,
+      originCountry: "🇨🇭 Switzerland",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
+      folderBackups: true,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: true,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: true,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: false },
-      gui: { supported: true },
+      cli: false,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: false },
-      android: { supported: true },
-      ios: { supported: true },
+      windows: true,
+      macos: true,
+      linux: false,
+      android: true,
+      ios: true,
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: false },
-      sftp: { supported: true },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: true,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: false,
+      sftp: true,
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -528,52 +582,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.idrive.com/pricing",
     pricing: "freemium",
     general: {
-      releaseYear: { text: "1995" },
-      openSource: { supported: false },
-      originCountry: { text: "🇺🇸 United States" },
+      releaseYear: "1995",
+      openSource: false,
+      originCountry: "🇺🇸 United States",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: "partial", note: "Via IDrive Mirror" },
+      folderBackups: true,
+      imageBackups: { value: "partial", note: "Via IDrive Mirror" },
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: false,
-      },
+      incrementalBackups: true,
+      fullBackups: false,
       differentialBackups: null,
     },
     features: {
       deduplication: null,
-      compression: { supported: false },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      compression: false,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: "partial", note: "Linux only" },
-      gui: { supported: true },
+      cli: { value: "partial", note: "Linux only" },
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: "partial", note: "Opt-in at signup" },
+      endToEndEncryption: true,
+      zeroKnowledge: { value: "partial", note: "Opt-in at signup" },
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: "partial", note: "No GUI" },
-      android: { supported: true },
-      ios: { supported: true },
+      windows: true,
+      macos: true,
+      linux: { value: "partial", note: "No GUI" },
+      android: true,
+      ios: true,
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: false },
-      sftp: { supported: false },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: true,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: false,
+      sftp: false,
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -584,55 +634,51 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-24",
     general: {
-      releaseYear: { text: "2016" },
+      releaseYear: "2016",
       openSource: {
-        supported: "partial",
+        value: "partial",
         note: "CLI source-available, GUI proprietary",
       },
-      originCountry: { text: "🇺🇸 United States" },
+      originCountry: "🇺🇸 United States",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: false,
-      },
-      differentialBackups: { supported: false },
+      incrementalBackups: true,
+      fullBackups: false,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: "partial", note: "Web GUI only" },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: { value: "partial", note: "Web GUI only" },
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: "partial", note: "GUI is paid" },
+      cli: true,
+      gui: { value: "partial", note: "GUI is paid" },
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: false },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
-      webdav: { supported: true },
-      rclone: { supported: false },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: false,
+      s3Compatible: true,
+      sftp: true,
+      webdav: true,
+      rclone: false,
     },
   },
   {
@@ -642,54 +688,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricingUrl: "https://www.easeus.com/store/backup.html",
     pricing: "freemium",
     general: {
-      releaseYear: { text: "2009" },
-      openSource: { supported: false },
-      originCountry: { text: "🇨🇳 China" },
+      releaseYear: "2009",
+      openSource: false,
+      originCountry: "🇨🇳 China",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
+      folderBackups: true,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: true,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: true,
     },
     features: {
       deduplication: null,
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: "partial", note: "Windows only" },
-      gui: { supported: true },
+      cli: { value: "partial", note: "Windows only" },
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true, note: "AES 256-bit" },
-      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+      endToEndEncryption: { value: true, note: "AES 256-bit" },
+      zeroKnowledge: { value: "partial", note: "Opt-in" },
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: false },
-      android: { supported: true },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: false,
+      android: true,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: true, note: "EaseUS Cloud" },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
+      managedCloud: { value: true, note: "EaseUS Cloud" },
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
       webdav: null,
-      rclone: { supported: false },
+      rclone: false,
     },
   },
   {
@@ -699,60 +739,51 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-18",
     general: {
-      releaseYear: { text: "2017" },
-      openSource: { supported: false },
+      releaseYear: "2017",
+      openSource: false,
       originCountry: {
-        text: "🇺🇸 United States",
+        value: "🇺🇸 United States",
         note: "HQ moved from Switzerland in 2020",
       },
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: "partial", note: "Windows & Linux" },
+      folderBackups: true,
+      imageBackups: { value: "partial", note: "Windows & Linux" },
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: false,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: {
-        supported: "partial",
-        note: "Linux only",
-      },
-      gui: { supported: true, note: "Windows, Linux and macOS agents" },
+      cli: { value: "partial", note: "Linux only" },
+      gui: { value: true, note: "Windows, Linux and macOS agents" },
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: "partial", note: "Opt-in" },
+      endToEndEncryption: true,
+      zeroKnowledge: { value: "partial", note: "Opt-in" },
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
       managedCloud: null,
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
       sftp: null,
       webdav: null,
-      rclone: { supported: false },
+      rclone: false,
     },
   },
   {
@@ -764,54 +795,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "paid",
     publishedAt: "2026-04-22",
     general: {
-      releaseYear: { text: "2006" },
-      openSource: { supported: false },
-      originCountry: { text: "🇬🇧 United Kingdom" },
+      releaseYear: "2006",
+      openSource: false,
+      originCountry: "🇬🇧 United Kingdom",
     },
     level: {
-      folderBackups: { supported: false },
-      imageBackups: { supported: true },
+      folderBackups: false,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: true,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: true,
     },
     features: {
       deduplication: null,
-      compression: { supported: true },
-      versioning: { supported: "partial", note: "Differential only" },
-      scheduling: { supported: true },
+      compression: true,
+      versioning: { value: "partial", note: "Differential only" },
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: true },
+      cli: true,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: false },
-      zeroKnowledge: { supported: false },
+      endToEndEncryption: false,
+      zeroKnowledge: false,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: false },
-      linux: { supported: false },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: false,
+      linux: false,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: false },
-      sftp: { supported: false },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: false,
+      sftp: false,
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -823,53 +848,47 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-04-26",
     general: {
       releaseYear: null,
-      openSource: { supported: false },
-      originCountry: { text: "🇮🇹 Italy" },
+      openSource: false,
+      originCountry: "🇮🇹 Italy",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: "partial", note: "Paid only" },
+      folderBackups: true,
+      imageBackups: { value: "partial", note: "Paid only" },
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: true,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: true,
     },
     features: {
       deduplication: null,
-      compression: { supported: true },
+      compression: true,
       versioning: null,
-      scheduling: { supported: true },
+      scheduling: true,
     },
     interface: {
-      cli: { supported: false },
-      gui: { supported: true },
+      cli: false,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
+      endToEndEncryption: true,
       zeroKnowledge: null,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: false },
-      linux: { supported: false },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: false,
+      linux: false,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
       webdav: null,
-      rclone: { supported: false },
+      rclone: false,
     },
   },
   {
@@ -880,54 +899,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-05-02",
     general: {
-      releaseYear: { text: "2012" },
-      openSource: { supported: false },
-      originCountry: { text: "🇨🇳 China" },
+      releaseYear: "2012",
+      openSource: false,
+      originCountry: "🇨🇳 China",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
+      folderBackups: true,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: true,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: true,
     },
     features: {
       deduplication: null,
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: "partial", note: "Windows only" },
-      gui: { supported: true },
+      cli: { value: "partial", note: "Windows only" },
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: "partial", note: "Sync only" },
-      linux: { supported: false },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: { value: "partial", note: "Sync only" },
+      linux: false,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: false },
+      managedCloud: true,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: false,
       sftp: null,
       webdav: null,
-      rclone: { supported: false },
+      rclone: false,
     },
   },
   {
@@ -938,53 +951,47 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     publishedAt: "2026-05-06",
     general: {
       releaseYear: null,
-      openSource: { supported: false },
-      originCountry: { text: "🇩🇪 Germany" },
+      openSource: false,
+      originCountry: "🇩🇪 Germany",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
+      folderBackups: true,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: {
-        supported: true,
-      },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: true,
     },
     features: {
       deduplication: null,
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: false },
-      gui: { supported: true },
+      cli: false,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: false },
-      linux: { supported: false },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: false,
+      linux: false,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: false },
-      sftp: { supported: false },
-      webdav: { supported: true },
-      rclone: { supported: false },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: false,
+      sftp: false,
+      webdav: true,
+      rclone: false,
     },
   },
   {
@@ -993,54 +1000,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     website: "https://kopia.io",
     pricing: "free",
     general: {
-      releaseYear: { text: "2019" },
-      openSource: { supported: true },
+      releaseYear: "2019",
+      openSource: true,
       originCountry: null,
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: "partial",
-      },
-      differentialBackups: {
-        supported: "partial",
-      },
+      incrementalBackups: true,
+      fullBackups: "partial",
+      differentialBackups: "partial",
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: true },
+      cli: true,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
-      webdav: { supported: true },
-      rclone: { supported: "partial", note: "Experimental" },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
+      webdav: true,
+      rclone: { value: "partial", note: "Experimental" },
     },
   },
   {
@@ -1050,50 +1051,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "free",
     publishedAt: "2026-04-20",
     general: {
-      releaseYear: { text: "2015" },
-      openSource: { supported: true },
-      originCountry: { text: "🇩🇪 Germany" },
+      releaseYear: "2015",
+      openSource: true,
+      originCountry: "🇩🇪 Germany",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: { supported: false },
-      differentialBackups: { supported: false },
+      incrementalBackups: true,
+      fullBackups: false,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: false },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: false,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: "partial", note: "Inofficial only" },
+      cli: true,
+      gui: { value: "partial", note: "Inofficial only" },
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
-      webdav: { supported: false },
-      rclone: { supported: true },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
+      webdav: false,
+      rclone: true,
     },
   },
   {
@@ -1103,52 +1102,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-28",
     general: {
-      releaseYear: { text: "2009" },
-      openSource: { supported: true },
-      originCountry: { text: "🇩🇰 Denmark" },
+      releaseYear: "2009",
+      openSource: true,
+      originCountry: "🇩🇰 Denmark",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: "partial",
-      },
+      incrementalBackups: true,
+      fullBackups: "partial",
       differentialBackups: null,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: true },
+      cli: true,
+      gui: true,
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
-      webdav: { supported: true },
-      rclone: { supported: true },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
+      webdav: true,
+      rclone: true,
     },
   },
   {
@@ -1158,55 +1153,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "freemium",
     publishedAt: "2026-04-30",
     general: {
-      releaseYear: { text: "2011" },
-      openSource: { supported: false },
-      originCountry: { text: "🇺🇸 United States" },
+      releaseYear: "2011",
+      openSource: false,
+      originCountry: "🇺🇸 United States",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
+      folderBackups: true,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: true,
-      },
-      differentialBackups: { supported: false },
+      incrementalBackups: true,
+      fullBackups: true,
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: {
-        supported: "partial",
-        note: "Windows & macOS only",
-      },
+      cli: true,
+      gui: { value: "partial", note: "Windows & macOS only" },
     },
     privacy: {
-      endToEndEncryption: { supported: "partial" },
-      zeroKnowledge: { supported: "partial" },
+      endToEndEncryption: "partial",
+      zeroKnowledge: "partial",
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: true },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
+      managedCloud: true,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
       sftp: null,
-      webdav: { supported: false },
-      rclone: { supported: false },
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -1216,57 +1204,48 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "free",
     publishedAt: "2026-05-04",
     general: {
-      releaseYear: { text: "2011" },
-      openSource: { supported: true },
-      originCountry: { text: "🇩🇪 Germany" },
+      releaseYear: "2011",
+      openSource: true,
+      originCountry: "🇩🇪 Germany",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: true },
+      folderBackups: true,
+      imageBackups: true,
     },
     strategies: {
-      incrementalBackups: {
-        supported: true,
-      },
-      fullBackups: {
-        supported: "partial",
-      },
-      differentialBackups: {
-        supported: false,
-      },
+      incrementalBackups: true,
+      fullBackups: "partial",
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: {
-        supported: "partial",
-        note: "Linux only",
-      },
-      gui: { supported: true, note: "Windows & macOS only" },
+      cli: { value: "partial", note: "Linux only" },
+      gui: { value: true, note: "Windows & macOS only" },
     },
     privacy: {
-      endToEndEncryption: { supported: false },
-      zeroKnowledge: { supported: false },
+      endToEndEncryption: false,
+      zeroKnowledge: false,
     },
     platforms: {
-      windows: { supported: true },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: true,
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: false },
-      sftp: { supported: false },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: false,
+      sftp: false,
+      webdav: false,
+      rclone: false,
     },
   },
   {
@@ -1276,57 +1255,65 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     pricing: "free",
     publishedAt: "2026-05-08",
     general: {
-      releaseYear: { text: "2025" },
-      openSource: { supported: true },
-      originCountry: { text: "🇫🇷 France" },
+      releaseYear: "2025",
+      openSource: true,
+      originCountry: "🇫🇷 France",
     },
     level: {
-      folderBackups: { supported: true },
-      imageBackups: { supported: false },
+      folderBackups: true,
+      imageBackups: false,
     },
     strategies: {
       incrementalBackups: {
-        supported: "partial",
+        value: "partial",
         note: "Deduplicated snapshots store changes, but Plakar does not use chained incremental archives",
       },
       fullBackups: {
-        supported: "partial",
+        value: "partial",
         note: "Snapshots are self-contained and independently restorable, but there is no separate full-backup mode",
       },
-      differentialBackups: { supported: false },
+      differentialBackups: false,
     },
     features: {
-      deduplication: { supported: true },
-      compression: { supported: true },
-      versioning: { supported: true },
-      scheduling: { supported: true },
+      deduplication: true,
+      compression: true,
+      versioning: true,
+      scheduling: true,
     },
     interface: {
-      cli: { supported: true },
-      gui: { supported: "partial", note: "Limited features" },
+      cli: true,
+      gui: { value: "partial", note: "Limited features" },
     },
     privacy: {
-      endToEndEncryption: { supported: true },
-      zeroKnowledge: { supported: true },
+      endToEndEncryption: true,
+      zeroKnowledge: true,
     },
     platforms: {
-      windows: {
-        supported: "partial",
-        note: "Via WSL",
-      },
-      macos: { supported: true },
-      linux: { supported: true },
-      android: { supported: false },
-      ios: { supported: false },
+      windows: { value: "partial", note: "Via WSL" },
+      macos: true,
+      linux: true,
+      android: false,
+      ios: false,
     },
     storages: {
-      managedCloud: { supported: false },
-      localFilesystem: { supported: true },
-      nas: { supported: true },
-      s3Compatible: { supported: true },
-      sftp: { supported: true },
-      webdav: { supported: false },
-      rclone: { supported: false },
+      managedCloud: false,
+      localFilesystem: true,
+      nas: true,
+      s3Compatible: true,
+      sftp: true,
+      webdav: false,
+      rclone: false,
     },
   },
 ];
+
+export const NORMALIZED_COMPARISON_TOOLS =
+  normalizeComparisonTools(COMPARISON_TOOLS);
+
+export function getPublishedNormalizedComparisonTools(
+  now: number = Date.now(),
+) {
+  return NORMALIZED_COMPARISON_TOOLS.filter(
+    (tool) => !tool.publishedAt || new Date(tool.publishedAt).getTime() <= now,
+  );
+}

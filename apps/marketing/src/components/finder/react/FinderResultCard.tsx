@@ -1,7 +1,6 @@
 import type {
-  BackupTool,
-  CellValue,
-  SupportedValue,
+  NormalizedBackupTool,
+  NormalizedCellValue,
 } from "@blinkdisk/constants/comparison";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
@@ -23,20 +22,16 @@ export type SelectedKey = {
 };
 
 type FinderResultCardProps = {
-  tool: BackupTool;
+  tool: NormalizedBackupTool;
 };
 
-function isSupported(v: CellValue): v is SupportedValue {
-  return v !== null && "supported" in v;
-}
-
-const pricingLabel: Record<BackupTool["pricing"], string> = {
+const pricingLabel: Record<NormalizedBackupTool["pricing"], string> = {
   free: "Free",
   freemium: "Freemium",
   paid: "Paid",
 };
 
-const pricingClass: Record<BackupTool["pricing"], string> = {
+const pricingClass: Record<NormalizedBackupTool["pricing"], string> = {
   free: "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400",
   freemium:
     "border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-400",
@@ -74,7 +69,7 @@ function AndroidIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 type PlatformEntry = {
-  key: keyof BackupTool["platforms"];
+  key: keyof NormalizedBackupTool["platforms"];
   label: string;
   Icon: (props: SVGProps<SVGSVGElement>) => ReactElement;
 };
@@ -89,23 +84,24 @@ const PLATFORMS: PlatformEntry[] = [
 
 type SupportState = "full" | "partial" | "none" | "unknown";
 
-function supportState(cell: CellValue): SupportState {
-  if (!isSupported(cell)) return "unknown";
-  if (cell.supported === true) return "full";
-  if (cell.supported === "partial") return "partial";
-  return "none";
+function supportState(cell: NormalizedCellValue): SupportState {
+  if (cell.value === null) return "unknown";
+  if (cell.value === true) return "full";
+  if (cell.value === "partial") return "partial";
+  if (cell.value === false) return "none";
+  return "unknown";
 }
 
 export function FinderResultCard({ tool }: FinderResultCardProps) {
   const compareHref = `/compare/${tool.slug}`;
 
   const releaseYear =
-    tool.general.releaseYear && "text" in tool.general.releaseYear
-      ? tool.general.releaseYear.text
+    typeof tool.general.releaseYear.value === "string"
+      ? tool.general.releaseYear.value
       : null;
   const originCountry =
-    tool.general.originCountry && "text" in tool.general.originCountry
-      ? tool.general.originCountry.text
+    typeof tool.general.originCountry.value === "string"
+      ? tool.general.originCountry.value
       : null;
 
   const folderBackups = supportState(tool.level.folderBackups);

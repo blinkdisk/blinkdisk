@@ -7,10 +7,9 @@ import {
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_STORAGE_LABELS,
   COMPARISON_STRATEGY_LABELS,
-  type BackupTool,
-  type CellValue,
   type LabelConfig,
-  type SupportedValue,
+  type NormalizedBackupTool,
+  type NormalizedCellValue,
 } from "@blinkdisk/constants/comparison";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
@@ -100,7 +99,7 @@ const SECTIONS: SectionConfig[] = [
 const GENERAL_FILTER_KEYS = new Set(["openSource"]);
 
 const PRICING_OPTIONS: {
-  value: BackupTool["pricing"];
+  value: NormalizedBackupTool["pricing"];
   label: string;
   description: string;
 }[] = [
@@ -110,7 +109,7 @@ const PRICING_OPTIONS: {
 ];
 
 type Filters = {
-  pricing: Set<BackupTool["pricing"]>;
+  pricing: Set<NormalizedBackupTool["pricing"]>;
   byCategory: Record<FilterCategory, Set<string>>;
 };
 
@@ -130,22 +129,17 @@ function emptyFilters(): Filters {
   };
 }
 
-function isSupported(v: CellValue): v is SupportedValue {
-  return v !== null && "supported" in v;
-}
-
-function cellMatches(cell: CellValue): {
+function cellMatches(cell: NormalizedCellValue): {
   matches: boolean;
   partial: boolean;
 } {
-  if (!isSupported(cell)) return { matches: false, partial: false };
-  if (cell.supported === true) return { matches: true, partial: false };
-  if (cell.supported === "partial") return { matches: true, partial: true };
+  if (cell.value === true) return { matches: true, partial: false };
+  if (cell.value === "partial") return { matches: true, partial: true };
   return { matches: false, partial: false };
 }
 
 function toolMatchesFilters(
-  tool: BackupTool,
+  tool: NormalizedBackupTool,
   filters: Filters,
 ): { matches: boolean; fullCount: number; partialCount: number } {
   if (filters.pricing.size > 0 && !filters.pricing.has(tool.pricing)) {
@@ -169,8 +163,12 @@ function toolMatchesFilters(
     const selected = filters.byCategory[cat];
     if (selected.size === 0) continue;
     for (const key of selected) {
-      const cell =
-        ((tool[cat] ?? {}) as Record<string, CellValue>)[key] ?? null;
+      const cell = ((tool[cat] ?? {}) as Record<string, NormalizedCellValue>)[
+        key
+      ] ?? {
+        value: null,
+        note: null,
+      };
       const { matches, partial } = cellMatches(cell);
       if (!matches) {
         return { matches: false, fullCount: 0, partialCount: 0 };
@@ -238,7 +236,7 @@ function parseFromParams(params: URLSearchParams): Filters {
 }
 
 type BackupFinderProps = {
-  tools: BackupTool[];
+  tools: NormalizedBackupTool[];
 };
 
 export function BackupFinder({ tools }: BackupFinderProps) {
@@ -286,7 +284,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
 
   const activeCount = countActive(filters);
 
-  const togglePricing = (value: BackupTool["pricing"]) => {
+  const togglePricing = (value: NormalizedBackupTool["pricing"]) => {
     setFilters((f) => {
       const next = new Set(f.pricing);
       if (next.has(value)) next.delete(value);

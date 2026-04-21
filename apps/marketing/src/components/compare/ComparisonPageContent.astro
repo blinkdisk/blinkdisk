@@ -29,6 +29,7 @@ import {
   COMPARISON_STRATEGY_LABELS,
   COMPARISON_STORAGE_LABELS,
   type BackupTool,
+  normalizeComparisonTools,
 } from "@blinkdisk/constants/comparison";
 
 type Props = {
@@ -115,9 +116,10 @@ const toolOptions = COMPARISON_TOOLS.map((tool) => ({
 }));
 const selectedSlugs = tools.map((tool) => tool.slug);
 const hasTools = tools.length > 0;
+const normalizedTools = normalizeComparisonTools(tools);
 
-const paddedTools: (BackupTool | null)[] =
-  tools.length === 1 ? [tools[0], null] : tools;
+const paddedTools =
+  normalizedTools.length === 1 ? [normalizedTools[0], null] : normalizedTools;
 ---
 
 <article

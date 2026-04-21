@@ -1,5 +1,5 @@
 ---
-import type { CellValue } from "@blinkdisk/constants/comparison";
+import type { NormalizedCellValue } from "@blinkdisk/constants/comparison";
 import ComparisonCell from "@marketing/components/compare/ComparisonCell.astro";
 import WindowsIcon from "@marketing/components/icons/Windows.astro";
 import MacosIcon from "@marketing/components/icons/Macos.astro";
@@ -12,7 +12,7 @@ type Props = {
   labelDescription?: string;
   labelIcon?: string;
   srText?: { true: string; false: string; partial: string };
-  values: CellValue[];
+  values: NormalizedCellValue[];
 };
 
 const { label, labelLink, labelDescription, labelIcon, srText, values } =
