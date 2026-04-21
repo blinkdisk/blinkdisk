@@ -1,10 +1,10 @@
-import type {
-  NormalizedBackupTool,
-  NormalizedCellValue,
-} from "@blinkdisk/constants/comparison";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { cn } from "@blinkdisk/utils/class";
+import type {
+  NormalizedBackupTool,
+  NormalizedCellValue,
+} from "@blinkdisk/utils/tools";
 import { ExternalLinkIcon, ScaleIcon, XIcon } from "lucide-react";
 import type { ComponentProps, ReactElement, SVGProps } from "react";
 

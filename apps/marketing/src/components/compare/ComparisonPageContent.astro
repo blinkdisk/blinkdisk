@@ -18,8 +18,9 @@ import HardDriveIcon from "@lucide/astro/icons/hard-drive";
 import InfoIcon from "@lucide/astro/icons/info";
 import AppWindowIcon from "@lucide/astro/icons/app-window";
 import MailIcon from "@lucide/astro/icons/mail";
+import type { BackupTool } from "@blinkdisk/constants/tools";
+import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
 import {
-  COMPARISON_TOOLS,
   COMPARISON_GENERAL_LABELS,
   COMPARISON_FEATURE_LABELS,
   COMPARISON_INTERFACE_LABELS,
@@ -28,9 +29,8 @@ import {
   COMPARISON_PLATFORM_LABELS,
   COMPARISON_STRATEGY_LABELS,
   COMPARISON_STORAGE_LABELS,
-  type BackupTool,
-  normalizeComparisonTools,
 } from "@blinkdisk/constants/comparison";
+import { normalizeComparisonTools } from "@blinkdisk/utils/tools";
 
 type Props = {
   tools: BackupTool[];
@@ -110,7 +110,7 @@ const tableSections = [
   },
 ];
 
-const toolOptions = COMPARISON_TOOLS.map((tool) => ({
+const toolOptions = BACKUP_TOOLS.map((tool) => ({
   value: tool.slug,
   label: tool.name,
 }));

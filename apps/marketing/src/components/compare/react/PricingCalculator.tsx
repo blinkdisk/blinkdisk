@@ -1,4 +1,4 @@
-import type { BackupTool } from "@blinkdisk/constants/comparison";
+import type { BackupTool } from "@blinkdisk/constants/tools";
 import AcronisPricingCalculator from "@marketing/components/compare/react/AcronisPricingCalculator";
 import AOMEIBackupperPricingCalculator from "@marketing/components/compare/react/AOMEIBackupperPricingCalculator";
 import BackblazePricingCalculator from "@marketing/components/compare/react/BackblazePricingCalculator";

@@ -8,13 +8,15 @@ import {
   COMPARISON_STORAGE_LABELS,
   COMPARISON_STRATEGY_LABELS,
   type LabelConfig,
-  type NormalizedBackupTool,
-  type NormalizedCellValue,
 } from "@blinkdisk/constants/comparison";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
 import { cn } from "@blinkdisk/utils/class";
+import {
+  type NormalizedBackupTool,
+  type NormalizedCellValue,
+} from "@blinkdisk/utils/tools";
 import {
   FinderResultCard,
   type SelectedKey,

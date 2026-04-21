@@ -1,7 +1,7 @@
 ---
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 import ComparisonPageContent from "@marketing/components/compare/ComparisonPageContent.astro";
-import { COMPARISON_TOOLS } from "@blinkdisk/constants/comparison";
+import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
 
 export const prerender = false;
 
@@ -11,7 +11,7 @@ if (!slug) return Astro.redirect("/404");
 const slugParts = slug.split("-vs-");
 
 const canonicalParts = slugParts.map((part) => {
-  const aliasMatch = COMPARISON_TOOLS.find((t) => t.aliases?.includes(part));
+  const aliasMatch = BACKUP_TOOLS.find((t) => t.aliases?.includes(part));
   return aliasMatch?.slug ?? part;
 });
 
@@ -19,7 +19,7 @@ if (canonicalParts.some((part, i) => part !== slugParts[i]))
   return Astro.redirect(`/compare/${canonicalParts.join("-vs-")}`, 301);
 
 const toolsOrUndefined = slugParts.map((slug) =>
-  COMPARISON_TOOLS.find((t) => t.slug === slug),
+  BACKUP_TOOLS.find((t) => t.slug === slug),
 );
 
 if (
