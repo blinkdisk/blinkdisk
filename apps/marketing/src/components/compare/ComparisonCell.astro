@@ -1,4 +1,5 @@
 ---
+import { formatCountryDisplay } from "@blinkdisk/constants/countries";
 import type { NormalizedCellValue } from "@blinkdisk/utils/tools";
 import CheckIcon from "@lucide/astro/icons/check";
 import XIcon from "@lucide/astro/icons/x";
@@ -6,10 +7,11 @@ import MinusIcon from "@lucide/astro/icons/minus";
 
 type Props = {
   value: NormalizedCellValue;
+  valueType?: "country";
   srText?: { true: string; false: string; partial: string };
 };
 
-const { value, srText } = Astro.props;
+const { value, valueType, srText } = Astro.props;
 
 const defaultSrText = {
   true: "Supported",
@@ -17,6 +19,10 @@ const defaultSrText = {
   partial: "Partially supported",
 };
 const finalSrText = srText ?? defaultSrText;
+const stringValue =
+  typeof value.value === "string" && valueType === "country"
+    ? formatCountryDisplay(value.value)
+    : value.value;
 ---
 
 <td class="px-4 py-3 text-center">
@@ -47,7 +53,7 @@ const finalSrText = srText ?? defaultSrText;
       </div>
     ) : (
       <div class="flex flex-col items-center gap-1">
-        <span class="text-foreground text-sm font-medium">{value.value}</span>
+        <span class="text-foreground text-sm font-medium">{stringValue}</span>
         {value.note && (
           <span class="text-muted-foreground text-xs">{value.note}</span>
         )}

@@ -11,12 +11,20 @@ type Props = {
   labelLink?: string;
   labelDescription?: string;
   labelIcon?: string;
+  valueType?: "country";
   srText?: { true: string; false: string; partial: string };
   values: NormalizedCellValue[];
 };
 
-const { label, labelLink, labelDescription, labelIcon, srText, values } =
-  Astro.props;
+const {
+  label,
+  labelLink,
+  labelDescription,
+  labelIcon,
+  valueType,
+  srText,
+  values,
+} = Astro.props;
 
 const iconComponents = {
   windows: WindowsIcon,
@@ -55,5 +63,9 @@ const IconComponent = labelIcon
       )
     }
   </td>
-  {values.map((value) => <ComparisonCell value={value} srText={srText} />)}
+  {
+    values.map((value) => (
+      <ComparisonCell value={value} valueType={valueType} srText={srText} />
+    ))
+  }
 </tr>

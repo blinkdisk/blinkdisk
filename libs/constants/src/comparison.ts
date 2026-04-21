@@ -5,6 +5,7 @@ export type LabelConfig = {
   link?: string;
   description?: string;
   icon?: string;
+  valueType?: "country";
   srText?: {
     true: string;
     false: string;
@@ -21,7 +22,7 @@ export const COMPARISON_GENERAL_LABELS: Record<
     srText: { true: "Yes", false: "No", partial: "Partially" },
   },
   releaseYear: { text: "Release Year" },
-  originCountry: { text: "Country of Origin" },
+  originCountry: { text: "Country of Origin", valueType: "country" },
 };
 
 export const COMPARISON_LEVEL_LABELS: Record<

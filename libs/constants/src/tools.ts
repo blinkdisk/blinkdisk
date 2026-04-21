@@ -1,9 +1,19 @@
+import type { CountryCode } from "./countries";
+
 export type FieldValue = boolean | "partial" | string;
 
 export type CellValue =
   | FieldValue
   | {
       value: FieldValue;
+      note: string;
+    }
+  | null;
+
+export type CountryCellValue =
+  | CountryCode
+  | {
+      value: CountryCode;
       note: string;
     }
   | null;
@@ -19,7 +29,7 @@ export type BackupTool = {
   general: {
     openSource: CellValue;
     releaseYear: CellValue;
-    originCountry: CellValue;
+    originCountry: CountryCellValue;
   };
   level: {
     folderBackups: CellValue;
@@ -72,7 +82,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: { value: "2025", note: "Built on Kopia, released in 2019" },
       openSource: true,
-      originCountry: "🇦🇹 Austria",
+      originCountry: "AT",
     },
     level: {
       folderBackups: true,
@@ -126,7 +136,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2008",
       openSource: false,
-      originCountry: "🇺🇸 United States",
+      originCountry: "US",
     },
     level: {
       folderBackups: true,
@@ -180,7 +190,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2006",
       openSource: false,
-      originCountry: "🇺🇸 United States",
+      originCountry: "US",
     },
     level: {
       folderBackups: true,
@@ -231,7 +241,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2007",
       openSource: false,
-      originCountry: "🇺🇸 United States",
+      originCountry: "US",
     },
     level: {
       folderBackups: true,
@@ -283,7 +293,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2003",
       openSource: false,
-      originCountry: "🇨🇭 Switzerland",
+      originCountry: "CH",
     },
     level: {
       folderBackups: true,
@@ -334,7 +344,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "1995",
       openSource: false,
-      originCountry: "🇺🇸 United States",
+      originCountry: "US",
     },
     level: {
       folderBackups: true,
@@ -389,7 +399,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
         value: "partial",
         note: "CLI source-available, GUI proprietary",
       },
-      originCountry: "🇺🇸 United States",
+      originCountry: "US",
     },
     level: {
       folderBackups: true,
@@ -440,7 +450,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2009",
       openSource: false,
-      originCountry: "🇨🇳 China",
+      originCountry: "CN",
     },
     level: {
       folderBackups: true,
@@ -492,7 +502,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
       releaseYear: "2017",
       openSource: false,
       originCountry: {
-        value: "🇺🇸 United States",
+        value: "US",
         note: "HQ moved from Switzerland in 2020",
       },
     },
@@ -547,7 +557,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2006",
       openSource: false,
-      originCountry: "🇬🇧 United Kingdom",
+      originCountry: "GB",
     },
     level: {
       folderBackups: false,
@@ -599,7 +609,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: null,
       openSource: false,
-      originCountry: "🇮🇹 Italy",
+      originCountry: "IT",
     },
     level: {
       folderBackups: true,
@@ -651,7 +661,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2012",
       openSource: false,
-      originCountry: "🇨🇳 China",
+      originCountry: "CN",
     },
     level: {
       folderBackups: true,
@@ -702,7 +712,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: null,
       openSource: false,
-      originCountry: "🇩🇪 Germany",
+      originCountry: "DE",
     },
     level: {
       folderBackups: true,
@@ -803,7 +813,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2015",
       openSource: true,
-      originCountry: "🇩🇪 Germany",
+      originCountry: "DE",
     },
     level: {
       folderBackups: true,
@@ -854,7 +864,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2009",
       openSource: true,
-      originCountry: "🇩🇰 Denmark",
+      originCountry: "DK",
     },
     level: {
       folderBackups: true,
@@ -905,7 +915,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2011",
       openSource: false,
-      originCountry: "🇺🇸 United States",
+      originCountry: "US",
     },
     level: {
       folderBackups: true,
@@ -956,7 +966,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2011",
       openSource: true,
-      originCountry: "🇩🇪 Germany",
+      originCountry: "DE",
     },
     level: {
       folderBackups: true,
@@ -1007,7 +1017,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
     general: {
       releaseYear: "2025",
       openSource: true,
-      originCountry: "🇫🇷 France",
+      originCountry: "FR",
     },
     level: {
       folderBackups: true,

@@ -1,3 +1,4 @@
+import { formatCountryDisplay } from "@blinkdisk/constants/countries";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { cn } from "@blinkdisk/utils/class";
@@ -101,7 +102,7 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
       : null;
   const originCountry =
     typeof tool.general.originCountry.value === "string"
-      ? tool.general.originCountry.value
+      ? formatCountryDisplay(tool.general.originCountry.value)
       : null;
 
   const folderBackups = supportState(tool.level.folderBackups);
