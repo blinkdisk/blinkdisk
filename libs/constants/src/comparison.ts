@@ -1,13 +1,11 @@
 export type SupportedValue = {
   supported: boolean | "partial";
   note?: string;
-  source?: string;
 };
 
 export type TextValue = {
   text: string;
   note?: string;
-  source?: string;
 };
 
 export type CellValue = SupportedValue | TextValue | null;
