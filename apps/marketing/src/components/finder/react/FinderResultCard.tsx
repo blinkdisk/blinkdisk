@@ -13,6 +13,7 @@ export type SelectedKey = {
   category:
     | "general"
     | "level"
+    | "strategies"
     | "features"
     | "privacy"
     | "platforms"

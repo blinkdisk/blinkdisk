@@ -10,6 +10,7 @@ import {
 import ExternalLinkIcon from "@lucide/astro/icons/external-link";
 import ListChecksIcon from "@lucide/astro/icons/list-checks";
 import LayersIcon from "@lucide/astro/icons/layers";
+import RotateCcwIcon from "@lucide/astro/icons/rotate-ccw";
 import TagIcon from "@lucide/astro/icons/tag";
 import ShieldIcon from "@lucide/astro/icons/shield";
 import MonitorIcon from "@lucide/astro/icons/monitor";
@@ -23,6 +24,7 @@ import {
   COMPARISON_LEVEL_LABELS,
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_PLATFORM_LABELS,
+  COMPARISON_STRATEGY_LABELS,
   COMPARISON_STORAGE_LABELS,
   type BackupTool,
 } from "@blinkdisk/constants/comparison";
@@ -38,8 +40,8 @@ const { tools, title, description } = Astro.props;
 const sectionIcons: Record<string, typeof ListChecksIcon> = {
   general: InfoIcon,
   level: LayersIcon,
+  strategies: RotateCcwIcon,
   features: ListChecksIcon,
-  pricing: TagIcon,
   privacy: ShieldIcon,
   platforms: MonitorIcon,
   storages: HardDriveIcon,
@@ -59,6 +61,13 @@ const tableSections = [
     category: "level" as const,
     labels: COMPARISON_LEVEL_LABELS,
     description: "What level of backup each tool supports.",
+  },
+  {
+    id: "strategies",
+    title: "Backup Strategies",
+    category: "strategies" as const,
+    labels: COMPARISON_STRATEGY_LABELS,
+    description: "Which backup methods each tool supports.",
   },
   {
     id: "features",
@@ -88,12 +97,6 @@ const tableSections = [
     labels: COMPARISON_STORAGE_LABELS,
     description: "Where you can store your backups.",
   },
-];
-
-const allSections = [
-  ...tableSections.slice(0, 3).map(({ id, title }) => ({ id, title })),
-  { id: "pricing", title: "Pricing" },
-  ...tableSections.slice(3).map(({ id, title }) => ({ id, title })),
 ];
 
 const toolOptions = COMPARISON_TOOLS.map((tool) => ({
@@ -201,27 +204,7 @@ const paddedTools: (BackupTool | null)[] =
   {
     hasTools && (
       <>
-        <nav class="bg-card text-muted-foreground mb-10 flex flex-wrap items-center justify-evenly gap-x-3 gap-y-2 rounded-lg border p-4 text-sm">
-          {allSections.map((section, i) => {
-            const Icon = sectionIcons[section.id];
-            return (
-              <>
-                <a
-                  href={`#${section.id}`}
-                  class="hover:text-foreground inline-flex items-center gap-1 transition-colors"
-                >
-                  <Icon class="size-3.5" />
-                  {section.title}
-                </a>
-                {i < allSections.length - 1 && (
-                  <span class="text-border">·</span>
-                )}
-              </>
-            );
-          })}
-        </nav>
-
-        {tableSections.slice(0, 3).map((section) => {
+        {tableSections.slice(0, 4).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
             <>
@@ -284,7 +267,7 @@ const paddedTools: (BackupTool | null)[] =
           )}
         </div>
 
-        {tableSections.slice(3).map((section) => {
+        {tableSections.slice(4).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
             <>

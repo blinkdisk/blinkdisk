@@ -29,6 +29,11 @@ export type BackupTool = {
     folderBackups: CellValue;
     imageBackups: CellValue;
   };
+  strategies: {
+    incrementalBackups: CellValue;
+    fullBackups: CellValue;
+    differentialBackups: CellValue;
+  };
   features: {
     deduplication: CellValue;
     compression: CellValue;
@@ -87,6 +92,27 @@ export const COMPARISON_LEVEL_LABELS: Record<
 > = {
   folderBackups: { text: "File/Folder Backups" },
   imageBackups: { text: "Disk Image Backups" },
+};
+
+export const COMPARISON_STRATEGY_LABELS: Record<
+  keyof BackupTool["strategies"],
+  LabelConfig
+> = {
+  incrementalBackups: {
+    text: "Incremental Backups",
+    link: "/glossary/what-is-an-incremental-backup",
+    description: "Copies changes since the previous backup",
+  },
+  fullBackups: {
+    text: "Full Backups",
+    link: "/glossary/what-is-a-full-backup",
+    description: "Copies all selected data each time",
+  },
+  differentialBackups: {
+    text: "Differential Backups",
+    link: "/glossary/what-is-a-differential-backup",
+    description: "Copies changes since the last full backup",
+  },
 };
 
 export const COMPARISON_FEATURE_LABELS: Record<
@@ -218,6 +244,16 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+        note: "Built on Kopia's always-incremental snapshots",
+      },
+      fullBackups: { supported: "partial" },
+      differentialBackups: {
+        supported: "partial",
+      },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -259,6 +295,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: false },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: { supported: false },
+      differentialBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -305,6 +348,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: { supported: false },
+      differentialBackups: { supported: false },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -346,6 +396,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: false },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: { supported: false },
+      differentialBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },
@@ -390,6 +447,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: true,
+      },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -431,6 +499,15 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Via IDrive Mirror" },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: false,
+      },
+      differentialBackups: null,
     },
     features: {
       deduplication: null,
@@ -478,6 +555,15 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: false,
+      },
+      differentialBackups: { supported: false },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -519,6 +605,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: true },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: true,
+      },
     },
     features: {
       deduplication: null,
@@ -565,6 +662,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Windows & Linux" },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: false,
+      },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -609,6 +717,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: false },
       imageBackups: { supported: true },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: true,
+      },
+    },
     features: {
       deduplication: null,
       compression: { supported: true },
@@ -651,6 +770,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: "partial", note: "Paid only" },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: true,
+      },
     },
     features: {
       deduplication: null,
@@ -695,6 +825,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: true,
+      },
+    },
     features: {
       deduplication: null,
       compression: { supported: true },
@@ -737,6 +878,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: {
+        supported: true,
+      },
+    },
     features: {
       deduplication: null,
       compression: { supported: true },
@@ -777,6 +929,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: false },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: "partial",
+      },
+      differentialBackups: {
+        supported: "partial",
+      },
     },
     features: {
       deduplication: { supported: true },
@@ -820,6 +983,13 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: false },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: { supported: false },
+      differentialBackups: { supported: false },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -861,6 +1031,15 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: false },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: "partial",
+      },
+      differentialBackups: null,
     },
     features: {
       deduplication: { supported: true },
@@ -904,6 +1083,15 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: true,
+      },
+      differentialBackups: { supported: false },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -946,6 +1134,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
       folderBackups: { supported: true },
       imageBackups: { supported: true },
     },
+    strategies: {
+      incrementalBackups: {
+        supported: true,
+      },
+      fullBackups: {
+        supported: "partial",
+      },
+      differentialBackups: {
+        supported: false,
+      },
+    },
     features: {
       deduplication: { supported: true },
       compression: { supported: true },
@@ -987,6 +1186,17 @@ export const COMPARISON_TOOLS: BackupTool[] = [
     level: {
       folderBackups: { supported: true },
       imageBackups: { supported: false },
+    },
+    strategies: {
+      incrementalBackups: {
+        supported: "partial",
+        note: "Deduplicated snapshots store changes, but Plakar does not use chained incremental archives",
+      },
+      fullBackups: {
+        supported: "partial",
+        note: "Snapshots are self-contained and independently restorable, but there is no separate full-backup mode",
+      },
+      differentialBackups: { supported: false },
     },
     features: {
       deduplication: { supported: true },

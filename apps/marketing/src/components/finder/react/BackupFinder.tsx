@@ -5,6 +5,7 @@ import {
   COMPARISON_PLATFORM_LABELS,
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_STORAGE_LABELS,
+  COMPARISON_STRATEGY_LABELS,
   type BackupTool,
   type CellValue,
   type LabelConfig,
@@ -56,6 +57,12 @@ const SECTIONS: SectionConfig[] = [
     labels: COMPARISON_LEVEL_LABELS,
   },
   {
+    id: "strategies",
+    title: "Backup Strategies",
+    icon: RotateCcwIcon,
+    labels: COMPARISON_STRATEGY_LABELS,
+  },
+  {
     id: "features",
     title: "Features",
     icon: ListChecksIcon,
@@ -105,6 +112,7 @@ function emptyFilters(): Filters {
     byCategory: {
       general: new Set(),
       level: new Set(),
+      strategies: new Set(),
       features: new Set(),
       privacy: new Set(),
       platforms: new Set(),
@@ -140,6 +148,7 @@ function toolMatchesFilters(
   const categories: FilterCategory[] = [
     "general",
     "level",
+    "strategies",
     "features",
     "privacy",
     "platforms",
@@ -195,6 +204,7 @@ function parseFromParams(params: URLSearchParams): Filters {
   const categories: FilterCategory[] = [
     "general",
     "level",
+    "strategies",
     "features",
     "privacy",
     "platforms",
