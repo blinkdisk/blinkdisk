@@ -1,4 +1,3 @@
-import { formatCountryDisplay } from "@blinkdisk/constants/countries";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { cn } from "@blinkdisk/utils/class";
@@ -6,8 +5,8 @@ import type {
   NormalizedBackupTool,
   NormalizedCellValue,
 } from "@blinkdisk/utils/tools";
-import { ExternalLinkIcon, ScaleIcon, XIcon } from "lucide-react";
-import type { ComponentProps, ReactElement, SVGProps } from "react";
+import { ExternalLinkIcon, ScaleIcon } from "lucide-react";
+import type { ReactElement, SVGProps } from "react";
 
 export type SelectedKey = {
   category:
@@ -93,36 +92,21 @@ function supportState(cell: NormalizedCellValue): SupportState {
   return "unknown";
 }
 
+function hasSupport(state: SupportState) {
+  return state === "full" || state === "partial";
+}
+
 export function FinderResultCard({ tool }: FinderResultCardProps) {
   const compareHref = `/compare/${tool.slug}`;
-
-  const releaseYear =
-    typeof tool.general.releaseYear.value === "string" ||
-    typeof tool.general.releaseYear.value === "number"
-      ? tool.general.releaseYear.value
-      : null;
-  const originCountry =
-    typeof tool.general.originCountry.value === "string"
-      ? formatCountryDisplay(tool.general.originCountry.value)
-      : null;
-
-  const folderBackups = supportState(tool.level.folderBackups);
-  const imageBackups = supportState(tool.level.imageBackups);
-  const backupKinds: string[] = [];
-  if (folderBackups === "full" || folderBackups === "partial") {
-    backupKinds.push(folderBackups === "partial" ? "Files (partial)" : "Files");
-  }
-  if (imageBackups === "full" || imageBackups === "partial") {
-    backupKinds.push(
-      imageBackups === "partial" ? "Disk image (partial)" : "Disk image",
-    );
-  }
+  const supportedPlatforms = PLATFORMS.filter(({ key }) =>
+    hasSupport(supportState(tool.platforms[key])),
+  );
 
   return (
-    <div className="bg-card flex flex-col gap-4 overflow-hidden rounded-lg border p-4 transition-colors sm:flex-row sm:items-stretch sm:gap-5 sm:p-5">
+    <div className="bg-card flex flex-col gap-4 overflow-hidden rounded-xl border p-4 transition-colors sm:flex-row sm:items-stretch sm:gap-5 sm:p-5">
       <a
         href={compareHref}
-        className="bg-muted group relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-md sm:aspect-auto sm:h-auto sm:w-44 md:w-56"
+        className="bg-muted group relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-lg sm:aspect-auto sm:h-auto sm:w-44 md:w-56"
         aria-label={`Compare ${tool.name}`}
         data-astro-prefetch
       >
@@ -134,54 +118,37 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
         />
       </a>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-3">
-        <div className="flex flex-col gap-1">
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-4">
+        <div className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <h3 className="text-foreground text-lg font-semibold leading-tight">
+            <h3 className="text-foreground text-xl font-semibold leading-tight">
               {tool.name}
             </h3>
             <Badge className={cn("ml-auto", pricingClass[tool.pricing])}>
               {pricingLabel[tool.pricing]}
             </Badge>
           </div>
-          {(releaseYear || originCountry) && (
-            <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
-              {releaseYear && <span>Released {releaseYear}</span>}
-              {releaseYear && originCountry && (
-                <span className="text-border">·</span>
-              )}
-              {originCountry && <span>{originCountry}</span>}
-            </div>
-          )}
         </div>
 
-        <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[auto_1fr]">
-          <InfoLabel>Platforms</InfoLabel>
-          <div className="flex flex-wrap items-center gap-1.5">
-            {PLATFORMS.map(({ key, label, Icon }) => {
-              const state = supportState(tool.platforms[key]);
-              return (
-                <PlatformPill
+        {supportedPlatforms.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <span className="text-muted-foreground text-xs font-medium uppercase tracking-[0.18em] sm:self-start">
+              Works on
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              {supportedPlatforms.map(({ key, label, Icon }) => (
+                <PlatformBadge
                   key={key}
                   label={label}
-                  state={state}
+                  state={supportState(tool.platforms[key])}
                   Icon={Icon}
                 />
-              );
-            })}
+              ))}
+            </div>
           </div>
+        )}
 
-          {backupKinds.length > 0 && (
-            <>
-              <InfoLabel>Backs up</InfoLabel>
-              <div className="text-foreground text-sm">
-                {backupKinds.join(", ")}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="mt-auto flex flex-col gap-2 pt-1 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <Button
             render={
               <a
@@ -211,21 +178,13 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
   );
 }
 
-function InfoLabel({ children }: ComponentProps<"span">) {
-  return (
-    <span className="text-muted-foreground pt-1 text-xs font-medium uppercase tracking-wide sm:self-start">
-      {children}
-    </span>
-  );
-}
-
-type PlatformPillProps = {
+type PlatformBadgeProps = {
   label: string;
   state: SupportState;
   Icon: (props: SVGProps<SVGSVGElement>) => ReactElement;
 };
 
-function PlatformPill({ label, state, Icon }: PlatformPillProps) {
+function PlatformBadge({ label, state, Icon }: PlatformBadgeProps) {
   const title =
     state === "full"
       ? label
@@ -239,22 +198,16 @@ function PlatformPill({ label, state, Icon }: PlatformPillProps) {
     <span
       title={title}
       className={cn(
-        "relative inline-flex size-7 items-center justify-center rounded-md border transition-colors",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
         state === "full" &&
-          "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400",
+          "border-border bg-muted/60 text-foreground dark:bg-muted/40",
         state === "partial" &&
-          "border-yellow-500/20 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-        state === "none" &&
-          "border-border bg-muted/40 text-muted-foreground/40",
-        state === "unknown" &&
-          "border-border text-muted-foreground/40 border-dashed bg-transparent",
+          "border-yellow-500/20 bg-yellow-500/10 text-yellow-800 dark:text-yellow-300",
       )}
     >
-      <Icon className="size-3.5" />
+      <Icon className="size-3.5 shrink-0" />
+      <span>{label}</span>
       <span className="sr-only">{title}</span>
-      {state === "none" && (
-        <XIcon className="bg-card text-muted-foreground/70 absolute -bottom-0.5 -right-0.5 size-3 rounded-full p-0.5" />
-      )}
     </span>
   );
 }
