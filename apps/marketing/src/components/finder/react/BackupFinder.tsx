@@ -42,6 +42,7 @@ import {
 } from "@marketing/components/finder/react/FinderResultCard";
 import {
   AppWindowIcon,
+  ChevronDownIcon,
   HardDriveIcon,
   InfoIcon,
   LayersIcon,
@@ -57,6 +58,7 @@ import {
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 type FilterCategory = SelectedKey["category"];
+type FilterGroupId = "pricing" | FilterCategory;
 
 type SectionConfig = {
   id: FilterCategory;
@@ -304,6 +306,37 @@ function countActive(filters: Filters): number {
   return n;
 }
 
+function getCategoryActiveCount(
+  filters: Filters,
+  category: FilterCategory,
+): number {
+  if (category === "general") {
+    return (
+      filters.byCategory.general.size +
+      (filters.releaseYear.min || filters.releaseYear.max ? 1 : 0) +
+      (filters.originCountries.size > 0 ? 1 : 0)
+    );
+  }
+
+  return filters.byCategory[category].size;
+}
+
+function getOpenGroupsFromFilters(filters: Filters): FilterGroupId[] {
+  const groups: FilterGroupId[] = [];
+
+  if (filters.pricing.size > 0) {
+    groups.push("pricing");
+  }
+
+  for (const section of SECTIONS) {
+    if (getCategoryActiveCount(filters, section.id) > 0) {
+      groups.push(section.id);
+    }
+  }
+
+  return groups;
+}
+
 function serialiseToParams(filters: Filters): URLSearchParams {
   const params = new URLSearchParams();
   if (filters.pricing.size > 0) {
@@ -386,6 +419,7 @@ type BackupFinderProps = {
 
 export function BackupFinder({ tools }: BackupFinderProps) {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
+  const [openGroups, setOpenGroups] = useState<FilterGroupId[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [countryQuery, setCountryQuery] = useState("");
   const hydrated = useRef(false);
@@ -421,7 +455,10 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     [availableOriginCountryCodes],
   );
   const selectedCountryOptions = useMemo(
-    () => originOptions.filter((option) => filters.originCountries.has(option.code)),
+    () =>
+      originOptions.filter((option) =>
+        filters.originCountries.has(option.code),
+      ),
     [filters.originCountries, originOptions],
   );
 
@@ -430,7 +467,9 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     if (Array.from(params.keys()).length > 0) {
-      setFilters(parseFromParams(params));
+      const parsedFilters = parseFromParams(params);
+      setFilters(parsedFilters);
+      setOpenGroups(getOpenGroupsFromFilters(parsedFilters));
     }
     hydrated.current = true;
   }, []);
@@ -440,7 +479,8 @@ export function BackupFinder({ tools }: BackupFinderProps) {
       const nextOriginCountries = new Set(
         Array.from(current.originCountries).filter(
           (code) =>
-            code === EUROPE_OPTION.code || availableOriginCountryCodes.has(code),
+            code === EUROPE_OPTION.code ||
+            availableOriginCountryCodes.has(code),
         ),
       );
       if (nextOriginCountries.size === current.originCountries.size) {
@@ -482,6 +522,13 @@ export function BackupFinder({ tools }: BackupFinderProps) {
   }, [tools, filters]);
 
   const activeCount = countActive(filters);
+  const toggleGroup = (group: FilterGroupId) => {
+    setOpenGroups((current) =>
+      current.includes(group)
+        ? current.filter((value) => value !== group)
+        : [...current, group],
+    );
+  };
 
   const togglePricing = (value: NormalizedBackupTool["pricing"]) => {
     setFilters((f) => {
@@ -513,27 +560,6 @@ export function BackupFinder({ tools }: BackupFinderProps) {
         [bound]: normalized,
       },
     }));
-  };
-
-  const clearCategory = (category: FilterCategory) => {
-    setFilters((f) => ({
-      ...f,
-      byCategory: { ...f.byCategory, [category]: new Set() },
-    }));
-  };
-
-  const clearGeneralFilters = () => {
-    setCountryQuery("");
-    setFilters((f) => ({
-      ...f,
-      byCategory: { ...f.byCategory, general: new Set() },
-      releaseYear: { min: "", max: "" },
-      originCountries: new Set(),
-    }));
-  };
-
-  const clearPricing = () => {
-    setFilters((f) => ({ ...f, pricing: new Set() }));
   };
 
   const resetAll = () => {
@@ -601,10 +627,12 @@ export function BackupFinder({ tools }: BackupFinderProps) {
         <div className="flex flex-col gap-6">
           {/* Pricing */}
           <FilterGroup
+            id="pricing"
             title="Pricing"
             icon={TagIcon}
             activeCount={filters.pricing.size}
-            onClear={clearPricing}
+            open={openGroups.includes("pricing")}
+            onToggle={() => toggleGroup("pricing")}
           >
             {PRICING_OPTIONS.map((option) => (
               <FilterCheckboxRow
@@ -629,22 +657,12 @@ export function BackupFinder({ tools }: BackupFinderProps) {
             return (
               <FilterGroup
                 key={section.id}
+                id={section.id}
                 title={section.title}
                 icon={section.icon}
-                activeCount={
-                  section.id === "general"
-                    ? filters.byCategory.general.size +
-                      (filters.releaseYear.min || filters.releaseYear.max
-                        ? 1
-                        : 0) +
-                      (filters.originCountries.size > 0 ? 1 : 0)
-                    : filters.byCategory[section.id].size
-                }
-                onClear={() =>
-                  section.id === "general"
-                    ? clearGeneralFilters()
-                    : clearCategory(section.id)
-                }
+                activeCount={getCategoryActiveCount(filters, section.id)}
+                open={openGroups.includes(section.id)}
+                onToggle={() => toggleGroup(section.id)}
               >
                 {keys.map((key) => {
                   const label = section.labels[key];
@@ -718,7 +736,9 @@ export function BackupFinder({ tools }: BackupFinderProps) {
                           const normalizedQuery = query.trim().toLowerCase();
                           if (!normalizedQuery) return true;
                           return (
-                            option.name.toLowerCase().includes(normalizedQuery) ||
+                            option.name
+                              .toLowerCase()
+                              .includes(normalizedQuery) ||
                             option.code.toLowerCase().includes(normalizedQuery)
                           );
                         }}
@@ -844,54 +864,63 @@ export function BackupFinder({ tools }: BackupFinderProps) {
 }
 
 type FilterGroupProps = {
+  id: FilterGroupId;
   title: string;
   description?: string;
   icon: typeof ListChecksIcon;
   activeCount: number;
-  onClear: () => void;
+  open: boolean;
+  onToggle: () => void;
   children: React.ReactNode;
 };
 
 function FilterGroup({
+  id,
   title,
   description,
   icon: Icon,
   activeCount,
-  onClear,
+  open,
+  onToggle,
   children,
 }: FilterGroupProps) {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-start gap-2">
-          <Icon className="text-muted-foreground mt-0.5 size-4 shrink-0" />
-          <div>
-            <h3 className="text-foreground text-sm font-semibold leading-tight">
-              {title}
-              {activeCount > 0 && (
-                <span className="text-muted-foreground ml-1.5 text-xs font-normal">
-                  ({activeCount})
-                </span>
-              )}
-            </h3>
-            {description && (
-              <p className="text-muted-foreground mt-0.5 text-xs">
-                {description}
-              </p>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={`filter-group-${id}`}
+        className="group flex items-start gap-2 text-left"
+      >
+        <Icon className="text-muted-foreground mt-0.5 size-4 shrink-0" />
+        <div className="flex-1">
+          <h3 className="text-foreground text-sm font-semibold leading-tight">
+            {title}
+            {activeCount > 0 && (
+              <span className="text-muted-foreground ml-1.5 text-xs font-normal">
+                ({activeCount})
+              </span>
             )}
-          </div>
+          </h3>
+          {description && (
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              {description}
+            </p>
+          )}
         </div>
-        {activeCount > 0 && (
-          <button
-            type="button"
-            onClick={onClear}
-            className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-          >
-            Clear
-          </button>
-        )}
-      </div>
-      <div className="flex flex-col gap-2.5 pl-6">{children}</div>
+        <ChevronDownIcon
+          className={cn(
+            "text-muted-foreground mt-0.5 size-4 shrink-0 transition-transform",
+            open && "rotate-180",
+          )}
+        />
+      </button>
+      {open && (
+        <div id={`filter-group-${id}`} className="flex flex-col gap-2.5 pl-6">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
