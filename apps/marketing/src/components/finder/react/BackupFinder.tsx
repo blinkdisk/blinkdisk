@@ -592,13 +592,13 @@ export function BackupFinder({ tools }: BackupFinderProps) {
       {/* Filter aside (desktop) / drawer (mobile) */}
       <aside
         className={cn(
-          "md:block",
+          "md:sticky md:top-32 md:flex md:max-h-[calc(100vh-10rem)] md:flex-col md:self-start",
           mobileFiltersOpen
-            ? "bg-background fixed inset-0 z-[1020] flex flex-col overflow-y-auto p-4 md:static md:z-auto md:p-0"
+            ? "max-md:bg-background max-md:fixed max-md:inset-0 max-md:z-[1020] max-md:flex max-md:flex-col max-md:p-4"
             : "hidden",
         )}
       >
-        <div className="mb-4 flex items-center justify-between md:mb-6">
+        <div className="mb-4 flex shrink-0 items-center justify-between md:mb-6">
           <h2 className="text-foreground text-lg font-semibold">Filters</h2>
           <div className="flex items-center gap-2">
             <button
@@ -624,7 +624,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex min-h-0 flex-auto flex-col gap-6 overflow-y-auto md:pr-2">
           {/* Pricing */}
           <FilterGroup
             id="pricing"
@@ -795,7 +795,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
         </div>
 
         {mobileFiltersOpen && (
-          <div className="mt-6 md:hidden">
+          <div className="mt-6 shrink-0 md:hidden">
             <Button
               className="w-full"
               onClick={() => setMobileFiltersOpen(false)}
