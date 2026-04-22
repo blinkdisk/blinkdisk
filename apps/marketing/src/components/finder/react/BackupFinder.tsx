@@ -9,9 +9,28 @@ import {
   COMPARISON_STRATEGY_LABELS,
   type LabelConfig,
 } from "@blinkdisk/constants/comparison";
+import {
+  ALL_COUNTRIES,
+  type Country,
+  type CountryCode,
+} from "@blinkdisk/constants/countries";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "@blinkdisk/ui/combobox";
+import { Input } from "@blinkdisk/ui/input";
 import { cn } from "@blinkdisk/utils/class";
 import {
   type NormalizedBackupTool,
@@ -35,7 +54,7 @@ import {
   TagIcon,
   XIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 type FilterCategory = SelectedKey["category"];
 
@@ -110,9 +129,42 @@ const PRICING_OPTIONS: {
   { value: "paid", label: "Paid", description: "Requires payment" },
 ];
 
+type CountryOption = Country & { code: CountryCode };
+type EuropeOption = {
+  code: "EUROPE";
+  name: "Europe";
+  emoji: "🇪🇺";
+  europe: true;
+};
+type OriginOption = CountryOption | EuropeOption;
+type OriginFilterValue = CountryCode | EuropeOption["code"];
+
+const EUROPE_OPTION: EuropeOption = {
+  code: "EUROPE",
+  name: "Europe",
+  emoji: "🇪🇺",
+  europe: true,
+};
+
+const COUNTRY_OPTIONS: CountryOption[] = Object.entries(ALL_COUNTRIES)
+  .map(([code, country]) => ({
+    code: code as CountryCode,
+    emoji: country.emoji,
+    name: country.name,
+    europe: "europe" in country ? country.europe : undefined,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+type ReleaseYearRange = {
+  min: string;
+  max: string;
+};
+
 type Filters = {
   pricing: Set<NormalizedBackupTool["pricing"]>;
   byCategory: Record<FilterCategory, Set<string>>;
+  releaseYear: ReleaseYearRange;
+  originCountries: Set<OriginFilterValue>;
 };
 
 function emptyFilters(): Filters {
@@ -128,6 +180,8 @@ function emptyFilters(): Filters {
       platforms: new Set(),
       storages: new Set(),
     },
+    releaseYear: { min: "", max: "" },
+    originCountries: new Set(),
   };
 }
 
@@ -140,12 +194,71 @@ function cellMatches(cell: NormalizedCellValue): {
   return { matches: false, partial: false };
 }
 
+function parseReleaseYearValue(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && /^\d{1,4}$/.test(value)) {
+    return Number.parseInt(value, 10);
+  }
+  return null;
+}
+
+function getToolReleaseYear(tool: NormalizedBackupTool): number | null {
+  return parseReleaseYearValue(tool.general.releaseYear.value);
+}
+
+function getToolOriginCountry(tool: NormalizedBackupTool): CountryCode | null {
+  const value = tool.general.originCountry.value;
+  if (typeof value !== "string") return null;
+  if (!(value in ALL_COUNTRIES)) return null;
+  return value as CountryCode;
+}
+
+function isEuropeanCountry(code: CountryCode | null): boolean {
+  if (!code) return false;
+  const country = ALL_COUNTRIES[code];
+  return !!(country && "europe" in country && country.europe);
+}
+
+function getActiveReleaseYearBounds(range: ReleaseYearRange) {
+  const min = parseReleaseYearValue(range.min);
+  const max = parseReleaseYearValue(range.max);
+  if (min !== null && max !== null && min > max) {
+    return { min: max, max: min };
+  }
+  return { min, max };
+}
+
 function toolMatchesFilters(
   tool: NormalizedBackupTool,
   filters: Filters,
 ): { matches: boolean; fullCount: number; partialCount: number } {
   if (filters.pricing.size > 0 && !filters.pricing.has(tool.pricing)) {
     return { matches: false, fullCount: 0, partialCount: 0 };
+  }
+
+  const { min: minReleaseYear, max: maxReleaseYear } =
+    getActiveReleaseYearBounds(filters.releaseYear);
+  if (minReleaseYear !== null || maxReleaseYear !== null) {
+    const releaseYear = getToolReleaseYear(tool);
+    if (
+      releaseYear === null ||
+      (minReleaseYear !== null && releaseYear < minReleaseYear) ||
+      (maxReleaseYear !== null && releaseYear > maxReleaseYear)
+    ) {
+      return { matches: false, fullCount: 0, partialCount: 0 };
+    }
+  }
+
+  if (filters.originCountries.size > 0) {
+    const originCountry = getToolOriginCountry(tool);
+    const matchesCountry =
+      originCountry !== null && filters.originCountries.has(originCountry);
+    const matchesEurope =
+      filters.originCountries.has(EUROPE_OPTION.code) &&
+      isEuropeanCountry(originCountry);
+    if (!matchesCountry && !matchesEurope) {
+      return { matches: false, fullCount: 0, partialCount: 0 };
+    }
   }
 
   let fullCount = 0;
@@ -186,6 +299,8 @@ function toolMatchesFilters(
 function countActive(filters: Filters): number {
   let n = filters.pricing.size;
   for (const cat of Object.values(filters.byCategory)) n += cat.size;
+  if (filters.releaseYear.min || filters.releaseYear.max) n += 1;
+  if (filters.originCountries.size > 0) n += 1;
   return n;
 }
 
@@ -198,6 +313,18 @@ function serialiseToParams(filters: Filters): URLSearchParams {
     if (set.size > 0) {
       params.set(cat, Array.from(set).sort().join(","));
     }
+  }
+  if (filters.releaseYear.min) {
+    params.set("releaseYearMin", filters.releaseYear.min);
+  }
+  if (filters.releaseYear.max) {
+    params.set("releaseYearMax", filters.releaseYear.max);
+  }
+  if (filters.originCountries.size > 0) {
+    params.set(
+      "originCountry",
+      Array.from(filters.originCountries).sort().join(","),
+    );
   }
   return params;
 }
@@ -234,6 +361,22 @@ function parseFromParams(params: URLSearchParams): Filters {
       if (validKeys.has(key)) filters.byCategory[cat].add(key);
     }
   }
+  const releaseYearMin = params.get("releaseYearMin");
+  if (releaseYearMin) {
+    filters.releaseYear.min = releaseYearMin.replace(/[^\d]/g, "").slice(0, 4);
+  }
+  const releaseYearMax = params.get("releaseYearMax");
+  if (releaseYearMax) {
+    filters.releaseYear.max = releaseYearMax.replace(/[^\d]/g, "").slice(0, 4);
+  }
+  const originCountry = params.get("originCountry");
+  if (originCountry) {
+    for (const code of originCountry.split(",")) {
+      if (code === EUROPE_OPTION.code || code in ALL_COUNTRIES) {
+        filters.originCountries.add(code as OriginFilterValue);
+      }
+    }
+  }
   return filters;
 }
 
@@ -244,7 +387,43 @@ type BackupFinderProps = {
 export function BackupFinder({ tools }: BackupFinderProps) {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [countryQuery, setCountryQuery] = useState("");
   const hydrated = useRef(false);
+  const countryAnchor = useComboboxAnchor();
+
+  const availableReleaseYears = useMemo(
+    () =>
+      tools
+        .map((tool) => getToolReleaseYear(tool))
+        .filter((year): year is number => year !== null)
+        .sort((a, b) => a - b),
+    [tools],
+  );
+  const minAvailableReleaseYear = availableReleaseYears[0] ?? undefined;
+  const maxAvailableReleaseYear =
+    availableReleaseYears[availableReleaseYears.length - 1] ?? undefined;
+  const availableOriginCountryCodes = useMemo(
+    () =>
+      new Set(
+        tools
+          .map((tool) => getToolOriginCountry(tool))
+          .filter((code): code is CountryCode => code !== null),
+      ),
+    [tools],
+  );
+  const originOptions = useMemo(
+    () => [
+      EUROPE_OPTION,
+      ...COUNTRY_OPTIONS.filter((country) =>
+        availableOriginCountryCodes.has(country.code),
+      ),
+    ],
+    [availableOriginCountryCodes],
+  );
+  const selectedCountryOptions = useMemo(
+    () => originOptions.filter((option) => filters.originCountries.has(option.code)),
+    [filters.originCountries, originOptions],
+  );
 
   // Hydrate from URL on mount
   useEffect(() => {
@@ -255,6 +434,24 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     }
     hydrated.current = true;
   }, []);
+
+  useEffect(() => {
+    setFilters((current) => {
+      const nextOriginCountries = new Set(
+        Array.from(current.originCountries).filter(
+          (code) =>
+            code === EUROPE_OPTION.code || availableOriginCountryCodes.has(code),
+        ),
+      );
+      if (nextOriginCountries.size === current.originCountries.size) {
+        return current;
+      }
+      return {
+        ...current,
+        originCountries: nextOriginCountries,
+      };
+    });
+  }, [availableOriginCountryCodes]);
 
   // Persist active filters to query string (shareable URLs, no history spam)
   useEffect(() => {
@@ -307,10 +504,31 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     });
   };
 
+  const updateReleaseYear = (bound: keyof ReleaseYearRange, value: string) => {
+    const normalized = value.replace(/[^\d]/g, "").slice(0, 4);
+    setFilters((f) => ({
+      ...f,
+      releaseYear: {
+        ...f.releaseYear,
+        [bound]: normalized,
+      },
+    }));
+  };
+
   const clearCategory = (category: FilterCategory) => {
     setFilters((f) => ({
       ...f,
       byCategory: { ...f.byCategory, [category]: new Set() },
+    }));
+  };
+
+  const clearGeneralFilters = () => {
+    setCountryQuery("");
+    setFilters((f) => ({
+      ...f,
+      byCategory: { ...f.byCategory, general: new Set() },
+      releaseYear: { min: "", max: "" },
+      originCountries: new Set(),
     }));
   };
 
@@ -319,6 +537,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
   };
 
   const resetAll = () => {
+    setCountryQuery("");
     setFilters(emptyFilters());
   };
 
@@ -412,8 +631,20 @@ export function BackupFinder({ tools }: BackupFinderProps) {
                 key={section.id}
                 title={section.title}
                 icon={section.icon}
-                activeCount={filters.byCategory[section.id].size}
-                onClear={() => clearCategory(section.id)}
+                activeCount={
+                  section.id === "general"
+                    ? filters.byCategory.general.size +
+                      (filters.releaseYear.min || filters.releaseYear.max
+                        ? 1
+                        : 0) +
+                      (filters.originCountries.size > 0 ? 1 : 0)
+                    : filters.byCategory[section.id].size
+                }
+                onClear={() =>
+                  section.id === "general"
+                    ? clearGeneralFilters()
+                    : clearCategory(section.id)
+                }
               >
                 {keys.map((key) => {
                   const label = section.labels[key];
@@ -429,6 +660,115 @@ export function BackupFinder({ tools }: BackupFinderProps) {
                     />
                   );
                 })}
+                {section.id === "general" && (
+                  <div className="flex flex-col gap-4 pt-1">
+                    <div className="flex flex-col gap-2">
+                      <div>
+                        <h4 className="text-foreground text-sm font-medium">
+                          Release Year
+                        </h4>
+                      </div>
+                      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                        <label>
+                          <Input
+                            type="number"
+                            inputMode="numeric"
+                            min={minAvailableReleaseYear}
+                            max={maxAvailableReleaseYear}
+                            placeholder={minAvailableReleaseYear?.toString()}
+                            value={filters.releaseYear.min}
+                            onChange={(event) =>
+                              updateReleaseYear("min", event.target.value)
+                            }
+                          />
+                        </label>
+                        <span className="text-muted-foreground text-sm">-</span>
+                        <label>
+                          <Input
+                            type="number"
+                            inputMode="numeric"
+                            min={minAvailableReleaseYear}
+                            max={maxAvailableReleaseYear}
+                            placeholder={maxAvailableReleaseYear?.toString()}
+                            value={filters.releaseYear.max}
+                            onChange={(event) =>
+                              updateReleaseYear("max", event.target.value)
+                            }
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <div>
+                        <h4 className="text-foreground text-sm font-medium">
+                          Country of Origin
+                        </h4>
+                      </div>
+                      <Combobox<OriginOption, true>
+                        multiple
+                        autoHighlight
+                        items={originOptions}
+                        value={selectedCountryOptions}
+                        inputValue={countryQuery}
+                        itemToStringLabel={(option) => option.name}
+                        isItemEqualToValue={(item, value) =>
+                          item.code === value.code
+                        }
+                        filter={(option, query) => {
+                          const normalizedQuery = query.trim().toLowerCase();
+                          if (!normalizedQuery) return true;
+                          return (
+                            option.name.toLowerCase().includes(normalizedQuery) ||
+                            option.code.toLowerCase().includes(normalizedQuery)
+                          );
+                        }}
+                        onInputValueChange={setCountryQuery}
+                        onValueChange={(options) => {
+                          setFilters((f) => ({
+                            ...f,
+                            originCountries: new Set(
+                              options.map((option) => option.code),
+                            ),
+                          }));
+                        }}
+                      >
+                        <ComboboxChips ref={countryAnchor} className="w-full">
+                          <ComboboxValue>
+                            {(values) => (
+                              <>
+                                {Array.isArray(values) &&
+                                  values.map((option) => (
+                                    <ComboboxChip key={option.code}>
+                                      {option.emoji} {option.name}
+                                    </ComboboxChip>
+                                  ))}
+                                <ComboboxChipsInput
+                                  placeholder="Search countries"
+                                  showClear
+                                />
+                              </>
+                            )}
+                          </ComboboxValue>
+                        </ComboboxChips>
+                        <ComboboxContent anchor={countryAnchor}>
+                          <ComboboxEmpty>No countries found.</ComboboxEmpty>
+                          <ComboboxList>
+                            {(option) => (
+                              <Fragment key={option.code}>
+                                <ComboboxItem value={option}>
+                                  {option.emoji} {option.name}
+                                </ComboboxItem>
+                                {option.code === EUROPE_OPTION.code && (
+                                  <ComboboxSeparator />
+                                )}
+                              </Fragment>
+                            )}
+                          </ComboboxList>
+                        </ComboboxContent>
+                      </Combobox>
+                    </div>
+                  </div>
+                )}
               </FilterGroup>
             );
           })}
@@ -560,8 +900,9 @@ type FilterCheckboxRowProps = {
   id: string;
   label: string;
   description?: string;
-  checked: boolean;
+  checked: React.ComponentProps<typeof Checkbox>["checked"];
   onToggle: () => void;
+  className?: string;
 };
 
 function FilterCheckboxRow({
@@ -570,11 +911,15 @@ function FilterCheckboxRow({
   description,
   checked,
   onToggle,
+  className,
 }: FilterCheckboxRowProps) {
   return (
     <label
       htmlFor={id}
-      className="flex cursor-pointer items-start gap-2.5 text-sm"
+      className={cn(
+        "flex cursor-pointer items-start gap-2.5 text-sm",
+        className,
+      )}
     >
       <Checkbox
         id={id}
