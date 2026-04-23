@@ -5,7 +5,7 @@ import type {
   NormalizedBackupTool,
   NormalizedCellValue,
 } from "@blinkdisk/utils/tools";
-import { CheckIcon, ExternalLinkIcon, PlusIcon, XIcon } from "lucide-react";
+import { ExternalLinkIcon, PlusIcon, XIcon } from "lucide-react";
 import type { ReactElement, SVGProps } from "react";
 
 export type SelectedKey = {
@@ -110,15 +110,6 @@ export function FinderResultCard({
   return (
     <div className="bg-card flex flex-col gap-4 overflow-hidden rounded-xl border p-4 transition-colors sm:flex-row sm:items-stretch sm:gap-5 sm:p-5">
       <div className="bg-muted relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-lg sm:aspect-auto sm:h-auto sm:w-44 md:w-56">
-        {isSelectedForComparison && (
-          <Badge
-            variant="subtle"
-            className="absolute left-3 top-3 z-10 h-auto px-2.5 py-1"
-          >
-            <CheckIcon className="size-3.5" />
-            Selected
-          </Badge>
-        )}
         <img
           src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
           alt={`${tool.name} screenshot`}
