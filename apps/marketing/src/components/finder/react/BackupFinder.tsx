@@ -49,6 +49,7 @@ import {
   ListChecksIcon,
   MonitorIcon,
   RotateCcwIcon,
+  ScaleIcon,
   SearchXIcon,
   ShieldIcon,
   SlidersHorizontalIcon,
@@ -306,6 +307,10 @@ function countActive(filters: Filters): number {
   return n;
 }
 
+function buildCompareHref(slugs: string[]) {
+  return `/compare/${slugs.join("-vs-")}`;
+}
+
 function getCategoryActiveCount(
   filters: Filters,
   category: FilterCategory,
@@ -422,6 +427,9 @@ export function BackupFinder({ tools }: BackupFinderProps) {
   const [openGroups, setOpenGroups] = useState<FilterGroupId[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [countryQuery, setCountryQuery] = useState("");
+  const [selectedComparisonSlugs, setSelectedComparisonSlugs] = useState<
+    string[]
+  >([]);
   const hydrated = useRef(false);
   const countryAnchor = useComboboxAnchor();
 
@@ -520,8 +528,16 @@ export function BackupFinder({ tools }: BackupFinderProps) {
       zeroMatches: matching.length === 0,
     };
   }, [tools, filters]);
+  const selectedComparisonTools = useMemo(
+    () =>
+      selectedComparisonSlugs
+        .map((slug) => tools.find((tool) => tool.slug === slug))
+        .filter((tool): tool is NormalizedBackupTool => tool !== undefined),
+    [selectedComparisonSlugs, tools],
+  );
 
   const activeCount = countActive(filters);
+  const canCompare = selectedComparisonSlugs.length >= 1;
   const toggleGroup = (group: FilterGroupId) => {
     setOpenGroups((current) =>
       current.includes(group)
@@ -567,299 +583,367 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     setFilters(emptyFilters());
   };
 
-  return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-[18rem_1fr] md:gap-8 lg:grid-cols-[20rem_1fr]">
-      {/* Mobile toolbar */}
-      <div className="flex items-center justify-between md:hidden">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => setMobileFiltersOpen(true)}
-        >
-          <SlidersHorizontalIcon className="size-4" />
-          Filters
-          {activeCount > 0 && (
-            <Badge variant="default" className="ml-1">
-              {activeCount}
-            </Badge>
-          )}
-        </Button>
-        <p className="text-muted-foreground text-sm">
-          {results.length} {results.length === 1 ? "match" : "matches"}
-        </p>
-      </div>
+  const toggleComparisonSelection = (slug: string) => {
+    setSelectedComparisonSlugs((current) => {
+      if (current.includes(slug)) {
+        return current.filter((value) => value !== slug);
+      }
+      return [...current, slug];
+    });
+  };
 
-      {/* Filter aside (desktop) / drawer (mobile) */}
-      <aside
+  const startComparison = () => {
+    if (!canCompare || typeof window === "undefined") return;
+    window.open(
+      buildCompareHref(selectedComparisonSlugs),
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
+  return (
+    <>
+      <div
         className={cn(
-          "md:sticky md:top-32 md:flex md:max-h-[calc(100vh-10rem)] md:flex-col md:self-start",
-          mobileFiltersOpen
-            ? "max-md:bg-background max-md:fixed max-md:inset-0 max-md:z-[1020] max-md:flex max-md:flex-col max-md:p-4"
-            : "hidden",
+          "grid grid-cols-1 gap-6 md:grid-cols-[18rem_1fr] md:gap-8 lg:grid-cols-[20rem_1fr]",
+          selectedComparisonSlugs.length > 0 && "pb-40 md:pb-32",
         )}
       >
-        <div className="mb-4 flex shrink-0 items-center justify-between md:mb-6">
-          <h2 className="text-foreground text-lg font-semibold">Filters</h2>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={resetAll}
-              disabled={activeCount === 0}
-              className={cn(
-                "text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors",
-                activeCount === 0 && "pointer-events-none opacity-50",
-              )}
-            >
-              <RotateCcwIcon className="size-3" />
-              Reset all
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen(false)}
-              className="text-muted-foreground hover:text-foreground md:hidden"
-              aria-label="Close filters"
-            >
-              <XIcon className="size-5" />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex min-h-0 flex-auto flex-col gap-6 overflow-y-auto md:pr-2">
-          {/* Pricing */}
-          <FilterGroup
-            id="pricing"
-            title="Pricing"
-            icon={TagIcon}
-            activeCount={filters.pricing.size}
-            open={openGroups.includes("pricing")}
-            onToggle={() => toggleGroup("pricing")}
+        {/* Mobile toolbar */}
+        <div className="flex items-center justify-between md:hidden">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setMobileFiltersOpen(true)}
           >
-            {PRICING_OPTIONS.map((option) => (
-              <FilterCheckboxRow
-                key={option.value}
-                id={`pricing-${option.value}`}
-                label={option.label}
-                description={option.description}
-                checked={filters.pricing.has(option.value)}
-                onToggle={() => togglePricing(option.value)}
-              />
-            ))}
-          </FilterGroup>
-
-          {SECTIONS.map((section) => {
-            const keys =
-              section.id === "general"
-                ? Object.keys(section.labels).filter((k) =>
-                    GENERAL_FILTER_KEYS.has(k),
-                  )
-                : Object.keys(section.labels);
-            if (keys.length === 0) return null;
-            return (
-              <FilterGroup
-                key={section.id}
-                id={section.id}
-                title={section.title}
-                icon={section.icon}
-                activeCount={getCategoryActiveCount(filters, section.id)}
-                open={openGroups.includes(section.id)}
-                onToggle={() => toggleGroup(section.id)}
-              >
-                {keys.map((key) => {
-                  const label = section.labels[key];
-                  if (!label) return null;
-                  return (
-                    <FilterCheckboxRow
-                      key={key}
-                      id={`${section.id}-${key}`}
-                      label={label.text}
-                      description={label.description}
-                      checked={filters.byCategory[section.id].has(key)}
-                      onToggle={() => toggleCategoryKey(section.id, key)}
-                    />
-                  );
-                })}
-                {section.id === "general" && (
-                  <div className="flex flex-col gap-4 pt-1">
-                    <div className="flex flex-col gap-2">
-                      <div>
-                        <h4 className="text-foreground text-sm font-medium">
-                          Release Year
-                        </h4>
-                      </div>
-                      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-                        <label>
-                          <Input
-                            type="number"
-                            inputMode="numeric"
-                            min={minAvailableReleaseYear}
-                            max={maxAvailableReleaseYear}
-                            placeholder={minAvailableReleaseYear?.toString()}
-                            value={filters.releaseYear.min}
-                            onChange={(event) =>
-                              updateReleaseYear("min", event.target.value)
-                            }
-                          />
-                        </label>
-                        <span className="text-muted-foreground text-sm">-</span>
-                        <label>
-                          <Input
-                            type="number"
-                            inputMode="numeric"
-                            min={minAvailableReleaseYear}
-                            max={maxAvailableReleaseYear}
-                            placeholder={maxAvailableReleaseYear?.toString()}
-                            value={filters.releaseYear.max}
-                            onChange={(event) =>
-                              updateReleaseYear("max", event.target.value)
-                            }
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <div>
-                        <h4 className="text-foreground text-sm font-medium">
-                          Country of Origin
-                        </h4>
-                      </div>
-                      <Combobox<OriginOption, true>
-                        multiple
-                        autoHighlight
-                        items={originOptions}
-                        value={selectedCountryOptions}
-                        inputValue={countryQuery}
-                        itemToStringLabel={(option) => option.name}
-                        isItemEqualToValue={(item, value) =>
-                          item.code === value.code
-                        }
-                        filter={(option, query) => {
-                          const normalizedQuery = query.trim().toLowerCase();
-                          if (!normalizedQuery) return true;
-                          return (
-                            option.name
-                              .toLowerCase()
-                              .includes(normalizedQuery) ||
-                            option.code.toLowerCase().includes(normalizedQuery)
-                          );
-                        }}
-                        onInputValueChange={setCountryQuery}
-                        onValueChange={(options) => {
-                          setFilters((f) => ({
-                            ...f,
-                            originCountries: new Set(
-                              options.map((option) => option.code),
-                            ),
-                          }));
-                        }}
-                      >
-                        <ComboboxChips ref={countryAnchor} className="w-full">
-                          <ComboboxValue>
-                            {(values) => (
-                              <>
-                                {Array.isArray(values) &&
-                                  values.map((option) => (
-                                    <ComboboxChip key={option.code}>
-                                      {option.emoji} {option.name}
-                                    </ComboboxChip>
-                                  ))}
-                                <ComboboxChipsInput
-                                  placeholder="Search countries"
-                                  showClear
-                                />
-                              </>
-                            )}
-                          </ComboboxValue>
-                        </ComboboxChips>
-                        <ComboboxContent anchor={countryAnchor}>
-                          <ComboboxEmpty>No countries found.</ComboboxEmpty>
-                          <ComboboxList>
-                            {(option) => (
-                              <Fragment key={option.code}>
-                                <ComboboxItem value={option}>
-                                  {option.emoji} {option.name}
-                                </ComboboxItem>
-                                {option.code === EUROPE_OPTION.code && (
-                                  <ComboboxSeparator />
-                                )}
-                              </Fragment>
-                            )}
-                          </ComboboxList>
-                        </ComboboxContent>
-                      </Combobox>
-                    </div>
-                  </div>
-                )}
-              </FilterGroup>
-            );
-          })}
-        </div>
-
-        {mobileFiltersOpen && (
-          <div className="mt-6 shrink-0 md:hidden">
-            <Button
-              className="w-full"
-              onClick={() => setMobileFiltersOpen(false)}
-            >
-              Show {results.length}{" "}
-              {results.length === 1 ? "result" : "results"}
-            </Button>
-          </div>
-        )}
-      </aside>
-
-      {/* Results */}
-      <section>
-        <div className="mb-6 hidden items-center justify-between md:flex">
+            <SlidersHorizontalIcon className="size-4" />
+            Filters
+            {activeCount > 0 && (
+              <Badge variant="default" className="ml-1">
+                {activeCount}
+              </Badge>
+            )}
+          </Button>
           <p className="text-muted-foreground text-sm">
-            Showing{" "}
-            <span className="text-foreground font-medium">
-              {results.length}
-            </span>{" "}
-            {results.length === 1 ? "tool" : "tools"}
-            {activeCount > 0 && <> matching your requirements</>}
+            {results.length} {results.length === 1 ? "match" : "matches"}
           </p>
-          {activeCount > 0 && (
-            <button
-              type="button"
-              onClick={resetAll}
-              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
-            >
-              <RotateCcwIcon className="size-3.5" />
-              Reset all
-            </button>
-          )}
         </div>
 
-        {zeroMatches ? (
-          <div className="bg-card flex flex-col items-center gap-4 rounded-lg border border-dashed p-12 text-center">
-            <div className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-full">
-              <SearchXIcon className="size-6" />
+        {/* Filter aside (desktop) / drawer (mobile) */}
+        <aside
+          className={cn(
+            "md:sticky md:top-32 md:flex md:max-h-[calc(100vh-10rem)] md:flex-col md:self-start",
+            mobileFiltersOpen
+              ? "max-md:bg-background max-md:fixed max-md:inset-0 max-md:z-[1020] max-md:flex max-md:flex-col max-md:p-4"
+              : "hidden",
+          )}
+        >
+          <div className="mb-4 flex shrink-0 items-center justify-between md:mb-6">
+            <h2 className="text-foreground text-lg font-semibold">Filters</h2>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={resetAll}
+                disabled={activeCount === 0}
+                className={cn(
+                  "text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors",
+                  activeCount === 0 && "pointer-events-none opacity-50",
+                )}
+              >
+                <RotateCcwIcon className="size-3" />
+                Reset all
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="text-muted-foreground hover:text-foreground md:hidden"
+                aria-label="Close filters"
+              >
+                <XIcon className="size-5" />
+              </button>
             </div>
-            <div>
-              <h3 className="text-foreground text-lg font-semibold">
-                No tools match every requirement
-              </h3>
-              <p className="text-muted-foreground mt-1 max-w-md text-sm">
-                Try loosening your filters. Your current selection is too
-                restrictive — no single backup tool ticks every box.
-              </p>
-            </div>
-            <Button size="sm" onClick={resetAll}>
-              <RotateCcwIcon className="size-4" />
-              Reset all filters
-            </Button>
           </div>
-        ) : (
-          <ul className="flex flex-col gap-4">
-            {results.map((tool) => (
-              <li key={tool.slug}>
-                <FinderResultCard tool={tool} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </div>
+
+          <div className="flex min-h-0 flex-auto flex-col gap-6 overflow-y-auto md:pr-2">
+            {/* Pricing */}
+            <FilterGroup
+              id="pricing"
+              title="Pricing"
+              icon={TagIcon}
+              activeCount={filters.pricing.size}
+              open={openGroups.includes("pricing")}
+              onToggle={() => toggleGroup("pricing")}
+            >
+              {PRICING_OPTIONS.map((option) => (
+                <FilterCheckboxRow
+                  key={option.value}
+                  id={`pricing-${option.value}`}
+                  label={option.label}
+                  description={option.description}
+                  checked={filters.pricing.has(option.value)}
+                  onToggle={() => togglePricing(option.value)}
+                />
+              ))}
+            </FilterGroup>
+
+            {SECTIONS.map((section) => {
+              const keys =
+                section.id === "general"
+                  ? Object.keys(section.labels).filter((k) =>
+                      GENERAL_FILTER_KEYS.has(k),
+                    )
+                  : Object.keys(section.labels);
+              if (keys.length === 0) return null;
+              return (
+                <FilterGroup
+                  key={section.id}
+                  id={section.id}
+                  title={section.title}
+                  icon={section.icon}
+                  activeCount={getCategoryActiveCount(filters, section.id)}
+                  open={openGroups.includes(section.id)}
+                  onToggle={() => toggleGroup(section.id)}
+                >
+                  {keys.map((key) => {
+                    const label = section.labels[key];
+                    if (!label) return null;
+                    return (
+                      <FilterCheckboxRow
+                        key={key}
+                        id={`${section.id}-${key}`}
+                        label={label.text}
+                        description={label.description}
+                        checked={filters.byCategory[section.id].has(key)}
+                        onToggle={() => toggleCategoryKey(section.id, key)}
+                      />
+                    );
+                  })}
+                  {section.id === "general" && (
+                    <div className="flex flex-col gap-4 pt-1">
+                      <div className="flex flex-col gap-2">
+                        <div>
+                          <h4 className="text-foreground text-sm font-medium">
+                            Release Year
+                          </h4>
+                        </div>
+                        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                          <label>
+                            <Input
+                              type="number"
+                              inputMode="numeric"
+                              min={minAvailableReleaseYear}
+                              max={maxAvailableReleaseYear}
+                              placeholder={minAvailableReleaseYear?.toString()}
+                              value={filters.releaseYear.min}
+                              onChange={(event) =>
+                                updateReleaseYear("min", event.target.value)
+                              }
+                            />
+                          </label>
+                          <span className="text-muted-foreground text-sm">
+                            -
+                          </span>
+                          <label>
+                            <Input
+                              type="number"
+                              inputMode="numeric"
+                              min={minAvailableReleaseYear}
+                              max={maxAvailableReleaseYear}
+                              placeholder={maxAvailableReleaseYear?.toString()}
+                              value={filters.releaseYear.max}
+                              onChange={(event) =>
+                                updateReleaseYear("max", event.target.value)
+                              }
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div>
+                          <h4 className="text-foreground text-sm font-medium">
+                            Country of Origin
+                          </h4>
+                        </div>
+                        <Combobox<OriginOption, true>
+                          multiple
+                          autoHighlight
+                          items={originOptions}
+                          value={selectedCountryOptions}
+                          inputValue={countryQuery}
+                          itemToStringLabel={(option) => option.name}
+                          isItemEqualToValue={(item, value) =>
+                            item.code === value.code
+                          }
+                          filter={(option, query) => {
+                            const normalizedQuery = query.trim().toLowerCase();
+                            if (!normalizedQuery) return true;
+                            return (
+                              option.name
+                                .toLowerCase()
+                                .includes(normalizedQuery) ||
+                              option.code
+                                .toLowerCase()
+                                .includes(normalizedQuery)
+                            );
+                          }}
+                          onInputValueChange={setCountryQuery}
+                          onValueChange={(options) => {
+                            setFilters((f) => ({
+                              ...f,
+                              originCountries: new Set(
+                                options.map((option) => option.code),
+                              ),
+                            }));
+                          }}
+                        >
+                          <ComboboxChips ref={countryAnchor} className="w-full">
+                            <ComboboxValue>
+                              {(values) => (
+                                <>
+                                  {Array.isArray(values) &&
+                                    values.map((option) => (
+                                      <ComboboxChip key={option.code}>
+                                        {option.emoji} {option.name}
+                                      </ComboboxChip>
+                                    ))}
+                                  <ComboboxChipsInput
+                                    placeholder="Search countries"
+                                    showClear
+                                  />
+                                </>
+                              )}
+                            </ComboboxValue>
+                          </ComboboxChips>
+                          <ComboboxContent anchor={countryAnchor}>
+                            <ComboboxEmpty>No countries found.</ComboboxEmpty>
+                            <ComboboxList>
+                              {(option) => (
+                                <Fragment key={option.code}>
+                                  <ComboboxItem value={option}>
+                                    {option.emoji} {option.name}
+                                  </ComboboxItem>
+                                  {option.code === EUROPE_OPTION.code && (
+                                    <ComboboxSeparator />
+                                  )}
+                                </Fragment>
+                              )}
+                            </ComboboxList>
+                          </ComboboxContent>
+                        </Combobox>
+                      </div>
+                    </div>
+                  )}
+                </FilterGroup>
+              );
+            })}
+          </div>
+
+          {mobileFiltersOpen && (
+            <div className="mt-6 shrink-0 md:hidden">
+              <Button
+                className="w-full"
+                onClick={() => setMobileFiltersOpen(false)}
+              >
+                Show {results.length}{" "}
+                {results.length === 1 ? "result" : "results"}
+              </Button>
+            </div>
+          )}
+        </aside>
+
+        {/* Results */}
+        <section>
+          <div className="mb-6 hidden items-center justify-between md:flex">
+            <p className="text-muted-foreground text-sm">
+              Showing{" "}
+              <span className="text-foreground font-medium">
+                {results.length}
+              </span>{" "}
+              {results.length === 1 ? "tool" : "tools"}
+              {activeCount > 0 && <> matching your requirements</>}
+            </p>
+            {activeCount > 0 && (
+              <button
+                type="button"
+                onClick={resetAll}
+                className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
+              >
+                <RotateCcwIcon className="size-3.5" />
+                Reset all
+              </button>
+            )}
+          </div>
+
+          {zeroMatches ? (
+            <div className="bg-card flex flex-col items-center gap-4 rounded-lg border border-dashed p-12 text-center">
+              <div className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-full">
+                <SearchXIcon className="size-6" />
+              </div>
+              <div>
+                <h3 className="text-foreground text-lg font-semibold">
+                  No tools match every requirement
+                </h3>
+                <p className="text-muted-foreground mt-1 max-w-md text-sm">
+                  Try loosening your filters. Your current selection is too
+                  restrictive — no single backup tool ticks every box.
+                </p>
+              </div>
+              <Button size="sm" onClick={resetAll}>
+                <RotateCcwIcon className="size-4" />
+                Reset all filters
+              </Button>
+            </div>
+          ) : (
+            <ul className="flex flex-col gap-4">
+              {results.map((tool) => (
+                <li key={tool.slug}>
+                  <FinderResultCard
+                    tool={tool}
+                    isSelectedForComparison={selectedComparisonSlugs.includes(
+                      tool.slug,
+                    )}
+                    onToggleComparison={toggleComparisonSelection}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+
+      {selectedComparisonTools.length > 0 && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-4 z-[1010] px-4">
+          <div className="bg-background/90 border-border/70 pointer-events-auto mx-auto flex w-full max-w-5xl flex-col gap-3 rounded-2xl border p-4 shadow-2xl backdrop-blur md:flex-row md:items-center md:justify-between">
+            <div className="flex min-w-0 flex-wrap gap-2">
+              {selectedComparisonTools.map((tool) => (
+                <button
+                  key={tool.slug}
+                  type="button"
+                  onClick={() => toggleComparisonSelection(tool.slug)}
+                  className="bg-muted text-foreground hover:bg-muted/80 inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
+                  aria-label={`Remove ${tool.name} from comparison`}
+                >
+                  <span className="truncate">{tool.name}</span>
+                  <XIcon className="text-muted-foreground size-3.5 shrink-0" />
+                </button>
+              ))}
+            </div>
+
+            <div className="md:shrink-0">
+              <Button
+                type="button"
+                onClick={startComparison}
+                disabled={!canCompare}
+                className="w-full md:w-auto"
+              >
+                <ScaleIcon className="size-4" />
+                Compare
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

@@ -5,7 +5,7 @@ import type {
   NormalizedBackupTool,
   NormalizedCellValue,
 } from "@blinkdisk/utils/tools";
-import { ExternalLinkIcon, ScaleIcon } from "lucide-react";
+import { CheckIcon, ExternalLinkIcon, PlusIcon, XIcon } from "lucide-react";
 import type { ReactElement, SVGProps } from "react";
 
 export type SelectedKey = {
@@ -23,6 +23,8 @@ export type SelectedKey = {
 
 type FinderResultCardProps = {
   tool: NormalizedBackupTool;
+  isSelectedForComparison: boolean;
+  onToggleComparison: (slug: string) => void;
 };
 
 const pricingLabel: Record<NormalizedBackupTool["pricing"], string> = {
@@ -96,27 +98,34 @@ function hasSupport(state: SupportState) {
   return state === "full" || state === "partial";
 }
 
-export function FinderResultCard({ tool }: FinderResultCardProps) {
-  const compareHref = `/compare/${tool.slug}`;
+export function FinderResultCard({
+  tool,
+  isSelectedForComparison,
+  onToggleComparison,
+}: FinderResultCardProps) {
   const supportedPlatforms = PLATFORMS.filter(({ key }) =>
     hasSupport(supportState(tool.platforms[key])),
   );
 
   return (
     <div className="bg-card flex flex-col gap-4 overflow-hidden rounded-xl border p-4 transition-colors sm:flex-row sm:items-stretch sm:gap-5 sm:p-5">
-      <a
-        href={compareHref}
-        className="bg-muted group relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-lg sm:aspect-auto sm:h-auto sm:w-44 md:w-56"
-        aria-label={`Compare ${tool.name}`}
-        data-astro-prefetch
-      >
+      <div className="bg-muted relative block aspect-[10/7] w-full shrink-0 overflow-hidden rounded-lg sm:aspect-auto sm:h-auto sm:w-44 md:w-56">
+        {isSelectedForComparison && (
+          <Badge
+            variant="subtle"
+            className="absolute left-3 top-3 z-10 h-auto px-2.5 py-1"
+          >
+            <CheckIcon className="size-3.5" />
+            Selected
+          </Badge>
+        )}
         <img
           src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
           alt={`${tool.name} screenshot`}
           loading="lazy"
-          className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
+          className="h-full w-full object-cover object-top"
         />
-      </a>
+      </div>
 
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-4">
         <div className="flex flex-col gap-2">
@@ -165,12 +174,21 @@ export function FinderResultCard({ tool }: FinderResultCardProps) {
             Website
           </Button>
           <Button
-            render={<a href={compareHref} data-astro-prefetch />}
+            type="button"
+            onClick={() => onToggleComparison(tool.slug)}
+            variant={isSelectedForComparison ? "outline" : "default"}
             size="sm"
             className="flex-1"
+            aria-pressed={isSelectedForComparison}
           >
-            <ScaleIcon className="size-4" />
-            Compare
+            {isSelectedForComparison ? (
+              <XIcon className="size-4" />
+            ) : (
+              <PlusIcon className="size-4" />
+            )}
+            {isSelectedForComparison
+              ? "Remove"
+              : "Add to comparison"}
           </Button>
         </div>
       </div>
