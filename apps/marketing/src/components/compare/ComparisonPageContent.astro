@@ -65,25 +65,25 @@ const tableSections = [
     description: "Basic info about each tool.",
   },
   {
+    id: "platforms",
+    title: "Platforms",
+    category: "platforms" as const,
+    labels: COMPARISON_PLATFORM_LABELS,
+    description: "Supported operating systems.",
+  },
+  {
+    id: "storages",
+    title: "Storage",
+    category: "storages" as const,
+    labels: COMPARISON_STORAGE_LABELS,
+    description: "Where you can store your backups.",
+  },
+  {
     id: "level",
     title: "Level",
     category: "level" as const,
     labels: COMPARISON_LEVEL_LABELS,
     description: "What level of backup each tool supports.",
-  },
-  {
-    id: "strategies",
-    title: "Backup Strategies",
-    category: "strategies" as const,
-    labels: COMPARISON_STRATEGY_LABELS,
-    description: "Which backup methods each tool supports.",
-  },
-  {
-    id: "features",
-    title: "Features",
-    category: "features" as const,
-    labels: COMPARISON_FEATURE_LABELS,
-    description: "Core backup capabilities.",
   },
   {
     id: "interface",
@@ -93,6 +93,13 @@ const tableSections = [
     description: "How you interact with each backup tool.",
   },
   {
+    id: "features",
+    title: "Features",
+    category: "features" as const,
+    labels: COMPARISON_FEATURE_LABELS,
+    description: "Core backup capabilities.",
+  },
+  {
     id: "privacy",
     title: "Privacy",
     category: "privacy" as const,
@@ -100,18 +107,11 @@ const tableSections = [
     description: "Encryption and data protection.",
   },
   {
-    id: "platforms",
-    title: "Platform Support",
-    category: "platforms" as const,
-    labels: COMPARISON_PLATFORM_LABELS,
-    description: "Supported operating systems.",
-  },
-  {
-    id: "storages",
-    title: "Storage Options",
-    category: "storages" as const,
-    labels: COMPARISON_STORAGE_LABELS,
-    description: "Where you can store your backups.",
+    id: "strategies",
+    title: "Backup Strategies",
+    category: "strategies" as const,
+    labels: COMPARISON_STRATEGY_LABELS,
+    description: "Which backup methods each tool supports.",
   },
 ];
 
@@ -273,7 +273,7 @@ const pricingGridStyle = useWideComparisonLayout
   {
     hasTools && (
       <>
-        {tableSections.slice(0, 4).map((section) => {
+        {tableSections.slice(0, 2).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
             <>
@@ -342,7 +342,7 @@ const pricingGridStyle = useWideComparisonLayout
           )}
         </div>
 
-        {tableSections.slice(4).map((section) => {
+        {tableSections.slice(2).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
             <>
