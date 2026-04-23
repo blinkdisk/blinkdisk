@@ -33,9 +33,18 @@ type BackupFinderProps = {
   tools: NormalizedBackupTool[];
 };
 
+const DEFAULT_OPEN_GROUPS: FilterGroupId[] = ["platforms"];
+
+function getInitialOpenGroups(filters: Filters): FilterGroupId[] {
+  const openGroups = getOpenGroupsFromFilters(filters);
+
+  return openGroups.length > 0 ? openGroups : DEFAULT_OPEN_GROUPS;
+}
+
 export function BackupFinder({ tools }: BackupFinderProps) {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
-  const [openGroups, setOpenGroups] = useState<FilterGroupId[]>([]);
+  const [openGroups, setOpenGroups] =
+    useState<FilterGroupId[]>(DEFAULT_OPEN_GROUPS);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [countryQuery, setCountryQuery] = useState("");
   const [selectedComparisonSlugs, setSelectedComparisonSlugs] = useState<
@@ -90,7 +99,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     if (Array.from(params.keys()).length > 0) {
       const parsedFilters = parseFromParams(params);
       setFilters(parsedFilters);
-      setOpenGroups(getOpenGroupsFromFilters(parsedFilters));
+      setOpenGroups(getInitialOpenGroups(parsedFilters));
     }
 
     hydrated.current = true;
