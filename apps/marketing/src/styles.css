@@ -11,6 +11,18 @@ body {
   overflow-x: hidden;
 }
 
+/* `overflow-x: hidden` promotes `overflow-y` to `auto`, establishing a scroll
+   container that breaks `position: sticky` for descendants. Switch to
+   `overflow-x: clip` only when a sticky element is present, so pages without
+   sticky descendants keep the broader-compatibility `hidden` behavior. */
+html:has([class~="sticky"], [class*=":sticky"]) {
+  overflow-x: clip;
+}
+
+body:has([class~="sticky"], [class*=":sticky"]) {
+  overflow-x: clip;
+}
+
 .prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   list-style-type: disc !important;
 }
@@ -161,6 +173,19 @@ body {
   @media (min-width: 68rem) {
     width: 64rem;
   }
+}
+
+.compare-page {
+  --comparison-page-padding: clamp(1rem, 3vw, 2rem);
+  width: min(90vw, 64rem);
+  padding-inline: var(--comparison-page-padding);
+}
+
+.compare-page--wide {
+  width: max(
+    min(90vw, 64rem),
+    calc(var(--comparison-page-min-width) + var(--comparison-page-padding) * 2)
+  );
 }
 
 body {

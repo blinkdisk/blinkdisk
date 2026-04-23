@@ -1,16 +1,23 @@
 ---
+import type { LabelConfig } from "@blinkdisk/constants/comparison";
 import type {
-  BackupTool,
-  CellValue,
-  LabelConfig,
-} from "@blinkdisk/constants/comparison";
+  NormalizedBackupTool,
+  NormalizedCellValue,
+} from "@blinkdisk/utils/tools";
 import ComparisonRow from "@marketing/components/compare/ComparisonRow.astro";
 
 type Props = {
-  tools: (BackupTool | null)[];
+  tools: (NormalizedBackupTool | null)[];
   category: keyof Pick<
-    BackupTool,
-    "general" | "features" | "privacy" | "platforms" | "storages"
+    NormalizedBackupTool,
+    | "general"
+    | "level"
+    | "strategies"
+    | "features"
+    | "interface"
+    | "privacy"
+    | "platforms"
+    | "storages"
   >;
   labels: Record<string, LabelConfig>;
 };
@@ -18,51 +25,63 @@ type Props = {
 const { tools, category, labels } = Astro.props;
 
 const keys = Object.keys(labels) as (keyof typeof labels)[];
-const columnWidth = tools.length === 2 ? "w-[37%]" : "w-[25%]";
+const labelColumnMinWidth = 220;
+const toolColumnMinWidth = 180;
+const tableMinWidth = `${labelColumnMinWidth + tools.length * toolColumnMinWidth}px`;
 ---
 
-<div class="overflow-x-auto">
-  <table class="w-full min-w-[600px] border-collapse">
-    <thead>
-      <tr class="border-border border-b">
-        <th></th>
-        {
-          tools.map((tool) => (
-            <th
-              class={`text-foreground px-4 py-3 text-center text-sm font-semibold ${columnWidth}`}
-            >
-              {tool ? (
-                <a
-                  href={tool.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="hover:text-primary transition-colors"
-                >
-                  {tool.name}
-                </a>
-              ) : (
-                <span class="text-muted-foreground">—</span>
-              )}
-            </th>
-          ))
-        }
-      </tr>
-    </thead>
-    <tbody>
+<table class="w-full border-collapse" style={`min-width: ${tableMinWidth};`}>
+  <thead>
+    <tr class="border-border border-b">
+      <th style={`min-width: ${labelColumnMinWidth}px;`}></th>
       {
-        keys.map((key) => (
-          <ComparisonRow
-            label={labels[key].text}
-            labelLink={labels[key].link}
-            labelDescription={labels[key].description}
-            labelIcon={labels[key].icon}
-            srText={labels[key].srText}
-            values={tools.map((tool) =>
-              tool ? (tool[category] as Record<string, CellValue>)[key] : null,
+        tools.map((tool) => (
+          <th
+            class="text-foreground px-4 py-3 text-center text-sm font-semibold"
+            style={`min-width: ${toolColumnMinWidth}px;`}
+          >
+            {tool ? (
+              <a
+                href={tool.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-primary transition-colors"
+              >
+                {tool.name}
+              </a>
+            ) : (
+              <span class="text-muted-foreground">—</span>
             )}
-          />
+          </th>
         ))
       }
-    </tbody>
-  </table>
-</div>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      keys.map((key) => (
+        <ComparisonRow
+          label={labels[key].text}
+          labelLink={labels[key].link}
+          labelDescription={labels[key].description}
+          labelIcon={labels[key].icon}
+          valueType={labels[key].valueType}
+          srText={labels[key].srText}
+          values={tools.map((tool) =>
+            tool
+              ? ((
+                  (tool[category] ?? {}) as Record<string, NormalizedCellValue>
+                )[key] ?? {
+                  value: null,
+                  note: null,
+                })
+              : {
+                  value: null,
+                  note: null,
+                },
+          )}
+        />
+      ))
+    }
+  </tbody>
+</table>

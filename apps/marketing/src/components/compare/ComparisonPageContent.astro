@@ -9,21 +9,28 @@ import {
 } from "@marketing/components/react/ToolSelector";
 import ExternalLinkIcon from "@lucide/astro/icons/external-link";
 import ListChecksIcon from "@lucide/astro/icons/list-checks";
+import LayersIcon from "@lucide/astro/icons/layers";
+import RotateCcwIcon from "@lucide/astro/icons/rotate-ccw";
 import TagIcon from "@lucide/astro/icons/tag";
 import ShieldIcon from "@lucide/astro/icons/shield";
 import MonitorIcon from "@lucide/astro/icons/monitor";
 import HardDriveIcon from "@lucide/astro/icons/hard-drive";
 import InfoIcon from "@lucide/astro/icons/info";
+import AppWindowIcon from "@lucide/astro/icons/app-window";
 import MailIcon from "@lucide/astro/icons/mail";
+import type { BackupTool } from "@blinkdisk/constants/tools";
+import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
 import {
-  COMPARISON_TOOLS,
   COMPARISON_GENERAL_LABELS,
   COMPARISON_FEATURE_LABELS,
+  COMPARISON_INTERFACE_LABELS,
+  COMPARISON_LEVEL_LABELS,
   COMPARISON_PRIVACY_LABELS,
   COMPARISON_PLATFORM_LABELS,
+  COMPARISON_STRATEGY_LABELS,
   COMPARISON_STORAGE_LABELS,
-  type BackupTool,
 } from "@blinkdisk/constants/comparison";
+import { normalizeComparisonTools } from "@blinkdisk/utils/tools";
 
 type Props = {
   tools: BackupTool[];
@@ -32,11 +39,18 @@ type Props = {
 };
 
 const { tools, title, description } = Astro.props;
+const useGenericHeading = tools.length > 3;
+const headingTitle = useGenericHeading ? "Compare Backup Tools" : title;
+const headingDescription = useGenericHeading
+  ? "Compare backup tools to find the perfect one for your needs."
+  : description;
 
 const sectionIcons: Record<string, typeof ListChecksIcon> = {
   general: InfoIcon,
+  level: LayersIcon,
+  strategies: RotateCcwIcon,
   features: ListChecksIcon,
-  pricing: TagIcon,
+  interface: AppWindowIcon,
   privacy: ShieldIcon,
   platforms: MonitorIcon,
   storages: HardDriveIcon,
@@ -48,7 +62,35 @@ const tableSections = [
     title: "General",
     category: "general" as const,
     labels: COMPARISON_GENERAL_LABELS,
-    description: "Basic info and backup types supported.",
+    description: "Basic info about each tool.",
+  },
+  {
+    id: "platforms",
+    title: "Platforms",
+    category: "platforms" as const,
+    labels: COMPARISON_PLATFORM_LABELS,
+    description: "Supported operating systems.",
+  },
+  {
+    id: "storages",
+    title: "Storage",
+    category: "storages" as const,
+    labels: COMPARISON_STORAGE_LABELS,
+    description: "Where you can store your backups.",
+  },
+  {
+    id: "level",
+    title: "Level",
+    category: "level" as const,
+    labels: COMPARISON_LEVEL_LABELS,
+    description: "What level of backup each tool supports.",
+  },
+  {
+    id: "interface",
+    title: "Interface",
+    category: "interface" as const,
+    labels: COMPARISON_INTERFACE_LABELS,
+    description: "How you interact with each backup tool.",
   },
   {
     id: "features",
@@ -59,58 +101,99 @@ const tableSections = [
   },
   {
     id: "privacy",
-    title: "Privacy & Security",
+    title: "Privacy",
     category: "privacy" as const,
     labels: COMPARISON_PRIVACY_LABELS,
     description: "Encryption and data protection.",
   },
   {
-    id: "platforms",
-    title: "Platform Support",
-    category: "platforms" as const,
-    labels: COMPARISON_PLATFORM_LABELS,
-    description: "Supported operating systems.",
-  },
-  {
-    id: "storages",
-    title: "Storage Options",
-    category: "storages" as const,
-    labels: COMPARISON_STORAGE_LABELS,
-    description: "Where you can store your backups.",
+    id: "strategies",
+    title: "Backup Strategies",
+    category: "strategies" as const,
+    labels: COMPARISON_STRATEGY_LABELS,
+    description: "Which backup methods each tool supports.",
   },
 ];
 
-const allSections = [
-  ...tableSections.slice(0, 2).map(({ id, title }) => ({ id, title })),
-  { id: "pricing", title: "Pricing" },
-  ...tableSections.slice(2).map(({ id, title }) => ({ id, title })),
-];
-
-const toolOptions = COMPARISON_TOOLS.map((tool) => ({
+const toolOptions = BACKUP_TOOLS.map((tool) => ({
   value: tool.slug,
   label: tool.name,
 }));
 const selectedSlugs = tools.map((tool) => tool.slug);
 const hasTools = tools.length > 0;
+const hasAvailableTools = selectedSlugs.length < toolOptions.length;
+const normalizedTools = normalizeComparisonTools(tools);
 
-const paddedTools: (BackupTool | null)[] =
-  tools.length === 1 ? [tools[0], null] : tools;
+const paddedTools =
+  normalizedTools.length === 1 ? [normalizedTools[0], null] : normalizedTools;
+
+const comparisonLabelColumnMinWidth = 220;
+const comparisonToolColumnMinWidth = 180;
+const comparisonCardMinWidth = 260;
+const toolGridGap = 16;
+const pricingGridGap = 24;
+const toolGridColumnCount = Math.max(
+  tools.length + (hasAvailableTools ? 1 : 0),
+  1,
+);
+const pricingGridColumnCount = Math.max(tools.length, 1);
+const comparisonTableMinWidth =
+  comparisonLabelColumnMinWidth +
+  paddedTools.length * comparisonToolColumnMinWidth;
+const toolGridMinWidth =
+  toolGridColumnCount * comparisonCardMinWidth +
+  Math.max(toolGridColumnCount - 1, 0) * toolGridGap;
+const pricingGridMinWidth =
+  pricingGridColumnCount * comparisonCardMinWidth +
+  Math.max(pricingGridColumnCount - 1, 0) * pricingGridGap;
+const useWideComparisonLayout =
+  toolGridColumnCount > 3 ||
+  pricingGridColumnCount > 3 ||
+  paddedTools.length > 3;
+const comparisonPageMinWidth = useWideComparisonLayout
+  ? `${Math.max(
+      comparisonTableMinWidth,
+      toolGridMinWidth,
+      pricingGridMinWidth,
+    )}px`
+  : undefined;
+const comparisonPageStyle = comparisonPageMinWidth
+  ? `--comparison-page-min-width: ${comparisonPageMinWidth};`
+  : undefined;
+const toolGridStyle = useWideComparisonLayout
+  ? `grid-template-columns: repeat(${toolGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr));`
+  : undefined;
+const pricingGridStyle = useWideComparisonLayout
+  ? `grid-template-columns: repeat(${pricingGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr));`
+  : undefined;
 ---
 
 <article
-  class={`mx-auto pt-page pb-page w-content ${tools.length <= 2 ? "md:max-w-4xl" : ""}`}
+  class:list={[
+    "compare-page pt-page pb-page mx-auto",
+    {
+      "compare-page--wide": useWideComparisonLayout,
+      "md:max-w-4xl": tools.length <= 2,
+    },
+  ]}
+  style={comparisonPageStyle}
 >
   <header class="mb-10">
     <h1 class="text-foreground mb-4 text-3xl font-bold sm:text-4xl">
-      {title}
+      {headingTitle}
     </h1>
     <p class="text-muted-foreground sm:text-lg">
-      {description}
+      {headingDescription}
     </p>
   </header>
 
   <div
-    class={`mb-10 grid grid-cols-1 gap-4 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+    class:list={[
+      "mb-10 grid gap-4",
+      !useWideComparisonLayout &&
+        "grid-cols-1 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
+    ]}
+    style={toolGridStyle}
   >
     {
       tools.map((tool, index) => (
@@ -153,16 +236,15 @@ const paddedTools: (BackupTool | null)[] =
       ))
     }
     {
-      tools.length < 2 &&
-        Array.from({ length: 2 - tools.length }).map(() => (
-          <div class="text-center">
-            <AddToolButton
-              client:load
-              tools={toolOptions}
-              selectedSlugs={selectedSlugs}
-            />
-          </div>
-        ))
+      hasAvailableTools && (
+        <div class="text-center">
+          <AddToolButton
+            client:load
+            tools={toolOptions}
+            selectedSlugs={selectedSlugs}
+          />
+        </div>
+      )
     }
   </div>
 
@@ -191,26 +273,6 @@ const paddedTools: (BackupTool | null)[] =
   {
     hasTools && (
       <>
-        <nav class="bg-card text-muted-foreground mb-10 flex flex-wrap items-center justify-evenly gap-x-3 gap-y-2 rounded-lg border p-4 text-sm">
-          {allSections.map((section, i) => {
-            const Icon = sectionIcons[section.id];
-            return (
-              <>
-                <a
-                  href={`#${section.id}`}
-                  class="hover:text-foreground inline-flex items-center gap-1 transition-colors"
-                >
-                  <Icon class="size-3.5" />
-                  {section.title}
-                </a>
-                {i < allSections.length - 1 && (
-                  <span class="text-border">·</span>
-                )}
-              </>
-            );
-          })}
-        </nav>
-
         {tableSections.slice(0, 2).map((section) => {
           const Icon = sectionIcons[section.id];
           return (
@@ -239,7 +301,12 @@ const paddedTools: (BackupTool | null)[] =
           Simple and transparent pricing calculators.
         </p>
         <div
-          class={`grid grid-cols-1 gap-6 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+          class:list={[
+            "grid gap-6",
+            !useWideComparisonLayout &&
+              "grid-cols-1 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
+          ]}
+          style={pricingGridStyle}
         >
           {tools.map((tool) => (
             <div class="flex flex-col gap-4">
@@ -266,10 +333,11 @@ const paddedTools: (BackupTool | null)[] =
             </div>
           ))}
           {tools.length === 1 && (
-            <div class="flex items-center justify-center">
-              <p class="text-muted-foreground text-sm">
-                Add another tool to compare pricing
-              </p>
+            <div
+              aria-hidden="true"
+              class="border-muted-foreground/20 text-muted-foreground from-muted/25 to-muted/10 hidden items-center justify-center rounded-lg border border-dashed bg-gradient-to-b text-sm font-medium md:flex"
+            >
+              No data
             </div>
           )}
         </div>
