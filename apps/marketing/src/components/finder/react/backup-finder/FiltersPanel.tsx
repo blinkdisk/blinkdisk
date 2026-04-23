@@ -59,6 +59,28 @@ export function FiltersPanel({
   onResetAll,
   onCloseMobileFilters,
 }: FiltersPanelProps) {
+  const pricingGroup = (
+    <FilterGroup
+      id="pricing"
+      title="Pricing"
+      icon={TagIcon}
+      activeCount={filters.pricing.size}
+      open={openGroups.includes("pricing")}
+      onToggle={() => onToggleGroup("pricing")}
+    >
+      {PRICING_OPTIONS.map((option) => (
+        <FilterCheckboxRow
+          key={option.value}
+          id={`pricing-${option.value}`}
+          label={option.label}
+          description={option.description}
+          checked={filters.pricing.has(option.value)}
+          onToggle={() => onTogglePricing(option.value)}
+        />
+      ))}
+    </FilterGroup>
+  );
+
   return (
     <aside
       className={cn(
@@ -95,33 +117,58 @@ export function FiltersPanel({
       </div>
 
       <div className="flex min-h-0 flex-auto flex-col gap-6 overflow-y-auto md:pr-2">
-        <FilterGroup
-          id="pricing"
-          title="Pricing"
-          icon={TagIcon}
-          activeCount={filters.pricing.size}
-          open={openGroups.includes("pricing")}
-          onToggle={() => onToggleGroup("pricing")}
-        >
-          {PRICING_OPTIONS.map((option) => (
-            <FilterCheckboxRow
-              key={option.value}
-              id={`pricing-${option.value}`}
-              label={option.label}
-              description={option.description}
-              checked={filters.pricing.has(option.value)}
-              onToggle={() => onTogglePricing(option.value)}
-            />
-          ))}
-        </FilterGroup>
-
         {SECTIONS.map((section) => {
-          const keys =
-            section.id === "general"
-              ? Object.keys(section.labels).filter((key) =>
-                  GENERAL_FILTER_KEYS.has(key),
-                )
-              : Object.keys(section.labels);
+          if (section.id === "general") {
+            return (
+              <div key="pricing-and-general" className="contents">
+                {pricingGroup}
+                <FilterGroup
+                  id={section.id}
+                  title={section.title}
+                  icon={section.icon}
+                  activeCount={getCategoryActiveCount(filters, section.id)}
+                  open={openGroups.includes(section.id)}
+                  onToggle={() => onToggleGroup(section.id)}
+                >
+                  {Object.keys(section.labels)
+                    .filter((key) => GENERAL_FILTER_KEYS.has(key))
+                    .map((key) => {
+                      const label = section.labels[key];
+                      if (!label) return null;
+
+                      return (
+                        <FilterCheckboxRow
+                          key={key}
+                          id={`${section.id}-${key}`}
+                          label={label.text}
+                          description={label.description}
+                          checked={filters.byCategory[section.id].has(key)}
+                          onToggle={() => onToggleCategoryKey(section.id, key)}
+                        />
+                      );
+                    })}
+
+                  <div className="flex flex-col gap-4 pt-1">
+                    <ReleaseYearRangeFields
+                      value={filters.releaseYear}
+                      minAvailableReleaseYear={minAvailableReleaseYear}
+                      maxAvailableReleaseYear={maxAvailableReleaseYear}
+                      onChange={onUpdateReleaseYear}
+                    />
+                    <OriginCountryCombobox
+                      originOptions={originOptions}
+                      selectedCountryOptions={selectedCountryOptions}
+                      query={countryQuery}
+                      onQueryChange={onCountryQueryChange}
+                      onValueChange={onOriginCountriesChange}
+                    />
+                  </div>
+                </FilterGroup>
+              </div>
+            );
+          }
+
+          const keys = Object.keys(section.labels);
 
           if (keys.length === 0) return null;
 
@@ -150,24 +197,6 @@ export function FiltersPanel({
                   />
                 );
               })}
-
-              {section.id === "general" && (
-                <div className="flex flex-col gap-4 pt-1">
-                  <ReleaseYearRangeFields
-                    value={filters.releaseYear}
-                    minAvailableReleaseYear={minAvailableReleaseYear}
-                    maxAvailableReleaseYear={maxAvailableReleaseYear}
-                    onChange={onUpdateReleaseYear}
-                  />
-                  <OriginCountryCombobox
-                    originOptions={originOptions}
-                    selectedCountryOptions={selectedCountryOptions}
-                    query={countryQuery}
-                    onQueryChange={onCountryQueryChange}
-                    onValueChange={onOriginCountriesChange}
-                  />
-                </div>
-              )}
             </FilterGroup>
           );
         })}

@@ -29,22 +29,34 @@ import type {
 } from "./types";
 
 export const FILTER_CATEGORIES: FilterCategory[] = [
-  "general",
-  "level",
-  "strategies",
-  "features",
-  "interface",
-  "privacy",
   "platforms",
   "storages",
+  "general",
+  "level",
+  "interface",
+  "features",
+  "privacy",
+  "strategies",
 ];
 
 export const SECTIONS: SectionConfig[] = [
+  {
+    id: "platforms",
+    title: "Platforms",
+    icon: MonitorIcon,
+    labels: COMPARISON_PLATFORM_LABELS,
+  },
   {
     id: "general",
     title: "General",
     icon: InfoIcon,
     labels: COMPARISON_GENERAL_LABELS,
+  },
+  {
+    id: "storages",
+    title: "Storage",
+    icon: HardDriveIcon,
+    labels: COMPARISON_STORAGE_LABELS,
   },
   {
     id: "level",
@@ -53,10 +65,10 @@ export const SECTIONS: SectionConfig[] = [
     labels: COMPARISON_LEVEL_LABELS,
   },
   {
-    id: "strategies",
-    title: "Backup Strategies",
-    icon: RotateCcwIcon,
-    labels: COMPARISON_STRATEGY_LABELS,
+    id: "interface",
+    title: "Interface",
+    icon: AppWindowIcon,
+    labels: COMPARISON_INTERFACE_LABELS,
   },
   {
     id: "features",
@@ -65,28 +77,16 @@ export const SECTIONS: SectionConfig[] = [
     labels: COMPARISON_FEATURE_LABELS,
   },
   {
-    id: "interface",
-    title: "Interface",
-    icon: AppWindowIcon,
-    labels: COMPARISON_INTERFACE_LABELS,
-  },
-  {
     id: "privacy",
-    title: "Privacy & Security",
+    title: "Privacy",
     icon: ShieldIcon,
     labels: COMPARISON_PRIVACY_LABELS,
   },
   {
-    id: "platforms",
-    title: "Platforms",
-    icon: MonitorIcon,
-    labels: COMPARISON_PLATFORM_LABELS,
-  },
-  {
-    id: "storages",
-    title: "Storage",
-    icon: HardDriveIcon,
-    labels: COMPARISON_STORAGE_LABELS,
+    id: "strategies",
+    title: "Strategies",
+    icon: RotateCcwIcon,
+    labels: COMPARISON_STRATEGY_LABELS,
   },
 ];
 
