@@ -89,10 +89,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
       imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        value: true,
-        note: "Built on Kopia's always-incremental snapshots",
-      },
+      incrementalBackups: true,
       fullBackups: "partial",
       differentialBackups: "partial",
     },
@@ -1024,14 +1021,8 @@ export const BACKUP_TOOLS: BackupTool[] = [
       imageBackups: false,
     },
     strategies: {
-      incrementalBackups: {
-        value: "partial",
-        note: "Deduplicated snapshots store changes, but Plakar does not use chained incremental archives",
-      },
-      fullBackups: {
-        value: "partial",
-        note: "Snapshots are self-contained and independently restorable, but there is no separate full-backup mode",
-      },
+      incrementalBackups: "partial",
+      fullBackups: "partial",
       differentialBackups: false,
     },
     features: {
