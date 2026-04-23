@@ -39,6 +39,11 @@ type Props = {
 };
 
 const { tools, title, description } = Astro.props;
+const useGenericHeading = tools.length > 3;
+const headingTitle = useGenericHeading ? "Compare Backup Tools" : title;
+const headingDescription = useGenericHeading
+  ? "Compare backup software side by side. Review features, pricing, privacy, platforms, storage options, and performance in one place."
+  : description;
 
 const sectionIcons: Record<string, typeof ListChecksIcon> = {
   general: InfoIcon,
@@ -116,26 +121,79 @@ const toolOptions = BACKUP_TOOLS.map((tool) => ({
 }));
 const selectedSlugs = tools.map((tool) => tool.slug);
 const hasTools = tools.length > 0;
+const hasAvailableTools = selectedSlugs.length < toolOptions.length;
 const normalizedTools = normalizeComparisonTools(tools);
 
 const paddedTools =
   normalizedTools.length === 1 ? [normalizedTools[0], null] : normalizedTools;
+
+const comparisonLabelColumnMinWidth = 220;
+const comparisonToolColumnMinWidth = 180;
+const comparisonCardMinWidth = 260;
+const toolGridGap = 16;
+const pricingGridGap = 24;
+const toolGridColumnCount = Math.max(
+  tools.length + (hasAvailableTools ? 1 : 0),
+  1,
+);
+const pricingGridColumnCount = Math.max(tools.length, 1);
+const comparisonTableMinWidth =
+  comparisonLabelColumnMinWidth +
+  paddedTools.length * comparisonToolColumnMinWidth;
+const toolGridMinWidth =
+  toolGridColumnCount * comparisonCardMinWidth +
+  Math.max(toolGridColumnCount - 1, 0) * toolGridGap;
+const pricingGridMinWidth =
+  pricingGridColumnCount * comparisonCardMinWidth +
+  Math.max(pricingGridColumnCount - 1, 0) * pricingGridGap;
+const useWideComparisonLayout =
+  toolGridColumnCount > 3 ||
+  pricingGridColumnCount > 3 ||
+  paddedTools.length > 3;
+const comparisonPageMinWidth = useWideComparisonLayout
+  ? `${Math.max(
+      comparisonTableMinWidth,
+      toolGridMinWidth,
+      pricingGridMinWidth,
+    )}px`
+  : undefined;
+const comparisonPageStyle = comparisonPageMinWidth
+  ? `--comparison-page-min-width: ${comparisonPageMinWidth};`
+  : undefined;
+const toolGridStyle = useWideComparisonLayout
+  ? `grid-template-columns: repeat(${toolGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr));`
+  : undefined;
+const pricingGridStyle = useWideComparisonLayout
+  ? `grid-template-columns: repeat(${pricingGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr));`
+  : undefined;
 ---
 
 <article
-  class={`mx-auto pt-page pb-page w-content ${tools.length <= 2 ? "md:max-w-4xl" : ""}`}
+  class:list={[
+    "compare-page pt-page pb-page mx-auto",
+    {
+      "compare-page--wide": useWideComparisonLayout,
+      "md:max-w-4xl": tools.length <= 2,
+    },
+  ]}
+  style={comparisonPageStyle}
 >
   <header class="mb-10">
     <h1 class="text-foreground mb-4 text-3xl font-bold sm:text-4xl">
-      {title}
+      {headingTitle}
     </h1>
     <p class="text-muted-foreground sm:text-lg">
-      {description}
+      {headingDescription}
     </p>
   </header>
 
   <div
-    class={`mb-10 grid grid-cols-1 gap-4 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+    class:list={[
+      "mb-10 grid gap-4",
+      !useWideComparisonLayout &&
+        "grid-cols-1 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
+    ]}
+    style={toolGridStyle}
   >
     {
       tools.map((tool, index) => (
@@ -178,16 +236,15 @@ const paddedTools =
       ))
     }
     {
-      tools.length < 2 &&
-        Array.from({ length: 2 - tools.length }).map(() => (
-          <div class="text-center">
-            <AddToolButton
-              client:load
-              tools={toolOptions}
-              selectedSlugs={selectedSlugs}
-            />
-          </div>
-        ))
+      hasAvailableTools && (
+        <div class="text-center">
+          <AddToolButton
+            client:load
+            tools={toolOptions}
+            selectedSlugs={selectedSlugs}
+          />
+        </div>
+      )
     }
   </div>
 
@@ -244,7 +301,12 @@ const paddedTools =
           Simple and transparent pricing calculators.
         </p>
         <div
-          class={`grid grid-cols-1 gap-6 ${tools.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+          class:list={[
+            "grid gap-6",
+            !useWideComparisonLayout &&
+              "grid-cols-1 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
+          ]}
+          style={pricingGridStyle}
         >
           {tools.map((tool) => (
             <div class="flex flex-col gap-4">
@@ -271,10 +333,11 @@ const paddedTools =
             </div>
           ))}
           {tools.length === 1 && (
-            <div class="flex items-center justify-center">
-              <p class="text-muted-foreground text-sm">
-                Add another tool to compare pricing
-              </p>
+            <div
+              aria-hidden="true"
+              class="border-muted-foreground/20 text-muted-foreground from-muted/25 to-muted/10 hidden items-center justify-center rounded-lg border border-dashed bg-gradient-to-b text-sm font-medium md:flex"
+            >
+              No data
             </div>
           )}
         </div>

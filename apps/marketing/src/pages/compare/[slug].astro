@@ -8,7 +8,8 @@ export const prerender = false;
 const slug = Astro.params.slug;
 if (!slug) return Astro.redirect("/404");
 
-const slugParts = slug.split("-vs-");
+const slugParts = slug.split("-vs-").filter(Boolean);
+if (slugParts.length === 0) return Astro.redirect("/404");
 
 const canonicalParts = slugParts.map((part) => {
   const aliasMatch = BACKUP_TOOLS.find((t) => t.aliases?.includes(part));
@@ -22,18 +23,21 @@ const toolsOrUndefined = slugParts.map((slug) =>
   BACKUP_TOOLS.find((t) => t.slug === slug),
 );
 
-if (
-  toolsOrUndefined.some((tool) => tool === undefined) ||
-  toolsOrUndefined.length > 3
-)
+if (toolsOrUndefined.some((tool) => tool === undefined))
   return Astro.redirect("/404");
 
 const tools = toolsOrUndefined.filter(
   (t): t is NonNullable<typeof t> => t !== undefined,
 );
 
+function formatToolList(names: string[]) {
+  if (names.length === 1) return `${names[0]} and other backup software`;
+  if (names.length === 2) return `${names[0]} and ${names[1]}`;
+  return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+}
+
 const title = `${tools.map((t) => t.name).join(" vs ")}: A Detailed Comparison`;
-const description = `Compare ${tools.length === 1 ? `${tools[0].name} and other backup software` : tools.length === 2 ? `${tools[0].name} and ${tools[1].name}` : `${tools[0].name}, ${tools[1].name} and ${tools[2].name}`} side by side. See features, pricing, privacy, platforms, storage options, and performance compared.`;
+const description = `Compare ${formatToolList(tools.map((tool) => tool.name))} side by side. See features, pricing, privacy, platforms, storage options, and performance compared.`;
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -57,6 +61,7 @@ const structuredData = {
   title={title}
   description={description}
   structuredData={structuredData}
+  bodyClass="comparison-page"
 >
   <ComparisonPageContent
     tools={tools}

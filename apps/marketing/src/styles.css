@@ -175,6 +175,19 @@ body:has([class~="sticky"], [class*=":sticky"]) {
   }
 }
 
+.compare-page {
+  --comparison-page-padding: clamp(1rem, 3vw, 2rem);
+  width: min(90vw, 64rem);
+  padding-inline: var(--comparison-page-padding);
+}
+
+.compare-page--wide {
+  width: max(
+    min(90vw, 64rem),
+    calc(var(--comparison-page-min-width) + var(--comparison-page-padding) * 2)
+  );
+}
+
 body {
   position: relative;
 }

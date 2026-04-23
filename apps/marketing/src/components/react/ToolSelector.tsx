@@ -87,7 +87,7 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
     window.location.href = `/compare/${newSlugs.join("-vs-")}`;
   };
 
-  if (selectedSlugs.length >= 3) {
+  if (availableTools.length === 0) {
     return null;
   }
 
