@@ -100,7 +100,10 @@ export const BACKUP_TOOLS: BackupTool[] = [
       scheduling: true,
     },
     interface: {
-      cli: false,
+      cli: {
+        value: "partial",
+        note: "Via Kopia CLI",
+      },
       gui: true,
     },
     privacy: {
