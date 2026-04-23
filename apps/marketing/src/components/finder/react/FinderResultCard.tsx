@@ -140,7 +140,7 @@ export function FinderResultCard({
         </div>
 
         {supportedPlatforms.length > 0 && (
-          <div className="flex flex-col gap-2">
+          <div className="flex hidden flex-col gap-2 sm:block">
             <span className="text-muted-foreground text-xs font-medium uppercase tracking-[0.18em] sm:self-start">
               Works on
             </span>
@@ -168,7 +168,7 @@ export function FinderResultCard({
             }
             variant="secondary"
             size="sm"
-            className="flex-1"
+            className="h-9 w-full sm:flex-1"
           >
             <ExternalLinkIcon className="size-4" />
             Website
@@ -178,7 +178,7 @@ export function FinderResultCard({
             onClick={() => onToggleComparison(tool.slug)}
             variant={isSelectedForComparison ? "outline" : "default"}
             size="sm"
-            className="flex-1"
+            className="h-9 w-full sm:flex-1"
             aria-pressed={isSelectedForComparison}
           >
             {isSelectedForComparison ? (
@@ -186,9 +186,7 @@ export function FinderResultCard({
             ) : (
               <PlusIcon className="size-4" />
             )}
-            {isSelectedForComparison
-              ? "Remove"
-              : "Add to comparison"}
+            {isSelectedForComparison ? "Remove" : "Add to comparison"}
           </Button>
         </div>
       </div>
