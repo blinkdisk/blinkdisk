@@ -242,6 +242,10 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     );
   };
 
+  const clearComparisonSelection = () => {
+    setSelectedComparisonSlugs([]);
+  };
+
   return (
     <>
       <div
@@ -303,6 +307,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
       <ComparisonBar
         selectedTools={selectedComparisonTools}
         canCompare={canCompare}
+        onClearSelection={clearComparisonSelection}
         onRemoveSelection={toggleComparisonSelection}
         onCompare={startComparison}
       />

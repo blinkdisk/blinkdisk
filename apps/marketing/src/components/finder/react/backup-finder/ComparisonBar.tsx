@@ -1,11 +1,12 @@
 import { Button } from "@blinkdisk/ui/button";
-import { ScaleIcon, XIcon } from "lucide-react";
+import { RotateCcwIcon, ScaleIcon, XIcon } from "lucide-react";
 
 import type { NormalizedBackupTool } from "@blinkdisk/utils/tools";
 
 type ComparisonBarProps = {
   selectedTools: NormalizedBackupTool[];
   canCompare: boolean;
+  onClearSelection: () => void;
   onRemoveSelection: (slug: string) => void;
   onCompare: () => void;
 };
@@ -13,6 +14,7 @@ type ComparisonBarProps = {
 export function ComparisonBar({
   selectedTools,
   canCompare,
+  onClearSelection,
   onRemoveSelection,
   onCompare,
 }: ComparisonBarProps) {
@@ -38,12 +40,21 @@ export function ComparisonBar({
           ))}
         </div>
 
-        <div className="md:shrink-0">
+        <div className="flex gap-2 md:shrink-0">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onClearSelection}
+            className="flex-1 md:flex-none"
+          >
+            <RotateCcwIcon className="size-4" />
+            Clear
+          </Button>
           <Button
             type="button"
             onClick={onCompare}
             disabled={!canCompare}
-            className="w-full md:w-auto"
+            className="flex-1 md:flex-none"
           >
             <ScaleIcon className="size-4" />
             Compare
