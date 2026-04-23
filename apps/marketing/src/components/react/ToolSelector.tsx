@@ -92,6 +92,9 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
   }
 
   const isFirstTool = selectedSlugs.length === 0;
+  const helperText = isFirstTool
+    ? "Choose a tool to start comparing"
+    : "Choose another tool to add it to your comparison";
 
   return (
     <div className="border-muted-foreground/30 from-muted/50 to-muted/20 flex h-full min-h-[280px] flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed bg-gradient-to-b p-6">
@@ -103,7 +106,7 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
           Add {isFirstTool ? "a" : "another"} tool
         </h3>
         <p className="text-muted-foreground mt-1 text-sm">
-          Choose {isFirstTool ? "a" : "another"} tool to start comparing
+          {helperText}
         </p>
       </div>
 

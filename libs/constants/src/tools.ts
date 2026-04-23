@@ -472,7 +472,7 @@ export const BACKUP_TOOLS: BackupTool[] = [
       gui: true,
     },
     privacy: {
-      endToEndEncryption: { value: true, note: "AES 256-bit" },
+      endToEndEncryption: true,
       zeroKnowledge: { value: "partial", note: "Opt-in" },
     },
     platforms: {
