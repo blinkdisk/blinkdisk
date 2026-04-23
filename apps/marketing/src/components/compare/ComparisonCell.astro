@@ -3,7 +3,6 @@ import { formatCountryDisplay } from "@blinkdisk/constants/countries";
 import type { NormalizedCellValue } from "@blinkdisk/utils/tools";
 import CheckIcon from "@lucide/astro/icons/check";
 import XIcon from "@lucide/astro/icons/x";
-import MinusIcon from "@lucide/astro/icons/minus";
 
 type Props = {
   value: NormalizedCellValue;
@@ -43,7 +42,9 @@ const stringValue =
           </span>
         ) : (
           <span class="inline-flex size-6 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
-            <MinusIcon class="size-4" />
+            <span aria-hidden="true" class="text-sm leading-none font-semibold">
+              ~
+            </span>
             <span class="sr-only">{finalSrText.partial}</span>
           </span>
         )}
