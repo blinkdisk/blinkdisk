@@ -148,12 +148,6 @@ export const COMPARISON_STORAGE_LABELS: Record<
   },
 };
 
-export function getPublishedComparisonTools(now: number = Date.now()) {
-  return BACKUP_TOOLS.filter(
-    (tool) => !tool.publishedAt || new Date(tool.publishedAt).getTime() <= now,
-  );
-}
-
 export function getComparisonSitemap(baseUrl: string) {
   const paths: string[] = [];
 

@@ -1057,7 +1057,7 @@ export const ALL_COUNTRIES = {
 
 export type CountryCode = keyof typeof ALL_COUNTRIES;
 
-export function getCountryByCode(code: string | null | undefined) {
+function getCountryByCode(code: string | null | undefined) {
   if (!code) return null;
 
   return ALL_COUNTRIES[code as CountryCode] ?? null;

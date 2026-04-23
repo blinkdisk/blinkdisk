@@ -1,9 +1,4 @@
-import {
-  BACKUP_TOOLS,
-  BackupTool,
-  CellValue,
-  FieldValue,
-} from "@blinkdisk/constants/tools";
+import { BackupTool, CellValue, FieldValue } from "@blinkdisk/constants/tools";
 
 export type NormalizedCellValue = {
   value: FieldValue | null;
@@ -35,7 +30,7 @@ export type NormalizedBackupTool = Omit<
   storages: NormalizeCellRecord<BackupTool["storages"]>;
 };
 
-export function normalizeCellValue(cell: CellValue): NormalizedCellValue {
+function normalizeCellValue(cell: CellValue): NormalizedCellValue {
   if (cell === null) return { value: null, note: null };
   if (typeof cell === "object") {
     return { value: cell.value, note: cell.note };
@@ -55,7 +50,7 @@ function normalizeCellRecord<T extends Record<string, CellValue>>(
   return normalized;
 }
 
-export function normalizeBackupTool(tool: BackupTool): NormalizedBackupTool {
+function normalizeBackupTool(tool: BackupTool): NormalizedBackupTool {
   return {
     ...tool,
     general: normalizeCellRecord(tool.general),
@@ -74,5 +69,3 @@ export function normalizeComparisonTools(
 ): NormalizedBackupTool[] {
   return tools.map(normalizeBackupTool);
 }
-
-export const NORMALIZED_BACKUP_TOOLS = normalizeComparisonTools(BACKUP_TOOLS);
