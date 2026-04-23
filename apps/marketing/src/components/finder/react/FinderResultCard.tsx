@@ -140,7 +140,7 @@ export function FinderResultCard({
         </div>
 
         {supportedPlatforms.length > 0 && (
-          <div className="flex hidden flex-col gap-2 sm:block">
+          <div className="hidden flex-col gap-2 sm:flex">
             <span className="text-muted-foreground text-xs font-medium uppercase tracking-[0.18em] sm:self-start">
               Works on
             </span>
