@@ -182,9 +182,14 @@ body:has([class~="sticky"], [class*=":sticky"]) {
 }
 
 .compare-page--wide {
-  width: max(
-    min(90vw, 64rem),
-    calc(var(--comparison-page-min-width) + var(--comparison-page-padding) * 2)
+  width: min(
+    90vw,
+    max(
+      64rem,
+      calc(
+        var(--comparison-page-min-width) + var(--comparison-page-padding) * 2
+      )
+    )
   );
 }
 

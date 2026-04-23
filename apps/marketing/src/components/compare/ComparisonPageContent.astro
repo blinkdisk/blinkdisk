@@ -136,7 +136,7 @@ const toolGridColumnCount = Math.max(
   tools.length + (hasAvailableTools ? 1 : 0),
   1,
 );
-const pricingGridColumnCount = Math.max(tools.length, 1);
+const pricingGridColumnCount = Math.max(tools.length, tools.length === 1 ? 2 : 1);
 const comparisonTableMinWidth =
   comparisonLabelColumnMinWidth +
   paddedTools.length * comparisonToolColumnMinWidth;
@@ -160,12 +160,8 @@ const comparisonPageMinWidth = useWideComparisonLayout
 const comparisonPageStyle = comparisonPageMinWidth
   ? `--comparison-page-min-width: ${comparisonPageMinWidth};`
   : undefined;
-const toolGridStyle = useWideComparisonLayout
-  ? `grid-template-columns: repeat(${toolGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr));`
-  : undefined;
-const pricingGridStyle = useWideComparisonLayout
-  ? `grid-template-columns: repeat(${pricingGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr));`
-  : undefined;
+const toolGridStyle = `grid-template-columns: repeat(${toolGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr)); min-width: ${toolGridMinWidth}px;`;
+const pricingGridStyle = `grid-template-columns: repeat(${pricingGridColumnCount}, minmax(${comparisonCardMinWidth}px, 1fr)); min-width: ${pricingGridMinWidth}px;`;
 ---
 
 <article
@@ -187,65 +183,60 @@ const pricingGridStyle = useWideComparisonLayout
     </p>
   </header>
 
-  <div
-    class:list={[
-      "mb-10 grid gap-4",
-      !useWideComparisonLayout &&
-        "grid-cols-1 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
-    ]}
-    style={toolGridStyle}
-  >
-    {
-      tools.map((tool, index) => (
-        <div class="text-center">
-          <div class="mb-3">
-            <ToolSelector
+  <div class="mb-10 overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch]">
+    <div class="grid gap-4" style={toolGridStyle}>
+      {
+        tools.map((tool, index) => (
+          <div class="text-center">
+            <div class="mb-3">
+              <ToolSelector
+                client:load
+                tools={toolOptions}
+                selectedSlugs={selectedSlugs}
+                index={index}
+                showRemove={true}
+              />
+            </div>
+            <button
+              type="button"
+              class="w-full md:cursor-zoom-in"
+              data-lightbox-trigger
+              data-src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+              data-alt={`${tool.name} screenshot`}
+            >
+              <img
+                src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
+                alt={`${tool.name} screenshot`}
+                class="aspect-[10/7] w-full rounded-lg border object-cover object-top"
+              />
+            </button>
+            <div class="mt-3">
+              <Button
+                href={tool.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="lg"
+                class="w-full"
+              >
+                <ExternalLinkIcon class="size-4" />
+                {tool.name}
+              </Button>
+            </div>
+          </div>
+        ))
+      }
+      {
+        hasAvailableTools && (
+          <div class="text-center">
+            <AddToolButton
               client:load
               tools={toolOptions}
               selectedSlugs={selectedSlugs}
-              index={index}
-              showRemove={true}
             />
           </div>
-          <button
-            type="button"
-            class="w-full md:cursor-zoom-in"
-            data-lightbox-trigger
-            data-src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
-            data-alt={`${tool.name} screenshot`}
-          >
-            <img
-              src={`https://static.blinkdisk.com/compare/screenshots/${tool.slug}.jpg`}
-              alt={`${tool.name} screenshot`}
-              class="aspect-[10/7] w-full rounded-lg border object-cover object-top"
-            />
-          </button>
-          <div class="mt-3">
-            <Button
-              href={tool.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              size="lg"
-              class="w-full"
-            >
-              <ExternalLinkIcon class="size-4" />
-              {tool.name}
-            </Button>
-          </div>
-        </div>
-      ))
-    }
-    {
-      hasAvailableTools && (
-        <div class="text-center">
-          <AddToolButton
-            client:load
-            tools={toolOptions}
-            selectedSlugs={selectedSlugs}
-          />
-        </div>
-      )
-    }
+        )
+      }
+    </div>
   </div>
 
   <div
@@ -284,11 +275,13 @@ const pricingGridStyle = useWideComparisonLayout
                 {section.description}
               </p>
               <div class="bg-card overflow-hidden rounded-lg border">
-                <ComparisonTable
-                  tools={paddedTools}
-                  category={section.category}
-                  labels={section.labels}
-                />
+                <div class="overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch]">
+                  <ComparisonTable
+                    tools={paddedTools}
+                    category={section.category}
+                    labels={section.labels}
+                  />
+                </div>
               </div>
             </>
           );
@@ -300,46 +293,41 @@ const pricingGridStyle = useWideComparisonLayout
         <p class="text-muted-foreground -mt-4 mb-6">
           Simple and transparent pricing calculators.
         </p>
-        <div
-          class:list={[
-            "grid gap-6",
-            !useWideComparisonLayout &&
-              "grid-cols-1 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
-          ]}
-          style={pricingGridStyle}
-        >
-          {tools.map((tool) => (
-            <div class="flex flex-col gap-4">
-              <h4 class="text-center text-sm font-semibold">{tool.name}</h4>
-              <PricingCalculator client:load tool={tool} />
-              {tool.pricingUrl && (
-                <Button
-                  href={tool.pricingUrl}
-                  target={
-                    tool.pricingUrl.startsWith("http") ? "_blank" : undefined
-                  }
-                  rel={
-                    tool.pricingUrl.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
-                  variant="secondary"
-                  class="w-full"
-                >
-                  <ExternalLinkIcon class="size-4" />
-                  View Pricing
-                </Button>
-              )}
-            </div>
-          ))}
-          {tools.length === 1 && (
-            <div
-              aria-hidden="true"
-              class="border-muted-foreground/20 text-muted-foreground from-muted/25 to-muted/10 hidden items-center justify-center rounded-lg border border-dashed bg-gradient-to-b text-sm font-medium md:flex"
-            >
-              No data
-            </div>
-          )}
+        <div class="overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch]">
+          <div class="grid gap-6" style={pricingGridStyle}>
+            {tools.map((tool) => (
+              <div class="flex flex-col gap-4">
+                <h4 class="text-center text-sm font-semibold">{tool.name}</h4>
+                <PricingCalculator client:load tool={tool} />
+                {tool.pricingUrl && (
+                  <Button
+                    href={tool.pricingUrl}
+                    target={
+                      tool.pricingUrl.startsWith("http") ? "_blank" : undefined
+                    }
+                    rel={
+                      tool.pricingUrl.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    variant="secondary"
+                    class="w-full"
+                  >
+                    <ExternalLinkIcon class="size-4" />
+                    View Pricing
+                  </Button>
+                )}
+              </div>
+            ))}
+            {tools.length === 1 && (
+              <div
+                aria-hidden="true"
+                class="border-muted-foreground/20 text-muted-foreground from-muted/25 to-muted/10 flex items-center justify-center rounded-lg border border-dashed bg-gradient-to-b text-sm font-medium"
+              >
+                No data
+              </div>
+            )}
+          </div>
         </div>
 
         {tableSections.slice(2).map((section) => {
@@ -353,11 +341,13 @@ const pricingGridStyle = useWideComparisonLayout
                 {section.description}
               </p>
               <div class="bg-card overflow-hidden rounded-lg border">
-                <ComparisonTable
-                  tools={paddedTools}
-                  category={section.category}
-                  labels={section.labels}
-                />
+                <div class="overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch]">
+                  <ComparisonTable
+                    tools={paddedTools}
+                    category={section.category}
+                    labels={section.labels}
+                  />
+                </div>
               </div>
             </>
           );

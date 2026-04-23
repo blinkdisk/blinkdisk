@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@blinkdisk/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
+import FreePricingCalculator from "@marketing/components/compare/react/FreePricingCalculator";
 import { useMemo, useState } from "react";
 
 const currency = "USD";
@@ -49,13 +50,7 @@ export default function BlinkDiskPricingCalculator() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="border-primary/30 bg-primary/5 rounded-xl border-2 border-dashed p-4">
-        <p className="text-primary text-sm font-medium">Custom Storage</p>
-        <p className="mt-1 text-3xl font-bold">100% Free</p>
-        <p className="text-muted-foreground mt-1 text-xs">
-          Use your own S3, Backblaze B2, SFTP, etc.
-        </p>
-      </div>
+      <FreePricingCalculator />
 
       <div className="flex w-full items-center gap-4">
         <hr className="w-full border-t" />
@@ -66,7 +61,7 @@ export default function BlinkDiskPricingCalculator() {
       <div className="bg-card rounded-xl border p-4">
         <p className="text-lg font-semibold">CloudBlink</p>
         <p className="text-muted-foreground text-sm">
-          Our managed cloud storage service
+          Our optional cloud storage service
         </p>
 
         <Select
