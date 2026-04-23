@@ -145,6 +145,12 @@ export default defineConfig({
       }),
     ],
     resolve: {
+      dedupe: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+      ],
       alias: {
         "@marketing": path.resolve(__dirname, "./src"),
         "@ui": path.resolve(__dirname, "../../libs/ui/src"),
