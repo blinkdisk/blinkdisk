@@ -42,7 +42,7 @@ const { tools, title, description } = Astro.props;
 const useGenericHeading = tools.length > 3;
 const headingTitle = useGenericHeading ? "Compare Backup Tools" : title;
 const headingDescription = useGenericHeading
-  ? "Compare X backup tool side by side."
+  ? "Compare backup tools to find the perfect one for your needs."
   : description;
 
 const sectionIcons: Record<string, typeof ListChecksIcon> = {

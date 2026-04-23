@@ -1,17 +1,20 @@
 ---
-type Props = {
-  title: string;
-  description: string;
-};
-
-const { title, description } = Astro.props;
 ---
 
-<header class="mb-10">
-  <h1 class="text-foreground mb-4 text-3xl font-bold sm:text-4xl">
-    {title}
-  </h1>
-  <p class="text-muted-foreground sm:text-lg">
-    {description}
-  </p>
+<header class="mb-12 sm:mb-16">
+  <div class="flex flex-col items-center text-center">
+    <h1
+      class="max-w-[22ch] text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl"
+    >
+      Find the perfect
+      <span class="whitespace-nowrap">backup tool for you</span>
+    </h1>
+
+    <p
+      class="text-muted-foreground mt-5 max-w-xl text-base sm:mt-6 sm:text-lg md:text-xl md:leading-relaxed"
+    >
+      Cut through the marketing noise and compare backup tools side by side on
+      the things that actually matter to you.
+    </p>
+  </div>
 </header>
