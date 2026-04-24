@@ -144,6 +144,14 @@ const allStructuredData = [
             ui_host: "https://eu.posthog.com",
             defaults: '2025-11-30',
         })
+        posthog.onFeatureFlags(function () {
+          var text = posthog.getFeatureFlag('download-button') === 'download-for-free'
+            ? 'Download for free'
+            : 'Download App';
+          document.querySelectorAll('[data-download-button]').forEach(function (el) {
+            el.textContent = text;
+          });
+        });
       </script>
     )}
 
