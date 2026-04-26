@@ -3,40 +3,64 @@ import Windows from "@marketing/components/icons/Windows.astro";
 import Macos from "@marketing/components/icons/Macos.astro";
 import Linux from "@marketing/components/icons/Linux.astro";
 import { DownloadButton } from "@marketing/components/react/DownloadButton";
+import { getLatestReleaseVersion } from "@marketing/utils/github";
 import type { Platform } from "@marketing/utils/platform";
+
+const version = await getLatestReleaseVersion();
 
 const operatingSystems: {
   name: string;
   icon: string;
   platform: Platform;
   description: string;
+  arch: string;
 }[] = [
   {
     name: "Windows",
     icon: "windows",
     platform: "windows",
     description: "Windows 11 and Windows 10 with 64-bit supported.",
+    arch: "x64 · ARM64",
   },
   {
     name: "macOS",
     icon: "macos",
     platform: "macos",
     description: "Big Sur and all newer versions of macOS are supported.",
+    arch: "Intel · Apple Silicon",
   },
   {
     name: "Linux",
     icon: "linux",
     platform: "linux",
     description: "AppImage, deb, and rpm for x86_64, arm64 and armv7l.",
+    arch: "x86_64 · amd64 · ARM",
   },
 ];
 ---
 
 <section
   id="integrations"
-  class="w-content mx-auto flex flex-col items-center py-16 sm:py-24"
+  class="w-content relative mx-auto flex flex-col items-center py-16 sm:py-24"
 >
-  <h2 class="text-center text-4xl font-bold sm:text-5xl">
+  <!-- Mono kicker -->
+  <div
+    class="bg-card/70 inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 backdrop-blur-sm"
+  >
+    <span class="relative flex size-1.5">
+      <span class="bg-primary/60 absolute inset-0 animate-ping rounded-full"
+      ></span>
+      <span class="bg-primary relative inline-flex size-1.5 rounded-full"
+      ></span>
+    </span>
+    <span
+      class="text-muted-foreground downloads-mono text-[0.68rem] font-bold uppercase tracking-[0.18em]"
+    >
+      Cross-Platform
+    </span>
+  </div>
+
+  <h2 class="mt-6 text-center text-4xl font-bold sm:text-5xl">
     Backup from any device
   </h2>
   <p class="text-muted-foreground mt-4 text-center text-sm md:text-base">
@@ -44,23 +68,38 @@ const operatingSystems: {
     Linux.
   </p>
   <div
-    class="sm:mt-22 mt-16 grid w-full grid-cols-1 gap-10 sm:grid-cols-3 md:gap-0"
+    class="max-w-92 mt-16 grid w-full grid-cols-1 gap-6 sm:mt-20 sm:gap-5 md:max-w-full md:grid-cols-3"
   >
     {
       operatingSystems.map((os) => (
-        <div class="max-w-70 mx-auto flex w-full flex-col items-start sm:items-center [&>svg]:size-10">
-          <div class="flex flex-row items-center gap-4 sm:flex-col">
-            {os.icon === "windows" && <Windows class="size-10" />}
-            {os.icon === "macos" && <Macos class="size-10" />}
-            {os.icon === "linux" && <Linux class="size-10" />}
-            <p class="text-3xl font-bold">{os.name}</p>
+        <div class="bg-card group relative flex flex-col overflow-hidden rounded-2xl border p-6 transition-all">
+          <div class="relative flex items-center justify-between">
+            <div class="bg-muted/50 border-border/60 flex size-12 items-center justify-center rounded-xl border [&>svg]:size-6">
+              {os.icon === "windows" && <Windows />}
+              {os.icon === "macos" && <Macos />}
+              {os.icon === "linux" && <Linux />}
+            </div>
+            <span class="text-muted-foreground/60 font-mono text-sm font-bold">
+              {version}
+            </span>
           </div>
-          <p class="text-muted-foreground sm:max-w-50 mt-2 w-full text-sm sm:text-center">
+
+          <p class="mt-5 text-2xl font-bold sm:text-3xl">{os.name}</p>
+          <p class="text-muted-foreground mt-1.5 text-sm leading-relaxed">
             {os.description}
           </p>
-          <div class="mt-8">
-            <DownloadButton client:visible os={os.platform} />
+
+          <div class="border-border/60 my-7 flex items-center gap-2">
+            <span class="text-muted-foreground/70 font-mono text-[0.6rem] font-bold uppercase tracking-[0.16em]">
+              Architecture
+            </span>
+            <span class="bg-border/60 h-px flex-1" />
+            <span class="text-foreground/80 font-mono text-[0.62rem] font-semibold tracking-tight">
+              {os.arch}
+            </span>
           </div>
+
+          <DownloadButton className="w-full" client:visible os={os.platform} />
         </div>
       ))
     }

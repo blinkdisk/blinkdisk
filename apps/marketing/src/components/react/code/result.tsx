@@ -328,12 +328,7 @@ function Stat({ icon, title, description, value, className }: StatProps) {
       <p className="text-lg leading-none tracking-tight [&>svg]:mr-1 [&>svg]:inline-block [&>svg]:size-4">
         {icon} {title}
       </p>
-      <p
-        style={{
-          fontFamily: "Space Mono, monospace",
-        }}
-        className="mt-2 text-4xl font-bold tracking-tighter"
-      >
+      <p className="mt-2 font-mono text-4xl font-bold tracking-tighter">
         {value}
       </p>
       {description && (

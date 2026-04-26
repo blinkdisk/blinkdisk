@@ -81,6 +81,7 @@
 }
 
 @theme inline {
+  --font-mono: "Space Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

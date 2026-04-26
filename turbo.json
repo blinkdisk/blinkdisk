@@ -28,6 +28,7 @@
     "SMTP_URL",
     "PLUNK_URL",
     "PLUNK_SECRET_KEY",
+    "GITHUB_TOKEN",
     "GITHUB_REF_NAME",
     "LOGSNAG_KEY",
     "POSTHOG_HOST",

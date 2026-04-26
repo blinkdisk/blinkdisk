@@ -5,7 +5,7 @@ import simonImage from "@marketing/assets/images/simon.jpg";
 
 <section
   id="quote"
-  class="w-content mx-auto px-6 py-16 sm:px-0 sm:py-24 md:max-w-3xl"
+  class="w-content mx-auto px-6 py-20 sm:px-0 sm:py-32 md:max-w-3xl"
 >
   <figure class="w-full">
     <p class="sr-only">5 out of 5 stars</p>
@@ -34,8 +34,11 @@ import simonImage from "@marketing/assets/images/simon.jpg";
     >
       <p>
         "A few months ago, my hard drive suddenly died. Years of work, photos,
-        and memories were gone in an instant. If I had set up BlinkDisk before,
-        it would've taken five minutes to protect everything."
+        and memories were gone in an instant. <span
+          class="quote-highlight relative inline whitespace-normal"
+          >If I had set up BlinkDisk before, it would've taken five minutes to
+          protect everything.</span
+        >"
       </p>
     </blockquote>
     <figcaption class="mt-8 flex items-center gap-4">
@@ -50,8 +53,23 @@ import simonImage from "@marketing/assets/images/simon.jpg";
       />
       <div class="flex flex-col">
         <p class="text-lg font-semibold">Simon K.</p>
-        <p class="text-muted-foreground text-sm">BlinkDisk User</p>
+        <p class="text-muted-foreground text-xs">BlinkDisk User</p>
       </div>
     </figcaption>
   </figure>
 </section>
+
+<style>
+  .quote-highlight {
+    --highlight: color-mix(in srgb, var(--primary) 22%, transparent);
+    background-image: linear-gradient(
+      to bottom,
+      transparent 82%,
+      var(--highlight) 82%,
+      var(--highlight) 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: 0 0;
+  }
+</style>
