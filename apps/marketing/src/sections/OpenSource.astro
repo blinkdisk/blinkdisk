@@ -4,6 +4,54 @@ import HeartIcon from "@lucide/astro/icons/heart";
 import EyeIcon from "@lucide/astro/icons/eye";
 import UsersIcon from "@lucide/astro/icons/users";
 
+const leftChips = [
+  {
+    emoji: "🌍",
+    label: "Translated to Spanish",
+    rotate: "-rotate-2",
+    floatClass: "os-float-1",
+    position: "left-0 top-[6%]",
+  },
+  {
+    emoji: "🐛",
+    label: "Caught a tiny bug",
+    rotate: "rotate-1",
+    floatClass: "os-float-2",
+    position: "left-[10%] top-[44%]",
+  },
+  {
+    emoji: "💡",
+    label: "Shared an idea",
+    rotate: "-rotate-1",
+    floatClass: "os-float-3",
+    position: "left-[3%] bottom-[8%]",
+  },
+];
+
+const rightChips = [
+  {
+    emoji: "🎨",
+    label: "Made it prettier",
+    rotate: "rotate-2",
+    floatClass: "os-float-2",
+    position: "right-[2%] top-[10%]",
+  },
+  {
+    emoji: "✨",
+    label: "Built a new feature",
+    rotate: "-rotate-1",
+    floatClass: "os-float-3",
+    position: "right-[8%] top-[46%]",
+  },
+  {
+    emoji: "❤️",
+    label: "Showed some love",
+    rotate: "rotate-1",
+    floatClass: "os-float-1",
+    position: "right-0 bottom-[6%]",
+  },
+];
+
 const principles = [
   {
     icon: "eye",
@@ -68,16 +116,43 @@ const principles = [
     </p>
   </div>
 
-  <!-- Centerpiece: rotating seal around GitHub mark -->
-  <div class="relative mt-14 flex items-center justify-center sm:mt-20">
-    <!-- Soft glow -->
+  <!-- Centerpiece: rotating seal flanked by community contribution chips -->
+  <div class="relative mx-auto mt-14 max-w-4xl sm:mt-20">
+    <!-- Soft glow, centered behind the seal -->
     <div
-      class="bg-primary/10 dark:bg-foreground/10 pointer-events-none absolute size-72 rounded-full blur-3xl sm:size-80"
+      class="bg-foreground/10 pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl sm:size-80"
       aria-hidden="true"
     >
     </div>
 
-    <div class="relative size-72 sm:size-80">
+    <!-- Floating community chips, hidden on small screens -->
+    {
+      [...leftChips, ...rightChips].map((chip) => (
+        <div
+          class:list={[
+            "pointer-events-none absolute z-10 hidden md:block",
+            chip.position,
+            chip.floatClass,
+          ]}
+          aria-hidden="true"
+        >
+          <div
+            class:list={[
+              "bg-card/90 inline-flex items-center gap-2 rounded-full border py-1.5 pl-2 pr-3.5 shadow-sm backdrop-blur-sm",
+              chip.rotate,
+            ]}
+          >
+            <span class="text-sm leading-none">{chip.emoji}</span>
+            <span class="whitespace-nowrap text-xs font-medium">
+              {chip.label}
+            </span>
+          </div>
+        </div>
+      ))
+    }
+
+    <!-- Seal -->
+    <div class="relative mx-auto size-72 sm:size-80">
       <!-- Rotating circular text -->
       <svg
         class="os-rotate absolute inset-0 size-full"
@@ -94,13 +169,12 @@ const principles = [
         <text
           fill="currentColor"
           class="text-foreground/70 os-mono"
-          font-size="9"
+          font-size="9.35"
           letter-spacing="3.5"
           font-weight="700"
         >
           <textPath href="#os-circle-path">
-            ★ PROUDLY OPEN SOURCE ★ COMMUNITY DRIVEN ★ FREE FOREVER ★ MIT
-            LICENSED
+            ★ PROUDLY OPEN SOURCE ★ COMMUNITY DRIVEN ★ FREE FOREVER
           </textPath>
         </text>
       </svg>
@@ -114,17 +188,17 @@ const principles = [
 
       <!-- Pulse ring -->
       <div
-        class="border-primary/30 dark:border-foreground/10 os-pulse absolute inset-0 m-auto size-44 rounded-full border-2"
+        class="border-foreground/10 os-pulse absolute inset-0 m-auto size-44 rounded-full border-2"
         aria-hidden="true"
       >
       </div>
 
       <!-- Inner GitHub badge -->
       <div
-        class="bg-card border-primary/20 dark:border-foreground/10 absolute inset-0 m-auto flex size-44 items-center justify-center overflow-hidden rounded-full border-2 shadow-2xl"
+        class="bg-card border-foreground/10 absolute inset-0 m-auto flex size-44 items-center justify-center overflow-hidden rounded-full border-2 shadow-2xl"
       >
         <div
-          class="from-primary/10 dark:from-foreground/5 absolute inset-0 bg-gradient-to-br to-transparent"
+          class="from-foreground/5 absolute inset-0 bg-gradient-to-br to-transparent"
         >
         </div>
         <GithubIcon class="text-foreground relative size-16" />
@@ -213,9 +287,34 @@ const principles = [
     }
   }
 
+  .os-float-1 {
+    animation: os-float 5.5s ease-in-out infinite;
+  }
+
+  .os-float-2 {
+    animation: os-float 6.5s ease-in-out 0.7s infinite;
+  }
+
+  .os-float-3 {
+    animation: os-float 7.5s ease-in-out 1.4s infinite;
+  }
+
+  @keyframes os-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .os-rotate,
-    .os-pulse {
+    .os-pulse,
+    .os-float-1,
+    .os-float-2,
+    .os-float-3 {
       animation: none;
     }
   }
