@@ -7,6 +7,7 @@ import Quote from "@marketing/sections/Quote.astro";
 import Features from "@marketing/sections/Features.astro";
 import Downloads from "@marketing/sections/Downloads.astro";
 import Storages from "@marketing/sections/Storages.astro";
+import OpenSource from "@marketing/sections/OpenSource.astro";
 import Faq from "@marketing/sections/Faq.astro";
 import { getFaqStructuredData } from "@marketing/data/faqs";
 import { MARKETING_URL } from "astro:env/server";
@@ -63,5 +64,6 @@ const structuredData = [getFaqStructuredData(), softwareSchema];
   <Features />
   <Downloads />
   <Storages />
+  <OpenSource />
   <Faq />
 </DefaultLayout>
