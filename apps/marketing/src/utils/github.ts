@@ -24,6 +24,6 @@ export async function getLatestReleaseVersion(): Promise<string> {
     return data.tag_name;
   } catch (error) {
     console.warn("Failed to fetch latest GitHub release version:", error);
-    return "v1.0";
+    return "v1";
   }
 }
