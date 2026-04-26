@@ -8,11 +8,29 @@ import FaqList from "@marketing/components/FaqList.astro";
     <h2 class="text-center text-4xl font-bold sm:text-5xl">
       Questions & Answers
     </h2>
-    <p class="text-muted-foreground mt-4 text-center">
+    <p class="text-muted-foreground mt-4 text-center text-sm md:text-base">
       Still have questions? Here are answers to some frequently asked questions.
     </p>
   </div>
-  <div class="mt-6 sm:mt-16">
+
+  <div class="relative mt-10 sm:mt-16">
     <FaqList faqs={faqs} />
+  </div>
+
+  <!-- Bottom helper -->
+  <div class="w-content mx-auto mt-10 flex flex-col items-center sm:mt-14">
+    <span
+      class="text-muted-foreground/70 inline-flex items-center gap-2 font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] sm:text-[0.68rem]"
+    >
+      <span class="bg-border h-px w-8"></span>
+      Still curious?
+      <span class="bg-border h-px w-8"></span>
+    </span>
+    <p class="text-muted-foreground mt-3 text-sm">
+      Reach us at <a
+        href="mailto:hello@blinkdisk.com"
+        class="text-primary font-medium hover:underline">hi@blinkdisk.com</a
+      >
+    </p>
   </div>
 </section>

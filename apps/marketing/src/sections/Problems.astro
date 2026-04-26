@@ -8,12 +8,26 @@ import InfoIcon from "@lucide/astro/icons/info";
   id="problems"
   class="w-content mx-auto flex flex-col items-center py-16 sm:py-32"
 >
-  <div class="flex items-center gap-5">
-    <TriangleAlertIcon class="hidden size-10 text-red-500 sm:block" />
-    <h2 class="text-center text-4xl font-bold sm:text-5xl">
-      Your files are at risk
-    </h2>
+  <!-- Mono kicker -->
+  <div
+    class="bg-card/70 inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 backdrop-blur-sm"
+  >
+    <span class="relative flex size-1.5">
+      <span class="absolute inset-0 animate-ping rounded-full bg-red-500/60"
+      ></span>
+      <span class="relative inline-flex size-1.5 rounded-full bg-red-500"
+      ></span>
+    </span>
+    <span
+      class="text-muted-foreground font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em]"
+    >
+      Why it matters
+    </span>
   </div>
+
+  <h2 class="mt-6 text-center text-4xl font-bold sm:text-5xl">
+    Your files are at risk
+  </h2>
   <p
     class="sm:w-150 text-muted-foreground mt-4 w-full text-center text-sm md:text-base"
   >
@@ -21,13 +35,21 @@ import InfoIcon from "@lucide/astro/icons/info";
     illusion. Most people only keep one copy of their data, and one copy is
     never enough.
   </p>
+
   <div class="mt-18 grid w-full grid-cols-1 gap-16 xl:grid-cols-3 xl:gap-8">
     <!-- Problem 1 -->
     <div
       class="lg:gap-30 flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:gap-10 md:gap-20 xl:flex-col xl:items-start xl:gap-8"
     >
       <div class="flex flex-col gap-2">
-        <h3 class="text-2xl font-bold sm:text-3xl">
+        <span
+          class="text-muted-foreground problems-mono inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.16em]"
+        >
+          <span class="text-red-500/70">01</span>
+          <span class="bg-muted-foreground/20 h-px w-6"></span>
+          Human Errors
+        </span>
+        <h3 class="mt-1 text-2xl font-bold sm:text-3xl">
           A wrong click and everything's gone
         </h3>
         <p class="text-muted-foreground mt-1 text-sm">
@@ -37,24 +59,36 @@ import InfoIcon from "@lucide/astro/icons/info";
         </p>
       </div>
       <div
-        class="max-w-90 relative mx-auto flex aspect-video w-full shrink-0 flex-col items-start justify-between rounded-xl border-2 border-red-500/10 bg-red-500/10 p-2 sm:w-80 md:m-0 dark:bg-red-500/5"
+        class="max-w-90 relative mx-auto flex aspect-video w-full shrink-0 flex-col items-start justify-between rounded-xl border-2 border-red-500/15 bg-red-500/10 p-2 sm:w-80 md:m-0 dark:bg-red-500/5"
       >
         <div
-          class="bg-card flex h-full w-full flex-col justify-between rounded-lg border p-5"
+          class="bg-card relative flex h-full w-full flex-col justify-between overflow-hidden rounded-lg border"
         >
-          <p class="font-medium">
-            Are you sure you want to permanently delete this folder?
-          </p>
-          <div class="mt-4 flex w-full justify-end gap-2">
-            <div
-              class="border-foreground/20 w-fit rounded-md border px-3 py-1.5 text-sm font-medium"
-            >
-              Cancel
-            </div>
-            <div
-              class="w-fit rounded-md bg-red-500 px-3 py-1.5 text-sm font-medium text-white"
-            >
-              Delete
+          <!-- Window chrome -->
+          <div
+            class="bg-muted/40 flex items-center gap-1.5 border-b px-3 py-1.5"
+          >
+            <span class="size-2 rounded-full bg-red-400/60"></span>
+            <span class="size-2 rounded-full bg-yellow-400/60"></span>
+            <span class="size-2 rounded-full bg-green-400/60"></span>
+          </div>
+          <div class="flex flex-1 flex-col justify-between p-4">
+            <p class="font-medium leading-tight">
+              Are you sure you want to permanently delete this folder?
+            </p>
+            <div class="mt-4 flex w-full items-center justify-end">
+              <div class="flex gap-2">
+                <div
+                  class="border-foreground/20 w-fit rounded-md border px-3 py-1.5 text-sm font-medium"
+                >
+                  Cancel
+                </div>
+                <div
+                  class="relative w-fit rounded-md bg-red-500 px-3 py-1.5 text-sm font-medium text-white"
+                >
+                  Delete
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -66,7 +100,14 @@ import InfoIcon from "@lucide/astro/icons/info";
       class="lg:gap-30 flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:gap-10 md:gap-20 xl:flex-col xl:items-start xl:gap-8"
     >
       <div class="flex flex-col gap-2">
-        <h3 class="text-2xl font-bold sm:text-3xl">
+        <span
+          class="text-muted-foreground problems-mono inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.16em]"
+        >
+          <span class="text-red-500/70">02</span>
+          <span class="bg-muted-foreground/20 h-px w-6"></span>
+          Hardware Failures
+        </span>
+        <h3 class="mt-1 text-2xl font-bold sm:text-3xl">
           Every hard drive dies and yours will too
         </h3>
         <p class="text-muted-foreground mt-1 text-sm">
@@ -76,17 +117,27 @@ import InfoIcon from "@lucide/astro/icons/info";
         </p>
       </div>
       <div
-        class="max-w-90 relative mx-auto flex aspect-video w-full shrink-0 flex-col items-start justify-between rounded-xl border-2 border-red-500/10 bg-red-500/10 p-2 sm:w-80 md:m-0 dark:bg-red-500/5"
+        class="max-w-90 relative mx-auto flex aspect-video w-full shrink-0 flex-col items-start justify-between rounded-xl border-2 border-red-500/15 bg-red-500/10 p-2 sm:w-80 md:m-0 dark:bg-red-500/5"
       >
         <div
-          class="bg-card flex h-full w-full flex-col justify-between rounded-lg border p-5"
+          class="bg-card relative flex h-full w-full flex-col overflow-hidden rounded-lg border"
         >
-          <div class="my-auto flex w-full flex-col items-center">
-            <TriangleAlertIcon class="mx-auto size-8 text-red-500" />
-            <p class="mt-3 text-center text-xl font-medium">
+          <!-- Window chrome -->
+          <div
+            class="bg-muted/40 flex items-center gap-1.5 border-b px-3 py-1.5"
+          >
+            <span class="size-2 rounded-full bg-red-400/60"></span>
+            <span class="size-2 rounded-full bg-yellow-400/60"></span>
+            <span class="size-2 rounded-full bg-green-400/60"></span>
+          </div>
+          <div class="flex flex-1 flex-col items-center justify-center p-4">
+            <TriangleAlertIcon class="size-8 text-red-500" />
+            <p class="mt-3 text-center text-xl font-medium leading-tight">
               Failed to start device
             </p>
-            <p class="text-muted-foreground mt-1 text-center text-xs">
+            <p
+              class="problems-mono text-muted-foreground mt-1.5 text-center text-[0.65rem] uppercase tracking-[0.14em]"
+            >
               Error: DISK_IS_CORRUPTED
             </p>
           </div>
@@ -99,7 +150,14 @@ import InfoIcon from "@lucide/astro/icons/info";
       class="lg:gap-30 flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:gap-10 md:gap-20 xl:flex-col xl:items-start xl:gap-8"
     >
       <div class="flex flex-col gap-2">
-        <h3 class="text-2xl font-bold sm:text-3xl">
+        <span
+          class="text-muted-foreground problems-mono inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.16em]"
+        >
+          <span class="text-red-500/70">03</span>
+          <span class="bg-muted-foreground/20 h-px w-6"></span>
+          Cyber Attacks
+        </span>
+        <h3 class="mt-1 text-2xl font-bold sm:text-3xl">
           Hackers don't care about your files
         </h3>
         <p class="text-muted-foreground mt-1 text-sm">
@@ -109,17 +167,31 @@ import InfoIcon from "@lucide/astro/icons/info";
         </p>
       </div>
       <div
-        class="max-w-90 relative mx-auto flex aspect-video w-full shrink-0 flex-col items-start justify-between rounded-xl border-2 border-red-500/10 bg-red-500/10 p-2 sm:w-80 md:m-0 dark:bg-red-500/5"
+        class="max-w-90 relative mx-auto flex aspect-video w-full shrink-0 flex-col items-start justify-between rounded-xl border-2 border-red-500/15 bg-red-500/10 p-2 sm:w-80 md:m-0 dark:bg-red-500/5"
       >
         <div
-          class="bg-card flex h-full w-full flex-col justify-between rounded-lg border p-5"
+          class="bg-card relative flex h-full w-full flex-col overflow-hidden rounded-lg border"
         >
-          <LockIcon class="size-8 text-red-500" />
-          <div class="flex flex-col">
-            <p class="text-base font-medium">Your files have been encrypted!</p>
-            <p class="text-muted-foreground mt-1 text-xs">
-              Send us $1,000 worth of bitcoin to recover your files.
-            </p>
+          <!-- Window chrome -->
+          <div
+            class="bg-muted/40 flex items-center gap-1.5 border-b px-3 py-1.5"
+          >
+            <span class="size-2 rounded-full bg-red-400/60"></span>
+            <span class="size-2 rounded-full bg-yellow-400/60"></span>
+            <span class="size-2 rounded-full bg-green-400/60"></span>
+          </div>
+          <div class="flex flex-1 flex-col justify-between p-4">
+            <LockIcon class="size-7 text-red-500" />
+            <div class="flex flex-col">
+              <p class="text-base font-medium leading-tight">
+                Your files have been encrypted!
+              </p>
+              <p
+                class="text-muted-foreground problems-mono mt-1.5 text-xs tracking-tight"
+              >
+                Send us $1,000 in bitcoin to recover your files.
+              </p>
+            </div>
           </div>
         </div>
       </div>

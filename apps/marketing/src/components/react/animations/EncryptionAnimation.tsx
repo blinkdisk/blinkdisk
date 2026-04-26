@@ -105,10 +105,7 @@ export default function EncryptionAnimation() {
         </div>
       </div>
       <hr className="w-full border-t" />
-      <p
-        className="whitespace-pre text-base/7"
-        style={{ fontFamily: "'Space Mono', monospace" }}
-      >
+      <p className="whitespace-pre font-mono text-base/7">
         <span className="text-muted-foreground">{encryptedText}</span>
         {encryptedText.length !== originalText.length &&
         encryptedText.length !== 0 ? (

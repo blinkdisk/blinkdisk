@@ -70,11 +70,46 @@ const otherStorages = [
   },
 ];
 
-const allStorages = [...localStorages, ...cloudStorages, ...otherStorages];
+const categories = [
+  {
+    label: "Local",
+    count: "04",
+    storages: localStorages,
+  },
+  {
+    label: "Cloud",
+    count: "04",
+    storages: cloudStorages,
+  },
+  {
+    label: "Protocols",
+    count: "04+",
+    storages: otherStorages,
+  },
+];
 ---
 
-<section class="w-content mx-auto flex flex-col items-center py-16 sm:py-24">
-  <h2 class="text-center text-4xl font-bold sm:text-5xl">
+<section
+  class="w-content relative mx-auto flex flex-col items-center py-16 sm:py-24"
+>
+  <!-- Mono kicker -->
+  <div
+    class="bg-card/70 inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 backdrop-blur-sm"
+  >
+    <span class="relative flex size-1.5">
+      <span class="bg-primary/60 absolute inset-0 animate-ping rounded-full"
+      ></span>
+      <span class="bg-primary relative inline-flex size-1.5 rounded-full"
+      ></span>
+    </span>
+    <span
+      class="text-muted-foreground storages-mono text-[0.68rem] font-bold uppercase tracking-[0.18em]"
+    >
+      Storage Backends
+    </span>
+  </div>
+
+  <h2 class="mt-6 text-center text-4xl font-bold sm:text-5xl">
     Ready for any storage
   </h2>
   <p class="text-muted-foreground mt-4 text-center text-sm md:text-base">
@@ -88,23 +123,44 @@ const allStorages = [...localStorages, ...cloudStorages, ...otherStorages];
     <StorageMarquee storages={otherStorages} />
   </div>
 
-  <!-- Desktop Grid -->
+  <!-- Desktop Grid with Category Headers -->
   <div class="relative hidden w-full sm:block">
-    <div
-      class="mt-20 grid w-full grid-flow-col grid-rows-6 gap-4 md:grid-rows-4"
-    >
+    <div class="mt-16 grid w-full grid-cols-3 gap-x-4">
       {
-        allStorages.map((storage) => (
-          <div class="bg-card flex items-center gap-4 rounded-xl border p-4">
-            <img
-              src={`/images/providers/${storage.image}`}
-              class="size-8 grayscale"
-              alt={storage.name}
-            />
-            <div>
-              <p class="text-sm font-medium">{storage.name}</p>
-              <p class="text-muted-foreground text-xs">{storage.description}</p>
+        categories.map((cat) => (
+          <div class="flex flex-col gap-3">
+            <div class="flex items-baseline justify-between gap-2 px-1 pb-1">
+              <span class="text-foreground storages-mono text-[0.68rem] font-bold uppercase tracking-[0.2em]">
+                {cat.label}
+              </span>
+              <span class="bg-border/80 h-px flex-1" />
+              <span class="text-muted-foreground/60 storages-mono text-[0.62rem] font-bold tracking-wider">
+                {cat.count}
+              </span>
             </div>
+            {cat.storages.map((storage) => (
+              <div
+                class:list={[
+                  "storages-card bg-card relative flex items-center gap-4 overflow-hidden rounded-xl border p-4 transition-all",
+                ]}
+              >
+                <div
+                  class="from-primary/[0.05] pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity"
+                  aria-hidden="true"
+                />
+                <img
+                  src={`/images/providers/${storage.image}`}
+                  class="relative size-8 grayscale transition-all"
+                  alt={storage.name}
+                />
+                <div class="relative min-w-0 flex-1">
+                  <p class="truncate text-sm font-semibold">{storage.name}</p>
+                  <p class="text-muted-foreground truncate text-xs">
+                    {storage.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         ))
       }
@@ -115,7 +171,17 @@ const allStorages = [...localStorages, ...cloudStorages, ...otherStorages];
     </div>
   </div>
 
-  <p class="text-muted-foreground mt-6 text-center text-sm">
-    ...and many more.
+  <p
+    class="text-muted-foreground/70 storages-mono mt-6 inline-flex items-center gap-2 text-[0.62rem] font-bold uppercase tracking-[0.18em] sm:text-[0.68rem]"
+  >
+    <span class="bg-border h-px w-8"></span>
+    + 70 more via RClone
+    <span class="bg-border h-px w-8"></span>
   </p>
 </section>
+
+<style>
+  .storages-mono {
+    font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+</style>

@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 
 type Props = {
   os: Platform;
+  className?: string;
 };
 
-export function DownloadButton({ os }: Props) {
+export function DownloadButton({ os, className }: Props) {
   const { platform } = usePlatform();
   const [mounted, setMounted] = useState(false);
 
@@ -21,6 +22,7 @@ export function DownloadButton({ os }: Props) {
     <Button
       variant={isCurrentPlatform ? "default" : "outline"}
       render={<a href="/download" />}
+      className={className}
     >
       Download
     </Button>
