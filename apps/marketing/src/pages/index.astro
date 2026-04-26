@@ -9,6 +9,7 @@ import Downloads from "@marketing/sections/Downloads.astro";
 import Storages from "@marketing/sections/Storages.astro";
 import OpenSource from "@marketing/sections/OpenSource.astro";
 import Faq from "@marketing/sections/Faq.astro";
+import CTA from "@marketing/components/CTA.astro";
 import { getFaqStructuredData } from "@marketing/data/faqs";
 import { MARKETING_URL } from "astro:env/server";
 
@@ -66,4 +67,7 @@ const structuredData = [getFaqStructuredData(), softwareSchema];
   <Storages />
   <OpenSource />
   <Faq />
+  <div class="pb-page">
+    <CTA />
+  </div>
 </DefaultLayout>

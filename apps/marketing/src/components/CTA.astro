@@ -1,21 +1,33 @@
 ---
 import Button from "@marketing/components/Button.astro";
 
+type Size = "sm" | "lg";
+
 type Props = {
   headline?: string;
   secondaryButtonText?: string;
   secondaryButtonHref?: string;
+  size?: Size;
 };
 
 const {
   headline,
   secondaryButtonText = "Read more",
   secondaryButtonHref = "/",
+  size = "lg",
 } = Astro.props;
+
+const sizeClasses: Record<Size, string> = {
+  sm: "w-[90vw] max-w-3xl lg:max-w-4xl",
+  lg: "w-content",
+};
 ---
 
 <section
-  class="cta-pattern bg-secondary relative mt-16 overflow-hidden rounded-2xl border px-8 py-12 text-center md:px-12 md:py-16"
+  class:list={[
+    "cta-pattern bg-secondary relative mx-auto mt-16 overflow-hidden rounded-2xl border px-8 py-12 text-center md:px-12 md:py-16",
+    sizeClasses[size],
+  ]}
 >
   <div class="mb-6 flex items-center justify-center gap-4">
     <div class="bg-foreground/20 h-px w-8"></div>
