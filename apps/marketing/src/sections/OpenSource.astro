@@ -1,0 +1,321 @@
+---
+import GithubIcon from "@marketing/components/icons/Github.astro";
+import HeartIcon from "@lucide/astro/icons/heart";
+import EyeIcon from "@lucide/astro/icons/eye";
+import UsersIcon from "@lucide/astro/icons/users";
+
+const leftChips = [
+  {
+    emoji: "🌍",
+    label: "Translated to Spanish",
+    rotate: "-rotate-2",
+    floatClass: "os-float-1",
+    position: "left-0 top-[6%]",
+  },
+  {
+    emoji: "🐛",
+    label: "Caught a tiny bug",
+    rotate: "rotate-1",
+    floatClass: "os-float-2",
+    position: "left-[10%] top-[44%]",
+  },
+  {
+    emoji: "💡",
+    label: "Shared an idea",
+    rotate: "-rotate-1",
+    floatClass: "os-float-3",
+    position: "left-[3%] bottom-[8%]",
+  },
+];
+
+const rightChips = [
+  {
+    emoji: "🎨",
+    label: "Made it prettier",
+    rotate: "rotate-2",
+    floatClass: "os-float-2",
+    position: "right-[2%] top-[10%]",
+  },
+  {
+    emoji: "✨",
+    label: "Built a new feature",
+    rotate: "-rotate-1",
+    floatClass: "os-float-3",
+    position: "right-[8%] top-[46%]",
+  },
+  {
+    emoji: "❤️",
+    label: "Showed some love",
+    rotate: "rotate-1",
+    floatClass: "os-float-1",
+    position: "right-0 bottom-[6%]",
+  },
+];
+
+const principles = [
+  {
+    icon: "eye",
+    title: "Nothing to hide",
+    description:
+      "Every line of code we write is out there for anyone to see. No mystery, no hidden tricks, no funny business. You can check exactly what's running on your computer.",
+  },
+  {
+    icon: "users",
+    title: "Built together",
+    description:
+      "BlinkDisk grows because real people use it, share ideas, and lend a hand. Anyone can suggest a feature, report a problem, or help us shape what comes next.",
+  },
+  {
+    icon: "heart",
+    title: "Yours forever",
+    description:
+      "No surprise paywalls, no locked features, no rug-pulls down the road. The app is free to use and the source is public, so it can never just disappear.",
+  },
+];
+---
+
+<section id="open-source" class="w-content relative mx-auto py-16 sm:py-24">
+  <!-- Decorative dot grid backdrop -->
+  <div
+    class="os-dotgrid pointer-events-none absolute left-1/2 top-32 -z-10 hidden h-[28rem] w-[110%] -translate-x-1/2 sm:block"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Header -->
+  <div class="relative flex flex-col items-center text-center">
+    <div
+      class="bg-card/70 inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 backdrop-blur-sm"
+    >
+      <span class="relative flex size-1.5">
+        <span class="bg-primary/60 absolute inset-0 animate-ping rounded-full"
+        ></span>
+        <span class="bg-primary relative inline-flex size-1.5 rounded-full"
+        ></span>
+      </span>
+      <span
+        class="text-muted-foreground os-mono text-[0.68rem] font-bold uppercase tracking-[0.18em]"
+      >
+        Proudly Open Source
+      </span>
+    </div>
+
+    <h2
+      class="mt-6 text-center text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl"
+    >
+      Made in the open,
+      <br class="hidden sm:block" />
+      by the community
+    </h2>
+
+    <p
+      class="text-muted-foreground mt-6 max-w-lg text-sm leading-relaxed md:text-base"
+    >
+      BlinkDisk is open source. That just means anyone can see exactly how it
+      works, suggest changes, and help make it better.
+    </p>
+  </div>
+
+  <!-- Centerpiece: rotating seal flanked by community contribution chips -->
+  <div class="relative mx-auto mt-14 max-w-4xl sm:mt-20">
+    <!-- Soft glow, centered behind the seal -->
+    <div
+      class="bg-foreground/10 pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl sm:size-80"
+      aria-hidden="true"
+    >
+    </div>
+
+    <!-- Floating community chips, hidden on small screens -->
+    {
+      [...leftChips, ...rightChips].map((chip) => (
+        <div
+          class:list={[
+            "pointer-events-none absolute z-10 hidden md:block",
+            chip.position,
+            chip.floatClass,
+          ]}
+          aria-hidden="true"
+        >
+          <div
+            class:list={[
+              "bg-card/90 inline-flex items-center gap-2 rounded-full border py-1.5 pl-2 pr-3.5 shadow-sm backdrop-blur-sm",
+              chip.rotate,
+            ]}
+          >
+            <span class="text-sm leading-none">{chip.emoji}</span>
+            <span class="whitespace-nowrap text-xs font-medium">
+              {chip.label}
+            </span>
+          </div>
+        </div>
+      ))
+    }
+
+    <!-- Seal -->
+    <div class="relative mx-auto size-72 sm:size-80">
+      <!-- Rotating circular text -->
+      <svg
+        class="os-rotate absolute inset-0 size-full"
+        viewBox="0 0 200 200"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <path
+            id="os-circle-path"
+            d="M 100,100 m -84,0 a 84,84 0 1,1 168,0 a 84,84 0 1,1 -168,0"
+          ></path>
+        </defs>
+        <text
+          fill="currentColor"
+          class="text-foreground/70 os-mono"
+          font-size="9.35"
+          letter-spacing="3.5"
+          font-weight="700"
+        >
+          <textPath href="#os-circle-path">
+            ★ PROUDLY OPEN SOURCE ★ COMMUNITY DRIVEN ★ FREE FOREVER
+          </textPath>
+        </text>
+      </svg>
+
+      <!-- Outer dotted ring -->
+      <div
+        class="border-foreground/15 absolute inset-0 m-auto size-60 rounded-full border-[1.5px] border-dashed"
+        aria-hidden="true"
+      >
+      </div>
+
+      <!-- Pulse ring -->
+      <div
+        class="border-foreground/10 os-pulse absolute inset-0 m-auto size-44 rounded-full border-2"
+        aria-hidden="true"
+      >
+      </div>
+
+      <!-- Inner GitHub badge -->
+      <div
+        class="bg-card border-foreground/10 absolute inset-0 m-auto flex size-44 items-center justify-center overflow-hidden rounded-full border-2 shadow-2xl"
+      >
+        <div
+          class="from-foreground/5 absolute inset-0 bg-gradient-to-br to-transparent"
+        >
+        </div>
+        <GithubIcon class="text-foreground relative size-16" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Three principles -->
+  <div class="mt-14 grid grid-cols-1 gap-4 sm:mt-20 md:grid-cols-3">
+    {
+      principles.map((p, idx) => (
+        <div class="bg-card relative overflow-hidden rounded-2xl border p-6 transition-all">
+          <div class="from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity" />
+          <div class="relative flex items-center gap-3">
+            <div class="bg-primary/10 border-primary/30 flex size-10 items-center justify-center rounded-lg border">
+              {p.icon === "eye" && <EyeIcon class="text-primary size-5" />}
+              {p.icon === "users" && <UsersIcon class="text-primary size-5" />}
+              {p.icon === "heart" && <HeartIcon class="text-primary size-5" />}
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight">{p.title}</h3>
+            <span class="os-mono text-muted-foreground/60 ml-auto text-base font-bold tracking-wider">
+              0{idx + 1}
+            </span>
+          </div>
+          <p class="text-muted-foreground relative mt-4 text-sm leading-relaxed">
+            {p.description}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .os-mono {
+    font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .os-dotgrid {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: oklch(0.65 0 0 / 0.15);
+    mask-image: radial-gradient(
+      ellipse 50% 50% at center,
+      black 0%,
+      transparent 75%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 50% 50% at center,
+      black 0%,
+      transparent 75%
+    );
+  }
+
+  :global(.dark) .os-dotgrid {
+    color: oklch(0.7 0 0 / 0.15);
+  }
+
+  .os-rotate {
+    animation: os-spin 40s linear infinite;
+    transform-origin: center;
+  }
+
+  @keyframes os-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .os-pulse {
+    animation: os-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes os-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 0.18;
+    }
+  }
+
+  .os-float-1 {
+    animation: os-float 5.5s ease-in-out infinite;
+  }
+
+  .os-float-2 {
+    animation: os-float 6.5s ease-in-out 0.7s infinite;
+  }
+
+  .os-float-3 {
+    animation: os-float 7.5s ease-in-out 1.4s infinite;
+  }
+
+  @keyframes os-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .os-rotate,
+    .os-pulse,
+    .os-float-1,
+    .os-float-2,
+    .os-float-3 {
+      animation: none;
+    }
+  }
+</style>
