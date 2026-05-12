@@ -197,40 +197,6 @@ body {
   position: relative;
 }
 
-body.background-pattern::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 800px;
-  background-image:
-    radial-gradient(circle at 50% 300px, oklch(1 0 0) 0%, transparent 50%),
-    radial-gradient(oklch(0.7 0 0 / 0.2) 1.5px, transparent 1.5px);
-  background-size:
-    100% 100%,
-    28px 28px;
-  mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 50%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: -1;
-}
-
-.dark body.background-pattern::before {
-  background-image:
-    radial-gradient(
-      circle at 50% 300px,
-      oklch(0.25 0 0 / 1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(oklch(0.5 0 0 / 0.2) 1.5px, transparent 1.5px);
-}
-
 .mermaid {
   display: flex;
   justify-content: center;
@@ -354,4 +320,38 @@ body.background-pattern::before {
 
 :root:not(.dark) .mermaid .edgeLabel {
   background-color: oklch(0.94 0 0);
+}
+
+body.background-pattern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 800px;
+  background-image:
+    radial-gradient(circle at 50% 300px, oklch(1 0 0) 0%, transparent 50%),
+    radial-gradient(oklch(0.7 0 0 / 0.2) 1.5px, transparent 1.5px);
+  background-size:
+    100% 100%,
+    28px 28px;
+  mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dark body.background-pattern::before {
+  background-image:
+    radial-gradient(
+      circle at 50% 300px,
+      oklch(0.25 0 0 / 1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(oklch(0.5 0 0 / 0.2) 1.5px, transparent 1.5px);
 }

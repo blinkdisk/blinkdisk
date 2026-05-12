@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WelcomeImport } from './routes/welcome'
 import { Route as AccountIdRouteImport } from './routes/{-$accountId}/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AccountIdIndexImport } from './routes/{-$accountId}/index'
@@ -27,6 +28,12 @@ import { Route as AccountIdVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdRou
 import { Route as AccountIdVaultIdHostNameUserNameFolderIdBackupIdDirectoryIdIndexImport } from './routes/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/index'
 
 // Create/Update Routes
+
+const WelcomeRoute = WelcomeImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AccountIdRouteRoute = AccountIdRouteImport.update({
   id: '/{-$accountId}',
@@ -141,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/{-$accountId}'
       fullPath: '/{-$accountId}'
       preLoaderRoute: typeof AccountIdRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeImport
       parentRoute: typeof rootRoute
     }
     '/{-$accountId}/{-$vaultId}': {
@@ -323,6 +337,7 @@ const AccountIdRouteRouteWithChildren = AccountIdRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/{-$accountId}': typeof AccountIdRouteRouteWithChildren
+  '/welcome': typeof WelcomeRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
@@ -339,6 +354,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/welcome': typeof WelcomeRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdIndexRoute
@@ -353,6 +369,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/{-$accountId}': typeof AccountIdRouteRouteWithChildren
+  '/welcome': typeof WelcomeRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
@@ -372,6 +389,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/{-$accountId}'
+    | '/welcome'
     | '/{-$accountId}/{-$vaultId}'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
@@ -387,6 +405,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/welcome'
     | '/{-$accountId}/loading'
     | '/{-$accountId}'
     | '/{-$accountId}/{-$vaultId}'
@@ -399,6 +418,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/{-$accountId}'
+    | '/welcome'
     | '/{-$accountId}/{-$vaultId}'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
@@ -417,11 +437,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountIdRouteRoute: typeof AccountIdRouteRouteWithChildren
+  WelcomeRoute: typeof WelcomeRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountIdRouteRoute: AccountIdRouteRouteWithChildren,
+  WelcomeRoute: WelcomeRoute,
 }
 
 export const routeTree = rootRoute
@@ -435,7 +457,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/{-$accountId}"
+        "/{-$accountId}",
+        "/welcome"
       ]
     },
     "/": {
@@ -448,6 +471,9 @@ export const routeTree = rootRoute
         "/{-$accountId}/loading",
         "/{-$accountId}/"
       ]
+    },
+    "/welcome": {
+      "filePath": "welcome.tsx"
     },
     "/{-$accountId}/{-$vaultId}": {
       "filePath": "{-$accountId}/{-$vaultId}/route.tsx",
