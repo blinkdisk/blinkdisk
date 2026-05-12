@@ -4,6 +4,7 @@ import { Button } from "@blinkdisk/ui/button";
 import { Logo } from "@components/logo";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { createFileRoute } from "@tanstack/react-router";
+import { LogInIcon, SkipForwardIcon } from "lucide-react";
 
 export const Route = createFileRoute("/welcome")({
   component: RouteComponent,
@@ -26,27 +27,30 @@ function RouteComponent() {
 
   return (
     <div className="background-pattern text-foreground flex min-h-screen w-screen flex-col items-center justify-center">
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-muted-foreground text-lg font-semibold uppercase tracking-widest md:whitespace-nowrap">
-          {t("title")}
-        </p>
-        <Logo className="mt-2 h-12" />
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex w-full items-center gap-4">
+          <span className="to-border h-px flex-1 bg-gradient-to-r from-transparent" />
+          <p className="text-muted-foreground text-sm font-semibold uppercase tracking-[0.3em] md:whitespace-nowrap">
+            {t("title")}
+          </p>
+          <span className="from-border h-px flex-1 bg-gradient-to-r to-transparent" />
+        </div>
+        <Logo className="h-12" />
       </div>
       <p className="text-muted-foreground max-w-100 mt-8 text-base leading-7 md:text-lg">
         {t("description")}
       </p>
 
-      <Button onClick={openAuthDialog} size="xl" className="mt-10 w-64">
-        {t("signIn")}
-      </Button>
-
-      <button
-        type="button"
-        onClick={skipAuth}
-        className="text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 mt-7 rounded-md px-3 py-2 text-sm outline-none transition-colors"
-      >
-        {t("skip")}
-      </button>
+      <div className="mt-10 flex gap-4">
+        <Button onClick={skipAuth} size="icon-xl" variant="secondary">
+          <SkipForwardIcon />
+          <span className="sr-only">{t("skip")}</span>
+        </Button>
+        <Button onClick={openAuthDialog} size="xl" className="px-14">
+          <LogInIcon className="mr-3" />
+          {t("signIn")}
+        </Button>
+      </div>
     </div>
   );
 }
