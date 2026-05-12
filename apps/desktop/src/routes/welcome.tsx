@@ -32,6 +32,7 @@ function RouteComponent() {
   const [isSkipDialogOpen, setIsSkipDialogOpen] = useState(false);
 
   async function skipAuth() {
+    await window.electron.store.set("hasSkippedAuth", true);
     await window.electron.store.set("currentAccountId", LOCAL_ACCOUNT_ID);
 
     navigate({
