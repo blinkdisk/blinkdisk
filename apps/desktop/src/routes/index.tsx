@@ -16,7 +16,7 @@ function RouteComponent() {
       | boolean
       | undefined;
 
-    const { accounts } = window.electron.store.get(
+    const accounts = window.electron.store.get(
       // @ts-expect-error accounts key does not exist
       "accounts",
     ) as Record<string, AccountStorageType>;
