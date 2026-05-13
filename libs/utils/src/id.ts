@@ -18,6 +18,7 @@ const prefixes = {
   Folder: "fld",
   Space: "spc",
   Subscription: "sub",
+  Trial: "trial",
 } as const;
 
 export type Prefix = keyof typeof prefixes;
