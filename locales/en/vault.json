@@ -69,6 +69,11 @@
         "change": "Change storage"
       },
       "submit": "Create vault"
+    },
+    "noStorageDialog": {
+      "title": "No CloudBlink storage available",
+      "description": "You don't have any CloudBlink storage available. Upgrade your storage to create a new CloudBlink vault.",
+      "upgrade": "Upgrade storage"
     }
   },
   "setup": {

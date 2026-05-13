@@ -41,13 +41,15 @@ export const cloudblinkRouter = router({
 
     const space = await ctx.db
       .selectFrom("Space")
-      .select(["id"])
+      .select(["id", "capacity"])
       .where("accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
     let spaceId: string;
 
     if (space) {
+      if (parseInt(space.capacity) === 0) throw new CustomError("NO_STORAGE");
+
       spaceId = space.id;
     } else {
       spaceId = generateId("Space");
