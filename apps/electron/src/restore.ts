@@ -21,6 +21,24 @@ type Restore = {
 
 const restores: Restore[] = [];
 
+const RESTORE_LOG_PREFIX = "[restore]";
+
+function logRestore(message: string, data?: Record<string, unknown>) {
+  console.info(`${RESTORE_LOG_PREFIX} ${message}`, data || "");
+}
+
+function warnRestore(message: string, data?: Record<string, unknown>) {
+  console.warn(`${RESTORE_LOG_PREFIX} ${message}`, data || "");
+}
+
+function errorRestore(
+  message: string,
+  error: unknown,
+  data?: Record<string, unknown>,
+) {
+  console.error(`${RESTORE_LOG_PREFIX} ${message}`, data || "", error);
+}
+
 export type RestoreItem = {
   objectId: string;
   name: string;
@@ -55,11 +73,26 @@ async function restore(
   vault: VaultInstance,
   onProgress?: (progress: number) => void,
 ) {
+  logRestore("restore item started", {
+    itemName: item.name,
+    itemType: item.type,
+    objectId: item.objectId,
+    directory,
+    hasProgressCallback: !!onProgress,
+  });
+
   let path = join(directory, item.name);
   const pathExists = await fileExists(path);
 
   if (pathExists) {
-    const { baseName: fileBaseName, extension: fileExtension } = splitFileName(item.name);
+    logRestore("restore target already exists, searching duplicate name", {
+      originalPath: path,
+      itemName: item.name,
+    });
+
+    const { baseName: fileBaseName, extension: fileExtension } = splitFileName(
+      item.name,
+    );
 
     let counter = 1;
     while (true) {
@@ -71,12 +104,22 @@ async function restore(
       const exists = await fileExists(newPath);
       if (!exists) {
         path = newPath;
+        logRestore("restore duplicate target selected", {
+          path,
+          counter: counter - 1,
+        });
         break;
       }
     }
   }
 
   if (item.type === "DIRECTORY") {
+    logRestore("directory restore task request", {
+      itemName: item.name,
+      objectId: item.objectId,
+      targetPath: path,
+    });
+
     const res = (await fetchVault(vault, {
       method: "POST",
       path: `/api/v1/restore`,
@@ -103,11 +146,31 @@ async function restore(
       },
     })) as { id: string };
 
+    logRestore("directory restore task created", {
+      itemName: item.name,
+      taskId: res.id,
+      targetPath: path,
+    });
+
     let total = 0;
     if (onProgress) total = await getDirectoryItemCount(vault, item.objectId);
+    if (onProgress) {
+      logRestore("directory restore total item count loaded", {
+        itemName: item.name,
+        objectId: item.objectId,
+        total,
+      });
+    }
 
     while (true) {
       const restore = await getRestoreStatus(vault, res.id);
+      logRestore("directory restore task status", {
+        itemName: item.name,
+        taskId: res.id,
+        status: restore.status,
+        count: restore.count,
+        total,
+      });
 
       if (restore.status !== "RUNNING") {
         try {
@@ -116,17 +179,32 @@ async function restore(
           // https://github.com/kopia/kopia/issues/4324
           await chmod(path, 0o755);
         } catch (e) {
-          console.warn("Failed to change folder permissions:", e);
+          warnRestore("failed to change restored folder permissions", {
+            path,
+            error: e instanceof Error ? e.message : String(e),
+          });
         }
 
+        logRestore("directory restore item complete", {
+          itemName: item.name,
+          taskId: res.id,
+          targetPath: path,
+          status: restore.status,
+        });
         break;
       }
 
-      if (onProgress) onProgress(restore.count / total);
+      if (onProgress) onProgress(total > 0 ? restore.count / total : 0);
 
       await new Promise((res) => setTimeout(res, 1000));
     }
   } else if (item.type === "SYMLINK") {
+    logRestore("symlink restore request", {
+      itemName: item.name,
+      objectId: item.objectId,
+      targetPath: path,
+    });
+
     const res = (await fetchVault(vault, {
       method: "GET",
       path: `/api/v1/objects/${item.objectId}`,
@@ -136,9 +214,27 @@ async function restore(
       raw: true,
     })) as string;
 
-    if (!res) return;
+    if (!res) {
+      warnRestore("symlink restore returned empty target", {
+        itemName: item.name,
+        objectId: item.objectId,
+      });
+      return;
+    }
     await symlink(res, path);
+    logRestore("symlink restore complete", {
+      itemName: item.name,
+      targetPath: path,
+      linkTarget: res,
+    });
   } else {
+    logRestore("file restore request", {
+      itemName: item.name,
+      itemType: item.type,
+      objectId: item.objectId,
+      targetPath: path,
+    });
+
     await fetchVault(vault, {
       method: "GET",
       path: `/api/v1/objects/${item.objectId}`,
@@ -146,6 +242,12 @@ async function restore(
         fname: item.name,
       },
       filePath: path,
+    });
+
+    logRestore("file restore complete", {
+      itemName: item.name,
+      objectId: item.objectId,
+      targetPath: path,
     });
   }
 }
@@ -166,10 +268,25 @@ export async function restoreSingle({
   const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
+  logRestore("restoreSingle dialog opened", {
+    vaultId,
+    folderId,
+    itemName: item.name,
+    itemType: item.type,
+    objectId: item.objectId,
+  });
+
   const result = await dialog.showOpenDialog(window, {
     defaultPath: app.getPath("downloads"),
     properties: ["openDirectory"],
     title: dialogTitle,
+  });
+
+  logRestore("restoreSingle dialog result", {
+    canceled: result.canceled,
+    filePaths: result.filePaths,
+    itemName: item.name,
+    itemType: item.type,
   });
 
   if (result.canceled || !result.filePaths[0]) return false;
@@ -177,6 +294,14 @@ export async function restoreSingle({
 
   queueMicrotask(async () => {
     const restoreId = Math.random().toString(16);
+
+    logRestore("restoreSingle queued", {
+      restoreId,
+      destination,
+      itemName: item.name,
+      itemType: item.type,
+      objectId: item.objectId,
+    });
 
     restores.push({
       id: restoreId,
@@ -188,11 +313,17 @@ export async function restoreSingle({
       folderId,
     });
 
-    await restore(item, destination, vault, (progress) =>
-      updateRestore(restoreId, { progress: progress * 0.9 }),
-    );
+    try {
+      await restore(item, destination, vault, (progress) =>
+        updateRestore(restoreId, { progress: progress * 0.9 }),
+      );
 
-    completeRestore(restoreId);
+      completeRestore(restoreId);
+      logRestore("restoreSingle complete", { restoreId, destination });
+    } catch (e) {
+      errorRestore("restoreSingle failed", e, { restoreId, destination });
+      completeRestore(restoreId);
+    }
   });
 
   return true;
@@ -214,10 +345,27 @@ export async function restoreMultiple({
   const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
+  logRestore("restoreMultiple dialog opened", {
+    vaultId,
+    folderId,
+    itemCount: items.length,
+    items: items.map((item) => ({
+      name: item.name,
+      type: item.type,
+      objectId: item.objectId,
+    })),
+  });
+
   const result = await dialog.showOpenDialog(window, {
     title: dialogTitle,
     defaultPath: app.getPath("downloads"),
     properties: ["openDirectory"],
+  });
+
+  logRestore("restoreMultiple dialog result", {
+    canceled: result.canceled,
+    filePaths: result.filePaths,
+    itemCount: items.length,
   });
 
   if (result.canceled || !result.filePaths.length) return false;
@@ -226,6 +374,12 @@ export async function restoreMultiple({
   queueMicrotask(async () => {
     const limit = pLimit(10);
     const restoreId = Math.random().toString(16);
+
+    logRestore("restoreMultiple queued", {
+      restoreId,
+      directory,
+      itemCount: items.length,
+    });
 
     restores.push({
       id: restoreId,
@@ -239,16 +393,35 @@ export async function restoreMultiple({
 
     const tasks = items.map((item) =>
       limit(async () => {
+        logRestore("restoreMultiple item started", {
+          restoreId,
+          itemName: item.name,
+          itemType: item.type,
+          objectId: item.objectId,
+        });
         await restore(item, directory, vault);
         updateRestore(restoreId, {
           progress: ((items.length - limit.pendingCount) / items.length) * 0.9,
         });
+        logRestore("restoreMultiple item complete", {
+          restoreId,
+          itemName: item.name,
+          itemType: item.type,
+          pendingCount: limit.pendingCount,
+          activeCount: limit.activeCount,
+        });
       }),
     );
 
-    await Promise.all(tasks);
+    try {
+      await Promise.all(tasks);
 
-    completeRestore(restoreId);
+      completeRestore(restoreId);
+      logRestore("restoreMultiple complete", { restoreId, directory });
+    } catch (e) {
+      errorRestore("restoreMultiple failed", e, { restoreId, directory });
+      completeRestore(restoreId);
+    }
   });
 
   return true;
@@ -268,91 +441,164 @@ export async function restoreDirectory({
   const vault = getVault(vaultId);
   if (!vault) throw new Error("VAULT_NOT_FOUND");
 
+  logRestore("restoreDirectory requested", {
+    vaultId,
+    folderId,
+    objectId,
+    options,
+  });
+
   queueMicrotask(async () => {
     const restoreId = Math.random().toString(16);
+    const destination =
+      options.type === "UNPACKED"
+        ? options.directoryPath
+        : dirname(options.filePath);
+
+    logRestore("restoreDirectory queued", {
+      restoreId,
+      objectId,
+      options,
+      destination,
+    });
 
     restores.push({
       id: restoreId,
       status: "RUNNING",
-      destination:
-        options.type === "UNPACKED"
-          ? options.directoryPath
-          : dirname(options.filePath),
+      destination,
       files: 0,
       directories: 1,
       progress: 0,
       folderId,
     });
 
-    const res = (await fetchVault(vault, {
-      method: "POST",
-      path: `/api/v1/restore`,
-      data: {
-        root: objectId,
-        options: {
-          incremental: false,
-          ignoreErrors: true,
-          restoreDirEntryAtDepth: 1000000,
-          minSizeForPlaceholder: 1000000,
+    try {
+      logRestore("restoreDirectory task request", {
+        restoreId,
+        objectId,
+        mode: options.type,
+        targetPath:
+          options.type === "UNPACKED" ? options.directoryPath : undefined,
+        zipFile: options.type === "ZIP" ? options.filePath : undefined,
+        compress: options.type === "ZIP" ? options.compress : undefined,
+      });
+
+      const res = (await fetchVault(vault, {
+        method: "POST",
+        path: `/api/v1/restore`,
+        data: {
+          root: objectId,
+          options: {
+            incremental: false,
+            ignoreErrors: true,
+            restoreDirEntryAtDepth: 1000000,
+            minSizeForPlaceholder: 1000000,
+          },
+          ...(options.type === "ZIP"
+            ? {
+                zipFile: options.filePath,
+                uncompressedZip: !options.compress,
+              }
+            : {
+                fsOutput: {
+                  targetPath: options.directoryPath,
+                  skipOwners: false,
+                  skipPermissions: false,
+                  skipTimes: false,
+                  ignorePermissionErrors: true,
+                  overwriteFiles: true,
+                  overwriteDirectories: true,
+                  overwriteSymlinks: true,
+                  writeFilesAtomically: false,
+                  writeSparseFiles: false,
+                },
+              }),
         },
-        ...(options.type === "ZIP"
-          ? {
-              zipFile: options.filePath,
-              uncompressedZip: !options.compress,
-            }
-          : {
-              fsOutput: {
-                targetPath: options.directoryPath,
-                skipOwners: false,
-                skipPermissions: false,
-                skipTimes: false,
-                ignorePermissionErrors: true,
-                overwriteFiles: true,
-                overwriteDirectories: true,
-                overwriteSymlinks: true,
-                writeFilesAtomically: false,
-                writeSparseFiles: false,
-              },
-            }),
-      },
-    })) as { id: string };
+      })) as { id: string };
 
-    const total = await getDirectoryItemCount(vault, objectId);
+      logRestore("restoreDirectory task created", {
+        restoreId,
+        taskId: res.id,
+        objectId,
+      });
 
-    while (true) {
-      const restore = await getRestoreStatus(vault, res.id);
+      const total = await getDirectoryItemCount(vault, objectId);
+      logRestore("restoreDirectory total item count loaded", {
+        restoreId,
+        taskId: res.id,
+        objectId,
+        total,
+      });
 
-      if (restore.status !== "RUNNING") {
-        if (options.type === "UNPACKED") {
-          // Kopia doesn't set the correct permissions on
-          // the parent folder, so we change it manually.
-          // https://github.com/kopia/kopia/issues/4324
-          await chmod(options.directoryPath, 0o755);
+      while (true) {
+        const restore = await getRestoreStatus(vault, res.id);
+        logRestore("restoreDirectory task status", {
+          restoreId,
+          taskId: res.id,
+          status: restore.status,
+          count: restore.count,
+          total,
+        });
 
-          const items = await readdir(options.directoryPath, {
-            withFileTypes: true,
-          });
-
-          const directories = items.filter((item) => item.isDirectory());
-
-          for (const directory of directories) {
+        if (restore.status !== "RUNNING") {
+          if (options.type === "UNPACKED") {
             // Kopia doesn't set the correct permissions on
             // the parent folder, so we change it manually.
             // https://github.com/kopia/kopia/issues/4324
-            try {
-              await chmod(join(options.directoryPath, directory.name), 0o755);
-            } catch (e) {
-              console.warn("Failed to change folder permissions:", e);
+            await chmod(options.directoryPath, 0o755);
+
+            const items = await readdir(options.directoryPath, {
+              withFileTypes: true,
+            });
+
+            const directories = items.filter((item) => item.isDirectory());
+            logRestore("restoreDirectory chmod child directories", {
+              restoreId,
+              directoryPath: options.directoryPath,
+              directoryCount: directories.length,
+            });
+
+            for (const directory of directories) {
+              // Kopia doesn't set the correct permissions on
+              // the parent folder, so we change it manually.
+              // https://github.com/kopia/kopia/issues/4324
+              try {
+                await chmod(join(options.directoryPath, directory.name), 0o755);
+              } catch (e) {
+                warnRestore(
+                  "failed to change restored child folder permissions",
+                  {
+                    path: join(options.directoryPath, directory.name),
+                    error: e instanceof Error ? e.message : String(e),
+                  },
+                );
+              }
             }
           }
+
+          completeRestore(restoreId);
+          logRestore("restoreDirectory complete", {
+            restoreId,
+            taskId: res.id,
+            status: restore.status,
+            destination,
+          });
+          break;
         }
 
-        completeRestore(restoreId);
-        break;
+        updateRestore(restoreId, {
+          progress: (total > 0 ? restore.count / total : 0) * 0.9,
+        });
+        await new Promise((res) => setTimeout(res, 1000));
       }
-
-      updateRestore(restoreId, { progress: (restore.count / total) * 0.9 });
-      await new Promise((res) => setTimeout(res, 1000));
+    } catch (e) {
+      errorRestore("restoreDirectory failed", e, {
+        restoreId,
+        objectId,
+        destination,
+        options,
+      });
+      completeRestore(restoreId);
     }
   });
 
@@ -360,6 +606,8 @@ export async function restoreDirectory({
 }
 
 async function getRestoreStatus(vault: VaultInstance, restoreId: string) {
+  logRestore("getRestoreStatus request", { restoreId });
+
   const task = (await fetchVault(vault, {
     method: "GET",
     path: `/api/v1/tasks/${restoreId}`,
@@ -387,6 +635,8 @@ async function getRestoreStatus(vault: VaultInstance, restoreId: string) {
 }
 
 async function getDirectoryItemCount(vault: VaultInstance, objectId: string) {
+  logRestore("getDirectoryItemCount request", { objectId });
+
   const stats = (await fetchVault(vault, {
     method: "GET",
     path: `/api/v1/objects/${objectId}`,
@@ -406,26 +656,49 @@ async function getDirectoryItemCount(vault: VaultInstance, objectId: string) {
 }
 
 export async function checkEmpty({ directoryPath }: { directoryPath: string }) {
+  logRestore("checkEmpty request", { directoryPath });
   const files = await readdir(directoryPath);
+  logRestore("checkEmpty result", { directoryPath, count: files.length });
   return files.length === 0;
 }
 
 export async function listRestores({ folderId }: { folderId: string }) {
+  logRestore("listRestores request", {
+    folderId,
+    restoreCount: restores.length,
+  });
   return restores.filter((restore) => restore.folderId === folderId);
 }
 
 function updateRestore(id: string, update: Partial<Restore>) {
   const index = restores.findIndex((restore) => restore.id === id);
-  if (index !== -1 && restores[index])
+  if (index !== -1 && restores[index]) {
     restores[index] = { ...restores[index], ...update };
+    logRestore("restore state updated", {
+      id,
+      update,
+      restore: restores[index],
+    });
+  } else {
+    warnRestore("restore state update skipped, restore not found", {
+      id,
+      update,
+    });
+  }
 }
 
 function completeRestore(id: string) {
+  logRestore("restore state completing", { id });
   updateRestore(id, { status: "COMPLETE", progress: 1 });
   setTimeout(() => removeRestore(id), 5000);
 }
 
 function removeRestore(id: string) {
   const index = restores.findIndex((restore) => restore.id === id);
-  if (index !== -1) restores.splice(index, 1);
+  if (index !== -1) {
+    restores.splice(index, 1);
+    logRestore("restore state removed", { id });
+  } else {
+    warnRestore("restore state remove skipped, restore not found", { id });
+  }
 }
