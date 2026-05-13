@@ -1,5 +1,6 @@
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
+import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
 import {
   ZDeleteCloudBlinkVault,
   ZGetCloudBlinkToken,
@@ -32,15 +33,54 @@ export const cloudblinkRouter = router({
   initVault: authedProcedure.mutation(async ({ ctx }) => {
     const vaultId = generateId("Vault");
 
-    let spaceId: string | null = null;
     const space = await ctx.db
       .selectFrom("Space")
       .select(["id"])
       .where("accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
-    if (!space) throw new CustomError("SPACE_NOT_FOUND");
-    spaceId = space.id;
+    let spaceId: string;
+
+    if (space) {
+      spaceId = space.id;
+    } else {
+      spaceId = generateId("Space");
+      const trialId = generateId("Trial");
+      const startedAt = new Date();
+      const endsAt = new Date(startedAt);
+      endsAt.setDate(endsAt.getDate() + TRIAL_DAYS);
+
+      await ctx.db.transaction().execute(async (trx) => {
+        await trx
+          .insertInto("Trial")
+          .values({
+            id: trialId,
+            capacity: TRIAL_STORAGE.toString(),
+            accountId: ctx.account.id,
+            startedAt,
+            endsAt,
+          })
+          .execute();
+
+        await trx
+          .insertInto("Space")
+          .values({
+            id: spaceId,
+            capacity: TRIAL_STORAGE.toString(),
+            used: "0",
+            accountId: ctx.account.id,
+            trialId,
+          })
+          .execute();
+      });
+
+      const spaceStub = ctx.env.SPACE.getByName(spaceId);
+      await (
+        spaceStub as unknown as {
+          init: (id: string, capacity: number) => Promise<void>;
+        }
+      ).init(spaceId, TRIAL_STORAGE);
+    }
 
     const token = await generateServiceToken(
       {
