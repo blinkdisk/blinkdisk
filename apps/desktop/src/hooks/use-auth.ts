@@ -39,11 +39,12 @@ export function useAuth() {
         posthog.identify(accountId);
       }
 
-      await window.electron.store.set("currentAccountId", accountId);
-
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.account.detail(),
-      });
+      await Promise.all([
+        window.electron.store.set("currentAccountId", accountId),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.account.detail(),
+        }),
+      ]);
     },
     [queryClient, queryKeys, posthog],
   );
