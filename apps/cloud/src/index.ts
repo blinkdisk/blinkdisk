@@ -1,9 +1,7 @@
 import { database } from "@blinkdisk/db/index";
 import { verifyServiceToken } from "@blinkdisk/utils/token";
-import {
-  deleteCancelled,
-  sendCancellationEmails,
-} from "@cloud/utils/cancellation";
+import { deleteCancelled, sendCancellationEmails } from "@cloud/utils/cancellation";
+import { endTrials } from "@cloud/utils/trials";
 import * as Sentry from "@sentry/cloudflare";
 
 export default Sentry.withSentry(
@@ -63,6 +61,7 @@ export default Sentry.withSentry(
 
       await sendCancellationEmails(db, controller.scheduledTime);
       await deleteCancelled(db, controller.scheduledTime, env);
+      await endTrials(db, controller.scheduledTime, env);
     },
   },
 );
