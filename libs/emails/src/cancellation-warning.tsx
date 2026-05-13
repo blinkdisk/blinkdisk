@@ -6,12 +6,15 @@ import {
 } from "@emails/hooks/use-email-translation";
 import { Heading, Text } from "@react-email/components";
 
-type CleanupEmailProps = LocaleProps & {
+type CancellationWarningEmailProps = LocaleProps & {
   daysLeft: number;
 };
 
-const CleanupEmail = ({ daysLeft, ...props }: CleanupEmailProps) => {
-  const { t } = useEmailTranslation(props, "cleanup");
+const CancellationWarningEmail = ({
+  daysLeft,
+  ...props
+}: CancellationWarningEmailProps) => {
+  const { t } = useEmailTranslation(props, "cancellationWarning");
 
   return (
     <Layout preview={t("preview", { daysLeft })}>
@@ -35,8 +38,8 @@ const CleanupEmail = ({ daysLeft, ...props }: CleanupEmailProps) => {
   );
 };
 
-CleanupEmail.PreviewProps = {
+CancellationWarningEmail.PreviewProps = {
   daysLeft: 3,
-} as CleanupEmailProps;
+} as CancellationWarningEmailProps;
 
-export default CleanupEmail;
+export default CancellationWarningEmail;

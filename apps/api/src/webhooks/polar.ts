@@ -258,9 +258,20 @@ export async function polarWebhook(
           .updateTable("Space")
           .set({
             capacity: capacity.toString(),
-            subscriptionId: subscriptionId,
+            subscriptionId,
+            trialId: null,
           })
           .where("id", "=", space.id)
+          .execute();
+
+        await db
+          .updateTable("Trial")
+          .set({
+            status: "ENDED",
+            endsAt: null,
+            endedAt: new Date(),
+          })
+          .where("accountId", "=", accountId)
           .execute();
 
         const stub = c.env.SPACE.getByName(space.id);

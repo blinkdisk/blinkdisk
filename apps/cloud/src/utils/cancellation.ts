@@ -1,8 +1,11 @@
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import { Database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
+import { deleteVaults } from "@cloud/utils/vault";
 
-export async function sendCleanupEmails(db: Database, scheduledTime: number) {
+export async function sendCancellationEmails(
+  db: Database,
+  scheduledTime: number,
+) {
   const start = new Date(scheduledTime);
   const end = new Date(start.getTime() + 1000 * 60 * 60 * 24 * 7);
 
@@ -27,13 +30,13 @@ export async function sendCleanupEmails(db: Database, scheduledTime: number) {
         )
       : 0;
 
-    await sendEmail("cleanup", subscription, {
+    await sendEmail("cancellationWarning", subscription, {
       daysLeft,
     });
   }
 }
 
-export async function cleanup(
+export async function deleteCancelled(
   db: Database,
   scheduledTime: number,
   env: CloudflareBindings,
@@ -44,12 +47,30 @@ export async function cleanup(
   const spaces = await db
     .selectFrom("Subscription")
     .innerJoin("Space", "Space.subscriptionId", "Subscription.id")
-    .select(["Space.id"])
+    .select(["Space.id", "Space.accountId"])
     .where("Subscription.cleanupAt", ">", start)
     .where("Subscription.cleanupAt", "<", end)
     .execute();
 
   if (!spaces.length) return;
+
+  for (const space of spaces) {
+    const stub = env.SPACE.getByName(space.id);
+    await stub.updateCapacity(0);
+  }
+
+  await db
+    .updateTable("Space")
+    .set({
+      capacity: "0",
+      subscriptionId: null,
+    })
+    .where(
+      "id",
+      "in",
+      spaces.map((space) => space.id),
+    )
+    .execute();
 
   const vaults = await db
     .selectFrom("Vault")
@@ -65,33 +86,5 @@ export async function cleanup(
 
   if (!vaults.length) return;
 
-  for (const space of spaces) {
-    const stub = env.SPACE.getByName(space.id);
-    await stub.updateCapacity(FREE_SPACE_AVAILABLE);
-  }
-
-  await db
-    .updateTable("Space")
-    .set({ capacity: FREE_SPACE_AVAILABLE.toString() })
-    .where(
-      "id",
-      "in",
-      spaces.map((space) => space.id),
-    )
-    .execute();
-
-  await db
-    .updateTable("Vault")
-    .set({ status: "DELETED" })
-    .where(
-      "id",
-      "in",
-      vaults.map((s) => s.id),
-    )
-    .execute();
-
-  for (const vault of vaults) {
-    const stub = env.VAULT.getByName(vault.id);
-    await stub.delete(vault.id);
-  }
+  await deleteVaults(db, env, vaults);
 }

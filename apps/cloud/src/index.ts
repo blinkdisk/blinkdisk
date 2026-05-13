@@ -1,6 +1,9 @@
 import { database } from "@blinkdisk/db/index";
 import { verifyServiceToken } from "@blinkdisk/utils/token";
-import { cleanup, sendCleanupEmails } from "@cloud/utils/cleanup";
+import {
+  deleteCancelled,
+  sendCancellationEmails,
+} from "@cloud/utils/cancellation";
 import * as Sentry from "@sentry/cloudflare";
 
 export default Sentry.withSentry(
@@ -58,8 +61,8 @@ export default Sentry.withSentry(
     async scheduled(controller: ScheduledController, env: CloudflareBindings) {
       const db = database(env.HYPERDRIVE.connectionString);
 
-      await sendCleanupEmails(db, controller.scheduledTime);
-      await cleanup(db, controller.scheduledTime, env);
+      await sendCancellationEmails(db, controller.scheduledTime);
+      await deleteCancelled(db, controller.scheduledTime, env);
     },
   },
 );
