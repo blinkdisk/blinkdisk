@@ -1,4 +1,4 @@
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
+import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import {
@@ -71,8 +71,9 @@ export function CreateVaultVariant({
         <CardContent className="pb-6">
           <p className="text-muted-foreground text-sm">
             <CheckIcon className="mr-2 inline-block size-4" />
-            {t("cloudblink.features.freeStorage", {
-              freeSpace: formatSize(FREE_SPACE_AVAILABLE),
+            {t("cloudblink.features.trialStorage", {
+              trialDays: TRIAL_DAYS,
+              trialStorage: formatSize(TRIAL_STORAGE),
             })}
           </p>
           <p className="text-muted-foreground text-sm">
