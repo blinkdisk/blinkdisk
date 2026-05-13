@@ -12,6 +12,9 @@ type DirectoryItemRowProps = {
   reset: () => void;
 };
 
+const INTERACTIVE_ROW_TARGET_SELECTOR =
+  'a, button, input, label, select, textarea, [role="button"], [role="checkbox"], [role="menuitem"], [data-no-row-click]';
+
 export function DirectoryItemRow({
   row,
   virtualRow,
@@ -25,7 +28,10 @@ export function DirectoryItemRow({
   return (
     <TableRow
       data-state={row.getIsSelected() && "selected"}
-      onClick={() => {
+      onClick={(event) => {
+        const target = event.target as HTMLElement;
+        if (target.closest(INTERACTIVE_ROW_TARGET_SELECTOR)) return;
+
         if (row.original?.type === "DIRECTORY") {
           reset();
 
