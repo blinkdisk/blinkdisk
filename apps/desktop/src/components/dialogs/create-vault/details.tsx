@@ -3,22 +3,28 @@ import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
+import { Button } from "@blinkdisk/ui/button";
+import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
-import { AlertTriangleIcon } from "lucide-react";
+import { AlertTriangleIcon, SquarePenIcon } from "lucide-react";
 import PasswordStrengthBar from "react-password-strength-bar";
 
 type CreateVaultDetailsProps = {
   providerType?: StorageProviderType;
   onSubmit?: () => void;
   config?: ProviderConfig;
+  autoSelectedProvider?: boolean;
+  onChangeStorage?: () => void;
 };
 
 export function CreateVaultDetails({
   providerType,
   onSubmit,
   config,
+  autoSelectedProvider,
+  onChangeStorage,
 }: CreateVaultDetailsProps) {
   const { t } = useAppTranslation("vault.createDialog.details");
   const { dark } = useTheme();
@@ -52,6 +58,28 @@ export function CreateVaultDetails({
       }}
       className="mt-8 flex flex-col gap-6"
     >
+      {autoSelectedProvider && providerType === "CLOUDBLINK" ? (
+        <div className="border-border bg-card flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="grid min-w-0 gap-2">
+            <CloudBlinkIcon className="mt-1 h-3.5 w-auto" />
+            <div className="grid gap-1">
+              <p className="text-muted-foreground max-w-68 text-xs leading-4">
+                {t("storage.description")}
+              </p>
+            </div>
+          </div>
+          <Button
+            onClick={onChangeStorage}
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="w-full shrink-0 sm:w-auto"
+          >
+            <SquarePenIcon />
+            {t("storage.change")}
+          </Button>
+        </div>
+      ) : null}
       <form.AppField name="name">
         {(field) => (
           <field.Text

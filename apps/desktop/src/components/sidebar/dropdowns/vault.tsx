@@ -75,7 +75,7 @@ export function SidebarVaultSelect({ className }: SidebarVaultSelectProps) {
               {isSyncing ? t("refreshing") : t("refresh")}
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem onClick={openCreateVault}>
+          <DropdownMenuItem onClick={() => openCreateVault()}>
             <PlusIcon className="size-4" />
             {t("createVault")}
           </DropdownMenuItem>

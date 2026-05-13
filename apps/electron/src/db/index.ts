@@ -109,8 +109,11 @@ export async function initAccountCollections(accountId: string) {
 
     if (!lastSync) {
       log.info(accountId, "not synced yet, syncing...");
-      syncManager.sync(vaultName);
-      syncManager.sync(configName);
+
+      await Promise.all([
+        syncManager.sync(vaultName),
+        syncManager.sync(configName),
+      ]);
     }
   }
 

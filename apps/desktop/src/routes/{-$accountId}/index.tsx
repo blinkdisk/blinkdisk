@@ -8,7 +8,7 @@ import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dial
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { createFileRoute } from "@tanstack/react-router";
 import { CloudAlertIcon, PlusIcon, RefreshCwIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/{-$accountId}/")({
   component: RouteComponent,
@@ -19,6 +19,7 @@ function RouteComponent() {
   const { accountId, isOnlineAccount } = useAccountId();
   const { openCreateVault } = useCreateVaultDialog();
   const { data: vaults } = useVaultList();
+  const openedVaultDialog = useRef(false);
 
   const { mutate: sync, isPending: isSyncing } = useSync();
 
@@ -46,6 +47,21 @@ function RouteComponent() {
     });
   }, [accountId, vaults, navigate]);
 
+  const openCreateCloudBlink = useCallback(() => {
+    openCreateVault({
+      step: "DETAILS",
+      provider: "CLOUDBLINK",
+      autoSelectedProvider: true,
+    });
+  }, [openCreateVault]);
+
+  useEffect(() => {
+    if (!isOnlineAccount || vaults?.length || openedVaultDialog.current) return;
+
+    openedVaultDialog.current = true;
+    openCreateCloudBlink();
+  }, [isOnlineAccount, openCreateCloudBlink, vaults]);
+
   if (!vaults?.length)
     return (
       <Empty
@@ -65,7 +81,12 @@ function RouteComponent() {
             {t("noVaults.refresh")}
           </Button>
         ) : null}
-        <Button onClick={openCreateVault} size="lg">
+        <Button
+          onClick={() =>
+            isOnlineAccount ? openCreateCloudBlink() : openCreateVault()
+          }
+          size="lg"
+        >
           <PlusIcon />
           {t("noVaults.add")}
         </Button>
