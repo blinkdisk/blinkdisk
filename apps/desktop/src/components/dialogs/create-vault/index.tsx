@@ -1,6 +1,4 @@
-import { StorageProviderType } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
@@ -12,11 +10,13 @@ import { CreateVaultConfig } from "@desktop/components/dialogs/create-vault/conf
 import { CreateVaultDetails } from "@desktop/components/dialogs/create-vault/details";
 import { CreateVaultProviders } from "@desktop/components/dialogs/create-vault/providers";
 import { CreateVaultVariant } from "@desktop/components/dialogs/create-vault/variant";
-import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
+import {
+  CreateVaultStep,
+  useCreateVaultDialog,
+} from "@desktop/hooks/state/use-create-vault-dialog";
 import { ArrowLeftIcon } from "lucide-react";
-import { useCallback, useState } from "react";
-
-type CreateVaultStep = "VARIANT" | "PROVIDER" | "CONFIG" | "DETAILS";
+import { useCallback } from "react";
 
 const backButton: Record<CreateVaultStep, CreateVaultStep> = {
   VARIANT: "VARIANT",
@@ -27,32 +27,38 @@ const backButton: Record<CreateVaultStep, CreateVaultStep> = {
 
 export function CreateVaultDialog() {
   const { t } = useAppTranslation("vault.createDialog");
-
-  const [step, setStep] = useState<CreateVaultStep>("VARIANT");
-  const [provider, setProvider] = useState<StorageProviderType | undefined>();
-  const [config, setConfig] = useState<ProviderConfig | undefined>();
-  const { isOpen, setIsOpen } = useCreateVaultDialog();
+  const { data: vaults } = useVaultList();
+  const { isOpen, setIsOpen, options, setOptions, resetOptions } =
+    useCreateVaultDialog();
+  const { step, provider, config, autoSelectedProvider } = options;
 
   const close = useCallback(() => {
     setIsOpen(false);
   }, [setIsOpen]);
 
   const reset = useCallback(() => {
-    setStep("VARIANT");
-    setProvider(undefined);
-    setConfig(undefined);
-  }, [setStep, setProvider, setConfig]);
+    resetOptions();
+  }, [resetOptions]);
+
+  const showFirstVaultTitle = !vaults?.length;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
       <DialogContent className="w-120 block max-h-[80vh] overflow-y-auto">
         <div className="flex items-center gap-3">
-          {step !== "VARIANT" ? (
+          {step !== "VARIANT" && !autoSelectedProvider ? (
             <Button
               onClick={() => {
                 if (step === "DETAILS" && provider == "CLOUDBLINK")
-                  setStep("VARIANT");
-                else setStep(backButton[step]);
+                  setOptions({
+                    step: "VARIANT",
+                    autoSelectedProvider: false,
+                  });
+                else
+                  setOptions({
+                    step: backButton[step],
+                    autoSelectedProvider: false,
+                  });
               }}
               variant="ghost"
               size="icon-xs"
@@ -60,7 +66,9 @@ export function CreateVaultDialog() {
               <ArrowLeftIcon />
             </Button>
           ) : null}
-          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogTitle>
+            {showFirstVaultTitle ? t("title.first") : t("title.default")}
+          </DialogTitle>
         </div>
         <DialogDescription className="sr-only">
           {t("description")}
@@ -68,18 +76,26 @@ export function CreateVaultDialog() {
         {step === "VARIANT" ? (
           <CreateVaultVariant
             selectCloud={() => {
-              setProvider("CLOUDBLINK");
-              setConfig(undefined);
-              setStep("DETAILS");
+              setOptions({
+                provider: "CLOUDBLINK",
+                config: undefined,
+                step: "DETAILS",
+                autoSelectedProvider: false,
+              });
             }}
-            selectCustom={() => setStep("PROVIDER")}
+            selectCustom={() =>
+              setOptions({ step: "PROVIDER", autoSelectedProvider: false })
+            }
           />
         ) : step === "PROVIDER" ? (
           <CreateVaultProviders
             selectProvider={(newProvider) => {
-              if (provider !== newProvider) setConfig(undefined);
-              setProvider(newProvider);
-              setStep("CONFIG");
+              setOptions({
+                provider: newProvider,
+                config: provider !== newProvider ? undefined : config,
+                step: "CONFIG",
+                autoSelectedProvider: false,
+              });
             }}
           />
         ) : step === "CONFIG" ? (
@@ -87,8 +103,11 @@ export function CreateVaultDialog() {
             config={config}
             provider={provider}
             onSubmit={(config) => {
-              setConfig(config);
-              setStep("DETAILS");
+              setOptions({
+                config,
+                step: "DETAILS",
+                autoSelectedProvider: false,
+              });
             }}
           />
         ) : step === "DETAILS" ? (
@@ -99,6 +118,13 @@ export function CreateVaultDialog() {
               setTimeout(reset, 100);
             }}
             config={config}
+            autoSelectedProvider={autoSelectedProvider}
+            onChangeStorage={() =>
+              setOptions({
+                step: "VARIANT",
+                autoSelectedProvider: false,
+              })
+            }
           />
         ) : null}
       </DialogContent>

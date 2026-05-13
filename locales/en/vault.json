@@ -6,7 +6,10 @@
     "add": "Add vault"
   },
   "createDialog": {
-    "title": "Create new vault",
+    "title": {
+      "default": "Create new vault",
+      "first": "Create your first vault"
+    },
     "description": "Create a new vault.",
     "variant": {
       "cloudblink": {
@@ -60,6 +63,10 @@
       "warning": {
         "title": "Never forget this password",
         "description": "We never store this password on our servers and there is no way to recover it. If you loose this password, you might not be able to restore your backups."
+      },
+      "storage": {
+        "description": "BlinkDisk manages the cloud storage for this vault.",
+        "change": "Change storage"
       },
       "submit": "Create vault"
     }
