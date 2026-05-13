@@ -42,6 +42,11 @@
     },
     "button": "Upgrade storage"
   },
+  "trialAlert": {
+    "title": "CloudBlink trial active",
+    "description": "{{capacity}} available for {{daysLeft}} more day(s).",
+    "button": "Upgrade"
+  },
   "offlineAlert": {
     "title": "You're offline",
     "description": "Some features may not work while your device is offline."

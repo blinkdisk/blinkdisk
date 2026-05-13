@@ -13,7 +13,12 @@ export const cloudblinkRouter = router({
   space: authedProcedure.query(async ({ ctx }) => {
     const space = await ctx.db
       .selectFrom("Space")
-      .select(["id", "capacity"])
+      .leftJoin("Trial", "Trial.id", "Space.trialId")
+      .select([
+        "Space.id as id",
+        "Space.capacity as capacity",
+        "Trial.endsAt as trialEndsAt",
+      ])
       .where("Space.accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
@@ -28,6 +33,7 @@ export const cloudblinkRouter = router({
     return {
       used,
       capacity: parseInt(space.capacity),
+      trialEndsAt: space.trialEndsAt,
     };
   }),
   initVault: authedProcedure.mutation(async ({ ctx }) => {

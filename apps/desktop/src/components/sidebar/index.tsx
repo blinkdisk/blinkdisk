@@ -18,8 +18,10 @@ import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
+import { SidebarTrialAlert } from "@desktop/components/sidebar/trial-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
+import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useOffline } from "@desktop/hooks/use-offline";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
@@ -31,6 +33,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isOffline } = useOffline();
   const { data: account } = useAccount();
   const { data: folders } = useFolderList();
+  const { data: space } = useSpace();
 
   const { accountId, vaultId, hostName, userName } = useParams({
     strict: false,
@@ -94,7 +97,16 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu className="gap-4">
-            {isOffline ? <SidebarOfflineAlert /> : <SidebarStorageAlert />}
+            {isOffline ? (
+              <SidebarOfflineAlert />
+            ) : space?.trialEndsAt ? (
+              <SidebarTrialAlert
+                capacity={space.capacity}
+                trialEndsAt={space.trialEndsAt}
+              />
+            ) : (
+              <SidebarStorageAlert />
+            )}
             <SidebarAddFolder />
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
