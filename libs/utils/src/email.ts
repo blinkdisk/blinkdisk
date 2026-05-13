@@ -2,6 +2,7 @@ import CancellationWarningEmail from "@blinkdisk/emails/cancellation-warning";
 import MagicEmail from "@blinkdisk/emails/magic";
 import StorageFullEmail from "@blinkdisk/emails/storage-full";
 import StorageThresholdEmail from "@blinkdisk/emails/storage-threshold";
+import TrialWarningEmail from "@blinkdisk/emails/trial-warning";
 import Plunk from "@plunk/node";
 import { pretty, render } from "@react-email/render";
 import { locales } from "@utils/locales";
@@ -23,6 +24,10 @@ const templates = {
   cancellationWarning: {
     sender: "cloudblink",
     component: CancellationWarningEmail,
+  },
+  trialWarning: {
+    sender: "cloudblink",
+    component: TrialWarningEmail,
   },
 };
 

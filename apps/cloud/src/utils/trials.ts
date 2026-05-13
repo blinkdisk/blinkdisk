@@ -1,5 +1,32 @@
 import { Database } from "@blinkdisk/db/index";
+import { sendEmail } from "@blinkdisk/utils/email";
 import { deleteVaults } from "@cloud/utils/vault";
+
+export async function sendTrialEmails(db: Database, scheduledTime: number) {
+  const start = new Date(scheduledTime);
+  const end = new Date(start.getTime() + 1000 * 60 * 60 * 24 * 7);
+
+  const trials = await db
+    .selectFrom("Trial")
+    .innerJoin("Account", "Account.id", "Trial.accountId")
+    .select(["Trial.id", "Trial.endsAt", "Account.email", "Account.language"])
+    .where("Trial.status", "=", "ACTIVE")
+    .where("Trial.endsAt", ">", start)
+    .where("Trial.endsAt", "<", end)
+    .execute();
+
+  for (const trial of trials) {
+    const daysLeft = trial.endsAt
+      ? Math.round(
+          (trial.endsAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+        )
+      : 0;
+
+    await sendEmail("trialWarning", trial, {
+      daysLeft,
+    });
+  }
+}
 
 export async function endTrials(
   db: Database,
