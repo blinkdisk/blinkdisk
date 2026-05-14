@@ -23,6 +23,10 @@ function isMissingWorkflowError(error: unknown) {
   );
 }
 
+function cancellationWorkflowId(params: CancellationWorkflowParams) {
+  return `${params.subscriptionId}-${new Date(params.cleanupAt).getTime()}`;
+}
+
 export async function startTrialWorkflow(
   env: CloudflareBindings,
   params: TrialWorkflowParams,
@@ -63,7 +67,7 @@ export async function startCancellationWorkflow(
 ) {
   try {
     await env.CANCELLATION_WORKFLOW.create({
-      id: params.subscriptionId,
+      id: cancellationWorkflowId(params),
       params,
     });
   } catch (error) {
@@ -77,18 +81,18 @@ export async function stopCancellationWorkflow(
   env: CloudflareBindings,
   params: CancellationWorkflowParams,
 ) {
-  try {
-    const instance = await env.CANCELLATION_WORKFLOW.get(
-      params.subscriptionId,
-    );
-    const { status } = await instance.status();
+  for (const id of [cancellationWorkflowId(params), params.subscriptionId]) {
+    try {
+      const instance = await env.CANCELLATION_WORKFLOW.get(id);
+      const { status } = await instance.status();
 
-    if (["complete", "errored", "terminated"].includes(status)) return;
+      if (["complete", "errored", "terminated"].includes(status)) continue;
 
-    await instance.terminate();
-  } catch (error) {
-    if (isMissingWorkflowError(error)) return;
+      await instance.terminate();
+    } catch (error) {
+      if (isMissingWorkflowError(error)) continue;
 
-    throw error;
+      throw error;
+    }
   }
 }
