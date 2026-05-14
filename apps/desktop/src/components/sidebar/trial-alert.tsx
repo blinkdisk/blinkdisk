@@ -3,8 +3,8 @@ import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
+import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatSize } from "@desktop/lib/number";
-import { useMemo } from "react";
 
 type SidebarTrialAlertProps = {
   capacity: number;
@@ -17,14 +17,7 @@ export function SidebarTrialAlert({
 }: SidebarTrialAlertProps) {
   const { t } = useAppTranslation("sidebar.trialAlert");
   const { openUpgradeDialog } = useUpgradeDialog();
-
-  const daysLeft = useMemo(() => {
-    const endsAt = new Date(trialEndsAt);
-    return Math.max(
-      Math.ceil((endsAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
-      0,
-    );
-  }, [trialEndsAt]);
+  const trialEndsIn = useRelativeTime(trialEndsAt);
 
   return (
     <SidebarMenuItem>
@@ -33,7 +26,7 @@ export function SidebarTrialAlert({
         <AlertDescription className="mt-0.5 text-sm">
           {t("description", {
             capacity: formatSize(capacity),
-            daysLeft,
+            trialEndsIn,
           })}
           <Button
             className="mt-2.5 w-full"

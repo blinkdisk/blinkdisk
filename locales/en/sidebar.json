@@ -44,7 +44,7 @@
   },
   "trialAlert": {
     "title": "CloudBlink trial active",
-    "description": "{{capacity}} available for {{daysLeft}} more day(s).",
+    "description": "{{capacity}} available until your trial ends {{trialEndsIn}}.",
     "button": "Upgrade"
   },
   "offlineAlert": {
