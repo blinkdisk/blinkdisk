@@ -12,7 +12,7 @@ import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLogsnag } from "@desktop/hooks/use-logsnag";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useNoStorageDialog } from "@desktop/hooks/state/use-no-storage-dialog";
+import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { getConfigCollection, getVaultCollection } from "@desktop/lib/db";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
@@ -43,7 +43,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const { accountId } = useAccountId();
   const { queryKeys } = useQueryKey();
   const { logsnag } = useLogsnag();
-  const { openNoStorageDialog } = useNoStorageDialog();
+  const { openUpgradeDialog } = useUpgradeDialog();
 
   return useMutation({
     mutationKey: ["vault", "create"],
@@ -187,7 +187,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
     },
     onError: (error) => {
       if (getErrorCode(error) === "NO_STORAGE") {
-        openNoStorageDialog();
+        openUpgradeDialog();
         return;
       }
 
