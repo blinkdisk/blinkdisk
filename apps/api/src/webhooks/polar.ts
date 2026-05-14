@@ -312,6 +312,7 @@ export async function polarWebhook(
             endedAt: new Date(),
           })
           .where("accountId", "=", accountId)
+          .where("status", "=", "ACTIVE")
           .execute();
 
         const stub = c.env.SPACE.getByName(space.id);
