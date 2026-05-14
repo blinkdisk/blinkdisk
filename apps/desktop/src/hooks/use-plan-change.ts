@@ -16,17 +16,7 @@ export function usePlanChange() {
 
       await Promise.all([
         queryClient.invalidateQueries({
-          predicate: (query) => {
-            const key = query.queryKey;
-
-            return (
-              Array.isArray(key) &&
-              key.length >= 4 &&
-              key[0] === queryKeys.vault.all[0] &&
-              key[1] === queryKeys.vault.all[1] &&
-              key[3] === "space"
-            );
-          },
+          queryKey: queryKeys.vault.all,
         }),
         queryClient.invalidateQueries({
           queryKey: queryKeys.subscription.all,
