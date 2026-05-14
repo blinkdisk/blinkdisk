@@ -33,7 +33,7 @@ export function SidebarStorageAlert() {
           <Button
             className="mt-2.5 w-full"
             size="sm"
-            variant={full ? "destructive" : "default"}
+            variant={full ? "destructive" : "warn"}
             onClick={openUpgradeDialog}
           >
             {t("button")}
