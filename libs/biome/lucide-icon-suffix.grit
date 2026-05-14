@@ -1,0 +1,21 @@
+engine biome(1.0)
+language js(typescript,jsx)
+
+or {
+  `import { $name } from $source` where {
+    $source <: or { `"lucide-react"`, includes "@lucide/astro/icons/" },
+    not $name <: r".*Icon",
+    register_diagnostic(
+      span = $name,
+      message = "Lucide icon imports must end with Icon."
+    )
+  },
+  `import $name from $source` where {
+    $source <: includes "@lucide/astro/icons/",
+    not $name <: r".*Icon",
+    register_diagnostic(
+      span = $name,
+      message = "Lucide icon imports must end with Icon."
+    )
+  }
+}

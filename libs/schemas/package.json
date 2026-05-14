@@ -6,14 +6,12 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
+    "lint": "biome check .",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "^22.13.9",
-    "eslint": "^9.22.0",
     "typescript": "5.8.2"
   },
   "dependencies": {

@@ -1,0 +1,117 @@
+engine biome(1.0)
+language js(typescript,jsx)
+
+or {
+  `import $_ from $source` where {
+    not $filename <: includes "libs/ui/",
+    $source <: or { `"@ui"`, includes "@ui/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/ui instead of @ui. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "apps/api/",
+    $source <: or { `"@api"`, includes "@api/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/api instead of @api. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "apps/marketing/",
+    $source <: or { `"@marketing"`, includes "@marketing/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/marketing instead of @marketing. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/styles/",
+    $source <: or { `"@styles"`, includes "@styles/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/styles instead of @styles. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/utils/",
+    $source <: or { `"@utils"`, includes "@utils/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/utils instead of @utils. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "apps/desktop/",
+    $source <: or { `"@desktop"`, includes "@desktop/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/desktop instead of @desktop. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/hooks/",
+    $source <: or { `"@hooks"`, includes "@hooks/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/hooks instead of @hooks. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/db/",
+    $source <: or { `"@db"`, includes "@db/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/db instead of @db. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/emails/",
+    $source <: or { `"@emails"`, includes "@emails/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/emails instead of @emails. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/schemas/",
+    $source <: or { `"@schemas"`, includes "@schemas/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/schemas instead of @schemas. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/config/",
+    $source <: or { `"@config"`, includes "@config/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/config instead of @config. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "libs/forms/",
+    $source <: or { `"@forms"`, includes "@forms/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/forms instead of @forms. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "apps/electron/",
+    $source <: or { `"@electron"`, includes "@electron/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/electron instead of @electron. Path aliases are only for same-package imports."
+    )
+  },
+  `import $_ from $source` where {
+    not $filename <: includes "apps/cloud/",
+    $source <: or { `"@cloud"`, includes "@cloud/" },
+    register_diagnostic(
+      span = $source,
+      message = "Use @blinkdisk/cloud instead of @cloud. Path aliases are only for same-package imports."
+    )
+  }
+}

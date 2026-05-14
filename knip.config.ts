@@ -42,12 +42,9 @@ const config: KnipConfig = {
       ignoreDependencies: [
         // Used in CSS url() imports which knip doesn't detect
         "@fontsource/space-mono",
-        // Used in eslint.config.mjs (eslint provided via @blinkdisk/eslint)
-        "eslint-plugin-astro",
         // Used in CSS
         "@tailwindcss/typography",
       ],
-      ignoreBinaries: ["eslint"],
     },
     "libs/*": {
       includeEntryExports: true,
@@ -56,11 +53,6 @@ const config: KnipConfig = {
     },
     "libs/db": {
       ignore: ["src/schema.ts"],
-    },
-    "libs/eslint": {
-      entry: ["*.mjs"],
-      project: ["*.mjs"],
-      ignore: ["node_modules/**"],
     },
     "libs/styles": {
       entry: ["*.css"],

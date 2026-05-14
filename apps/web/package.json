@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --max-warnings=0",
+    "lint": "biome check .",
     "preview": "vite preview",
     "deploy": "wrangler deploy"
   },
@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "@blinkdisk/assets": "workspace:*",
-    "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@sentry/vite-plugin": "^5.1.1",
     "@tanstack/router-plugin": "^1.114.25",
@@ -53,7 +52,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-react-compiler": "19.1.0-rc.1",
     "dotenv": "^16.4.7",
-    "eslint": "^9.21.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
     "vite-plugin-environment": "^1.1.3",
