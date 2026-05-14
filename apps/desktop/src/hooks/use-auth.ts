@@ -1,9 +1,11 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
+import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { getVaultCollection } from "@desktop/lib/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
@@ -18,6 +20,7 @@ export function useAuth() {
   const { accountId } = useAccountId();
   const { queryKeys } = useQueryKey();
   const { openAuthDialog } = useAuthDialog();
+  const { openCreateVault } = useCreateVaultDialog();
 
   const [authenticated, setAuthenticated] = useAppStorage(
     "authenticated",
@@ -45,8 +48,20 @@ export function useAuth() {
           queryKey: queryKeys.account.detail(),
         }),
       ]);
+
+      const hasActiveVaults = getVaultCollection(accountId)
+        .find({ status: "ACTIVE" })
+        .fetch().length;
+
+      if (!local && !hasActiveVaults) {
+        openCreateVault({
+          step: "DETAILS",
+          provider: "CLOUDBLINK",
+          autoSelectedProvider: true,
+        });
+      }
     },
-    [queryClient, queryKeys, posthog],
+    [queryClient, queryKeys, posthog, openCreateVault],
   );
 
   const selectAccount = useCallback(
