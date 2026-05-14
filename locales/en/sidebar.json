@@ -45,7 +45,7 @@
   "trialAlert": {
     "title": "CloudBlink trial active",
     "description": "{{capacity}} available until your trial ends {{trialEndsIn}}.",
-    "button": "Upgrade"
+    "button": "Upgrade storage"
   },
   "offlineAlert": {
     "title": "You're offline",
