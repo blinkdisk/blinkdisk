@@ -1,5 +1,6 @@
 import { database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
+import { waitUntil } from "@cloud/utils/workflows";
 import { deleteVaults } from "@cloud/utils/vault";
 import {
   WorkflowEntrypoint,
@@ -29,7 +30,9 @@ export class TrialWorkflow extends WorkflowEntrypoint<
     for (const daysLeft of [7, 6, 5, 4, 3, 2, 1]) {
       const warningAt = new Date(endsAt.getTime() - DAY_MS * daysLeft);
 
-      await step.sleepUntil(
+      await waitUntil(
+        this.env,
+        step,
         `wait until trial warning ${daysLeft} days left`,
         warningAt,
       );
@@ -63,7 +66,7 @@ export class TrialWorkflow extends WorkflowEntrypoint<
       );
     }
 
-    await step.sleepUntil("wait until trial ends", endsAt);
+    await waitUntil(this.env, step, "wait until trial ends", endsAt);
 
     await step.do("end trial and delete vaults", async () => {
       const db = database(this.env.HYPERDRIVE.connectionString);

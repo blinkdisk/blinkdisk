@@ -1,5 +1,6 @@
 import { database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
+import { waitUntil } from "@cloud/utils/workflows";
 import { deleteVaults } from "@cloud/utils/vault";
 import {
   WorkflowEntrypoint,
@@ -32,7 +33,9 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
     for (const daysLeft of [7, 6, 5, 4, 3, 2, 1]) {
       const warningAt = new Date(cleanupAt.getTime() - DAY_MS * daysLeft);
 
-      await step.sleepUntil(
+      await waitUntil(
+        this.env,
+        step,
         `wait until cancellation warning ${daysLeft} days left`,
         warningAt,
       );
@@ -65,7 +68,12 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
       );
     }
 
-    await step.sleepUntil("wait until subscription cleanup", cleanupAt);
+    await waitUntil(
+      this.env,
+      step,
+      "wait until subscription cleanup",
+      cleanupAt,
+    );
 
     await step.do("delete cancelled subscription vaults", async () => {
       const db = database(this.env.HYPERDRIVE.connectionString);
