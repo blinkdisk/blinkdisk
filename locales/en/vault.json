@@ -62,7 +62,7 @@
       },
       "warning": {
         "title": "Never forget this password",
-        "description": "We never store this password on our servers and there is no way to recover it. If you loose this password, you might not be able to restore your backups."
+        "description": "We never store this password on our servers and there is no way to recover it. If you lose this password, you might not be able to restore your backups."
       },
       "storage": {
         "description": "BlinkDisk manages the cloud storage for this vault.",
