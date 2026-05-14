@@ -91,19 +91,6 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
         await stub.updateCapacity(0);
       }
 
-      await db
-        .updateTable("Space")
-        .set({
-          capacity: "0",
-          subscriptionId: null,
-        })
-        .where(
-          "id",
-          "in",
-          spaces.map((space) => space.id),
-        )
-        .execute();
-
       const vaults = await db
         .selectFrom("Vault")
         .select(["id"])
@@ -117,6 +104,19 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
         .execute();
 
       if (vaults.length) await deleteVaults(db, this.env, vaults);
+
+      await db
+        .updateTable("Space")
+        .set({
+          capacity: "0",
+          subscriptionId: null,
+        })
+        .where(
+          "id",
+          "in",
+          spaces.map((space) => space.id),
+        )
+        .execute();
 
       return { skipped: false, vaults: vaults.length };
     });
