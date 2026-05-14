@@ -1,3 +1,4 @@
+import { startTrialWorkflow } from "@api/lib/workflows";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
@@ -88,6 +89,11 @@ export const cloudblinkRouter = router({
           init: (id: string, capacity: number) => Promise<void>;
         }
       ).init(spaceId, TRIAL_STORAGE);
+
+      await startTrialWorkflow(ctx.env, {
+        trialId,
+        endsAt: endsAt.toISOString(),
+      });
     }
 
     const token = await generateServiceToken(

@@ -1,10 +1,4 @@
-import { database } from "@blinkdisk/db/index";
 import { verifyServiceToken } from "@blinkdisk/utils/token";
-import {
-  deleteCancelled,
-  sendCancellationEmails,
-} from "@cloud/utils/cancellation";
-import { endTrials, sendTrialEmails } from "@cloud/utils/trials";
 import * as Sentry from "@sentry/cloudflare";
 
 export default Sentry.withSentry(
@@ -59,17 +53,10 @@ export default Sentry.withSentry(
         },
       });
     },
-    async scheduled(controller: ScheduledController, env: CloudflareBindings) {
-      const db = database(env.HYPERDRIVE.connectionString);
-
-      await sendCancellationEmails(db, controller.scheduledTime);
-      await deleteCancelled(db, controller.scheduledTime, env);
-
-      await sendTrialEmails(db, controller.scheduledTime);
-      await endTrials(db, controller.scheduledTime, env);
-    },
   },
 );
 
 export { Space } from "@cloud/classes/space";
 export { Vault } from "@cloud/classes/vault";
+export { CancellationWorkflow } from "@cloud/workflows/cancellation";
+export { TrialWorkflow } from "@cloud/workflows/trial";
