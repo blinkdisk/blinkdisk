@@ -88,7 +88,7 @@ export async function polarWebhook(
 
         const subscriptionsWithCleanup = await db
           .selectFrom("Subscription")
-          .select(["id", "cleanupAt"])
+          .select(["id", "cleanupAt", "canceledAt"])
           .where("accountId", "=", account.id)
           .where("cleanupAt", "is not", null)
           .execute();
@@ -109,6 +109,7 @@ export async function polarWebhook(
                 stopCancellationWorkflow(c.env, {
                   subscriptionId: subscription.id,
                   cleanupAt: subscription.cleanupAt!.toISOString(),
+                  canceledAt: subscription.canceledAt!.toISOString(),
                 }),
               ),
           );
@@ -165,7 +166,7 @@ export async function polarWebhook(
       ) {
         const previous = await db
           .selectFrom("Subscription")
-          .select(["id", "planId", "accountId", "cleanupAt"])
+          .select(["id", "planId", "accountId", "cleanupAt", "canceledAt"])
           .where("polarSubscriptionId", "=", subscription.id)
           .executeTakeFirst();
 
@@ -220,15 +221,23 @@ export async function polarWebhook(
           .execute();
 
         if (cleanupAt && !previous.cleanupAt) {
+          if (!subscription.canceledAt)
+            throw new Error("Cannot start cancellation workflow without canceledAt");
+
           await startCancellationWorkflow(c.env, {
             subscriptionId: previous.id,
             cleanupAt: cleanupAt.toISOString(),
+            canceledAt: subscription.canceledAt.toISOString(),
           });
         } else if (previous.cleanupAt && !cleanupAt) {
+          if (!previous.canceledAt)
+            throw new Error("Cannot stop cancellation workflow without canceledAt");
+
           c.executionCtx.waitUntil(
             stopCancellationWorkflow(c.env, {
               subscriptionId: previous.id,
               cleanupAt: previous.cleanupAt.toISOString(),
+              canceledAt: previous.canceledAt.toISOString(),
             }),
           );
         }

@@ -1,6 +1,7 @@
 type CancellationWorkflowParams = {
   subscriptionId: string;
   cleanupAt: string;
+  canceledAt: string;
 };
 
 type TrialWorkflowParams = {
@@ -24,7 +25,7 @@ function isMissingWorkflowError(error: unknown) {
 }
 
 function cancellationWorkflowId(params: CancellationWorkflowParams) {
-  return `${params.subscriptionId}-${new Date(params.cleanupAt).getTime()}`;
+  return `${params.subscriptionId}-${new Date(params.canceledAt).getTime()}`;
 }
 
 export async function startTrialWorkflow(
@@ -81,18 +82,18 @@ export async function stopCancellationWorkflow(
   env: CloudflareBindings,
   params: CancellationWorkflowParams,
 ) {
-  for (const id of [cancellationWorkflowId(params), params.subscriptionId]) {
-    try {
-      const instance = await env.CANCELLATION_WORKFLOW.get(id);
-      const { status } = await instance.status();
+  try {
+    const instance = await env.CANCELLATION_WORKFLOW.get(
+      cancellationWorkflowId(params),
+    );
+    const { status } = await instance.status();
 
-      if (["complete", "errored", "terminated"].includes(status)) continue;
+    if (["complete", "errored", "terminated"].includes(status)) return;
 
-      await instance.terminate();
-    } catch (error) {
-      if (isMissingWorkflowError(error)) continue;
+    await instance.terminate();
+  } catch (error) {
+    if (isMissingWorkflowError(error)) return;
 
-      throw error;
-    }
+    throw error;
   }
 }
