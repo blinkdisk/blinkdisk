@@ -22,6 +22,20 @@
       },
     ],
   },
+  "workflows": [
+    {
+      "name": "cloud-cancellations",
+      "binding": "CANCELLATION_WORKFLOW",
+      "class_name": "CancellationWorkflow",
+      "script_name": "cloud",
+    },
+    {
+      "name": "cloud-trials",
+      "binding": "TRIAL_WORKFLOW",
+      "class_name": "TrialWorkflow",
+      "script_name": "cloud",
+    },
+  ],
   "kv_namespaces": [
     {
       "binding": "CACHE",

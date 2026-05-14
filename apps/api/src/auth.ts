@@ -12,7 +12,6 @@ import {
   TIMEZONE_HEADER,
 } from "@blinkdisk/constants/header";
 import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/constants/language";
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
 import { DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";
@@ -152,25 +151,6 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       user: {
         create: {
           after: async (account, ctx) => {
-            const spaceId = generateId("Space");
-
-            await db
-              .insertInto("Space")
-              .values({
-                id: spaceId,
-                capacity: FREE_SPACE_AVAILABLE.toString(),
-                used: "0",
-                accountId: account.id,
-              })
-              .execute();
-
-            const stub = env.SPACE.getByName(spaceId);
-            await (
-              stub as unknown as {
-                init: (id: string, capacity: number) => Promise<void>;
-              }
-            ).init(spaceId, FREE_SPACE_AVAILABLE);
-
             const language = ctx?.request?.headers?.get(LANGUAGE_HEADER);
             const timeZone = ctx?.request?.headers?.get(TIMEZONE_HEADER);
 

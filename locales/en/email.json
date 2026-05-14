@@ -21,11 +21,18 @@
     "urgent": "🚨 Your storage is completely full! New files cannot be backed up and you may lose data if your device fails.",
     "action": "Please immediately upgrade your plan or delete old backups so new files can be backed up and your data stays protected."
   },
-  "cleanup": {
-    "subject": "You backups will be deleted in {{daysLeft}} day(s)",
-    "title": "You backups will be deleted in {{daysLeft}} day(s)",
+  "cancellationWarning": {
+    "subject": "Your backups will be deleted in {{daysLeft}} day(s)",
+    "title": "Your backups will be deleted in {{daysLeft}} day(s)",
     "preview": "Your CloudBlink subscription has been cancelled. Your backups will be deleted in {{daysLeft}} day(s).",
     "body": "Your CloudBlink subscription has been cancelled. Your backups and some vaults will be permanently deleted in {{daysLeft}} day(s). To prevent data loss, please resubscribe to CloudBlink before the deletion date.",
     "warning": "🚨 Your backups and some vaults will be permanently deleted in {{daysLeft}} day(s). Resubscribe to keep your backups safe."
+  },
+  "trialWarning": {
+    "subject": "Your CloudBlink trial ends in {{daysLeft}} day(s)",
+    "title": "Your CloudBlink trial ends in {{daysLeft}} day(s)",
+    "preview": "Your CloudBlink trial ends in {{daysLeft}} day(s).",
+    "body": "Your CloudBlink trial ends in {{daysLeft}} day(s). Your backups and CloudBlink vaults will be permanently deleted unless you upgrade before the trial ends.",
+    "warning": "Your backups and CloudBlink vaults will be permanently deleted in {{daysLeft}} day(s). Upgrade to keep your backups safe."
   }
 }

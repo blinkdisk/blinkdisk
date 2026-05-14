@@ -12,6 +12,7 @@ import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLogsnag } from "@desktop/hooks/use-logsnag";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { getConfigCollection, getVaultCollection } from "@desktop/lib/db";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";
@@ -22,6 +23,19 @@ export type CreateVaultResponse = {
   vaultId: string;
 };
 
+type ErrorDataCode = {
+  data?: {
+    code?: string;
+  };
+};
+
+function getErrorCode(error: unknown) {
+  if (!error || typeof error !== "object") return;
+
+  if ("code" in error && typeof error.code === "string") return error.code;
+  if ("data" in error) return (error as ErrorDataCode).data?.code;
+}
+
 export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
   const posthog = usePostHog();
@@ -29,6 +43,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const { accountId } = useAccountId();
   const { queryKeys } = useQueryKey();
   const { logsnag } = useLogsnag();
+  const { openUpgradeDialog } = useUpgradeDialog();
 
   return useMutation({
     mutationKey: ["vault", "create"],
@@ -170,7 +185,14 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
       return { vaultId };
     },
-    onError: showErrorToast,
+    onError: (error) => {
+      if (getErrorCode(error) === "NO_STORAGE") {
+        openUpgradeDialog();
+        return;
+      }
+
+      showErrorToast(error);
+    },
     onSuccess: async (res) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.vault.status(res.vaultId),

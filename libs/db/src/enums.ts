@@ -22,6 +22,11 @@ export const ConfigLevel = {
   PROFILE: "PROFILE",
 } as const;
 export type ConfigLevel = (typeof ConfigLevel)[keyof typeof ConfigLevel];
+export const TrialStatus = {
+  ACTIVE: "ACTIVE",
+  ENDED: "ENDED",
+} as const;
+export type TrialStatus = (typeof TrialStatus)[keyof typeof TrialStatus];
 export const SubscriptionStatus = {
   TRIALING: "TRIALING",
   ACTIVE: "ACTIVE",

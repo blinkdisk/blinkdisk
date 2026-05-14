@@ -28,6 +28,7 @@ model Account {
   configs       Config[]
   space         Space[]
   subscriptions Subscription[]
+  trial         Trial?
 
   @@index([email])
 }
@@ -143,12 +144,36 @@ model Space {
   used           BigInt
   accountId      String   @unique
   subscriptionId String?
+  trialId        String?  @unique
   createdAt      DateTime @default(now())
 
   account      Account       @relation(fields: [accountId], references: [id])
   subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+  trial        Trial?        @relation(fields: [trialId], references: [id])
 
   vaults Vault[]
+}
+
+enum TrialStatus {
+  ACTIVE
+  ENDED
+}
+
+model Trial {
+  id        String      @id @default(cuid())
+  status    TrialStatus @default(ACTIVE)
+  capacity  BigInt
+  accountId String      @unique
+  startedAt DateTime
+  endsAt    DateTime?
+  endedAt   DateTime?
+  createdAt DateTime    @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+  space   Space?
+
+  @@index([status])
+  @@index([endsAt])
 }
 
 enum SubscriptionStatus {

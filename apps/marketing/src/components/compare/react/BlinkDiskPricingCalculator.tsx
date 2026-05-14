@@ -1,6 +1,6 @@
 import type { BillingPeriod } from "@blinkdisk/constants/plans";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
-import { FREE_SPACE_AVAILABLE } from "@blinkdisk/constants/space";
+import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
 import {
   Select,
   SelectContent,
@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 
 const currency = "USD";
 
-const FREE_TIER_GB = FREE_SPACE_AVAILABLE / (1000 * 1000 * 1000);
+const TRIAL_STORAGE_GB = TRIAL_STORAGE / (1000 * 1000 * 1000);
 
 export default function BlinkDiskPricingCalculator() {
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
@@ -39,7 +39,10 @@ export default function BlinkDiskPricingCalculator() {
 
   const planItems = useMemo(
     () => [
-      { value: "-1", label: `${formatStorage(FREE_TIER_GB)} (Free)` },
+      {
+        value: "-1",
+        label: `${formatStorage(TRIAL_STORAGE_GB)} (${TRIAL_DAYS}-day trial)`,
+      },
       ...availablePlans.map((plan, index) => ({
         value: String(index),
         label: formatStorage(plan.storageGB),
@@ -99,7 +102,7 @@ export default function BlinkDiskPricingCalculator() {
           </Tabs>
         )}
 
-        <div className="mt-5 flex items-baseline gap-1">
+        <div className="mt-5 flex items-baseline gap-2">
           <span className="text-3xl font-bold">
             {displayAmount.toLocaleString(undefined, {
               style: "currency",
@@ -108,8 +111,12 @@ export default function BlinkDiskPricingCalculator() {
               maximumFractionDigits: 0,
             })}
           </span>
-          <span className="text-muted-foreground">
-            {period === "YEARLY" ? "/year" : "/month"}
+          <span className={isFreeTier ? "text-foreground/80 font-medium" : "text-muted-foreground"}>
+            {isFreeTier
+              ? `for ${TRIAL_DAYS} days`
+              : period === "YEARLY"
+                ? "/year"
+                : "/month"}
           </span>
         </div>
       </div>

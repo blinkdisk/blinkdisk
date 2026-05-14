@@ -5,6 +5,7 @@ import Button from "@marketing/components/Button.astro";
 import CTA from "@marketing/components/CTA.astro";
 import FaqList from "@marketing/components/FaqList.astro";
 import ProPlanCard from "@marketing/components/react/ProPlanCard";
+import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
 import CheckIcon from "@lucide/astro/icons/check";
 import DownloadIcon from "@lucide/astro/icons/download";
 import GlobeIcon from "@lucide/astro/icons/globe";
@@ -13,6 +14,8 @@ import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
 import { MARKETING_URL } from "astro:env/server";
 
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
+const trialStorage = `${TRIAL_STORAGE / (1000 * 1000 * 1000)} GB`;
+const trialDuration = `${TRIAL_DAYS}-day`;
 
 const faqs = [
   {
@@ -47,7 +50,7 @@ const productSchema = {
   "@type": "Product",
   name: "CloudBlink",
   description:
-    "Hassle-free managed cloud backups with 15GB free. Bank-grade encryption, automatic scaling, and zero maintenance required.",
+    `Hassle-free managed cloud backups with a ${trialDuration}, ${trialStorage} free trial. Bank-grade encryption, automatic scaling, and zero maintenance required.`,
   image: `${siteUrl}/brand/social.jpg`,
   brand: {
     "@type": "Brand",
@@ -57,7 +60,7 @@ const productSchema = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "15GB free cloud storage",
+    description: `${trialDuration} trial with ${trialStorage} free cloud storage`,
     url: `${siteUrl}/cloudblink`,
   },
 };
@@ -65,7 +68,7 @@ const productSchema = {
 
 <DefaultLayout
   title="CloudBlink: The cloud storage built for backups"
-  description="Zero setup, zero maintenance backup storage. Get 15GB free with end-to-end encryption. Your data, protected in the cloud."
+  description={`Zero setup, zero maintenance backup storage. Start with a ${trialDuration}, ${trialStorage} free trial and end-to-end encryption. Your data, protected in the cloud.`}
   structuredData={productSchema}
 >
   <section>
@@ -186,7 +189,8 @@ const productSchema = {
                 </div>
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
-                    <span class="text-muted-foreground">CloudBlink (15 GB)</span
+                    <span class="text-muted-foreground"
+                      >CloudBlink trial ({trialStorage})</span
                     >
                     <span>$0.00</span>
                   </div>
@@ -203,8 +207,8 @@ const productSchema = {
               <span class="text-primary text-sm font-medium">Pricing</span>
               <h3 class="mt-1 text-xl font-semibold">Affordable Pricing</h3>
               <p class="text-muted-foreground mt-2 text-sm">
-                Start free with 15GB, then upgrade when you need more space. No
-                hidden fees, no surprise charges, cancel anytime.
+                Start with a {trialDuration}, {trialStorage} free trial, then
+                upgrade when you need more space. No credit card required.
               </p>
             </div>
           </div>
@@ -617,7 +621,8 @@ const productSchema = {
         Affordable Pricing
       </h2>
       <p class="text-muted-foreground mt-4 text-center">
-        Start for free and upgrade anytime when you need more storage.
+        Start with a {trialDuration}, {trialStorage} free trial and upgrade
+        anytime when you need more storage.
       </p>
     </div>
 
@@ -630,16 +635,17 @@ const productSchema = {
           </p>
         </div>
         <div class="mb-6">
-          <div class="flex items-baseline">
+          <div class="flex items-baseline gap-2">
             <span class="text-4xl font-bold">$0</span>
-            <span class="text-muted-foreground ml-1">/month</span>
+            <span class="text-foreground/80 text-base font-medium"
+              >for {TRIAL_DAYS} days</span
+            >
           </div>
-          <p class="text-muted-foreground mt-1 text-sm">100% free</p>
         </div>
         <ul class="mb-8 flex-1 space-y-3 text-sm">
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />
-            <span><strong>15 GB</strong> cloud storage</span>
+            <span><strong>{trialStorage}</strong> cloud storage</span>
           </li>
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />
@@ -647,7 +653,7 @@ const productSchema = {
           </li>
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />
-            <span>All desktop features</span>
+            <span>All features included</span>
           </li>
           <li class="flex items-center gap-2">
             <CheckIcon class="text-primary size-4 shrink-0" />

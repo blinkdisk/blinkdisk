@@ -1,5 +1,7 @@
+import { startTrialWorkflow } from "@api/lib/workflows";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
+import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
 import {
   ZDeleteCloudBlinkVault,
   ZGetCloudBlinkToken,
@@ -12,7 +14,12 @@ export const cloudblinkRouter = router({
   space: authedProcedure.query(async ({ ctx }) => {
     const space = await ctx.db
       .selectFrom("Space")
-      .select(["id", "capacity"])
+      .leftJoin("Trial", "Trial.id", "Space.trialId")
+      .select([
+        "Space.id as id",
+        "Space.capacity as capacity",
+        "Trial.endsAt as trialEndsAt",
+      ])
       .where("Space.accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
@@ -27,20 +34,67 @@ export const cloudblinkRouter = router({
     return {
       used,
       capacity: parseInt(space.capacity),
+      trialEndsAt: space.trialEndsAt,
     };
   }),
   initVault: authedProcedure.mutation(async ({ ctx }) => {
     const vaultId = generateId("Vault");
 
-    let spaceId: string | null = null;
     const space = await ctx.db
       .selectFrom("Space")
-      .select(["id"])
+      .select(["id", "capacity"])
       .where("accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
-    if (!space) throw new CustomError("SPACE_NOT_FOUND");
-    spaceId = space.id;
+    let spaceId: string;
+
+    if (space) {
+      if (parseInt(space.capacity) === 0) throw new CustomError("NO_STORAGE");
+
+      spaceId = space.id;
+    } else {
+      spaceId = generateId("Space");
+      const trialId = generateId("Trial");
+      const startedAt = new Date();
+      const endsAt = new Date(startedAt);
+      endsAt.setDate(endsAt.getDate() + TRIAL_DAYS);
+
+      const spaceStub = ctx.env.SPACE.getByName(spaceId);
+      await (
+        spaceStub as unknown as {
+          init: (id: string, capacity: number) => Promise<void>;
+        }
+      ).init(spaceId, TRIAL_STORAGE);
+
+      await ctx.db.transaction().execute(async (trx) => {
+        await trx
+          .insertInto("Trial")
+          .values({
+            id: trialId,
+            capacity: TRIAL_STORAGE.toString(),
+            accountId: ctx.account.id,
+            startedAt,
+            endsAt,
+          })
+          .execute();
+
+        await trx
+          .insertInto("Space")
+          .values({
+            id: spaceId,
+            capacity: TRIAL_STORAGE.toString(),
+            used: "0",
+            accountId: ctx.account.id,
+            trialId,
+          })
+          .execute();
+      });
+
+      await startTrialWorkflow(ctx.env, {
+        trialId,
+        endsAt: endsAt.toISOString(),
+      });
+    }
 
     const token = await generateServiceToken(
       {

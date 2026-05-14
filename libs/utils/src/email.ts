@@ -1,7 +1,8 @@
-import CleanupEmail from "@blinkdisk/emails/cleanup";
+import CancellationWarningEmail from "@blinkdisk/emails/cancellation-warning";
 import MagicEmail from "@blinkdisk/emails/magic";
 import StorageFullEmail from "@blinkdisk/emails/storage-full";
 import StorageThresholdEmail from "@blinkdisk/emails/storage-threshold";
+import TrialWarningEmail from "@blinkdisk/emails/trial-warning";
 import Plunk from "@plunk/node";
 import { pretty, render } from "@react-email/render";
 import { locales } from "@utils/locales";
@@ -13,16 +14,20 @@ const templates = {
     component: MagicEmail,
   },
   storageThreshold: {
-    sender: "cloud",
+    sender: "cloudblink",
     component: StorageThresholdEmail,
   },
   storageFull: {
-    sender: "cloud",
+    sender: "cloudblink",
     component: StorageFullEmail,
   },
-  cleanup: {
-    sender: "cloud",
-    component: CleanupEmail,
+  cancellationWarning: {
+    sender: "cloudblink",
+    component: CancellationWarningEmail,
+  },
+  trialWarning: {
+    sender: "cloudblink",
+    component: TrialWarningEmail,
   },
 };
 

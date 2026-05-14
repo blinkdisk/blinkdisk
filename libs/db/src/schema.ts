@@ -8,9 +8,10 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 import type {
   ConfigLevel,
   SubscriptionStatus,
+  TrialStatus,
   VaultProvider,
   VaultStatus,
-} from "@db/enums";
+} from "./enums";
 
 export type Account = {
   id: Generated<string>;
@@ -65,6 +66,7 @@ export type Space = {
   used: string;
   accountId: string;
   subscriptionId: string | null;
+  trialId: string | null;
   createdAt: Generated<Timestamp>;
 };
 export type Subscription = {
@@ -80,6 +82,16 @@ export type Subscription = {
   canceledAt: Timestamp | null;
   endedAt: Timestamp | null;
   cleanupAt: Timestamp | null;
+  createdAt: Generated<Timestamp>;
+};
+export type Trial = {
+  id: string;
+  status: Generated<TrialStatus>;
+  capacity: string;
+  accountId: string;
+  startedAt: Timestamp;
+  endsAt: Timestamp | null;
+  endedAt: Timestamp | null;
   createdAt: Generated<Timestamp>;
 };
 export type Vault = {
@@ -110,6 +122,7 @@ export type DB = {
   Session: Session;
   Space: Space;
   Subscription: Subscription;
+  Trial: Trial;
   Vault: Vault;
   Verification: Verification;
 };

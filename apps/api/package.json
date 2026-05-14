@@ -23,7 +23,7 @@
     "dotenv": "^16.4.7",
     "eslint": "^9.22.0",
     "typescript": "5.8.2",
-    "wrangler": "^4.32.0"
+    "wrangler": "^4.91.0"
   },
   "dependencies": {
     "@better-auth/electron": "1.5.5",

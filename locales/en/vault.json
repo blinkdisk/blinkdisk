@@ -15,7 +15,7 @@
       "cloudblink": {
         "readMore": "Read more",
         "features": {
-          "freeStorage": "{{freeSpace}} for free",
+          "trialStorage": "{{trialStorage}} free for {{trialDays}} days",
           "noSetup": "No setup required",
           "cheaper": "80% cheaper than S3"
         },

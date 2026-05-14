@@ -1,6 +1,4 @@
-import { database } from "@blinkdisk/db/index";
 import { verifyServiceToken } from "@blinkdisk/utils/token";
-import { cleanup, sendCleanupEmails } from "@cloud/utils/cleanup";
 import * as Sentry from "@sentry/cloudflare";
 
 export default Sentry.withSentry(
@@ -55,14 +53,10 @@ export default Sentry.withSentry(
         },
       });
     },
-    async scheduled(controller: ScheduledController, env: CloudflareBindings) {
-      const db = database(env.HYPERDRIVE.connectionString);
-
-      await sendCleanupEmails(db, controller.scheduledTime);
-      await cleanup(db, controller.scheduledTime, env);
-    },
   },
 );
 
 export { Space } from "@cloud/classes/space";
 export { Vault } from "@cloud/classes/vault";
+export { CancellationWorkflow } from "@cloud/workflows/cancellation";
+export { TrialWorkflow } from "@cloud/workflows/trial";
