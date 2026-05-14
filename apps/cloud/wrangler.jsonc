@@ -17,6 +17,18 @@
       },
     ],
   },
+  "workflows": [
+    {
+      "name": "cloud-cancellations",
+      "binding": "CANCELLATION_WORKFLOW",
+      "class_name": "CancellationWorkflow",
+    },
+    {
+      "name": "cloud-trials",
+      "binding": "TRIAL_WORKFLOW",
+      "class_name": "TrialWorkflow",
+    },
+  ],
   "migrations": [
     {
       "tag": "v1",
@@ -31,13 +43,6 @@
       "deleted_classes": ["Storage"],
     },
   ],
-  "env": {
-    "production": {
-      "triggers": {
-        "crons": ["0 0 * * *"],
-      },
-    },
-  },
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",

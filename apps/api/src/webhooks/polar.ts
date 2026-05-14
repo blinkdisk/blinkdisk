@@ -1,6 +1,7 @@
 import { HonoContextOptions } from "@api/index";
 import { trackAffiliatePayment } from "@api/lib/affiliate";
 import { posthog } from "@api/lib/posthog";
+import { startCancellationWorkflow } from "@api/lib/workflows";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { SubscriptionStatus } from "@blinkdisk/db/enums";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
@@ -193,6 +194,13 @@ export async function polarWebhook(
           })
           .where("id", "=", previous.id)
           .execute();
+
+        if (cleanupAt) {
+          await startCancellationWorkflow(c.env, {
+            subscriptionId: previous.id,
+            cleanupAt: cleanupAt.toISOString(),
+          });
+        }
 
         if (plan && plan.id !== previous.planId) planUpdated = true;
 
