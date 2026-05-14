@@ -1,7 +1,7 @@
 import { database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
-import { waitUntil } from "@cloud/utils/workflows";
 import { deleteVaults } from "@cloud/utils/vault";
+import { waitUntil } from "@cloud/utils/workflows";
 import {
   WorkflowEntrypoint,
   type WorkflowEvent,
@@ -83,9 +83,20 @@ export class TrialWorkflow extends WorkflowEntrypoint<
       const stub = this.env.SPACE.getByName(trial.spaceId);
       await stub.updateCapacity(0);
 
+      const vaults = await db
+        .selectFrom("Vault")
+        .select(["id"])
+        .where("provider", "=", "CLOUDBLINK")
+        .where("spaceId", "=", trial.spaceId)
+        .where("status", "=", "ACTIVE")
+        .execute();
+
+      if (vaults.length) await deleteVaults(db, this.env, vaults);
+
       await db
         .updateTable("Space")
         .set({
+          used: "0",
           capacity: "0",
           trialId: null,
         })
@@ -100,16 +111,6 @@ export class TrialWorkflow extends WorkflowEntrypoint<
         })
         .where("id", "=", trial.id)
         .execute();
-
-      const vaults = await db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("provider", "=", "CLOUDBLINK")
-        .where("spaceId", "=", trial.spaceId)
-        .where("status", "=", "ACTIVE")
-        .execute();
-
-      if (vaults.length) await deleteVaults(db, this.env, vaults);
 
       return { skipped: false, vaults: vaults.length };
     });

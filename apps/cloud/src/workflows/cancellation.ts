@@ -1,7 +1,7 @@
 import { database } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
-import { waitUntil } from "@cloud/utils/workflows";
 import { deleteVaults } from "@cloud/utils/vault";
+import { waitUntil } from "@cloud/utils/workflows";
 import {
   WorkflowEntrypoint,
   type WorkflowEvent,
@@ -116,6 +116,7 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
       await db
         .updateTable("Space")
         .set({
+          used: "0",
           capacity: "0",
           subscriptionId: null,
         })
