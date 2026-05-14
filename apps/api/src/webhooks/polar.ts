@@ -1,7 +1,10 @@
 import { HonoContextOptions } from "@api/index";
 import { trackAffiliatePayment } from "@api/lib/affiliate";
 import { posthog } from "@api/lib/posthog";
-import { startCancellationWorkflow } from "@api/lib/workflows";
+import {
+  startCancellationWorkflow,
+  stopCancellationWorkflow,
+} from "@api/lib/workflows";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { SubscriptionStatus } from "@blinkdisk/db/enums";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
@@ -82,13 +85,35 @@ export async function polarWebhook(
 
         if (!account) return c.json({ error: "Account not found" }, 400);
 
+        const subscriptionsWithCleanup = await db
+          .selectFrom("Subscription")
+          .select(["id", "cleanupAt"])
+          .where("accountId", "=", account.id)
+          .where("cleanupAt", "is not", null)
+          .execute();
+
         // Clear cleanupAt on any previous subscriptions for this account
         // to prevent stale cleanup emails and data deletion
-        await db
-          .updateTable("Subscription")
-          .set({ cleanupAt: null })
-          .where("accountId", "=", account.id)
-          .execute();
+        if (subscriptionsWithCleanup.length) {
+          await db
+            .updateTable("Subscription")
+            .set({ cleanupAt: null })
+            .where("accountId", "=", account.id)
+            .execute();
+
+          c.executionCtx.waitUntil(
+            Promise.all(
+              subscriptionsWithCleanup
+                .filter((subscription) => subscription.cleanupAt)
+                .map((subscription) =>
+                  stopCancellationWorkflow(c.env, {
+                    subscriptionId: subscription.id,
+                    cleanupAt: subscription.cleanupAt!.toISOString(),
+                  }),
+                ),
+            ),
+          );
+        }
 
         accountId = account.id;
         subscriptionId = generateId("Subscription");
@@ -195,11 +220,18 @@ export async function polarWebhook(
           .where("id", "=", previous.id)
           .execute();
 
-        if (cleanupAt) {
+        if (cleanupAt && !previous.cleanupAt) {
           await startCancellationWorkflow(c.env, {
             subscriptionId: previous.id,
             cleanupAt: cleanupAt.toISOString(),
           });
+        } else if (previous.cleanupAt && !cleanupAt) {
+          c.executionCtx.waitUntil(
+            stopCancellationWorkflow(c.env, {
+              subscriptionId: previous.id,
+              cleanupAt: previous.cleanupAt.toISOString(),
+            }),
+          );
         }
 
         if (plan && plan.id !== previous.planId) planUpdated = true;
