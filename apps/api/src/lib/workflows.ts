@@ -23,23 +23,13 @@ function isMissingWorkflowError(error: unknown) {
   );
 }
 
-function getCancellationWorkflowId(params: CancellationWorkflowParams) {
-  const cleanupAt = new Date(params.cleanupAt);
-  return `cancellation-${params.subscriptionId}-${cleanupAt.getTime()}`;
-}
-
-function getTrialWorkflowId(params: TrialWorkflowParams) {
-  const endsAt = new Date(params.endsAt);
-  return `trial-${params.trialId}-${endsAt.getTime()}`;
-}
-
 export async function startTrialWorkflow(
   env: CloudflareBindings,
   params: TrialWorkflowParams,
 ) {
   try {
     await env.TRIAL_WORKFLOW.create({
-      id: getTrialWorkflowId(params),
+      id: params.trialId,
       params,
     });
   } catch (error) {
@@ -54,7 +44,7 @@ export async function stopTrialWorkflow(
   params: TrialWorkflowParams,
 ) {
   try {
-    const instance = await env.TRIAL_WORKFLOW.get(getTrialWorkflowId(params));
+    const instance = await env.TRIAL_WORKFLOW.get(params.trialId);
     const { status } = await instance.status();
 
     if (["complete", "errored", "terminated"].includes(status)) return;
@@ -73,7 +63,7 @@ export async function startCancellationWorkflow(
 ) {
   try {
     await env.CANCELLATION_WORKFLOW.create({
-      id: getCancellationWorkflowId(params),
+      id: params.subscriptionId,
       params,
     });
   } catch (error) {
@@ -89,7 +79,7 @@ export async function stopCancellationWorkflow(
 ) {
   try {
     const instance = await env.CANCELLATION_WORKFLOW.get(
-      getCancellationWorkflowId(params),
+      params.subscriptionId,
     );
     const { status } = await instance.status();
 
