@@ -28,19 +28,40 @@ function getCancellationWorkflowId(params: CancellationWorkflowParams) {
   return `cancellation-${params.subscriptionId}-${cleanupAt.getTime()}`;
 }
 
+function getTrialWorkflowId(params: TrialWorkflowParams) {
+  const endsAt = new Date(params.endsAt);
+  return `trial-${params.trialId}-${endsAt.getTime()}`;
+}
+
 export async function startTrialWorkflow(
   env: CloudflareBindings,
   params: TrialWorkflowParams,
 ) {
-  const endsAt = new Date(params.endsAt);
-
   try {
     await env.TRIAL_WORKFLOW.create({
-      id: `trial-${params.trialId}-${endsAt.getTime()}`,
+      id: getTrialWorkflowId(params),
       params,
     });
   } catch (error) {
     if (isDuplicateWorkflowError(error)) return;
+
+    throw error;
+  }
+}
+
+export async function stopTrialWorkflow(
+  env: CloudflareBindings,
+  params: TrialWorkflowParams,
+) {
+  try {
+    const instance = await env.TRIAL_WORKFLOW.get(getTrialWorkflowId(params));
+    const { status } = await instance.status();
+
+    if (["complete", "errored", "terminated"].includes(status)) return;
+
+    await instance.terminate();
+  } catch (error) {
+    if (isMissingWorkflowError(error)) return;
 
     throw error;
   }

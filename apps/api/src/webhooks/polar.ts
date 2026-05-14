@@ -4,6 +4,7 @@ import { posthog } from "@api/lib/posthog";
 import {
   startCancellationWorkflow,
   stopCancellationWorkflow,
+  stopTrialWorkflow,
 } from "@api/lib/workflows";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import { SubscriptionStatus } from "@blinkdisk/db/enums";
@@ -101,17 +102,15 @@ export async function polarWebhook(
             .where("accountId", "=", account.id)
             .execute();
 
-          c.executionCtx.waitUntil(
-            Promise.all(
-              subscriptionsWithCleanup
-                .filter((subscription) => subscription.cleanupAt)
-                .map((subscription) =>
-                  stopCancellationWorkflow(c.env, {
-                    subscriptionId: subscription.id,
-                    cleanupAt: subscription.cleanupAt!.toISOString(),
-                  }),
-                ),
-            ),
+          await Promise.all(
+            subscriptionsWithCleanup
+              .filter((subscription) => subscription.cleanupAt)
+              .map((subscription) =>
+                stopCancellationWorkflow(c.env, {
+                  subscriptionId: subscription.id,
+                  cleanupAt: subscription.cleanupAt!.toISOString(),
+                }),
+              ),
           );
         }
 
@@ -304,16 +303,39 @@ export async function polarWebhook(
           .where("id", "=", space.id)
           .execute();
 
-        await db
-          .updateTable("Trial")
-          .set({
-            status: "ENDED",
-            endsAt: null,
-            endedAt: new Date(),
-          })
+        const activeTrials = await db
+          .selectFrom("Trial")
+          .select(["id", "endsAt"])
           .where("accountId", "=", accountId)
           .where("status", "=", "ACTIVE")
           .execute();
+
+        if (activeTrials.length) {
+          await db
+            .updateTable("Trial")
+            .set({
+              status: "ENDED",
+              endsAt: null,
+              endedAt: new Date(),
+            })
+            .where(
+              "id",
+              "in",
+              activeTrials.map((t) => t.id),
+            )
+            .execute();
+
+          await Promise.all(
+            activeTrials
+              .filter((trial) => trial.endsAt)
+              .map((trial) =>
+                stopTrialWorkflow(c.env, {
+                  trialId: trial.id,
+                  endsAt: trial.endsAt!.toISOString(),
+                }),
+              ),
+          );
+        }
 
         const stub = c.env.SPACE.getByName(space.id);
         await (
