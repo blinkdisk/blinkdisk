@@ -59,6 +59,13 @@ export const cloudblinkRouter = router({
       const endsAt = new Date(startedAt);
       endsAt.setDate(endsAt.getDate() + TRIAL_DAYS);
 
+      const spaceStub = ctx.env.SPACE.getByName(spaceId);
+      await (
+        spaceStub as unknown as {
+          init: (id: string, capacity: number) => Promise<void>;
+        }
+      ).init(spaceId, TRIAL_STORAGE);
+
       await ctx.db.transaction().execute(async (trx) => {
         await trx
           .insertInto("Trial")
@@ -82,13 +89,6 @@ export const cloudblinkRouter = router({
           })
           .execute();
       });
-
-      const spaceStub = ctx.env.SPACE.getByName(spaceId);
-      await (
-        spaceStub as unknown as {
-          init: (id: string, capacity: number) => Promise<void>;
-        }
-      ).init(spaceId, TRIAL_STORAGE);
 
       await startTrialWorkflow(ctx.env, {
         trialId,
