@@ -9,7 +9,7 @@ import {
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 
-export type TrialWorkflowParams = {
+type TrialWorkflowParams = {
   trialId: string;
   endsAt: string;
 };

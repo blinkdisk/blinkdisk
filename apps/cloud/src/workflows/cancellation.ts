@@ -9,7 +9,7 @@ import {
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 
-export type CancellationWorkflowParams = {
+type CancellationWorkflowParams = {
   subscriptionId: string;
   cleanupAt: string;
 };
