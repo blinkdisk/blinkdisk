@@ -3,8 +3,8 @@ import {
   LANGUAGE_HEADER,
   TIMEZONE_HEADER,
 } from "@blinkdisk/constants/header";
-import { LanguageCode } from "@blinkdisk/constants/language";
-import { ZMagicCodeType } from "@blinkdisk/schemas/auth";
+import type { LanguageCode } from "@blinkdisk/constants/language";
+import type { ZMagicCodeType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";

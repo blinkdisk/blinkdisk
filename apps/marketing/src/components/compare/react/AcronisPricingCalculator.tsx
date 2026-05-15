@@ -105,7 +105,9 @@ export default function AcronisTrueImagePricingCalculator() {
         {storageItems.length > 1 && (
           <Select
             value={storageIndex.toString()}
-            onValueChange={(value) => value && setStorageIndex(parseInt(value))}
+            onValueChange={(value) =>
+              value && setStorageIndex(parseInt(value, 10))
+            }
             items={storageItems}
           >
             <SelectTrigger className="bg-secondary mt-3 text-sm">

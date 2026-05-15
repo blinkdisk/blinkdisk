@@ -2,9 +2,9 @@ import {
   ALL_COUNTRIES,
   type CountryCode,
 } from "@blinkdisk/constants/countries";
-import {
-  type NormalizedBackupTool,
-  type NormalizedCellValue,
+import type {
+  NormalizedBackupTool,
+  NormalizedCellValue,
 } from "@blinkdisk/utils/tools";
 
 import {

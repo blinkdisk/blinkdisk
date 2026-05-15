@@ -1,9 +1,8 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import * as React from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { ChevronRightIcon } from "lucide-react";
+import type * as React from "react";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -61,6 +60,7 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive lint/a11y/useSemanticElements: current page is rendered as inactive breadcrumb text.
     <span
       data-slot="breadcrumb-page"
       role="link"

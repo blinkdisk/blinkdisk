@@ -1,4 +1,4 @@
-import { generateId, generateCode, verifyId, type Prefix } from "./id";
+import { generateCode, generateId, type Prefix, verifyId } from "./id";
 
 describe("generateId", () => {
   it("returns a string of length 21 without prefix", () => {

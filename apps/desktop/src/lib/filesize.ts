@@ -1,4 +1,4 @@
-import { ZFileSizeType } from "@blinkdisk/schemas/policy";
+import type { ZFileSizeType } from "@blinkdisk/schemas/policy";
 
 export function fromBytes(bytes: number): ZFileSizeType {
   if (bytes === undefined) return { value: undefined, unit: "B" };
@@ -27,7 +27,7 @@ export function fromBytes(bytes: number): ZFileSizeType {
 }
 
 export function toBytes(size: ZFileSizeType): number | undefined {
-  if (size.value == undefined) return undefined;
+  if (size.value === undefined) return undefined;
   if (size.unit === "B") return size.value;
   if (size.unit === "KB") return size.value * 1000;
   if (size.unit === "MB") return size.value * 1000 * 1000;

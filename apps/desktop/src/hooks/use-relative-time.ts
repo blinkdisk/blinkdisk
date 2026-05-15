@@ -36,7 +36,7 @@ export function useRelativeTime(
     }, 10_000);
 
     return () => clearInterval(interval);
-  }, [date, getRelativeTime]);
+  }, [getRelativeTime]);
 
   return relativeTime;
 }

@@ -1,4 +1,4 @@
-import { filesize, FilesizeOptions } from "filesize";
+import { type FilesizeOptions, filesize } from "filesize";
 
 export function formatSize(size: number, options?: FilesizeOptions) {
   return filesize(size, options);

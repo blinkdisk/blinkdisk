@@ -11,6 +11,7 @@ export function AmazonS3Icon({ className }: AmazonS3IconProps) {
       viewBox="0 0 428 512"
       className={className}
     >
+      <title>Amazon S3</title>
       <defs>
         <style>
           {`.cls-1 {

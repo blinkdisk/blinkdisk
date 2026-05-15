@@ -26,7 +26,7 @@ export function useMount() {
         ),
       );
 
-      if (error && "code" in error && error.code == "NOT_FOUND") return null;
+      if (error && "code" in error && error.code === "NOT_FOUND") return null;
       if (error) throw error;
 
       return res.data as CoreMountItem;

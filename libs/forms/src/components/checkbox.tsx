@@ -1,9 +1,9 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
 import {
-  CheckboxProps,
+  type CheckboxProps,
   Checkbox as CheckboxRoot,
 } from "@blinkdisk/ui/checkbox";
 import { cn } from "@blinkdisk/utils/class";

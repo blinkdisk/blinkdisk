@@ -1,4 +1,4 @@
-import { HonoContextOptions } from "@api/index";
+import type { HonoContextOptions } from "@api/index";
 import { trackAffiliatePayment } from "@api/lib/affiliate";
 import { posthog } from "@api/lib/posthog";
 import {
@@ -7,18 +7,18 @@ import {
   stopTrialWorkflow,
 } from "@api/lib/workflows";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
-import { SubscriptionStatus } from "@blinkdisk/db/enums";
+import type { SubscriptionStatus } from "@blinkdisk/db/enums";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
 import { generateId } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
-import { Order } from "@polar-sh/sdk/models/components/order.js";
-import { Subscription } from "@polar-sh/sdk/models/components/subscription";
+import type { Order } from "@polar-sh/sdk/models/components/order.js";
+import type { Subscription } from "@polar-sh/sdk/models/components/subscription";
 import {
   validateEvent,
   WebhookVerificationError,
 } from "@polar-sh/sdk/webhooks";
-import { Context } from "hono";
-import { BlankInput } from "hono/types";
+import type { Context } from "hono";
+import type { BlankInput } from "hono/types";
 
 const MIN_GRACE_PERIOD_MS = 1000 * 60 * 60 * 24 * 7;
 
@@ -104,12 +104,19 @@ export async function polarWebhook(
 
           await Promise.all(
             subscriptionsWithCleanup
-              .filter((subscription) => subscription.cleanupAt)
+              .filter(
+                (
+                  subscription,
+                ): subscription is typeof subscription & {
+                  cleanupAt: Date;
+                  canceledAt: Date;
+                } => !!subscription.cleanupAt && !!subscription.canceledAt,
+              )
               .map((subscription) =>
                 stopCancellationWorkflow(c.env, {
                   subscriptionId: subscription.id,
-                  cleanupAt: subscription.cleanupAt!.toISOString(),
-                  canceledAt: subscription.canceledAt!.toISOString(),
+                  cleanupAt: subscription.cleanupAt.toISOString(),
+                  canceledAt: subscription.canceledAt.toISOString(),
                 }),
               ),
           );
@@ -222,7 +229,9 @@ export async function polarWebhook(
 
         if (cleanupAt && !previous.cleanupAt) {
           if (!subscription.canceledAt)
-            throw new Error("Cannot start cancellation workflow without canceledAt");
+            throw new Error(
+              "Cannot start cancellation workflow without canceledAt",
+            );
 
           await startCancellationWorkflow(c.env, {
             subscriptionId: previous.id,
@@ -231,7 +240,9 @@ export async function polarWebhook(
           });
         } else if (previous.cleanupAt && !cleanupAt) {
           if (!previous.canceledAt)
-            throw new Error("Cannot stop cancellation workflow without canceledAt");
+            throw new Error(
+              "Cannot stop cancellation workflow without canceledAt",
+            );
 
           c.executionCtx.waitUntil(
             stopCancellationWorkflow(c.env, {
@@ -336,11 +347,14 @@ export async function polarWebhook(
 
           await Promise.all(
             activeTrials
-              .filter((trial) => trial.endsAt)
+              .filter(
+                (trial): trial is typeof trial & { endsAt: Date } =>
+                  !!trial.endsAt,
+              )
               .map((trial) =>
                 stopTrialWorkflow(c.env, {
                   trialId: trial.id,
-                  endsAt: trial.endsAt!.toISOString(),
+                  endsAt: trial.endsAt.toISOString(),
                 }),
               ),
           );

@@ -1,12 +1,17 @@
 ---
 import "@marketing/styles.css";
-import ThemeScript from "@marketing/components/ThemeScript.astro";
-import { MARKETING_URL, POSTHOG_KEY, POSTHOG_HOST, ENDORSELY_PUBLIC_KEY, CRISP_KEY } from "astro:env/server";
-
+import {
+  CRISP_KEY,
+  ENDORSELY_PUBLIC_KEY,
+  MARKETING_URL,
+  POSTHOG_HOST,
+  POSTHOG_KEY,
+} from "astro:env/server";
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
 import inter700 from "@fontsource/inter/files/inter-latin-700-normal.woff2";
+import ThemeScript from "@marketing/components/ThemeScript.astro";
 
 export type Props = {
   title?: string;
@@ -27,7 +32,15 @@ const defaultDescription =
 const defaultImage = `${MARKETING_URL ?? "https://blinkdisk.com"}/brand/social.jpg`;
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
-const { title, description, image, og, structuredData, backgroundPattern, bodyClass } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  og,
+  structuredData,
+  backgroundPattern,
+  bodyClass,
+} = Astro.props;
 
 const pageTitle = title ? `${title} | BlinkDisk` : defaultTitle;
 const pageDescription = description || defaultDescription;
@@ -71,7 +84,11 @@ const websiteSchema = {
 const allStructuredData = [
   organizationSchema,
   websiteSchema,
-  ...(Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : []),
+  ...(Array.isArray(structuredData)
+    ? structuredData
+    : structuredData
+      ? [structuredData]
+      : []),
 ];
 ---
 

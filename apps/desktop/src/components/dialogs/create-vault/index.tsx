@@ -12,7 +12,7 @@ import { CreateVaultProviders } from "@desktop/components/dialogs/create-vault/p
 import { CreateVaultVariant } from "@desktop/components/dialogs/create-vault/variant";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import {
-  CreateVaultStep,
+  type CreateVaultStep,
   useCreateVaultDialog,
 } from "@desktop/hooks/state/use-create-vault-dialog";
 import { ArrowLeftIcon } from "lucide-react";
@@ -49,7 +49,7 @@ export function CreateVaultDialog() {
           {step !== "VARIANT" && !autoSelectedProvider ? (
             <Button
               onClick={() => {
-                if (step === "DETAILS" && provider == "CLOUDBLINK")
+                if (step === "DETAILS" && provider === "CLOUDBLINK")
                   setOptions({
                     step: "VARIANT",
                     autoSelectedProvider: false,

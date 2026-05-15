@@ -5,7 +5,7 @@
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { MinutesProps } from "@desktop/components/cron/types";
+import type { MinutesProps } from "@desktop/components/cron/types";
 
 export function Minutes(props: MinutesProps) {
   const {
@@ -48,7 +48,7 @@ export function Minutes(props: MinutesProps) {
             : locale.emptyMinutes || DEFAULT_LOCALE_EN.emptyMinutes
         }
         value={value}
-        unit={UNITS[0]!}
+        unit={UNITS[0]}
         setValue={setValue}
         locale={locale}
         className={className}

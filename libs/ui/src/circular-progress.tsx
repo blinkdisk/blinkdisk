@@ -46,6 +46,7 @@ export function CircularProgress({
         style={{ transform: "rotate(-90deg)" }}
         className="relative"
       >
+        <title>Progress</title>
         {/* Base Circle */}
         <circle
           r={radius}

@@ -50,10 +50,9 @@ describe("toBits", () => {
 });
 
 describe("roundtrip", () => {
-  it.each([0, 1000, 1_000_000, 1_000_000_000])(
-    "toBits(fromBits(%i)) === %i",
-    (bits) => {
-      expect(toBits(fromBits(bits))).toBe(bits);
-    },
-  );
+  it.each([
+    0, 1000, 1_000_000, 1_000_000_000,
+  ])("toBits(fromBits(%i)) === %i", (bits) => {
+    expect(toBits(fromBits(bits))).toBe(bits);
+  });
 });

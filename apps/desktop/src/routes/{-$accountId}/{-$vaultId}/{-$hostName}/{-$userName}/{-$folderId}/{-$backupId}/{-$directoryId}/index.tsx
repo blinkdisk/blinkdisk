@@ -2,6 +2,7 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { DirectoryTable } from "@desktop/components/directories/table";
 import { Empty } from "@desktop/components/empty";
+import type { BreadcrumbSearchParams } from "@desktop/components/vaults/breadcrumb";
 import { VaultRestores } from "@desktop/components/vaults/restores";
 import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useDirectory } from "@desktop/hooks/queries/core/use-directory";
@@ -60,10 +61,9 @@ function RouteComponent() {
                 {
                   id: "backup",
                   text: getBackupDisplayName(backup),
-                  href:
-                    !path || !path.length
-                      ? undefined
-                      : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+                  href: !path?.length
+                    ? undefined
+                    : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                   params: (params) => ({
                     ...params,
                     directoryId: backup.rootID,
@@ -81,7 +81,7 @@ function RouteComponent() {
                         ...params,
                         directoryId: objectId,
                       }),
-                      search: (search: Record<string, string[]>) => ({
+                      search: (search: BreadcrumbSearchParams) => ({
                         ...search,
                         path: search.path?.slice(0, index + 1),
                       }),
@@ -92,7 +92,7 @@ function RouteComponent() {
       >
         <Button
           onClick={() => {
-            if (path && path.length)
+            if (path?.length)
               navigate({
                 to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                 params: (params) => ({

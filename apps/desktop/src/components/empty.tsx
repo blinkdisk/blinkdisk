@@ -1,5 +1,5 @@
 import { cn } from "@blinkdisk/utils/class";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type EmptyProps = {
   title: string;

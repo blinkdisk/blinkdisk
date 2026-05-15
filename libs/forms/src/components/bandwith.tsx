@@ -1,9 +1,9 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
-import { ZBandwithType } from "@blinkdisk/schemas/vault";
-import { Input, InputProps } from "@blinkdisk/ui/input";
+import type { ZBandwithType } from "@blinkdisk/schemas/vault";
+import { Input, type InputProps } from "@blinkdisk/ui/input";
 import {
   Select,
   SelectContent,
@@ -60,7 +60,8 @@ const Bandwith = React.forwardRef<
           ) =>
             field.handleChange({
               value:
-                "valueAsNumber" in e.target && !isNaN(e.target.valueAsNumber)
+                "valueAsNumber" in e.target &&
+                !Number.isNaN(e.target.valueAsNumber)
                   ? e.target.valueAsNumber
                   : e.target.value !== ""
                     ? Number(e.target.value)

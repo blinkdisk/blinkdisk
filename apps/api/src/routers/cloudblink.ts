@@ -33,7 +33,7 @@ export const cloudblinkRouter = router({
 
     return {
       used,
-      capacity: parseInt(space.capacity),
+      capacity: parseInt(space.capacity, 10),
       trialEndsAt: space.trialEndsAt,
     };
   }),
@@ -49,7 +49,8 @@ export const cloudblinkRouter = router({
     let spaceId: string;
 
     if (space) {
-      if (parseInt(space.capacity) === 0) throw new CustomError("NO_STORAGE");
+      if (parseInt(space.capacity, 10) === 0)
+        throw new CustomError("NO_STORAGE");
 
       spaceId = space.id;
     } else {

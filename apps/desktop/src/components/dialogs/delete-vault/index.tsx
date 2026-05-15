@@ -53,72 +53,70 @@ export function DeleteVaultDialog() {
   });
 
   return (
-    <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
-        <DialogContent className="w-105">
-          <DialogHeader>
-            <DialogTitle>{t("title")}</DialogTitle>
-            <DialogDescription>{t("description")}</DialogDescription>
-          </DialogHeader>
-          {vault && vault.provider !== "CLOUDBLINK" ? (
-            <Alert className="mt-4 w-full">
-              <InfoIcon />
-              <AlertTitle>{t("storageAlert.title")}</AlertTitle>
-              <AlertDescription className="text-xs">
-                {t("storageAlert.description")}
-              </AlertDescription>
-            </Alert>
-          ) : null}
-          {vault && (
-            <DynamicField
-              containerClassName="mt-4"
-              name="confirm"
-              title={t("confirm.label", { vaultName: vault.name })}
-              errors={
-                showError
-                  ? [
-                      {
-                        message:
-                          confirmName.length === 0
-                            ? t("confirm.error.empty", {
-                                vaultName: vault.name,
-                              })
-                            : t("confirm.error.mismatch"),
-                        translated: true,
-                      },
-                    ]
-                  : undefined
-              }
-            >
-              <Input
-                id="confirm"
-                type="text"
-                value={confirmName}
-                onChange={(e) => {
-                  setShowError(false);
-                  setConfirmName(e.target.value);
-                }}
-                placeholder={t("confirm.placeholder")}
-              />
-            </DynamicField>
-          )}
-          <DialogFooter className="mt-6">
-            <Button onClick={() => setIsOpen(false)} variant="secondary">
-              {t("cancel")}
-            </Button>
-            <Button
-              loading={isDeletePending}
-              onClick={() => {
-                if (!isConfirmed) return setShowError(true);
-                if (options) mutateDelete({ vaultId: options.vaultId });
+    <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
+      <DialogContent className="w-105">
+        <DialogHeader>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
+        </DialogHeader>
+        {vault && vault.provider !== "CLOUDBLINK" ? (
+          <Alert className="mt-4 w-full">
+            <InfoIcon />
+            <AlertTitle>{t("storageAlert.title")}</AlertTitle>
+            <AlertDescription className="text-xs">
+              {t("storageAlert.description")}
+            </AlertDescription>
+          </Alert>
+        ) : null}
+        {vault && (
+          <DynamicField
+            containerClassName="mt-4"
+            name="confirm"
+            title={t("confirm.label", { vaultName: vault.name })}
+            errors={
+              showError
+                ? [
+                    {
+                      message:
+                        confirmName.length === 0
+                          ? t("confirm.error.empty", {
+                              vaultName: vault.name,
+                            })
+                          : t("confirm.error.mismatch"),
+                      translated: true,
+                    },
+                  ]
+                : undefined
+            }
+          >
+            <Input
+              id="confirm"
+              type="text"
+              value={confirmName}
+              onChange={(e) => {
+                setShowError(false);
+                setConfirmName(e.target.value);
               }}
-              variant="destructive"
-            >
-              {t("continue")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+              placeholder={t("confirm.placeholder")}
+            />
+          </DynamicField>
+        )}
+        <DialogFooter className="mt-6">
+          <Button onClick={() => setIsOpen(false)} variant="secondary">
+            {t("cancel")}
+          </Button>
+          <Button
+            loading={isDeletePending}
+            onClick={() => {
+              if (!isConfirmed) return setShowError(true);
+              if (options) mutateDelete({ vaultId: options.vaultId });
+            }}
+            variant="destructive"
+          >
+            {t("continue")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

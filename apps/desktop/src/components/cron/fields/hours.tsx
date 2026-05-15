@@ -5,7 +5,7 @@
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { HoursProps } from "@desktop/components/cron/types";
+import type { HoursProps } from "@desktop/components/cron/types";
 
 export function Hours(props: HoursProps) {
   const {
@@ -34,7 +34,7 @@ export function Hours(props: HoursProps) {
       <CustomSelect
         placeholder={locale.emptyHours || DEFAULT_LOCALE_EN.emptyHours}
         value={value}
-        unit={UNITS[1]!}
+        unit={UNITS[1]}
         setValue={setValue}
         locale={locale}
         className={className}

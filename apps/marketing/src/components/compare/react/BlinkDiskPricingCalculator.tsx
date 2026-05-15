@@ -16,6 +16,10 @@ const currency = "USD";
 
 const TRIAL_STORAGE_GB = TRIAL_STORAGE / (1000 * 1000 * 1000);
 
+const formatStorage = (gb: number) => {
+  return `${gb.toLocaleString()} GB`;
+};
+
 export default function BlinkDiskPricingCalculator() {
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
   const [planIndex, setPlanIndex] = useState(-1);
@@ -32,10 +36,6 @@ export default function BlinkDiskPricingCalculator() {
     if (isFreeTier || !price) return 0;
     return price.amount;
   }, [isFreeTier, price]);
-
-  const formatStorage = (gb: number) => {
-    return `${gb.toLocaleString()} GB`;
-  };
 
   const planItems = useMemo(
     () => [
@@ -111,7 +111,13 @@ export default function BlinkDiskPricingCalculator() {
               maximumFractionDigits: 0,
             })}
           </span>
-          <span className={isFreeTier ? "text-foreground/80 font-medium" : "text-muted-foreground"}>
+          <span
+            className={
+              isFreeTier
+                ? "text-foreground/80 font-medium"
+                : "text-muted-foreground"
+            }
+          >
             {isFreeTier
               ? `for ${TRIAL_DAYS} days`
               : period === "YEARLY"

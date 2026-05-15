@@ -1,7 +1,10 @@
 vi.mock("@blinkdisk/utils/id", () => ({ generateId: vi.fn(() => "mock-id") }));
 vi.mock("@blinkdisk/utils/try-catch", () => ({ tryCatch: vi.fn() }));
 vi.mock("@electron/log", () => ({ log: { info: vi.fn(), error: vi.fn() } }));
-vi.mock("@electron/path", () => ({ corePath: vi.fn(), globalVaultDirectory: vi.fn(() => "/mock") }));
+vi.mock("@electron/path", () => ({
+  corePath: vi.fn(),
+  globalVaultDirectory: vi.fn(() => "/mock"),
+}));
 vi.mock("@electron/vault/fetch", () => ({ fetchVault: vi.fn() }));
 vi.mock("@electron/vault/manage", () => ({ vaults: {} }));
 vi.mock("@electron/window", () => ({ sendWindow: vi.fn() }));
@@ -9,7 +12,10 @@ vi.mock("child_process", () => ({ spawn: vi.fn() }));
 vi.mock("electron", () => ({ app: { isPackaged: false } }));
 vi.mock("tough-cookie", () => ({ CookieJar: vi.fn() }));
 
-import { parseServerLine, calculateStatusPollDelay } from "@electron/vault/server";
+import {
+  calculateStatusPollDelay,
+  parseServerLine,
+} from "@electron/vault/server";
 
 describe("parseServerLine", () => {
   beforeEach(() => {
@@ -18,7 +24,10 @@ describe("parseServerLine", () => {
 
   it("parses SERVER ADDRESS line", () => {
     const result = parseServerLine("SERVER ADDRESS: https://127.0.0.1:12345");
-    expect(result).toEqual({ key: "SERVER ADDRESS", value: "https://127.0.0.1:12345" });
+    expect(result).toEqual({
+      key: "SERVER ADDRESS",
+      value: "https://127.0.0.1:12345",
+    });
   });
 
   it("parses SERVER PASSWORD line", () => {
@@ -39,12 +48,20 @@ describe("parseServerLine", () => {
   it("parses SERVER CERTIFICATE line and decodes base64", () => {
     const encoded = Buffer.from("hello").toString("base64");
     const result = parseServerLine(`SERVER CERTIFICATE: ${encoded}`);
-    expect(result).toEqual({ key: "SERVER CERTIFICATE", value: encoded, decoded: "hello" });
+    expect(result).toEqual({
+      key: "SERVER CERTIFICATE",
+      value: encoded,
+      decoded: "hello",
+    });
   });
 
   it("parses BDC SPACE UPDATE line with JSON", () => {
     const result = parseServerLine('BDC SPACE UPDATE: {"used":100}');
-    expect(result).toEqual({ key: "BDC SPACE UPDATE", value: '{"used":100}', parsed: { used: 100 } });
+    expect(result).toEqual({
+      key: "BDC SPACE UPDATE",
+      value: '{"used":100}',
+      parsed: { used: 100 },
+    });
   });
 
   it("returns BDC VAULT DELETED for vault deleted lines", () => {

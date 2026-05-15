@@ -1,6 +1,9 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { CoreMountItem, useMount } from "@desktop/hooks/queries/core/use-mount";
+import {
+  type CoreMountItem,
+  useMount,
+} from "@desktop/hooks/queries/core/use-mount";
 import { useBackup } from "@desktop/hooks/use-backup";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -37,7 +40,7 @@ export function useStartMount() {
       const platform = await window.electron.os.platform();
 
       let directoryPath = newMount.path;
-      if (path && path.length) {
+      if (path?.length) {
         const seperator = platform === "windows" ? "\\" : "/";
         const subDirectories = path.map(({ name }) => name).join(seperator);
         directoryPath = `${directoryPath}${seperator}${subDirectories}`;

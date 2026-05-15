@@ -1,4 +1,4 @@
-import { ZPolicyType } from "@blinkdisk/schemas/policy";
+import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertPolicyToCore } from "@desktop/lib/policy";

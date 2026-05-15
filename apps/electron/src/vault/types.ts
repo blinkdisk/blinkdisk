@@ -1,5 +1,5 @@
-import { ChildProcessWithoutNullStreams } from "child_process";
-import { CookieJar } from "tough-cookie";
+import type { ChildProcessWithoutNullStreams } from "node:child_process";
+import type { CookieJar } from "tough-cookie";
 
 export type VaultStatus = "SETUP" | "STARTING" | "RUNNING";
 

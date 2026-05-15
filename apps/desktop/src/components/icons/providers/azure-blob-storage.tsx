@@ -12,6 +12,7 @@ export function AzureBlobStorageIcon({ className }: AzureBlobStorageIconProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
+      <title>Azure Blob Storage</title>
       <path
         d="M27.9797 0H10.6597C9.94475 0 9.28475 0.381 8.92775 1L0.26775 16C-0.08925 16.619 -0.08925 17.381 0.26775 18L8.92775 33C9.28475 33.619 9.94575 34 10.6597 34H27.9797C28.6947 34 29.3547 33.619 29.7117 33L38.3717 18C38.7287 17.381 38.7287 16.619 38.3717 16L29.7117 1C29.3547 0.381 28.6947 0 27.9797 0Z"
         fill="#2979FF"

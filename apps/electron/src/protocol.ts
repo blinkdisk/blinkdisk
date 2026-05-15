@@ -1,3 +1,5 @@
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   INTERNAL_SCHEME,
   PROTOCOL_API_NS,
@@ -9,8 +11,6 @@ import { getAccountCookie } from "@electron/auth";
 import { fetchVaultRaw } from "@electron/vault/fetch";
 import { getVault } from "@electron/vault/manage";
 import { app, net, protocol } from "electron";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
 
 export function registerProtcol() {
   protocol.registerSchemesAsPrivileged([
@@ -29,10 +29,7 @@ export function registerProtcol() {
   ]);
 }
 
-export function resolveProtocolPath(
-  baseDir: string,
-  pathname: string,
-): string {
+export function resolveProtocolPath(baseDir: string, pathname: string): string {
   return path.resolve(
     baseDir,
     pathname === "/" ? "index.html" : pathname.slice(1),

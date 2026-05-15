@@ -1,4 +1,4 @@
-import { EncryptedString } from "@electron/encryption";
+import type { EncryptedString } from "@electron/encryption";
 import { globalConfigDirectory } from "@electron/path";
 import { initVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";
@@ -68,8 +68,7 @@ type DotNotation<T, TPrefix extends string = "", D extends number = 5> = [
   ? object
   : {
       [K in keyof T & string]: T[K] extends object
-        ? // eslint-disable-next-line
-          T[K] extends Array<any>
+        ? T[K] extends ReadonlyArray<unknown>
           ? { [P in DotPrefix<TPrefix, K>]: T[K] }
           : { [P in DotPrefix<TPrefix, K>]: T[K] } & DotNotation<
               T[K],
@@ -79,10 +78,11 @@ type DotNotation<T, TPrefix extends string = "", D extends number = 5> = [
         : { [P in DotPrefix<TPrefix, K>]: T[K] };
     }[keyof T & string];
 
-// eslint-disable-next-line
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I,
-) => void
+type UnionToIntersection<U> = (
+  U extends unknown
+    ? (k: U) => void
+    : never
+) extends (k: infer I) => void
   ? I
   : never;
 

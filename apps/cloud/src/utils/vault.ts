@@ -1,4 +1,4 @@
-import { Database } from "@blinkdisk/db/index";
+import type { Database } from "@blinkdisk/db/index";
 
 export async function deleteVaults(
   db: Database,

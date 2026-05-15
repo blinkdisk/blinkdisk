@@ -1,4 +1,4 @@
-import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import type { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";

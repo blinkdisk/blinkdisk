@@ -1,7 +1,7 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZRetentionPolicy,
-  ZRetentionPolicyType,
+  type ZRetentionPolicyType,
 } from "@blinkdisk/schemas/policy";
 import { PolicyContext } from "@desktop/components/policy/context";
 import { pickDefinedFields } from "@desktop/lib/policy";

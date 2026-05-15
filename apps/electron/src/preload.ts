@@ -24,7 +24,7 @@ import type {
   encryptVaultConfig,
 } from "@electron/encryption";
 import type { getPasswordCache, setPasswordCache } from "@electron/password";
-import {
+import type {
   checkEmpty,
   listRestores,
   restoreDirectory,
@@ -37,21 +37,21 @@ import type {
   GlobalStorageSchema,
 } from "@electron/store";
 import type { UpdateStatus } from "@electron/updater";
-import {
+import type {
   connectVault,
   createVault,
   getVault,
   getVaultStatus,
 } from "@electron/vault/manage";
-import { validateVaultConfig } from "@electron/vault/validate";
+import type { validateVaultConfig } from "@electron/vault/validate";
 import {
   contextBridge,
+  type IpcRendererEvent,
   ipcRenderer,
-  IpcRendererEvent,
-  OpenDialogOptions,
-  OpenDialogReturnValue,
-  SaveDialogOptions,
-  SaveDialogReturnValue,
+  type OpenDialogOptions,
+  type OpenDialogReturnValue,
+  type SaveDialogOptions,
+  type SaveDialogReturnValue,
   webFrame,
   webUtils,
 } from "electron";

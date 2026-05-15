@@ -3,9 +3,12 @@ vi.mock("@electron/fs", () => ({ fileExists: vi.fn() }));
 vi.mock("@electron/vault/fetch", () => ({ fetchVault: vi.fn() }));
 vi.mock("@electron/vault/manage", () => ({ getVault: vi.fn() }));
 vi.mock("@electron/window", () => ({ window: null }));
-vi.mock("electron", () => ({ app: { getPath: vi.fn() }, dialog: { showOpenDialog: vi.fn() } }));
+vi.mock("electron", () => ({
+  app: { getPath: vi.fn() },
+  dialog: { showOpenDialog: vi.fn() },
+}));
 
-import { splitFileName, generateDuplicateName } from "@electron/restore";
+import { generateDuplicateName, splitFileName } from "@electron/restore";
 
 describe("splitFileName", () => {
   beforeEach(() => {
@@ -13,19 +16,31 @@ describe("splitFileName", () => {
   });
 
   it('splits "photo.jpg" into baseName and extension', () => {
-    expect(splitFileName("photo.jpg")).toEqual({ baseName: "photo", extension: "jpg" });
+    expect(splitFileName("photo.jpg")).toEqual({
+      baseName: "photo",
+      extension: "jpg",
+    });
   });
 
   it('splits "archive.tar.gz" keeping compound base name', () => {
-    expect(splitFileName("archive.tar.gz")).toEqual({ baseName: "archive.tar", extension: "gz" });
+    expect(splitFileName("archive.tar.gz")).toEqual({
+      baseName: "archive.tar",
+      extension: "gz",
+    });
   });
 
   it('handles "README" with no extension', () => {
-    expect(splitFileName("README")).toEqual({ baseName: "README", extension: "" });
+    expect(splitFileName("README")).toEqual({
+      baseName: "README",
+      extension: "",
+    });
   });
 
   it('handles ".gitignore" as empty baseName with extension', () => {
-    expect(splitFileName(".gitignore")).toEqual({ baseName: "", extension: "gitignore" });
+    expect(splitFileName(".gitignore")).toEqual({
+      baseName: "",
+      extension: "gitignore",
+    });
   });
 
   it('splits "file.name.with.dots.txt" correctly', () => {
@@ -54,6 +69,8 @@ describe("generateDuplicateName", () => {
   });
 
   it("generates duplicate name with compound base name", () => {
-    expect(generateDuplicateName("archive.tar", "gz", 3)).toBe("archive.tar (3).gz");
+    expect(generateDuplicateName("archive.tar", "gz", 3)).toBe(
+      "archive.tar (3).gz",
+    );
   });
 });

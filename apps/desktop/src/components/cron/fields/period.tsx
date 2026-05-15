@@ -2,6 +2,7 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
   Select,
   SelectContent,
@@ -9,11 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@blinkdisk/ui/select";
-import { useCallback } from "react";
-
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { PeriodProps, PeriodType } from "@desktop/components/cron/types";
+import type { PeriodProps, PeriodType } from "@desktop/components/cron/types";
+import { useCallback } from "react";
 
 export function Period(props: PeriodProps) {
   const {

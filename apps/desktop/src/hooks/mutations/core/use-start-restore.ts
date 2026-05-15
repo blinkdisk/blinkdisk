@@ -1,8 +1,8 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
+import type { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
+import type { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
 import { useFolderId } from "@desktop/hooks/use-folder-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";

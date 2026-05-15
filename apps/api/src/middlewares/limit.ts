@@ -1,4 +1,4 @@
-import { Context, Next } from "hono";
+import type { Context, Next } from "hono";
 
 export async function ratelimit(
   c: Context<{ Bindings: CloudflareBindings }>,

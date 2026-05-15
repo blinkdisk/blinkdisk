@@ -1,9 +1,8 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import * as React from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { Button } from "@ui/button";
 import { XIcon } from "lucide-react";
+import type * as React from "react";
 
 function Dialog({
   onClosed,

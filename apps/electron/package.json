@@ -17,7 +17,6 @@
     "dev": "concurrently \"pnpm:compile:dev\" \"pnpm:dev:electron\"",
     "dev:electron": "electronmon ./build/index.js $ELECTRON_EXTRA_ARGS",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --max-warnings=0",
     "test": "vitest run",
     "compile:dev": "node esbuild.config.mjs development",
     "compile:prod": "node esbuild.config.mjs production",
@@ -53,7 +52,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@sentry/esbuild-plugin": "^5.1.1",
     "@types/auto-launch": "^5.0.5",
@@ -65,7 +63,6 @@
     "electron-builder": "^26.0.12",
     "electronmon": "^2.0.3",
     "esbuild": "^0.25.3",
-    "eslint": "^9.22.0",
     "typescript": "5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.18"

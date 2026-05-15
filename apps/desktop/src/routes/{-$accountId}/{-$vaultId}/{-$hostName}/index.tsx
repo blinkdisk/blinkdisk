@@ -31,7 +31,7 @@ function RouteComponent() {
       });
     else {
       const localUser = profile.userNames.find(
-        ({ userName }) => userName == localUserName,
+        ({ userName }) => userName === localUserName,
       );
 
       navigate({

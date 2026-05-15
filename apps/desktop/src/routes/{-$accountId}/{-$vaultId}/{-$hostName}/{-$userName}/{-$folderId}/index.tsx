@@ -134,7 +134,7 @@ function RouteComponent() {
       </div>
       {backups !== null && backups !== undefined && backups.length === 0 ? (
         folder?.status === "UPLOADING" &&
-        folder.currentTaskStatus == "CANCELING" ? (
+        folder.currentTaskStatus === "CANCELING" ? (
           <Empty
             icon={<SquareIcon />}
             title={t("empty.canceling.title")}

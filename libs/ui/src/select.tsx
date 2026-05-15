@@ -1,8 +1,7 @@
 import { Select as SelectPrimitive } from "@base-ui/react/select";
-import * as React from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import type * as React from "react";
 
 export type SelectProps<
   Value,

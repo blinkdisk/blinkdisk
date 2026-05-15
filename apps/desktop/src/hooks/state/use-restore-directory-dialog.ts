@@ -1,5 +1,5 @@
-import { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
+import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 

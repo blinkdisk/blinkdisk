@@ -1,4 +1,4 @@
-import { ZPolicyType } from "@blinkdisk/schemas/policy";
+import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import {
   AccordionContent,
   AccordionItem,
@@ -6,7 +6,7 @@ import {
 } from "@blinkdisk/ui/accordion";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { PolicyContext } from "@desktop/components/policy/context";
-import { ReactNode, useContext } from "react";
+import { type ReactNode, useContext } from "react";
 
 type SettingsCategoryProps = {
   id: keyof ZPolicyType | string;

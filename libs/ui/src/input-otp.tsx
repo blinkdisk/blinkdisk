@@ -1,7 +1,6 @@
+import { cn } from "@blinkdisk/utils/class";
 import { OTPInput, OTPInputContext } from "input-otp";
 import * as React from "react";
-
-import { cn } from "@blinkdisk/utils/class";
 
 export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {
   containerClassName?: string;

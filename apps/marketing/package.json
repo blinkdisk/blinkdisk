@@ -8,8 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "deploy": "wrangler deploy",
-    "lint": "eslint . --max-warnings=0"
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",
@@ -51,13 +50,11 @@
   },
   "devDependencies": {
     "@blinkdisk/assets": "workspace:*",
-    "@blinkdisk/eslint": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/dom-to-image": "^2.6.7",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@types/twemoji-parser": "^13.1.4",
-    "eslint-plugin-astro": "^1.5.0",
     "typescript": "5.8.2",
     "wrangler": "^4.62.0"
   }

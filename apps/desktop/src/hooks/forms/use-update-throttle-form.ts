@@ -1,5 +1,8 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
-import { ZVaultThrottle, ZVaultThrottleType } from "@blinkdisk/schemas/vault";
+import {
+  ZVaultThrottle,
+  type ZVaultThrottleType,
+} from "@blinkdisk/schemas/vault";
 import { useUpdateThrottle } from "@desktop/hooks/mutations/core/use-update-throttle";
 import { useVaultThrottle } from "@desktop/hooks/queries/core/use-vault-throttle";
 

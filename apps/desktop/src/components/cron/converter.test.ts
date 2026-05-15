@@ -143,30 +143,28 @@ describe("getCronStringFromValues", () => {
 
 describe("formatValue", () => {
   it("formats a basic number", () => {
-    expect(formatValue(5, UNITS[0]!)).toBe("5");
+    expect(formatValue(5, UNITS[0])).toBe("5");
   });
 
   it("adds leading zero when enabled", () => {
-    expect(formatValue(5, UNITS[0]!, false, true)).toBe("05");
+    expect(formatValue(5, UNITS[0], false, true)).toBe("05");
   });
 
   it("formats 12-hour clock PM", () => {
-    expect(formatValue(14, UNITS[1]!, false, false, "12-hour-clock")).toBe(
+    expect(formatValue(14, UNITS[1], false, false, "12-hour-clock")).toBe(
       "2PM",
     );
   });
 
   it("formats 12-hour clock AM", () => {
-    expect(formatValue(9, UNITS[1]!, false, false, "12-hour-clock")).toBe(
-      "9AM",
-    );
+    expect(formatValue(9, UNITS[1], false, false, "12-hour-clock")).toBe("9AM");
   });
 
   it("humanizes months", () => {
-    expect(formatValue(1, UNITS[3]!, true)).toBe("JAN");
+    expect(formatValue(1, UNITS[3], true)).toBe("JAN");
   });
 
   it("humanizes weekdays", () => {
-    expect(formatValue(0, UNITS[4]!, true)).toBe("SUN");
+    expect(formatValue(0, UNITS[4], true)).toBe("SUN");
   });
 });

@@ -5,7 +5,7 @@
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { MonthsProps } from "@desktop/components/cron/types";
+import type { MonthsProps } from "@desktop/components/cron/types";
 
 export function Months(props: MonthsProps) {
   const {
@@ -37,7 +37,7 @@ export function Months(props: MonthsProps) {
         grid={false}
         value={value}
         unit={{
-          ...UNITS[3]!,
+          ...UNITS[3],
           // Allow translation of alternative labels when using "humanizeLabels"
           // Issue #3
           alt: locale.altMonths || DEFAULT_LOCALE_EN.altMonths,

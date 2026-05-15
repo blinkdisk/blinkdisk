@@ -1,17 +1,17 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
 import {
   SelectContent,
   SelectItem,
-  SelectProps,
+  type SelectProps,
   Select as SelectRoot,
   SelectTrigger,
   SelectValue,
 } from "@blinkdisk/ui/select";
 import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { ReactNode, useContext } from "react";
+import React, { type ReactNode, useContext } from "react";
 
 const Select = React.forwardRef<
   HTMLButtonElement,

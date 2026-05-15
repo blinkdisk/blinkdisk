@@ -20,8 +20,8 @@ vi.mock("electron", () => ({
 }));
 
 import { authenticateToken } from "@electron/auth";
-import { sendWindow } from "@electron/window";
 import { onDeeplinkOpen } from "@electron/deeplink";
+import { sendWindow } from "@electron/window";
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -44,34 +44,44 @@ describe("onDeeplinkOpen", () => {
   it("sends deeplink.onOpen event for valid protocol URL", async () => {
     await onDeeplinkOpen("blinkdisk://settings");
 
-    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", { event: "settings" });
+    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", {
+      event: "settings",
+    });
   });
 
   it("extracts and authenticates token from auth callback URL", async () => {
     await onDeeplinkOpen("blinkdisk://auth/callback#token=mytoken123");
 
-    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", { event: "auth" });
+    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", {
+      event: "auth",
+    });
     expect(authenticateToken).toHaveBeenCalledWith({ token: "mytoken123" });
   });
 
   it("does not authenticate when hash doesn't start with #token=", async () => {
     await onDeeplinkOpen("blinkdisk://auth/callback#other=value");
 
-    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", { event: "auth" });
+    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", {
+      event: "auth",
+    });
     expect(authenticateToken).not.toHaveBeenCalled();
   });
 
   it("does not authenticate for non-auth hostnames", async () => {
     await onDeeplinkOpen("blinkdisk://settings/callback#token=abc");
 
-    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", { event: "settings" });
+    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", {
+      event: "settings",
+    });
     expect(authenticateToken).not.toHaveBeenCalled();
   });
 
   it("does not authenticate for non-callback paths", async () => {
     await onDeeplinkOpen("blinkdisk://auth/other#token=abc");
 
-    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", { event: "auth" });
+    expect(sendWindow).toHaveBeenCalledWith("deeplink.onOpen", {
+      event: "auth",
+    });
     expect(authenticateToken).not.toHaveBeenCalled();
   });
 });

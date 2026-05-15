@@ -1,4 +1,4 @@
-import { ZPolicyType } from "@blinkdisk/schemas/policy";
+import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { fromBytes, toBytes } from "@desktop/lib/filesize";
 
 export type CorePolicy = {
@@ -116,7 +116,9 @@ export type CorePolicy = {
   noParent?: boolean;
 };
 
-export function convertPolicyFromCore(policy: CorePolicy): ZPolicyType | null {
+export function convertPolicyFromCore(
+  policy: CorePolicy | null | undefined,
+): ZPolicyType | null {
   if (!policy) return null;
 
   return {

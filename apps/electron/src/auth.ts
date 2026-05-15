@@ -4,23 +4,28 @@ import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
 } from "@blinkdisk/constants/auth";
-import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
-import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import type { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
+import type { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { initAccountCollections } from "@electron/db";
 import {
   decryptString,
-  EncryptedString,
+  type EncryptedString,
   encryptString,
 } from "@electron/encryption";
-import { AccountStorageType, store } from "@electron/store";
+import { type AccountStorageType, store } from "@electron/store";
 import { sendWindow } from "@electron/window";
 import {
   inferAdditionalFields,
   magicLinkClient,
 } from "better-auth/client/plugins";
-import { createAuthClient, SuccessContext } from "better-auth/react";
+import { createAuthClient, type SuccessContext } from "better-auth/react";
 import { parseSetCookie } from "set-cookie-parser";
+
+type AuthSuccessData = {
+  user?: AccountStorageType["data"];
+  session?: AccountStorageType["session"];
+};
 
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
@@ -179,10 +184,7 @@ export function storeToken(accountId: string, token: string) {
   store.set(`accounts.${accountId}.secret`, encryptString(token));
 }
 
-function parseAccount(
-  // eslint-disable-next-line
-  context: SuccessContext<any>,
-) {
+function parseAccount(context: SuccessContext<AuthSuccessData>) {
   if (!context.data?.user?.id) return;
 
   const account = context.data?.user;
@@ -194,10 +196,7 @@ function parseAccount(
   store.set(`accounts.${account.id}.session`, session);
 }
 
-function parseCookies(
-  // eslint-disable-next-line
-  context: SuccessContext<any>,
-) {
+function parseCookies(context: SuccessContext<AuthSuccessData>) {
   const setCookie = context.response.headers.get("set-cookie");
   if (!setCookie) return;
 

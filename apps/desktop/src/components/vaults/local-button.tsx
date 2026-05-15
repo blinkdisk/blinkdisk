@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@blinkdisk/ui/button";
+import { Button, type ButtonProps } from "@blinkdisk/ui/button";
 import { RemoteTooltip } from "@desktop/components/vaults/remote-tooltip";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 

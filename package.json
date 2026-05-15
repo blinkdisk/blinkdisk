@@ -3,9 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "lint": "turbo run lint",
     "dev": "dotenv -- turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md,astro}\"",
+    "format": "biome format --write .",
     "env:update": "turbo run env:update",
     "db:migrate:dev": "dotenv -- pnpm --filter db migrate:dev",
     "db:migrate:prod": "dotenv -- pnpm --filter db migrate:prod",
@@ -13,16 +12,13 @@
     "emails:studio": "dotenv -- pnpm --filter emails studio",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "unused": "knip"
+    "unused": "knip",
+    "check": "biome check ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
     "dotenv-cli": "^8.0.0",
     "knip": "^5.82.1",
-    "prettier": "^3.5.3",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-organize-imports": "^4.1.0",
-    "prettier-plugin-prisma": "^5.0.0",
-    "prettier-plugin-tailwindcss": "^0.6.11",
     "turbo": "^2.4.4",
     "typescript": "5.8.2"
   },

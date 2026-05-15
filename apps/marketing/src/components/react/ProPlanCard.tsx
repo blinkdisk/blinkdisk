@@ -13,6 +13,10 @@ import { useMemo, useState } from "react";
 
 const currency = "USD";
 
+const formatStorage = (gb: number) => {
+  return `${gb.toLocaleString()} GB`;
+};
+
 export default function ProPlanCard() {
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
   const [planIndex, setPlanIndex] = useState(0);
@@ -28,10 +32,6 @@ export default function ProPlanCard() {
     if (!price) return 0;
     return period === "YEARLY" ? price.amount / 12 : price.amount;
   }, [price, period]);
-
-  const formatStorage = (gb: number) => {
-    return `${gb.toLocaleString()} GB`;
-  };
 
   const planItems = useMemo(
     () =>

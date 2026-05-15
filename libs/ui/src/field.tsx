@@ -1,9 +1,8 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import { useMemo } from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { Label } from "@ui/label";
+import { cva, type VariantProps } from "class-variance-authority";
 import { TriangleAlertIcon } from "lucide-react";
+import { useMemo } from "react";
 
 const fieldVariants = cva(
   "data-[invalid=true]:text-destructive gap-2 group/field flex w-full",
@@ -29,6 +28,7 @@ function Field({
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: component styling and props are built around a div wrapper.
     <div
       role="group"
       data-slot="field"
@@ -92,7 +92,7 @@ function FieldError({
       ...new Map(errors.map((error) => [error?.message, error])).values(),
     ];
 
-    if (uniqueErrors?.length == 1) {
+    if (uniqueErrors?.length === 1) {
       return uniqueErrors[0]?.message;
     }
 
@@ -100,6 +100,7 @@ function FieldError({
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
           (error, index) =>
+            // biome-ignore lint/suspicious/noArrayIndexKey: validation errors are deduplicated static messages.
             error?.message && <li key={index}>{error.message}</li>,
         )}
       </ul>

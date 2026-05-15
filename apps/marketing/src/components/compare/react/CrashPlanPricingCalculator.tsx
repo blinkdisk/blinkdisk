@@ -28,7 +28,10 @@ export default function CrashPlanPricingCalculator() {
         </p>
 
         <div className="mt-5">
-          <label className="text-muted-foreground mb-1 block text-xs">
+          <label
+            htmlFor="crashplan-pricing-devices"
+            className="text-muted-foreground mb-1 block text-xs"
+          >
             Devices
           </label>
           <div className="flex items-center gap-2">
@@ -42,6 +45,7 @@ export default function CrashPlanPricingCalculator() {
               <MinusIcon className="size-4" />
             </Button>
             <Input
+              id="crashplan-pricing-devices"
               className="bg-secondary w-16 text-center"
               type="number"
               min={1}

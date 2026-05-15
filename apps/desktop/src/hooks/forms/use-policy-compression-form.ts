@@ -1,7 +1,7 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZCompressionPolicy,
-  ZCompressionPolicyType,
+  type ZCompressionPolicyType,
 } from "@blinkdisk/schemas/policy";
 import { PolicyContext } from "@desktop/components/policy/context";
 import { pickDefinedFields } from "@desktop/lib/policy";

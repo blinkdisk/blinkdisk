@@ -9,8 +9,8 @@ vi.mock("@electron/encryption", () => ({
   decryptString: vi.fn((str: string) => str.replace("encrypted:", "")),
 }));
 
-import { setPasswordCache, getPasswordCache } from "@electron/password";
-import { encryptString, decryptString } from "@electron/encryption";
+import { decryptString, encryptString } from "@electron/encryption";
+import { getPasswordCache, setPasswordCache } from "@electron/password";
 
 describe("setPasswordCache", () => {
   beforeEach(() => {

@@ -105,9 +105,7 @@ export function AddToolButton({ tools, selectedSlugs }: AddToolButtonProps) {
         <h3 className="text-foreground text-xl font-semibold">
           Add {isFirstTool ? "a" : "another"} tool
         </h3>
-        <p className="text-muted-foreground mt-1 text-sm">
-          {helperText}
-        </p>
+        <p className="text-muted-foreground mt-1 text-sm">{helperText}</p>
       </div>
 
       <Combobox<{ label: string; value: string }>

@@ -26,7 +26,7 @@ export function useEmailTranslation(
   ) {
     if (prefix) key = `${prefix}.${key}`;
 
-    if (!locales[locale] || !locales[locale][namespace]) return key;
+    if (!locales[locale]?.[namespace]) return key;
 
     const translation = getNestedTranslation(locales[locale][namespace], key);
     if (

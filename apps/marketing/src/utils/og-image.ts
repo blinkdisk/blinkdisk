@@ -36,7 +36,7 @@ export async function generateOgImage({
   badge,
 }: OgImageOptions): Promise<Buffer> {
   const truncatedDescription =
-    description.length > 180 ? description.slice(0, 177) + "..." : description;
+    description.length > 180 ? `${description.slice(0, 177)}...` : description;
   const titleSize = title.length > 50 ? (badge ? 52 : 56) : badge ? 60 : 64;
   const gap = badge ? "32px" : "40px";
   const descriptionSize = badge ? "26px" : "28px";

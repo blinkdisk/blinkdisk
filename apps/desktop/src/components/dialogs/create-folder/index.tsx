@@ -38,9 +38,8 @@ export function CreateFolderDialog() {
     form.reset();
     clearDefaultValues();
     setStep("GENERAL");
-    // eslint-disable-next-line
     window.folderMockPolicy = undefined;
-  }, [form, clearDefaultValues, setStep]);
+  }, [form, clearDefaultValues]);
 
   const onSuccess = useCallback(() => {
     setIsOpen(false);
@@ -48,38 +47,36 @@ export function CreateFolderDialog() {
   }, [reset, setIsOpen]);
 
   return (
-    <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
-        <DialogContent
-          className={cn(
-            "block max-h-[80vh] overflow-y-auto",
-            step === "GENERAL" ? "max-w-115" : "max-w-140",
-          )}
-        >
-          <div className="flex items-center gap-3">
-            {step !== "GENERAL" ? (
-              <Button
-                onClick={() => {
-                  setStep("GENERAL");
-                }}
-                variant="ghost"
-                size="icon-xs"
-              >
-                <ArrowLeftIcon />
-              </Button>
-            ) : null}
-            <DialogTitle>{t("title")}</DialogTitle>
-          </div>
-          <DialogDescription className="sr-only">
-            {t("description")}
-          </DialogDescription>
-          {step === "GENERAL" ? (
-            <CreateFolderGeneral form={form} />
-          ) : (
-            <CreateFolderSettings values={values} onSuccess={onSuccess} />
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
+      <DialogContent
+        className={cn(
+          "block max-h-[80vh] overflow-y-auto",
+          step === "GENERAL" ? "max-w-115" : "max-w-140",
+        )}
+      >
+        <div className="flex items-center gap-3">
+          {step !== "GENERAL" ? (
+            <Button
+              onClick={() => {
+                setStep("GENERAL");
+              }}
+              variant="ghost"
+              size="icon-xs"
+            >
+              <ArrowLeftIcon />
+            </Button>
+          ) : null}
+          <DialogTitle>{t("title")}</DialogTitle>
+        </div>
+        <DialogDescription className="sr-only">
+          {t("description")}
+        </DialogDescription>
+        {step === "GENERAL" ? (
+          <CreateFolderGeneral form={form} />
+        ) : (
+          <CreateFolderSettings values={values} onSuccess={onSuccess} />
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

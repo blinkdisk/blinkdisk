@@ -4,7 +4,9 @@ vi.mock("@blinkdisk/constants/app", () => ({
   PROTOCOL_FRONTEND_NS: "frontend",
   PROTOCOL_VAULT_NS: "vault",
 }));
-vi.mock("@blinkdisk/constants/header", () => ({ ACCOUNT_ID_HEADER: "x-account-id" }));
+vi.mock("@blinkdisk/constants/header", () => ({
+  ACCOUNT_ID_HEADER: "x-account-id",
+}));
 vi.mock("@electron/auth", () => ({ getAccountCookie: vi.fn() }));
 vi.mock("@electron/vault/fetch", () => ({ fetchVaultRaw: vi.fn() }));
 vi.mock("@electron/vault/manage", () => ({ getVault: vi.fn() }));
@@ -15,7 +17,7 @@ vi.mock("electron", () => ({
 }));
 
 import path from "node:path";
-import { resolveProtocolPath, isPathSafe } from "@electron/protocol";
+import { isPathSafe, resolveProtocolPath } from "@electron/protocol";
 
 describe("resolveProtocolPath", () => {
   const baseDir = "/srv/frontend";

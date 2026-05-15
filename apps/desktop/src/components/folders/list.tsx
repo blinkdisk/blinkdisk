@@ -14,7 +14,7 @@ import { FolderPreview } from "@desktop/components/folders/preview";
 import { LocalDropdownMenuItem } from "@desktop/components/vaults/local-dropdown-item";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
@@ -68,15 +68,12 @@ function Folder({ folder }: FolderProps) {
   );
 
   const showStartTime = useMemo(
-    () => folder && folder.lastSnapshot && !folder.lastSnapshot.incomplete,
+    () => folder?.lastSnapshot && !folder.lastSnapshot.incomplete,
     [folder],
   );
 
   return (
-    <div
-      role="link"
-      className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2"
-    >
+    <div className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2">
       <Link
         to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
         params={(params) => ({

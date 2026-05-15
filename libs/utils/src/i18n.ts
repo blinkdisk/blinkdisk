@@ -27,4 +27,4 @@ i18n
     },
   });
 
-export { i18n, I18nextProvider, Trans, useTranslation };
+export { I18nextProvider, i18n, Trans, useTranslation };

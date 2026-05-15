@@ -11,14 +11,14 @@ export default function DeduplicationAnimation() {
     return [
       EXAMPLE_FOLDERS.slice(0, half),
       EXAMPLE_FOLDERS.slice(half, EXAMPLE_FOLDERS.length),
-    ];
+    ] as const;
   }, []);
 
   return (
     <div className="relative flex h-full w-full items-center justify-between p-6">
       <div className="flex w-1/2 flex-col gap-6 overflow-hidden">
-        <Marquee folders={marquees[0]!} duration={20} direction="right" />
-        <Marquee folders={marquees[1]!} duration={30} direction="left" />
+        <Marquee folders={marquees[0]} duration={20} direction="right" />
+        <Marquee folders={marquees[1]} duration={30} direction="left" />
       </div>
       <div className="flex w-1/2 items-center justify-center">
         <div className="flex items-center gap-3">

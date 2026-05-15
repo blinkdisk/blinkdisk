@@ -24,7 +24,7 @@ export function useStartBackup() {
         {
           params: {
             ...profileFilter,
-            ...(options && options.path && { path: options.path }),
+            ...(options?.path && { path: options.path }),
           },
         },
       );

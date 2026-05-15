@@ -1,0 +1,39 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "plugins": [
+    "./libs/biome/no-cross-package-alias.grit",
+    "./libs/biome/lucide-icon-suffix.grit"
+  ],
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**/*.{js,jsx,ts,tsx,mjs,cjs,md,astro}",
+      "!dist",
+      "!build",
+      "!out",
+      "!.wrangler",
+      "!.astro",
+      "!apps/core",
+      "!**/routeTree.gen.ts",
+      "!**/worker-configuration.d.ts"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useAnchorContent": "off"
+      }
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": { "source": { "organizeImports": "on" } }
+  }
+}

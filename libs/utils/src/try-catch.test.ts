@@ -1,5 +1,5 @@
-import { tryCatch } from "./try-catch";
 import { CustomError } from "./error";
+import { tryCatch } from "./try-catch";
 
 describe("tryCatch", () => {
   describe("sync function", () => {
@@ -44,9 +44,7 @@ describe("tryCatch", () => {
     });
 
     it("returns error on rejection", async () => {
-      const [data, error] = await tryCatch(
-        Promise.reject(new Error("fail")),
-      );
+      const [data, error] = await tryCatch(Promise.reject(new Error("fail")));
       expect(data).toBeUndefined();
       expect(error).toBeInstanceOf(Error);
       expect((error as Error).message).toBe("fail");

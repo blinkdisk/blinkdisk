@@ -4,5 +4,4 @@ export const locales = {
   en: {
     email: en,
   },
-  // eslint-disable-next-line
-} as Record<string, Record<string, any>>;
+} as Record<string, { email: typeof en }>;

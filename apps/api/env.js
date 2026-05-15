@@ -1,6 +1,5 @@
-/* eslint-disable no-undef */
+import fs from "node:fs";
 import { config } from "dotenv";
-import fs from "fs";
 
 config({
   path: "../../.env",

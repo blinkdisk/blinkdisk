@@ -277,7 +277,11 @@ function ExtensionListEditor({
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
-            <form.Field key={index} name={`${fieldName}[${index}]`}>
+            <form.Field
+              // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
+              key={index}
+              name={`${fieldName}[${index}]`}
+            >
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">
                   <Input

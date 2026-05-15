@@ -2,8 +2,8 @@ vi.mock("electron", () => ({
   shell: { openExternal: vi.fn() },
 }));
 
-import { shell } from "electron";
 import { openBrowser } from "@electron/shell";
+import { shell } from "electron";
 
 describe("openBrowser", () => {
   beforeEach(() => {
@@ -17,16 +17,12 @@ describe("openBrowser", () => {
 
   it("opens https URLs", () => {
     openBrowser("https://example.com/path");
-    expect(shell.openExternal).toHaveBeenCalledWith(
-      "https://example.com/path",
-    );
+    expect(shell.openExternal).toHaveBeenCalledWith("https://example.com/path");
   });
 
   it("opens mailto URLs", () => {
     openBrowser("mailto:test@example.com");
-    expect(shell.openExternal).toHaveBeenCalledWith(
-      "mailto:test@example.com",
-    );
+    expect(shell.openExternal).toHaveBeenCalledWith("mailto:test@example.com");
   });
 
   it("does not open file: URLs", () => {

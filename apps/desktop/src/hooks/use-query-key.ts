@@ -1,5 +1,5 @@
 import { useAccountId } from "@desktop/hooks/use-account-id";
-import { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { ProfileFilter } from "@desktop/hooks/use-profile";
 import { useMemo } from "react";
 
 export function useQueryKey() {

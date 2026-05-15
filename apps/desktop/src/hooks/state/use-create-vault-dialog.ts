@@ -1,5 +1,5 @@
-import { StorageProviderType } from "@blinkdisk/constants/providers";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { StorageProviderType } from "@blinkdisk/constants/providers";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 

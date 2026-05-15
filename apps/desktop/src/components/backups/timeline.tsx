@@ -1,23 +1,22 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
+import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { cn } from "@blinkdisk/utils/class";
 import { PinBadge } from "@desktop/components/backups/pin-badge";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { LocalButton } from "@desktop/components/vaults/local-button";
-import { useFolder } from "@desktop/hooks/use-folder";
-import { useRelativeTime } from "@desktop/hooks/use-relative-time";
-
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Button } from "@blinkdisk/ui/button";
-import { Skeleton } from "@blinkdisk/ui/skeleton";
-import { cn } from "@blinkdisk/utils/class";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
 import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
+import { useFolder } from "@desktop/hooks/use-folder";
+import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatBackupDate } from "@desktop/lib/backup";
 import { formatSize } from "@desktop/lib/number";
 import { Link } from "@tanstack/react-router";
@@ -85,8 +84,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 
     if (
       ["PENDING", "UPLOADING"].includes(folder?.status || "") ||
-      (folder &&
-        folder.lastSnapshot &&
+      (folder?.lastSnapshot &&
         "incomplete" in folder.lastSnapshot &&
         folder?.lastSnapshot?.incomplete === "checkpoint")
     ) {
@@ -197,17 +195,15 @@ function FakeBackup() {
       )}
     >
       {folder && folder.status === "PENDING" ? (
-        <>
-          <div className="flex items-center gap-4">
-            <CalendarClockIcon className="text-muted-foreground size-6" />
-            <div className="flex flex-col">
-              <p className="font-medium">{t("pending.title")}</p>
-              <p className="text-muted-foreground text-xs">
-                {t("pending.description")}
-              </p>
-            </div>
+        <div className="flex items-center gap-4">
+          <CalendarClockIcon className="text-muted-foreground size-6" />
+          <div className="flex flex-col">
+            <p className="font-medium">{t("pending.title")}</p>
+            <p className="text-muted-foreground text-xs">
+              {t("pending.description")}
+            </p>
           </div>
-        </>
+        </div>
       ) : folder && folder.status === "UPLOADING" ? (
         <>
           {folder.upload?.progress ? (
@@ -260,7 +256,7 @@ export function Backup({ backup }: BackupProps) {
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
 
   return (
-    <div role="link" className={cn(cardClassName, "hover:bg-card-hover")}>
+    <div className={cn(cardClassName, "hover:bg-card-hover")}>
       <Link
         to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
         params={(params) => ({

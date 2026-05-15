@@ -9,7 +9,7 @@ export function VaultRestores() {
   const { data: restores } = useRestoreList();
   const { t } = useAppTranslation("directory.restore");
 
-  if (!restores || !restores.length) return null;
+  if (!restores?.length) return null;
   return (
     <div className="mb-8 flex flex-col gap-4">
       {restores.map((restore) => (

@@ -14,7 +14,11 @@ import { MonthDays } from "@desktop/components/cron/fields/month-days";
 import { Months } from "@desktop/components/cron/fields/months";
 import { Period } from "@desktop/components/cron/fields/period";
 import { WeekDays } from "@desktop/components/cron/fields/week-days";
-import { CronProps, Locale, PeriodType } from "@desktop/components/cron/types";
+import type {
+  CronProps,
+  Locale,
+  PeriodType,
+} from "@desktop/components/cron/types";
 import { usePrevious } from "@desktop/components/cron/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -80,6 +84,7 @@ export function Cron(props: CronProps) {
   const [valueCleared, setValueCleared] = useState<boolean>(false);
   const previousValueCleared = usePrevious(valueCleared);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: this mount-only parse initializes internal field state from the initial cron value; later prop changes are handled by the following effect.
   useEffect(() => {
     setValuesFromCronString(
       value,
@@ -97,9 +102,9 @@ export function Cron(props: CronProps) {
       setWeekDays,
       setPeriod,
     );
-    // eslint-disable-next-line
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: keep the previous react-js-cron update triggers; changing callback deps here can alter parsing timing.
   useEffect(() => {
     if (value !== internalValueRef.current) {
       setValuesFromCronString(
@@ -119,51 +124,47 @@ export function Cron(props: CronProps) {
         setPeriod,
       );
     }
-    // eslint-disable-next-line
   }, [value, allowEmpty, shortcuts, locale]);
 
-  useEffect(
-    () => {
-      // Only change the value if a user touched a field
-      // and if the user didn't use the clear button
-      if (
-        (period || minutes || months || monthDays || weekDays || hours) &&
-        !valueCleared &&
-        !previousValueCleared
-      ) {
-        const selectedPeriod = period || defaultPeriodRef.current;
-        const cron = getCronStringFromValues(
-          selectedPeriod,
-          months,
-          monthDays,
-          weekDays,
-          hours,
-          minutes,
-          humanizeValue,
-          dropdownsConfig,
-        );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: preserve the existing field-to-cron update triggers; adding callback/previous-value deps can change when the parent value is emitted.
+  useEffect(() => {
+    // Only change the value if a user touched a field
+    // and if the user didn't use the clear button
+    if (
+      (period || minutes || months || monthDays || weekDays || hours) &&
+      !valueCleared &&
+      !previousValueCleared
+    ) {
+      const selectedPeriod = period || defaultPeriodRef.current;
+      const cron = getCronStringFromValues(
+        selectedPeriod,
+        months,
+        monthDays,
+        weekDays,
+        hours,
+        minutes,
+        humanizeValue,
+        dropdownsConfig,
+      );
 
-        setValue(cron, { selectedPeriod });
-        internalValueRef.current = cron;
+      setValue(cron, { selectedPeriod });
+      internalValueRef.current = cron;
 
-        if (onError) onError(undefined);
-      } else if (valueCleared) {
-        setValueCleared(false);
-      }
-    },
-    // eslint-disable-next-line
-    [
-      period,
-      monthDays,
-      months,
-      weekDays,
-      hours,
-      minutes,
-      humanizeValue,
-      valueCleared,
-      dropdownsConfig,
-    ],
-  );
+      if (onError) onError(undefined);
+    } else if (valueCleared) {
+      setValueCleared(false);
+    }
+  }, [
+    period,
+    monthDays,
+    months,
+    weekDays,
+    hours,
+    minutes,
+    humanizeValue,
+    valueCleared,
+    dropdownsConfig,
+  ]);
 
   const clockFormat = useMemo(() => {
     const date = new Date(Date.UTC(2020, 0, 1, 13, 0, 0)); // 1:00 PM UTC
@@ -199,132 +200,128 @@ export function Cron(props: CronProps) {
         />
       )}
 
-      <>
-        {periodForRender === "year" && allowedDropdowns.includes("months") && (
-          <Months
-            value={months}
-            setValue={setMonths}
+      {periodForRender === "year" && allowedDropdowns.includes("months") && (
+        <Months
+          value={months}
+          setValue={setMonths}
+          locale={locale}
+          humanizeLabels={
+            dropdownsConfig?.months?.humanizeLabels ?? humanizeLabels
+          }
+          disabled={dropdownsConfig?.months?.disabled ?? disabled}
+          readOnly={dropdownsConfig?.months?.readOnly ?? readOnly}
+          period={periodForRender}
+          periodicityOnDoubleClick={
+            dropdownsConfig?.months?.periodicityOnDoubleClick ??
+            periodicityOnDoubleClick
+          }
+          mode={dropdownsConfig?.months?.mode ?? mode}
+          allowClear={dropdownsConfig?.months?.allowClear ?? allowClear}
+          filterOption={dropdownsConfig?.months?.filterOption}
+          getPopupContainer={getPopupContainer}
+        />
+      )}
+
+      {(periodForRender === "year" || periodForRender === "month") &&
+        allowedDropdowns.includes("month-days") && (
+          <MonthDays
+            value={monthDays}
+            setValue={setMonthDays}
             locale={locale}
-            humanizeLabels={
-              dropdownsConfig?.months?.humanizeLabels ?? humanizeLabels
+            weekDays={weekDays}
+            disabled={dropdownsConfig?.["month-days"]?.disabled ?? disabled}
+            readOnly={dropdownsConfig?.["month-days"]?.readOnly ?? readOnly}
+            leadingZero={
+              dropdownsConfig?.["month-days"]?.leadingZero ?? leadingZero
             }
-            disabled={dropdownsConfig?.months?.disabled ?? disabled}
-            readOnly={dropdownsConfig?.months?.readOnly ?? readOnly}
             period={periodForRender}
             periodicityOnDoubleClick={
-              dropdownsConfig?.months?.periodicityOnDoubleClick ??
+              dropdownsConfig?.["month-days"]?.periodicityOnDoubleClick ??
               periodicityOnDoubleClick
             }
-            mode={dropdownsConfig?.months?.mode ?? mode}
-            allowClear={dropdownsConfig?.months?.allowClear ?? allowClear}
-            filterOption={dropdownsConfig?.months?.filterOption}
+            mode={dropdownsConfig?.["month-days"]?.mode ?? mode}
+            allowClear={
+              dropdownsConfig?.["month-days"]?.allowClear ?? allowClear
+            }
+            filterOption={dropdownsConfig?.["month-days"]?.filterOption}
             getPopupContainer={getPopupContainer}
           />
         )}
 
-        {(periodForRender === "year" || periodForRender === "month") &&
-          allowedDropdowns.includes("month-days") && (
-            <MonthDays
-              value={monthDays}
-              setValue={setMonthDays}
+      {(periodForRender === "year" ||
+        periodForRender === "month" ||
+        periodForRender === "week") &&
+        allowedDropdowns.includes("week-days") && (
+          <WeekDays
+            value={weekDays}
+            setValue={setWeekDays}
+            locale={locale}
+            humanizeLabels={
+              dropdownsConfig?.["week-days"]?.humanizeLabels ?? humanizeLabels
+            }
+            monthDays={monthDays}
+            disabled={dropdownsConfig?.["week-days"]?.disabled ?? disabled}
+            readOnly={dropdownsConfig?.["week-days"]?.readOnly ?? readOnly}
+            period={periodForRender}
+            periodicityOnDoubleClick={
+              dropdownsConfig?.["week-days"]?.periodicityOnDoubleClick ??
+              periodicityOnDoubleClick
+            }
+            mode={dropdownsConfig?.["week-days"]?.mode ?? mode}
+            allowClear={
+              dropdownsConfig?.["week-days"]?.allowClear ?? allowClear
+            }
+            filterOption={dropdownsConfig?.["week-days"]?.filterOption}
+            getPopupContainer={getPopupContainer}
+          />
+        )}
+
+      <div className="flex gap-2">
+        {periodForRender !== "minute" &&
+          periodForRender !== "hour" &&
+          allowedDropdowns.includes("hours") && (
+            <Hours
+              value={hours}
+              setValue={setHours}
               locale={locale}
-              weekDays={weekDays}
-              disabled={dropdownsConfig?.["month-days"]?.disabled ?? disabled}
-              readOnly={dropdownsConfig?.["month-days"]?.readOnly ?? readOnly}
-              leadingZero={
-                dropdownsConfig?.["month-days"]?.leadingZero ?? leadingZero
-              }
+              disabled={dropdownsConfig?.hours?.disabled ?? disabled}
+              readOnly={dropdownsConfig?.hours?.readOnly ?? readOnly}
+              leadingZero={dropdownsConfig?.hours?.leadingZero ?? leadingZero}
+              clockFormat={clockFormat}
               period={periodForRender}
               periodicityOnDoubleClick={
-                dropdownsConfig?.["month-days"]?.periodicityOnDoubleClick ??
+                dropdownsConfig?.hours?.periodicityOnDoubleClick ??
                 periodicityOnDoubleClick
               }
-              mode={dropdownsConfig?.["month-days"]?.mode ?? mode}
-              allowClear={
-                dropdownsConfig?.["month-days"]?.allowClear ?? allowClear
-              }
-              filterOption={dropdownsConfig?.["month-days"]?.filterOption}
+              mode={dropdownsConfig?.hours?.mode ?? mode}
+              allowClear={dropdownsConfig?.hours?.allowClear ?? allowClear}
+              filterOption={dropdownsConfig?.hours?.filterOption}
               getPopupContainer={getPopupContainer}
             />
           )}
 
-        {(periodForRender === "year" ||
-          periodForRender === "month" ||
-          periodForRender === "week") &&
-          allowedDropdowns.includes("week-days") && (
-            <WeekDays
-              value={weekDays}
-              setValue={setWeekDays}
+        {periodForRender !== "minute" &&
+          allowedDropdowns.includes("minutes") && (
+            <Minutes
+              value={minutes}
+              setValue={setMinutes}
               locale={locale}
-              humanizeLabels={
-                dropdownsConfig?.["week-days"]?.humanizeLabels ?? humanizeLabels
-              }
-              monthDays={monthDays}
-              disabled={dropdownsConfig?.["week-days"]?.disabled ?? disabled}
-              readOnly={dropdownsConfig?.["week-days"]?.readOnly ?? readOnly}
               period={periodForRender}
+              disabled={dropdownsConfig?.minutes?.disabled ?? disabled}
+              readOnly={dropdownsConfig?.minutes?.readOnly ?? readOnly}
+              leadingZero={dropdownsConfig?.minutes?.leadingZero ?? leadingZero}
+              clockFormat={clockFormat}
               periodicityOnDoubleClick={
-                dropdownsConfig?.["week-days"]?.periodicityOnDoubleClick ??
+                dropdownsConfig?.minutes?.periodicityOnDoubleClick ??
                 periodicityOnDoubleClick
               }
-              mode={dropdownsConfig?.["week-days"]?.mode ?? mode}
-              allowClear={
-                dropdownsConfig?.["week-days"]?.allowClear ?? allowClear
-              }
-              filterOption={dropdownsConfig?.["week-days"]?.filterOption}
+              mode={dropdownsConfig?.minutes?.mode ?? mode}
+              allowClear={dropdownsConfig?.minutes?.allowClear ?? allowClear}
+              filterOption={dropdownsConfig?.minutes?.filterOption}
               getPopupContainer={getPopupContainer}
             />
           )}
-
-        <div className="flex gap-2">
-          {periodForRender !== "minute" &&
-            periodForRender !== "hour" &&
-            allowedDropdowns.includes("hours") && (
-              <Hours
-                value={hours}
-                setValue={setHours}
-                locale={locale}
-                disabled={dropdownsConfig?.hours?.disabled ?? disabled}
-                readOnly={dropdownsConfig?.hours?.readOnly ?? readOnly}
-                leadingZero={dropdownsConfig?.hours?.leadingZero ?? leadingZero}
-                clockFormat={clockFormat}
-                period={periodForRender}
-                periodicityOnDoubleClick={
-                  dropdownsConfig?.hours?.periodicityOnDoubleClick ??
-                  periodicityOnDoubleClick
-                }
-                mode={dropdownsConfig?.hours?.mode ?? mode}
-                allowClear={dropdownsConfig?.hours?.allowClear ?? allowClear}
-                filterOption={dropdownsConfig?.hours?.filterOption}
-                getPopupContainer={getPopupContainer}
-              />
-            )}
-
-          {periodForRender !== "minute" &&
-            allowedDropdowns.includes("minutes") && (
-              <Minutes
-                value={minutes}
-                setValue={setMinutes}
-                locale={locale}
-                period={periodForRender}
-                disabled={dropdownsConfig?.minutes?.disabled ?? disabled}
-                readOnly={dropdownsConfig?.minutes?.readOnly ?? readOnly}
-                leadingZero={
-                  dropdownsConfig?.minutes?.leadingZero ?? leadingZero
-                }
-                clockFormat={clockFormat}
-                periodicityOnDoubleClick={
-                  dropdownsConfig?.minutes?.periodicityOnDoubleClick ??
-                  periodicityOnDoubleClick
-                }
-                mode={dropdownsConfig?.minutes?.mode ?? mode}
-                allowClear={dropdownsConfig?.minutes?.allowClear ?? allowClear}
-                filterOption={dropdownsConfig?.minutes?.filterOption}
-                getPopupContainer={getPopupContainer}
-              />
-            )}
-        </div>
-      </>
+      </div>
     </div>
   );
 }

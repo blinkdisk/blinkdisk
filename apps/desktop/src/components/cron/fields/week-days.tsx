@@ -2,12 +2,11 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { useMemo } from "react";
-
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { WeekDaysProps } from "@desktop/components/cron/types";
+import type { WeekDaysProps } from "@desktop/components/cron/types";
+import { useMemo } from "react";
 
 export function WeekDays(props: WeekDaysProps) {
   const {
@@ -30,13 +29,13 @@ export function WeekDays(props: WeekDaysProps) {
   const noMonthDays = period === "week" || !monthDays || monthDays.length === 0;
 
   const localeJSON = JSON.stringify(locale);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: preserve existing react-js-cron locale invalidation behavior without changing dependency timing in this vendored component.
   const placeholder = useMemo(() => {
     if (noMonthDays) {
       return locale.emptyWeekDays || DEFAULT_LOCALE_EN.emptyWeekDays;
     }
 
     return locale.emptyWeekDaysShort || DEFAULT_LOCALE_EN.emptyWeekDaysShort;
-    // eslint-disable-next-line
   }, [noMonthDays, localeJSON]);
 
   const displayWeekDays =
@@ -74,7 +73,7 @@ export function WeekDays(props: WeekDaysProps) {
         grid={false}
         value={value}
         unit={{
-          ...UNITS[4]!,
+          ...UNITS[4],
           // Allow translation of alternative labels when using "humanizeLabels"
           // Issue #3
           alt: locale.altWeekDays || DEFAULT_LOCALE_EN.altWeekDays,

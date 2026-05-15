@@ -1,12 +1,12 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
+import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: component styling and props are built around a div wrapper.
     <div
       data-slot="input-group"
       role="group"
@@ -46,6 +46,7 @@ function InputGroupAddon({
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents lint/a11y/useSemanticElements: addon focuses the nested input and is styled as a div wrapper.
     <div
       role="group"
       data-slot="input-group-addon"

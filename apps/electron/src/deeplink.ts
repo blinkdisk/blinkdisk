@@ -1,8 +1,8 @@
+import { resolve } from "node:path";
 import { APP_SCHEME, APP_SCHEME_PROTOCOL } from "@blinkdisk/constants/app";
 import { authenticateToken } from "@electron/auth";
 import { focusWindow, sendWindow } from "@electron/window";
 import { app } from "electron";
-import { resolve } from "path";
 
 let hasRegistered = false;
 if (process.defaultApp) {

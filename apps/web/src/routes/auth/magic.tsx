@@ -46,6 +46,7 @@ function RouteComponent() {
                   <div className="flex">
                     {slots.slice(0, 5).map((slot, idx) => (
                       <InputOTPSlot
+                        // biome-ignore lint/suspicious/noArrayIndexKey: OTP slots are fixed positions, and the slot index is their identity.
                         key={idx}
                         index={idx}
                         {...slot}
@@ -56,6 +57,7 @@ function RouteComponent() {
                   <div className="flex">
                     {slots.slice(5).map((slot, idx) => (
                       <InputOTPSlot
+                        // biome-ignore lint/suspicious/noArrayIndexKey: OTP slots are fixed positions, and the slot index is their identity.
                         key={idx + 5}
                         index={idx + 5}
                         {...slot}
@@ -68,8 +70,7 @@ function RouteComponent() {
             />
           )}
         </form.AppField>
-        {errors.onSubmit &&
-        errors.onSubmit.code &&
+        {errors.onSubmit?.code &&
         (errors.onSubmit.code as unknown as string) === "INVALID_CODE" ? (
           <Alert variant="destructive">
             <AlertTriangleIcon className="mb-0.5 mr-2 inline-block size-3.5" />

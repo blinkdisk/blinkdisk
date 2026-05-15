@@ -87,7 +87,10 @@ export default function DuplicacyPricingCalculator() {
         </Select>
 
         <div className="mt-3">
-          <label className="text-muted-foreground mb-1 block text-xs">
+          <label
+            htmlFor="duplicacy-pricing-computers"
+            className="text-muted-foreground mb-1 block text-xs"
+          >
             Computers
           </label>
           <div className="flex items-center gap-2">
@@ -101,6 +104,7 @@ export default function DuplicacyPricingCalculator() {
               <MinusIcon className="size-4" />
             </Button>
             <Input
+              id="duplicacy-pricing-computers"
               className="bg-secondary w-16 text-center"
               type="number"
               min={1}

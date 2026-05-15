@@ -1,5 +1,8 @@
-import { DynamicField, DynamicFieldProps } from "@blinkdisk/components/dynamic-field";
-import { InputOTP, InputOTPProps } from "@blinkdisk/ui/input-otp";
+import {
+  DynamicField,
+  type DynamicFieldProps,
+} from "@blinkdisk/components/dynamic-field";
+import { InputOTP, type InputOTPProps } from "@blinkdisk/ui/input-otp";
 import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import React, { useContext } from "react";
 
@@ -28,9 +31,7 @@ const Code = React.forwardRef<
         maxLength={maxLength}
         render={render}
         pasteTransformer={(t) => t.replace(/\s|-/g, "")}
-        // Types are weird here, just closing the InputOTP
-        // tag doesn't satisfy the children prop.
-        // eslint-disable-next-line
+        // biome-ignore lint/correctness/noChildrenProp: Types are weird here
         children={undefined}
         disabled={disabledContext || disabled}
       />

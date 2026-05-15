@@ -15,6 +15,7 @@ export default function VaultIcon({ className }: VaultIconProps) {
         fill="none"
         className="h-full w-full"
       >
+        <title>Vault</title>
         <rect
           width={1000}
           height={1000}
@@ -380,6 +381,7 @@ export default function VaultIcon({ className }: VaultIconProps) {
           animationDirection: "alternate",
         }}
       >
+        <title>Vault animation</title>
         <g filter="url(#filter0_d_248_92)">
           <rect
             x={215.035}

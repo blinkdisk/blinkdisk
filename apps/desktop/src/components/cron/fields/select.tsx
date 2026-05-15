@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@blinkdisk/ui/select";
 import { formatValue } from "@desktop/components/cron/converter";
-import { CustomSelectProps } from "@desktop/components/cron/types";
+import type { CustomSelectProps } from "@desktop/components/cron/types";
 import { useCallback, useMemo } from "react";
 
 export function CustomSelect(props: CustomSelectProps) {

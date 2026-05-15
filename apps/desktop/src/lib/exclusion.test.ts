@@ -1,3 +1,4 @@
+import { ZExclusionForm } from "@blinkdisk/schemas/policy";
 import { buildExclusionRule, parseExclusionRule } from "@desktop/lib/exclusion";
 
 describe("parseExclusionRule", () => {
@@ -150,6 +151,6 @@ describe("roundtrip", () => {
     "*cache*/",
   ])("build(parse(%j)) === %j", (rule) => {
     const parsed = parseExclusionRule(rule);
-    expect(buildExclusionRule(parsed as any)).toBe(rule);
+    expect(buildExclusionRule(ZExclusionForm.parse(parsed))).toBe(rule);
   });
 });

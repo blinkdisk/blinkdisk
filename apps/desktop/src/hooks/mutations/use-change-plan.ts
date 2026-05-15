@@ -1,4 +1,4 @@
-import { ZChangePlan } from "@blinkdisk/schemas/payment";
+import type { ZChangePlan } from "@blinkdisk/schemas/payment";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";

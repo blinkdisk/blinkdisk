@@ -1,4 +1,4 @@
-import { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
+import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";

@@ -1,6 +1,6 @@
 import { storeToken } from "@electron/auth";
 import { store } from "@electron/store";
-import { SessionResponse } from "better-auth/client";
+import type { SessionResponse } from "better-auth/client";
 import { safeStorage } from "electron";
 
 export async function migrateAuthV2() {

@@ -7,9 +7,17 @@ import {
   BreadcrumbSeparator,
 } from "@blinkdisk/ui/breadcrumb";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
-import { VaultItem } from "@desktop/hooks/queries/use-vault";
+import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { Link } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
+
+export type BreadcrumbSearchParams = {
+  path?: { objectId: string; name: string }[];
+};
+
+type BreadcrumbSearch = (
+  search: BreadcrumbSearchParams,
+) => BreadcrumbSearchParams;
 
 export type VaultBreadcrumbProps = {
   vault: VaultItem | undefined;
@@ -19,8 +27,7 @@ export type VaultBreadcrumbProps = {
         text: string;
         href?: string;
         params?: (params: Record<string, string>) => Record<string, string>;
-        // eslint-disable-next-line
-        search?: (search: Record<string, any>) => Record<string, any>;
+        search?: BreadcrumbSearch;
       }
     | undefined
   )[];

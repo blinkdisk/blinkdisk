@@ -1,10 +1,10 @@
 ---
-import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import TableOfContents from "@marketing/components/TableOfContents.astro";
-import CTA from "@marketing/components/CTA.astro";
 import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
 import { MARKETING_URL } from "astro:env/server";
+import CTA from "@marketing/components/CTA.astro";
+import TableOfContents from "@marketing/components/TableOfContents.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import type { ImageMetadata } from "astro";
 
 type Heading = {
   depth: number;

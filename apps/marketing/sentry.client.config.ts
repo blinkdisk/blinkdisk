@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/astro";
 import { SENTRY_MARKETING_DSN } from "astro:env/client";
+import * as Sentry from "@sentry/astro";
 
 Sentry.init({
   dsn: SENTRY_MARKETING_DSN,

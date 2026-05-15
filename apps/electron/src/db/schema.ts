@@ -12,8 +12,7 @@ interface SchemaCollectionOptions<
 
 export class SchemaCollection<
   T extends ZodType<BaseItem<I>>,
-  // eslint-disable-next-line
-  I = any,
+  I = unknown,
   U extends BaseItem = ZodInfer<T>,
 > extends Collection<ZodInfer<T>, I, U> {
   private schema: T;

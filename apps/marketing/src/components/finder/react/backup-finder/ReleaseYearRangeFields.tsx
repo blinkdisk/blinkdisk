@@ -21,29 +21,27 @@ export function ReleaseYearRangeFields({
         <h4 className="text-foreground text-sm font-medium">Release Year</h4>
       </div>
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-        <label>
-          <Input
-            type="number"
-            inputMode="numeric"
-            min={minAvailableReleaseYear}
-            max={maxAvailableReleaseYear}
-            placeholder={minAvailableReleaseYear?.toString()}
-            value={value.min}
-            onChange={(event) => onChange("min", event.target.value)}
-          />
-        </label>
+        <Input
+          type="number"
+          inputMode="numeric"
+          min={minAvailableReleaseYear}
+          max={maxAvailableReleaseYear}
+          placeholder={minAvailableReleaseYear?.toString()}
+          value={value.min}
+          aria-label="Minimum release year"
+          onChange={(event) => onChange("min", event.target.value)}
+        />
         <span className="text-muted-foreground text-sm">-</span>
-        <label>
-          <Input
-            type="number"
-            inputMode="numeric"
-            min={minAvailableReleaseYear}
-            max={maxAvailableReleaseYear}
-            placeholder={maxAvailableReleaseYear?.toString()}
-            value={value.max}
-            onChange={(event) => onChange("max", event.target.value)}
-          />
-        </label>
+        <Input
+          type="number"
+          inputMode="numeric"
+          min={minAvailableReleaseYear}
+          max={maxAvailableReleaseYear}
+          placeholder={maxAvailableReleaseYear?.toString()}
+          value={value.max}
+          aria-label="Maximum release year"
+          onChange={(event) => onChange("max", event.target.value)}
+        />
       </div>
     </div>
   );

@@ -1,15 +1,15 @@
+import { spawn } from "node:child_process";
+import { existsSync, renameSync } from "node:fs";
+import { resolve } from "node:path";
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
 import { corePath, globalVaultDirectory } from "@electron/path";
 import { fetchVault } from "@electron/vault/fetch";
 import { vaults } from "@electron/vault/manage";
-import { VaultServer, VaultStatus } from "@electron/vault/types";
+import type { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
-import { spawn } from "child_process";
 import { app } from "electron";
-import { existsSync, renameSync } from "fs";
-import { resolve } from "path";
 import { CookieJar } from "tough-cookie";
 
 export function startVaultServer(id: string, pollStatus = true) {
@@ -55,7 +55,7 @@ export function startVaultServer(id: string, pollStatus = true) {
     process?.stdout.on("data", (data) => logFormatted(id, data));
 
     process?.stderr.on("data", (data) => {
-      const lines = (data + "").split("\n");
+      const lines = `${data}`.split("\n");
 
       for (const line of lines) {
         const parsed = parseServerLine(line);

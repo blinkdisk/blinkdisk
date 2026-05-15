@@ -2,12 +2,11 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { useMemo } from "react";
-
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { MonthDaysProps } from "@desktop/components/cron/types";
+import type { MonthDaysProps } from "@desktop/components/cron/types";
+import { useMemo } from "react";
 
 export function MonthDays(props: MonthDaysProps) {
   const {
@@ -29,13 +28,13 @@ export function MonthDays(props: MonthDaysProps) {
   const noWeekDays = !weekDays || weekDays.length === 0;
 
   const localeJSON = JSON.stringify(locale);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: preserve existing react-js-cron locale invalidation behavior without changing dependency timing in this vendored component.
   const placeholder = useMemo(() => {
     if (noWeekDays) {
       return locale.emptyMonthDays || DEFAULT_LOCALE_EN.emptyMonthDays;
     }
 
     return locale.emptyMonthDaysShort || DEFAULT_LOCALE_EN.emptyMonthDaysShort;
-    // eslint-disable-next-line
   }, [noWeekDays, localeJSON]);
 
   const displayMonthDays =
@@ -55,7 +54,7 @@ export function MonthDays(props: MonthDaysProps) {
         placeholder={placeholder}
         value={value}
         setValue={setValue}
-        unit={UNITS[2]!}
+        unit={UNITS[2]}
         locale={locale}
         className={className}
         disabled={disabled}

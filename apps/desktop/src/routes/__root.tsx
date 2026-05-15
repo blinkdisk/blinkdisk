@@ -15,8 +15,8 @@ import { useShortcutListener } from "@desktop/hooks/use-shortcut-listener";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { i18n } from "@desktop/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { CaptureResult } from "posthog-js";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import type { CaptureResult } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 
 import "react-loading-skeleton/dist/skeleton.css";

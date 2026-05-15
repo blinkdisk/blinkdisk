@@ -1,8 +1,11 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
-import { ZRcloneConfig, ZRcloneConfigType } from "@blinkdisk/schemas/providers";
+import {
+  ZRcloneConfig,
+  type ZRcloneConfigType,
+} from "@blinkdisk/schemas/providers";
 import {
   useConfigValidation,
-  VaultAction,
+  type VaultAction,
 } from "@desktop/hooks/use-config-validation";
 
 export function useRcloneForm({

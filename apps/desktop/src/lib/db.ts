@@ -1,7 +1,7 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { SchemaCollection } from "@blinkdisk/electron/db/schema";
-import { ZConfig, ZConfigType } from "@blinkdisk/schemas/config";
-import { ZVault, ZVaultType } from "@blinkdisk/schemas/vault";
+import { ZConfig, type ZConfigType } from "@blinkdisk/schemas/config";
+import { ZVault, type ZVaultType } from "@blinkdisk/schemas/vault";
 import { createElectronAdapter } from "@blinkdisk/signaldb-electron/renderer";
 import maverickReactivityAdapter from "@signaldb/maverickjs";
 

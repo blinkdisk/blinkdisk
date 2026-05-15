@@ -1,3 +1,4 @@
+import { CustomError } from "@blinkdisk/utils/error";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +10,9 @@ export function useVaultStatus() {
   const query = useQuery({
     queryKey: queryKeys.vault.status(vaultId),
     queryFn: async () => {
-      const res = await window.electron!.vault.status(vaultId!);
+      if (!vaultId) throw new CustomError("MISSING_REQUIRED_VALUE");
+
+      const res = await window.electron.vault.status(vaultId);
 
       if (!res) return null;
       return res;

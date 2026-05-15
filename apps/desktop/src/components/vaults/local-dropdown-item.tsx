@@ -1,6 +1,6 @@
 import {
   DropdownMenuItem,
-  DropdownMenuItemProps,
+  type DropdownMenuItemProps,
 } from "@blinkdisk/ui/dropdown-menu";
 import { RemoteTooltip } from "@desktop/components/vaults/remote-tooltip";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";

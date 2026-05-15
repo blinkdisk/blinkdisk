@@ -1,6 +1,9 @@
-import { ZFileSizeType } from "@blinkdisk/schemas/policy";
-import { DynamicField, DynamicFieldProps } from "@blinkdisk/components/dynamic-field";
-import { Input, InputProps } from "@blinkdisk/ui/input";
+import {
+  DynamicField,
+  type DynamicFieldProps,
+} from "@blinkdisk/components/dynamic-field";
+import type { ZFileSizeType } from "@blinkdisk/schemas/policy";
+import { Input, type InputProps } from "@blinkdisk/ui/input";
 import {
   Select,
   SelectContent,
@@ -58,7 +61,8 @@ const Filesize = React.forwardRef<
           ) =>
             field.handleChange({
               value:
-                "valueAsNumber" in e.target && !isNaN(e.target.valueAsNumber)
+                "valueAsNumber" in e.target &&
+                !Number.isNaN(e.target.valueAsNumber)
                   ? e.target.valueAsNumber
                   : e.target.value !== ""
                     ? Number(e.target.value)
