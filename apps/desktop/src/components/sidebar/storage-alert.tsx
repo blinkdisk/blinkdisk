@@ -4,6 +4,7 @@ import { Button } from "@blinkdisk/ui/button";
 import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
+import { CircleFadingArrowUpIcon } from "lucide-react";
 import { useMemo } from "react";
 
 export function SidebarStorageAlert() {
@@ -35,6 +36,7 @@ export function SidebarStorageAlert() {
             variant={full ? "destructive" : "warn"}
             onClick={openUpgradeDialog}
           >
+            <CircleFadingArrowUpIcon />
             {t("button")}
           </Button>
         </AlertDescription>
