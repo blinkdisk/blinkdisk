@@ -23,6 +23,7 @@ export function Logo({ theme, className }: LogoProps) {
         className,
       )}
     >
+      <title>Blinkdisk</title>
       <rect
         x="153.987"
         y="47.9989"
