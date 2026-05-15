@@ -7,5 +7,6 @@
     "title": "Failed to update automatically",
     "description": "An error occurred while trying to update. Please download the update manually using the button below."
   },
-  "manual": "Download manually"
+  "manual": "Download manually",
+  "install": "Install & Restart"
 }

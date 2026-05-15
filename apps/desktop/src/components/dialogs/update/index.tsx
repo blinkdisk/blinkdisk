@@ -12,7 +12,7 @@ import {
 } from "@blinkdisk/ui/dialog";
 import { Progress } from "@blinkdisk/ui/progress";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type UpdateDialogTestState = "hidden" | "downloading" | "downloaded" | "error";
 
@@ -75,12 +75,22 @@ export function UpdateDialog() {
     };
   }, []);
 
+  const downloadManually = useCallback(async () => {
+    await window.electron.shell.open.browser(
+      `${process.env.MARKETING_URL}/download`,
+    );
+  }, []);
+
   return (
     <Dialog open={status?.available ?? false}>
-      <DialogContent className="w-120" showCloseButton={false}>
+      <DialogContent className="w-100" showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+          <DialogTitle className="text-center text-2xl">
+            {t("title")}
+          </DialogTitle>
+          <DialogDescription className="text-center mt-2">
+            {t("description")}
+          </DialogDescription>
         </DialogHeader>
         {status?.errored ? (
           <Alert variant="warn" className="mt-6">
@@ -110,30 +120,37 @@ export function UpdateDialog() {
           </div>
         ) : null}
         <DialogFooter className="mt-8">
-          <Button
-            onClick={async () => {
-              await window.electron.shell.open.browser(
-                `${process.env.MARKETING_URL}/download`,
-              );
-            }}
-            size="lg"
-            variant={status?.errored ? "default" : "outline"}
-          >
-            <ExternalLinkIcon />
-            {t("manual")}
-          </Button>
-          {!status?.errored && status?.downloaded ? (
-            <Button
-              onClick={() => {
-                window.electron.update.install();
-              }}
-              size="lg"
-              variant="default"
-            >
-              <DownloadIcon />
-              {t("Install & Restart")}
+          {status?.errored ? (
+            <Button onClick={downloadManually} className="grow">
+              <ExternalLinkIcon />
+              {t("manual")}
             </Button>
-          ) : null}
+          ) : !status?.downloaded ? (
+            <Button
+              onClick={downloadManually}
+              variant="outline"
+              className="grow"
+            >
+              <ExternalLinkIcon />
+              {t("manual")}
+            </Button>
+          ) : (
+            <>
+              <Button onClick={downloadManually} size="icon" variant="outline">
+                <ExternalLinkIcon />
+              </Button>
+              <Button
+                onClick={() => {
+                  window.electron.update.install();
+                }}
+                variant="default"
+                className="grow"
+              >
+                <DownloadIcon />
+                {t("install")}
+              </Button>
+            </>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
