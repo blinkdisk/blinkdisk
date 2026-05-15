@@ -36,7 +36,6 @@ export function useUpdateFolderPolicy({
       const policy = convertPolicyToCore(values);
 
       if (mock) {
-        // eslint-disable-next-line
         window.folderMockPolicy = policy;
       } else {
         if (!folder) throw new Error("Folder not found, but mock is undefined");
