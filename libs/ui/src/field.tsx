@@ -28,6 +28,7 @@ function Field({
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: component styling and props are built around a div wrapper.
     <div
       role="group"
       data-slot="field"
@@ -99,6 +100,7 @@ function FieldError({
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
           (error, index) =>
+            // biome-ignore lint/suspicious/noArrayIndexKey: validation errors are deduplicated static messages.
             error?.message && <li key={index}>{error.message}</li>,
         )}
       </ul>

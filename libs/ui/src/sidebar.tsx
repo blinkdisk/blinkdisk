@@ -58,7 +58,7 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      // eslint-disable-next-line
+      // biome-ignore lint/suspicious/noDocumentCookie: sidebar state is persisted in a cookie.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
     [setOpenProp, open],
