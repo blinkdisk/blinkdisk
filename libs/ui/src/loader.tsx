@@ -19,8 +19,8 @@ export function Loader({ size, small, big, className, center }: LoaderProps) {
   return (
     <svg
       style={{
-        width: getSize() + "rem",
-        height: getSize() + "rem",
+        width: `${getSize()}rem`,
+        height: `${getSize()}rem`,
         ...(center ? { translateX: "-50%", translateY: "-50%" } : {}),
       }}
       className={cn("m-0 origin-center animate-spin", className)}
