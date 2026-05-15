@@ -1,7 +1,10 @@
 import { z } from "zod";
 
-// eslint-disable-next-line
-export type ZCloudBlinkConfigType = {};
+declare const emptyCloudBlinkConfig: unique symbol;
+
+export type ZCloudBlinkConfigType = {
+  [emptyCloudBlinkConfig]?: never;
+};
 
 export const ZFilesystemConfig = z.object({
   path: z.string().min(1).max(512),

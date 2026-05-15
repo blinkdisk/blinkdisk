@@ -29,12 +29,7 @@ describe("mapProviderType", () => {
 
 describe("mapConfigFields", () => {
   it("returns CloudBlink config with url, token, version", () => {
-    const result = mapConfigFields(
-      "CLOUDBLINK",
-      { someField: "ignored" },
-      3,
-      "test-token",
-    );
+    const result = mapConfigFields("CLOUDBLINK", {}, 3, "test-token");
 
     expect(result).toEqual({
       url: process.env.CLOUD_URL,
@@ -43,8 +38,9 @@ describe("mapConfigFields", () => {
     });
   });
 
-  it("maps S3 fields using coreMapping", () => {
-    const result = mapConfigFields("AMAZON_S3", {
+  it("maps S3-compatible fields using coreMapping", () => {
+    const result = mapConfigFields("S3_COMPATIBLE", {
+      endpoint: "https://s3.example.com",
       accessKeyType: "AKIA123",
       accessKeySecret: "secret",
       bucket: "my-bucket",
@@ -54,6 +50,7 @@ describe("mapConfigFields", () => {
     });
 
     expect(result).toEqual({
+      endpoint: "https://s3.example.com",
       accessKeyID: "AKIA123",
       secretAccessKey: "secret",
       bucket: "my-bucket",
@@ -96,12 +93,14 @@ describe("mapConfigFields", () => {
       keyId: "key123",
       keySecret: "secret",
       bucket: "my-bucket",
+      prefix: "backups",
     });
 
     expect(result).toEqual({
       keyId: "key123",
       key: "secret",
       bucket: "my-bucket",
+      prefix: "backups",
     });
   });
 
