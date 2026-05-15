@@ -1,4 +1,5 @@
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
+import { CustomError } from "@blinkdisk/utils/error";
 import { useConfigList } from "@desktop/hooks/queries/use-config-list";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultPassword } from "@desktop/hooks/queries/use-vault-password";
@@ -15,9 +16,8 @@ export function useVaultConfig() {
   return useQuery({
     queryKey: queryKeys.vault.config(vault?.id, password),
     queryFn: async () => {
-      if (!vault || !password || !configs) return null;
-
-      if (!vault || !configs || !password) return null;
+      if (!vault || !password || !configs)
+        throw new CustomError("MISSING_REQUIRED_VALUE");
 
       const localHostName = window.electron.os.hostName(vault.id);
       const localUserName = window.electron.os.userName(vault.id);
@@ -34,7 +34,7 @@ export function useVaultConfig() {
       if (!config) return null;
 
       return (await window.electron.vault.config.decrypt({
-        password: password!,
+        password,
         encrypted: config.data,
       })) as ProviderConfig;
     },

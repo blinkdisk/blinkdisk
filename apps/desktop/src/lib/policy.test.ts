@@ -8,6 +8,12 @@ import {
   pickDefinedFields,
 } from "@desktop/lib/policy";
 
+function expectValue<T>(value: T): NonNullable<T> {
+  expect(value).not.toBeNull();
+  expect(value).not.toBeUndefined();
+  return value as NonNullable<T>;
+}
+
 describe("pickDefinedFields", () => {
   it("picks only the listed keys", () => {
     const obj = { a: 1, b: 2, c: 3 };
@@ -64,7 +70,7 @@ describe("convertPolicyFromCore", () => {
       },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.retention).toEqual({
       latest: 10,
@@ -82,7 +88,7 @@ describe("convertPolicyFromCore", () => {
       files: { ignore: ["*.log", "temp*"] },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.files.exclusions).toEqual([
       { rule: "*.log" },
@@ -95,7 +101,7 @@ describe("convertPolicyFromCore", () => {
       files: { maxFileSize: 1_000_000 },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.files.maxFileSize).toEqual({ value: 1, unit: "MB" });
   });
@@ -105,7 +111,7 @@ describe("convertPolicyFromCore", () => {
       scheduling: { manual: true },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.schedule.trigger).toBe("MANUAL");
   });
@@ -115,7 +121,7 @@ describe("convertPolicyFromCore", () => {
       scheduling: { manual: false, intervalSeconds: 3600 },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.schedule.trigger).toBe("SCHEDULE");
     expect(result.schedule.interval).toBe("3600");
@@ -126,7 +132,7 @@ describe("convertPolicyFromCore", () => {
       scheduling: { timeOfDay: [{ hour: 9, min: 30 }] },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.schedule.times).toEqual([{ hour: 9, minute: 30 }]);
   });
@@ -136,7 +142,7 @@ describe("convertPolicyFromCore", () => {
       scheduling: { cron: ["0 0 * * *", "0 12 * * 1-5"] },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.schedule.cron).toEqual([
       { id: "0-0 0 * * *", expression: "0 0 * * *" },
@@ -149,7 +155,7 @@ describe("convertPolicyFromCore", () => {
       compression: { compressorName: "" },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.compression.algorithm).toBeUndefined();
   });
@@ -159,7 +165,7 @@ describe("convertPolicyFromCore", () => {
       compression: { minSize: 1000, maxSize: 1_000_000_000 },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.compression.minFileSize).toEqual({ value: 1, unit: "KB" });
     expect(result.compression.maxFileSize).toEqual({ value: 1, unit: "GB" });
@@ -174,7 +180,7 @@ describe("convertPolicyFromCore", () => {
       },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.errors).toEqual({
       ignoreFile: true,
@@ -191,7 +197,7 @@ describe("convertPolicyFromCore", () => {
       },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.scripts.beforeFolder).toEqual({
       script: "echo before",
@@ -210,7 +216,7 @@ describe("convertPolicyFromCore", () => {
       },
     });
 
-    const result = convertPolicyFromCore(core)!;
+    const result = expectValue(convertPolicyFromCore(core));
 
     expect(result.logging.files).toEqual({
       snapshotted: 1,
@@ -325,21 +331,21 @@ describe("convertPolicyToCore", () => {
 describe("roundtrip with defaultVaultPolicy", () => {
   it("preserves retention through toCore → fromCore", () => {
     const core = convertPolicyToCore(defaultVaultPolicy);
-    const ui = convertPolicyFromCore(core)!;
+    const ui = expectValue(convertPolicyFromCore(core));
 
     expect(ui.retention).toEqual(defaultVaultPolicy.retention);
   });
 
   it("preserves errors through toCore → fromCore", () => {
     const core = convertPolicyToCore(defaultVaultPolicy);
-    const ui = convertPolicyFromCore(core)!;
+    const ui = expectValue(convertPolicyFromCore(core));
 
     expect(ui.errors).toEqual(defaultVaultPolicy.errors);
   });
 
   it("preserves logging through toCore → fromCore", () => {
     const core = convertPolicyToCore(defaultVaultPolicy);
-    const ui = convertPolicyFromCore(core)!;
+    const ui = expectValue(convertPolicyFromCore(core));
 
     expect(ui.logging).toEqual(defaultVaultPolicy.logging);
   });

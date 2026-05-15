@@ -1,4 +1,5 @@
 import type { ZUpdateVaultFormType } from "@blinkdisk/schemas/vault";
+import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -13,13 +14,15 @@ export function useUpdateVault(onSuccess: () => void) {
   return useMutation({
     mutationKey: ["vault", vaultId, "name"],
     mutationFn: async (values: ZUpdateVaultFormType) => {
+      if (!vaultId) throw new CustomError("MISSING_REQUIRED_VALUE");
+
       await vaultApi(vaultId).post("/api/v1/repo/description", {
         description: values.name,
       });
 
       getVaultCollection(accountId).updateOne(
         {
-          id: vaultId!,
+          id: vaultId,
         },
         {
           $set: {

@@ -54,7 +54,7 @@ export function MonthDays(props: MonthDaysProps) {
         placeholder={placeholder}
         value={value}
         setValue={setValue}
-        unit={UNITS[2]!}
+        unit={UNITS[2]}
         locale={locale}
         className={className}
         disabled={disabled}

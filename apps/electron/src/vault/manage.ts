@@ -31,7 +31,8 @@ export async function createVault(payload: {
   const options = payload.vault.options;
 
   let vault: VaultInstance;
-  if (vaults[payload.vault.id]) vault = vaults[payload.vault.id]!;
+  const existingVault = vaults[payload.vault.id];
+  if (existingVault) vault = existingVault;
   else
     vault = {
       id: payload.vault.id,
@@ -105,7 +106,8 @@ export async function connectVault({
   token?: string | null;
 }) {
   let vault: VaultInstance;
-  if (vaults[id]) vault = vaults[id]!;
+  const existingVault = vaults[id];
+  if (existingVault) vault = existingVault;
   else
     vault = {
       id,

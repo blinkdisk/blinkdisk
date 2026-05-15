@@ -58,10 +58,11 @@ export function useSetupVault({
 
           // This shouldn't happen in theory
           if (!encryptedConfig) return setStep("CONFIG");
+          if (!values.password) throw new CustomError("MISSING_REQUIRED_VALUE");
 
           const [decryptedConfig, err] = await tryCatch(
             window.electron.vault.config.decrypt({
-              password: values.password!,
+              password: values.password,
               encrypted: encryptedConfig.data,
             }) as Promise<ProviderConfig>,
           );

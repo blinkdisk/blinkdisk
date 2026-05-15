@@ -104,12 +104,19 @@ export async function polarWebhook(
 
           await Promise.all(
             subscriptionsWithCleanup
-              .filter((subscription) => subscription.cleanupAt)
+              .filter(
+                (
+                  subscription,
+                ): subscription is typeof subscription & {
+                  cleanupAt: Date;
+                  canceledAt: Date;
+                } => !!subscription.cleanupAt && !!subscription.canceledAt,
+              )
               .map((subscription) =>
                 stopCancellationWorkflow(c.env, {
                   subscriptionId: subscription.id,
-                  cleanupAt: subscription.cleanupAt!.toISOString(),
-                  canceledAt: subscription.canceledAt!.toISOString(),
+                  cleanupAt: subscription.cleanupAt.toISOString(),
+                  canceledAt: subscription.canceledAt.toISOString(),
                 }),
               ),
           );
@@ -340,11 +347,14 @@ export async function polarWebhook(
 
           await Promise.all(
             activeTrials
-              .filter((trial) => trial.endsAt)
+              .filter(
+                (trial): trial is typeof trial & { endsAt: Date } =>
+                  !!trial.endsAt,
+              )
               .map((trial) =>
                 stopTrialWorkflow(c.env, {
                   trialId: trial.id,
-                  endsAt: trial.endsAt!.toISOString(),
+                  endsAt: trial.endsAt.toISOString(),
                 }),
               ),
           );

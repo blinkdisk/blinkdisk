@@ -3,6 +3,12 @@ import {
   convertThrottleToCore,
 } from "@desktop/lib/throttle";
 
+function expectValue<T>(value: T): NonNullable<T> {
+  expect(value).not.toBeNull();
+  expect(value).not.toBeUndefined();
+  return value as NonNullable<T>;
+}
+
 describe("convertThrottleFromCore", () => {
   it("returns null for falsy input", () => {
     expect(convertThrottleFromCore(null as any)).toBeNull();
@@ -105,7 +111,7 @@ describe("roundtrip", () => {
       maxDownloadSpeedBytesPerSecond: 5_000_000,
     };
 
-    const ui = convertThrottleFromCore(core)!;
+    const ui = expectValue(convertThrottleFromCore(core));
     const result = convertThrottleToCore(ui);
 
     expect(result).toEqual(core);

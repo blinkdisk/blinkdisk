@@ -40,7 +40,7 @@ export async function sendEmail(...args: Parameters<typeof getEmailOptions>) {
   const options = await getEmailOptions(...args);
 
   if (process.env.EMAIL_PROVIDER === "plunk") {
-    const plunk = new Plunk(process.env.PLUNK_SECRET_KEY!, {
+    const plunk = new Plunk(process.env.PLUNK_SECRET_KEY || "", {
       ...(process.env.PLUNK_URL && { baseUrl: process.env.PLUNK_URL }),
     });
 
@@ -54,7 +54,7 @@ export async function sendEmail(...args: Parameters<typeof getEmailOptions>) {
       subscribed: true,
     });
   } else {
-    const smtp = nodemailer.createTransport(process.env.SMTP_URL!);
+    const smtp = nodemailer.createTransport(process.env.SMTP_URL || "");
 
     await smtp.sendMail({
       from: options.from,

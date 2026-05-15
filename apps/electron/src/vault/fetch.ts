@@ -57,11 +57,14 @@ export async function fetchVaultRaw(
   },
 ) {
   return await new Promise((res, rej) => {
+    const { address, certificate } = vault.server;
+    if (!address || !certificate) throw new Error("VAULT_SERVER_NOT_READY");
+
     const req = https.request(
       {
-        ca: [vault.server.certificate!],
+        ca: [certificate],
         host: "127.0.0.1",
-        port: parseInt(new URL(vault.server.address).port, 10).toString(),
+        port: parseInt(new URL(address).port, 10).toString(),
         method,
         path,
         headers: {
@@ -93,7 +96,7 @@ export async function fetchVaultRaw(
           if (parsed && parsed.length) {
             parsed.forEach((cookie) => {
               if (!cookie || !vault.server.cookies) return;
-              vault.server.cookies.setCookieSync(cookie, vault.server.address!);
+              vault.server.cookies.setCookieSync(cookie, address);
             });
           }
         }

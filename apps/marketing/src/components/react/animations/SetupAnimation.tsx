@@ -8,7 +8,8 @@ function pickRandomFolders(): typeof EXAMPLE_FOLDERS {
 
   while (result.size < 3) {
     const randomIndex = Math.floor(Math.random() * EXAMPLE_FOLDERS.length);
-    result.add(EXAMPLE_FOLDERS[randomIndex]!);
+    const folder = EXAMPLE_FOLDERS[randomIndex];
+    if (folder) result.add(folder);
   }
 
   return Array.from(result);

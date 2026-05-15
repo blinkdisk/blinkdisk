@@ -73,7 +73,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
     },
     trustedOrigins: [
       process.env.WEB_URL,
-      process.env.DESKTOP_URL!,
+      process.env.DESKTOP_URL || "",
       APP_ID_ORIGIN,
     ],
     advanced: {

@@ -59,8 +59,8 @@ const Path = React.forwardRef<
           title,
         });
 
-        if (!result.canceled && result.filePaths.length)
-          field.handleChange(result.filePaths[0]!);
+        if (!result.canceled && result.filePaths[0])
+          field.handleChange(result.filePaths[0]);
       }
 
       setLoading(false);

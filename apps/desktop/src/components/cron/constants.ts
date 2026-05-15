@@ -34,7 +34,7 @@ export const SUPPORTED_SHORTCUTS: ShortcutsValues[] = [
     value: "0 * * * *",
   },
 ];
-export const UNITS: Unit[] = [
+export const UNITS: [Unit, Unit, Unit, Unit, Unit] = [
   {
     type: "minutes",
     min: 0,

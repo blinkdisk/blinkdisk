@@ -23,8 +23,9 @@ export function CodeStatsDropzone({
     },
     maxFiles: 1,
     onDropAccepted: async (files) => {
-      if (!files.length) return;
-      onFileChange?.(files[0]!);
+      const file = files[0];
+      if (!file) return;
+      onFileChange?.(file);
     },
   });
 

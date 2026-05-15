@@ -16,7 +16,7 @@ export function createWindow() {
     minWidth: 950,
     minHeight: 500,
     title: "BlinkDisk",
-    backgroundColor: getTheme() == "light" ? "#ffffff" : "#222222",
+    backgroundColor: getTheme() === "light" ? "#ffffff" : "#222222",
     webPreferences: {
       preload: join(import.meta.dirname, "preload.js"),
     },
@@ -27,7 +27,7 @@ export function createWindow() {
   window.setMenu(null);
 
   window.loadURL(
-    app.isPackaged ? PROTOCOL_FRONTEND_URL : process.env.DESKTOP_URL!,
+    app.isPackaged ? PROTOCOL_FRONTEND_URL : process.env.DESKTOP_URL || "",
   );
 
   window.webContents.setWindowOpenHandler(({ url: rawUrl }) => {
@@ -36,7 +36,7 @@ export function createWindow() {
     if (
       url.protocol === INTERNAL_PROTOCOL ||
       (!app.isPackaged &&
-        url.origin === new URL(process.env.DESKTOP_URL!).origin)
+        url.origin === new URL(process.env.DESKTOP_URL || "").origin)
     )
       window?.loadURL(rawUrl);
     else if (

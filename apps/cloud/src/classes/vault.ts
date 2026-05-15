@@ -75,7 +75,7 @@ export class Vault extends DurableObject<Cloudflare.Env> {
     const vaultId = getVaultId(request.headers);
     if (!vaultId)
       return new Response("Failed to parse vault id", { status: 500 });
-    this.id = vaultId!;
+    this.id = vaultId;
 
     const webSocketPair = new WebSocketPair();
 

@@ -34,7 +34,7 @@ export function Hours(props: HoursProps) {
       <CustomSelect
         placeholder={locale.emptyHours || DEFAULT_LOCALE_EN.emptyHours}
         value={value}
-        unit={UNITS[1]!}
+        unit={UNITS[1]}
         setValue={setValue}
         locale={locale}
         className={className}

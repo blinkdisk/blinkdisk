@@ -71,7 +71,7 @@ export class Space extends DurableObject<Cloudflare.Env> {
     await this.db
       .updateTable("Space")
       .set({ used: used.toString() })
-      .where("id", "=", id!)
+      .where("id", "=", id)
       .execute();
 
     const percentage = used / capacity;

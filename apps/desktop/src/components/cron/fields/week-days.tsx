@@ -73,7 +73,7 @@ export function WeekDays(props: WeekDaysProps) {
         grid={false}
         value={value}
         unit={{
-          ...UNITS[4]!,
+          ...UNITS[4],
           // Allow translation of alternative labels when using "humanizeLabels"
           // Issue #3
           alt: locale.altWeekDays || DEFAULT_LOCALE_EN.altWeekDays,

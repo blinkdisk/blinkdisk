@@ -48,7 +48,7 @@ export function Minutes(props: MinutesProps) {
             : locale.emptyMinutes || DEFAULT_LOCALE_EN.emptyMinutes
         }
         value={value}
-        unit={UNITS[0]!}
+        unit={UNITS[0]}
         setValue={setValue}
         locale={locale}
         className={className}
