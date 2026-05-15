@@ -27,7 +27,7 @@ export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
           locale={language}
           onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
         >
-          <button>
+          <button type="button">
             <EmojiCard emoji={values.emoji} size="lg" />
           </button>
         </EmojiPicker>

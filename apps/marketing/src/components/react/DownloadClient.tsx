@@ -201,6 +201,7 @@ export default function DownloadClient() {
           <div className="sm:w-sm mt-12 flex w-[80vw] flex-col items-center gap-4">
             {"share" in navigator ? (
               <button
+                type="button"
                 onClick={async () => {
                   try {
                     if (!navigator.share || !navigator.canShare)
@@ -228,6 +229,7 @@ export default function DownloadClient() {
             <div className="flex w-full items-center gap-2">
               <div className="relative flex-1">
                 <button
+                  type="button"
                   onClick={() => setCalendarOpen(!calendarOpen)}
                   className="bg-secondary hover:bg-secondary/80 border-border inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors"
                 >
@@ -238,18 +240,21 @@ export default function DownloadClient() {
                 {calendarOpen && (
                   <div className="bg-card absolute left-0 top-12 z-10 w-full rounded-md border p-1 shadow-lg">
                     <button
+                      type="button"
                       onClick={() => remind("google")}
                       className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
                     >
                       Google Calendar
                     </button>
                     <button
+                      type="button"
                       onClick={() => remind("outlook")}
                       className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
                     >
                       Outlook
                     </button>
                     <button
+                      type="button"
                       onClick={() => remind("other")}
                       className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
                     >
@@ -259,6 +264,7 @@ export default function DownloadClient() {
                 )}
               </div>
               <button
+                type="button"
                 onClick={async () => {
                   const success = await copy(window.location.href);
 
