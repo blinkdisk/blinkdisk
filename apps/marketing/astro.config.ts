@@ -1,3 +1,5 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
@@ -7,8 +9,6 @@ import sentry from "@sentry/astro";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField } from "astro/config";
 import mermaid from "astro-mermaid";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { viteStaticCopy as copy } from "vite-plugin-static-copy";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

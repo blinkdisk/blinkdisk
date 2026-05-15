@@ -1,3 +1,5 @@
+import { chmod, readdir, symlink } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import type { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
 import { fileExists } from "@electron/fs";
 import { fetchVault } from "@electron/vault/fetch";
@@ -5,9 +7,7 @@ import { getVault } from "@electron/vault/manage";
 import type { VaultInstance } from "@electron/vault/types";
 import { window } from "@electron/window";
 import { app, dialog } from "electron";
-import { chmod, readdir, symlink } from "node:fs/promises";
 import pLimit from "p-limit";
-import { dirname, join } from "node:path";
 
 type Restore = {
   id: string;

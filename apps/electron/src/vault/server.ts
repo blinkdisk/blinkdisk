@@ -1,3 +1,6 @@
+import { spawn } from "node:child_process";
+import { existsSync, renameSync } from "node:fs";
+import { resolve } from "node:path";
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
@@ -6,10 +9,7 @@ import { fetchVault } from "@electron/vault/fetch";
 import { vaults } from "@electron/vault/manage";
 import type { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
-import { spawn } from "node:child_process";
 import { app } from "electron";
-import { existsSync, renameSync } from "node:fs";
-import { resolve } from "node:path";
 import { CookieJar } from "tough-cookie";
 
 export function startVaultServer(id: string, pollStatus = true) {

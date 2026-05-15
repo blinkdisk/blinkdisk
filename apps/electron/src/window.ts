@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import {
   INTERNAL_PROTOCOL,
   PROTOCOL_FRONTEND_URL,
@@ -5,8 +6,6 @@ import {
 import { openBrowser } from "@electron/shell";
 import { getTheme } from "@electron/theme";
 import { app, BrowserWindow } from "electron";
-
-import { join } from "node:path";
 
 export let window: BrowserWindow | null = null;
 

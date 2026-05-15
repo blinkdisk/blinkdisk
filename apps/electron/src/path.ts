@@ -1,6 +1,6 @@
-import { app } from "electron";
 import os from "node:os";
 import { join } from "node:path";
+import { app } from "electron";
 
 export const platform = (() => {
   switch (process.platform) {
