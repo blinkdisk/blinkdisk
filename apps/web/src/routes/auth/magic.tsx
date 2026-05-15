@@ -46,6 +46,7 @@ function RouteComponent() {
                   <div className="flex">
                     {slots.slice(0, 5).map((slot, idx) => (
                       <InputOTPSlot
+                        // biome-ignore lint/suspicious/noArrayIndexKey: OTP slots are fixed positions, and the slot index is their identity.
                         key={idx}
                         index={idx}
                         {...slot}
@@ -56,6 +57,7 @@ function RouteComponent() {
                   <div className="flex">
                     {slots.slice(5).map((slot, idx) => (
                       <InputOTPSlot
+                        // biome-ignore lint/suspicious/noArrayIndexKey: OTP slots are fixed positions, and the slot index is their identity.
                         key={idx + 5}
                         index={idx + 5}
                         {...slot}
