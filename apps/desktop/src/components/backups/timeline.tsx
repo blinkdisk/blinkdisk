@@ -259,7 +259,7 @@ export function Backup({ backup }: BackupProps) {
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
 
   return (
-    <div role="link" className={cn(cardClassName, "hover:bg-card-hover")}>
+    <div className={cn(cardClassName, "hover:bg-card-hover")}>
       <Link
         to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
         params={(params) => ({

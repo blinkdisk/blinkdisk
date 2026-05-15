@@ -73,10 +73,7 @@ function Folder({ folder }: FolderProps) {
   );
 
   return (
-    <div
-      role="link"
-      className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2"
-    >
+    <div className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2">
       <Link
         to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
         params={(params) => ({
