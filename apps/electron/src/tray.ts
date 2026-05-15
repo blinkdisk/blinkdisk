@@ -1,7 +1,7 @@
 import { platform } from "@electron/path";
 import { focusWindow } from "@electron/window";
 import { app, Menu, nativeImage, Tray } from "electron";
-import { join } from "path";
+import { join } from "node:path";
 
 let tray: Tray | null = null;
 

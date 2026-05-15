@@ -1,4 +1,4 @@
-import { access, constants, stat } from "fs/promises";
+import { access, constants, stat } from "node:fs/promises";
 import getFolderSize from "get-folder-size";
 
 export async function fileExists(path: string) {

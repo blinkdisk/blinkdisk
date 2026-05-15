@@ -2,7 +2,7 @@ import { APP_SCHEME, APP_SCHEME_PROTOCOL } from "@blinkdisk/constants/app";
 import { authenticateToken } from "@electron/auth";
 import { focusWindow, sendWindow } from "@electron/window";
 import { app } from "electron";
-import { resolve } from "path";
+import { resolve } from "node:path";
 
 let hasRegistered = false;
 if (process.defaultApp) {

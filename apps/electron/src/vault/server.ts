@@ -6,10 +6,10 @@ import { fetchVault } from "@electron/vault/fetch";
 import { vaults } from "@electron/vault/manage";
 import type { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
-import { spawn } from "child_process";
+import { spawn } from "node:child_process";
 import { app } from "electron";
-import { existsSync, renameSync } from "fs";
-import { resolve } from "path";
+import { existsSync, renameSync } from "node:fs";
+import { resolve } from "node:path";
 import { CookieJar } from "tough-cookie";
 
 export function startVaultServer(id: string, pollStatus = true) {

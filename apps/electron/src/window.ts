@@ -6,7 +6,7 @@ import { openBrowser } from "@electron/shell";
 import { getTheme } from "@electron/theme";
 import { app, BrowserWindow } from "electron";
 
-import { join } from "path";
+import { join } from "node:path";
 
 export let window: BrowserWindow | null = null;
 

@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import type { KnipConfig } from "knip";
 
 const tsconfigRaw = readFileSync("./libs/typescript/base.json", "utf8");

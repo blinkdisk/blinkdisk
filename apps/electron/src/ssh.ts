@@ -1,5 +1,5 @@
 import type { ZSftpConfigType } from "@blinkdisk/schemas/providers";
-import { type ExecFileException, execFile } from "child_process";
+import { type ExecFileException, execFile } from "node:child_process";
 
 export function sshKeyscan(form: ZSftpConfigType) {
   return new Promise<{ error?: string; output?: string }>((res) => {

@@ -5,9 +5,9 @@ import { getVault } from "@electron/vault/manage";
 import type { VaultInstance } from "@electron/vault/types";
 import { window } from "@electron/window";
 import { app, dialog } from "electron";
-import { chmod, readdir, symlink } from "fs/promises";
+import { chmod, readdir, symlink } from "node:fs/promises";
 import pLimit from "p-limit";
-import { dirname, join } from "path";
+import { dirname, join } from "node:path";
 
 type Restore = {
   id: string;
