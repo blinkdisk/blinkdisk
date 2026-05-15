@@ -24,7 +24,7 @@ export function fromBits(bytes: number): ZBandwithType {
 }
 
 export function toBits(size: ZBandwithType): number | undefined {
-  if (size.value == undefined) return undefined;
+  if (size.value === undefined) return undefined;
   if (size.unit === "bps") return size.value;
   if (size.unit === "Kbps") return size.value * 1000;
   if (size.unit === "Mbps") return size.value * 1000 * 1000;

@@ -49,7 +49,7 @@ export function CreateVaultDialog() {
           {step !== "VARIANT" && !autoSelectedProvider ? (
             <Button
               onClick={() => {
-                if (step === "DETAILS" && provider == "CLOUDBLINK")
+                if (step === "DETAILS" && provider === "CLOUDBLINK")
                   setOptions({
                     step: "VARIANT",
                     autoSelectedProvider: false,
