@@ -35,7 +35,7 @@ export function SidebarAlerts() {
     });
   }
 
-  if (isOffline) {
+  if (!isOffline) {
     alerts.push({
       key: "offline",
       alert: <SidebarOfflineAlert />,
@@ -83,7 +83,7 @@ export function SidebarAlerts() {
 
   return (
     <Carousel
-      opts={{ align: "start" }}
+      opts={{ align: "start", loop: true }}
       setApi={setCarouselApi}
       className="group/alerts"
     >
