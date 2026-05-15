@@ -70,8 +70,7 @@ function RouteComponent() {
             />
           )}
         </form.AppField>
-        {errors.onSubmit &&
-        errors.onSubmit.code &&
+        {errors.onSubmit?.code &&
         (errors.onSubmit.code as unknown as string) === "INVALID_CODE" ? (
           <Alert variant="destructive">
             <AlertTriangleIcon className="mb-0.5 mr-2 inline-block size-3.5" />

@@ -60,10 +60,9 @@ function RouteComponent() {
                 {
                   id: "backup",
                   text: getBackupDisplayName(backup),
-                  href:
-                    !path || !path.length
-                      ? undefined
-                      : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+                  href: !path?.length
+                    ? undefined
+                    : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                   params: (params) => ({
                     ...params,
                     directoryId: backup.rootID,
@@ -92,7 +91,7 @@ function RouteComponent() {
       >
         <Button
           onClick={() => {
-            if (path && path.length)
+            if (path?.length)
               navigate({
                 to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
                 params: (params) => ({

@@ -13,17 +13,9 @@ export function CreateVaultAlerts({ form, action }: CreateVaultAlertsProps) {
   const errors = useStore(form.store, (store) => store.errorMap);
 
   if (action === "UPDATE") return null;
-  if (
-    errors &&
-    errors.onSubmit &&
-    errors.onSubmit.code === "VAULT_VALIDATION_FAILED"
-  )
+  if (errors?.onSubmit && errors.onSubmit.code === "VAULT_VALIDATION_FAILED")
     return <ConfigValidationError message={errors.onSubmit.message} />;
-  if (
-    errors &&
-    errors.onSubmit &&
-    errors.onSubmit.code === "VAULT_ALREADY_EXISTS"
-  )
+  if (errors?.onSubmit && errors.onSubmit.code === "VAULT_ALREADY_EXISTS")
     return <VaultExistsError name={errors.onSubmit.name} />;
 
   return null;

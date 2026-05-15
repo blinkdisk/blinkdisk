@@ -68,7 +68,7 @@ function Folder({ folder }: FolderProps) {
   );
 
   const showStartTime = useMemo(
-    () => folder && folder.lastSnapshot && !folder.lastSnapshot.incomplete,
+    () => folder?.lastSnapshot && !folder.lastSnapshot.incomplete,
     [folder],
   );
 

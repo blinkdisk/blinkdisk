@@ -26,7 +26,7 @@ export const paymentRouter = router({
       if (!plan) throw new CustomError("PRICE_NOT_FOUND");
 
       const price = plan.prices.find((p) => p.id === input.priceId);
-      if (!price || !price.polarId) throw new CustomError("PRICE_NOT_FOUND");
+      if (!price?.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
       const space = await ctx.db
         .selectFrom("Space")
@@ -140,7 +140,7 @@ export const paymentRouter = router({
       .where("id", "=", ctx.account.id)
       .executeTakeFirst();
 
-    if (!account || !account.polarId) throw new CustomError("NOT_ALLOWED");
+    if (!account?.polarId) throw new CustomError("NOT_ALLOWED");
 
     const polar = getPolar(ctx.env.POLAR_ENVIRONMENT, ctx.env.POLAR_TOKEN);
 
@@ -161,7 +161,7 @@ export const paymentRouter = router({
       if (!plan) throw new CustomError("PRICE_NOT_FOUND");
 
       const price = plan.prices.find((p) => p.id === input.priceId);
-      if (!price || !price.polarId) throw new CustomError("PRICE_NOT_FOUND");
+      if (!price?.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
       const current = await getActiveSubscription(ctx.account.id, ctx.db)
         .select(["id", "priceId", "polarSubscriptionId"])

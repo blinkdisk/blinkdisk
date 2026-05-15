@@ -34,7 +34,7 @@ export function mapConfigFields(
   const mapped: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(config)) {
-    if (provider.coreMapping && provider.coreMapping[key]) {
+    if (provider.coreMapping?.[key]) {
       mapped[provider.coreMapping[key]] = value;
     } else {
       mapped[key] = value;

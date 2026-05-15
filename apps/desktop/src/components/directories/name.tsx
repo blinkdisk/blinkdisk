@@ -39,7 +39,7 @@ export function DirectoryNameCell({ info, dark }: DirectoryNameCellProps) {
           <div className="flex size-8 items-center justify-center">
             <Loader />
           </div>
-        ) : directory && directory.skeleton ? (
+        ) : directory?.skeleton ? (
           <Skeleton width="2rem" height="2rem" />
         ) : directory ? (
           <div

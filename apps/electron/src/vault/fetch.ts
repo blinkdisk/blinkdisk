@@ -90,10 +90,10 @@ export async function fetchVaultRaw(
       (result) => {
         const cookies = result.headers["set-cookie"];
 
-        if (cookies && cookies.length) {
+        if (cookies?.length) {
           const parsed = cookies.map((c) => c && Cookie.parse(c));
 
-          if (parsed && parsed.length) {
+          if (parsed?.length) {
             parsed.forEach((cookie) => {
               if (!cookie || !vault.server.cookies) return;
               vault.server.cookies.setCookieSync(cookie, address);

@@ -124,17 +124,16 @@ export function RestoreDirectoryDialog() {
                     title={t("filePath.placeholder")}
                     defaultFileName={t("filePath.defaultFileName", {
                       directory:
-                        (options && options.path && options?.path.length
+                        (options?.path?.length
                           ? options.path.at(-1)?.name
                           : undefined) ||
                         options?.folder?.name ||
                         "Folder",
-                      date:
-                        options && options.backup && options.backup.startTime
-                          ? new Date(options.backup.startTime)
-                              .toLocaleDateString()
-                              .replace(/\//g, ".")
-                          : "Unknown",
+                      date: options?.backup?.startTime
+                        ? new Date(options.backup.startTime)
+                            .toLocaleDateString()
+                            .replace(/\//g, ".")
+                        : "Unknown",
                     })}
                     mode="save"
                     type="file"

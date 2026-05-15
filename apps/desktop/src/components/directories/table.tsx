@@ -273,9 +273,7 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
           className="h-full w-full"
           containerClassName={cn(
             "h-full w-full mt-6",
-            items && items[0]?.skeleton
-              ? "overflow-y-hidden"
-              : "overflow-y-auto",
+            items?.[0]?.skeleton ? "overflow-y-hidden" : "overflow-y-auto",
           )}
         >
           <TableHeader className="sticky top-0 z-10 grid">

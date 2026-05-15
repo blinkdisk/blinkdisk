@@ -40,7 +40,7 @@ export function useStartMount() {
       const platform = await window.electron.os.platform();
 
       let directoryPath = newMount.path;
-      if (path && path.length) {
+      if (path?.length) {
         const seperator = platform === "windows" ? "\\" : "/";
         const subDirectories = path.map(({ name }) => name).join(seperator);
         directoryPath = `${directoryPath}${seperator}${subDirectories}`;

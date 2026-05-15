@@ -84,8 +84,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
 
     if (
       ["PENDING", "UPLOADING"].includes(folder?.status || "") ||
-      (folder &&
-        folder.lastSnapshot &&
+      (folder?.lastSnapshot &&
         "incomplete" in folder.lastSnapshot &&
         folder?.lastSnapshot?.incomplete === "checkpoint")
     ) {
