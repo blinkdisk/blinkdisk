@@ -31,6 +31,14 @@ const templates = {
   },
 };
 
+type TemplateProps<Key extends keyof typeof templates> = Parameters<
+  (typeof templates)[Key]["component"]
+>[0];
+
+type TemplateComponent<Key extends keyof typeof templates> = (
+  props: TemplateProps<Key>,
+) => ReturnType<(typeof templates)[Key]["component"]>;
+
 type EmailAccount = {
   email: string;
   language: string | undefined | null;
@@ -68,26 +76,27 @@ export async function sendEmail(...args: Parameters<typeof getEmailOptions>) {
 export async function getEmailOptions<Key extends keyof typeof templates>(
   template: Key,
   account: EmailAccount,
-  props?: Omit<
-    Parameters<(typeof templates)[Key]["component"]>[0],
-    "locale" | "locales"
-  >,
+  props?: Omit<TemplateProps<Key>, "locale" | "locales">,
 ) {
-  let subject = locales[account.language ?? "en"]?.email[template]?.subject;
+  const locale = (locales[account.language ?? "en"] ??
+    locales.en) as (typeof locales)["en"];
+  let subject = locale.email[template]?.subject ?? "";
 
   Object.entries(props || {}).forEach(([key, value]) => {
     if (typeof value === "object") return;
     subject = subject.replace(`{{${key}}}`, String(value));
   });
 
+  const component = templates[template]
+    .component as unknown as TemplateComponent<Key>;
+
   const html = await pretty(
     await render(
-      templates[template].component({
-        // eslint-disable-next-line
-        ...((props || {}) as any),
+      component({
+        ...(props || {}),
         locale: account.language || "en",
         locales,
-      }),
+      } as TemplateProps<Key>),
     ),
   );
 

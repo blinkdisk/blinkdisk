@@ -22,6 +22,11 @@ import {
 import { createAuthClient, type SuccessContext } from "better-auth/react";
 import { parseSetCookie } from "set-cookie-parser";
 
+type AuthSuccessData = {
+  user?: AccountStorageType["data"];
+  session?: AccountStorageType["session"];
+};
+
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
   basePath: "/api/auth",
@@ -179,10 +184,7 @@ export function storeToken(accountId: string, token: string) {
   store.set(`accounts.${accountId}.secret`, encryptString(token));
 }
 
-function parseAccount(
-  // eslint-disable-next-line
-  context: SuccessContext<any>,
-) {
+function parseAccount(context: SuccessContext<AuthSuccessData>) {
   if (!context.data?.user?.id) return;
 
   const account = context.data?.user;
@@ -194,10 +196,7 @@ function parseAccount(
   store.set(`accounts.${account.id}.session`, session);
 }
 
-function parseCookies(
-  // eslint-disable-next-line
-  context: SuccessContext<any>,
-) {
+function parseCookies(context: SuccessContext<AuthSuccessData>) {
   const setCookie = context.response.headers.get("set-cookie");
   if (!setCookie) return;
 

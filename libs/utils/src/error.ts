@@ -19,14 +19,9 @@ export type CustomErrorCode =
 
 export class CustomError extends Error {
   code: CustomErrorCode;
-  // eslint-disable-next-line
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
 
-  constructor(
-    code: CustomErrorCode,
-    // eslint-disable-next-line
-    variables?: Record<string, any>,
-  ) {
+  constructor(code: CustomErrorCode, variables?: Record<string, unknown>) {
     super();
     this.code = code;
     this.variables = variables;

@@ -54,7 +54,7 @@ describe("getDefinedFields", () => {
 
 describe("convertPolicyFromCore", () => {
   it("returns null for falsy input", () => {
-    expect(convertPolicyFromCore(null as any)).toBeNull();
+    expect(convertPolicyFromCore(null)).toBeNull();
   });
 
   it("maps retention fields", () => {

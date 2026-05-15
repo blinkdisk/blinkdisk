@@ -1,6 +1,14 @@
 import type { ZExclusionFormType } from "@blinkdisk/schemas/policy";
 
-export function parseExclusionRule(rule: string) {
+export type ParsedExclusionRule = {
+  type: ZExclusionFormType["type"];
+  matchType?: MatchType;
+  pattern?: string;
+  extension?: string;
+  foldersOnly?: boolean;
+};
+
+export function parseExclusionRule(rule: string): ParsedExclusionRule {
   const extensionMatch = rule.match(/^\*\.(.+)$/);
   if (extensionMatch?.[1]) {
     return {

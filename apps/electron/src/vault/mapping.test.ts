@@ -16,12 +16,12 @@ describe("mapProviderType", () => {
   });
 
   it("resolves aliases", () => {
-    expect(mapProviderType("BLINKDISK_CLOUD" as any)).toBe("bdc");
-    expect(mapProviderType("BLINKCLOUD" as any)).toBe("bdc");
+    expect(mapProviderType("BLINKDISK_CLOUD")).toBe("bdc");
+    expect(mapProviderType("BLINKCLOUD")).toBe("bdc");
   });
 
   it("throws for unknown provider", () => {
-    expect(() => mapProviderType("UNKNOWN" as any)).toThrow(
+    expect(() => mapProviderType("UNKNOWN")).toThrow(
       "Provider UNKNOWN not found",
     );
   });
@@ -123,7 +123,7 @@ describe("mapConfigFields", () => {
   });
 
   it("throws for unknown provider", () => {
-    expect(() => mapConfigFields("UNKNOWN" as any, {})).toThrow(
+    expect(() => mapConfigFields("UNKNOWN", {})).toThrow(
       "Provider UNKNOWN not found",
     );
   });

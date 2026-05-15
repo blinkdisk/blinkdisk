@@ -8,6 +8,26 @@ import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import { FileIcon, FolderIcon, TrashIcon } from "lucide-react";
 import React, { useCallback, useContext, useState } from "react";
 
+type ElectronDialogBridge = {
+  electron?: {
+    dialog: {
+      open: (options: {
+        properties: (
+          | "openDirectory"
+          | "createDirectory"
+          | "openFile"
+          | "showHiddenFiles"
+        )[];
+        title: string;
+      }) => Promise<{ canceled: boolean; filePaths: string[] }>;
+      save: (options: {
+        title: string;
+        defaultFileName?: string;
+      }) => Promise<{ canceled: boolean; filePath?: string }>;
+    };
+  };
+};
+
 const Path = React.forwardRef<
   HTMLButtonElement,
   {
@@ -42,16 +62,18 @@ const Path = React.forwardRef<
     const onClickCallback = useCallback(async () => {
       setLoading(true);
 
+      const electron = (window as Window & ElectronDialogBridge).electron;
+
       if (mode === "save") {
-        const result = await (window as any).electron?.dialog.save({
+        const result = await electron?.dialog.save({
           title,
           defaultFileName,
         });
 
-        if (!result.canceled && result.filePath)
+        if (result && !result.canceled && result.filePath)
           field.handleChange(result.filePath);
       } else {
-        const result = await (window as any).electron?.dialog.open({
+        const result = await electron?.dialog.open({
           properties:
             type === "directory"
               ? ["openDirectory", "createDirectory"]
@@ -59,7 +81,7 @@ const Path = React.forwardRef<
           title,
         });
 
-        if (!result.canceled && result.filePaths[0])
+        if (result && !result.canceled && result.filePaths[0])
           field.handleChange(result.filePaths[0]);
       }
 

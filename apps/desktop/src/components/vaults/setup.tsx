@@ -5,7 +5,13 @@ import { useSetupPasswordForm } from "@desktop/hooks/forms/use-setup-password-fo
 import { useSetupVault } from "@desktop/hooks/mutations/use-setup-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { SettingsIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { type ComponentType, useMemo, useState } from "react";
+
+type ConfigFormProps = {
+  action: "SETUP";
+  config?: ProviderConfig;
+  onSubmit: (config: ProviderConfig) => void;
+};
 
 export type SetupStep = "PASSWORD" | "CONFIG";
 
@@ -42,8 +48,13 @@ export function Setup() {
     },
   });
 
-  const ConfigForm = useMemo(
-    () => (vault ? providerForms[vault.provider] : null),
+  const ConfigForm = useMemo<ComponentType<ConfigFormProps> | null>(
+    () =>
+      vault
+        ? (providerForms[
+            vault.provider
+          ] as unknown as ComponentType<ConfigFormProps>)
+        : null,
     [vault],
   );
 
@@ -83,10 +94,7 @@ export function Setup() {
             {ConfigForm && (
               <ConfigForm
                 action="SETUP"
-                // ProviderConfig and the form could be different
-                // providers from typescripts perspective
-                // eslint-disable-next-line
-                config={initialConfig as any}
+                config={initialConfig ?? undefined}
                 onSubmit={async (config) => {
                   setConfig(config);
 

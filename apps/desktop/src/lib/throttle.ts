@@ -12,7 +12,7 @@ export type CoreThrottle = {
 };
 
 export function convertThrottleFromCore(
-  policy: CoreThrottle,
+  policy: CoreThrottle | null | undefined,
 ): ZVaultThrottleType | null {
   if (!policy) return null;
 

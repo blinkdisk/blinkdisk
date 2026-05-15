@@ -11,7 +11,7 @@ function expectValue<T>(value: T): NonNullable<T> {
 
 describe("convertThrottleFromCore", () => {
   it("returns null for falsy input", () => {
-    expect(convertThrottleFromCore(null as any)).toBeNull();
+    expect(convertThrottleFromCore(null)).toBeNull();
   });
 
   it("converts enabled upload and download speeds", () => {

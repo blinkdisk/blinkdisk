@@ -14,6 +14,8 @@ import {
 } from "@electron/path";
 import { app } from "electron";
 
+const mockedApp = app as typeof app & { isPackaged: boolean };
+
 describe("platform", () => {
   it("is one of win, mac, or linux", () => {
     expect(["win", "mac", "linux"]).toContain(platform);
@@ -23,7 +25,7 @@ describe("platform", () => {
 describe("globalConfigDirectory", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (app as any).isPackaged = false;
+    mockedApp.isPackaged = false;
   });
 
   it("contains blinkdisk-dev in dev mode", () => {
@@ -31,7 +33,7 @@ describe("globalConfigDirectory", () => {
   });
 
   it("contains blinkdisk (not blinkdisk-dev) in packaged mode", () => {
-    (app as any).isPackaged = true;
+    mockedApp.isPackaged = true;
     const dir = globalConfigDirectory();
     expect(dir).toContain("blinkdisk");
     expect(dir).not.toContain("blinkdisk-dev");
@@ -41,7 +43,7 @@ describe("globalConfigDirectory", () => {
 describe("globalVaultDirectory", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (app as any).isPackaged = false;
+    mockedApp.isPackaged = false;
   });
 
   it("ends with vaults", () => {
@@ -56,7 +58,7 @@ describe("globalVaultDirectory", () => {
 describe("globalAccountDirectory", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (app as any).isPackaged = false;
+    mockedApp.isPackaged = false;
   });
 
   it("ends with accounts", () => {
@@ -67,7 +69,7 @@ describe("globalAccountDirectory", () => {
 describe("corePath", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (app as any).isPackaged = false;
+    mockedApp.isPackaged = false;
   });
 
   it("contains go/bin/core in dev mode", () => {

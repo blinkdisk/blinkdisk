@@ -26,8 +26,9 @@ import { toast } from "sonner";
 declare global {
   interface Window {
     endorsely_referral?: string;
-    // eslint-disable-next-line
-    posthog?: any;
+    posthog?: {
+      capture: (event: string, properties?: Record<string, unknown>) => void;
+    };
   }
 }
 

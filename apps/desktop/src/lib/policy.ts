@@ -116,7 +116,9 @@ export type CorePolicy = {
   noParent?: boolean;
 };
 
-export function convertPolicyFromCore(policy: CorePolicy): ZPolicyType | null {
+export function convertPolicyFromCore(
+  policy: CorePolicy | null | undefined,
+): ZPolicyType | null {
   if (!policy) return null;
 
   return {
