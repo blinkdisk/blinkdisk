@@ -24,6 +24,7 @@ export function SidebarAlerts() {
   const { status } = useUpdateDialog();
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentAlert, setCurrentAlert] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const storagePercentage = space ? space.used / space.capacity : 0;
   const alerts: SidebarAlertSlide[] = [];
@@ -64,18 +65,18 @@ export function SidebarAlerts() {
   useEffect(() => {
     if (!carouselApi) return;
 
-    setCurrentAlert(carouselApi.selectedScrollSnap());
-
-    const handleSelect = () => {
+    const updateCarouselState = () => {
+      setScrollSnaps(carouselApi.scrollSnapList());
       setCurrentAlert(carouselApi.selectedScrollSnap());
     };
 
-    carouselApi.on("select", handleSelect);
-    carouselApi.on("reInit", handleSelect);
+    updateCarouselState();
+    carouselApi.on("select", updateCarouselState);
+    carouselApi.on("reInit", updateCarouselState);
 
     return () => {
-      carouselApi.off("select", handleSelect);
-      carouselApi.off("reInit", handleSelect);
+      carouselApi.off("select", updateCarouselState);
+      carouselApi.off("reInit", updateCarouselState);
     };
   }, [carouselApi]);
 
@@ -94,11 +95,11 @@ export function SidebarAlerts() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      {alerts.length > 1 ? (
+      {scrollSnaps.length > 1 ? (
         <div className="mt-2 flex justify-center gap-1.5">
-          {alerts.map(({ key }, index) => (
+          {scrollSnaps.map((scrollSnap, index) => (
             <button
-              key={key}
+              key={scrollSnap}
               type="button"
               aria-label={`Go to alert ${index + 1}`}
               aria-current={index === currentAlert ? "true" : undefined}
