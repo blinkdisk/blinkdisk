@@ -10,14 +10,13 @@ import {
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
 import { Progress } from "@blinkdisk/ui/progress";
-import { useUpdate } from "@desktop/hooks/use-update";
+import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
 export function UpdateDialog() {
   const { t } = useAppTranslation("update");
-  const { status } = useUpdate();
-  const [dismissed, setDismissed] = useState(false);
+  const { isOpen, setIsOpen, status } = useUpdateDialog();
   const [confirmDismissOpen, setConfirmDismissOpen] = useState(false);
 
   const downloadManually = useCallback(async () => {
@@ -27,16 +26,20 @@ export function UpdateDialog() {
   }, []);
 
   const dismiss = useCallback(() => {
-    setDismissed(true);
+    setIsOpen(false);
     setConfirmDismissOpen(false);
-  }, []);
+  }, [setIsOpen]);
 
   return (
     <>
       <Dialog
-        open={(status?.available ?? false) && !dismissed}
+        open={isOpen}
         onOpenChange={(open) => {
-          if (!open) setConfirmDismissOpen(true);
+          if (open) {
+            setIsOpen(true);
+          } else {
+            setConfirmDismissOpen(true);
+          }
         }}
       >
         <DialogContent className="w-100">

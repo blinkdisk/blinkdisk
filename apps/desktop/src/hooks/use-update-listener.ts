@@ -1,7 +1,9 @@
 import type { UpdateStatus } from "@blinkdisk/electron/updater";
+import {
+  type UpdateDialogTestState,
+  useUpdateDialog,
+} from "@desktop/hooks/state/use-update-dialog";
 import { useEffect } from "react";
-
-import { type UpdateDialogTestState, useUpdate } from "./use-update";
 
 declare global {
   interface Window {
@@ -38,7 +40,7 @@ function getTestUpdateStatus(state: UpdateDialogTestState): UpdateStatus {
 }
 
 export function useUpdateListener() {
-  const { setStatus } = useUpdate();
+  const { setStatus } = useUpdateDialog();
 
   useEffect(() => {
     window.electron.update.status().then(setStatus);
