@@ -9,8 +9,7 @@
     "postdeploy": "bash ./sentry.sh",
     "typecheck": "tsc --noEmit",
     "typegen": "wrangler types --env-interface CloudflareBindings",
-    "env:update": "node env.js && pnpm run typegen",
-    "lint": "biome check ."
+    "env:update": "node env.js && pnpm run typegen"
   },
   "exports": {
     "./*": "./src/*.ts"

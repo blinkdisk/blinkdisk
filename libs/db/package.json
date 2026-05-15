@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "lint": "biome check .",
     "check-types": "tsc --noEmit",
     "migrate:dev": "prisma migrate dev",
     "migrate:prod": "prisma migrate deploy",

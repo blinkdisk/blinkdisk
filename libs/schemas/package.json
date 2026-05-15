@@ -6,7 +6,6 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "lint": "biome check .",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {

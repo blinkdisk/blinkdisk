@@ -7,7 +7,6 @@
   },
   "scripts": {
     "studio": "email dev --dir src/ --port 3001",
-    "lint": "biome check .",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {

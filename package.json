@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "lint": "turbo run lint",
     "dev": "dotenv -- turbo run dev",
     "format": "biome format --write .",
     "env:update": "turbo run env:update",
