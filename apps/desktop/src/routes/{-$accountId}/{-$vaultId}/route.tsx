@@ -29,9 +29,7 @@ function RouteComponent() {
       {status === "STARTING" ? (
         <VaultStarting />
       ) : vault && status === "SETUP" ? (
-        <>
-          <Setup />
-        </>
+        <Setup />
       ) : (
         <Outlet />
       )}

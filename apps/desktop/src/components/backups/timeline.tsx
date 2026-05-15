@@ -195,17 +195,15 @@ function FakeBackup() {
       )}
     >
       {folder && folder.status === "PENDING" ? (
-        <>
-          <div className="flex items-center gap-4">
-            <CalendarClockIcon className="text-muted-foreground size-6" />
-            <div className="flex flex-col">
-              <p className="font-medium">{t("pending.title")}</p>
-              <p className="text-muted-foreground text-xs">
-                {t("pending.description")}
-              </p>
-            </div>
+        <div className="flex items-center gap-4">
+          <CalendarClockIcon className="text-muted-foreground size-6" />
+          <div className="flex flex-col">
+            <p className="font-medium">{t("pending.title")}</p>
+            <p className="text-muted-foreground text-xs">
+              {t("pending.description")}
+            </p>
           </div>
-        </>
+        </div>
       ) : folder && folder.status === "UPLOADING" ? (
         <>
           {folder.upload?.progress ? (

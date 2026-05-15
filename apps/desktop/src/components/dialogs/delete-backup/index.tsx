@@ -25,39 +25,37 @@ export function DeleteBackupDialog() {
   });
 
   return (
-    <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-105">
-          <DialogHeader>
-            <DialogTitle>{t("title")}</DialogTitle>
-            <DialogDescription>{t("description")}</DialogDescription>
-          </DialogHeader>
-          <Alert className="mb-6 mt-4 w-full">
-            <InfoIcon />
-            <AlertTitle>{t("alert.title")}</AlertTitle>
-            <AlertDescription className="text-xs">
-              {t("alert.description")}
-            </AlertDescription>
-          </Alert>
-          <DialogFooter>
-            <Button onClick={() => setIsOpen(false)} variant="secondary">
-              {t("cancel")}
-            </Button>
-            <Button
-              loading={isPending}
-              onClick={() =>
-                options &&
-                mutateAsync({
-                  backupId: options?.backupId,
-                })
-              }
-              variant="destructive"
-            >
-              {t("continue")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="w-105">
+        <DialogHeader>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
+        </DialogHeader>
+        <Alert className="mb-6 mt-4 w-full">
+          <InfoIcon />
+          <AlertTitle>{t("alert.title")}</AlertTitle>
+          <AlertDescription className="text-xs">
+            {t("alert.description")}
+          </AlertDescription>
+        </Alert>
+        <DialogFooter>
+          <Button onClick={() => setIsOpen(false)} variant="secondary">
+            {t("cancel")}
+          </Button>
+          <Button
+            loading={isPending}
+            onClick={() =>
+              options &&
+              mutateAsync({
+                backupId: options?.backupId,
+              })
+            }
+            variant="destructive"
+          >
+            {t("continue")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

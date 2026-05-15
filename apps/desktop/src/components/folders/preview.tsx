@@ -57,30 +57,27 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
           )}
         >
           {folder ? (
-            <>
-              {folder.status === "PENDING"
-                ? t("backupPending")
-                : folder.currentTaskStatus === "CANCELING"
-                  ? t("backupCanceling")
-                  : folder.status === "UPLOADING"
-                    ? t("backupRunning")
-                    : folder.lastSnapshot?.incomplete === "checkpoint"
-                      ? t("backupPaused")
-                      : folder.lastSnapshot?.incomplete === "canceled"
-                        ? t("backupCanceled")
-                        : folder.lastSnapshot
-                          ? t("stats", {
-                              fileCount: formatInt(
-                                (folder.lastSnapshot?.stats?.cachedFiles || 0) +
-                                  (folder.lastSnapshot?.stats?.nonCachedFiles ||
-                                    0),
-                              ),
-                              size: formatSize(
-                                folder.lastSnapshot?.stats?.totalSize || 0,
-                              ),
-                            })
-                          : t("noBackups")}
-            </>
+            folder.status === "PENDING" ? (
+              t("backupPending")
+            ) : folder.currentTaskStatus === "CANCELING" ? (
+              t("backupCanceling")
+            ) : folder.status === "UPLOADING" ? (
+              t("backupRunning")
+            ) : folder.lastSnapshot?.incomplete === "checkpoint" ? (
+              t("backupPaused")
+            ) : folder.lastSnapshot?.incomplete === "canceled" ? (
+              t("backupCanceled")
+            ) : folder.lastSnapshot ? (
+              t("stats", {
+                fileCount: formatInt(
+                  (folder.lastSnapshot?.stats?.cachedFiles || 0) +
+                    (folder.lastSnapshot?.stats?.nonCachedFiles || 0),
+                ),
+                size: formatSize(folder.lastSnapshot?.stats?.totalSize || 0),
+              })
+            ) : (
+              t("noBackups")
+            )
           ) : (
             <Skeleton width={100} />
           )}

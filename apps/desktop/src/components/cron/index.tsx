@@ -200,132 +200,128 @@ export function Cron(props: CronProps) {
         />
       )}
 
-      <>
-        {periodForRender === "year" && allowedDropdowns.includes("months") && (
-          <Months
-            value={months}
-            setValue={setMonths}
+      {periodForRender === "year" && allowedDropdowns.includes("months") && (
+        <Months
+          value={months}
+          setValue={setMonths}
+          locale={locale}
+          humanizeLabels={
+            dropdownsConfig?.months?.humanizeLabels ?? humanizeLabels
+          }
+          disabled={dropdownsConfig?.months?.disabled ?? disabled}
+          readOnly={dropdownsConfig?.months?.readOnly ?? readOnly}
+          period={periodForRender}
+          periodicityOnDoubleClick={
+            dropdownsConfig?.months?.periodicityOnDoubleClick ??
+            periodicityOnDoubleClick
+          }
+          mode={dropdownsConfig?.months?.mode ?? mode}
+          allowClear={dropdownsConfig?.months?.allowClear ?? allowClear}
+          filterOption={dropdownsConfig?.months?.filterOption}
+          getPopupContainer={getPopupContainer}
+        />
+      )}
+
+      {(periodForRender === "year" || periodForRender === "month") &&
+        allowedDropdowns.includes("month-days") && (
+          <MonthDays
+            value={monthDays}
+            setValue={setMonthDays}
             locale={locale}
-            humanizeLabels={
-              dropdownsConfig?.months?.humanizeLabels ?? humanizeLabels
+            weekDays={weekDays}
+            disabled={dropdownsConfig?.["month-days"]?.disabled ?? disabled}
+            readOnly={dropdownsConfig?.["month-days"]?.readOnly ?? readOnly}
+            leadingZero={
+              dropdownsConfig?.["month-days"]?.leadingZero ?? leadingZero
             }
-            disabled={dropdownsConfig?.months?.disabled ?? disabled}
-            readOnly={dropdownsConfig?.months?.readOnly ?? readOnly}
             period={periodForRender}
             periodicityOnDoubleClick={
-              dropdownsConfig?.months?.periodicityOnDoubleClick ??
+              dropdownsConfig?.["month-days"]?.periodicityOnDoubleClick ??
               periodicityOnDoubleClick
             }
-            mode={dropdownsConfig?.months?.mode ?? mode}
-            allowClear={dropdownsConfig?.months?.allowClear ?? allowClear}
-            filterOption={dropdownsConfig?.months?.filterOption}
+            mode={dropdownsConfig?.["month-days"]?.mode ?? mode}
+            allowClear={
+              dropdownsConfig?.["month-days"]?.allowClear ?? allowClear
+            }
+            filterOption={dropdownsConfig?.["month-days"]?.filterOption}
             getPopupContainer={getPopupContainer}
           />
         )}
 
-        {(periodForRender === "year" || periodForRender === "month") &&
-          allowedDropdowns.includes("month-days") && (
-            <MonthDays
-              value={monthDays}
-              setValue={setMonthDays}
+      {(periodForRender === "year" ||
+        periodForRender === "month" ||
+        periodForRender === "week") &&
+        allowedDropdowns.includes("week-days") && (
+          <WeekDays
+            value={weekDays}
+            setValue={setWeekDays}
+            locale={locale}
+            humanizeLabels={
+              dropdownsConfig?.["week-days"]?.humanizeLabels ?? humanizeLabels
+            }
+            monthDays={monthDays}
+            disabled={dropdownsConfig?.["week-days"]?.disabled ?? disabled}
+            readOnly={dropdownsConfig?.["week-days"]?.readOnly ?? readOnly}
+            period={periodForRender}
+            periodicityOnDoubleClick={
+              dropdownsConfig?.["week-days"]?.periodicityOnDoubleClick ??
+              periodicityOnDoubleClick
+            }
+            mode={dropdownsConfig?.["week-days"]?.mode ?? mode}
+            allowClear={
+              dropdownsConfig?.["week-days"]?.allowClear ?? allowClear
+            }
+            filterOption={dropdownsConfig?.["week-days"]?.filterOption}
+            getPopupContainer={getPopupContainer}
+          />
+        )}
+
+      <div className="flex gap-2">
+        {periodForRender !== "minute" &&
+          periodForRender !== "hour" &&
+          allowedDropdowns.includes("hours") && (
+            <Hours
+              value={hours}
+              setValue={setHours}
               locale={locale}
-              weekDays={weekDays}
-              disabled={dropdownsConfig?.["month-days"]?.disabled ?? disabled}
-              readOnly={dropdownsConfig?.["month-days"]?.readOnly ?? readOnly}
-              leadingZero={
-                dropdownsConfig?.["month-days"]?.leadingZero ?? leadingZero
-              }
+              disabled={dropdownsConfig?.hours?.disabled ?? disabled}
+              readOnly={dropdownsConfig?.hours?.readOnly ?? readOnly}
+              leadingZero={dropdownsConfig?.hours?.leadingZero ?? leadingZero}
+              clockFormat={clockFormat}
               period={periodForRender}
               periodicityOnDoubleClick={
-                dropdownsConfig?.["month-days"]?.periodicityOnDoubleClick ??
+                dropdownsConfig?.hours?.periodicityOnDoubleClick ??
                 periodicityOnDoubleClick
               }
-              mode={dropdownsConfig?.["month-days"]?.mode ?? mode}
-              allowClear={
-                dropdownsConfig?.["month-days"]?.allowClear ?? allowClear
-              }
-              filterOption={dropdownsConfig?.["month-days"]?.filterOption}
+              mode={dropdownsConfig?.hours?.mode ?? mode}
+              allowClear={dropdownsConfig?.hours?.allowClear ?? allowClear}
+              filterOption={dropdownsConfig?.hours?.filterOption}
               getPopupContainer={getPopupContainer}
             />
           )}
 
-        {(periodForRender === "year" ||
-          periodForRender === "month" ||
-          periodForRender === "week") &&
-          allowedDropdowns.includes("week-days") && (
-            <WeekDays
-              value={weekDays}
-              setValue={setWeekDays}
+        {periodForRender !== "minute" &&
+          allowedDropdowns.includes("minutes") && (
+            <Minutes
+              value={minutes}
+              setValue={setMinutes}
               locale={locale}
-              humanizeLabels={
-                dropdownsConfig?.["week-days"]?.humanizeLabels ?? humanizeLabels
-              }
-              monthDays={monthDays}
-              disabled={dropdownsConfig?.["week-days"]?.disabled ?? disabled}
-              readOnly={dropdownsConfig?.["week-days"]?.readOnly ?? readOnly}
               period={periodForRender}
+              disabled={dropdownsConfig?.minutes?.disabled ?? disabled}
+              readOnly={dropdownsConfig?.minutes?.readOnly ?? readOnly}
+              leadingZero={dropdownsConfig?.minutes?.leadingZero ?? leadingZero}
+              clockFormat={clockFormat}
               periodicityOnDoubleClick={
-                dropdownsConfig?.["week-days"]?.periodicityOnDoubleClick ??
+                dropdownsConfig?.minutes?.periodicityOnDoubleClick ??
                 periodicityOnDoubleClick
               }
-              mode={dropdownsConfig?.["week-days"]?.mode ?? mode}
-              allowClear={
-                dropdownsConfig?.["week-days"]?.allowClear ?? allowClear
-              }
-              filterOption={dropdownsConfig?.["week-days"]?.filterOption}
+              mode={dropdownsConfig?.minutes?.mode ?? mode}
+              allowClear={dropdownsConfig?.minutes?.allowClear ?? allowClear}
+              filterOption={dropdownsConfig?.minutes?.filterOption}
               getPopupContainer={getPopupContainer}
             />
           )}
-
-        <div className="flex gap-2">
-          {periodForRender !== "minute" &&
-            periodForRender !== "hour" &&
-            allowedDropdowns.includes("hours") && (
-              <Hours
-                value={hours}
-                setValue={setHours}
-                locale={locale}
-                disabled={dropdownsConfig?.hours?.disabled ?? disabled}
-                readOnly={dropdownsConfig?.hours?.readOnly ?? readOnly}
-                leadingZero={dropdownsConfig?.hours?.leadingZero ?? leadingZero}
-                clockFormat={clockFormat}
-                period={periodForRender}
-                periodicityOnDoubleClick={
-                  dropdownsConfig?.hours?.periodicityOnDoubleClick ??
-                  periodicityOnDoubleClick
-                }
-                mode={dropdownsConfig?.hours?.mode ?? mode}
-                allowClear={dropdownsConfig?.hours?.allowClear ?? allowClear}
-                filterOption={dropdownsConfig?.hours?.filterOption}
-                getPopupContainer={getPopupContainer}
-              />
-            )}
-
-          {periodForRender !== "minute" &&
-            allowedDropdowns.includes("minutes") && (
-              <Minutes
-                value={minutes}
-                setValue={setMinutes}
-                locale={locale}
-                period={periodForRender}
-                disabled={dropdownsConfig?.minutes?.disabled ?? disabled}
-                readOnly={dropdownsConfig?.minutes?.readOnly ?? readOnly}
-                leadingZero={
-                  dropdownsConfig?.minutes?.leadingZero ?? leadingZero
-                }
-                clockFormat={clockFormat}
-                periodicityOnDoubleClick={
-                  dropdownsConfig?.minutes?.periodicityOnDoubleClick ??
-                  periodicityOnDoubleClick
-                }
-                mode={dropdownsConfig?.minutes?.mode ?? mode}
-                allowClear={dropdownsConfig?.minutes?.allowClear ?? allowClear}
-                filterOption={dropdownsConfig?.minutes?.filterOption}
-                getPopupContainer={getPopupContainer}
-              />
-            )}
-        </div>
-      </>
+      </div>
     </div>
   );
 }

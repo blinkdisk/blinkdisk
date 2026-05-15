@@ -69,16 +69,13 @@ const LogEntry = memo(function LogEntry({ log }: { log: CoreTaskLogEntry }) {
       <span className="text-foreground wrap-break-word mt-0.5 min-w-0">
         {log.msg}
       </span>
-      {extras.length > 0 && (
-        <>
-          {extras.map(([key, value]) => (
-            <span key={key}>
-              <span className="text-muted-foreground/70">{key}=</span>
-              <span className="text-foreground/60">{formatValue(value)}</span>
-            </span>
-          ))}
-        </>
-      )}
+      {extras.length > 0 &&
+        extras.map(([key, value]) => (
+          <span key={key}>
+            <span className="text-muted-foreground/70">{key}=</span>
+            <span className="text-foreground/60">{formatValue(value)}</span>
+          </span>
+        ))}
     </p>
   );
 });
@@ -147,12 +144,10 @@ export function TaskDialog() {
               )}
             </div>
           ) : (
-            <>
-              {logs.map((log, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: task logs are append-only entries without a stable id from the backend.
-                <LogEntry key={i} log={log} />
-              ))}
-            </>
+            logs.map((log, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: task logs are append-only entries without a stable id from the backend.
+              <LogEntry key={i} log={log} />
+            ))
           )}
         </div>
 

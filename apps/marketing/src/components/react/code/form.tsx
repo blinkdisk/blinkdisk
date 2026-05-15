@@ -268,65 +268,63 @@ export function CodeStatsForm({
           </Button>
         </form>
       ) : (
-        <>
-          <div className="mt-12 flex flex-col gap-12 md:flex-row md:gap-24">
-            <div className="flex max-w-[80vw] flex-col sm:w-80">
-              <h2 className="text-2xl font-bold">
-                <span className="text-primary">1.</span> Zip your code
-              </h2>
-              <p className="text-muted-foreground mt-2 text-sm">
-                Use the following command to zip your project, excluding all
-                files from your .gitignore:
-              </p>
-              <code className="bg-muted mt-4 rounded-lg border p-3 text-sm">
-                {command}
-              </code>
-              <Button
-                onClick={async () => {
-                  const success = await copy(command);
+        <div className="mt-12 flex flex-col gap-12 md:flex-row md:gap-24">
+          <div className="flex max-w-[80vw] flex-col sm:w-80">
+            <h2 className="text-2xl font-bold">
+              <span className="text-primary">1.</span> Zip your code
+            </h2>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Use the following command to zip your project, excluding all files
+              from your .gitignore:
+            </p>
+            <code className="bg-muted mt-4 rounded-lg border p-3 text-sm">
+              {command}
+            </code>
+            <Button
+              onClick={async () => {
+                const success = await copy(command);
 
-                  if (success)
-                    toast.success("Copied command to clipboard", {
-                      description:
-                        "You can now paste it into your project's terminal.",
-                    });
-                  else
-                    toast.error("Failed to copy command to clipboard", {
-                      description: "Please try to copy it manually instead.",
-                    });
+                if (success)
+                  toast.success("Copied command to clipboard", {
+                    description:
+                      "You can now paste it into your project's terminal.",
+                  });
+                else
+                  toast.error("Failed to copy command to clipboard", {
+                    description: "Please try to copy it manually instead.",
+                  });
 
-                  setCopied(true);
-                }}
-                className="mt-4"
-                variant={copied ? "outline" : "default"}
-              >
-                <ClipboardIcon />
-                Copy Command
-              </Button>
-            </div>
-            <div className="flex max-w-[80vw] flex-col sm:w-80">
-              <h2 className="text-2xl font-bold">
-                <span className="text-primary">2.</span> Select .zip file
-              </h2>
-              <p className="text-muted-foreground mt-2 text-sm">
-                Select the generated repo.zip file here:
-              </p>
-              <CodeStatsDropzone
-                onFileChange={loadZip}
-                buttonVariant={copied ? "default" : "outline"}
-                loading={loading}
-              />
-              <Alert variant="info" className="max-w-85 mt-5">
-                <LockIcon />
-                <AlertTitle>Your Code Stays Private</AlertTitle>
-                <AlertTitle className="line-clamp-none whitespace-normal text-xs">
-                  All analysis happens entirely in your browser and files are
-                  never uploaded or stored.
-                </AlertTitle>
-              </Alert>
-            </div>
+                setCopied(true);
+              }}
+              className="mt-4"
+              variant={copied ? "outline" : "default"}
+            >
+              <ClipboardIcon />
+              Copy Command
+            </Button>
           </div>
-        </>
+          <div className="flex max-w-[80vw] flex-col sm:w-80">
+            <h2 className="text-2xl font-bold">
+              <span className="text-primary">2.</span> Select .zip file
+            </h2>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Select the generated repo.zip file here:
+            </p>
+            <CodeStatsDropzone
+              onFileChange={loadZip}
+              buttonVariant={copied ? "default" : "outline"}
+              loading={loading}
+            />
+            <Alert variant="info" className="max-w-85 mt-5">
+              <LockIcon />
+              <AlertTitle>Your Code Stays Private</AlertTitle>
+              <AlertTitle className="line-clamp-none whitespace-normal text-xs">
+                All analysis happens entirely in your browser and files are
+                never uploaded or stored.
+              </AlertTitle>
+            </Alert>
+          </div>
+        </div>
       )}
     </>
   );
