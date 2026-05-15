@@ -8,7 +8,7 @@ import { I18nextProvider } from "@blinkdisk/utils/i18n";
 import { AuthListener } from "@desktop/components/auth-listener";
 import { AuthDialog } from "@desktop/components/dialogs/auth";
 import { SelectAccountDialog } from "@desktop/components/dialogs/select-account";
-import { Update } from "@desktop/components/update";
+import { UpdateDialog } from "@desktop/components/dialogs/update";
 import { useStorageListener } from "@desktop/hooks/use-app-storage";
 import { useDeeplinkListener } from "@desktop/hooks/use-deeplink-listener";
 import { useShortcutListener } from "@desktop/hooks/use-shortcut-listener";
@@ -61,13 +61,12 @@ function RootComponent() {
             <QueryClientProvider client={queryClient}>
               <Devtools />
               <SkeletonTheme dark={theme.dark}>
-                <Update>
-                  <Outlet />
-                  <Toaster dark={theme.dark} />
-                  <AuthDialog />
-                  <SelectAccountDialog />
-                  <AuthListener />
-                </Update>
+                <Outlet />
+                <Toaster dark={theme.dark} />
+                <AuthDialog />
+                <SelectAccountDialog />
+                <AuthListener />
+                <UpdateDialog />
               </SkeletonTheme>
             </QueryClientProvider>
           </PostHogProvider>
