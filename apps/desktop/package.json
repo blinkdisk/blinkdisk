@@ -37,6 +37,7 @@
     "@tanstack/react-virtual": "^3.13.12",
     "@trpc/client": "^10.45.2",
     "date-fns": "^4.1.0",
+    "embla-carousel-auto-height": "8.6.0",
     "filesize": "^11.0.2",
     "framer-motion": "^12.5.0",
     "lucide-react": "^1.7.0",

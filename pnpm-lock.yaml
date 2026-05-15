@@ -212,6 +212,9 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
+      embla-carousel-auto-height:
+        specifier: 8.6.0
+        version: 8.6.0(embla-carousel@8.6.0)
       filesize:
         specifier: ^11.0.2
         version: 11.0.2
@@ -11621,6 +11624,14 @@ packages:
       runtime-required: 1.1.0
       watchboy: 0.4.3
     dev: true
+
+  /embla-carousel-auto-height@8.6.0(embla-carousel@8.6.0):
+    resolution: {integrity: sha512-/HrJQOEM6aol/oF33gd2QlINcXy3e19fJWvHDuHWp2bpyTa+2dm9tVVJak30m2Qy6QyQ6Fc8DkImtv7pxWOJUQ==}
+    peerDependencies:
+      embla-carousel: 8.6.0
+    dependencies:
+      embla-carousel: 8.6.0
+    dev: false
 
   /embla-carousel-react@8.6.0(react@19.0.0):
     resolution: {integrity: sha512-0/PjqU7geVmo6F734pmPqpyHqiM99olvyecY7zdweCw+6tKEXnrE90pBiBbMMU8s5tICemzpQ3hi5EpxzGW+JA==}

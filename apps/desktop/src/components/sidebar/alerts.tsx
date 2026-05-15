@@ -13,6 +13,7 @@ import { SidebarUpdateAlert } from "@desktop/components/sidebar/update-alert";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
 import { useOffline } from "@desktop/hooks/use-offline";
+import AutoHeight from "embla-carousel-auto-height";
 import { type ReactNode, useEffect, useState } from "react";
 
 type SidebarAlertSlide = {
@@ -87,10 +88,11 @@ export function SidebarAlerts() {
   return (
     <Carousel
       opts={{ align: "start", loop: true }}
+      plugins={[AutoHeight()]}
       setApi={setCarouselApi}
       className="group/alerts"
     >
-      <CarouselContent className="-ml-2 items-end">
+      <CarouselContent className="-ml-2 items-start transition-[height]">
         {alerts.map(({ alert, key }) => (
           <CarouselItem key={key} className="pl-2">
             {alert}
