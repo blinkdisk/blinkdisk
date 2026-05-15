@@ -59,10 +59,9 @@ describe("toBytes", () => {
 });
 
 describe("roundtrip", () => {
-  it.each([0, 1000, 1_000_000, 1_000_000_000, 1_000_000_000_000])(
-    "toBytes(fromBytes(%i)) === %i",
-    (bytes) => {
-      expect(toBytes(fromBytes(bytes))).toBe(bytes);
-    },
-  );
+  it.each([
+    0, 1000, 1_000_000, 1_000_000_000, 1_000_000_000_000,
+  ])("toBytes(fromBytes(%i)) === %i", (bytes) => {
+    expect(toBytes(fromBytes(bytes))).toBe(bytes);
+  });
 });

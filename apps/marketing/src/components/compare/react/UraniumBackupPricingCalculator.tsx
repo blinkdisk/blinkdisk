@@ -30,8 +30,7 @@ const licenses: Record<LicenseType, License> = {
   },
   pro: {
     name: "Pro",
-    description:
-      "Powerful data protection with Tape, databases and VMs backup",
+    description: "Powerful data protection with Tape, databases and VMs backup",
     price: 150,
     from: true,
   },

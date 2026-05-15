@@ -32,7 +32,9 @@ describe("getUserName", () => {
 
   it("falls back to OS username when config has no username field", () => {
     vi.mocked(existsSync).mockReturnValue(true);
-    vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ hostname: "confighost" }));
+    vi.mocked(readFileSync).mockReturnValue(
+      JSON.stringify({ hostname: "confighost" }),
+    );
 
     expect(getUserName("vault1")).toBe("testuser");
   });
@@ -54,14 +56,22 @@ describe("getUserName", () => {
 
   it("strips domain prefix on win32", () => {
     const originalPlatform = process.platform;
-    Object.defineProperty(process, "platform", { value: "win32", configurable: true });
+    Object.defineProperty(process, "platform", {
+      value: "win32",
+      configurable: true,
+    });
 
     vi.mocked(existsSync).mockReturnValue(false);
-    vi.mocked(userInfo).mockReturnValue({ username: "DOMAIN\\user" } as ReturnType<typeof userInfo>);
+    vi.mocked(userInfo).mockReturnValue({
+      username: "DOMAIN\\user",
+    } as ReturnType<typeof userInfo>);
 
     expect(getUserName("vault1")).toBe("user");
 
-    Object.defineProperty(process, "platform", { value: originalPlatform, configurable: true });
+    Object.defineProperty(process, "platform", {
+      value: originalPlatform,
+      configurable: true,
+    });
   });
 });
 
@@ -77,7 +87,9 @@ describe("getHostName", () => {
 
   it("falls back to OS hostname when config has no hostname field", () => {
     vi.mocked(existsSync).mockReturnValue(true);
-    vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ username: "configuser" }));
+    vi.mocked(readFileSync).mockReturnValue(
+      JSON.stringify({ username: "configuser" }),
+    );
 
     expect(getHostName("vault1")).toBe("testhost");
   });

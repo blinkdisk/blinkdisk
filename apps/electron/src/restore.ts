@@ -59,7 +59,9 @@ async function restore(
   const pathExists = await fileExists(path);
 
   if (pathExists) {
-    const { baseName: fileBaseName, extension: fileExtension } = splitFileName(item.name);
+    const { baseName: fileBaseName, extension: fileExtension } = splitFileName(
+      item.name,
+    );
 
     let counter = 1;
     while (true) {

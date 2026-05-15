@@ -1,14 +1,13 @@
 import { formatInt, formatSize } from "@desktop/lib/number";
 
 describe("formatSize", () => {
-  it.each([0, 1000, 1_000_000, 1_000_000_000])(
-    "returns a string for size %i",
-    (size) => {
-      const result = formatSize(size);
-      expect(typeof result).toBe("string");
-      expect(String(result).length).toBeGreaterThan(0);
-    },
-  );
+  it.each([
+    0, 1000, 1_000_000, 1_000_000_000,
+  ])("returns a string for size %i", (size) => {
+    const result = formatSize(size);
+    expect(typeof result).toBe("string");
+    expect(String(result).length).toBeGreaterThan(0);
+  });
 
   it("result contains expected unit indicators", () => {
     expect(String(formatSize(0))).toContain("B");

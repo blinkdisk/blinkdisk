@@ -10,7 +10,9 @@ type MoveVaultsInput = {
 
 export function useMoveVaults({
   onSuccess,
-}: { onSuccess?: (values: MoveVaultsInput) => void } = {}) {
+}: {
+  onSuccess?: (values: MoveVaultsInput) => void;
+} = {}) {
   return useMutation({
     mutationKey: ["vault", "move"],
     mutationFn: async (values: MoveVaultsInput) => {

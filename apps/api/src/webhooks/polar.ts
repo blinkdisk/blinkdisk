@@ -222,7 +222,9 @@ export async function polarWebhook(
 
         if (cleanupAt && !previous.cleanupAt) {
           if (!subscription.canceledAt)
-            throw new Error("Cannot start cancellation workflow without canceledAt");
+            throw new Error(
+              "Cannot start cancellation workflow without canceledAt",
+            );
 
           await startCancellationWorkflow(c.env, {
             subscriptionId: previous.id,
@@ -231,7 +233,9 @@ export async function polarWebhook(
           });
         } else if (previous.cleanupAt && !cleanupAt) {
           if (!previous.canceledAt)
-            throw new Error("Cannot stop cancellation workflow without canceledAt");
+            throw new Error(
+              "Cannot stop cancellation workflow without canceledAt",
+            );
 
           c.executionCtx.waitUntil(
             stopCancellationWorkflow(c.env, {

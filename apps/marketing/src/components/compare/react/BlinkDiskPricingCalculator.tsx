@@ -111,7 +111,13 @@ export default function BlinkDiskPricingCalculator() {
               maximumFractionDigits: 0,
             })}
           </span>
-          <span className={isFreeTier ? "text-foreground/80 font-medium" : "text-muted-foreground"}>
+          <span
+            className={
+              isFreeTier
+                ? "text-foreground/80 font-medium"
+                : "text-muted-foreground"
+            }
+          >
             {isFreeTier
               ? `for ${TRIAL_DAYS} days`
               : period === "YEARLY"

@@ -1,5 +1,8 @@
 import { ZFileSizeType } from "@blinkdisk/schemas/policy";
-import { DynamicField, DynamicFieldProps } from "@blinkdisk/components/dynamic-field";
+import {
+  DynamicField,
+  DynamicFieldProps,
+} from "@blinkdisk/components/dynamic-field";
 import { Input, InputProps } from "@blinkdisk/ui/input";
 import {
   Select,

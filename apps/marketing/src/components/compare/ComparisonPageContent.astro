@@ -136,7 +136,10 @@ const toolGridColumnCount = Math.max(
   tools.length + (hasAvailableTools ? 1 : 0),
   1,
 );
-const pricingGridColumnCount = Math.max(tools.length, tools.length === 1 ? 2 : 1);
+const pricingGridColumnCount = Math.max(
+  tools.length,
+  tools.length === 1 ? 2 : 1,
+);
 const comparisonTableMinWidth =
   comparisonLabelColumnMinWidth +
   paddedTools.length * comparisonToolColumnMinWidth;

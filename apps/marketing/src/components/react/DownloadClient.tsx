@@ -331,9 +331,7 @@ export default function DownloadClient() {
             <p className="text-muted-foreground text-sm">Architecture</p>
             <Tabs
               value={architecture ?? null}
-              onValueChange={(value) =>
-                setArchitecture(value as Architecture)
-              }
+              onValueChange={(value) => setArchitecture(value as Architecture)}
             >
               <TabsList className="w-full">
                 <TabsTrigger value="x86_64" className="px-4">

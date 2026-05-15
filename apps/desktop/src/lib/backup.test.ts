@@ -19,7 +19,9 @@ describe("getBackupDisplayName", () => {
 
 describe("formatBackupDate", () => {
   it("returns a non-empty string for valid ISO dates", () => {
-    expect(formatBackupDate({ startTime: "2024-01-15T10:30:00Z" })).toBeTruthy();
+    expect(
+      formatBackupDate({ startTime: "2024-01-15T10:30:00Z" }),
+    ).toBeTruthy();
     expect(typeof formatBackupDate({ startTime: "2024-01-15T10:30:00Z" })).toBe(
       "string",
     );

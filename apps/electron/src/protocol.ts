@@ -29,10 +29,7 @@ export function registerProtcol() {
   ]);
 }
 
-export function resolveProtocolPath(
-  baseDir: string,
-  pathname: string,
-): string {
+export function resolveProtocolPath(baseDir: string, pathname: string): string {
   return path.resolve(
     baseDir,
     pathname === "/" ? "index.html" : pathname.slice(1),
