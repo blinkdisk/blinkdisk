@@ -1,7 +1,7 @@
 import { auth } from "@api/auth";
 import type { HonoContextOptions } from "@api/index";
-import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
-import { Context as HonoContext } from "hono";
+import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import type { Context as HonoContext } from "hono";
 
 export const createContext = async (
   _: FetchCreateContextFnOptions,

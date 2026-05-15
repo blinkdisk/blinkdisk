@@ -1,36 +1,36 @@
 ---
-import Button from "@marketing/components/Button.astro";
-import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
-import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
-import PricingCalculator from "@marketing/components/compare/react/PricingCalculator";
 import {
-  ToolSelector,
-  AddToolButton,
-} from "@marketing/components/react/ToolSelector";
-import ExternalLinkIcon from "@lucide/astro/icons/external-link";
-import ListChecksIcon from "@lucide/astro/icons/list-checks";
-import LayersIcon from "@lucide/astro/icons/layers";
-import RotateCcwIcon from "@lucide/astro/icons/rotate-ccw";
-import TagIcon from "@lucide/astro/icons/tag";
-import ShieldIcon from "@lucide/astro/icons/shield";
-import MonitorIcon from "@lucide/astro/icons/monitor";
-import HardDriveIcon from "@lucide/astro/icons/hard-drive";
-import InfoIcon from "@lucide/astro/icons/info";
-import AppWindowIcon from "@lucide/astro/icons/app-window";
-import MailIcon from "@lucide/astro/icons/mail";
-import type { BackupTool } from "@blinkdisk/constants/tools";
-import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
-import {
-  COMPARISON_GENERAL_LABELS,
   COMPARISON_FEATURE_LABELS,
+  COMPARISON_GENERAL_LABELS,
   COMPARISON_INTERFACE_LABELS,
   COMPARISON_LEVEL_LABELS,
-  COMPARISON_PRIVACY_LABELS,
   COMPARISON_PLATFORM_LABELS,
-  COMPARISON_STRATEGY_LABELS,
+  COMPARISON_PRIVACY_LABELS,
   COMPARISON_STORAGE_LABELS,
+  COMPARISON_STRATEGY_LABELS,
 } from "@blinkdisk/constants/comparison";
+import type { BackupTool } from "@blinkdisk/constants/tools";
+import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
 import { normalizeComparisonTools } from "@blinkdisk/utils/tools";
+import AppWindowIcon from "@lucide/astro/icons/app-window";
+import ExternalLinkIcon from "@lucide/astro/icons/external-link";
+import HardDriveIcon from "@lucide/astro/icons/hard-drive";
+import InfoIcon from "@lucide/astro/icons/info";
+import LayersIcon from "@lucide/astro/icons/layers";
+import ListChecksIcon from "@lucide/astro/icons/list-checks";
+import MailIcon from "@lucide/astro/icons/mail";
+import MonitorIcon from "@lucide/astro/icons/monitor";
+import RotateCcwIcon from "@lucide/astro/icons/rotate-ccw";
+import ShieldIcon from "@lucide/astro/icons/shield";
+import TagIcon from "@lucide/astro/icons/tag";
+import Button from "@marketing/components/Button.astro";
+import ComparisonTable from "@marketing/components/compare/ComparisonTable.astro";
+import PricingCalculator from "@marketing/components/compare/react/PricingCalculator";
+import SectionHeading from "@marketing/components/compare/SectionHeading.astro";
+import {
+  AddToolButton,
+  ToolSelector,
+} from "@marketing/components/react/ToolSelector";
 
 type Props = {
   tools: BackupTool[];

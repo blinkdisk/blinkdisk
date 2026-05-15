@@ -1,8 +1,8 @@
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { ConfigValidationError } from "@desktop/components/errors/config-validation";
 import { VaultExistsError } from "@desktop/components/errors/vault-exists";
-import { VaultAction } from "@desktop/hooks/use-config-validation";
-import { AnyFormApi } from "@tanstack/react-form";
+import type { VaultAction } from "@desktop/hooks/use-config-validation";
+import type { AnyFormApi } from "@tanstack/react-form";
 
 type CreateVaultAlertsProps = {
   form: AnyFormApi;

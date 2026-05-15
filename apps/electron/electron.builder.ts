@@ -1,5 +1,5 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
-import { Configuration } from "electron-builder";
+import type { Configuration } from "electron-builder";
 
 // Path alias seems to break build in CI
 import { APP_ID, APP_SCHEME } from "../../libs/constants/src/app";

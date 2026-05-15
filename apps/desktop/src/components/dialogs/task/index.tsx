@@ -12,7 +12,7 @@ import {
 import { useCancelTask } from "@desktop/hooks/mutations/core/use-cancel-task";
 import { useTask } from "@desktop/hooks/queries/core/use-task";
 import {
-  CoreTaskLogEntry,
+  type CoreTaskLogEntry,
   useTaskLogs,
 } from "@desktop/hooks/queries/core/use-task-logs";
 import { useTaskDialog } from "@desktop/hooks/state/use-task-dialog";

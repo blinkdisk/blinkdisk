@@ -1,5 +1,5 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
-import { AccountStorageType } from "@blinkdisk/electron/store";
+import type { AccountStorageType } from "@blinkdisk/electron/store";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useMemo } from "react";
 

@@ -1,4 +1,4 @@
-import { ZExclusionFormType } from "@blinkdisk/schemas/policy";
+import type { ZExclusionFormType } from "@blinkdisk/schemas/policy";
 
 export function parseExclusionRule(rule: string) {
   const extensionMatch = rule.match(/^\*\.(.+)$/);

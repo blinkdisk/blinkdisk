@@ -1,5 +1,8 @@
 import { LANGUAGE_HEADER } from "@blinkdisk/constants/header";
-import { ZRegisterServerType, ZRegisterType } from "@blinkdisk/schemas/auth";
+import type {
+  ZRegisterServerType,
+  ZRegisterType,
+} from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";

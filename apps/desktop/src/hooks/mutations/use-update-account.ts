@@ -1,4 +1,4 @@
-import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
+import type { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useAccountId } from "@desktop/hooks/use-account-id";

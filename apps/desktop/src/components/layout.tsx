@@ -3,7 +3,7 @@ import { CreateVaultDialog } from "@desktop/components/dialogs/create-vault/inde
 import { SettingsDialogs } from "@desktop/components/dialogs/settings/index";
 import { UpgradeDialog } from "@desktop/components/dialogs/upgrade";
 import { Sidebar } from "@desktop/components/sidebar/index";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export type LayoutProps = {
   children?: ReactNode;

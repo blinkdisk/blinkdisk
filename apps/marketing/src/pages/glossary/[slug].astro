@@ -1,6 +1,6 @@
 ---
-import GlossaryTermLayout from "@marketing/layouts/GlossaryTermLayout.astro";
 import { getCollection, render } from "astro:content";
+import GlossaryTermLayout from "@marketing/layouts/GlossaryTermLayout.astro";
 
 export async function getStaticPaths() {
   const terms = await getCollection("glossary", ({ data }) => {

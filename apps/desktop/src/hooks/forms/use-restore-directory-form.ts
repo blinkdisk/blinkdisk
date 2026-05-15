@@ -1,7 +1,7 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZRestoreDirectory,
-  ZRestoreDirectoryType,
+  type ZRestoreDirectoryType,
 } from "@blinkdisk/schemas/directory";
 import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 

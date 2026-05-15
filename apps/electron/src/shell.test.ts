@@ -2,8 +2,8 @@ vi.mock("electron", () => ({
   shell: { openExternal: vi.fn() },
 }));
 
-import { shell } from "electron";
 import { openBrowser } from "@electron/shell";
+import { shell } from "electron";
 
 describe("openBrowser", () => {
   beforeEach(() => {

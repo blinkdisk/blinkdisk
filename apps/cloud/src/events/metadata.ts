@@ -1,6 +1,6 @@
 import { HeadObjectCommand } from "@aws-sdk/client-s3";
 import { ZCloudGetMetadata } from "@blinkdisk/schemas/cloud";
-import { Vault } from "@cloud/classes/vault";
+import type { Vault } from "@cloud/classes/vault";
 
 export async function getMetadata(
   durableObject: InstanceType<typeof Vault>,

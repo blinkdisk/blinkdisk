@@ -17,7 +17,7 @@ vi.mock("electron", () => ({
 }));
 
 import path from "node:path";
-import { resolveProtocolPath, isPathSafe } from "@electron/protocol";
+import { isPathSafe, resolveProtocolPath } from "@electron/protocol";
 
 describe("resolveProtocolPath", () => {
   const baseDir = "/srv/frontend";

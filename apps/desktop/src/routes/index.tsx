@@ -1,5 +1,5 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
-import { AccountStorageType } from "@blinkdisk/electron/store";
+import type { AccountStorageType } from "@blinkdisk/electron/store";
 import { getVaultCollection } from "@desktop/lib/db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";

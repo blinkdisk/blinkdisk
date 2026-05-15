@@ -1,6 +1,8 @@
+import { existsSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
-import { ZConfig, ZConfigType } from "@blinkdisk/schemas/config";
-import { ZVault, ZVaultType } from "@blinkdisk/schemas/vault";
+import { ZConfig, type ZConfigType } from "@blinkdisk/schemas/config";
+import { ZVault, type ZVaultType } from "@blinkdisk/schemas/vault";
 import { setupSignalDBMain } from "@blinkdisk/signaldb-electron/main";
 import { getAccountCache } from "@electron/cache";
 import { SchemaCollection } from "@electron/db/schema";
@@ -10,8 +12,6 @@ import { globalAccountDirectory } from "@electron/path";
 import { initVaults } from "@electron/vault/manage";
 import createFilesystemAdapter from "@signaldb/fs";
 import { ipcMain } from "electron";
-import { existsSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
 
 const bridge = setupSignalDBMain(ipcMain);
 

@@ -3,16 +3,16 @@ import {
   DEFAULT_VAULT_OPTIONS,
   LATEST_VAULT_VERSION,
 } from "@blinkdisk/constants/vault";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
-import { ZCreateVaultType } from "@blinkdisk/schemas/vault";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { ZCreateVaultType } from "@blinkdisk/schemas/vault";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { removeEmptyStrings } from "@blinkdisk/utils/object";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
+import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLogsnag } from "@desktop/hooks/use-logsnag";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
-import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
 import { getConfigCollection, getVaultCollection } from "@desktop/lib/db";
 import { convertPolicyToCore, defaultVaultPolicy } from "@desktop/lib/policy";
 import { trpc } from "@desktop/lib/trpc";

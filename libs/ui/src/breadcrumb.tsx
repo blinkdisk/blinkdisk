@@ -1,9 +1,8 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import * as React from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { ChevronRightIcon } from "lucide-react";
+import type * as React from "react";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (

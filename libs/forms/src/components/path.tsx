@@ -1,6 +1,6 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
 import { Button } from "@blinkdisk/ui/button";
 import { cn } from "@blinkdisk/utils/class";

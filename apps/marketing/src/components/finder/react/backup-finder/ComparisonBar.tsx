@@ -1,7 +1,6 @@
 import { Button } from "@blinkdisk/ui/button";
-import { RotateCcwIcon, ScaleIcon, XIcon } from "lucide-react";
-
 import type { NormalizedBackupTool } from "@blinkdisk/utils/tools";
+import { RotateCcwIcon, ScaleIcon, XIcon } from "lucide-react";
 
 type ComparisonBarProps = {
   selectedTools: NormalizedBackupTool[];

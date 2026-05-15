@@ -1,6 +1,6 @@
 import {
   decryptString,
-  EncryptedString,
+  type EncryptedString,
   encryptString,
 } from "@electron/encryption";
 import { store } from "@electron/store";

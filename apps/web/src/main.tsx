@@ -1,17 +1,16 @@
 import "./styles.css";
 
+import { DefaultErrorPage } from "@blinkdisk/components/errors/default";
+import { NotFoundPage } from "@blinkdisk/components/errors/not-found";
 import {
   reactErrorHandler,
   init as reactInit,
   tanstackRouterBrowserTracingIntegration,
 } from "@sentry/react";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "@web/routeTree.gen";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-
-import { DefaultErrorPage } from "@blinkdisk/components/errors/default";
-import { NotFoundPage } from "@blinkdisk/components/errors/not-found";
-import { routeTree } from "@web/routeTree.gen";
 
 const router = createRouter({
   routeTree,

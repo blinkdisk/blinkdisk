@@ -1,4 +1,4 @@
-import { AccountStorageType, store } from "@electron/store";
+import { type AccountStorageType, store } from "@electron/store";
 
 export type AccountCacheWithId = AccountStorageType & {
   id: string;

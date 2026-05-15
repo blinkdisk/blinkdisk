@@ -17,7 +17,7 @@ import { DirectoryItemRow } from "@desktop/components/directories/row";
 import { Empty } from "@desktop/components/empty";
 import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
 import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
-import { DirectoryItem as DirectoryItemType } from "@desktop/hooks/queries/core/use-directory";
+import type { DirectoryItem as DirectoryItemType } from "@desktop/hooks/queries/core/use-directory";
 import { usePlatform } from "@desktop/hooks/queries/use-platform";
 import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
 import { useBackup } from "@desktop/hooks/use-backup";
@@ -26,15 +26,15 @@ import { useFolder } from "@desktop/hooks/use-folder";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { formatSize } from "@desktop/lib/number";
 import {
-  ColumnFiltersState,
+  type ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  Row,
-  SortingState,
-  Table as TableType,
+  type Row,
+  type SortingState,
+  type Table as TableType,
   useReactTable,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";

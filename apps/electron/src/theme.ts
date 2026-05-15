@@ -1,4 +1,4 @@
-import { GlobalStorageType, store } from "@electron/store";
+import { type GlobalStorageType, store } from "@electron/store";
 import { nativeTheme } from "electron/main";
 
 export function getTheme() {

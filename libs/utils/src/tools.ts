@@ -1,4 +1,8 @@
-import { BackupTool, CellValue, FieldValue } from "@blinkdisk/constants/tools";
+import type {
+  BackupTool,
+  CellValue,
+  FieldValue,
+} from "@blinkdisk/constants/tools";
 
 export type NormalizedCellValue = {
   value: FieldValue | null;

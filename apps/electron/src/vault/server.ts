@@ -4,7 +4,7 @@ import { log } from "@electron/log";
 import { corePath, globalVaultDirectory } from "@electron/path";
 import { fetchVault } from "@electron/vault/fetch";
 import { vaults } from "@electron/vault/manage";
-import { VaultServer, VaultStatus } from "@electron/vault/types";
+import type { VaultServer, VaultStatus } from "@electron/vault/types";
 import { sendWindow } from "@electron/window";
 import { spawn } from "child_process";
 import { app } from "electron";

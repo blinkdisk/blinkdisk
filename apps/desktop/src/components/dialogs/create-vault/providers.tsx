@@ -1,4 +1,4 @@
-import {
+import type {
   STORAGE_PROVIDERS,
   StorageProviderType,
 } from "@blinkdisk/constants/providers";

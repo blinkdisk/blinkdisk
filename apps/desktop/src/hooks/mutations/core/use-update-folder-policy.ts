@@ -1,4 +1,4 @@
-import { ZPolicyType } from "@blinkdisk/schemas/policy";
+import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";

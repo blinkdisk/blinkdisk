@@ -1,4 +1,4 @@
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useConfigList } from "@desktop/hooks/queries/use-config-list";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultPassword } from "@desktop/hooks/queries/use-vault-password";

@@ -2,12 +2,11 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { useMemo } from "react";
-
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { WeekDaysProps } from "@desktop/components/cron/types";
+import type { WeekDaysProps } from "@desktop/components/cron/types";
+import { useMemo } from "react";
 
 export function WeekDays(props: WeekDaysProps) {
   const {

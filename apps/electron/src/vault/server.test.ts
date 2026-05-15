@@ -13,8 +13,8 @@ vi.mock("electron", () => ({ app: { isPackaged: false } }));
 vi.mock("tough-cookie", () => ({ CookieJar: vi.fn() }));
 
 import {
-  parseServerLine,
   calculateStatusPollDelay,
+  parseServerLine,
 } from "@electron/vault/server";
 
 describe("parseServerLine", () => {

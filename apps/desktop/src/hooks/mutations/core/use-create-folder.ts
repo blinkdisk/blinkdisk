@@ -1,4 +1,4 @@
-import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";

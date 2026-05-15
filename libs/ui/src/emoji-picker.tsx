@@ -3,12 +3,12 @@ import { Input } from "@ui/input";
 import { Loader } from "@ui/loader";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
 import {
-  EmojiPickerListCategoryHeaderProps,
-  EmojiPickerListEmojiProps,
-  Locale,
+  type EmojiPickerListCategoryHeaderProps,
+  type EmojiPickerListEmojiProps,
+  type Locale,
   EmojiPicker as Picker,
 } from "frimousse";
-import { ReactElement, useState } from "react";
+import { type ReactElement, useState } from "react";
 import { parse } from "twemoji-parser";
 
 export type EmojiPickerProps = {

@@ -1,18 +1,17 @@
 ---
 import "@marketing/styles.css";
-import ThemeScript from "@marketing/components/ThemeScript.astro";
 import {
-  MARKETING_URL,
-  POSTHOG_KEY,
-  POSTHOG_HOST,
-  ENDORSELY_PUBLIC_KEY,
   CRISP_KEY,
+  ENDORSELY_PUBLIC_KEY,
+  MARKETING_URL,
+  POSTHOG_HOST,
+  POSTHOG_KEY,
 } from "astro:env/server";
-
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
 import inter700 from "@fontsource/inter/files/inter-latin-700-normal.woff2";
+import ThemeScript from "@marketing/components/ThemeScript.astro";
 
 export type Props = {
   title?: string;

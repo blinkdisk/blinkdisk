@@ -1,8 +1,8 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
-import { StorageProviderType } from "@blinkdisk/constants/providers";
+import type { StorageProviderType } from "@blinkdisk/constants/providers";
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
-import { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { ZVaultOptionsType } from "@blinkdisk/schemas/vault";
 import { getAccountCache } from "@electron/cache";
 import { collections } from "@electron/db";
 import { log } from "@electron/log";
@@ -10,7 +10,7 @@ import { getHostName, getUserName } from "@electron/profile";
 import { fetchVault } from "@electron/vault/fetch";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 import { startVaultServer } from "@electron/vault/server";
-import { VaultInstance } from "@electron/vault/types";
+import type { VaultInstance } from "@electron/vault/types";
 import { validationVault } from "@electron/vault/validate";
 
 export const vaults: Record<string, VaultInstance> = {};

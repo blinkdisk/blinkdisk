@@ -1,5 +1,5 @@
-import { StorageProviderType } from "@blinkdisk/constants/providers";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { StorageProviderType } from "@blinkdisk/constants/providers";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { getVaultCollection } from "@desktop/lib/db";
 import { useCallback } from "react";

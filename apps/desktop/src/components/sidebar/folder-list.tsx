@@ -7,7 +7,7 @@ import {
   SidebarMenuItem,
 } from "@blinkdisk/ui/sidebar";
 import { FolderPreview } from "@desktop/components/folders/preview";
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { Link, useParams } from "@tanstack/react-router";
 

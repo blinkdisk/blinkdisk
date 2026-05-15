@@ -1,13 +1,13 @@
-import { ZConfigType } from "@blinkdisk/schemas/config";
-import { ZVaultType } from "@blinkdisk/schemas/vault";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import type { ZConfigType } from "@blinkdisk/schemas/config";
+import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
 import { globalAccountDirectory } from "@electron/path";
 import { trpc } from "@electron/trpc";
 import createFilesystemAdapter from "@signaldb/fs";
 import { SyncManager } from "@signaldb/sync";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 
 export type SyncOptions = {
   name: string;

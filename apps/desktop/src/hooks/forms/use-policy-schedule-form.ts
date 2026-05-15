@@ -1,8 +1,8 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
-  ZPolicyType,
+  type ZPolicyType,
   ZSchedulePolicy,
-  ZSchedulePolicyType,
+  type ZSchedulePolicyType,
 } from "@blinkdisk/schemas/policy";
 import { PolicyContext } from "@desktop/components/policy/context";
 import { pickDefinedFields } from "@desktop/lib/policy";

@@ -5,7 +5,7 @@ import { Toaster } from "@blinkdisk/ui/toast";
 import { TooltipProvider } from "@blinkdisk/ui/tooltip";
 import { I18nextProvider } from "@blinkdisk/utils/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HeadContent, Outlet, createRootRoute } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Outlet } from "@tanstack/react-router";
 import { useTheme } from "@web/hooks/use-theme";
 import { i18n } from "@web/i18n";
 import { PostHogProvider } from "posthog-js/react";

@@ -26,7 +26,7 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useOffline } from "@desktop/hooks/use-offline";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount } = useAccountId();

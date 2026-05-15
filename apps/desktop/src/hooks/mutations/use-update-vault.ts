@@ -1,4 +1,4 @@
-import { ZUpdateVaultFormType } from "@blinkdisk/schemas/vault";
+import type { ZUpdateVaultFormType } from "@blinkdisk/schemas/vault";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";

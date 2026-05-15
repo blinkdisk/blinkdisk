@@ -4,7 +4,7 @@ import {
 } from "@blinkdisk/constants/app";
 import { openBrowser } from "@electron/shell";
 import { getTheme } from "@electron/theme";
-import { BrowserWindow, app } from "electron";
+import { app, BrowserWindow } from "electron";
 
 import { join } from "path";
 

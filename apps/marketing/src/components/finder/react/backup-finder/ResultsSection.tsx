@@ -1,7 +1,6 @@
 import { Button } from "@blinkdisk/ui/button";
-import { RotateCcwIcon, SearchXIcon } from "lucide-react";
-
 import type { NormalizedBackupTool } from "@blinkdisk/utils/tools";
+import { RotateCcwIcon, SearchXIcon } from "lucide-react";
 import { FinderResultCard } from "../FinderResultCard";
 
 type ResultsSectionProps = {

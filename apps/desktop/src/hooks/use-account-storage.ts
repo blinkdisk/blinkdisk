@@ -1,4 +1,4 @@
-import { AccountStorageSchema } from "@blinkdisk/electron/store";
+import type { AccountStorageSchema } from "@blinkdisk/electron/store";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 

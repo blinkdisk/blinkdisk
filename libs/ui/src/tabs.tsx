@@ -1,7 +1,6 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@blinkdisk/utils/class";
+import { cva, type VariantProps } from "class-variance-authority";
 
 export type TabsProps = TabsPrimitive.Root.Props;
 

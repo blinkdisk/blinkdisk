@@ -2,10 +2,8 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { MutableRefObject } from "react";
-
 import { SUPPORTED_SHORTCUTS, UNITS } from "@desktop/components/cron/constants";
-import {
+import type {
   AllowEmpty,
   ClockFormat,
   DropdownConfig,
@@ -29,6 +27,7 @@ import {
   setError,
   sort,
 } from "@desktop/components/cron/utils";
+import type { MutableRefObject } from "react";
 
 /**
  * Set values from cron string
@@ -357,7 +356,7 @@ function parsePartString(str: string, unit: Unit) {
       fixSunday(
         replaceAlternatives(str, unit.min, unit.alt)
           .split(",")
-          .map((value) => {
+          .flatMap((value) => {
             const valueParts = value.split("/");
 
             if (valueParts.length > 2) {
@@ -378,8 +377,7 @@ function parsePartString(str: string, unit: Unit) {
             const intervalValues = applyInterval(parsedValues, step);
 
             return intervalValues;
-          })
-          .flat(),
+          }),
         unit,
       ),
     ),
@@ -419,7 +417,7 @@ function replaceAlternatives(str: string, min: number, alt?: string[]) {
  */
 function fixSunday(values: number[], unit: Unit) {
   if (unit.type === "week-days") {
-    values = values.map(function (value) {
+    values = values.map((value) => {
       if (value === 7) {
         return 0;
       }

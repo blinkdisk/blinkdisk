@@ -1,5 +1,5 @@
-import { tryCatch } from "./try-catch";
 import { CustomError } from "./error";
+import { tryCatch } from "./try-catch";
 
 describe("tryCatch", () => {
   describe("sync function", () => {

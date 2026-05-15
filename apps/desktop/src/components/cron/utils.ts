@@ -2,10 +2,9 @@
 // Original copyright (c) 2021 Xavier Rutayisire
 // https://github.com/xrutayisire/react-js-cron
 
-import { useEffect, useRef } from "react";
-
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { Locale, OnError } from "@desktop/components/cron/types";
+import type { Locale, OnError } from "@desktop/components/cron/types";
+import { useEffect, useRef } from "react";
 
 /**
  * Creates an array of integers from start to end, inclusive
@@ -24,9 +23,7 @@ export function range(start: number, end: number) {
  * Sorts an array of numbers
  */
 export function sort(array: number[]) {
-  array.sort(function (a, b) {
-    return a - b;
-  });
+  array.sort((a, b) => a - b);
 
   return array;
 }
@@ -37,7 +34,7 @@ export function sort(array: number[]) {
 export function dedup(array: number[]) {
   const result: number[] = [];
 
-  array.forEach(function (i) {
+  array.forEach((i) => {
     if (result.indexOf(i) < 0) {
       result.push(i);
     }

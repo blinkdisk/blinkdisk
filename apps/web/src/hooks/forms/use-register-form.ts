@@ -1,5 +1,5 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
-import { ZRegisterForm, ZRegisterFormType } from "@blinkdisk/schemas/auth";
+import { ZRegisterForm, type ZRegisterFormType } from "@blinkdisk/schemas/auth";
 import { useRegister } from "@web/hooks/mutations/use-register";
 
 type RegisterFormProps = {

@@ -8,7 +8,7 @@ vi.mock("electron", () => ({
   dialog: { showOpenDialog: vi.fn() },
 }));
 
-import { splitFileName, generateDuplicateName } from "@electron/restore";
+import { generateDuplicateName, splitFileName } from "@electron/restore";
 
 describe("splitFileName", () => {
   beforeEach(() => {

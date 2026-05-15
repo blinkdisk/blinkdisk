@@ -1,6 +1,6 @@
 import {
-  BillingPeriod,
-  Plan as PlanType,
+  type BillingPeriod,
+  type Plan as PlanType,
   SUBSCRIPTION_PLANS,
 } from "@blinkdisk/constants/plans";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
@@ -18,7 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
 import { Trans } from "@blinkdisk/utils/i18n";
 import { PendingCheckoutDialog } from "@desktop/components/dialogs/pending-checkout";
 import {
-  PlanChangeAction,
+  type PlanChangeAction,
   PlanChangeDialog,
 } from "@desktop/components/dialogs/plan-change";
 import { useCheckout } from "@desktop/hooks/mutations/use-checkout";

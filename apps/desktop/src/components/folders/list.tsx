@@ -14,7 +14,7 @@ import { FolderPreview } from "@desktop/components/folders/preview";
 import { LocalDropdownMenuItem } from "@desktop/components/vaults/local-dropdown-item";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
-import { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";

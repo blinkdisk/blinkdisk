@@ -1,5 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { Accordion } from "@blinkdisk/ui/accordion";
 import { Button } from "@blinkdisk/ui/button";
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";

@@ -1,9 +1,8 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
+import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

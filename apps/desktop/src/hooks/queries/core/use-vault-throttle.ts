@@ -1,7 +1,10 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { convertThrottleFromCore, CoreThrottle } from "@desktop/lib/throttle";
+import {
+  type CoreThrottle,
+  convertThrottleFromCore,
+} from "@desktop/lib/throttle";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 

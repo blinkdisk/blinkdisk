@@ -5,14 +5,14 @@ vi.mock("electron", () => ({
   },
 }));
 
-import { app } from "electron";
 import {
-  platform,
+  corePath,
+  globalAccountDirectory,
   globalConfigDirectory,
   globalVaultDirectory,
-  globalAccountDirectory,
-  corePath,
+  platform,
 } from "@electron/path";
+import { app } from "electron";
 
 describe("platform", () => {
   it("is one of win, mac, or linux", () => {

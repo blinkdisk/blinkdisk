@@ -1,9 +1,9 @@
 ---
-import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import BlogCard from "@marketing/components/BlogCard.astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
+import BlogCard from "@marketing/components/BlogCard.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 
 const posts = await getCollection("blog", ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;

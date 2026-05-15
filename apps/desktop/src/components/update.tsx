@@ -4,7 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { Progress } from "@blinkdisk/ui/progress";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 export function Update({ children }: { children: ReactNode }) {
   const { t } = useAppTranslation("update");

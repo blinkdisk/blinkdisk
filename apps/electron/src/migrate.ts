@@ -3,7 +3,7 @@ import { log } from "@electron/log";
 import { migrateAuthV1 } from "@electron/migrations/auth_v1";
 import { migrateAuthV2 } from "@electron/migrations/auth_v2";
 import { migrateStoreV1 } from "@electron/migrations/store_v1";
-import { GlobalStorageType, store } from "@electron/store";
+import { type GlobalStorageType, store } from "@electron/store";
 import { captureException } from "@sentry/electron/main";
 
 const migrations = [

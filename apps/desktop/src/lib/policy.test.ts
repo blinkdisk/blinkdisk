@@ -1,7 +1,7 @@
 import {
+  type CorePolicy,
   convertPolicyFromCore,
   convertPolicyToCore,
-  CorePolicy,
   defaultVaultPolicy,
   emptyPolicy,
   getDefinedFields,

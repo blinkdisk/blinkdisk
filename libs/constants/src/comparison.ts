@@ -1,4 +1,4 @@
-import { BACKUP_TOOLS, BackupTool } from "./tools";
+import { BACKUP_TOOLS, type BackupTool } from "./tools";
 
 export type LabelConfig = {
   text: string;

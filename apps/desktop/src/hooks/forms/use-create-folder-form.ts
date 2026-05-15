@@ -1,7 +1,7 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZCreateFolderForm,
-  ZCreateFolderFormType,
+  type ZCreateFolderFormType,
 } from "@blinkdisk/schemas/folder";
 
 export function useCreateFolderForm({

@@ -1,11 +1,11 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZFilesystemConfig,
-  ZFilesystemConfigType,
+  type ZFilesystemConfigType,
 } from "@blinkdisk/schemas/providers";
 import {
   useConfigValidation,
-  VaultAction,
+  type VaultAction,
 } from "@desktop/hooks/use-config-validation";
 
 export function useFilesystemForm({

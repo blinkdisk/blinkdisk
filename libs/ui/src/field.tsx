@@ -1,9 +1,8 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import { useMemo } from "react";
-
 import { cn } from "@blinkdisk/utils/class";
 import { Label } from "@ui/label";
+import { cva, type VariantProps } from "class-variance-authority";
 import { TriangleAlertIcon } from "lucide-react";
+import { useMemo } from "react";
 
 const fieldVariants = cva(
   "data-[invalid=true]:text-destructive gap-2 group/field flex w-full",

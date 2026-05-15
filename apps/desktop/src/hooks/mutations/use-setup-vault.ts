@@ -1,12 +1,12 @@
 import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { removeEmptyStrings } from "@blinkdisk/utils/object";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
-import { SetupStep } from "@desktop/components/vaults/setup";
-import { VaultItem } from "@desktop/hooks/queries/use-vault";
+import type { SetupStep } from "@desktop/components/vaults/setup";
+import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { getConfigCollection } from "@desktop/lib/db";

@@ -1,4 +1,4 @@
-import { Context } from "@api/context";
+import type { Context } from "@api/context";
 import { CustomError } from "@blinkdisk/utils/error";
 import * as Sentry from "@sentry/cloudflare";
 import { initTRPC } from "@trpc/server";

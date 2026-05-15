@@ -13,7 +13,7 @@ import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAuth } from "@desktop/hooks/use-auth";
 import { UserPlusIcon } from "lucide-react";
-import { ReactElement } from "react";
+import type { ReactElement } from "react";
 
 export type AccountSelectDropdownProps = {
   children: ReactElement;

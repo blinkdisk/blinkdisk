@@ -1,3 +1,5 @@
+import { platform } from "node:os";
+import { basename, dirname, join } from "node:path";
 import {
   authenticateToken,
   getAccount,
@@ -30,8 +32,6 @@ import {
 import { validateVaultConfig } from "@electron/vault/validate";
 import { setProgressBar, window } from "@electron/window";
 import { app, dialog, ipcMain, shell } from "electron";
-import { platform } from "node:os";
-import { basename, dirname, join } from "node:path";
 
 ipcMain.on("window.console", () => window?.webContents.toggleDevTools());
 ipcMain.on("window.reload", () => window?.reload());

@@ -1,15 +1,15 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
 import {
   TabsList,
-  TabsProps,
+  type TabsProps,
   Tabs as TabsRoot,
   TabsTrigger,
 } from "@blinkdisk/ui/tabs";
 import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { ReactNode, useContext } from "react";
+import React, { type ReactNode, useContext } from "react";
 
 const Tabs = React.forwardRef<
   HTMLDivElement,

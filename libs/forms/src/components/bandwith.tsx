@@ -1,9 +1,9 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
-import { ZBandwithType } from "@blinkdisk/schemas/vault";
-import { Input, InputProps } from "@blinkdisk/ui/input";
+import type { ZBandwithType } from "@blinkdisk/schemas/vault";
+import { Input, type InputProps } from "@blinkdisk/ui/input";
 import {
   Select,
   SelectContent,

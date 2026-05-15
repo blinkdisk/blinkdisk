@@ -1,11 +1,11 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZS3CompatibleConfig,
-  ZS3CompatibleConfigType,
+  type ZS3CompatibleConfigType,
 } from "@blinkdisk/schemas/providers";
 import {
   useConfigValidation,
-  VaultAction,
+  type VaultAction,
 } from "@desktop/hooks/use-config-validation";
 
 export function useS3CompatibleForm({

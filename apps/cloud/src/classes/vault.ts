@@ -1,7 +1,8 @@
+import { DurableObject } from "cloudflare:workers";
 import {
   DeleteObjectsCommand,
   ListObjectsCommand,
-  ListObjectsCommandOutput,
+  type ListObjectsCommandOutput,
   S3Client,
 } from "@aws-sdk/client-s3";
 import { ZCloudBase } from "@blinkdisk/schemas/cloud";
@@ -14,7 +15,6 @@ import { getMetadata } from "@cloud/events/metadata";
 import { putBlob } from "@cloud/events/put";
 import { scheduleVaultAlarm } from "@cloud/utils/alarm";
 import { pickS3Endpoint } from "@cloud/utils/server";
-import { DurableObject } from "cloudflare:workers";
 
 export class Vault extends DurableObject<Cloudflare.Env> {
   id: string = "unknown";

@@ -1,17 +1,17 @@
 ---
-import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
-import CloudBlink from "@marketing/components/icons/CloudBlink.astro";
-import Button from "@marketing/components/Button.astro";
-import CTA from "@marketing/components/CTA.astro";
-import FaqList from "@marketing/components/FaqList.astro";
-import ProPlanCard from "@marketing/components/react/ProPlanCard";
+import { MARKETING_URL } from "astro:env/server";
 import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
+import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
 import CheckIcon from "@lucide/astro/icons/check";
 import DownloadIcon from "@lucide/astro/icons/download";
 import GlobeIcon from "@lucide/astro/icons/globe";
 import TagIcon from "@lucide/astro/icons/tag";
-import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
-import { MARKETING_URL } from "astro:env/server";
+import Button from "@marketing/components/Button.astro";
+import CTA from "@marketing/components/CTA.astro";
+import FaqList from "@marketing/components/FaqList.astro";
+import CloudBlink from "@marketing/components/icons/CloudBlink.astro";
+import ProPlanCard from "@marketing/components/react/ProPlanCard";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 const trialStorage = `${TRIAL_STORAGE / (1000 * 1000 * 1000)} GB`;

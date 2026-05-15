@@ -3,7 +3,7 @@ import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
-import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
+import type { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
 
 type CreateFolderGeneralProps = {
   form: ReturnType<typeof useCreateFolderForm>;

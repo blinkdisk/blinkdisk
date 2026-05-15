@@ -5,8 +5,8 @@ import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
+  type CorePolicy,
   convertPolicyFromCore,
-  CorePolicy,
   emptyPolicy,
   getDefinedFields,
 } from "@desktop/lib/policy";

@@ -12,14 +12,14 @@ import {
   TIMEZONE_HEADER,
 } from "@blinkdisk/constants/header";
 import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/constants/language";
-import { DB, dialect } from "@blinkdisk/db/index";
+import { type DB, dialect } from "@blinkdisk/db/index";
 import { sendEmail } from "@blinkdisk/utils/email";
-import { generateCode, generateId, Prefix } from "@blinkdisk/utils/id";
+import { generateCode, generateId, type Prefix } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
 import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink } from "better-auth/plugins";
-import { Kysely } from "kysely";
+import type { Kysely } from "kysely";
 
 const cookieSettings = {
   attributes: {

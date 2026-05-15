@@ -1,4 +1,4 @@
-import { EncryptedString } from "@electron/encryption";
+import type { EncryptedString } from "@electron/encryption";
 import { globalConfigDirectory } from "@electron/path";
 import { initVaults } from "@electron/vault/manage";
 import { sendWindow } from "@electron/window";

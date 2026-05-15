@@ -20,8 +20,8 @@ vi.mock("electron", () => ({
 }));
 
 import { authenticateToken } from "@electron/auth";
-import { sendWindow } from "@electron/window";
 import { onDeeplinkOpen } from "@electron/deeplink";
+import { sendWindow } from "@electron/window";
 
 beforeEach(() => {
   vi.clearAllMocks();

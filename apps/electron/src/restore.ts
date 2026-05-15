@@ -1,8 +1,8 @@
-import { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
+import type { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
 import { fileExists } from "@electron/fs";
 import { fetchVault } from "@electron/vault/fetch";
 import { getVault } from "@electron/vault/manage";
-import { VaultInstance } from "@electron/vault/types";
+import type { VaultInstance } from "@electron/vault/types";
 import { window } from "@electron/window";
 import { app, dialog } from "electron";
 import { chmod, readdir, symlink } from "fs/promises";

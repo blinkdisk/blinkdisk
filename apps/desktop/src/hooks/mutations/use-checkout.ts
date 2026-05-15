@@ -1,5 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ZCreateCheckoutType } from "@blinkdisk/schemas/payment";
+import type { ZCreateCheckoutType } from "@blinkdisk/schemas/payment";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { trpc } from "@desktop/lib/trpc";
 import { useMutation } from "@tanstack/react-query";

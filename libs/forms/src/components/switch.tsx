@@ -1,8 +1,8 @@
 import {
   DynamicField,
-  DynamicFieldProps,
+  type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
-import { SwitchProps, Switch as SwitchRoot } from "@blinkdisk/ui/switch";
+import { type SwitchProps, Switch as SwitchRoot } from "@blinkdisk/ui/switch";
 import { cn } from "@blinkdisk/utils/class";
 import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
 import React, { useContext } from "react";

@@ -21,7 +21,7 @@ import {
   UserIcon,
   UserPlusIcon,
 } from "lucide-react";
-import { ReactElement } from "react";
+import type { ReactElement } from "react";
 
 export type AccountMenuDropdownProps = {
   children: ReactElement;

@@ -1,9 +1,9 @@
 import {
   STORAGE_PROVIDERS,
-  StorageProviderType,
+  type StorageProviderType,
 } from "@blinkdisk/constants/providers";
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 
 export function mapProviderType(providerType: StorageProviderType) {
   const provider = STORAGE_PROVIDERS.find(

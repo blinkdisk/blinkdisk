@@ -4,22 +4,22 @@ import {
   ELECTRON_CLIENT_ID,
   ELECTRON_COOKIE_PREFIX,
 } from "@blinkdisk/constants/auth";
-import { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
-import { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
+import type { ZUpdateAccountType } from "@blinkdisk/schemas/accounts";
+import type { ZUpdatePreferencesType } from "@blinkdisk/schemas/settings";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { initAccountCollections } from "@electron/db";
 import {
   decryptString,
-  EncryptedString,
+  type EncryptedString,
   encryptString,
 } from "@electron/encryption";
-import { AccountStorageType, store } from "@electron/store";
+import { type AccountStorageType, store } from "@electron/store";
 import { sendWindow } from "@electron/window";
 import {
   inferAdditionalFields,
   magicLinkClient,
 } from "better-auth/client/plugins";
-import { createAuthClient, SuccessContext } from "better-auth/react";
+import { createAuthClient, type SuccessContext } from "better-auth/react";
 import { parseSetCookie } from "set-cookie-parser";
 
 export const authClient = createAuthClient({

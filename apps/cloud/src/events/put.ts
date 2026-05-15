@@ -1,8 +1,8 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { ZCloudPutBlob } from "@blinkdisk/schemas/cloud";
-import { Space } from "@cloud/classes/space";
-import { Vault } from "@cloud/classes/vault";
+import type { Space } from "@cloud/classes/space";
+import type { Vault } from "@cloud/classes/vault";
 import { consumeSpace } from "@cloud/utils/space";
 
 export async function putBlob(

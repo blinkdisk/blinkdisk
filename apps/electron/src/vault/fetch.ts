@@ -1,4 +1,4 @@
-import { VaultInstance } from "@electron/vault/types";
+import type { VaultInstance } from "@electron/vault/types";
 import { createWriteStream } from "fs";
 import { rename } from "fs/promises";
 import https from "https";

@@ -5,7 +5,7 @@
 import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
-import { MonthsProps } from "@desktop/components/cron/types";
+import type { MonthsProps } from "@desktop/components/cron/types";
 
 export function Months(props: MonthsProps) {
   const {

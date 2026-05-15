@@ -1,9 +1,9 @@
 ---
-import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
+import { normalizeComparisonTools } from "@blinkdisk/utils/tools";
 import FinderIntro from "@marketing/components/finder/FinderIntro.astro";
 import { BackupFinder } from "@marketing/components/finder/react/BackupFinder";
-import { normalizeComparisonTools } from "@blinkdisk/utils/tools";
-import { BACKUP_TOOLS } from "@blinkdisk/constants/tools";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
 
 // Show every tool on the finder regardless of `publishedAt` — the staggered
 // release only gates the /compare/* sitemap, not discoverability here.

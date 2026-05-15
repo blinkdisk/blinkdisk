@@ -1,5 +1,8 @@
 import "./styles.css";
 
+import { DefaultErrorPage } from "@blinkdisk/components/errors/default";
+import { NotFoundPage } from "@blinkdisk/components/errors/not-found";
+import { routeTree } from "@desktop/routeTree.gen";
 import { init } from "@sentry/electron/renderer";
 import {
   reactErrorHandler,
@@ -7,16 +10,12 @@ import {
   tanstackRouterBrowserTracingIntegration,
 } from "@sentry/react";
 import {
-  RouterProvider,
   createHashHistory,
   createRouter,
+  RouterProvider,
 } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-
-import { DefaultErrorPage } from "@blinkdisk/components/errors/default";
-import { NotFoundPage } from "@blinkdisk/components/errors/not-found";
-import { routeTree } from "@desktop/routeTree.gen";
 
 export const history = createHashHistory();
 

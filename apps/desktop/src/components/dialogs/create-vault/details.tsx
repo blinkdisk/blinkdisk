@@ -1,7 +1,7 @@
-import { StorageProviderType } from "@blinkdisk/constants/providers";
+import type { StorageProviderType } from "@blinkdisk/constants/providers";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { ProviderConfig } from "@blinkdisk/schemas/providers";
+import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";

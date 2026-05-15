@@ -1,4 +1,4 @@
-import { ZVaultType } from "@blinkdisk/schemas/vault";
+import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { useAccountReactivity } from "@desktop/hooks/use-reactivity";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { getVaultCollection } from "@desktop/lib/db";
