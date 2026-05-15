@@ -21,7 +21,6 @@ export function SidebarStorageAlert() {
     return percentage >= 0.98;
   }, [percentage]);
 
-  if (percentage < 0.8) return null;
   return (
     <SidebarMenuItem>
       <Alert variant={full ? "destructive" : "warn"} className="rounded-xl p-4">

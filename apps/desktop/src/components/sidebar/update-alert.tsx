@@ -7,9 +7,7 @@ import { DownloadIcon } from "lucide-react";
 
 export function SidebarUpdateAlert() {
   const { t } = useAppTranslation("sidebar.updateAlert");
-  const { setIsOpen, status } = useUpdateDialog();
-
-  if (!status?.available) return null;
+  const { setIsOpen } = useUpdateDialog();
 
   return (
     <SidebarMenuItem>

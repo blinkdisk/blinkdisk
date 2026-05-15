@@ -20,15 +20,19 @@ export function SidebarTrialAlert({
 }: SidebarTrialAlertProps) {
   const { t } = useAppTranslation("sidebar.trialAlert");
   const { openUpgradeDialog } = useUpgradeDialog();
+
   const trialEndsIn = useRelativeTime(trialEndsAt);
+
   const daysUntilTrialEnds =
     (new Date(trialEndsAt).getTime() - Date.now()) / DAY_IN_MS;
+
   const variant =
     daysUntilTrialEnds < 7
       ? "destructive"
       : daysUntilTrialEnds < 14
         ? "warn"
         : "info";
+
   const buttonVariant =
     variant === "destructive"
       ? "destructive"
