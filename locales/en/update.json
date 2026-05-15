@@ -7,5 +7,15 @@
     "title": "Failed to update automatically",
     "description": "An error occurred while trying to update. Please download the update manually using the button below."
   },
-  "manual": "Download manually"
+  "dismiss": {
+    "title": "Dismiss update?",
+    "warning": {
+      "title": "Things might break",
+      "description": "Install the update as soon as you can to keep BlinkDisk working correctly."
+    },
+    "cancel": "Cancel",
+    "confirm": "Dismiss update"
+  },
+  "manual": "Download manually",
+  "install": "Install & Restart"
 }
