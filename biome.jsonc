@@ -15,21 +15,14 @@
       "!.wrangler",
       "!.astro",
       "!apps/core",
+      "!**/routeTree.gen.ts",
       "!**/worker-configuration.d.ts"
     ]
   },
   "formatter": {
     "enabled": true,
-    "formatWithErrors": false,
     "indentStyle": "space",
-    "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 80,
-    "attributePosition": "auto",
-    "bracketSameLine": false,
-    "bracketSpacing": true,
-    "expand": "auto",
-    "useEditorconfig": true
+    "indentWidth": 2
   },
   "linter": {
     "enabled": true,
