@@ -41,7 +41,7 @@ describe("mapConfigFields", () => {
   it("maps S3-compatible fields using coreMapping", () => {
     const result = mapConfigFields("S3_COMPATIBLE", {
       endpoint: "https://s3.example.com",
-      accessKeyType: "AKIA123",
+      accessKeyId: "AKIA123",
       accessKeySecret: "secret",
       bucket: "my-bucket",
       region: "us-east-1",
