@@ -21,7 +21,7 @@ export function RemoteTooltip({ children }: RemoteTooltipProps) {
         </div>
         <p className="text-muted-foreground mt-1 text-xs">{t("description")}</p>
       </TooltipContent>
-      <TooltipTrigger render={<span tabIndex={0} />}>{children}</TooltipTrigger>
+      <TooltipTrigger render={<span />}>{children}</TooltipTrigger>
     </Tooltip>
   );
 }

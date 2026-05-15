@@ -409,7 +409,7 @@ function InsufficientStorageTooltip({
           storageGB: storageGB.toLocaleString(),
         })}
       </TooltipContent>
-      <TooltipTrigger render={<span tabIndex={0} />}>{children}</TooltipTrigger>
+      <TooltipTrigger render={<span />}>{children}</TooltipTrigger>
     </Tooltip>
   );
 }
