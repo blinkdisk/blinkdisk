@@ -1,4 +1,3 @@
-import type { UpdateStatus } from "@blinkdisk/electron/updater";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
@@ -11,69 +10,13 @@ import {
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
 import { Progress } from "@blinkdisk/ui/progress";
+import { useUpdate } from "@desktop/hooks/use-update";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-
-type UpdateDialogTestState = "hidden" | "downloading" | "downloaded" | "error";
-
-declare global {
-  interface Window {
-    testUpdateDialog?: (state?: UpdateDialogTestState) => void;
-  }
-}
-
-function getTestUpdateStatus(state: UpdateDialogTestState): UpdateStatus {
-  return {
-    available: state !== "hidden",
-    details:
-      state === "hidden"
-        ? null
-        : {
-            files: [],
-            path: "",
-            releaseDate: new Date().toISOString(),
-            sha512: "",
-            version: "v1.0.0",
-          },
-    downloaded: state === "downloaded",
-    progress:
-      state === "downloading"
-        ? {
-            bytesPerSecond: 1_200_000,
-            delta: 600_000,
-            percent: 42,
-            total: 100_000_000,
-            transferred: 42_000_000,
-          }
-        : null,
-    errored: state === "error",
-  };
-}
+import { useCallback } from "react";
 
 export function UpdateDialog() {
   const { t } = useAppTranslation("update");
-
-  const [status, setStatus] = useState<UpdateStatus | null>(null);
-
-  useEffect(() => {
-    window.electron.update.status().then(setStatus);
-
-    return window.electron.update.change((payload) => {
-      setStatus(payload);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-
-    window.testUpdateDialog = (state = "downloading") => {
-      setStatus(getTestUpdateStatus(state));
-    };
-
-    return () => {
-      delete window.testUpdateDialog;
-    };
-  }, []);
+  const { status } = useUpdate();
 
   const downloadManually = useCallback(async () => {
     await window.electron.shell.open.browser(
