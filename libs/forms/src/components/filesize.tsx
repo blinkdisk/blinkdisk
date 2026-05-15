@@ -61,7 +61,8 @@ const Filesize = React.forwardRef<
           ) =>
             field.handleChange({
               value:
-                "valueAsNumber" in e.target && !isNaN(e.target.valueAsNumber)
+                "valueAsNumber" in e.target &&
+                !Number.isNaN(e.target.valueAsNumber)
                   ? e.target.valueAsNumber
                   : e.target.value !== ""
                     ? Number(e.target.value)

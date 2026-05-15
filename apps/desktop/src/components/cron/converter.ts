@@ -439,7 +439,7 @@ function parseRange(rangeStr: string, context: string, unit: Unit) {
 
     const value = convertStringToNumber(part);
 
-    if (isNaN(value)) {
+    if (Number.isNaN(value)) {
       throw new Error(`Invalid value "${context}" for ${unit.type}`);
     }
 
@@ -452,7 +452,7 @@ function parseRange(rangeStr: string, context: string, unit: Unit) {
     const minValue = convertStringToNumber(minPart);
     const maxValue = convertStringToNumber(maxPart);
 
-    if (isNaN(minValue) || isNaN(maxValue)) {
+    if (Number.isNaN(minValue) || Number.isNaN(maxValue)) {
       throw new Error(`Invalid value "${context}" for ${unit.type}`);
     }
 
@@ -493,7 +493,7 @@ function parseStep(step: string | undefined, unit: Unit) {
   if (typeof step !== "undefined") {
     const parsedStep = convertStringToNumber(step);
 
-    if (isNaN(parsedStep) || parsedStep < 1) {
+    if (Number.isNaN(parsedStep) || parsedStep < 1) {
       throw new Error(`Invalid interval step value "${step}" for ${unit.type}`);
     }
 
