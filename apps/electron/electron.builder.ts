@@ -1,4 +1,5 @@
-/* eslint-disable turbo/no-undeclared-env-vars */
+// biome-ignore-all lint/suspicious/noTemplateCurlyInString: electron builder uses this syntax
+
 import type { Configuration } from "electron-builder";
 
 // Path alias seems to break build in CI
