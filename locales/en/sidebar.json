@@ -47,6 +47,11 @@
     "description": "{{capacity}} available until your trial ends {{trialEndsIn}}.",
     "button": "Upgrade storage"
   },
+  "updateAlert": {
+    "title": "Update available",
+    "description": "A new version is available.",
+    "button": "Update"
+  },
   "offlineAlert": {
     "title": "You're offline",
     "description": "Some features may not work while your device is offline."

@@ -19,6 +19,7 @@ import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { SidebarTrialAlert } from "@desktop/components/sidebar/trial-alert";
+import { SidebarUpdateAlert } from "@desktop/components/sidebar/update-alert";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useSpace } from "@desktop/hooks/queries/use-space";
@@ -97,6 +98,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu className="gap-4">
+            <SidebarUpdateAlert />
             {isOffline ? (
               <SidebarOfflineAlert />
             ) : space?.trialEndsAt ? (
