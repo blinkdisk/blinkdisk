@@ -7,22 +7,8 @@
       "linter": {
         "rules": {
           "correctness": {
-            "noUnusedVariables": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["**/*.astro/*.js", "**/*.astro/*.ts"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noArguments": "off"
-          },
-          "suspicious": {
-            "noExplicitAny": "off",
-            "noUnusedExpressions": "off",
-            "noVar": "off"
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
           }
         }
       }
