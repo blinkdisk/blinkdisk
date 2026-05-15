@@ -3,6 +3,8 @@ import {
   type CarouselApi,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@blinkdisk/ui/carousel";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
@@ -36,7 +38,7 @@ export function SidebarAlerts() {
     });
   }
 
-  if (!isOffline) {
+  if (isOffline) {
     alerts.push({
       key: "offline",
       alert: <SidebarOfflineAlert />,
@@ -96,21 +98,33 @@ export function SidebarAlerts() {
         ))}
       </CarouselContent>
       {scrollSnaps.length > 1 ? (
-        <div className="mt-2 flex justify-center gap-1.5">
-          {scrollSnaps.map((scrollSnap, index) => (
-            <button
-              key={scrollSnap}
-              type="button"
-              aria-label={`Go to alert ${index + 1}`}
-              aria-current={index === currentAlert ? "true" : undefined}
-              onClick={() => carouselApi?.scrollTo(index)}
-              className={
-                index === currentAlert
-                  ? "bg-foreground/70 size-1.5 rounded-full"
-                  : "bg-foreground/20 hover:bg-foreground/40 size-1.5 rounded-full transition-colors"
-              }
+        <div className="mt-2 flex items-center justify-between">
+          <div className="flex gap-0.5">
+            <CarouselPrevious
+              variant="ghost"
+              className="text-muted-foreground static size-6 translate-y-0"
             />
-          ))}
+            <CarouselNext
+              variant="ghost"
+              className="text-muted-foreground static size-6 translate-y-0"
+            />
+          </div>
+          <div className="flex gap-1.5">
+            {scrollSnaps.map((scrollSnap, index) => (
+              <button
+                key={scrollSnap}
+                type="button"
+                aria-label={`Go to alert ${index + 1}`}
+                aria-current={index === currentAlert ? "true" : undefined}
+                onClick={() => carouselApi?.scrollTo(index)}
+                className={
+                  index === currentAlert
+                    ? "bg-foreground/70 size-1.5 rounded-full"
+                    : "bg-foreground/20 hover:bg-foreground/40 size-1.5 rounded-full transition-colors"
+                }
+              />
+            ))}
+          </div>
         </div>
       ) : null}
     </Carousel>
