@@ -61,7 +61,7 @@ export async function fetchVaultRaw(
       {
         ca: [vault.server.certificate!],
         host: "127.0.0.1",
-        port: parseInt(new URL(vault.server.address).port).toString(),
+        port: parseInt(new URL(vault.server.address).port, 10).toString(),
         method,
         path,
         headers: {
