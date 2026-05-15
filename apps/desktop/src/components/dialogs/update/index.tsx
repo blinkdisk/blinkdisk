@@ -14,22 +14,46 @@ import { Progress } from "@blinkdisk/ui/progress";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
+type UpdateDialogTestState = "hidden" | "downloading" | "downloaded" | "error";
+
+declare global {
+  interface Window {
+    testUpdateDialog?: (state?: UpdateDialogTestState) => void;
+  }
+}
+
+function getTestUpdateStatus(state: UpdateDialogTestState): UpdateStatus {
+  return {
+    available: state !== "hidden",
+    details:
+      state === "hidden"
+        ? null
+        : {
+            files: [],
+            path: "",
+            releaseDate: new Date().toISOString(),
+            sha512: "",
+            version: "v1.0.0",
+          },
+    downloaded: state === "downloaded",
+    progress:
+      state === "downloading"
+        ? {
+            bytesPerSecond: 1_200_000,
+            delta: 600_000,
+            percent: 42,
+            total: 100_000_000,
+            transferred: 42_000_000,
+          }
+        : null,
+    errored: state === "error",
+  };
+}
+
 export function UpdateDialog() {
   const { t } = useAppTranslation("update");
 
-  const [status, setStatus] = useState<UpdateStatus | null>({
-    available: true,
-    downloaded: true,
-    progress: null,
-    errored: true,
-    details: {
-      files: [],
-      version: "v1.0.0",
-      path: "",
-      sha512: "",
-      releaseDate: "",
-    },
-  });
+  const [status, setStatus] = useState<UpdateStatus | null>(null);
 
   useEffect(() => {
     window.electron.update.status().then(setStatus);
@@ -37,6 +61,18 @@ export function UpdateDialog() {
     return window.electron.update.change((payload) => {
       setStatus(payload);
     });
+  }, []);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
+    window.testUpdateDialog = (state = "downloading") => {
+      setStatus(getTestUpdateStatus(state));
+    };
+
+    return () => {
+      delete window.testUpdateDialog;
+    };
   }, []);
 
   return (
