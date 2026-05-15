@@ -29,7 +29,7 @@ const fileSystemBase = {
 const s3Base = {
   coreType: "s3",
   coreMapping: {
-    accessKeyType: "accessKeyID",
+    accessKeyId: "accessKeyID",
     accessKeySecret: "secretAccessKey",
     disableTls: "doNotUseTLS",
     disableTlsVerification: "doNotVerifyTLS",
