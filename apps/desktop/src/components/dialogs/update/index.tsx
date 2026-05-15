@@ -16,7 +16,7 @@ import { useCallback, useState } from "react";
 
 export function UpdateDialog() {
   const { t } = useAppTranslation("update");
-  const { isOpen, setIsOpen, status } = useUpdateDialog();
+  const { dismiss, isOpen, setIsOpen, status } = useUpdateDialog();
   const [confirmDismissOpen, setConfirmDismissOpen] = useState(false);
 
   const downloadManually = useCallback(async () => {
@@ -25,10 +25,10 @@ export function UpdateDialog() {
     );
   }, []);
 
-  const dismiss = useCallback(() => {
-    setIsOpen(false);
+  const confirmDismiss = useCallback(async () => {
+    await dismiss();
     setConfirmDismissOpen(false);
-  }, [setIsOpen]);
+  }, [dismiss]);
 
   return (
     <>
@@ -139,7 +139,7 @@ export function UpdateDialog() {
             >
               {t("dismiss.cancel")}
             </Button>
-            <Button variant="warn" onClick={dismiss}>
+            <Button variant="warn" onClick={confirmDismiss}>
               {t("dismiss.confirm")}
             </Button>
           </DialogFooter>

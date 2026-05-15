@@ -8,6 +8,7 @@ import Store from "electron-store";
 export type GlobalStorageType = {
   authenticated: boolean;
   currentAccountId: string | null;
+  dismissedUpdateVersion?: string | null;
   hasSkippedAuth: boolean;
   preferences: {
     theme: "system" | "dark" | "light";
