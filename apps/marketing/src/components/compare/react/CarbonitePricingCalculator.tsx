@@ -98,7 +98,10 @@ export default function CarbonitePricingCalculator() {
         </Select>
 
         <div className="mt-3">
-          <label className="text-muted-foreground mb-1 block text-xs">
+          <label
+            htmlFor="carbonite-pricing-quantity"
+            className="text-muted-foreground mb-1 block text-xs"
+          >
             {plan.quantityLabel}
           </label>
           <div className="flex items-center gap-2">
@@ -112,6 +115,7 @@ export default function CarbonitePricingCalculator() {
               <MinusIcon className="size-4" />
             </Button>
             <Input
+              id="carbonite-pricing-quantity"
               className="bg-secondary w-16 text-center"
               type="number"
               min={1}
