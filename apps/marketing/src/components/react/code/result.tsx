@@ -91,7 +91,7 @@ export function CodeStatsResult({
   const generateImage = useCallback(async () => {
     if (!ref.current) return null;
     return await render.toJpeg(ref.current, { quality: 0.95 });
-  }, [ref]);
+  }, []);
 
   const download = useCallback(async () => {
     setDownloadLoading(true);

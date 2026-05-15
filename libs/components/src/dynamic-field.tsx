@@ -37,7 +37,10 @@ export function DynamicField({
   end,
   innerClassName,
   containerClassName,
-  ...props
+  title,
+  name,
+  required,
+  labelClassName,
 }: DynamicFieldProps) {
   const { t } = useAppTranslation("validation");
 
@@ -51,14 +54,14 @@ export function DynamicField({
             {
               ...error,
               field:
-                props.title && typeof props.title === "string"
-                  ? props.title
-                  : props.name || error.path || "",
+                title && typeof title === "string"
+                  ? title
+                  : name || error.path || "",
             },
           )
         : error.message,
     );
-  }, [errors, props, t]);
+  }, [errors, name, t, title]);
 
   return (
     <Field className={containerClassName}>
@@ -66,11 +69,21 @@ export function DynamicField({
         <div className="flex flex-col">
           {end ? (
             <div className="flex items-end">
-              <Label {...props} />
+              <Label
+                title={title}
+                name={name}
+                required={required}
+                labelClassName={labelClassName}
+              />
               {end}
             </div>
           ) : (
-            <Label {...props} />
+            <Label
+              title={title}
+              name={name}
+              required={required}
+              labelClassName={labelClassName}
+            />
           )}
           {description && (
             <FieldDescription className="mb-1">{description}</FieldDescription>

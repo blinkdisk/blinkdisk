@@ -43,7 +43,6 @@ const Path = React.forwardRef<
       setLoading(true);
 
       if (mode === "save") {
-        // eslint-disable-next-line
         const result = await (window as any).electron?.dialog.save({
           title,
           defaultFileName,
@@ -52,7 +51,6 @@ const Path = React.forwardRef<
         if (!result.canceled && result.filePath)
           field.handleChange(result.filePath);
       } else {
-        // eslint-disable-next-line
         const result = await (window as any).electron?.dialog.open({
           properties:
             type === "directory"
@@ -67,7 +65,7 @@ const Path = React.forwardRef<
 
       setLoading(false);
       field.handleBlur();
-    }, [field, defaultFileName, mode, setLoading, title, type]);
+    }, [field, defaultFileName, mode, title, type]);
 
     const clearValue = useCallback(() => {
       field.handleChange("");

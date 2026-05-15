@@ -17,7 +17,7 @@ export function Update({ children }: { children: ReactNode }) {
     return window.electron.update.change((payload) => {
       setStatus(payload);
     });
-  }, [setStatus]);
+  }, []);
 
   if (status?.available) {
     return (
