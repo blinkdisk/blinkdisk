@@ -202,7 +202,7 @@ function ExclusionPreview({ rule }: ExclusionPreviewProps) {
         <>
           <p className="text-muted-foreground m-0! text-xs">
             {parsed.foldersOnly ? t("name.foldersOnly") : t("name.both")}{" "}
-            {t("matchType." + parsed.matchType)}
+            {t(`matchType.${parsed.matchType}`)}
           </p>
           <p className="font-medium">{parsed.pattern}</p>
         </>

@@ -55,7 +55,7 @@ export function startVaultServer(id: string, pollStatus = true) {
     process?.stdout.on("data", (data) => logFormatted(id, data));
 
     process?.stderr.on("data", (data) => {
-      const lines = (data + "").split("\n");
+      const lines = `${data}`.split("\n");
 
       for (const line of lines) {
         const parsed = parseServerLine(line);
