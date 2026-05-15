@@ -277,8 +277,8 @@ function ExtensionListEditor({
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
             <form.Field
+              // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
               key={index}
               name={`${fieldName}[${index}]`}
             >
