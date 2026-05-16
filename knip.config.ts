@@ -14,6 +14,9 @@ const commonIgnore = [
 const commonProject = ["src/**/*.{ts,tsx}"];
 
 const config: KnipConfig = {
+  compilers: {
+    mdx: true,
+  },
   workspaces: {
     ".": {
       entry: [],
@@ -38,6 +41,12 @@ const config: KnipConfig = {
       ignore: [...commonIgnore, "src/preload.ts"],
     },
     "apps/marketing": {
+      entry: [
+        "src/pages/**/*.{astro,ts}",
+        "src/content/**/*.mdx",
+        "src/components/Callout.astro",
+      ],
+      project: ["src/**/*.{astro,mdx,ts,tsx}"],
       ignore: commonIgnore,
       ignoreDependencies: [
         // Used in CSS url() imports which knip doesn't detect
@@ -53,6 +62,9 @@ const config: KnipConfig = {
     },
     "libs/db": {
       ignore: ["src/schema.ts"],
+    },
+    "libs/biome": {
+      project: ["*.grit"],
     },
     "libs/styles": {
       entry: ["*.css"],
