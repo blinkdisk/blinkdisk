@@ -24,7 +24,6 @@ type Props = {
   };
   headings: Heading[];
   ctaHeadline?: string;
-  slug: string;
   readingTime: number;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
@@ -38,12 +37,10 @@ const {
   image,
   headings,
   ctaHeadline,
-  slug,
   readingTime,
   structuredData,
 } = Astro.props;
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
-const ogImage = `/blog/og/${slug}.png`;
 const imageSource = typeof image.src === "string" ? image.src : image.src.src;
 const absoluteImageSource = imageSource.startsWith("http")
   ? imageSource
@@ -105,7 +102,7 @@ const pageStructuredData = [
   title={title}
   description={description}
   image={absoluteImageSource}
-  og={{ title, image: ogImage }}
+  og={{ title }}
   structuredData={pageStructuredData}
 >
   <article class="pt-page pb-page mx-auto w-[90vw] max-w-3xl lg:max-w-4xl">
