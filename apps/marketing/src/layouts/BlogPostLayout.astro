@@ -15,72 +15,114 @@ type Heading = {
 type Props = {
   title: string;
   description: string;
-  pubDate: Date;
+  publicationDate: Date;
+  lastUpdated?: Date;
   author: string;
   image: {
-    src: ImageMetadata;
+    src: ImageMetadata | string;
     alt: string;
   };
   headings: Heading[];
   ctaHeadline?: string;
   slug: string;
   readingTime: number;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
 
 const {
   title,
   description,
-  pubDate,
+  publicationDate,
+  lastUpdated,
   author,
   image,
   headings,
   ctaHeadline,
   slug,
   readingTime,
+  structuredData,
 } = Astro.props;
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 const ogImage = `/blog/og/${slug}.png`;
+const imageSource = typeof image.src === "string" ? image.src : image.src.src;
+const absoluteImageSource = imageSource.startsWith("http")
+  ? imageSource
+  : `${siteUrl}${imageSource}`;
 
-const formattedDate = pubDate.toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const updatedDate = lastUpdated ?? publicationDate;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+const formattedPublicationDate = formatDate(publicationDate);
+const formattedUpdatedDate = formatDate(updatedDate);
 
 const blogPostingSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: title,
   description: description,
-  image: `${siteUrl}${image.src.src}`,
-  datePublished: pubDate.toISOString(),
-  author: {
-    "@type": "Person",
-    name: author,
-  },
+  image: absoluteImageSource,
+  datePublished: publicationDate.toISOString(),
+  dateModified: updatedDate.toISOString(),
+  author:
+    author === "Paul Koeck"
+      ? {
+          "@type": "Person",
+          name: author,
+          url: "https://paul.koeck.dev",
+          jobTitle: "Founder, BlinkDisk",
+          sameAs: [
+            "https://github.com/poeck",
+            "https://www.linkedin.com/in/paul-koeck-1221a3219/",
+          ],
+        }
+      : {
+          "@type": "Person",
+          name: author,
+        },
   publisher: {
     "@type": "Organization",
     name: "BlinkDisk",
   },
 };
+
+const pageStructuredData = [
+  blogPostingSchema,
+  ...(Array.isArray(structuredData)
+    ? structuredData
+    : structuredData
+      ? [structuredData]
+      : []),
+];
 ---
 
 <DefaultLayout
   title={title}
   description={description}
-  image={image.src.src}
+  image={absoluteImageSource}
   og={{ title, image: ogImage }}
-  structuredData={blogPostingSchema}
+  structuredData={pageStructuredData}
 >
   <article class="pt-page pb-page mx-auto w-[90vw] max-w-3xl lg:max-w-4xl">
     <header class="mb-12">
       <h1 class="text-foreground mb-8 text-3xl font-bold md:text-4xl">
         {title}
       </h1>
-      <div class="text-foreground/60 mb-6 flex flex-wrap gap-x-8 gap-y-2">
+      <div
+        class="text-foreground/60 mb-6 grid grid-cols-2 gap-x-8 gap-y-2 sm:flex sm:flex-wrap"
+      >
         <div>
           <span class="block text-sm">Published on</span>
-          <span class="text-foreground">{formattedDate}</span>
+          <span class="text-foreground">{formattedPublicationDate}</span>
+        </div>
+        <div>
+          <span class="block text-sm">Updated on</span>
+          <span class="text-foreground">{formattedUpdatedDate}</span>
         </div>
         <div>
           <span class="block text-sm">Written by</span>
@@ -92,7 +134,13 @@ const blogPostingSchema = {
         </div>
       </div>
       <div class="overflow-hidden rounded-xl">
-        <Image src={image.src} alt={image.alt} class="w-full" />
+        {
+          typeof image.src === "string" ? (
+            <Image src={image.src} alt={image.alt} width={1200} height={630} class="w-full" />
+          ) : (
+            <Image src={image.src} alt={image.alt} width={1200} height={630} class="w-full" />
+          )
+        }
       </div>
     </header>
 
@@ -101,6 +149,52 @@ const blogPostingSchema = {
         class="prose dark:prose-invert prose-img:rounded-xl prose-img:shadow min-w-0 max-w-none flex-1"
       >
         <slot />
+        <section
+          class="border-border/70 bg-secondary/40 not-prose relative mt-14 overflow-hidden rounded-2xl border p-6 sm:p-8"
+        >
+          <span
+            class="text-foreground/10 pointer-events-none absolute right-6 top-4 text-8xl font-semibold leading-none"
+            aria-hidden="true"
+          >
+            &ldquo;
+          </span>
+          <div class="grid gap-6 sm:grid-cols-[4rem_1fr] sm:gap-x-6">
+            <div>
+              <img
+                src="/images/paul.jpg"
+                alt="Paul Koeck"
+                width="112"
+                height="112"
+                loading="lazy"
+                class="border-border h-13 w-13 rounded-xl border object-cover sm:h-16 sm:w-16"
+              />
+            </div>
+            <div class="min-w-0">
+              <div>
+                <h2 class="text-foreground text-3xl font-semibold">
+                  Paul Koeck
+                </h2>
+                <p
+                  class="text-muted-foreground mt-1 flex items-center gap-2 text-sm font-medium"
+                >
+                  <span
+                    class="bg-primary h-1.5 w-1.5 rounded-full"
+                    aria-hidden="true"
+                  ></span>
+                  Backup specialist
+                </p>
+              </div>
+            </div>
+            <p
+              class="text-foreground/75 max-w-2xl leading-relaxed sm:col-span-2"
+            >
+              Paul works on backup systems, restore workflows, and the everyday
+              problems that make people lose files. He founded BlinkDisk after
+              seeing how much backup software still makes recovery feel harder
+              than it should.
+            </p>
+          </div>
+        </section>
       </div>
       <aside class="hidden w-56 shrink-0 lg:block">
         <TableOfContents headings={headings} />
