@@ -10,8 +10,7 @@ const posts = await getCollection("blog", ({ data }) => {
 });
 
 const sortedPosts = posts.sort(
-  (a, b) =>
-    b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
+  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
 );
 
 const [featuredPost, ...restPosts] = sortedPosts;
