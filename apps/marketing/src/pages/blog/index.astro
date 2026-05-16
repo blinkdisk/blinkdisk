@@ -10,7 +10,7 @@ const posts = await getCollection("blog", ({ data }) => {
 });
 
 const sortedPosts = posts.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
 );
 
 const [featuredPost, ...restPosts] = sortedPosts;
@@ -56,6 +56,8 @@ const formatDate = (date: Date) =>
                 <Image
                   src={featuredPost.data.image.src}
                   alt={featuredPost.data.image.alt}
+                  width={featuredPost.data.image.src.width ?? 1200}
+                  height={featuredPost.data.image.src.height ?? 630}
                   class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
@@ -64,7 +66,7 @@ const formatDate = (date: Date) =>
                   Latest Post
                 </span>
                 <span class="text-muted-foreground mb-3 text-sm">
-                  {formatDate(featuredPost.data.pubDate)}
+                  {formatDate(featuredPost.data.publicationDate)}
                 </span>
                 <h2 class="text-foreground mb-3 text-2xl font-bold md:text-3xl">
                   {featuredPost.data.title}
@@ -93,7 +95,7 @@ const formatDate = (date: Date) =>
                   <BlogCard
                     title={post.data.title}
                     description={post.data.description}
-                    pubDate={post.data.pubDate}
+                    publicationDate={post.data.publicationDate}
                     author={post.data.author}
                     image={post.data.image}
                     slug={post.id}

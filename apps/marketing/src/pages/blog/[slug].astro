@@ -19,18 +19,35 @@ const { Content, headings } = await render(post);
 const wordsPerMinute = 200;
 const wordCount = post.body?.split(/\s+/).length ?? 0;
 const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+
+const faqStructuredData = post.data.faqs?.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: post.data.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    }
+  : undefined;
 ---
 
 <BlogPostLayout
   title={post.data.title}
   description={post.data.description}
-  pubDate={post.data.pubDate}
+  publicationDate={post.data.publicationDate}
+  lastUpdated={post.data.lastUpdated}
   author={post.data.author}
   image={post.data.image}
   headings={headings}
   ctaHeadline={post.data.ctaHeadline}
   slug={post.id}
   readingTime={readingTime}
+  structuredData={faqStructuredData}
 >
   <Content />
 </BlogPostLayout>
