@@ -70,22 +70,21 @@ const blogPostingSchema = {
   image: absoluteImageSource,
   datePublished: publicationDate.toISOString(),
   dateModified: updatedDate.toISOString(),
-  author:
-    showPaulAuthorBio
-      ? {
-          "@type": "Person",
-          name: author,
-          url: "https://paul.koeck.dev",
-          jobTitle: "Founder, BlinkDisk",
-          sameAs: [
-            "https://github.com/poeck",
-            "https://www.linkedin.com/in/paul-koeck-1221a3219/",
-          ],
-        }
-      : {
-          "@type": "Person",
-          name: author,
-        },
+  author: showPaulAuthorBio
+    ? {
+        "@type": "Person",
+        name: author,
+        url: "https://paul.koeck.dev",
+        jobTitle: "Founder, BlinkDisk",
+        sameAs: [
+          "https://github.com/poeck",
+          "https://www.linkedin.com/in/paul-koeck-1221a3219/",
+        ],
+      }
+    : {
+        "@type": "Person",
+        name: author,
+      },
   publisher: {
     "@type": "Organization",
     name: "BlinkDisk",
