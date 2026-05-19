@@ -8,7 +8,14 @@ export function useSpaceUpdate() {
 
   useEffect(() => {
     return window.electron.space.update(async (payload) => {
-      await queryClient.setQueryData(queryKeys.space, payload.space);
+      queryClient.setQueryData(queryKeys.space, (space) => {
+        if (!space) return undefined;
+
+        return {
+          ...space,
+          ...payload.space,
+        };
+      });
     });
   }, [queryClient, queryKeys]);
 }
