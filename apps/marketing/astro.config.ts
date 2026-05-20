@@ -73,6 +73,14 @@ export default defineConfig({
   output: "static",
   prefetch: true,
   trailingSlash: "never",
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+    },
+  },
   server: { port: 3000 },
   adapter: cloudflare({
     imageService: "compile",
