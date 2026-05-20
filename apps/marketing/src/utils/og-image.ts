@@ -30,6 +30,44 @@ type OgImageOptions = {
   badge?: string;
 };
 
+type SecurityAnalysisOgImageOptions = {
+  title: string;
+  description: string;
+  severity: string;
+  cvssScore: number;
+  cveId: string;
+};
+
+const severityColors: Record<
+  string,
+  { primary: string; soft: string; text: string; border: string }
+> = {
+  critical: {
+    primary: "#ef4444",
+    soft: "rgba(239, 68, 68, 0.16)",
+    text: "#fecaca",
+    border: "rgba(239, 68, 68, 0.45)",
+  },
+  high: {
+    primary: "#f97316",
+    soft: "rgba(249, 115, 22, 0.16)",
+    text: "#fed7aa",
+    border: "rgba(249, 115, 22, 0.45)",
+  },
+  medium: {
+    primary: "#eab308",
+    soft: "rgba(234, 179, 8, 0.16)",
+    text: "#fef08a",
+    border: "rgba(234, 179, 8, 0.45)",
+  },
+  low: {
+    primary: "#10b981",
+    soft: "rgba(16, 185, 129, 0.16)",
+    text: "#a7f3d0",
+    border: "rgba(16, 185, 129, 0.45)",
+  },
+};
+
 export async function generateOgImage({
   title,
   description,
@@ -129,6 +167,263 @@ export async function generateOgImage({
                     lineHeight: 1.5,
                   },
                   children: truncatedDescription,
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  const svg = await satori(element as ReactNode, {
+    width: 1200,
+    height: 630,
+    fonts: [
+      {
+        name: "Inter",
+        data: inter400,
+        weight: 400,
+        style: "normal",
+      },
+      {
+        name: "Inter",
+        data: inter700,
+        weight: 700,
+        style: "normal",
+      },
+    ],
+  });
+
+  return sharp(Buffer.from(svg)).png().toBuffer();
+}
+
+export async function generateSecurityAnalysisOgImage({
+  title,
+  description,
+  severity,
+  cvssScore,
+  cveId,
+}: SecurityAnalysisOgImageOptions): Promise<Buffer> {
+  const normalizedSeverity = severity.toLowerCase();
+  const theme = severityColors[normalizedSeverity] ?? {
+    primary: "#94a3b8",
+    soft: "rgba(148, 163, 184, 0.16)",
+    text: "#cbd5e1",
+    border: "rgba(148, 163, 184, 0.4)",
+  };
+  const truncatedDescription =
+    description.length > 145 ? `${description.slice(0, 142)}...` : description;
+  const titleSize = title.length > 68 ? 46 : title.length > 52 ? 50 : 56;
+  const score = Number.isInteger(cvssScore)
+    ? cvssScore.toFixed(1)
+    : String(cvssScore);
+
+  const logoElement = {
+    type: "img",
+    props: {
+      src: logoDataUri,
+      width: 220,
+      height: 33,
+      style: {
+        height: "33px",
+      },
+    },
+  };
+
+  const element = {
+    type: "div",
+    props: {
+      style: {
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "56px 60px",
+        background:
+          "linear-gradient(135deg, #08090b 0%, #101318 48%, #171014 100%)",
+        color: "#ffffff",
+        fontFamily: "Inter",
+        position: "relative",
+      },
+      children: [
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "430px",
+              height: "430px",
+              background: `radial-gradient(circle, ${theme.soft} 0%, rgba(0, 0, 0, 0) 68%)`,
+            },
+          },
+        },
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            },
+            children: [
+              logoElement,
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    backgroundColor: theme.soft,
+                    border: `1px solid ${theme.border}`,
+                    color: theme.text,
+                    fontSize: "19px",
+                    fontWeight: 700,
+                    padding: "10px 18px",
+                    borderRadius: "9999px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          width: "10px",
+                          height: "10px",
+                          borderRadius: "9999px",
+                          backgroundColor: theme.primary,
+                        },
+                      },
+                    },
+                    `${severity} severity`,
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              gap: "46px",
+              alignItems: "flex-end",
+              width: "100%",
+            },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "24px",
+                    flex: "1 1 auto",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          gap: "14px",
+                          color: "rgba(255, 255, 255, 0.62)",
+                          fontSize: "22px",
+                          fontFamily: "Inter",
+                        },
+                        children: cveId,
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: "#ffffff",
+                          fontSize: `${titleSize}px`,
+                          fontWeight: 700,
+                          lineHeight: 1.12,
+                          maxWidth: "800px",
+                        },
+                        children: title,
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: "rgba(255, 255, 255, 0.7)",
+                          fontSize: "25px",
+                          lineHeight: 1.45,
+                          maxWidth: "760px",
+                        },
+                        children: truncatedDescription,
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: {
+                    width: "210px",
+                    height: "210px",
+                    flexShrink: 0,
+                    borderRadius: "28px",
+                    border: `1px solid ${theme.border}`,
+                    backgroundColor: "rgba(255, 255, 255, 0.045)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "10px",
+                    boxShadow: `inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 60px ${theme.soft}`,
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: "rgba(255, 255, 255, 0.6)",
+                          fontSize: "18px",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.12em",
+                        },
+                        children: "CVSS",
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: "#ffffff",
+                          fontSize: "76px",
+                          fontWeight: 700,
+                          lineHeight: 1,
+                        },
+                        children: score,
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: theme.text,
+                          fontSize: "20px",
+                          fontWeight: 700,
+                        },
+                        children: "/ 10",
+                      },
+                    },
+                  ],
                 },
               },
             ],

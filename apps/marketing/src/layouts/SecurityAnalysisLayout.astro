@@ -14,6 +14,7 @@ type Heading = {
 };
 
 type Props = {
+  slug: string;
   title: string;
   description: string;
   publicationDate: Date;
@@ -37,6 +38,7 @@ type Props = {
 };
 
 const {
+  slug,
   title,
   description,
   publicationDate,
@@ -55,6 +57,7 @@ const {
 
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 const updatedDate = lastUpdated ?? publicationDate;
+const ogImage = `/security/analysis/og/${slug}.png`;
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("en-US", {
@@ -208,7 +211,7 @@ const pageStructuredData = [
 <BaseLayout
   title={title}
   description={description}
-  og={{ title }}
+  og={{ title, image: ogImage }}
   structuredData={pageStructuredData}
 >
   <nav
