@@ -42,6 +42,22 @@ body:has([class~="sticky"], [class*=":sticky"]) {
   scroll-margin-top: 8rem;
 }
 
+.astro-code,
+.astro-code span {
+  background-color: var(--color-card) !important;
+}
+
+.dark .astro-code,
+.dark .astro-code span {
+  background-color: var(--color-card) !important;
+  /*background-color: var(--shiki-dark-bg) !important;*/
+
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
 @font-face {
   font-family: Inter;
   font-style: normal;

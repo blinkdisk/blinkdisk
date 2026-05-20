@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from "astro:content";
+import SecurityAnalysisLayout from "@marketing/layouts/SecurityAnalysisLayout.astro";
+
+export async function getStaticPaths() {
+  const analyses = await getCollection("security", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  return analyses.map((analysis) => ({
+    params: { slug: analysis.id },
+    props: { analysis },
+  }));
+}
+
+const { analysis } = Astro.props;
+const { Content, headings } = await render(analysis);
+
+const faqStructuredData = analysis.data.faqs?.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: analysis.data.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    }
+  : undefined;
+---
+
+<SecurityAnalysisLayout
+  title={analysis.data.title}
+  description={analysis.data.description}
+  publicationDate={analysis.data.publicationDate}
+  lastUpdated={analysis.data.lastUpdated}
+  author={analysis.data.author}
+  severity={analysis.data.severity}
+  cvssScore={analysis.data.cvssScore}
+  cvssVector={analysis.data.cvssVector}
+  cveId={analysis.data.cveId}
+  ghsaId={analysis.data.ghsaId}
+  credits={analysis.data.credits}
+  references={analysis.data.references}
+  headings={headings}
+  structuredData={faqStructuredData}
+>
+  <Content />
+</SecurityAnalysisLayout>
