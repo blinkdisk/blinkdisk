@@ -1,14 +1,14 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
+import { AccountDashboard } from "@desktop/components/accounts/dashboard";
 import { Empty } from "@desktop/components/empty";
-import { VaultHome } from "@desktop/components/vaults/home";
 import { useSync } from "@desktop/hooks/mutations/use-sync";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { createFileRoute } from "@tanstack/react-router";
 import { CloudAlertIcon, PlusIcon, RefreshCwIcon } from "lucide-react";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 export const Route = createFileRoute("/{-$accountId}/")({
   component: RouteComponent,
@@ -16,35 +16,11 @@ export const Route = createFileRoute("/{-$accountId}/")({
 
 function RouteComponent() {
   const { t } = useAppTranslation("vault");
-  const { accountId, isOnlineAccount } = useAccountId();
+  const { isOnlineAccount } = useAccountId();
   const { openCreateVault } = useCreateVaultDialog();
   const { data: vaults } = useVaultList();
 
   const { mutate: sync, isPending: isSyncing } = useSync();
-
-  const navigate = Route.useNavigate();
-
-  useEffect(() => {
-    if (!vaults?.length || !accountId) return;
-
-    let lastUsedVaultId = window.electron.store.get(
-      `accounts.${accountId}.lastUsedVaultId`,
-    ) as string | null;
-
-    if (lastUsedVaultId) {
-      const vault = vaults.find((vault) => vault.id === lastUsedVaultId);
-      if (!vault) lastUsedVaultId = null;
-    }
-
-    navigate({
-      to: "/{-$accountId}/{-$vaultId}",
-      params: (params) => ({
-        ...params,
-        vaultId: lastUsedVaultId || vaults[0]?.id || "",
-      }),
-      replace: true,
-    });
-  }, [accountId, vaults, navigate]);
 
   const openCreateCloudBlink = useCallback(() => {
     openCreateVault({
@@ -85,5 +61,5 @@ function RouteComponent() {
       </Empty>
     );
 
-  return <VaultHome />;
+  return <AccountDashboard />;
 }
