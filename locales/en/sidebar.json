@@ -55,5 +55,11 @@
   "offlineAlert": {
     "title": "You're offline",
     "description": "Some features may not work while your device is offline."
+  },
+  "reviewAlert": {
+    "title": "Enjoying BlinkDisk?",
+    "description": "Help others find us by leaving a like on AlternativeTo.",
+    "button": "Like on AlternativeTo",
+    "dismiss": "Dismiss"
   }
 }

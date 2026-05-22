@@ -7,14 +7,19 @@ import {
   CarouselPrevious,
 } from "@blinkdisk/ui/carousel";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
+import { SidebarReviewAlert } from "@desktop/components/sidebar/review-alert";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
 import { SidebarTrialAlert } from "@desktop/components/sidebar/trial-alert";
 import { SidebarUpdateAlert } from "@desktop/components/sidebar/update-alert";
 import { useSpace } from "@desktop/hooks/queries/use-space";
+import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
+import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useOffline } from "@desktop/hooks/use-offline";
 import AutoHeight from "embla-carousel-auto-height";
 import { type ReactNode, useEffect, useState } from "react";
+
+const REVIEW_ALERT_VAULT_AGE_MS = 12 * 60 * 60 * 1000;
 
 type SidebarAlertSlide = {
   key: string;
@@ -24,12 +29,21 @@ type SidebarAlertSlide = {
 export function SidebarAlerts() {
   const { isOffline } = useOffline();
   const { data: space } = useSpace();
+  const { data: vault } = useVault();
   const { status } = useUpdateDialog();
+  const [reviewDismissedAt] = useAppStorage("reviewDismissedAt");
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentAlert, setCurrentAlert] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const storagePercentage = space ? space.used / space.capacity : 0;
+
+  const showReviewAlert =
+    !reviewDismissedAt &&
+    !!vault?.createdAt &&
+    Date.now() - new Date(vault.createdAt).getTime() >
+      REVIEW_ALERT_VAULT_AGE_MS;
+
   const alerts: SidebarAlertSlide[] = [];
 
   if (status?.available) {
@@ -62,6 +76,13 @@ export function SidebarAlerts() {
     alerts.push({
       key: "storage",
       alert: <SidebarStorageAlert />,
+    });
+  }
+
+  if (showReviewAlert) {
+    alerts.push({
+      key: "review",
+      alert: <SidebarReviewAlert />,
     });
   }
 
