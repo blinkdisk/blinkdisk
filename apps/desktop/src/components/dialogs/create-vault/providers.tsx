@@ -62,7 +62,7 @@ function Provider({ provider, selectProvider }: ProviderProps) {
       onClick={() => selectProvider(provider.type)}
     >
       <div className="flex items-center gap-4">
-        <Icon className="!size-6" />
+        <Icon className="!size-6 text-muted-foreground" />
         <div className="flex flex-col items-start">
           <p>{provider.name}</p>
           <p className="text-muted-foreground text-xs">
