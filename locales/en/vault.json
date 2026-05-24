@@ -5,6 +5,10 @@
     "refresh": "Reload vaults",
     "add": "Add vault"
   },
+  "dashboard": {
+    "title": "Vaults",
+    "createVault": "Create vault"
+  },
   "createDialog": {
     "title": {
       "default": "Create new vault",

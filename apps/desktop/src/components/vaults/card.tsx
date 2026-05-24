@@ -21,7 +21,7 @@ export function VaultCard({ vault }: VaultCardProps) {
         <div className="h-8 w-2.5 bg-linear-to-b from-neutral-200 dark:from-neutral-900/50 to-black/5 dark:to-neutral-900/20 rounded-r-[0.4rem] p-1 pl-0">
           <div className="w-full h-full rounded-r-lg bg-white dark:bg-neutral-700 border border-l-0"></div>
         </div>
-        <p className="font-medium text-lg">{vault.name}</p>
+        <p className="font-semibold text-xl">{vault.name}</p>
       </div>
       <div className="flex flex-col">
         <div className="w-full h-0.5 bg-neutral-200 dark:bg-neutral-900/50"></div>
