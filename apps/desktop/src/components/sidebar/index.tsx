@@ -21,7 +21,12 @@ import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
-import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
+import {
+  EllipsisVerticalIcon,
+  HomeIcon,
+  SettingsIcon,
+  VaultIcon,
+} from "lucide-react";
 import type { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
@@ -53,7 +58,20 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
           </SidebarMenu>
         </SidebarHeader>
         <SidebarContent className="mt-4 flex flex-col gap-0 p-2">
-          {vaultId ? (
+          {!vaultId ? (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                className="px-3"
+                isActive={pathname === `/${accountId}`}
+                render={
+                  <Link to="/{-$accountId}">
+                    <VaultIcon />
+                    {t("vaults")}
+                  </Link>
+                }
+              />
+            </SidebarMenuItem>
+          ) : (
             <>
               <SidebarMenuItem>
                 <SidebarMenuButton
@@ -86,7 +104,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 />
               </SidebarMenuItem>
             </>
-          ) : null}
+          )}
           <SidebarFolderList folders={folders} />
         </SidebarContent>
         <SidebarFooter>

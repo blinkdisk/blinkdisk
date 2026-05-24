@@ -25,6 +25,7 @@
     "addAccount": "Add account"
   },
   "links": {
+    "vaults": "Vaults",
     "home": "Home",
     "settings": "Settings"
   },
