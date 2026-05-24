@@ -7,7 +7,9 @@
   },
   "dashboard": {
     "title": "Vaults",
-    "createVault": "Create vault"
+    "createVault": "Create vault",
+    "count_one": "{{count}} vault found",
+    "count_other": "{{count}} vaults found"
   },
   "createDialog": {
     "title": {

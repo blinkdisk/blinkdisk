@@ -28,8 +28,10 @@ export function AccountDashboard() {
     <div className="flex min-h-full flex-col overflow-y-auto p-6">
       <div className="mb-6 flex h-9 w-full items-center justify-between gap-4">
         <div className="flex flex-col">
-          <h1 className="text-lg font-semibold">{t("title")}</h1>
-          <p className="text-xs text-muted-foreground">3 vaults found</p>
+          <h1 className="text-xl font-semibold">{t("title")}</h1>
+          <p className="text-xs text-muted-foreground">
+            {t("count", { count: vaults?.length ?? 0 })}
+          </p>
         </div>
         <div className="flex gap-3">
           {isOnlineAccount && (
