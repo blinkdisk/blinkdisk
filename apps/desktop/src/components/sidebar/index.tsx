@@ -109,7 +109,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         <SidebarFooter>
           <SidebarMenu className="gap-4">
             <SidebarAlerts />
-            <SidebarAddFolder />
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
                 <SidebarMenuButton size="lg">
