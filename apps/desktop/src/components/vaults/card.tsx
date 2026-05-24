@@ -32,7 +32,7 @@ export function VaultCard({ vault }: VaultCardProps) {
           <div className="w-full h-full rounded-r-lg bg-white dark:bg-neutral-700 border border-l-0"></div>
         </div>
         <div className="flex gap-2 items-center text-muted-foreground">
-          <Icon className="size-4 grayscale" />
+          <Icon className="size-4" />
           <p className="text-sm">{t(`providers.${vault.provider}.name`)}</p>
         </div>
       </div>
