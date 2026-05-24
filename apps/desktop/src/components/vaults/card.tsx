@@ -31,11 +31,9 @@ export function VaultCard({ vault }: VaultCardProps) {
         <div className="h-8 w-2.5 bg-linear-to-b from-neutral-200 dark:from-neutral-900/50 to-black/5 dark:to-neutral-900/20 rounded-r-[0.4rem] p-1 pl-0">
           <div className="w-full h-full rounded-r-lg bg-white dark:bg-neutral-700 border border-l-0"></div>
         </div>
-        <div className="flex gap-2 items-center">
-          <Icon className="size-4" />
-          <p className="text-muted-foreground text-sm">
-            {t(`providers.${vault.provider}.name`)}
-          </p>
+        <div className="flex gap-2 items-center text-muted-foreground">
+          <Icon className="size-4 grayscale" />
+          <p className="text-sm">{t(`providers.${vault.provider}.name`)}</p>
         </div>
       </div>
       <div className="absolute right-6">
