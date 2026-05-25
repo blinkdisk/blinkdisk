@@ -105,6 +105,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
               </SidebarMenuItem>
             </>
           )}
+          <SidebarFolderList folders={folders} />
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu className="gap-4">
