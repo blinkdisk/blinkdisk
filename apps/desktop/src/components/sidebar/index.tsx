@@ -12,13 +12,15 @@ import {
 import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
-import { SidebarAddFolder } from "@desktop/components/sidebar/add-folder";
 import { SidebarAlerts } from "@desktop/components/sidebar/alerts";
 import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
 import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
+import { VaultMenuDropdown } from "@desktop/components/vaults/menu-dropdown";
+import { VaultPreview } from "@desktop/components/vaults/preview";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
+import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
@@ -32,6 +34,7 @@ import type { ComponentProps } from "react";
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount } = useAccountId();
   const { data: account } = useAccount();
+  const { data: vault } = useVault();
   const { data: folders } = useFolderList();
 
   const { accountId, vaultId, hostName, userName } = useParams({
@@ -49,15 +52,22 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
       <SidebarContainer variant="inset" {...props}>
         <SidebarHeader>
           <SidebarMenu>
-            <SidebarMenuItem className="pl-2 pt-1">
+            <SidebarMenuItem className="pl-3 py-2">
               <Link to="/{-$accountId}" tabIndex={-1}>
                 <Logo />
               </Link>
             </SidebarMenuItem>
-            <SidebarSelects />
           </SidebarMenu>
         </SidebarHeader>
-        <SidebarContent className="mt-4 flex flex-col gap-0 p-2">
+        <SidebarContent className="flex flex-col gap-6 p-2">
+          {vaultId && vault ? (
+            <VaultMenuDropdown>
+              <SidebarMenuButton size="lg">
+                <VaultPreview vault={vault} />
+              </SidebarMenuButton>
+            </VaultMenuDropdown>
+          ) : null}
+          <SidebarSelects />
           {!vaultId ? (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -73,39 +83,41 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
             </SidebarMenuItem>
           ) : (
             <>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  className="px-3"
-                  isActive={
-                    pathname ===
-                    `/${accountId}/${vaultId}/${hostName}/${userName}`
-                  }
-                  render={
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
-                      <HomeIcon />
-                      {t("home")}
-                    </Link>
-                  }
-                />
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  className="px-3"
-                  isActive={
-                    pathname ===
-                    `/${accountId}/${vaultId}/${hostName}/${userName}/settings`
-                  }
-                  render={
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
-                      <SettingsIcon />
-                      {t("settings")}
-                    </Link>
-                  }
-                />
-              </SidebarMenuItem>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    className="px-3"
+                    isActive={
+                      pathname ===
+                      `/${accountId}/${vaultId}/${hostName}/${userName}`
+                    }
+                    render={
+                      <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
+                        <HomeIcon />
+                        {t("home")}
+                      </Link>
+                    }
+                  />
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    className="px-3"
+                    isActive={
+                      pathname ===
+                      `/${accountId}/${vaultId}/${hostName}/${userName}/settings`
+                    }
+                    render={
+                      <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                        <SettingsIcon />
+                        {t("settings")}
+                      </Link>
+                    }
+                  />
+                </SidebarMenuItem>
+              </SidebarMenu>
+              <SidebarFolderList folders={folders} />
             </>
           )}
-          <SidebarFolderList folders={folders} />
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu className="gap-4">

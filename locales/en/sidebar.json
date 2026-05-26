@@ -21,6 +21,9 @@
     "logout": "Sign out",
     "addAccount": "Add account"
   },
+  "vaultMenu": {
+    "createVault": "Create vault"
+  },
   "accountListMenu": {
     "addAccount": "Add account"
   },
@@ -28,9 +31,6 @@
     "vaults": "Vaults",
     "home": "Home",
     "settings": "Settings"
-  },
-  "folderList": {
-    "title": "Folders"
   },
   "storageAlert": {
     "high": {
