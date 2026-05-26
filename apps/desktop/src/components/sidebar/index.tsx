@@ -62,7 +62,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         <SidebarContent className="flex flex-col gap-6 p-2">
           {vaultId && vault ? (
             <VaultMenuDropdown>
-              <SidebarMenuButton size="lg">
+              <SidebarMenuButton className="shrink-0" size="lg">
                 <VaultPreview vault={vault} />
               </SidebarMenuButton>
             </VaultMenuDropdown>
