@@ -28,7 +28,6 @@ import {
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
-  VaultIcon,
 } from "lucide-react";
 import type { ComponentProps } from "react";
 
