@@ -26,6 +26,7 @@ import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   EllipsisVerticalIcon,
   HomeIcon,
+  LayoutDashboardIcon,
   SettingsIcon,
   VaultIcon,
 } from "lucide-react";
@@ -75,8 +76,8 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 isActive={pathname === `/${accountId}`}
                 render={
                   <Link to="/{-$accountId}">
-                    <VaultIcon />
-                    {t("vaults")}
+                    <LayoutDashboardIcon />
+                    {t("dashboard")}
                   </Link>
                 }
               />
