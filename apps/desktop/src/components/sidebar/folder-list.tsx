@@ -16,7 +16,7 @@ export function SidebarFolderList({ folders }: SidebarFolderListProps) {
   if (!["STARTING", "RUNNING"].includes(status || "")) return null;
   if (folders !== undefined && folders !== null && !folders.length) return null;
   return (
-    <div className="flex flex-col">
+    <div className="mt-4 flex flex-col">
       <div className="flex flex-col gap-2">
         {(folders === undefined || folders === null
           ? (new Array(3).fill(undefined) as undefined[])

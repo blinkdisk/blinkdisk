@@ -24,7 +24,7 @@ export function SidebarSelects() {
 
   if (!sections.length) return null;
   return (
-    <div className="flex w-full flex-col">
+    <div className="mt-4 flex w-full flex-col">
       {sections.map((section, index) => {
         const className = cn(
           index > 0 && "rounded-t-none",

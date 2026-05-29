@@ -24,6 +24,7 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
+  ArrowLeftIcon,
   EllipsisVerticalIcon,
   HomeIcon,
   LayoutDashboardIcon,
@@ -60,14 +61,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
           </SidebarMenu>
         </SidebarHeader>
         <SidebarContent className="flex flex-col gap-6 p-2">
-          {vaultId && vault ? (
-            <VaultMenuDropdown>
-              <SidebarMenuButton className="shrink-0" size="lg">
-                <VaultPreview vault={vault} />
-              </SidebarMenuButton>
-            </VaultMenuDropdown>
-          ) : null}
-          <SidebarSelects />
           {!vaultId ? (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -82,41 +75,58 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
               />
             </SidebarMenuItem>
           ) : (
-            <>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    className="px-3"
-                    isActive={
-                      pathname ===
-                      `/${accountId}/${vaultId}/${hostName}/${userName}`
-                    }
-                    render={
-                      <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
-                        <HomeIcon />
-                        {t("home")}
-                      </Link>
-                    }
-                  />
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    className="px-3"
-                    isActive={
-                      pathname ===
-                      `/${accountId}/${vaultId}/${hostName}/${userName}/settings`
-                    }
-                    render={
-                      <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
-                        <SettingsIcon />
-                        {t("settings")}
-                      </Link>
-                    }
-                  />
-                </SidebarMenuItem>
-              </SidebarMenu>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3 text-muted-foreground hover:text-foreground"
+                  render={
+                    <Link to="/{-$accountId}">
+                      <ArrowLeftIcon />
+                      {t("backToAccount")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem className="mt-4">
+                <VaultMenuDropdown>
+                  <SidebarMenuButton className="shrink-0" size="lg">
+                    {vault ? <VaultPreview vault={vault} /> : null}
+                  </SidebarMenuButton>
+                </VaultMenuDropdown>
+              </SidebarMenuItem>
+              <SidebarSelects />
+              <SidebarMenuItem className="mt-4">
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={
+                    pathname ===
+                    `/${accountId}/${vaultId}/${hostName}/${userName}`
+                  }
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
+                      <HomeIcon />
+                      {t("home")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={
+                    pathname ===
+                    `/${accountId}/${vaultId}/${hostName}/${userName}/settings`
+                  }
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                      <SettingsIcon />
+                      {t("settings")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
               <SidebarFolderList folders={folders} />
-            </>
+            </SidebarMenu>
           )}
         </SidebarContent>
         <SidebarFooter>

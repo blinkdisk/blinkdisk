@@ -30,7 +30,8 @@
   "links": {
     "dashboard": "Dashboard",
     "home": "Home",
-    "settings": "Settings"
+    "settings": "Settings",
+    "backToAccount": "Back to account"
   },
   "storageAlert": {
     "high": {
