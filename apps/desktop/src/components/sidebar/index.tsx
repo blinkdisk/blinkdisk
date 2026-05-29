@@ -68,8 +68,8 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 isActive={pathname === `/${accountId}`}
                 render={
                   <Link to="/{-$accountId}">
-                    <LayoutDashboardIcon />
-                    {t("dashboard")}
+                    <HomeIcon />
+                    {t("home")}
                   </Link>
                 }
               />
@@ -104,8 +104,8 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   }
                   render={
                     <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
-                      <HomeIcon />
-                      {t("home")}
+                      <LayoutDashboardIcon />
+                      {t("overview")}
                     </Link>
                   }
                 />

@@ -28,10 +28,10 @@
     "addAccount": "Add account"
   },
   "links": {
-    "dashboard": "Dashboard",
     "home": "Home",
+    "overview": "Overview",
     "settings": "Settings",
-    "backToAccount": "Back to account"
+    "backToAccount": "Back to home"
   },
   "storageAlert": {
     "high": {
