@@ -1,4 +1,4 @@
-import { VaultHome } from "@desktop/components/vaults/home";
+import { VaultOverview } from "@desktop/components/vaults/overview";
 import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
@@ -47,5 +47,5 @@ function RouteComponent() {
     }
   }, [profiles, navigate, localUserName, hostName]);
 
-  return <VaultHome />;
+  return <VaultOverview />;
 }

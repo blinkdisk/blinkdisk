@@ -27,13 +27,13 @@ import {
 import { useMemo } from "react";
 import { GaugeComponent } from "react-gauge-component";
 
-type VaultHomeProps = {
+type VaultOverviewProps = {
   vault?: VaultItem;
   folders?: CoreFolderItem[];
 };
 
-export function VaultHome({ vault, folders }: VaultHomeProps) {
-  const { t } = useAppTranslation("vault.home");
+export function VaultOverview({ vault, folders }: VaultOverviewProps) {
+  const { t } = useAppTranslation("vault.overview");
 
   const { dark } = useTheme();
   const { openCreateFolder } = useCreateFolderDialog();
@@ -62,47 +62,6 @@ export function VaultHome({ vault, folders }: VaultHomeProps) {
         folders !== undefined ? "overflow-y-auto" : "overflow-hidden",
       )}
     >
-      <VaultTitlebar
-        vault={vault}
-        breadcrumbs={
-          !vault
-            ? [undefined]
-            : [
-                {
-                  id: "home",
-                  text: t("title"),
-                },
-              ]
-        }
-      >
-        {vault ? (
-          vault.provider === "CLOUDBLINK" ? (
-            <Button
-              size="sm"
-              variant={(storagePercentage || 0) < 0.7 ? "outline" : "default"}
-              onClick={openUpgradeDialog}
-            >
-              <CircleFadingArrowUpIcon />
-
-              {t("upgrade")}
-            </Button>
-          ) : (
-            <Button
-              render={
-                <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings" />
-              }
-              nativeButton={false}
-              variant="outline"
-              size="sm"
-            >
-              <SettingsIcon />
-              {t("settings")}
-            </Button>
-          )
-        ) : (
-          <Skeleton height="2.25rem" width="7rem" />
-        )}
-      </VaultTitlebar>
       <div className="flex flex-row gap-6">
         <Card className="grow">
           <CardContent className="flex h-full items-center gap-7 px-6 py-2">

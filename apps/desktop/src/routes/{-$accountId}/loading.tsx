@@ -1,4 +1,4 @@
-import { VaultHome } from "@desktop/components/vaults/home";
+import { VaultOverview } from "@desktop/components/vaults/overview";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/{-$accountId}/loading")({
@@ -9,5 +9,5 @@ export const Route = createFileRoute("/{-$accountId}/loading")({
 // the user is switching accounts, to prevent
 // account-specific queries from throwing errors.
 function RouteComponent() {
-  return <VaultHome />;
+  return <VaultOverview />;
 }

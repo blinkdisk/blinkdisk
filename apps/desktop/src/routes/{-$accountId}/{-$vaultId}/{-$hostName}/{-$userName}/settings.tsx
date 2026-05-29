@@ -30,35 +30,6 @@ function RouteComponent() {
 
   return (
     <div className="flex min-h-full flex-col overflow-x-hidden p-6">
-      <VaultTitlebar
-        vault={vault}
-        breadcrumbs={
-          !vault
-            ? [undefined]
-            : [
-                {
-                  id: "settings",
-                  text: t("title"),
-                },
-              ]
-        }
-      >
-        {vault ? (
-          <Button
-            render={
-              <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}" />
-            }
-            nativeButton={false}
-            variant="outline"
-            size="sm"
-          >
-            <HomeIcon />
-            {t("home")}
-          </Button>
-        ) : (
-          <Skeleton height="2.25rem" width="7rem" />
-        )}
-      </VaultTitlebar>
       <div className="mt-auto"></div>
       <div className="lg:w-130 mx-auto w-full">
         <PolicyContextProvider level="VAULT">

@@ -340,7 +340,7 @@
       }
     }
   },
-  "home": {
+  "overview": {
     "title": "Home",
     "vault": "Vault",
     "settings": "Settings",
