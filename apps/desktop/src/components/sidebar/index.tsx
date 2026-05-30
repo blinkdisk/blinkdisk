@@ -94,9 +94,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   </SidebarMenuButton>
                 </VaultMenuDropdown>
               </SidebarMenuItem>
-              <SidebarMenuItem className="mt-4">
-                <SidebarSelects />
-              </SidebarMenuItem>
+              <SidebarSelects />
               <SidebarMenuItem className="mt-4">
                 <SidebarMenuButton
                   className="px-3"

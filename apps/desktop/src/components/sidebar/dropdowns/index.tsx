@@ -1,3 +1,4 @@
+import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { cn } from "@blinkdisk/utils/class";
 import { SidebarHostNameSelect } from "@desktop/components/sidebar/dropdowns/hostName";
 import { SidebarUserNameSelect } from "@desktop/components/sidebar/dropdowns/userName";
@@ -24,19 +25,21 @@ export function SidebarSelects() {
 
   if (!sections.length) return null;
   return (
-    <div className="flex w-full flex-col">
-      {sections.map((section, index) => {
-        const className = cn(
-          index > 0 && "rounded-t-none",
-          index < sections.length - 1 && "rounded-b-none border-b-0",
-        );
+    <SidebarMenuItem className="mt-4">
+      <div className="flex w-full flex-col">
+        {sections.map((section, index) => {
+          const className = cn(
+            index > 0 && "rounded-t-none",
+            index < sections.length - 1 && "rounded-b-none border-b-0",
+          );
 
-        return section === "HOSTNAME" ? (
-          <SidebarHostNameSelect key="HOSTNAME" className={className} />
-        ) : section === "USERNAME" ? (
-          <SidebarUserNameSelect key="USERNAME" className={className} />
-        ) : null;
-      })}
-    </div>
+          return section === "HOSTNAME" ? (
+            <SidebarHostNameSelect key="HOSTNAME" className={className} />
+          ) : section === "USERNAME" ? (
+            <SidebarUserNameSelect key="USERNAME" className={className} />
+          ) : null;
+        })}
+      </div>
+    </SidebarMenuItem>
   );
 }
