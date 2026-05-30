@@ -1,31 +1,17 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Button } from "@blinkdisk/ui/button";
-import { Card, CardContent, CardTitle } from "@blinkdisk/ui/card";
-import { CircularProgress } from "@blinkdisk/ui/circular-progress";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
+import { HealthCard } from "@desktop/components/accounts/health-card";
+import { StorageCard } from "@desktop/components/accounts/storage-card";
 import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
 import { LocalButton } from "@desktop/components/vaults/local-button";
-import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { useSpace } from "@desktop/hooks/queries/use-space";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
-import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
-import { useTheme } from "@desktop/hooks/use-theme";
-import { formatSize } from "@desktop/lib/number";
-import { Link } from "@tanstack/react-router";
-import {
-  CircleFadingArrowUpIcon,
-  CloudUploadIcon,
-  FolderPlusIcon,
-  PlusIcon,
-  SettingsIcon,
-} from "lucide-react";
+import { CloudUploadIcon, FolderPlusIcon, PlusIcon } from "lucide-react";
 import { useMemo } from "react";
-import { GaugeComponent } from "react-gauge-component";
 
 type VaultOverviewProps = {
   vault?: VaultItem;
@@ -35,16 +21,8 @@ type VaultOverviewProps = {
 export function VaultOverview({ vault, folders }: VaultOverviewProps) {
   const { t } = useAppTranslation("vault.overview");
 
-  const { dark } = useTheme();
   const { openCreateFolder } = useCreateFolderDialog();
-  const { openUpgradeDialog } = useUpgradeDialog();
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
-  const { data: space } = useSpace();
-
-  const storagePercentage = useMemo(() => {
-    if (!space) return null;
-    return Math.min(space.used / space.capacity, 1);
-  }, [space]);
 
   const isAnyBackupRunning = useMemo(
     () =>
@@ -63,110 +41,9 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
       )}
     >
       <div className="flex flex-row gap-6">
-        <Card className="grow">
-          <CardContent className="flex h-full items-center gap-7 px-6 py-2">
-            {vault ? (
-              <GaugeComponent
-                labels={{
-                  valueLabel: { hide: true },
-                  tickLabels: { hideMinMax: true },
-                }}
-                type="semicircle"
-                arc={{
-                  colorArray: ["#ef4444", "#22c55e"],
-                  padding: 0.05,
-                  subArcs: [
-                    { limit: 30 },
-                    { limit: 60 },
-                    { limit: 85 },
-                    { limit: 100 },
-                    {},
-                  ],
-                }}
-                pointer={{
-                  type: "needle",
-                  animate: false,
-                  color: dark ? "#fff" : "#000",
-                }}
-                value={100}
-                className="mx-[-2rem] mb-[-1rem] mt-[-1.25rem] w-48"
-              />
-            ) : (
-              <Skeleton width="8rem" height="5rem" />
-            )}
-            <div className="flex flex-col gap-1">
-              <p className="text-2xl font-bold">
-                {vault ? t("score.category") : <Skeleton width={100} />}
-              </p>
-              <p className="text-muted-foreground text-sm">
-                {vault ? (
-                  t("score.description")
-                ) : (
-                  <Skeleton width={200} count={2} />
-                )}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <HealthCard isLoading={!vault} />
         {!vault || (vault && vault.provider === "CLOUDBLINK") ? (
-          <Card
-            className={cn(
-              "flex shrink-0 items-center justify-center",
-              (storagePercentage || 0) >= 0.9
-                ? "border-destructive/20 bg-destructive/10 text-destructive [&_.muted]:text-destructive/70"
-                : (storagePercentage || 0) >= 0.8
-                  ? "border-orange-600/20 bg-orange-600/10 text-orange-600 [&_.muted]:text-orange-600/70"
-                  : (storagePercentage || 0) >= 0.7
-                    ? "border-amber-600/20 bg-amber-600/10 text-amber-600 [&_.muted]:text-amber-600/70"
-                    : "",
-            )}
-          >
-            <CardContent className="flex w-60 flex-col justify-between px-6 py-2">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col">
-                  <CardTitle className="text-sm font-medium">
-                    {vault && space ? (
-                      t("usedStorage.title")
-                    ) : (
-                      <Skeleton width={100} />
-                    )}
-                  </CardTitle>
-                  <p className="mt-1 text-3xl font-bold">
-                    {vault && space ? (
-                      storagePercentage?.toLocaleString(undefined, {
-                        style: "percent",
-                      }) || ""
-                    ) : (
-                      <Skeleton width={100} />
-                    )}
-                  </p>
-                </div>
-                {vault && space ? (
-                  <CircularProgress
-                    value={100 * (storagePercentage || 0)}
-                    size={50}
-                    strokeWidth={6}
-                    progressClassName="opacity-60 dark:opacity-70"
-                  />
-                ) : (
-                  <Skeleton width={50} height={50} />
-                )}
-              </div>
-              <p className="muted text-muted-foreground mt-2 text-sm">
-                {vault && space ? (
-                  t("usedStorage.amount", {
-                    // Show 0B used if less than 20kb
-                    // Users were confused that there was already space used after
-                    // creating an empty vault. Usually a new vault takes around 8kb.
-                    used: formatSize(space.used < 20000 ? 0 : space.used),
-                    capacity: formatSize(space.capacity),
-                  })
-                ) : (
-                  <Skeleton width={160} />
-                )}
-              </p>
-            </CardContent>
-          </Card>
+          <StorageCard isLoading={!vault} />
         ) : null}
       </div>
       <div className="mt-8 flex items-center justify-between">

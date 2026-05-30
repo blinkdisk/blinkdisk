@@ -8,6 +8,8 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useCallback } from "react";
 import { VaultCard } from "../vaults/card";
+import { HealthCard } from "./health-card";
+import { StorageCard } from "./storage-card";
 
 export function AccountHome() {
   const { t } = useAppTranslation("vault.home");
@@ -26,6 +28,12 @@ export function AccountHome() {
 
   return (
     <div className="flex min-h-full flex-col overflow-y-auto p-6">
+      <div className="mb-8 flex flex-row gap-6">
+        <HealthCard isLoading={vaults === undefined} />
+        {isOnlineAccount ? (
+          <StorageCard isLoading={vaults === undefined} />
+        ) : null}
+      </div>
       <div className="mb-6 flex h-9 w-full items-center justify-between gap-4">
         <div className="flex flex-col">
           <h1 className="text-xl font-semibold">{t("title")}</h1>

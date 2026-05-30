@@ -358,7 +358,7 @@
     },
     "score": {
       "category": "Excellent",
-      "description": "All your files were backed up without any errors or warnings."
+      "description": "Your backup setup is configured correctly."
     },
     "usedStorage": {
       "title": "CloudBlink usage",
