@@ -5,6 +5,12 @@
     "refresh": "Reload vaults",
     "add": "Add vault"
   },
+  "home": {
+    "title": "Vaults",
+    "createVault": "Create vault",
+    "count_one": "{{count}} vault found",
+    "count_other": "{{count}} vaults found"
+  },
   "createDialog": {
     "title": {
       "default": "Create new vault",
@@ -90,7 +96,7 @@
     },
     "FILESYSTEM": {
       "name": "Local filesystem",
-      "description": "Use local vault device",
+      "description": "Save to a local folder",
       "fields": {
         "path": {
           "label": "Backup destination folder",
@@ -101,7 +107,7 @@
     },
     "NETWORK_ATTACHED_STORAGE": {
       "name": "Network attached storage",
-      "description": "Connect to network vault",
+      "description": "Save to a NAS device",
       "fields": {
         "path": {
           "label": "NAS mount path",
@@ -112,7 +118,7 @@
     },
     "AMAZON_S3": {
       "name": "Amazon S3",
-      "description": "Store in AWS cloud",
+      "description": "Store on Amazon S3",
       "fields": {
         "bucket": {
           "label": "Bucket name",
@@ -146,7 +152,7 @@
     },
     "S3_COMPATIBLE": {
       "name": "S3 compatible storage",
-      "description": "Use S3-compatible services",
+      "description": "Use any S3-compatible service",
       "fields": {
         "bucket": {
           "label": "Bucket name",
@@ -186,7 +192,7 @@
     },
     "GOOGLE_CLOUD_STORAGE": {
       "name": "Google Cloud Storage",
-      "description": "Store in Google cloud",
+      "description": "Store on Google Cloud",
       "fields": {
         "bucket": {
           "label": "Bucket name",
@@ -204,7 +210,7 @@
     },
     "BACKBLAZE": {
       "name": "Backblaze B2",
-      "description": "Store in Backblaze cloud",
+      "description": "Store on Backblaze B2",
       "fields": {
         "bucket": {
           "label": "Bucket name",
@@ -226,7 +232,7 @@
     },
     "AZURE_BLOB_STORAGE": {
       "name": "Azure Blob Storage",
-      "description": "Store in Azure cloud",
+      "description": "Store on Azure Blob Storage",
       "fields": {
         "container": {
           "label": "Container name",
@@ -256,7 +262,7 @@
     },
     "SFTP": {
       "name": "SFTP",
-      "description": "Transfer via secure FTP",
+      "description": "Connect via SFTP",
       "fields": {
         "host": {
           "label": "Host",
@@ -303,7 +309,7 @@
     },
     "RCLONE": {
       "name": "Rclone remote",
-      "description": "Use any rclone remote",
+      "description": "Connect any Rclone remote",
       "fields": {
         "remotePath": {
           "label": "Remote path",
@@ -317,7 +323,7 @@
     },
     "WEBDAV": {
       "name": "WebDAV",
-      "description": "Store via WebDAV protocol",
+      "description": "Connect via WebDAV",
       "fields": {
         "url": {
           "label": "WebDAV URL",
@@ -334,7 +340,7 @@
       }
     }
   },
-  "home": {
+  "overview": {
     "title": "Home",
     "vault": "Vault",
     "settings": "Settings",
@@ -352,10 +358,10 @@
     },
     "score": {
       "category": "Excellent",
-      "description": "All your files were backed up without any errors or warnings."
+      "description": "Your backup setup is configured correctly."
     },
     "usedStorage": {
-      "title": "Cloud storage used",
+      "title": "CloudBlink usage",
       "amount": "{{used}} of {{capacity}} used"
     }
   },

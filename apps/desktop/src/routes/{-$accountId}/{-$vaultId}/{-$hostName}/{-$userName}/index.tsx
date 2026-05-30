@@ -1,4 +1,4 @@
-import { VaultHome } from "@desktop/components/vaults/home";
+import { VaultOverview } from "@desktop/components/vaults/overview";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
@@ -16,7 +16,7 @@ function RouteComponent() {
   const { data: folders } = useFolderList();
 
   return (
-    <VaultHome
+    <VaultOverview
       vault={status === "RUNNING" ? vault : undefined}
       folders={status === "RUNNING" && folders !== null ? folders : undefined}
     />

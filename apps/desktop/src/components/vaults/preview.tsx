@@ -1,6 +1,6 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
-import { VaultIcon } from "lucide-react";
+import { providerIcons } from "@desktop/components/icons/providers/index";
 
 type VaultPreviewProps = {
   vault: ZVaultType;
@@ -9,10 +9,12 @@ type VaultPreviewProps = {
 export function VaultPreview({ vault }: VaultPreviewProps) {
   const { t } = useAppTranslation("vault");
 
+  const Icon = providerIcons[vault.provider];
+
   return (
     <div className="flex items-center gap-2.5">
-      <div className="bg-secondary flex size-9 shrink-0 items-center justify-center rounded-lg">
-        <VaultIcon className="size-4" />
+      <div className="bg-muted border flex size-9 shrink-0 items-center justify-center rounded-lg">
+        <Icon className="size-4" />
       </div>
       <div className="grid flex-1 text-left leading-tight">
         <span className="truncate text-[0.875rem] font-semibold">

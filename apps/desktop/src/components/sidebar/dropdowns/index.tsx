@@ -2,14 +2,11 @@ import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { cn } from "@blinkdisk/utils/class";
 import { SidebarHostNameSelect } from "@desktop/components/sidebar/dropdowns/hostName";
 import { SidebarUserNameSelect } from "@desktop/components/sidebar/dropdowns/userName";
-import { SidebarVaultSelect } from "@desktop/components/sidebar/dropdowns/vault";
 import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
-import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
 
 export function SidebarSelects() {
-  const { data: vaults } = useVaultList();
   const { data: profiles } = useVaultProfiles();
 
   const { hostName } = useParams({ strict: false });
@@ -21,31 +18,28 @@ export function SidebarSelects() {
 
   const sections = useMemo(() => {
     return [
-      // Only one vault is required to show the dropdown,
-      // to be able to add a new vault from there.
-      ...((vaults?.length || 0) > 0 ? ["VAULTS"] : []),
       ...((profiles?.length || 0) > 1 ? ["HOSTNAME"] : []),
       ...((userNames?.length || 0) > 1 ? ["USERNAME"] : []),
     ];
-  }, [profiles, vaults, userNames]);
+  }, [profiles, userNames]);
 
   if (!sections.length) return null;
   return (
-    <SidebarMenuItem className="mt-8 flex w-full flex-col">
-      {sections.map((section, index) => {
-        const className = cn(
-          index > 0 && "rounded-t-none",
-          index < sections.length - 1 && "rounded-b-none border-b-0",
-        );
+    <SidebarMenuItem className="mt-4">
+      <div className="flex w-full flex-col">
+        {sections.map((section, index) => {
+          const className = cn(
+            index > 0 && "rounded-t-none",
+            index < sections.length - 1 && "rounded-b-none border-b-0",
+          );
 
-        return section === "HOSTNAME" ? (
-          <SidebarHostNameSelect key="HOSTNAME" className={className} />
-        ) : section === "USERNAME" ? (
-          <SidebarUserNameSelect key="USERNAME" className={className} />
-        ) : section === "VAULTS" ? (
-          <SidebarVaultSelect key="VAULTS" className={className} />
-        ) : null;
-      })}
+          return section === "HOSTNAME" ? (
+            <SidebarHostNameSelect key="HOSTNAME" className={className} />
+          ) : section === "USERNAME" ? (
+            <SidebarUserNameSelect key="USERNAME" className={className} />
+          ) : null;
+        })}
+      </div>
     </SidebarMenuItem>
   );
 }

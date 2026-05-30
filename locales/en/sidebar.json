@@ -21,15 +21,17 @@
     "logout": "Sign out",
     "addAccount": "Add account"
   },
+  "vaultMenu": {
+    "createVault": "Create vault"
+  },
   "accountListMenu": {
     "addAccount": "Add account"
   },
   "links": {
     "home": "Home",
-    "settings": "Settings"
-  },
-  "folderList": {
-    "title": "Folders"
+    "overview": "Overview",
+    "settings": "Settings",
+    "backToAccount": "Back to home"
   },
   "storageAlert": {
     "high": {

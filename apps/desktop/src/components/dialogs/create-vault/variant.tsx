@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@blinkdisk/ui/card";
-import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
+import { CloudBlinkLogo } from "@desktop/components/icons/cloudblink";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-dialog";
@@ -55,7 +55,7 @@ export function CreateVaultVariant({
     <div className="mt-8 flex flex-col gap-5">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-3">
-          <CloudBlinkIcon className="h-4 w-auto" />
+          <CloudBlinkLogo className="h-4 w-auto" />
           <Button
             variant="ghost"
             size="sm"

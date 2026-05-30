@@ -1,4 +1,4 @@
-import { VaultHome } from "@desktop/components/vaults/home";
+import { VaultOverview } from "@desktop/components/vaults/overview";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -25,5 +25,5 @@ function RouteComponent() {
     });
   }, [navigate, localHostName]);
 
-  return <VaultHome />;
+  return <VaultOverview />;
 }

@@ -1,8 +1,8 @@
-export type CloudBlinkIconProps = {
+export type CloudBlinkLogoProps = {
   className?: string;
 };
 
-export function CloudBlinkIcon({ className }: CloudBlinkIconProps) {
+export function CloudBlinkLogo({ className }: CloudBlinkLogoProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@ export function CloudBlinkIcon({ className }: CloudBlinkIconProps) {
       fill="none"
       className={className}
     >
-      <title>CloudBlink</title>
+      <title>CloudBlink Logo</title>
       <g clipPath="url(#clip0_221_57)">
         <path
           d="M281.752 0C221.246 0 171.992 47.4416 168.79 107.117C129.972 114.111 100.505 147.989 100.505 188.8C100.505 234.671 137.706 271.872 183.576 271.872H379.928C425.799 271.872 463 234.671 463 188.8C463 147.989 433.532 114.111 394.715 107.117C391.513 47.4416 342.259 0 281.752 0Z"

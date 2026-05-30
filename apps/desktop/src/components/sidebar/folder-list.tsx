@@ -1,11 +1,6 @@
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { CircularProgress } from "@blinkdisk/ui/circular-progress";
 import { Loader } from "@blinkdisk/ui/loader";
-import {
-  SidebarGroupLabel,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@blinkdisk/ui/sidebar";
+import { SidebarMenuButton, SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
@@ -16,15 +11,12 @@ type SidebarFolderListProps = {
 };
 
 export function SidebarFolderList({ folders }: SidebarFolderListProps) {
-  const { t } = useAppTranslation("sidebar.folderList");
-
   const { status } = useVaultStatus();
 
   if (!["STARTING", "RUNNING"].includes(status || "")) return null;
   if (folders !== undefined && folders !== null && !folders.length) return null;
   return (
     <div className="mt-4 flex flex-col">
-      <SidebarGroupLabel>{t("title")}</SidebarGroupLabel>
       <div className="flex flex-col gap-2">
         {(folders === undefined || folders === null
           ? (new Array(3).fill(undefined) as undefined[])

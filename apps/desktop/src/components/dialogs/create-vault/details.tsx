@@ -4,7 +4,7 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
-import { CloudBlinkIcon } from "@desktop/components/icons/cloudblink";
+import { CloudBlinkLogo } from "@desktop/components/icons/cloudblink";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
@@ -61,7 +61,7 @@ export function CreateVaultDetails({
       {autoSelectedProvider && providerType === "CLOUDBLINK" ? (
         <div className="border-border bg-card flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="grid min-w-0 gap-2">
-            <CloudBlinkIcon className="mt-1 h-3.5 w-auto" />
+            <CloudBlinkLogo className="mt-1 h-3.5 w-auto" />
             <div className="grid gap-1">
               <p className="text-muted-foreground max-w-68 text-xs leading-4">
                 {t("storage.description")}

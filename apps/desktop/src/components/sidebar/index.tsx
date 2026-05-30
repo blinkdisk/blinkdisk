@@ -12,21 +12,30 @@ import {
 import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
-import { SidebarAddFolder } from "@desktop/components/sidebar/add-folder";
 import { SidebarAlerts } from "@desktop/components/sidebar/alerts";
 import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
 import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
+import { VaultMenuDropdown } from "@desktop/components/vaults/menu-dropdown";
+import { VaultPreview } from "@desktop/components/vaults/preview";
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
+import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
-import { EllipsisVerticalIcon, HomeIcon, SettingsIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  EllipsisVerticalIcon,
+  HomeIcon,
+  LayoutDashboardIcon,
+  SettingsIcon,
+} from "lucide-react";
 import type { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount } = useAccountId();
   const { data: account } = useAccount();
+  const { data: vault } = useVault();
   const { data: folders } = useFolderList();
 
   const { accountId, vaultId, hostName, userName } = useParams({
@@ -44,18 +53,49 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
       <SidebarContainer variant="inset" {...props}>
         <SidebarHeader>
           <SidebarMenu>
-            <SidebarMenuItem className="pl-2 pt-1">
+            <SidebarMenuItem className="pl-3 py-2">
               <Link to="/{-$accountId}" tabIndex={-1}>
                 <Logo />
               </Link>
             </SidebarMenuItem>
-            <SidebarSelects />
           </SidebarMenu>
         </SidebarHeader>
-        <SidebarContent className="mt-4 flex flex-col gap-0 p-2">
-          {vaultId ? (
-            <>
+        <SidebarContent className="flex flex-col gap-6 p-2">
+          {!vaultId ? (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                className="px-3"
+                isActive={pathname === `/${accountId}`}
+                render={
+                  <Link to="/{-$accountId}">
+                    <HomeIcon />
+                    {t("home")}
+                  </Link>
+                }
+              />
+            </SidebarMenuItem>
+          ) : (
+            <SidebarMenu>
               <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3 text-muted-foreground hover:text-foreground"
+                  render={
+                    <Link to="/{-$accountId}">
+                      <ArrowLeftIcon />
+                      {t("backToAccount")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem className="mt-4">
+                <VaultMenuDropdown>
+                  <SidebarMenuButton className="shrink-0" size="lg">
+                    {vault ? <VaultPreview vault={vault} /> : null}
+                  </SidebarMenuButton>
+                </VaultMenuDropdown>
+              </SidebarMenuItem>
+              <SidebarSelects />
+              <SidebarMenuItem className="mt-4">
                 <SidebarMenuButton
                   className="px-3"
                   isActive={
@@ -64,8 +104,8 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   }
                   render={
                     <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
-                      <HomeIcon />
-                      {t("home")}
+                      <LayoutDashboardIcon />
+                      {t("overview")}
                     </Link>
                   }
                 />
@@ -85,14 +125,13 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   }
                 />
               </SidebarMenuItem>
-            </>
-          ) : null}
-          <SidebarFolderList folders={folders} />
+              <SidebarFolderList folders={folders} />
+            </SidebarMenu>
+          )}
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu className="gap-4">
             <SidebarAlerts />
-            <SidebarAddFolder />
             <SidebarMenuItem className="flex items-center">
               <AccountSelectDropdown>
                 <SidebarMenuButton size="lg">
