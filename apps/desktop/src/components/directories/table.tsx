@@ -10,6 +10,10 @@ import {
   TableRow,
 } from "@blinkdisk/ui/table";
 import { cn } from "@blinkdisk/utils/class";
+import {
+  DirectoryBreadcrumb,
+  useDirectoryBreadcrumbPath,
+} from "@desktop/components/directories/breadcrumb";
 import { DirectoryMount } from "@desktop/components/directories/mount";
 import { DirectoryNameCell } from "@desktop/components/directories/name";
 import { DirectoryItemRow } from "@desktop/components/directories/row";
@@ -60,6 +64,8 @@ export function DirectoryTable({
 
   const { t } = useAppTranslation("directory.table");
   const { dark } = useTheme();
+  const breadcrumbPath = useDirectoryBreadcrumbPath();
+  const hasBreadcrumb = !!breadcrumbPath?.length;
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selection, setSelection] = useState({});
@@ -192,6 +198,7 @@ export function DirectoryTable({
           <Skeleton width="20rem" height="2.5rem" />
         )}
       </div>
+      <DirectoryBreadcrumb />
       <DirectoryMount />
       {table.getColumn("name")?.getFilterValue() && rows.length === 0 ? (
         <Empty
@@ -204,7 +211,8 @@ export function DirectoryTable({
           ref={parent}
           className="h-full w-full"
           containerClassName={cn(
-            "h-full w-full mt-6",
+            "h-full w-full",
+            hasBreadcrumb ? "mt-4" : "mt-6",
             items?.[0]?.skeleton ? "overflow-y-hidden" : "overflow-y-auto",
           )}
         >
