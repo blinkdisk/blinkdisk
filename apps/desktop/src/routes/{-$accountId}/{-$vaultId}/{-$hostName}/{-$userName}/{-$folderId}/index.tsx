@@ -8,17 +8,14 @@ import { Empty } from "@desktop/components/empty";
 import { FolderPreview } from "@desktop/components/folders/preview";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
-import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
-import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowLeftIcon,
   ClockIcon,
   CloudUploadIcon,
   ListPlusIcon,
@@ -37,7 +34,6 @@ function RouteComponent() {
   const { t } = useAppTranslation("backup.list");
 
   const { data: folder } = useFolder();
-  const { data: vault } = useVault();
   const { openFolderSettings } = useFolderSettingsDialog();
   const { data: backups } = useCompletedBackupList();
 
@@ -54,31 +50,6 @@ function RouteComponent() {
           : "overflow-hidden",
       )}
     >
-      <VaultTitlebar
-        vault={vault}
-        breadcrumbs={
-          !folder
-            ? [undefined]
-            : [
-                {
-                  id: "folder",
-                  text: folder.name || "",
-                },
-              ]
-        }
-      >
-        <Button
-          render={
-            <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}" />
-          }
-          nativeButton={false}
-          variant="outline"
-          size="sm"
-        >
-          <ArrowLeftIcon />
-          {t("back")}
-        </Button>
-      </VaultTitlebar>
       <VaultRestores />
       <div className="mb-8 flex items-center justify-between">
         <FolderPreview folder={folder} />
