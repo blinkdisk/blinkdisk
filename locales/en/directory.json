@@ -3,6 +3,9 @@
     "name": "Name",
     "size": "Size",
     "modified": "Last modified",
+    "mode": "Mode",
+    "uid": "UID",
+    "gid": "GID",
     "symlink": {
       "tooltip": "Symbolic link"
     },

@@ -80,7 +80,11 @@ export function DirectoryTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selection, setSelection] = useState({});
   const [filters, setFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    mode: false,
+    uid: false,
+    gid: false,
+  });
 
   const parent = useRef<HTMLTableElement>(null);
 
@@ -146,6 +150,39 @@ export function DirectoryTable({
           ),
         size: 150,
       }),
+      columnHelper.accessor("meta.mode", {
+        id: "mode",
+        header: () => t("mode"),
+        cell: (info) =>
+          info.row.original?.skeleton ? (
+            <Skeleton width={70} />
+          ) : (
+            info.getValue()
+          ),
+        size: 100,
+      }),
+      columnHelper.accessor("meta.uid", {
+        id: "uid",
+        header: () => t("uid"),
+        cell: (info) =>
+          info.row.original?.skeleton ? (
+            <Skeleton width={50} />
+          ) : (
+            info.getValue()
+          ),
+        size: 80,
+      }),
+      columnHelper.accessor("meta.gid", {
+        id: "gid",
+        header: () => t("gid"),
+        cell: (info) =>
+          info.row.original?.skeleton ? (
+            <Skeleton width={50} />
+          ) : (
+            info.getValue()
+          ),
+        size: 80,
+      }),
     ];
   }, [t, dark]);
 
@@ -190,6 +227,9 @@ export function DirectoryTable({
       name: t("name"),
       size: t("size"),
       modified: t("modified"),
+      mode: t("mode"),
+      uid: t("uid"),
+      gid: t("gid"),
     }),
     [t],
   );
