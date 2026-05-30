@@ -9,22 +9,34 @@ import {
 } from "@blinkdisk/ui/breadcrumb";
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
-import { DirectoryTable } from "@desktop/components/directories/table";
+import {
+  DirectoryTable,
+  type Item as DirectoryTableItem,
+} from "@desktop/components/directories/table";
 import { Empty } from "@desktop/components/empty";
 import { VaultRestores } from "@desktop/components/vaults/restores";
+import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useDirectory } from "@desktop/hooks/queries/core/use-directory";
-import { useVault } from "@desktop/hooks/queries/use-vault";
+import { usePlatform } from "@desktop/hooks/queries/use-platform";
+import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
 import { useBackup } from "@desktop/hooks/use-backup";
+import { useDirectoryId } from "@desktop/hooks/use-directory-id";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { getBackupDisplayName } from "@desktop/lib/backup";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeftIcon, FilePlusIcon } from "lucide-react";
-import { useRef } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CloudDownloadIcon, FilePlusIcon, FolderOpenIcon } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { z } from "zod";
 
 type BreadcrumbSearchParams = {
   path?: { objectId: string; name: string }[];
+};
+
+type DirectoryTableSelection = {
+  items: DirectoryTableItem[];
+  allSelected: boolean;
 };
 
 export const Route = createFileRoute(
@@ -43,40 +55,40 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
   const scrollParent = useRef<HTMLDivElement>(null);
+  const [selection, setSelection] = useState<DirectoryTableSelection>({
+    items: [],
+    allSelected: false,
+  });
 
   const { t } = useAppTranslation("directory");
   const { path } = Route.useSearch();
+  const { directoryId } = useDirectoryId();
 
-  const { data: vault } = useVault();
   const { data: folder } = useFolder();
   const { data: backup } = useBackup();
   const { data: directory } = useDirectory();
+  const { data: platform } = usePlatform();
+  const { openRestoreDirectory } = useRestoreDirectoryDialog();
+  const { mutate: startMount, isPending: isStartMountPending } =
+    useStartMount();
+  const { mutate: startRestore, isPending: isStartingRestore } =
+    useStartRestore();
+
+  const updateSelection = useCallback((selection: DirectoryTableSelection) => {
+    setSelection(selection);
+  }, []);
+
+  const selectedItemCount = selection.items.length;
 
   return (
     <div
       ref={scrollParent}
       className="flex h-full w-full flex-col overflow-hidden p-6"
     >
-      <div className="mb-6 flex h-9 w-full items-center justify-between gap-4">
+      <div className="mb-6 flex h-10 w-full items-center justify-between gap-4">
         <Breadcrumb className="w-full min-w-0 overflow-x-auto">
           <BreadcrumbList className="flex flex-nowrap whitespace-nowrap">
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                className="text-base"
-                render={
-                  vault ? (
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
-                      {vault.name}
-                    </Link>
-                  ) : (
-                    <Skeleton width={100} />
-                  )
-                }
-              />
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="[&>svg]:size-4" />
             {!folder || !backup ? (
               <>
                 <BreadcrumbItem>
@@ -163,29 +175,54 @@ function RouteComponent() {
         </Breadcrumb>
         <div className="flex shrink-0 items-center gap-x-2">
           <Button
-            onClick={() => {
-              if (path?.length)
-                navigate({
-                  to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
-                  params: (params) => ({
-                    ...params,
-                    directoryId:
-                      path[path.length - 2]?.objectId || backup?.rootID,
-                  }),
-                  search: {
-                    path: path.slice(0, path.length - 1),
-                  },
-                });
-              else
-                navigate({
-                  to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
-                });
-            }}
-            size="sm"
-            variant="outline"
+            onClick={() => startMount()}
+            loading={isStartMountPending}
+            variant="secondary"
           >
-            <ArrowLeftIcon />
-            {t("back")}
+            <FolderOpenIcon />
+            {t(
+              `table.mount.open.${
+                platform === "windows"
+                  ? "windows"
+                  : platform === "macos"
+                    ? "macos"
+                    : "other"
+              }`,
+            )}
+          </Button>
+          <Button
+            onClick={() => {
+              if (selection.items.length === 0 || selection.allSelected) {
+                openRestoreDirectory({
+                  directoryId: directoryId || "",
+                  path,
+                  folder,
+                  backup,
+                });
+                return;
+              }
+
+              if (selection.items.length === 1 && selection.items[0]) {
+                startRestore({
+                  variant: "single",
+                  item: selection.items[0],
+                });
+                return;
+              }
+
+              startRestore({
+                variant: "multiple",
+                items: selection.items,
+              });
+            }}
+            loading={isStartingRestore}
+          >
+            <CloudDownloadIcon />
+            {selectedItemCount > 0
+              ? t("table.restore.selected", {
+                  count: selectedItemCount,
+                })
+              : t("table.restore.folder")}
           </Button>
         </div>
       </div>
@@ -206,7 +243,7 @@ function RouteComponent() {
                 ? directory
                 : new Array(5).fill({ name: "", skeleton: true, size: 0 })
             }
-            path={path}
+            onSelectionChange={updateSelection}
           />
         )}
       </div>

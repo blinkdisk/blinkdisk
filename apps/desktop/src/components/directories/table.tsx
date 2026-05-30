@@ -1,5 +1,4 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
 import { Input } from "@blinkdisk/ui/input";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
@@ -15,14 +14,7 @@ import { DirectoryMount } from "@desktop/components/directories/mount";
 import { DirectoryNameCell } from "@desktop/components/directories/name";
 import { DirectoryItemRow } from "@desktop/components/directories/row";
 import { Empty } from "@desktop/components/empty";
-import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
-import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import type { DirectoryItem as DirectoryItemType } from "@desktop/hooks/queries/core/use-directory";
-import { usePlatform } from "@desktop/hooks/queries/use-platform";
-import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
-import { useBackup } from "@desktop/hooks/use-backup";
-import { useDirectoryId } from "@desktop/hooks/use-directory-id";
-import { useFolder } from "@desktop/hooks/use-folder";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { formatSize } from "@desktop/lib/number";
 import {
@@ -41,12 +33,10 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  CloudDownloadIcon,
   FileSearchIcon,
-  FolderOpenIcon,
   SearchIcon,
 } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export type Item = DirectoryItemType & {
   skeleton?: boolean;
@@ -56,22 +46,20 @@ const columnHelper = createColumnHelper<Item>();
 
 type DirectoryTableProps = {
   items: Item[] | undefined | null;
-  path?: { objectId: string; name: string }[];
+  onSelectionChange?: (selection: {
+    items: Item[];
+    allSelected: boolean;
+  }) => void;
 };
 
-export function DirectoryTable({ items, path }: DirectoryTableProps) {
+export function DirectoryTable({
+  items,
+  onSelectionChange,
+}: DirectoryTableProps) {
   "use no memo";
 
   const { t } = useAppTranslation("directory.table");
   const { dark } = useTheme();
-  const { directoryId } = useDirectoryId();
-  const { data: platform } = usePlatform();
-  const { data: folder } = useFolder();
-  const { data: backup } = useBackup();
-
-  const { openRestoreDirectory } = useRestoreDirectoryDialog();
-  const { mutate: startMount, isPending: isStartMountPending } =
-    useStartMount();
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selection, setSelection] = useState({});
@@ -176,8 +164,12 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
       .filter(Boolean) as Item[];
   }, [selection, items]);
 
-  const { mutate: startRestore, isPending: isStartingRestore } =
-    useStartRestore();
+  useEffect(() => {
+    onSelectionChange?.({
+      items: selectedFiles,
+      allSelected: selectedFiles.length === items?.length,
+    });
+  }, [items?.length, onSelectionChange, selectedFiles]);
 
   return (
     <>
@@ -199,66 +191,6 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
         ) : (
           <Skeleton width="20rem" height="2.5rem" />
         )}
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => startMount()}
-            loading={isStartMountPending}
-            variant="secondary"
-          >
-            <FolderOpenIcon />
-            {t(
-              `mount.open.${
-                platform === "windows"
-                  ? "windows"
-                  : platform === "macos"
-                    ? "macos"
-                    : "other"
-              }`,
-            )}
-          </Button>
-          {Object.keys(selection).length > 0 ? (
-            <Button
-              onClick={() =>
-                selectedFiles.length === items?.length
-                  ? openRestoreDirectory({
-                      directoryId: directoryId || "",
-                      path,
-                      folder,
-                      backup,
-                    })
-                  : selectedFiles.length === 1 && selectedFiles[0]
-                    ? startRestore({
-                        variant: "single",
-                        item: selectedFiles[0],
-                      })
-                    : startRestore({
-                        variant: "multiple",
-                        items: selectedFiles,
-                      })
-              }
-              loading={isStartingRestore}
-            >
-              <CloudDownloadIcon />
-              {t("restore.selected", {
-                count: Object.keys(selection).length,
-              })}
-            </Button>
-          ) : (
-            <Button
-              onClick={() =>
-                openRestoreDirectory({
-                  directoryId: directoryId || "",
-                  path,
-                  folder,
-                  backup,
-                })
-              }
-            >
-              <CloudDownloadIcon />
-              {t("restore.folder")}
-            </Button>
-          )}
-        </div>
       </div>
       <DirectoryMount />
       {table.getColumn("name")?.getFilterValue() && rows.length === 0 ? (
