@@ -1,14 +1,19 @@
 {
-  "back": "Go back",
   "table": {
     "name": "Name",
     "size": "Size",
     "modified": "Last modified",
+    "mode": "Mode",
+    "uid": "UID",
+    "gid": "GID",
     "symlink": {
       "tooltip": "Symbolic link"
     },
     "search": {
       "placeholder": "Search for files or folders..."
+    },
+    "columns": {
+      "button": "Columns"
     },
     "empty": {
       "title": "Empty folder",

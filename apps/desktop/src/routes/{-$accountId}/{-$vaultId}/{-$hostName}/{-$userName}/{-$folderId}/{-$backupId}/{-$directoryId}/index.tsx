@@ -1,19 +1,29 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
-import { DirectoryTable } from "@desktop/components/directories/table";
+import { BackupPreview } from "@desktop/components/backups/preview";
+import {
+  DirectoryTable,
+  type Item as DirectoryTableItem,
+} from "@desktop/components/directories/table";
 import { Empty } from "@desktop/components/empty";
-import type { BreadcrumbSearchParams } from "@desktop/components/vaults/breadcrumb";
 import { VaultRestores } from "@desktop/components/vaults/restores";
-import { VaultTitlebar } from "@desktop/components/vaults/titlebar";
+import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import { useDirectory } from "@desktop/hooks/queries/core/use-directory";
-import { useVault } from "@desktop/hooks/queries/use-vault";
+import { usePlatform } from "@desktop/hooks/queries/use-platform";
+import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
 import { useBackup } from "@desktop/hooks/use-backup";
+import { useDirectoryId } from "@desktop/hooks/use-directory-id";
 import { useFolder } from "@desktop/hooks/use-folder";
-import { getBackupDisplayName } from "@desktop/lib/backup";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeftIcon, FilePlusIcon } from "lucide-react";
-import { useRef } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { CloudDownloadIcon, FilePlusIcon, FolderOpenIcon } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { z } from "zod";
+
+type DirectoryTableSelection = {
+  items: DirectoryTableItem[];
+  allSelected: boolean;
+};
 
 export const Route = createFileRoute(
   "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}/",
@@ -31,91 +41,96 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
   const scrollParent = useRef<HTMLDivElement>(null);
+  const [selection, setSelection] = useState<DirectoryTableSelection>({
+    items: [],
+    allSelected: false,
+  });
 
   const { t } = useAppTranslation("directory");
   const { path } = Route.useSearch();
+  const { directoryId } = useDirectoryId();
 
-  const { data: vault } = useVault();
   const { data: folder } = useFolder();
   const { data: backup } = useBackup();
   const { data: directory } = useDirectory();
+  const { data: platform } = usePlatform();
+  const { openRestoreDirectory } = useRestoreDirectoryDialog();
+  const { mutate: startMount, isPending: isStartMountPending } =
+    useStartMount();
+  const { mutate: startRestore, isPending: isStartingRestore } =
+    useStartRestore();
+
+  const updateSelection = useCallback((selection: DirectoryTableSelection) => {
+    setSelection(selection);
+  }, []);
+
+  const selectedItemCount = selection.items.length;
 
   return (
     <div
       ref={scrollParent}
       className="flex h-full w-full flex-col overflow-hidden p-6"
     >
-      <VaultTitlebar
-        vault={vault}
-        breadcrumbs={
-          !folder || !backup
-            ? [undefined, undefined]
-            : [
-                {
-                  id: "folder",
-                  text: folder.name || "",
-                  href: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
-                },
-                {
-                  id: "backup",
-                  text: getBackupDisplayName(backup),
-                  href: !path?.length
-                    ? undefined
-                    : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
-                  params: (params) => ({
-                    ...params,
-                    directoryId: backup.rootID,
-                  }),
-                },
-                ...(path
-                  ? path.map(({ objectId, name }, index) => ({
-                      id: objectId,
-                      text: name,
-                      href:
-                        index === path.length - 1
-                          ? undefined
-                          : "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
-                      params: (params: Record<string, string>) => ({
-                        ...params,
-                        directoryId: objectId,
-                      }),
-                      search: (search: BreadcrumbSearchParams) => ({
-                        ...search,
-                        path: search.path?.slice(0, index + 1),
-                      }),
-                    }))
-                  : []),
-              ]
-        }
-      >
-        <Button
-          onClick={() => {
-            if (path?.length)
-              navigate({
-                to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
-                params: (params) => ({
-                  ...params,
-                  directoryId:
-                    path[path.length - 2]?.objectId || backup?.rootID,
-                }),
-                search: {
-                  path: path.slice(0, path.length - 1),
-                },
+      <div className="mb-6 flex h-10 w-full items-center justify-between gap-4">
+        {backup && folder ? (
+          <BackupPreview backup={backup} folder={folder} />
+        ) : (
+          <div />
+        )}
+        <div className="flex shrink-0 items-center gap-x-2">
+          <Button
+            onClick={() => startMount()}
+            loading={isStartMountPending}
+            variant="secondary"
+          >
+            <FolderOpenIcon />
+            {t(
+              `table.mount.open.${
+                platform === "windows"
+                  ? "windows"
+                  : platform === "macos"
+                    ? "macos"
+                    : "other"
+              }`,
+            )}
+          </Button>
+          <Button
+            onClick={() => {
+              if (selection.items.length === 0 || selection.allSelected) {
+                openRestoreDirectory({
+                  directoryId: directoryId || "",
+                  path,
+                  folder,
+                  backup,
+                });
+                return;
+              }
+
+              if (selection.items.length === 1 && selection.items[0]) {
+                startRestore({
+                  variant: "single",
+                  item: selection.items[0],
+                });
+                return;
+              }
+
+              startRestore({
+                variant: "multiple",
+                items: selection.items,
               });
-            else
-              navigate({
-                to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
-              });
-          }}
-          size="sm"
-          variant="outline"
-        >
-          <ArrowLeftIcon />
-          {t("back")}
-        </Button>
-      </VaultTitlebar>
+            }}
+            loading={isStartingRestore}
+          >
+            <CloudDownloadIcon />
+            {selectedItemCount > 0
+              ? t("table.restore.selected", {
+                  count: selectedItemCount,
+                })
+              : t("table.restore.folder")}
+          </Button>
+        </div>
+      </div>
       <div className="flex h-[calc(100vh-8.9rem)] w-full flex-col">
         <VaultRestores />
         {directory !== null &&
@@ -133,7 +148,7 @@ function RouteComponent() {
                 ? directory
                 : new Array(5).fill({ name: "", skeleton: true, size: 0 })
             }
-            path={path}
+            onSelectionChange={updateSelection}
           />
         )}
       </div>

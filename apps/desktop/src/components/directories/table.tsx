@@ -1,6 +1,13 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuTrigger,
+} from "@blinkdisk/ui/dropdown-menu";
 import { Input } from "@blinkdisk/ui/input";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import {
@@ -11,18 +18,15 @@ import {
   TableRow,
 } from "@blinkdisk/ui/table";
 import { cn } from "@blinkdisk/utils/class";
+import {
+  DirectoryBreadcrumb,
+  useDirectoryBreadcrumbPath,
+} from "@desktop/components/directories/breadcrumb";
 import { DirectoryMount } from "@desktop/components/directories/mount";
 import { DirectoryNameCell } from "@desktop/components/directories/name";
 import { DirectoryItemRow } from "@desktop/components/directories/row";
 import { Empty } from "@desktop/components/empty";
-import { useStartMount } from "@desktop/hooks/mutations/core/use-start-mount";
-import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import type { DirectoryItem as DirectoryItemType } from "@desktop/hooks/queries/core/use-directory";
-import { usePlatform } from "@desktop/hooks/queries/use-platform";
-import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
-import { useBackup } from "@desktop/hooks/use-backup";
-import { useDirectoryId } from "@desktop/hooks/use-directory-id";
-import { useFolder } from "@desktop/hooks/use-folder";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { formatSize } from "@desktop/lib/number";
 import {
@@ -36,17 +40,17 @@ import {
   type SortingState,
   type Table as TableType,
   useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  CloudDownloadIcon,
+  ChevronDownIcon,
   FileSearchIcon,
-  FolderOpenIcon,
   SearchIcon,
 } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export type Item = DirectoryItemType & {
   skeleton?: boolean;
@@ -56,26 +60,31 @@ const columnHelper = createColumnHelper<Item>();
 
 type DirectoryTableProps = {
   items: Item[] | undefined | null;
-  path?: { objectId: string; name: string }[];
+  onSelectionChange?: (selection: {
+    items: Item[];
+    allSelected: boolean;
+  }) => void;
 };
 
-export function DirectoryTable({ items, path }: DirectoryTableProps) {
+export function DirectoryTable({
+  items,
+  onSelectionChange,
+}: DirectoryTableProps) {
   "use no memo";
 
   const { t } = useAppTranslation("directory.table");
   const { dark } = useTheme();
-  const { directoryId } = useDirectoryId();
-  const { data: platform } = usePlatform();
-  const { data: folder } = useFolder();
-  const { data: backup } = useBackup();
-
-  const { openRestoreDirectory } = useRestoreDirectoryDialog();
-  const { mutate: startMount, isPending: isStartMountPending } =
-    useStartMount();
+  const breadcrumbPath = useDirectoryBreadcrumbPath();
+  const hasBreadcrumb = !!breadcrumbPath?.length;
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selection, setSelection] = useState({});
   const [filters, setFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    mode: false,
+    uid: false,
+    gid: false,
+  });
 
   const parent = useRef<HTMLTableElement>(null);
 
@@ -117,6 +126,7 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
         cell: (info) => <DirectoryNameCell info={info} dark={dark} />,
       }),
       columnHelper.accessor("stats.size", {
+        id: "size",
         header: () => t("size"),
         cell: (info) =>
           info.row.original?.skeleton ? (
@@ -127,6 +137,7 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
         size: 120,
       }),
       columnHelper.accessor("modifiedAt", {
+        id: "modified",
         header: () => t("modified"),
         cell: (info) =>
           info.row.original?.skeleton ? (
@@ -138,6 +149,39 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
             })
           ),
         size: 150,
+      }),
+      columnHelper.accessor("meta.mode", {
+        id: "mode",
+        header: () => t("mode"),
+        cell: (info) =>
+          info.row.original?.skeleton ? (
+            <Skeleton width={70} />
+          ) : (
+            info.getValue()
+          ),
+        size: 100,
+      }),
+      columnHelper.accessor("meta.uid", {
+        id: "uid",
+        header: () => t("uid"),
+        cell: (info) =>
+          info.row.original?.skeleton ? (
+            <Skeleton width={50} />
+          ) : (
+            info.getValue()
+          ),
+        size: 80,
+      }),
+      columnHelper.accessor("meta.gid", {
+        id: "gid",
+        header: () => t("gid"),
+        cell: (info) =>
+          info.row.original?.skeleton ? (
+            <Skeleton width={50} />
+          ) : (
+            info.getValue()
+          ),
+        size: 80,
       }),
     ];
   }, [t, dark]);
@@ -151,11 +195,13 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
     onSortingChange: setSorting,
     onRowSelectionChange: setSelection,
     onColumnFiltersChange: setFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     getRowId: (row) => row.id,
     state: {
       sorting,
       rowSelection: selection,
       columnFilters: filters,
+      columnVisibility,
     },
   });
 
@@ -176,90 +222,80 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
       .filter(Boolean) as Item[];
   }, [selection, items]);
 
-  const { mutate: startRestore, isPending: isStartingRestore } =
-    useStartRestore();
+  const columnLabels = useMemo<Record<string, string>>(
+    () => ({
+      name: t("name"),
+      size: t("size"),
+      modified: t("modified"),
+      mode: t("mode"),
+      uid: t("uid"),
+      gid: t("gid"),
+    }),
+    [t],
+  );
+
+  useEffect(() => {
+    onSelectionChange?.({
+      items: selectedFiles,
+      allSelected: selectedFiles.length === items?.length,
+    });
+  }, [items?.length, onSelectionChange, selectedFiles]);
 
   return (
     <>
       <div className="flex items-center justify-between gap-4">
         {items !== null && items !== undefined && !items[0]?.skeleton ? (
-          <div className="relative">
-            <SearchIcon className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
-            <Input
-              placeholder={t("search.placeholder")}
-              className="pl-9"
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(e) =>
-                table.getColumn("name")?.setFilterValue(e.target.value)
-              }
-            />
-          </div>
+          <>
+            <div className="relative">
+              <SearchIcon className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+              <Input
+                placeholder={t("search.placeholder")}
+                className="h-10 pl-9"
+                value={
+                  (table.getColumn("name")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(e) =>
+                  table.getColumn("name")?.setFilterValue(e.target.value)
+                }
+              />
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="secondary" className="h-10 min-w-28 px-3">
+                    {t("columns.button")}
+                    <ChevronDownIcon className="ml-auto" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuGroup>
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {columnLabels[column.id] ?? column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         ) : (
-          <Skeleton width="20rem" height="2.5rem" />
+          <>
+            <Skeleton width="20rem" height="2.5rem" />
+            <Skeleton width="7rem" height="2.5rem" />
+          </>
         )}
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => startMount()}
-            loading={isStartMountPending}
-            variant="secondary"
-          >
-            <FolderOpenIcon />
-            {t(
-              `mount.open.${
-                platform === "windows"
-                  ? "windows"
-                  : platform === "macos"
-                    ? "macos"
-                    : "other"
-              }`,
-            )}
-          </Button>
-          {Object.keys(selection).length > 0 ? (
-            <Button
-              onClick={() =>
-                selectedFiles.length === items?.length
-                  ? openRestoreDirectory({
-                      directoryId: directoryId || "",
-                      path,
-                      folder,
-                      backup,
-                    })
-                  : selectedFiles.length === 1 && selectedFiles[0]
-                    ? startRestore({
-                        variant: "single",
-                        item: selectedFiles[0],
-                      })
-                    : startRestore({
-                        variant: "multiple",
-                        items: selectedFiles,
-                      })
-              }
-              loading={isStartingRestore}
-            >
-              <CloudDownloadIcon />
-              {t("restore.selected", {
-                count: Object.keys(selection).length,
-              })}
-            </Button>
-          ) : (
-            <Button
-              onClick={() =>
-                openRestoreDirectory({
-                  directoryId: directoryId || "",
-                  path,
-                  folder,
-                  backup,
-                })
-              }
-            >
-              <CloudDownloadIcon />
-              {t("restore.folder")}
-            </Button>
-          )}
-        </div>
       </div>
+      <DirectoryBreadcrumb />
       <DirectoryMount />
       {table.getColumn("name")?.getFilterValue() && rows.length === 0 ? (
         <Empty
@@ -272,7 +308,8 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
           ref={parent}
           className="h-full w-full"
           containerClassName={cn(
-            "h-full w-full mt-6",
+            "h-full w-full",
+            hasBreadcrumb ? "mt-4" : "mt-6",
             items?.[0]?.skeleton ? "overflow-y-hidden" : "overflow-y-auto",
           )}
         >
@@ -318,7 +355,7 @@ export function DirectoryTable({ items, path }: DirectoryTableProps) {
             ))}
           </TableHeader>
           <TableBody
-            key={JSON.stringify(selection)}
+            key={JSON.stringify({ columnVisibility, selection })}
             style={{
               height: `${virtualizer.getTotalSize()}px`,
             }}
