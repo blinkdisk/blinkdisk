@@ -1,6 +1,6 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
-import { AccountDashboard } from "@desktop/components/accounts/dashboard";
+import { AccountHome } from "@desktop/components/accounts/home";
 import { Empty } from "@desktop/components/empty";
 import { useSync } from "@desktop/hooks/mutations/use-sync";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
@@ -61,5 +61,5 @@ function RouteComponent() {
       </Empty>
     );
 
-  return <AccountDashboard />;
+  return <AccountHome />;
 }

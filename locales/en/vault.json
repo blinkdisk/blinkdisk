@@ -5,7 +5,7 @@
     "refresh": "Reload vaults",
     "add": "Add vault"
   },
-  "dashboard": {
+  "home": {
     "title": "Vaults",
     "createVault": "Create vault",
     "count_one": "{{count}} vault found",

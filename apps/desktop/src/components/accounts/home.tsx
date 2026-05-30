@@ -9,8 +9,8 @@ import { PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useCallback } from "react";
 import { VaultCard } from "../vaults/card";
 
-export function AccountDashboard() {
-  const { t } = useAppTranslation("vault.dashboard");
+export function AccountHome() {
+  const { t } = useAppTranslation("vault.home");
   const { isOnlineAccount } = useAccountId();
   const { openCreateVault } = useCreateVaultDialog();
   const { mutate: sync, isPending: isSyncing } = useSync();
