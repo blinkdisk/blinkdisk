@@ -17,6 +17,7 @@ export function StorageCard({ isLoading }: StorageCardProps) {
 
   const storagePercentage = useMemo(() => {
     if (!space) return null;
+    if (space.capacity === 0) return 1;
     return Math.min(space.used / space.capacity, 1);
   }, [space]);
 
