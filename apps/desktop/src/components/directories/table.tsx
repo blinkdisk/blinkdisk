@@ -289,7 +289,10 @@ export function DirectoryTable({
             </DropdownMenu>
           </>
         ) : (
-          <Skeleton width="20rem" height="2.5rem" />
+          <>
+            <Skeleton width="20rem" height="2.5rem" />
+            <Skeleton width="7rem" height="2.5rem" />
+          </>
         )}
       </div>
       <DirectoryBreadcrumb />
