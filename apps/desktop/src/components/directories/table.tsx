@@ -262,7 +262,7 @@ export function DirectoryTable({
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
-                  <Button variant="outline" className="h-10 min-w-28 px-3">
+                  <Button variant="secondary" className="h-10 min-w-28 px-3">
                     {t("columns.button")}
                     <ChevronDownIcon className="ml-auto" />
                   </Button>
