@@ -1,5 +1,6 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
+import { BackupPreview } from "@desktop/components/backups/preview";
 import {
   DirectoryTable,
   type Item as DirectoryTableItem,
@@ -71,7 +72,12 @@ function RouteComponent() {
       ref={scrollParent}
       className="flex h-full w-full flex-col overflow-hidden p-6"
     >
-      <div className="mb-6 flex h-10 w-full items-center justify-end gap-4">
+      <div className="mb-6 flex h-10 w-full items-center justify-between gap-4">
+        {backup && folder ? (
+          <BackupPreview backup={backup} folder={folder} />
+        ) : (
+          <div />
+        )}
         <div className="flex shrink-0 items-center gap-x-2">
           <Button
             onClick={() => startMount()}
