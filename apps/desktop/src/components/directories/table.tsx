@@ -1,5 +1,13 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuTrigger,
+} from "@blinkdisk/ui/dropdown-menu";
 import { Input } from "@blinkdisk/ui/input";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import {
@@ -32,11 +40,13 @@ import {
   type SortingState,
   type Table as TableType,
   useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  ChevronDownIcon,
   FileSearchIcon,
   SearchIcon,
 } from "lucide-react";
@@ -70,6 +80,7 @@ export function DirectoryTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selection, setSelection] = useState({});
   const [filters, setFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const parent = useRef<HTMLTableElement>(null);
 
@@ -111,6 +122,7 @@ export function DirectoryTable({
         cell: (info) => <DirectoryNameCell info={info} dark={dark} />,
       }),
       columnHelper.accessor("stats.size", {
+        id: "size",
         header: () => t("size"),
         cell: (info) =>
           info.row.original?.skeleton ? (
@@ -121,6 +133,7 @@ export function DirectoryTable({
         size: 120,
       }),
       columnHelper.accessor("modifiedAt", {
+        id: "modified",
         header: () => t("modified"),
         cell: (info) =>
           info.row.original?.skeleton ? (
@@ -145,11 +158,13 @@ export function DirectoryTable({
     onSortingChange: setSorting,
     onRowSelectionChange: setSelection,
     onColumnFiltersChange: setFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     getRowId: (row) => row.id,
     state: {
       sorting,
       rowSelection: selection,
       columnFilters: filters,
+      columnVisibility,
     },
   });
 
@@ -170,6 +185,15 @@ export function DirectoryTable({
       .filter(Boolean) as Item[];
   }, [selection, items]);
 
+  const columnLabels = useMemo<Record<string, string>>(
+    () => ({
+      name: t("name"),
+      size: t("size"),
+      modified: t("modified"),
+    }),
+    [t],
+  );
+
   useEffect(() => {
     onSelectionChange?.({
       items: selectedFiles,
@@ -181,19 +205,49 @@ export function DirectoryTable({
     <>
       <div className="flex items-center justify-between gap-4">
         {items !== null && items !== undefined && !items[0]?.skeleton ? (
-          <div className="relative">
-            <SearchIcon className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
-            <Input
-              placeholder={t("search.placeholder")}
-              className="pl-9"
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(e) =>
-                table.getColumn("name")?.setFilterValue(e.target.value)
-              }
-            />
-          </div>
+          <>
+            <div className="relative">
+              <SearchIcon className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+              <Input
+                placeholder={t("search.placeholder")}
+                className="h-10 pl-9"
+                value={
+                  (table.getColumn("name")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(e) =>
+                  table.getColumn("name")?.setFilterValue(e.target.value)
+                }
+              />
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="outline" className="h-10 min-w-28 px-3">
+                    {t("columns.button")}
+                    <ChevronDownIcon className="ml-auto" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuGroup>
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {columnLabels[column.id] ?? column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         ) : (
           <Skeleton width="20rem" height="2.5rem" />
         )}
@@ -258,7 +312,7 @@ export function DirectoryTable({
             ))}
           </TableHeader>
           <TableBody
-            key={JSON.stringify(selection)}
+            key={JSON.stringify({ columnVisibility, selection })}
             style={{
               height: `${virtualizer.getTotalSize()}px`,
             }}

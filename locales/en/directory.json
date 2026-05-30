@@ -9,6 +9,9 @@
     "search": {
       "placeholder": "Search for files or folders..."
     },
+    "columns": {
+      "button": "Columns"
+    },
     "empty": {
       "title": "Empty folder",
       "description": "This folder was empty at the time the backup was created. Add the missing files to the folder and create a new backup."
