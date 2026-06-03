@@ -356,6 +356,14 @@
         "description": "You haven't added any folders yet. Add one by pressing the button below."
       }
     },
+    "stats": {
+      "totalSize": "Total size",
+      "totalSizeDescription": "Across all latest snapshots",
+      "files": "Files",
+      "filesDescription": "Tracked in latest snapshots",
+      "devices": "Devices",
+      "devicesDescription": "Unique hosts in this vault"
+    },
     "score": {
       "category": "Excellent",
       "description": "Your backup setup is configured correctly."
