@@ -7,6 +7,13 @@ const ZKey = z
     "Path must not include directory traversal patterns",
   );
 
+const ZListPrefix = z
+  .string()
+  .regex(
+    /^(?!.*(?:\.\.\/|\.\.\\)).*$/,
+    "Path must not include directory traversal patterns",
+  );
+
 export const ZCloudBase = z.object({
   requestId: z.string(),
 });
@@ -34,8 +41,8 @@ export const ZCloudDeleteBlob = ZCloudBase.extend(
 
 export const ZCloudListBlobs = ZCloudBase.extend(
   z.object({
-    prefix: ZKey,
-    marker: ZKey.optional(),
+    prefix: ZListPrefix.optional(),
+    marker: ZListPrefix.optional(),
   }).shape,
 );
 

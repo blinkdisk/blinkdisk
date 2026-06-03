@@ -18,7 +18,7 @@ export async function listBlobs(
   const res = await durableObject.s3.send(
     new ListObjectsCommand({
       Bucket: durableObject.bucket,
-      Prefix: `${durableObject.id}/${payload.prefix}`,
+      Prefix: `${durableObject.id}/${payload.prefix || ""}`,
       MaxKeys: 1000,
       ...(payload.marker && { Marker: payload.marker }),
     }),
