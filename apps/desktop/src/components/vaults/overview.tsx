@@ -48,8 +48,6 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
   const stats = useMemo(() => {
     if (!allFolders) return null;
 
-    console.log(allFolders);
-
     return {
       totalSize: allFolders.reduce(
         (sum, folder) => sum + (folder.lastSnapshot?.stats.totalSize || 0),
@@ -80,7 +78,6 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
           description={t("stats.totalSizeDescription")}
           value={stats ? formatSize(stats.totalSize) : undefined}
           isLoading={!vault || !stats}
-          accent="cyan"
         />
         <VaultStatCard
           icon={<FilesIcon />}
@@ -88,7 +85,6 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
           description={t("stats.filesDescription")}
           value={stats ? formatInt(stats.fileCount) : undefined}
           isLoading={!vault || !stats}
-          accent="emerald"
         />
         <VaultStatCard
           icon={<MonitorIcon />}
@@ -96,7 +92,6 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
           description={t("stats.devicesDescription")}
           value={stats ? formatInt(stats.deviceCount) : undefined}
           isLoading={!vault || !stats}
-          accent="amber"
         />
       </div>
       <div className="mt-8 flex items-center justify-between">
