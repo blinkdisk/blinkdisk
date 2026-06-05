@@ -1,4 +1,5 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
+import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useMoveVaultsDialog } from "@desktop/hooks/state/use-move-vaults-dialog";
 import { useAuth } from "@desktop/hooks/use-auth";
 import { getVaultCollection } from "@desktop/lib/db";
@@ -6,12 +7,15 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect } from "react";
 
 export function AuthListener() {
+  const { setIsOpen: setAuthDialogIsOpen } = useAuthDialog();
   const { openMoveVaultsDialog } = useMoveVaultsDialog();
   const { setAuthenticated, accountChanged } = useAuth();
   const navigate = useNavigate();
 
   const onAccountAdd = useCallback(
     async ({ accountId }: { accountId: string }) => {
+      setAuthDialogIsOpen(false);
+
       await setAuthenticated(true);
       await navigate({ to: "/{-$accountId}/loading" });
 
@@ -30,7 +34,13 @@ export function AuthListener() {
         });
       }
     },
-    [setAuthenticated, accountChanged, navigate, openMoveVaultsDialog],
+    [
+      setAuthDialogIsOpen,
+      setAuthenticated,
+      accountChanged,
+      navigate,
+      openMoveVaultsDialog,
+    ],
   );
 
   useEffect(() => {
