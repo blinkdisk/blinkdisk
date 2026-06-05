@@ -1,5 +1,5 @@
 ---
-import EmojiCard from "@marketing/components/EmojiCard.astro";
+import FolderCard from "@marketing/components/FolderCard.astro";
 
 type Props = {
   folder: {
@@ -14,7 +14,7 @@ const { folder } = Astro.props;
 ---
 
 <div class="flex items-center gap-3">
-  <EmojiCard emoji={folder.emoji} size="sm" />
+  <FolderCard emoji={folder.emoji} size="sm" />
   <div class="flex flex-col">
     <p class="whitespace-nowrap text-base font-semibold">{folder.name}</p>
     <p class="text-muted-foreground text-xs">

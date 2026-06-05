@@ -3,7 +3,7 @@ import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
 import { parse } from "twemoji-parser";
 
-export type EmojiCardProps = {
+export type FolderCardProps = {
   emoji: string | undefined;
   size?: "lg" | "md" | "sm";
   theme?: "light" | "dark";
@@ -12,12 +12,12 @@ export type EmojiCardProps = {
 
 const defaultColor = "0deg 0% 39%";
 
-export function EmojiCard({
+export function FolderCard({
   emoji = "📁",
   className,
   theme,
   size = "md",
-}: EmojiCardProps) {
+}: FolderCardProps) {
   const { color, emojiUrl } = useMemo(() => {
     const parsed = parse(emoji);
     const url = parsed[0]?.url;

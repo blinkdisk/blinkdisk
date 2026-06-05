@@ -1,4 +1,4 @@
-import { EmojiCard } from "@blinkdisk/components/emoji-card";
+import { FolderCard } from "@blinkdisk/components/folder-card";
 import type { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
 import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useTheme } from "@desktop/hooks/use-theme";
@@ -14,7 +14,7 @@ export function BackupPreview({ backup, folder }: BackupPreviewProps) {
 
   return (
     <div className="flex w-full min-w-0 items-center gap-4">
-      <EmojiCard
+      <FolderCard
         emoji={folder.emoji}
         size="md"
         theme={dark ? "dark" : "light"}

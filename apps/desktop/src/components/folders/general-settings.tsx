@@ -1,5 +1,5 @@
 import { DynamicField } from "@blinkdisk/components/dynamic-field";
-import { EmojiCard } from "@blinkdisk/components/emoji-card";
+import { FolderCard } from "@blinkdisk/components/folder-card";
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
@@ -44,7 +44,7 @@ export function FolderGeneralSettings() {
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
               <button disabled={disabledContext} type="button">
-                <EmojiCard emoji={values.emoji} size="lg" />
+                <FolderCard emoji={values.emoji} size="lg" />
               </button>
             </EmojiPicker>
             <EmojiPicker
