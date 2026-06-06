@@ -16,7 +16,7 @@ export function BackupPreview({ backup, folder }: BackupPreviewProps) {
     <div className="flex w-full min-w-0 items-center gap-4">
       <FolderCard
         emoji={folder.emoji}
-        size={5}
+        size={2.8}
         theme={dark ? "dark" : "light"}
       />
       <div className="flex w-full flex-col">
