@@ -44,7 +44,7 @@ export function FolderGeneralSettings() {
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
               <button disabled={disabledContext} type="button">
-                <FolderCard emoji={values.emoji} size="lg" />
+                <FolderCard emoji={values.emoji} size={5} />
               </button>
             </EmojiPicker>
             <EmojiPicker
