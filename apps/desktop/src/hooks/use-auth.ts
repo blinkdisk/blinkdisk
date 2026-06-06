@@ -49,9 +49,11 @@ export function useAuth() {
         }),
       ]);
 
-      const hasActiveVaults = getVaultCollection(accountId)
-        .find({ status: "ACTIVE" })
-        .fetch().length;
+      const vaultCollection = getVaultCollection(accountId);
+      await vaultCollection.isReady();
+
+      const hasActiveVaults = vaultCollection.find({ status: "ACTIVE" }).fetch()
+        .length;
 
       if (!local && !hasActiveVaults) {
         openCreateVault({
