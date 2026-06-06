@@ -33,7 +33,10 @@ export function FolderCard({
   }, [emoji, theme]);
 
   return (
-    <div style={{ width: `${size}rem` }} className={cn("rounded-md relative")}>
+    <div
+      style={{ width: `${size}rem` }}
+      className={cn("rounded-md relative", className)}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="64"
@@ -46,11 +49,11 @@ export function FolderCard({
         <path
           xmlns="http://www.w3.org/2000/svg"
           d="M61 19.5V49.3923C61 51.9404 59.9817 54.3842 58.169 56.186C56.3564 57.9878 53.8979 59 51.3344 59H12.6656C10.1021 59 7.64365 57.9878 5.831 56.186C4.01834 54.3842 3 51.9404 3 49.3923V14.6077C3 12.0596 4.01834 9.61582 5.831 7.81403C7.64365 6.01224 10.1021 5 12.6656 5L22.3344 5C23.9293 4.99926 25.4998 5.27735 26.9056 5.80947C28.3115 6.3416 29.5091 7.11122 30.3917 8.04972L33.1286 10.9865C33.6305 11.5117 34.3071 11.9418 35.0992 12.2391C35.8912 12.5365 36.7745 12.6919 37.6715 12.6918H51.3344C53.8927 12.6924 56.3465 13.4093 58.1581 14.6853C59.9698 15.9614 60.9917 17.6927 61 19.5Z"
-          fill={`hsl(${color} / 0.15)`}
-          stroke={`hsl(${color} / 0.1)`}
-          stroke-width="5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          fill={`color-mix(in srgb, hsl(${color}) 18%, var(--background))`}
+          stroke={`color-mix(in srgb, hsl(${color}) 30%, var(--background))`}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
       {emojiUrl ? (
