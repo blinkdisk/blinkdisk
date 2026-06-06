@@ -34,7 +34,7 @@ export function FolderCard({
 
   return (
     <div
-      style={{ width: `${size}rem` }}
+      style={{ width: `${size}rem`, aspectRatio: 1, flexShrink: 0 }}
       className={cn("rounded-md relative", className)}
     >
       <svg
@@ -44,6 +44,7 @@ export function FolderCard({
         viewBox="0 0 64 64"
         fill="none"
         className="w-full h-full"
+        style={{ width: "100%", height: "100%" }}
       >
         <title>Folder</title>
         <path

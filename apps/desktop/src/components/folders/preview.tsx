@@ -25,7 +25,7 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
       {folder ? (
         <FolderCard
           emoji={folder.emoji}
-          size={size === "sm" ? 5 : 3}
+          size={size === "sm" ? 2.25 : 3}
           theme={dark ? "dark" : "light"}
         />
       ) : (
