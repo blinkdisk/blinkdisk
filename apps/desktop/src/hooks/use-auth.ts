@@ -52,8 +52,9 @@ export function useAuth() {
       const vaultCollection = getVaultCollection(accountId);
       await vaultCollection.isReady();
 
-      const hasActiveVaults = vaultCollection.find({ status: "ACTIVE" }).fetch()
-        .length;
+      const hasActiveVaults = vaultCollection
+        .find({ status: "ACTIVE" })
+        .fetch().length;
 
       if (!local && !hasActiveVaults) {
         openCreateVault({
