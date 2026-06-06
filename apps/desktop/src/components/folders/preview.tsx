@@ -1,4 +1,4 @@
-import { EmojiCard } from "@blinkdisk/components/emoji-card";
+import { FolderCard } from "@blinkdisk/components/folder-card";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
@@ -23,9 +23,9 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
       )}
     >
       {folder ? (
-        <EmojiCard
+        <FolderCard
           emoji={folder.emoji}
-          size={size === "sm" ? "sm" : "md"}
+          size={size === "sm" ? 2.25 : 2.8}
           theme={dark ? "dark" : "light"}
         />
       ) : (

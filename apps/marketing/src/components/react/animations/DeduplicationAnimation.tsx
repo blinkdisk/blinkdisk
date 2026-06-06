@@ -1,4 +1,4 @@
-import { EmojiCard } from "@blinkdisk/components/emoji-card";
+import { FolderCard } from "@blinkdisk/components/folder-card";
 import { EXAMPLE_FOLDERS } from "@blinkdisk/constants/folder";
 import { useMemo } from "react";
 
@@ -22,7 +22,7 @@ export default function DeduplicationAnimation() {
       </div>
       <div className="flex w-1/2 items-center justify-center">
         <div className="flex items-center gap-3">
-          <EmojiCard emoji="📦" size="sm" />
+          <FolderCard emoji="📦" size={2.25} />
           <div className="flex flex-col">
             <p className="text-base font-semibold">Backup</p>
             <p className="text-muted-foreground text-xs">
@@ -66,7 +66,7 @@ function Marquee({ folders, duration, direction }: MarqueeProps) {
             key={folder.name}
             className="flex items-center gap-2 whitespace-nowrap"
           >
-            <EmojiCard emoji={folder.emoji} size="sm" />
+            <FolderCard emoji={folder.emoji} size={2.25} />
             <span className="text-sm font-medium">{folder.name}</span>
           </div>
         ))}
@@ -75,7 +75,7 @@ function Marquee({ folders, duration, direction }: MarqueeProps) {
             key={`${folder.name}-dup`}
             className="flex items-center gap-2 whitespace-nowrap"
           >
-            <EmojiCard emoji={folder.emoji} size="sm" />
+            <FolderCard emoji={folder.emoji} size={2.25} />
             <span className="text-sm font-medium">{folder.name}</span>
           </div>
         ))}

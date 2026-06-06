@@ -1,4 +1,4 @@
-import { EmojiCard } from "@blinkdisk/components/emoji-card";
+import { FolderCard } from "@blinkdisk/components/folder-card";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
@@ -28,7 +28,7 @@ export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
           onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
         >
           <button type="button">
-            <EmojiCard emoji={values.emoji} size="lg" />
+            <FolderCard emoji={values.emoji} size={3.5} />
           </button>
         </EmojiPicker>
         <EmojiPicker
