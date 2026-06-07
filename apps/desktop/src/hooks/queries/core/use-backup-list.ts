@@ -45,7 +45,9 @@ export function useBackupList({
   const useFolderFilters = filters === "folder";
 
   return useQuery({
-    queryKey: queryKeys.backup.list(useFolderFilters ? folder?.id : "all"),
+    queryKey: useFolderFilters
+      ? queryKeys.backup.list(folder?.id)
+      : queryKeys.backup.unfiltered(vaultId),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<{
         snapshots: CoreBackupItem[];
