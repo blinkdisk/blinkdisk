@@ -1,6 +1,8 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
+import { cn } from "@blinkdisk/utils/class";
 import { providerIcons } from "@desktop/components/icons/providers/index";
+import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { Link } from "@tanstack/react-router";
 
 type VaultCardProps = {
@@ -10,6 +12,8 @@ type VaultCardProps = {
 export function VaultCard({ vault }: VaultCardProps) {
   const Icon = providerIcons[vault.provider];
   const { t } = useAppTranslation("vault");
+  const { status, isLoading } = useVaultStatus(vault.id);
+  const displayStatus = isLoading ? "STARTING" : (status ?? "STARTING");
 
   return (
     <Link
@@ -21,7 +25,7 @@ export function VaultCard({ vault }: VaultCardProps) {
         <div className="h-8 w-2.5 bg-linear-to-b from-neutral-200 dark:from-neutral-900/50 to-black/5 dark:to-neutral-900/20 rounded-r-[0.4rem] p-1 pl-0">
           <div className="w-full h-full rounded-r-lg bg-white dark:bg-neutral-700 border border-l-0"></div>
         </div>
-        <p className="font-semibold text-xl">{vault.name}</p>
+        <p className="truncate font-semibold text-xl">{vault.name}</p>
       </div>
       <div className="flex flex-col">
         <div className="w-full h-0.5 bg-neutral-200 dark:bg-neutral-900/50"></div>
@@ -31,9 +35,25 @@ export function VaultCard({ vault }: VaultCardProps) {
         <div className="h-8 w-2.5 bg-linear-to-b from-neutral-200 dark:from-neutral-900/50 to-black/5 dark:to-neutral-900/20 rounded-r-[0.4rem] p-1 pl-0">
           <div className="w-full h-full rounded-r-lg bg-white dark:bg-neutral-700 border border-l-0"></div>
         </div>
-        <div className="flex gap-2 items-center text-muted-foreground">
-          <Icon className="size-4" />
-          <p className="text-sm">{t(`providers.${vault.provider}.name`)}</p>
+        <div className="flex items-center gap-4 text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <VaultStatusIndicator
+              loading={isLoading}
+              status={displayStatus}
+              label={t(`status.${displayStatus}`)}
+            />
+            <p
+              className={cn("text-sm", getVaultStatusTextClass(displayStatus))}
+            >
+              {t(`status.${displayStatus}`)}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Icon className="size-4" />
+            <p className="text-sm">
+              {t(`providers.${vault.provider}.shortName`)}
+            </p>
+          </div>
         </div>
       </div>
       <div className="absolute right-6">
@@ -48,6 +68,52 @@ export function VaultCard({ vault }: VaultCardProps) {
         </div>
       </div>
     </Link>
+  );
+}
+
+type VaultStatusIndicatorProps = {
+  loading: boolean;
+  status?: "SETUP" | "STARTING" | "RUNNING";
+  label: string;
+};
+
+function getVaultStatusTextClass(status?: "SETUP" | "STARTING" | "RUNNING") {
+  switch (status) {
+    case "RUNNING":
+      return "text-green-700 dark:text-green-500/85";
+    case "STARTING":
+      return "text-neutral-500 dark:text-neutral-400";
+    case "SETUP":
+      return "text-amber-600 dark:text-amber-300";
+    default:
+      return "text-neutral-500 dark:text-neutral-400";
+  }
+}
+
+function VaultStatusIndicator({
+  loading,
+  status,
+  label,
+}: VaultStatusIndicatorProps) {
+  const pending = loading || status === "STARTING";
+
+  return (
+    <div
+      aria-label={label}
+      role="img"
+      title={label}
+      className={cn(
+        "size-2 shrink-0 rounded-full ring-2 ring-black/5 transition-colors dark:ring-white/5",
+        status === "RUNNING" &&
+          "bg-green-600/90 shadow-[0_0_5px_rgb(22_163_74_/_0.45)] dark:bg-green-500/80 dark:shadow-[0_0_4px_rgb(34_197_94_/_0.35)]",
+        status === "STARTING" &&
+          "bg-neutral-400/90 shadow-[0_0_5px_rgb(115_115_115_/_0.55)] dark:bg-neutral-400/90",
+        status === "SETUP" &&
+          "bg-amber-400/90 shadow-[0_0_5px_rgb(245_158_11_/_0.55)] dark:bg-amber-300/90",
+        !status && "bg-neutral-400/80 dark:bg-neutral-500/80",
+        pending && "animate-pulse",
+      )}
+    />
   );
 }
 

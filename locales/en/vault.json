@@ -90,12 +90,19 @@
     "title": "Starting vault",
     "description": "Your vault is being initialized. This usually takes a few seconds."
   },
+  "status": {
+    "RUNNING": "Active",
+    "SETUP": "Setup required",
+    "STARTING": "Starting"
+  },
   "providers": {
     "CLOUDBLINK": {
-      "name": "CloudBlink"
+      "name": "CloudBlink",
+      "shortName": "CloudBlink"
     },
     "FILESYSTEM": {
       "name": "Local filesystem",
+      "shortName": "Local",
       "description": "Save to a local folder",
       "fields": {
         "path": {
@@ -107,6 +114,7 @@
     },
     "NETWORK_ATTACHED_STORAGE": {
       "name": "Network attached storage",
+      "shortName": "NAS",
       "description": "Save to a NAS device",
       "fields": {
         "path": {
@@ -118,6 +126,7 @@
     },
     "AMAZON_S3": {
       "name": "Amazon S3",
+      "shortName": "S3",
       "description": "Store on Amazon S3",
       "fields": {
         "bucket": {
@@ -152,6 +161,7 @@
     },
     "S3_COMPATIBLE": {
       "name": "S3 compatible storage",
+      "shortName": "S3",
       "description": "Use any S3-compatible service",
       "fields": {
         "bucket": {
@@ -192,6 +202,7 @@
     },
     "GOOGLE_CLOUD_STORAGE": {
       "name": "Google Cloud Storage",
+      "shortName": "GCS",
       "description": "Store on Google Cloud",
       "fields": {
         "bucket": {
@@ -210,6 +221,7 @@
     },
     "BACKBLAZE": {
       "name": "Backblaze B2",
+      "shortName": "B2",
       "description": "Store on Backblaze B2",
       "fields": {
         "bucket": {
@@ -232,6 +244,7 @@
     },
     "AZURE_BLOB_STORAGE": {
       "name": "Azure Blob Storage",
+      "shortName": "Azure",
       "description": "Store on Azure Blob Storage",
       "fields": {
         "container": {
@@ -262,6 +275,7 @@
     },
     "SFTP": {
       "name": "SFTP",
+      "shortName": "SFTP",
       "description": "Connect via SFTP",
       "fields": {
         "host": {
@@ -309,6 +323,7 @@
     },
     "RCLONE": {
       "name": "Rclone remote",
+      "shortName": "Rclone",
       "description": "Connect any Rclone remote",
       "fields": {
         "remotePath": {
@@ -323,6 +338,7 @@
     },
     "WEBDAV": {
       "name": "WebDAV",
+      "shortName": "WebDAV",
       "description": "Connect via WebDAV",
       "fields": {
         "url": {
