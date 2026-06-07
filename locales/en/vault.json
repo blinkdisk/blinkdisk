@@ -357,12 +357,12 @@
       }
     },
     "stats": {
-      "totalSize": "Total size",
+      "totalSize": "Protected data",
       "totalSizeDescription": "Across all latest snapshots",
-      "files": "Files",
+      "files": "Protected files",
       "filesDescription": "Tracked in latest snapshots",
-      "devices": "Devices",
-      "devicesDescription": "Unique hosts in this vault"
+      "directories": "Protected directories",
+      "directoriesDescription": "Tracked in latest snapshots"
     },
     "score": {
       "category": "Excellent",
