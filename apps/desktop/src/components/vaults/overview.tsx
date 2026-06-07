@@ -17,7 +17,7 @@ import {
 } from "@desktop/hooks/queries/core/use-folder-list";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
-import { formatInt, formatSize } from "@desktop/lib/number";
+import { formatCompactInt, formatSize } from "@desktop/lib/number";
 import {
   ArrowDownRightIcon,
   ArrowUpRightIcon,
@@ -95,14 +95,14 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
         <VaultStatCard
           title={t("stats.files")}
           description={t("stats.filesDescription")}
-          value={stats ? formatInt(stats.fileCount) : undefined}
+          value={stats ? formatCompactInt(stats.fileCount) : undefined}
           history={statHistory?.fileCount}
           isLoading={!vault || !stats}
         />
         <VaultStatCard
           title={t("stats.directories")}
           description={t("stats.directoriesDescription")}
-          value={stats ? formatInt(stats.directoryCount) : undefined}
+          value={stats ? formatCompactInt(stats.directoryCount) : undefined}
           history={statHistory?.directoryCount}
           isLoading={!vault || !stats}
         />
