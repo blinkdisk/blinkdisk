@@ -190,7 +190,7 @@ function VaultStatCard({
 
   return (
     <Card className="overflow-hidden py-0">
-      <CardContent className="p-5">
+      <CardContent className="flex h-full flex-col p-5">
         <div className="flex items-start justify-between gap-4">
           <CardTitle className="text-muted-foreground min-w-0 text-sm font-medium">
             {!isLoading ? title : <Skeleton width={90} />}
@@ -202,13 +202,13 @@ function VaultStatCard({
             </div>
           ) : null}
         </div>
-        <div className="mt-5 flex items-end justify-between gap-4">
+        <div className="mt-auto flex items-end justify-between gap-4 pt-5">
           <p className="shrink-0 whitespace-nowrap text-4xl font-semibold tracking-normal">
             {!isLoading ? value : <Skeleton width={120} />}
           </p>
           {!isLoading ? (
             <VaultStatSparkline
-              className="text-foreground pointer-events-none h-10 min-w-0 max-w-48 flex-1"
+              className="pointer-events-none h-10 min-w-0 max-w-48 flex-1 text-zinc-400 dark:text-zinc-500"
               values={history ?? []}
             />
           ) : null}
