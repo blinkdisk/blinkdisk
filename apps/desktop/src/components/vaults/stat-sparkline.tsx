@@ -1,10 +1,14 @@
 import { useId } from "react";
 
 type VaultStatSparklineProps = {
+  className?: string;
   values: number[];
 };
 
-export function VaultStatSparkline({ values }: VaultStatSparklineProps) {
+export function VaultStatSparkline({
+  className,
+  values,
+}: VaultStatSparklineProps) {
   const gradientId = useId().replace(/:/g, "");
   const width = 130;
   const height = 52;
@@ -45,7 +49,7 @@ export function VaultStatSparkline({ values }: VaultStatSparklineProps) {
   return (
     <svg
       aria-hidden="true"
-      className="text-primary pointer-events-none absolute top-5 right-5 h-13 w-32"
+      className={className}
       preserveAspectRatio="none"
       viewBox={`0 0 ${width} ${height}`}
     >
@@ -62,9 +66,20 @@ export function VaultStatSparkline({ values }: VaultStatSparklineProps) {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeOpacity="0.62"
+        strokeOpacity="0.8"
         strokeWidth="2.25"
         vectorEffect="non-scaling-stroke"
+      />
+      <line
+        opacity="0.75"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="6"
+        vectorEffect="non-scaling-stroke"
+        x1={lastPoint.x}
+        x2={lastPoint.x}
+        y1={lastPoint.y}
+        y2={lastPoint.y}
       />
     </svg>
   );

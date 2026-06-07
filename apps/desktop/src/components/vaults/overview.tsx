@@ -18,7 +18,13 @@ import {
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { formatInt, formatSize } from "@desktop/lib/number";
-import { CloudUploadIcon, FolderPlusIcon, PlusIcon } from "lucide-react";
+import {
+  ArrowDownRightIcon,
+  ArrowUpRightIcon,
+  CloudUploadIcon,
+  FolderPlusIcon,
+  PlusIcon,
+} from "lucide-react";
 import { useMemo } from "react";
 
 type VaultOverviewProps = {
@@ -174,29 +180,61 @@ type VaultStatCardProps = {
 
 function VaultStatCard({
   title,
-  description,
   value,
   history,
   isLoading,
 }: VaultStatCardProps) {
+  const trend = getHistoryTrend(history);
+  const TrendIcon =
+    trend.direction === "down" ? ArrowDownRightIcon : ArrowUpRightIcon;
+
   return (
-    <Card className="min-h-32 overflow-hidden py-0">
-      <CardContent className="relative flex h-full flex-col justify-between p-5">
-        {!isLoading ? <VaultStatSparkline values={history ?? []} /> : null}
-        <div className="flex min-w-0 flex-col">
-          <CardTitle className="text-muted-foreground text-sm font-medium">
+    <Card className="overflow-hidden py-0">
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <CardTitle className="text-muted-foreground min-w-0 text-sm font-medium">
             {!isLoading ? title : <Skeleton width={90} />}
           </CardTitle>
-          <p className="mt-2 truncate text-4xl font-semibold tracking-normal">
+          {!isLoading ? (
+            <div className="text-foreground flex shrink-0 items-center gap-1 text-xs font-semibold">
+              <TrendIcon className="size-4" />
+              {formatTrendPercent(trend.percent)}
+            </div>
+          ) : null}
+        </div>
+        <div className="mt-5 flex items-end justify-between gap-4">
+          <p className="shrink-0 whitespace-nowrap text-4xl font-semibold tracking-normal">
             {!isLoading ? value : <Skeleton width={120} />}
           </p>
+          {!isLoading ? (
+            <VaultStatSparkline
+              className="text-foreground pointer-events-none h-10 min-w-0 max-w-48 flex-1"
+              values={history ?? []}
+            />
+          ) : null}
         </div>
-        <p className="text-muted-foreground mt-4 truncate text-xs">
-          {!isLoading ? description : <Skeleton width={150} />}
-        </p>
       </CardContent>
     </Card>
   );
+}
+
+function getHistoryTrend(history?: number[]) {
+  const first = history?.find((value) => value > 0) ?? history?.[0] ?? 0;
+  const last = history?.[history.length - 1] ?? 0;
+  const percent =
+    first === 0 ? (last > 0 ? 100 : 0) : ((last - first) / first) * 100;
+
+  return {
+    direction: percent < 0 ? "down" : "up",
+    percent: Math.abs(percent),
+  };
+}
+
+function formatTrendPercent(percent: number) {
+  return `${percent.toLocaleString(undefined, {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+  })}%`;
 }
 
 function buildVaultStatHistory(backups: CoreBackupItem[]) {
