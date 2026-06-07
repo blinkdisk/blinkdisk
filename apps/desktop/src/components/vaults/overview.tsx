@@ -55,6 +55,8 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
     return buildVaultStatHistory(backups);
   }, [backups]);
 
+  const isStatsLoading = !vault || !stats || !statHistory;
+
   return (
     <div
       className={cn(
@@ -67,19 +69,19 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
           title={t("stats.totalSize")}
           value={stats ? formatSize(stats.totalSize) : undefined}
           history={statHistory?.totalSize}
-          isLoading={!vault || !stats}
+          isLoading={isStatsLoading}
         />
         <VaultStatCard
           title={t("stats.files")}
           value={stats ? formatCompactInt(stats.fileCount) : undefined}
           history={statHistory?.fileCount}
-          isLoading={!vault || !stats}
+          isLoading={isStatsLoading}
         />
         <VaultStatCard
           title={t("stats.directories")}
           value={stats ? formatCompactInt(stats.directoryCount) : undefined}
           history={statHistory?.directoryCount}
-          isLoading={!vault || !stats}
+          isLoading={isStatsLoading}
         />
       </div>
       <div className="mt-8 flex items-center justify-between">
