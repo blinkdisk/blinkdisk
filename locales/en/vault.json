@@ -384,7 +384,7 @@
       },
       "localOnly": {
         "category": "No cloud backup",
-        "description": "Cloud backup protects your data if the drive is lost or breaks."
+        "description": "Add a cloud vault to protect against drive failure or loss."
       }
     },
     "usedStorage": {

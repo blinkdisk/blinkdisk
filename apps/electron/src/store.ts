@@ -10,6 +10,7 @@ export type GlobalStorageType = {
   currentAccountId: string | null;
   dismissedUpdateVersion?: string | null;
   reviewDismissedAt?: string | null;
+  localVaultsAlertDismissedAt?: string | null;
   hasSkippedAuth: boolean;
   preferences: {
     theme: "system" | "dark" | "light";
