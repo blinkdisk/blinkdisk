@@ -5,7 +5,12 @@ import { cn } from "@blinkdisk/utils/class";
 import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
 import { LocalButton } from "@desktop/components/vaults/local-button";
+import { VaultStatSparkline } from "@desktop/components/vaults/stat-sparkline";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
+import {
+  type CoreBackupItem,
+  useBackupList,
+} from "@desktop/hooks/queries/core/use-backup-list";
 import {
   type CoreFolderItem,
   useUnfilteredFolderList,
@@ -27,6 +32,7 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
   const { openCreateFolder } = useCreateFolderDialog();
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
   const { data: allFolders } = useUnfilteredFolderList();
+  const { data: backups } = useBackupList({ filters: "none" });
 
   const isAnyBackupRunning = useMemo(
     () =>
@@ -59,6 +65,12 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
     };
   }, [allFolders]);
 
+  const statHistory = useMemo(() => {
+    if (!backups) return null;
+
+    return buildVaultStatHistory(backups);
+  }, [backups]);
+
   return (
     <div
       className={cn(
@@ -71,18 +83,21 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
           title={t("stats.totalSize")}
           description={t("stats.totalSizeDescription")}
           value={stats ? formatSize(stats.totalSize) : undefined}
+          history={statHistory?.totalSize}
           isLoading={!vault || !stats}
         />
         <VaultStatCard
           title={t("stats.files")}
           description={t("stats.filesDescription")}
           value={stats ? formatInt(stats.fileCount) : undefined}
+          history={statHistory?.fileCount}
           isLoading={!vault || !stats}
         />
         <VaultStatCard
           title={t("stats.directories")}
           description={t("stats.directoriesDescription")}
           value={stats ? formatInt(stats.directoryCount) : undefined}
+          history={statHistory?.directoryCount}
           isLoading={!vault || !stats}
         />
       </div>
@@ -153,6 +168,7 @@ type VaultStatCardProps = {
   title: string;
   description: string;
   value?: string;
+  history?: number[];
   isLoading: boolean;
 };
 
@@ -160,11 +176,13 @@ function VaultStatCard({
   title,
   description,
   value,
+  history,
   isLoading,
 }: VaultStatCardProps) {
   return (
     <Card className="min-h-32 overflow-hidden py-0">
       <CardContent className="relative flex h-full flex-col justify-between p-5">
+        {!isLoading ? <VaultStatSparkline values={history ?? []} /> : null}
         <div className="flex min-w-0 flex-col">
           <CardTitle className="text-muted-foreground text-sm font-medium">
             {!isLoading ? title : <Skeleton width={90} />}
@@ -178,5 +196,57 @@ function VaultStatCard({
         </p>
       </CardContent>
     </Card>
+  );
+}
+
+function buildVaultStatHistory(backups: CoreBackupItem[]) {
+  const days = Array.from({ length: 30 }, (_, index) => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - (29 - index));
+    return date;
+  });
+  const sortedBackups = [...backups]
+    .filter((backup) => backup.incomplete === undefined)
+    .sort(
+      (a, b) =>
+        new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+    );
+  const latestByRoot = new Map<string, CoreBackupItem>();
+  let backupIndex = 0;
+
+  return days.reduce(
+    (history, day) => {
+      const nextDay = new Date(day);
+      nextDay.setDate(day.getDate() + 1);
+
+      while (backupIndex < sortedBackups.length) {
+        const backup = sortedBackups[backupIndex];
+        if (!backup || new Date(backup.startTime) >= nextDay) break;
+
+        latestByRoot.set(backup.rootID, backup);
+        backupIndex += 1;
+      }
+
+      const totals = Array.from(latestByRoot.values()).reduce(
+        (sum, backup) => ({
+          totalSize: sum.totalSize + backup.summary.size,
+          fileCount: sum.fileCount + backup.summary.files,
+          directoryCount: sum.directoryCount + backup.summary.dirs,
+        }),
+        { totalSize: 0, fileCount: 0, directoryCount: 0 },
+      );
+
+      history.totalSize.push(totals.totalSize);
+      history.fileCount.push(totals.fileCount);
+      history.directoryCount.push(totals.directoryCount);
+
+      return history;
+    },
+    {
+      totalSize: [] as number[],
+      fileCount: [] as number[],
+      directoryCount: [] as number[],
+    },
   );
 }
