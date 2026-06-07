@@ -5,7 +5,7 @@ name = "blinkdisk"
 [setup]
 script = '''
 cd "$CODEX_WORKTREE_PATH"
-cp $CODEX_SOURCE_TREE_PATH/.env $CODEX_WORKTREE_PATH/.env
+cp "$CODEX_SOURCE_TREE_PATH/.env" "$CODEX_WORKTREE_PATH/.env"
 pnpm install
 '''
 
