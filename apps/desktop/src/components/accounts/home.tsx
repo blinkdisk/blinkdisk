@@ -29,7 +29,7 @@ export function AccountHome() {
   return (
     <div className="flex min-h-full flex-col overflow-y-auto p-6">
       <div className="mb-8 flex flex-row gap-6">
-        <HealthCard isLoading={vaults === undefined} />
+        <HealthCard isLoading={vaults === undefined} vaults={vaults} />
         {isOnlineAccount ? (
           <StorageCard isLoading={vaults === undefined} />
         ) : null}
