@@ -3,9 +3,10 @@ import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useQuery } from "@tanstack/react-query";
 
-export function useVaultStatus() {
+export function useVaultStatus(vaultIdOverride?: string) {
   const { queryKeys } = useQueryKey();
-  const { vaultId } = useVaultId();
+  const { vaultId: routeVaultId } = useVaultId();
+  const vaultId = vaultIdOverride ?? routeVaultId;
 
   const query = useQuery({
     queryKey: queryKeys.vault.status(vaultId),
