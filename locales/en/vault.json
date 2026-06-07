@@ -358,11 +358,8 @@
     },
     "stats": {
       "totalSize": "Protected data",
-      "totalSizeDescription": "Across all latest snapshots",
       "files": "Protected files",
-      "filesDescription": "Tracked in latest snapshots",
-      "directories": "Protected directories",
-      "directoriesDescription": "Tracked in latest snapshots"
+      "directories": "Protected directories"
     },
     "score": {
       "category": "Excellent",

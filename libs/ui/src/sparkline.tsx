@@ -1,14 +1,11 @@
 import { useId } from "react";
 
-type VaultStatSparklineProps = {
+type SparklineProps = {
   className?: string;
   values: number[];
 };
 
-export function VaultStatSparkline({
-  className,
-  values,
-}: VaultStatSparklineProps) {
+export function Sparkline({ className, values }: SparklineProps) {
   const gradientId = useId().replace(/:/g, "");
   const width = 130;
   const height = 52;

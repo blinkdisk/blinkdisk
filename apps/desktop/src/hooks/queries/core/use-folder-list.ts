@@ -89,68 +89,58 @@ export type CoreFolderItem = {
     | "FAILED";
 };
 
-async function fetchFolderList(
-  vaultId: string | undefined,
-  params?: { host: string; userName: string },
-) {
-  const res = await vaultApi(vaultId).get<{
-    sources: CoreFolderItem[];
-    error?: string;
-  }>("/api/v1/sources", {
-    params,
-  });
+type UseFolderListOptions = {
+  unfiltered?: boolean;
+};
 
-  const folders: CoreFolderItem[] = [];
-
-  for (const folder of res.data.sources) {
-    if (folder.status === "UPLOADING" && folder.upload) {
-      folder.upload.progress = !folder.upload.estimatedBytes
-        ? 0
-        : (folder.upload.hashedBytes + folder.upload.cachedBytes) /
-          folder.upload.estimatedBytes;
-    }
-
-    const id = await hashFolder({
-      hostName: folder.source.host,
-      userName: folder.source.userName,
-      path: folder.source.path,
-    });
-
-    folders.push({
-      ...folder,
-      id,
-    });
-  }
-
-  return folders;
-}
-
-export function useFolderList() {
+export function useFolderList({
+  unfiltered = false,
+}: UseFolderListOptions = {}) {
   const { profileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
+  const params = unfiltered ? undefined : (profileFilter ?? undefined);
 
   return useQuery({
-    queryKey: queryKeys.folder.list(vaultId, profileFilter),
+    queryKey: unfiltered
+      ? [...queryKeys.folder.all, "list", vaultId, "unfiltered"]
+      : queryKeys.folder.list(vaultId, profileFilter),
     queryFn: async () => {
-      if (!profileFilter) return null;
-      return fetchFolderList(vaultId, profileFilter);
+      if (!unfiltered && !profileFilter) return null;
+
+      const res = await vaultApi(vaultId).get<{
+        sources: CoreFolderItem[];
+        error?: string;
+      }>("/api/v1/sources", {
+        params,
+      });
+
+      const folders: CoreFolderItem[] = [];
+
+      for (const folder of res.data.sources) {
+        if (folder.status === "UPLOADING" && folder.upload) {
+          folder.upload.progress = !folder.upload.estimatedBytes
+            ? 0
+            : (folder.upload.hashedBytes + folder.upload.cachedBytes) /
+              folder.upload.estimatedBytes;
+        }
+
+        const id = await hashFolder({
+          hostName: folder.source.host,
+          userName: folder.source.userName,
+          path: folder.source.path,
+        });
+
+        folders.push({
+          ...folder,
+          id,
+        });
+      }
+
+      return folders;
     },
     refetchInterval: 1000,
-    enabled: !!vaultId && !!profileFilter && running,
-  });
-}
-
-export function useUnfilteredFolderList() {
-  const { queryKeys } = useQueryKey();
-  const { vaultId } = useVaultId();
-  const { running } = useVaultStatus();
-
-  return useQuery({
-    queryKey: [...queryKeys.folder.all, "list", vaultId, "unfiltered"],
-    queryFn: () => fetchFolderList(vaultId),
-    refetchInterval: 1000,
-    enabled: !!vaultId && running,
+    enabled: !!vaultId && (unfiltered || !!profileFilter) && running,
   });
 }

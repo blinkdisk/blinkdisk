@@ -1,30 +1,24 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Card, CardContent, CardTitle } from "@blinkdisk/ui/card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
 import { LocalButton } from "@desktop/components/vaults/local-button";
-import { VaultStatSparkline } from "@desktop/components/vaults/stat-sparkline";
+import { VaultStatCard } from "@desktop/components/vaults/stat-card";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
-import {
-  type CoreBackupItem,
-  useBackupList,
-} from "@desktop/hooks/queries/core/use-backup-list";
+import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
 import {
   type CoreFolderItem,
-  useUnfilteredFolderList,
+  useFolderList,
 } from "@desktop/hooks/queries/core/use-folder-list";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { formatCompactInt, formatSize } from "@desktop/lib/number";
 import {
-  ArrowDownRightIcon,
-  ArrowUpRightIcon,
-  CloudUploadIcon,
-  FolderPlusIcon,
-  PlusIcon,
-} from "lucide-react";
+  buildVaultStatHistory,
+  buildVaultStats,
+} from "@desktop/lib/vault-stats";
+import { CloudUploadIcon, FolderPlusIcon, PlusIcon } from "lucide-react";
 import { useMemo } from "react";
 
 type VaultOverviewProps = {
@@ -37,7 +31,7 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
 
   const { openCreateFolder } = useCreateFolderDialog();
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
-  const { data: allFolders } = useUnfilteredFolderList();
+  const { data: allFolders } = useFolderList({ unfiltered: true });
   const { data: backups } = useBackupList({ filters: "none" });
 
   const isAnyBackupRunning = useMemo(
@@ -52,23 +46,7 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
   const stats = useMemo(() => {
     if (!allFolders) return null;
 
-    return {
-      totalSize: allFolders.reduce(
-        (sum, folder) => sum + (folder.lastSnapshot?.stats.totalSize || 0),
-        0,
-      ),
-      fileCount: allFolders.reduce(
-        (sum, folder) =>
-          sum +
-          (folder.lastSnapshot?.stats.nonCachedFiles || 0) +
-          (folder.lastSnapshot?.stats.cachedFiles || 0),
-        0,
-      ),
-      directoryCount: allFolders.reduce(
-        (sum, folder) => sum + (folder.lastSnapshot?.stats.dirCount || 0),
-        0,
-      ),
-    };
+    return buildVaultStats(allFolders);
   }, [allFolders]);
 
   const statHistory = useMemo(() => {
@@ -87,21 +65,18 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
       <div className="grid grid-cols-3 gap-6">
         <VaultStatCard
           title={t("stats.totalSize")}
-          description={t("stats.totalSizeDescription")}
           value={stats ? formatSize(stats.totalSize) : undefined}
           history={statHistory?.totalSize}
           isLoading={!vault || !stats}
         />
         <VaultStatCard
           title={t("stats.files")}
-          description={t("stats.filesDescription")}
           value={stats ? formatCompactInt(stats.fileCount) : undefined}
           history={statHistory?.fileCount}
           isLoading={!vault || !stats}
         />
         <VaultStatCard
           title={t("stats.directories")}
-          description={t("stats.directoriesDescription")}
           value={stats ? formatCompactInt(stats.directoryCount) : undefined}
           history={statHistory?.directoryCount}
           isLoading={!vault || !stats}
@@ -167,124 +142,5 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
         <FolderList folders={folders} />
       )}
     </div>
-  );
-}
-
-type VaultStatCardProps = {
-  title: string;
-  description: string;
-  value?: string;
-  history?: number[];
-  isLoading: boolean;
-};
-
-function VaultStatCard({
-  title,
-  value,
-  history,
-  isLoading,
-}: VaultStatCardProps) {
-  const trend = getHistoryTrend(history);
-  const TrendIcon =
-    trend.direction === "down" ? ArrowDownRightIcon : ArrowUpRightIcon;
-
-  return (
-    <Card className="overflow-hidden py-0">
-      <CardContent className="flex h-full flex-col p-5">
-        <div className="flex items-start justify-between gap-4">
-          <CardTitle className="text-muted-foreground min-w-0 text-sm font-medium">
-            {!isLoading ? title : <Skeleton width={90} />}
-          </CardTitle>
-          {!isLoading ? (
-            <div className="text-foreground flex shrink-0 items-center gap-1 text-xs font-semibold">
-              <TrendIcon className="size-4" />
-              {formatTrendPercent(trend.percent)}
-            </div>
-          ) : null}
-        </div>
-        <div className="mt-auto flex items-end justify-between gap-4 pt-5">
-          <p className="shrink-0 whitespace-nowrap text-4xl font-semibold tracking-normal">
-            {!isLoading ? value : <Skeleton width={120} />}
-          </p>
-          {!isLoading ? (
-            <VaultStatSparkline
-              className="pointer-events-none h-10 min-w-0 max-w-48 flex-1 text-zinc-400 dark:text-zinc-500"
-              values={history ?? []}
-            />
-          ) : null}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function getHistoryTrend(history?: number[]) {
-  const first = history?.find((value) => value > 0) ?? history?.[0] ?? 0;
-  const last = history?.[history.length - 1] ?? 0;
-  const percent =
-    first === 0 ? (last > 0 ? 100 : 0) : ((last - first) / first) * 100;
-
-  return {
-    direction: percent < 0 ? "down" : "up",
-    percent: Math.abs(percent),
-  };
-}
-
-function formatTrendPercent(percent: number) {
-  return `${percent.toLocaleString(undefined, {
-    maximumFractionDigits: 1,
-    minimumFractionDigits: 1,
-  })}%`;
-}
-
-function buildVaultStatHistory(backups: CoreBackupItem[]) {
-  const days = Array.from({ length: 30 }, (_, index) => {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() - (29 - index));
-    return date;
-  });
-  const sortedBackups = [...backups]
-    .filter((backup) => backup.incomplete === undefined)
-    .sort(
-      (a, b) =>
-        new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
-    );
-  const latestByRoot = new Map<string, CoreBackupItem>();
-  let backupIndex = 0;
-
-  return days.reduce(
-    (history, day) => {
-      const nextDay = new Date(day);
-      nextDay.setDate(day.getDate() + 1);
-
-      while (backupIndex < sortedBackups.length) {
-        const backup = sortedBackups[backupIndex];
-        if (!backup || new Date(backup.startTime) >= nextDay) break;
-
-        latestByRoot.set(backup.rootID, backup);
-        backupIndex += 1;
-      }
-
-      const totals = Array.from(latestByRoot.values()).reduce(
-        (sum, backup) => ({
-          totalSize: sum.totalSize + backup.summary.size,
-          fileCount: sum.fileCount + backup.summary.files,
-          directoryCount: sum.directoryCount + backup.summary.dirs,
-        }),
-        { totalSize: 0, fileCount: 0, directoryCount: 0 },
-      );
-
-      history.totalSize.push(totals.totalSize);
-      history.fileCount.push(totals.fileCount);
-      history.directoryCount.push(totals.directoryCount);
-
-      return history;
-    },
-    {
-      totalSize: [] as number[],
-      fileCount: [] as number[],
-      directoryCount: [] as number[],
-    },
   );
 }
