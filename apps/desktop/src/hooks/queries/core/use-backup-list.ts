@@ -30,15 +30,24 @@ export type CoreBackupItem = {
   pins: string[];
 };
 
-export function useBackupList() {
+type UseBackupListOptions = {
+  filters?: "folder" | "none";
+};
+
+export function useBackupList({
+  filters = "folder",
+}: UseBackupListOptions = {}) {
   const { profileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
   const { data: folder } = useFolder();
+  const useFolderFilters = filters === "folder";
 
   return useQuery({
-    queryKey: queryKeys.backup.list(folder?.id),
+    queryKey: useFolderFilters
+      ? queryKeys.backup.list(folder?.id)
+      : queryKeys.backup.unfiltered(vaultId),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<{
         snapshots: CoreBackupItem[];
@@ -46,16 +55,18 @@ export function useBackupList() {
         uniqueCount: number;
         error?: string;
       }>("/api/v1/snapshots", {
-        params: {
-          ...profileFilter,
-          path: folder?.source.path || "",
-          all: "1",
-        },
+        params: useFolderFilters
+          ? {
+              ...profileFilter,
+              path: folder?.source.path || "",
+              all: "1",
+            }
+          : undefined,
       });
 
       return res.data.snapshots.reverse();
     },
     refetchInterval: 1000,
-    enabled: !!vaultId && !!folder && running,
+    enabled: !!vaultId && (!useFolderFilters || !!folder) && running,
   });
 }

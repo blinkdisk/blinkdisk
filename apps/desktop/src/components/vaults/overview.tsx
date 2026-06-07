@@ -1,15 +1,23 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
-import { HealthCard } from "@desktop/components/accounts/health-card";
-import { StorageCard } from "@desktop/components/accounts/storage-card";
 import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
 import { LocalButton } from "@desktop/components/vaults/local-button";
+import { VaultStatCard } from "@desktop/components/vaults/stat-card";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
-import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
+import {
+  type CoreFolderItem,
+  useFolderList,
+} from "@desktop/hooks/queries/core/use-folder-list";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
+import { formatCompactInt, formatSize } from "@desktop/lib/number";
+import {
+  buildVaultStatHistory,
+  buildVaultStats,
+} from "@desktop/lib/vault-stats";
 import { CloudUploadIcon, FolderPlusIcon, PlusIcon } from "lucide-react";
 import { useMemo } from "react";
 
@@ -23,6 +31,8 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
 
   const { openCreateFolder } = useCreateFolderDialog();
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
+  const { data: allFolders } = useFolderList({ unfiltered: true });
+  const { data: backups } = useBackupList({ filters: "none" });
 
   const isAnyBackupRunning = useMemo(
     () =>
@@ -33,6 +43,20 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
     [folders],
   );
 
+  const stats = useMemo(() => {
+    if (!allFolders) return null;
+
+    return buildVaultStats(allFolders);
+  }, [allFolders]);
+
+  const statHistory = useMemo(() => {
+    if (!backups) return null;
+
+    return buildVaultStatHistory(backups);
+  }, [backups]);
+
+  const isStatsLoading = !vault || !stats || !statHistory;
+
   return (
     <div
       className={cn(
@@ -40,11 +64,25 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
         folders !== undefined ? "overflow-y-auto" : "overflow-hidden",
       )}
     >
-      <div className="flex flex-row gap-6">
-        <HealthCard isLoading={!vault} />
-        {!vault || (vault && vault.provider === "CLOUDBLINK") ? (
-          <StorageCard isLoading={!vault} />
-        ) : null}
+      <div className="grid grid-cols-3 gap-6">
+        <VaultStatCard
+          title={t("stats.totalSize")}
+          value={stats ? formatSize(stats.totalSize) : undefined}
+          history={statHistory?.totalSize}
+          isLoading={isStatsLoading}
+        />
+        <VaultStatCard
+          title={t("stats.files")}
+          value={stats ? formatCompactInt(stats.fileCount) : undefined}
+          history={statHistory?.fileCount}
+          isLoading={isStatsLoading}
+        />
+        <VaultStatCard
+          title={t("stats.directories")}
+          value={stats ? formatCompactInt(stats.directoryCount) : undefined}
+          history={statHistory?.directoryCount}
+          isLoading={isStatsLoading}
+        />
       </div>
       <div className="mt-8 flex items-center justify-between">
         <div className="flex flex-col">

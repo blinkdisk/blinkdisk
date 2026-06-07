@@ -356,6 +356,11 @@
         "description": "You haven't added any folders yet. Add one by pressing the button below."
       }
     },
+    "stats": {
+      "totalSize": "Protected data",
+      "files": "Protected files",
+      "directories": "Protected directories"
+    },
     "score": {
       "category": "Excellent",
       "description": "Your backup setup is configured correctly."

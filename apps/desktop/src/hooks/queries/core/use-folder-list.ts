@@ -89,22 +89,31 @@ export type CoreFolderItem = {
     | "FAILED";
 };
 
-export function useFolderList() {
+type UseFolderListOptions = {
+  unfiltered?: boolean;
+};
+
+export function useFolderList({
+  unfiltered = false,
+}: UseFolderListOptions = {}) {
   const { profileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
+  const params = unfiltered ? undefined : (profileFilter ?? undefined);
 
   return useQuery({
-    queryKey: queryKeys.folder.list(vaultId, profileFilter),
+    queryKey: unfiltered
+      ? [...queryKeys.folder.all, "list", vaultId, "unfiltered"]
+      : queryKeys.folder.list(vaultId, profileFilter),
     queryFn: async () => {
-      if (!profileFilter) return null;
+      if (!unfiltered && !profileFilter) return null;
 
       const res = await vaultApi(vaultId).get<{
         sources: CoreFolderItem[];
         error?: string;
       }>("/api/v1/sources", {
-        params: profileFilter,
+        params,
       });
 
       const folders: CoreFolderItem[] = [];
@@ -132,6 +141,6 @@ export function useFolderList() {
       return folders;
     },
     refetchInterval: 1000,
-    enabled: !!vaultId && !!profileFilter && running,
+    enabled: !!vaultId && (unfiltered || !!profileFilter) && running,
   });
 }

@@ -10,3 +10,10 @@ export function formatInt(number: number) {
     maximumFractionDigits: 0,
   });
 }
+
+export function formatCompactInt(number: number) {
+  return number.toLocaleString(undefined, {
+    maximumFractionDigits: 1,
+    notation: "compact",
+  });
+}

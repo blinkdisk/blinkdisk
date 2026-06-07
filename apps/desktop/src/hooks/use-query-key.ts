@@ -58,6 +58,11 @@ export function useQueryKey() {
       backup: {
         all: [accountId, "backup"],
         list: (folderId?: string) => [...keys.backup.all, "list", folderId],
+        unfiltered: (vaultId?: string) => [
+          ...keys.backup.all,
+          "unfiltered",
+          vaultId,
+        ],
       },
       folder: {
         all: [accountId, "folder"],
