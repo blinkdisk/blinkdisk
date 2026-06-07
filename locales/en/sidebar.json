@@ -58,6 +58,12 @@
     "title": "You're offline",
     "description": "Some features may not work while your device is offline."
   },
+  "localOnlyAlert": {
+    "title": "No cloud backup",
+    "description": "Add a cloud vault to protect against drive failure or loss.",
+    "button": "Create cloud vault",
+    "dismiss": "Dismiss"
+  },
   "reviewAlert": {
     "title": "Enjoying BlinkDisk?",
     "description": "Help others find us by leaving a like on AlternativeTo.",

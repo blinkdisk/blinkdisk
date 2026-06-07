@@ -1,3 +1,4 @@
+import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import {
   Carousel,
   type CarouselApi,
@@ -6,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@blinkdisk/ui/carousel";
+import { SidebarLocalOnlyAlert } from "@desktop/components/sidebar/local-only-alert";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarReviewAlert } from "@desktop/components/sidebar/review-alert";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
@@ -13,6 +15,7 @@ import { SidebarTrialAlert } from "@desktop/components/sidebar/trial-alert";
 import { SidebarUpdateAlert } from "@desktop/components/sidebar/update-alert";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
+import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useOffline } from "@desktop/hooks/use-offline";
@@ -30,13 +33,26 @@ export function SidebarAlerts() {
   const { isOffline } = useOffline();
   const { data: space } = useSpace();
   const { data: vault } = useVault();
+  const { data: vaults } = useVaultList();
   const { status } = useUpdateDialog();
-  const [reviewDismissedAt] = useAppStorage("reviewDismissedAt");
+  const [reviewDismissedAt] = useAppStorage("sidebarAlerts.dismissed.review");
+  const [cloudBackupDismissedAt] = useAppStorage(
+    "sidebarAlerts.dismissed.cloudBackup",
+  );
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentAlert, setCurrentAlert] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const storagePercentage = space ? space.used / space.capacity : 0;
+  const onlyLocalVaults =
+    !!vaults?.length &&
+    vaults.every((vault) => {
+      const provider = STORAGE_PROVIDERS.find(
+        (provider) => provider.type === vault.provider,
+      );
+
+      return provider?.local;
+    });
 
   const showReviewAlert =
     !reviewDismissedAt &&
@@ -57,6 +73,13 @@ export function SidebarAlerts() {
     alerts.push({
       key: "offline",
       alert: <SidebarOfflineAlert />,
+    });
+  }
+
+  if (onlyLocalVaults && !cloudBackupDismissedAt) {
+    alerts.push({
+      key: "local-vaults",
+      alert: <SidebarLocalOnlyAlert />,
     });
   }
 

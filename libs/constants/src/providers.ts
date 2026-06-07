@@ -18,16 +18,19 @@ type StorageProvider = {
   alias?: string[];
   coreType: string;
   level: ConfigLevel;
+  local: boolean;
   coreMapping?: Record<string, string>;
   hidden?: boolean;
 };
 
 const fileSystemBase = {
   coreType: "filesystem",
+  local: true,
 };
 
 const s3Base = {
   coreType: "s3",
+  local: false,
   coreMapping: {
     accessKeyId: "accessKeyID",
     accessKeySecret: "secretAccessKey",
@@ -42,6 +45,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     alias: ["BLINKDISK_CLOUD", "BLINKCLOUD"],
     level: "VAULT",
     coreType: "bdc",
+    local: false,
     hidden: true,
   },
   {
@@ -58,6 +62,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     type: "GOOGLE_CLOUD_STORAGE",
     level: "VAULT",
     coreType: "gcs",
+    local: false,
   },
   {
     type: "AMAZON_S3",
@@ -73,6 +78,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     type: "BACKBLAZE",
     level: "VAULT",
     coreType: "b2",
+    local: false,
     coreMapping: {
       keySecret: "key",
     },
@@ -81,6 +87,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     type: "AZURE_BLOB_STORAGE",
     level: "VAULT",
     coreType: "azureBlob",
+    local: false,
     coreMapping: {
       account: "storageAccount",
       key: "storageKey",
@@ -91,6 +98,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     type: "SFTP",
     level: "VAULT",
     coreType: "sftp",
+    local: false,
     coreMapping: {
       user: "username",
       privateKey: "keyData",
@@ -101,6 +109,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     type: "RCLONE",
     level: "PROFILE",
     coreType: "rclone",
+    local: false,
     coreMapping: {
       rclonePath: "rcloneExe",
     },
@@ -109,6 +118,7 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     type: "WEBDAV",
     level: "VAULT",
     coreType: "webdav",
+    local: false,
     coreMapping: {
       user: "username",
     },

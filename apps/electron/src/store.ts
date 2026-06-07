@@ -9,7 +9,12 @@ export type GlobalStorageType = {
   authenticated: boolean;
   currentAccountId: string | null;
   dismissedUpdateVersion?: string | null;
-  reviewDismissedAt?: string | null;
+  sidebarAlerts: {
+    dismissed: {
+      review?: string | null;
+      cloudBackup?: string | null;
+    };
+  };
   hasSkippedAuth: boolean;
   preferences: {
     theme: "system" | "dark" | "light";

@@ -378,8 +378,14 @@
       "directories": "Protected directories"
     },
     "score": {
-      "category": "Excellent",
-      "description": "Your backup setup is configured correctly."
+      "excellent": {
+        "category": "Excellent",
+        "description": "Your backup setup is configured correctly."
+      },
+      "localOnly": {
+        "category": "No cloud backup",
+        "description": "Add a cloud vault to protect against drive failure or loss."
+      }
     },
     "usedStorage": {
       "title": "CloudBlink usage",

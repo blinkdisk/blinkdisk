@@ -7,7 +7,9 @@ import { HeartIcon, XIcon } from "lucide-react";
 
 export function SidebarReviewAlert() {
   const { t } = useAppTranslation("sidebar.reviewAlert");
-  const [, setReviewDismissedAt] = useAppStorage("reviewDismissedAt");
+  const [, setReviewDismissedAt] = useAppStorage(
+    "sidebarAlerts.dismissed.review",
+  );
 
   return (
     <SidebarMenuItem>
