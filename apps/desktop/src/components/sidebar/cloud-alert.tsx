@@ -6,11 +6,11 @@ import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dial
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { PlusIcon, XIcon } from "lucide-react";
 
-export function SidebarLocalVaultsAlert() {
+export function SidebarCloudAlert() {
   const { t } = useAppTranslation("sidebar.localVaultsAlert");
   const { openCreateVault } = useCreateVaultDialog();
-  const [, setLocalVaultsAlertDismissedAt] = useAppStorage(
-    "localVaultsAlertDismissedAt",
+  const [, setCloudBackupDismissedAt] = useAppStorage(
+    "sidebarAlerts.dismissed.cloudBackup",
   );
 
   return (
@@ -21,9 +21,7 @@ export function SidebarLocalVaultsAlert() {
           size="icon-xs"
           aria-label={t("dismiss")}
           className="text-muted-foreground absolute right-2 top-2"
-          onClick={() =>
-            setLocalVaultsAlertDismissedAt(new Date().toISOString())
-          }
+          onClick={() => setCloudBackupDismissedAt(new Date().toISOString())}
         >
           <XIcon />
         </Button>

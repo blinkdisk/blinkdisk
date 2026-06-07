@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@blinkdisk/ui/carousel";
-import { SidebarLocalVaultsAlert } from "@desktop/components/sidebar/local-vaults-alert";
+import { SidebarCloudAlert } from "@desktop/components/sidebar/cloud-alert";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarReviewAlert } from "@desktop/components/sidebar/review-alert";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
@@ -35,9 +35,9 @@ export function SidebarAlerts() {
   const { data: vault } = useVault();
   const { data: vaults } = useVaultList();
   const { status } = useUpdateDialog();
-  const [reviewDismissedAt] = useAppStorage("reviewDismissedAt");
-  const [localVaultsAlertDismissedAt] = useAppStorage(
-    "localVaultsAlertDismissedAt",
+  const [reviewDismissedAt] = useAppStorage("sidebarAlerts.dismissed.review");
+  const [cloudBackupDismissedAt] = useAppStorage(
+    "sidebarAlerts.dismissed.cloudBackup",
   );
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentAlert, setCurrentAlert] = useState(0);
@@ -76,10 +76,10 @@ export function SidebarAlerts() {
     });
   }
 
-  if (onlyLocalVaults && !localVaultsAlertDismissedAt) {
+  if (onlyLocalVaults && !cloudBackupDismissedAt) {
     alerts.push({
       key: "local-vaults",
-      alert: <SidebarLocalVaultsAlert />,
+      alert: <SidebarCloudAlert />,
     });
   }
 
