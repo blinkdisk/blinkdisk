@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@blinkdisk/ui/carousel";
-import { SidebarCloudAlert } from "@desktop/components/sidebar/cloud-alert";
+import { SidebarLocalOnlyAlert } from "@desktop/components/sidebar/local-only-alert";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarReviewAlert } from "@desktop/components/sidebar/review-alert";
 import { SidebarStorageAlert } from "@desktop/components/sidebar/storage-alert";
@@ -79,7 +79,7 @@ export function SidebarAlerts() {
   if (onlyLocalVaults && !cloudBackupDismissedAt) {
     alerts.push({
       key: "local-vaults",
-      alert: <SidebarCloudAlert />,
+      alert: <SidebarLocalOnlyAlert />,
     });
   }
 

@@ -58,7 +58,7 @@
     "title": "You're offline",
     "description": "Some features may not work while your device is offline."
   },
-  "localVaultsAlert": {
+  "localOnlyAlert": {
     "title": "No cloud backup",
     "description": "Add a cloud vault to protect against drive failure or loss.",
     "button": "Create cloud vault",
