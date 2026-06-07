@@ -160,9 +160,9 @@
       }
     },
     "S3_COMPATIBLE": {
-      "name": "S3 compatible storage",
+      "name": "S3 compatible",
       "shortName": "S3",
-      "description": "Use any S3-compatible service",
+      "description": "Use any S3-compatible storage",
       "fields": {
         "bucket": {
           "label": "Bucket name",
