@@ -123,7 +123,7 @@ export function convertPolicyFromCore(
 
   return {
     name: policy.name,
-    emoji: policy.emoji,
+    emoji: policy.emoji || undefined,
     retention: {
       latest: policy.retention?.keepLatest,
       hourly: policy.retention?.keepHourly,

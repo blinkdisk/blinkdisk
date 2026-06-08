@@ -41,6 +41,12 @@ export function FolderGeneralSettings() {
           <div className="flex flex-row items-center justify-center gap-3">
             <EmojiPicker
               locale={language}
+              clearLabel={t("emoji.clear")}
+              onEmojiClear={
+                values.emoji
+                  ? () => form.setFieldValue("emoji", undefined)
+                  : undefined
+              }
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
               <button disabled={disabledContext} type="button">
@@ -49,10 +55,16 @@ export function FolderGeneralSettings() {
             </EmojiPicker>
             <EmojiPicker
               locale={language}
+              clearLabel={t("emoji.clear")}
+              onEmojiClear={
+                values.emoji
+                  ? () => form.setFieldValue("emoji", undefined)
+                  : undefined
+              }
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
               <Button disabled={disabledContext} variant="secondary">
-                {t("emoji.button")}
+                {t("emoji.change")}
               </Button>
             </EmojiPicker>
           </div>

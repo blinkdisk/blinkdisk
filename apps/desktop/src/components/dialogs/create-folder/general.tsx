@@ -25,6 +25,12 @@ export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
       <div className="flex flex-row items-center justify-center gap-3">
         <EmojiPicker
           locale={language}
+          clearLabel={t("emoji.clear")}
+          onEmojiClear={
+            values.emoji
+              ? () => form.setFieldValue("emoji", undefined)
+              : undefined
+          }
           onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
         >
           <button type="button">
@@ -33,9 +39,15 @@ export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
         </EmojiPicker>
         <EmojiPicker
           locale={language}
+          clearLabel={t("emoji.clear")}
+          onEmojiClear={
+            values.emoji
+              ? () => form.setFieldValue("emoji", undefined)
+              : undefined
+          }
           onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
         >
-          <Button variant="secondary">{t("emoji.button")}</Button>
+          <Button variant="secondary">{t("emoji.change")}</Button>
         </EmojiPicker>
       </div>
       <form.AppField

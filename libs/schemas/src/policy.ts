@@ -132,7 +132,7 @@ const ZIgnoreParentPolicy = z.boolean().optional();
 
 export const ZGeneralPolicyForm = z.object({
   name: ZFolderName,
-  emoji: ZFolderEmoji,
+  emoji: ZFolderEmoji.optional(),
 });
 
 export type ZGeneralPolicyFormType = z.infer<typeof ZGeneralPolicyForm>;

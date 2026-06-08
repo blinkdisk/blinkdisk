@@ -12,7 +12,7 @@ export function usePolicyGeneralForm() {
   const form = useAppForm({
     defaultValues: {
       name: policy?.defined.name,
-      emoji: policy?.defined.emoji || "📁",
+      emoji: policy?.defined.emoji || undefined,
     } as ZGeneralPolicyFormType,
     validators: {
       onSubmit: ZGeneralPolicyForm,

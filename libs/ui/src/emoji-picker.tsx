@@ -1,4 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@ui/button";
 import { Input } from "@ui/input";
 import { Loader } from "@ui/loader";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
@@ -8,13 +9,16 @@ import {
   type Locale,
   EmojiPicker as Picker,
 } from "frimousse";
+import { EraserIcon } from "lucide-react";
 import { type ReactElement, useState } from "react";
 import { parse } from "twemoji-parser";
 
 export type EmojiPickerProps = {
   locale: string;
   children?: ReactElement;
+  clearLabel?: string;
   onEmojiSelect?: (emoji: string) => void;
+  onEmojiClear?: () => void;
 };
 
 const supportedLocales = [
@@ -51,7 +55,9 @@ const supportedLocales = [
 export function EmojiPicker({
   locale,
   children,
+  clearLabel,
   onEmojiSelect,
+  onEmojiClear,
 }: EmojiPickerProps) {
   const { t } = useAppTranslation("folder.emojiPicker");
 
@@ -68,12 +74,28 @@ export function EmojiPicker({
           locale={supportedLocales.includes(locale) ? (locale as Locale) : "en"}
         >
           <Picker.Search value={search} className="hidden" />
-          <Input
-            className="z-10 mx-2 mt-2 w-auto"
-            placeholder={t("search")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className="z-10 flex items-center gap-2 p-2 pb-0">
+            <Input
+              className="w-auto flex-1"
+              placeholder={t("search")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {onEmojiClear ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                title={clearLabel}
+                onClick={() => {
+                  onEmojiClear();
+                  setIsOpen(false);
+                }}
+              >
+                <EraserIcon />
+              </Button>
+            ) : null}
+          </div>
           <Picker.Viewport className="outline-hidden relative flex-1">
             <Picker.Loading className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
               <Loader />
