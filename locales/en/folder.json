@@ -7,7 +7,8 @@
       "placeholder": "Enter folder name"
     },
     "emoji": {
-      "button": "Change emoji"
+      "change": "Change emoji",
+      "clear": "Remove emoji"
     },
     "path": {
       "label": "Folder path",

@@ -5,7 +5,7 @@ export const ZFolderEmoji = z.emoji().min(1);
 
 export const ZCreateFolderForm = z.object({
   name: ZFolderName,
-  emoji: ZFolderEmoji,
+  emoji: ZFolderEmoji.optional(),
   path: z.string().min(1),
 });
 

@@ -14,7 +14,6 @@ export function useCreateFolderForm({
   const form = useAppForm({
     defaultValues: {
       name: "",
-      emoji: "📁",
       path: "",
       ...(defaultValues || {}),
     },

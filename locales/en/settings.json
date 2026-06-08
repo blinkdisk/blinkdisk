@@ -86,7 +86,8 @@
         "label": "Folder path"
       },
       "emoji": {
-        "button": "Change emoji"
+        "change": "Change emoji",
+        "clear": "Remove emoji"
       },
       "save": "Save"
     },
