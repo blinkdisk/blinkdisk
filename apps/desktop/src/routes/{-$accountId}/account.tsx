@@ -3,6 +3,7 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
 import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
+import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useStore } from "@tanstack/react-form";
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/{-$accountId}/account")({
 function RouteComponent() {
   const { t } = useAppTranslation("settings.accountPage");
   const { isOnlineAccount } = useAccountId();
+  const { accounts } = useAccountList();
+  const hasAccounts = accounts.length > 0;
 
   return (
     <div className="flex min-h-full flex-col overflow-y-auto px-6 py-12 md:px-8 md:py-16">
@@ -35,7 +38,8 @@ function RouteComponent() {
           </h1>
         </div>
 
-        {isOnlineAccount ? <AccountSettingsSection /> : <LocalAccountSection />}
+        {isOnlineAccount ? <AccountSettingsSection /> : null}
+        {!isOnlineAccount && !hasAccounts ? <LocalAccountSection /> : null}
         <PreferencesSettingsSection />
       </div>
     </div>
