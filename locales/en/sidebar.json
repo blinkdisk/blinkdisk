@@ -14,9 +14,6 @@
     "refresh": "Reload vaults",
     "refreshing": "Refreshing..."
   },
-  "accountMenu": {
-    "addAccount": "Add account"
-  },
   "vaultMenu": {
     "createVault": "Create vault"
   },

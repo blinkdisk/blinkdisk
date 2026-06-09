@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@blinkdisk/ui/sidebar";
-import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
 import { SidebarAlerts } from "@desktop/components/sidebar/alerts";
@@ -25,7 +24,6 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
-  EllipsisVerticalIcon,
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
@@ -156,11 +154,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   />
                 </SidebarMenuButton>
               </AccountSelectDropdown>
-              <AccountMenuDropdown>
-                <SidebarMenuButton size="icon">
-                  <EllipsisVerticalIcon className="size-4" />
-                </SidebarMenuButton>
-              </AccountMenuDropdown>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
