@@ -37,6 +37,11 @@
       }
     }
   },
+  "emailVisibility": {
+    "show": "Show email",
+    "hide": "Hide email",
+    "hidden": "Email hidden"
+  },
   "preferences": {
     "title": "Preferences",
     "theme": {

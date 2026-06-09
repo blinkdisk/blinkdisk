@@ -1,6 +1,8 @@
 import { LANGUAGE_CODES, LANGUAGE_NAMES } from "@blinkdisk/constants/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
+import { Email } from "@desktop/components/accounts/email";
 import { SignOutDialog } from "@desktop/components/dialogs/sign-out";
 import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
 import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
@@ -8,11 +10,14 @@ import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useSignOutDialog } from "@desktop/hooks/state/use-sign-out-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useEmailVisibility } from "@desktop/hooks/use-email-visibility";
 import { useStore } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   BellIcon,
   CloudIcon,
+  EyeIcon,
+  EyeOffIcon,
   KeyRoundIcon,
   LogInIcon,
   LogOutIcon,
@@ -52,10 +57,12 @@ function RouteComponent() {
 function AccountSettingsSection() {
   const { t } = useAppTranslation("settings");
   const { openSignOutDialog } = useSignOutDialog();
+  const { isEmailVisible, toggleEmailVisibility } = useEmailVisibility();
   const form = useUpdateAccountForm();
-  const [isDirty, isSubmitting] = useStore(form.store, (state) => [
+  const [isDirty, isSubmitting, email] = useStore(form.store, (state) => [
     state.isDirty,
     state.isSubmitting,
+    state.values.email,
   ]);
 
   const submitIfNeeded = () => {
@@ -115,20 +122,40 @@ function AccountSettingsSection() {
             </div>
           </SettingsRow>
           <SettingsRow title={t("auth:register.email.label")}>
-            <form.AppField name="email">
-              {(field) => (
-                <field.Text
-                  readOnly
-                  disabled
-                  label={{
-                    title: t("auth:register.email.label"),
-                    labelClassName: "sr-only",
-                  }}
-                  placeholder={t("auth:register.email.placeholder")}
-                  className="md:w-64"
+            <div className="flex min-w-0 items-center justify-end gap-2 md:w-64">
+              <Email
+                email={email}
+                className="min-w-0 flex-1 text-sm md:text-right"
+                hiddenVariant="blur"
+              />
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      aria-label={t(
+                        isEmailVisible
+                          ? "emailVisibility.hide"
+                          : "emailVisibility.show",
+                      )}
+                      aria-pressed={!isEmailVisible}
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={toggleEmailVisibility}
+                    >
+                      {isEmailVisible ? <EyeOffIcon /> : <EyeIcon />}
+                    </Button>
+                  }
                 />
-              )}
-            </form.AppField>
+                <TooltipContent>
+                  {t(
+                    isEmailVisible
+                      ? "emailVisibility.hide"
+                      : "emailVisibility.show",
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </SettingsRow>
         </form>
         <SettingsRow title={t("accountPage.signOut.title")} separated>
