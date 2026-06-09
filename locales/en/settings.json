@@ -4,6 +4,10 @@
     "profile": {
       "fullName": "Full name"
     },
+    "signOut": {
+      "title": "Sign out",
+      "button": "Sign out"
+    },
     "local": {
       "title": "Sign in to BlinkDisk",
       "button": "Sign in",

@@ -6,6 +6,7 @@ import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-prefer
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useAuth } from "@desktop/hooks/use-auth";
 import { useStore } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -13,6 +14,7 @@ import {
   CloudIcon,
   KeyRoundIcon,
   LogInIcon,
+  LogOutIcon,
   MonitorIcon,
   MoonIcon,
   SunIcon,
@@ -48,6 +50,7 @@ function RouteComponent() {
 
 function AccountSettingsSection() {
   const { t } = useAppTranslation("settings");
+  const { logout } = useAuth();
   const form = useUpdateAccountForm();
   const [isDirty, isSubmitting] = useStore(form.store, (state) => [
     state.isDirty,
@@ -61,27 +64,28 @@ function AccountSettingsSection() {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        submitIfNeeded();
-      }}
-      onBlur={(e) => {
-        if (!(e.target instanceof HTMLInputElement)) return;
-        if (!["firstName", "lastName"].includes(e.target.name)) return;
+    <SettingsPanel>
+      <form
+        className="contents"
+        onSubmit={(e) => {
+          e.preventDefault();
+          submitIfNeeded();
+        }}
+        onBlur={(e) => {
+          if (!(e.target instanceof HTMLInputElement)) return;
+          if (!["firstName", "lastName"].includes(e.target.name)) return;
 
-        if (
-          e.relatedTarget instanceof HTMLInputElement &&
-          e.currentTarget.contains(e.relatedTarget) &&
-          ["firstName", "lastName"].includes(e.relatedTarget.name)
-        ) {
-          return;
-        }
+          if (
+            e.relatedTarget instanceof HTMLInputElement &&
+            e.currentTarget.contains(e.relatedTarget) &&
+            ["firstName", "lastName"].includes(e.relatedTarget.name)
+          ) {
+            return;
+          }
 
-        submitIfNeeded();
-      }}
-    >
-      <SettingsPanel>
+          submitIfNeeded();
+        }}
+      >
         <SettingsRow title={t("accountPage.profile.fullName")}>
           <div className="grid w-full gap-3 md:w-64 md:grid-cols-2">
             <form.AppField name="firstName">
@@ -124,8 +128,19 @@ function AccountSettingsSection() {
             )}
           </form.AppField>
         </SettingsRow>
-      </SettingsPanel>
-    </form>
+      </form>
+      <SettingsRow title={t("accountPage.signOut.title")} separated>
+        <Button
+          type="button"
+          variant="destructive-secondary"
+          onClick={logout}
+          className="w-fit"
+        >
+          <LogOutIcon />
+          {t("accountPage.signOut.button")}
+        </Button>
+      </SettingsRow>
+    </SettingsPanel>
   );
 }
 
@@ -281,6 +296,7 @@ type SettingsRowProps = {
   description?: string;
   titleClassName?: string;
   fullWidth?: boolean;
+  separated?: boolean;
   children: ReactNode;
 };
 
@@ -289,6 +305,7 @@ function SettingsRow({
   description,
   titleClassName,
   fullWidth,
+  separated,
   children,
 }: SettingsRowProps) {
   if (fullWidth) {
@@ -300,7 +317,11 @@ function SettingsRow({
   }
 
   return (
-    <div className="border-border flex flex-col gap-4 border-b px-5 py-4 last:border-b-0 md:min-h-20 md:flex-row md:items-center md:justify-between">
+    <div
+      className={`border-border flex flex-col gap-4 border-b px-5 py-4 last:border-b-0 md:min-h-20 md:flex-row md:items-center md:justify-between ${
+        separated ? "border-t" : ""
+      }`}
+    >
       <div className="min-w-0">
         {title ? (
           <p className={titleClassName || "text-base font-medium"}>{title}</p>
