@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { useAuth } from "@desktop/hooks/use-auth";
-import { LogOutIcon, UserPlusIcon } from "lucide-react";
+import { UserPlusIcon } from "lucide-react";
 import type { ReactElement } from "react";
 
 export type AccountMenuDropdownProps = {
@@ -19,7 +19,7 @@ export function AccountMenuDropdown({ children }: AccountMenuDropdownProps) {
 
   const isMobile = useIsMobile();
 
-  const { addAccount, logout } = useAuth();
+  const { addAccount } = useAuth();
 
   return (
     <DropdownMenu>
@@ -30,10 +30,6 @@ export function AccountMenuDropdown({ children }: AccountMenuDropdownProps) {
         align="end"
         sideOffset={4}
       >
-        <DropdownMenuItem onClick={logout}>
-          <LogOutIcon />
-          {t("accountMenu.logout")}
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={addAccount}>
           <UserPlusIcon />
           {t("accountMenu.addAccount")}

@@ -6,7 +6,17 @@
     },
     "signOut": {
       "title": "Sign out",
-      "button": "Sign out"
+      "button": "Sign out",
+      "dialog": {
+        "title": "Sign out of this account?",
+        "description": "Confirm that you want to sign out of this account.",
+        "warning": {
+          "title": "Backups will stop",
+          "description": "Vaults in this account will stop backing up until you sign in again."
+        },
+        "cancel": "Cancel",
+        "confirm": "Sign out"
+      }
     },
     "local": {
       "title": "Sign in to BlinkDisk",

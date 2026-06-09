@@ -1,12 +1,13 @@
 import { LANGUAGE_CODES, LANGUAGE_NAMES } from "@blinkdisk/constants/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
+import { SignOutDialog } from "@desktop/components/dialogs/sign-out";
 import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
 import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
+import { useSignOutDialog } from "@desktop/hooks/state/use-sign-out-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
-import { useAuth } from "@desktop/hooks/use-auth";
 import { useStore } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -50,7 +51,7 @@ function RouteComponent() {
 
 function AccountSettingsSection() {
   const { t } = useAppTranslation("settings");
-  const { logout } = useAuth();
+  const { openSignOutDialog } = useSignOutDialog();
   const form = useUpdateAccountForm();
   const [isDirty, isSubmitting] = useStore(form.store, (state) => [
     state.isDirty,
@@ -64,83 +65,86 @@ function AccountSettingsSection() {
   };
 
   return (
-    <SettingsPanel>
-      <form
-        className="contents"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submitIfNeeded();
-        }}
-        onBlur={(e) => {
-          if (!(e.target instanceof HTMLInputElement)) return;
-          if (!["firstName", "lastName"].includes(e.target.name)) return;
+    <>
+      <SettingsPanel>
+        <form
+          className="contents"
+          onSubmit={(e) => {
+            e.preventDefault();
+            submitIfNeeded();
+          }}
+          onBlur={(e) => {
+            if (!(e.target instanceof HTMLInputElement)) return;
+            if (!["firstName", "lastName"].includes(e.target.name)) return;
 
-          if (
-            e.relatedTarget instanceof HTMLInputElement &&
-            e.currentTarget.contains(e.relatedTarget) &&
-            ["firstName", "lastName"].includes(e.relatedTarget.name)
-          ) {
-            return;
-          }
+            if (
+              e.relatedTarget instanceof HTMLInputElement &&
+              e.currentTarget.contains(e.relatedTarget) &&
+              ["firstName", "lastName"].includes(e.relatedTarget.name)
+            ) {
+              return;
+            }
 
-          submitIfNeeded();
-        }}
-      >
-        <SettingsRow title={t("accountPage.profile.fullName")}>
-          <div className="grid w-full gap-3 md:w-64 md:grid-cols-2">
-            <form.AppField name="firstName">
-              {(field) => (
-                <field.Text
-                  label={{
-                    title: t("auth:register.firstName.label"),
-                    labelClassName: "sr-only",
-                  }}
-                  placeholder={t("auth:register.firstName.placeholder")}
-                />
-              )}
-            </form.AppField>
-            <form.AppField name="lastName">
-              {(field) => (
-                <field.Text
-                  label={{
-                    title: t("auth:register.lastName.label"),
-                    labelClassName: "sr-only",
-                  }}
-                  placeholder={t("auth:register.lastName.placeholder")}
-                />
-              )}
-            </form.AppField>
-          </div>
-        </SettingsRow>
-        <SettingsRow title={t("auth:register.email.label")}>
-          <form.AppField name="email">
-            {(field) => (
-              <field.Text
-                readOnly
-                disabled
-                label={{
-                  title: t("auth:register.email.label"),
-                  labelClassName: "sr-only",
-                }}
-                placeholder={t("auth:register.email.placeholder")}
-                className="md:w-64"
-              />
-            )}
-          </form.AppField>
-        </SettingsRow>
-      </form>
-      <SettingsRow title={t("accountPage.signOut.title")} separated>
-        <Button
-          type="button"
-          variant="destructive-secondary"
-          onClick={logout}
-          className="w-fit"
+            submitIfNeeded();
+          }}
         >
-          <LogOutIcon />
-          {t("accountPage.signOut.button")}
-        </Button>
-      </SettingsRow>
-    </SettingsPanel>
+          <SettingsRow title={t("accountPage.profile.fullName")}>
+            <div className="grid w-full gap-3 md:w-64 md:grid-cols-2">
+              <form.AppField name="firstName">
+                {(field) => (
+                  <field.Text
+                    label={{
+                      title: t("auth:register.firstName.label"),
+                      labelClassName: "sr-only",
+                    }}
+                    placeholder={t("auth:register.firstName.placeholder")}
+                  />
+                )}
+              </form.AppField>
+              <form.AppField name="lastName">
+                {(field) => (
+                  <field.Text
+                    label={{
+                      title: t("auth:register.lastName.label"),
+                      labelClassName: "sr-only",
+                    }}
+                    placeholder={t("auth:register.lastName.placeholder")}
+                  />
+                )}
+              </form.AppField>
+            </div>
+          </SettingsRow>
+          <SettingsRow title={t("auth:register.email.label")}>
+            <form.AppField name="email">
+              {(field) => (
+                <field.Text
+                  readOnly
+                  disabled
+                  label={{
+                    title: t("auth:register.email.label"),
+                    labelClassName: "sr-only",
+                  }}
+                  placeholder={t("auth:register.email.placeholder")}
+                  className="md:w-64"
+                />
+              )}
+            </form.AppField>
+          </SettingsRow>
+        </form>
+        <SettingsRow title={t("accountPage.signOut.title")} separated>
+          <Button
+            type="button"
+            variant="destructive-secondary"
+            onClick={openSignOutDialog}
+            className="w-fit"
+          >
+            <LogOutIcon />
+            {t("accountPage.signOut.button")}
+          </Button>
+        </SettingsRow>
+      </SettingsPanel>
+      <SignOutDialog />
+    </>
   );
 }
 
