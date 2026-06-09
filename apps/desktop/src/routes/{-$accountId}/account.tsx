@@ -199,32 +199,28 @@ function LocalAccountSection() {
 
   return (
     <SettingsPanel>
-      <SettingsRow title={t("title")} description={t("description")}>
+      <SettingsRow title={t("title")} titleClassName="text-lg font-semibold">
         <Button onClick={openAuthDialog} size="lg" className="w-fit px-6">
           <LogInIcon />
           {t("button")}
         </Button>
       </SettingsRow>
-      <SettingsRow>
+      <SettingsRow fullWidth>
         <div className="grid gap-4">
           <SignInPoint
             icon={<CloudIcon />}
-            title={t("auth:welcome.skipDialog.points.cloudblink.title")}
-            description={t(
-              "auth:welcome.skipDialog.points.cloudblink.description",
-            )}
+            title={t("features.cloudblink.title")}
+            description={t("features.cloudblink.description")}
           />
           <SignInPoint
             icon={<KeyRoundIcon />}
-            title={t("auth:welcome.skipDialog.points.sync.title")}
-            description={t("auth:welcome.skipDialog.points.sync.description")}
+            title={t("features.sync.title")}
+            description={t("features.sync.description")}
           />
           <SignInPoint
             icon={<BellIcon />}
-            title={t("auth:welcome.skipDialog.points.notifications.title")}
-            description={t(
-              "auth:welcome.skipDialog.points.notifications.description",
-            )}
+            title={t("features.notifications.title")}
+            description={t("features.notifications.description")}
           />
         </div>
       </SettingsRow>
@@ -261,14 +257,32 @@ function SettingsPanel({ children }: SettingsPanelProps) {
 type SettingsRowProps = {
   title?: string;
   description?: string;
+  titleClassName?: string;
+  fullWidth?: boolean;
   children: ReactNode;
 };
 
-function SettingsRow({ title, description, children }: SettingsRowProps) {
+function SettingsRow({
+  title,
+  description,
+  titleClassName,
+  fullWidth,
+  children,
+}: SettingsRowProps) {
+  if (fullWidth) {
+    return (
+      <div className="border-border border-b px-5 py-4 last:border-b-0">
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div className="border-border flex flex-col gap-4 border-b px-5 py-4 last:border-b-0 md:min-h-20 md:flex-row md:items-center md:justify-between">
       <div className="min-w-0">
-        {title ? <p className="text-base font-medium">{title}</p> : null}
+        {title ? (
+          <p className={titleClassName || "text-base font-medium"}>{title}</p>
+        ) : null}
         {description ? (
           <p className="text-muted-foreground mt-1 max-w-sm text-sm">
             {description}
@@ -290,9 +304,9 @@ type SignInPointProps = {
 
 function SignInPoint({ icon, title, description }: SignInPointProps) {
   return (
-    <div className="flex max-w-xl gap-3">
+    <div className="flex gap-3">
       <div className="text-primary mt-0.5 [&>svg]:size-4">{icon}</div>
-      <div className="grid gap-1">
+      <div className="grid min-w-0 flex-1 gap-1">
         <p className="text-sm font-medium">{title}</p>
         <p className="text-muted-foreground text-xs leading-5">{description}</p>
       </div>

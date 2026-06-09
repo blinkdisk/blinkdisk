@@ -6,8 +6,21 @@
     },
     "local": {
       "title": "Sign in to BlinkDisk",
-      "description": "You're using a local account. Sign in to unlock CloudBlink and account features.",
-      "button": "Sign in"
+      "button": "Sign in",
+      "features": {
+        "cloudblink": {
+          "title": "Built-in cloud storage",
+          "description": "Use CloudBlink for affordable storage built specifically for encrypted BlinkDisk backups."
+        },
+        "sync": {
+          "title": "Cross-device setup",
+          "description": "Sync your encrypted vault configurations so new devices are easier to set up."
+        },
+        "notifications": {
+          "title": "Important email alerts",
+          "description": "Get notified when storage runs low or when account-level issues need your attention."
+        }
+      }
     }
   },
   "account": {
