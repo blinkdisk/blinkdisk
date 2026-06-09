@@ -1,4 +1,13 @@
 {
+  "accountPage": {
+    "title": "Account",
+    "description": "Manage your account and application preferences.",
+    "local": {
+      "title": "Sign in to BlinkDisk",
+      "description": "You're using a local account. Sign in to unlock CloudBlink and account features.",
+      "button": "Sign in"
+    }
+  },
   "account": {
     "title": "Account",
     "description": "Update your account settings.",

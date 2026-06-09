@@ -29,6 +29,7 @@ import {
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
+  UserIcon,
 } from "lucide-react";
 import type { ComponentProps } from "react";
 
@@ -62,18 +63,32 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         </SidebarHeader>
         <SidebarContent className="flex flex-col gap-6 p-2">
           {!vaultId ? (
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                className="px-3"
-                isActive={pathname === `/${accountId}`}
-                render={
-                  <Link to="/{-$accountId}">
-                    <HomeIcon />
-                    {t("home")}
-                  </Link>
-                }
-              />
-            </SidebarMenuItem>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `/${accountId}`}
+                  render={
+                    <Link to="/{-$accountId}">
+                      <HomeIcon />
+                      {t("home")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `/${accountId}/account`}
+                  render={
+                    <Link to="/{-$accountId}/account">
+                      <UserIcon />
+                      {t("account")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+            </SidebarMenu>
           ) : (
             <SidebarMenu>
               <SidebarMenuItem>

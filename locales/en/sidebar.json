@@ -29,6 +29,7 @@
   },
   "links": {
     "home": "Home",
+    "account": "Account",
     "overview": "Overview",
     "settings": "Settings",
     "backToAccount": "Back to home"
