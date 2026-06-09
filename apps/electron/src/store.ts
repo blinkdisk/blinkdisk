@@ -18,6 +18,7 @@ export type GlobalStorageType = {
   hasSkippedAuth: boolean;
   preferences: {
     theme: "system" | "dark" | "light";
+    hideEmail?: boolean;
   };
   passwords: {
     [vaultId: string]: EncryptedString;

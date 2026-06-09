@@ -16,6 +16,7 @@ import { Route as AccountIdRouteImport } from './routes/{-$accountId}/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AccountIdIndexImport } from './routes/{-$accountId}/index'
 import { Route as AccountIdLoadingImport } from './routes/{-$accountId}/loading'
+import { Route as AccountIdAccountImport } from './routes/{-$accountId}/account'
 import { Route as AccountIdVaultIdRouteImport } from './routes/{-$accountId}/{-$vaultId}/route'
 import { Route as AccountIdVaultIdIndexImport } from './routes/{-$accountId}/{-$vaultId}/index'
 import { Route as AccountIdVaultIdHostNameIndexImport } from './routes/{-$accountId}/{-$vaultId}/{-$hostName}/index'
@@ -56,6 +57,12 @@ const AccountIdIndexRoute = AccountIdIndexImport.update({
 const AccountIdLoadingRoute = AccountIdLoadingImport.update({
   id: '/loading',
   path: '/loading',
+  getParentRoute: () => AccountIdRouteRoute,
+} as any)
+
+const AccountIdAccountRoute = AccountIdAccountImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AccountIdRouteRoute,
 } as any)
 
@@ -162,6 +169,13 @@ declare module '@tanstack/react-router' {
       path: '/{-$vaultId}'
       fullPath: '/{-$accountId}/{-$vaultId}'
       preLoaderRoute: typeof AccountIdVaultIdRouteImport
+      parentRoute: typeof AccountIdRouteImport
+    }
+    '/{-$accountId}/account': {
+      id: '/{-$accountId}/account'
+      path: '/account'
+      fullPath: '/{-$accountId}/account'
+      preLoaderRoute: typeof AccountIdAccountImport
       parentRoute: typeof AccountIdRouteImport
     }
     '/{-$accountId}/loading': {
@@ -320,12 +334,14 @@ const AccountIdVaultIdRouteRouteWithChildren =
 
 interface AccountIdRouteRouteChildren {
   AccountIdVaultIdRouteRoute: typeof AccountIdVaultIdRouteRouteWithChildren
+  AccountIdAccountRoute: typeof AccountIdAccountRoute
   AccountIdLoadingRoute: typeof AccountIdLoadingRoute
   AccountIdIndexRoute: typeof AccountIdIndexRoute
 }
 
 const AccountIdRouteRouteChildren: AccountIdRouteRouteChildren = {
   AccountIdVaultIdRouteRoute: AccountIdVaultIdRouteRouteWithChildren,
+  AccountIdAccountRoute: AccountIdAccountRoute,
   AccountIdLoadingRoute: AccountIdLoadingRoute,
   AccountIdIndexRoute: AccountIdIndexRoute,
 }
@@ -339,6 +355,7 @@ export interface FileRoutesByFullPath {
   '/{-$accountId}': typeof AccountIdRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
+  '/{-$accountId}/account': typeof AccountIdAccountRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}/': typeof AccountIdVaultIdIndexRoute
@@ -355,6 +372,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/welcome': typeof WelcomeRoute
+  '/{-$accountId}/account': typeof AccountIdAccountRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdIndexRoute
@@ -371,6 +389,7 @@ export interface FileRoutesById {
   '/{-$accountId}': typeof AccountIdRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
+  '/{-$accountId}/account': typeof AccountIdAccountRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}/': typeof AccountIdVaultIdIndexRoute
@@ -391,6 +410,7 @@ export interface FileRouteTypes {
     | '/{-$accountId}'
     | '/welcome'
     | '/{-$accountId}/{-$vaultId}'
+    | '/{-$accountId}/account'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
     | '/{-$accountId}/{-$vaultId}/'
@@ -406,6 +426,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/welcome'
+    | '/{-$accountId}/account'
     | '/{-$accountId}/loading'
     | '/{-$accountId}'
     | '/{-$accountId}/{-$vaultId}'
@@ -420,6 +441,7 @@ export interface FileRouteTypes {
     | '/{-$accountId}'
     | '/welcome'
     | '/{-$accountId}/{-$vaultId}'
+    | '/{-$accountId}/account'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
     | '/{-$accountId}/{-$vaultId}/'
@@ -468,6 +490,7 @@ export const routeTree = rootRoute
       "filePath": "{-$accountId}/route.tsx",
       "children": [
         "/{-$accountId}/{-$vaultId}",
+        "/{-$accountId}/account",
         "/{-$accountId}/loading",
         "/{-$accountId}/"
       ]
@@ -483,6 +506,10 @@ export const routeTree = rootRoute
         "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
         "/{-$accountId}/{-$vaultId}/{-$hostName}/"
       ]
+    },
+    "/{-$accountId}/account": {
+      "filePath": "{-$accountId}/account.tsx",
+      "parent": "/{-$accountId}"
     },
     "/{-$accountId}/loading": {
       "filePath": "{-$accountId}/loading.tsx",

@@ -14,13 +14,6 @@
     "refresh": "Reload vaults",
     "refreshing": "Refreshing..."
   },
-  "accountMenu": {
-    "account": "Account",
-    "preferences": "Preferences",
-    "billing": "Billing",
-    "logout": "Sign out",
-    "addAccount": "Add account"
-  },
   "vaultMenu": {
     "createVault": "Create vault"
   },
@@ -29,6 +22,7 @@
   },
   "links": {
     "home": "Home",
+    "account": "Account",
     "overview": "Overview",
     "settings": "Settings",
     "backToAccount": "Back to home"

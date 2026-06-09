@@ -1,6 +1,7 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Avatar, AvatarFallback } from "@blinkdisk/ui/avatar";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { Email } from "@desktop/components/accounts/email";
 import { HatGlassesIcon } from "lucide-react";
 import { useMemo } from "react";
 
@@ -46,15 +47,15 @@ export function AccountPreview({ account, local }: AccountPreviewProps) {
             <Skeleton width={130} />
           )}
         </span>
-        <span className="truncate text-xs">
-          {local ? (
-            t("local.description")
-          ) : account?.email ? (
-            account.email
-          ) : (
+        {local ? (
+          <span className="truncate text-xs">{t("local.description")}</span>
+        ) : account?.email ? (
+          <Email email={account.email} className="truncate text-xs" />
+        ) : (
+          <span className="truncate text-xs">
             <Skeleton width={100} />
-          )}
-        </span>
+          </span>
+        )}
       </div>
     </div>
   );

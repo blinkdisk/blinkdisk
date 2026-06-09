@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@blinkdisk/ui/sidebar";
-import { AccountMenuDropdown } from "@desktop/components/accounts/menu-dropdown";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
 import { SidebarAlerts } from "@desktop/components/sidebar/alerts";
@@ -25,10 +24,10 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
-  EllipsisVerticalIcon,
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
+  UserIcon,
 } from "lucide-react";
 import type { ComponentProps } from "react";
 
@@ -62,18 +61,32 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         </SidebarHeader>
         <SidebarContent className="flex flex-col gap-6 p-2">
           {!vaultId ? (
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                className="px-3"
-                isActive={pathname === `/${accountId}`}
-                render={
-                  <Link to="/{-$accountId}">
-                    <HomeIcon />
-                    {t("home")}
-                  </Link>
-                }
-              />
-            </SidebarMenuItem>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `/${accountId}`}
+                  render={
+                    <Link to="/{-$accountId}">
+                      <HomeIcon />
+                      {t("home")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `/${accountId}/account`}
+                  render={
+                    <Link to="/{-$accountId}/account">
+                      <UserIcon />
+                      {t("account")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+            </SidebarMenu>
           ) : (
             <SidebarMenu>
               <SidebarMenuItem>
@@ -141,11 +154,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   />
                 </SidebarMenuButton>
               </AccountSelectDropdown>
-              <AccountMenuDropdown>
-                <SidebarMenuButton size="icon">
-                  <EllipsisVerticalIcon className="size-4" />
-                </SidebarMenuButton>
-              </AccountMenuDropdown>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
