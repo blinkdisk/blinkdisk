@@ -200,7 +200,7 @@ function PreferencesSettingsSection() {
                     labelClassName: "sr-only",
                   }}
                   placeholder={t("theme.description")}
-                  triggerClassName="md:w-64"
+                  triggerClassName="md:w-44"
                   items={[
                     {
                       value: "light",
@@ -246,7 +246,7 @@ function PreferencesSettingsSection() {
                     labelClassName: "sr-only",
                   }}
                   placeholder={t("language.description")}
-                  triggerClassName="md:w-64"
+                  triggerClassName="md:w-44"
                   items={LANGUAGE_CODES.map((code) => ({
                     value: code,
                     label: LANGUAGE_NAMES[code].name,
