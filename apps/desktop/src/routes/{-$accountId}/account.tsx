@@ -27,13 +27,12 @@ function RouteComponent() {
   const { isOnlineAccount } = useAccountId();
 
   return (
-    <div className="flex min-h-full flex-col overflow-y-auto p-6">
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
+    <div className="flex min-h-full flex-col overflow-y-auto px-6 py-12 md:px-8 md:py-16">
+      <div className="mx-auto flex w-full max-w-[46rem] flex-col gap-10">
         <div>
-          <h1 className="text-2xl font-semibold">{t("title")}</h1>
-          <p className="text-muted-foreground mt-1 text-sm">
-            {t("description")}
-          </p>
+          <h1 className="text-3xl font-semibold tracking-normal">
+            {t("title")}
+          </h1>
         </div>
 
         {isOnlineAccount ? <AccountSettingsSection /> : <LocalAccountSection />}
@@ -49,47 +48,62 @@ function AccountSettingsSection() {
   const isDirty = useStore(form.store, () => form.state.isDirty);
 
   return (
-    <SettingsSection title={t("title")} description={t("description")}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(e);
-        }}
-        className="flex flex-col gap-6"
-      >
-        <div className="flex gap-4">
-          <form.AppField name="firstName">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit(e);
+      }}
+    >
+      <SettingsPanel>
+        <SettingsRow title={t("settings:accountPage.profile.fullName")}>
+          <div className="grid w-full gap-3 md:w-64 md:grid-cols-2">
+            <form.AppField name="firstName">
+              {(field) => (
+                <field.Text
+                  label={{
+                    title: t("auth:register.firstName.label"),
+                    labelClassName: "sr-only",
+                  }}
+                  placeholder={t("auth:register.firstName.placeholder")}
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="lastName">
+              {(field) => (
+                <field.Text
+                  label={{
+                    title: t("auth:register.lastName.label"),
+                    labelClassName: "sr-only",
+                  }}
+                  placeholder={t("auth:register.lastName.placeholder")}
+                />
+              )}
+            </form.AppField>
+          </div>
+        </SettingsRow>
+        <SettingsRow title={t("auth:register.email.label")}>
+          <form.AppField name="email">
             {(field) => (
               <field.Text
-                label={{ title: t("auth:register.firstName.label") }}
-                placeholder={t("auth:register.firstName.placeholder")}
+                readOnly
+                disabled
+                label={{
+                  title: t("auth:register.email.label"),
+                  labelClassName: "sr-only",
+                }}
+                placeholder={t("auth:register.email.placeholder")}
+                className="md:w-64"
               />
             )}
           </form.AppField>
-          <form.AppField name="lastName">
-            {(field) => (
-              <field.Text
-                label={{ title: t("auth:register.lastName.label") }}
-                placeholder={t("auth:register.lastName.placeholder")}
-              />
-            )}
-          </form.AppField>
-        </div>
-        <form.AppField name="email">
-          {(field) => (
-            <field.Text
-              readOnly
-              disabled
-              label={{ title: t("auth:register.email.label") }}
-              placeholder={t("auth:register.email.placeholder")}
-            />
-          )}
-        </form.AppField>
-        <form.AppForm>
-          <form.Submit disabled={!isDirty}>{t("submit")}</form.Submit>
-        </form.AppForm>
-      </form>
-    </SettingsSection>
+        </SettingsRow>
+        <SettingsRow>
+          <form.AppForm>
+            <form.Submit disabled={!isDirty}>{t("submit")}</form.Submit>
+          </form.AppForm>
+        </SettingsRow>
+      </SettingsPanel>
+    </form>
   );
 }
 
@@ -98,64 +112,84 @@ function PreferencesSettingsSection() {
   const form = useUpdatePreferencesForm();
 
   return (
-    <SettingsSection title={t("title")} description={t("description")}>
+    <SettingsGroup title={t("title")}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           form.handleSubmit(e);
         }}
-        className="flex flex-col gap-6"
       >
-        <form.AppField name="theme">
-          {(field) => (
-            <field.Select
-              label={{ title: t("theme.label") }}
-              placeholder={t("theme.description")}
-              items={[
-                {
-                  value: "light",
-                  label: (
-                    <div className="flex items-center gap-2">
-                      <SunIcon className="size-4" /> {t("theme.items.light")}
-                    </div>
-                  ),
-                },
-                {
-                  value: "dark",
-                  label: (
-                    <div className="flex items-center gap-2">
-                      <MoonIcon className="size-4" />
-                      {t("theme.items.dark")}
-                    </div>
-                  ),
-                },
-                {
-                  value: "system",
-                  label: (
-                    <div className="flex items-center gap-2">
-                      <MonitorIcon className="size-4" />
-                      {t("theme.items.system")}
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          )}
-        </form.AppField>
-        <form.AppField name="language">
-          {(field) => (
-            <field.Select
-              label={{ title: t("language.label") }}
-              placeholder={t("language.description")}
-              items={LANGUAGE_CODES.map((code) => ({
-                value: code,
-                label: LANGUAGE_NAMES[code].name,
-              }))}
-            />
-          )}
-        </form.AppField>
+        <SettingsPanel>
+          <SettingsRow
+            title={t("theme.label")}
+            description={t("theme.description")}
+          >
+            <form.AppField name="theme">
+              {(field) => (
+                <field.Select
+                  label={{
+                    title: t("theme.label"),
+                    labelClassName: "sr-only",
+                  }}
+                  placeholder={t("theme.description")}
+                  triggerClassName="md:w-64"
+                  items={[
+                    {
+                      value: "light",
+                      label: (
+                        <div className="flex items-center gap-2">
+                          <SunIcon className="size-4" />{" "}
+                          {t("theme.items.light")}
+                        </div>
+                      ),
+                    },
+                    {
+                      value: "dark",
+                      label: (
+                        <div className="flex items-center gap-2">
+                          <MoonIcon className="size-4" />
+                          {t("theme.items.dark")}
+                        </div>
+                      ),
+                    },
+                    {
+                      value: "system",
+                      label: (
+                        <div className="flex items-center gap-2">
+                          <MonitorIcon className="size-4" />
+                          {t("theme.items.system")}
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
+              )}
+            </form.AppField>
+          </SettingsRow>
+          <SettingsRow
+            title={t("language.label")}
+            description={t("language.description")}
+          >
+            <form.AppField name="language">
+              {(field) => (
+                <field.Select
+                  label={{
+                    title: t("language.label"),
+                    labelClassName: "sr-only",
+                  }}
+                  placeholder={t("language.description")}
+                  triggerClassName="md:w-64"
+                  items={LANGUAGE_CODES.map((code) => ({
+                    value: code,
+                    label: LANGUAGE_NAMES[code].name,
+                  }))}
+                />
+              )}
+            </form.AppField>
+          </SettingsRow>
+        </SettingsPanel>
       </form>
-    </SettingsSection>
+    </SettingsGroup>
   );
 }
 
@@ -164,56 +198,87 @@ function LocalAccountSection() {
   const { openAuthDialog } = useAuthDialog();
 
   return (
-    <SettingsSection title={t("title")} description={t("description")}>
-      <div className="grid gap-4">
-        <SignInPoint
-          icon={<CloudIcon />}
-          title={t("auth:welcome.skipDialog.points.cloudblink.title")}
-          description={t(
-            "auth:welcome.skipDialog.points.cloudblink.description",
-          )}
-        />
-        <SignInPoint
-          icon={<KeyRoundIcon />}
-          title={t("auth:welcome.skipDialog.points.sync.title")}
-          description={t("auth:welcome.skipDialog.points.sync.description")}
-        />
-        <SignInPoint
-          icon={<BellIcon />}
-          title={t("auth:welcome.skipDialog.points.notifications.title")}
-          description={t(
-            "auth:welcome.skipDialog.points.notifications.description",
-          )}
-        />
-      </div>
-
-      <Button onClick={openAuthDialog} size="lg" className="mt-6 w-fit px-6">
-        <LogInIcon />
-        {t("button")}
-      </Button>
-    </SettingsSection>
+    <SettingsPanel>
+      <SettingsRow title={t("title")} description={t("description")}>
+        <Button onClick={openAuthDialog} size="lg" className="w-fit px-6">
+          <LogInIcon />
+          {t("button")}
+        </Button>
+      </SettingsRow>
+      <SettingsRow>
+        <div className="grid gap-4">
+          <SignInPoint
+            icon={<CloudIcon />}
+            title={t("auth:welcome.skipDialog.points.cloudblink.title")}
+            description={t(
+              "auth:welcome.skipDialog.points.cloudblink.description",
+            )}
+          />
+          <SignInPoint
+            icon={<KeyRoundIcon />}
+            title={t("auth:welcome.skipDialog.points.sync.title")}
+            description={t("auth:welcome.skipDialog.points.sync.description")}
+          />
+          <SignInPoint
+            icon={<BellIcon />}
+            title={t("auth:welcome.skipDialog.points.notifications.title")}
+            description={t(
+              "auth:welcome.skipDialog.points.notifications.description",
+            )}
+          />
+        </div>
+      </SettingsRow>
+    </SettingsPanel>
   );
 }
 
-type SettingsSectionProps = {
+type SettingsGroupProps = {
   title: string;
-  description: string;
   children: ReactNode;
 };
 
-function SettingsSection({
-  title,
-  description,
-  children,
-}: SettingsSectionProps) {
+function SettingsGroup({ title, children }: SettingsGroupProps) {
   return (
-    <section className="border-border bg-card rounded-xl border p-6">
-      <div className="mb-6">
-        <h2 className="text-base font-medium">{title}</h2>
-        <p className="text-muted-foreground mt-1 text-sm">{description}</p>
-      </div>
+    <section className="grid gap-4">
+      <h2 className="text-xl font-semibold">{title}</h2>
       {children}
     </section>
+  );
+}
+
+type SettingsPanelProps = {
+  children: ReactNode;
+};
+
+function SettingsPanel({ children }: SettingsPanelProps) {
+  return (
+    <section className="border-border bg-card overflow-hidden rounded-xl border">
+      {children}
+    </section>
+  );
+}
+
+type SettingsRowProps = {
+  title?: string;
+  description?: string;
+  children: ReactNode;
+};
+
+function SettingsRow({ title, description, children }: SettingsRowProps) {
+  return (
+    <div className="border-border flex flex-col gap-4 border-b px-5 py-4 last:border-b-0 md:min-h-20 md:flex-row md:items-center md:justify-between">
+      <div className="min-w-0">
+        {title ? <p className="text-base font-medium">{title}</p> : null}
+        {description ? (
+          <p className="text-muted-foreground mt-1 max-w-sm text-sm">
+            {description}
+          </p>
+        ) : null}
+      </div>
+      <div className="flex w-full justify-start md:w-auto md:justify-end">
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -225,7 +290,7 @@ type SignInPointProps = {
 
 function SignInPoint({ icon, title, description }: SignInPointProps) {
   return (
-    <div className="flex gap-3">
+    <div className="flex max-w-xl gap-3">
       <div className="text-primary mt-0.5 [&>svg]:size-4">{icon}</div>
       <div className="grid gap-1">
         <p className="text-sm font-medium">{title}</p>
