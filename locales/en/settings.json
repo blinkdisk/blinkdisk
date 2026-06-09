@@ -11,14 +11,10 @@
     }
   },
   "account": {
-    "title": "Account",
-    "description": "Update your account settings.",
-    "submit": "Update account",
-    "logout": "Sign out"
+    "submit": "Update account"
   },
   "preferences": {
     "title": "Preferences",
-    "description": "Change your application preferences.",
     "theme": {
       "label": "Theme",
       "description": "Select your theme preference.",

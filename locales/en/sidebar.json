@@ -15,9 +15,6 @@
     "refreshing": "Refreshing..."
   },
   "accountMenu": {
-    "account": "Account",
-    "preferences": "Preferences",
-    "billing": "Billing",
     "logout": "Sign out",
     "addAccount": "Add account"
   },
