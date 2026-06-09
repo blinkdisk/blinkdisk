@@ -1,8 +1,24 @@
 {
-  "accountPage": {
+  "account": {
     "title": "Account",
     "profile": {
-      "fullName": "Full name"
+      "fullName": "Full name",
+      "firstName": {
+        "label": "First name",
+        "placeholder": "John"
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Doe"
+      },
+      "email": {
+        "label": "Email"
+      }
+    },
+    "emailVisibility": {
+      "show": "Show email",
+      "hide": "Hide email",
+      "hidden": "Email hidden"
     },
     "signOut": {
       "title": "Sign out",
@@ -35,27 +51,22 @@
           "description": "Get notified when storage runs low or when account-level issues need your attention."
         }
       }
-    }
-  },
-  "emailVisibility": {
-    "show": "Show email",
-    "hide": "Hide email",
-    "hidden": "Email hidden"
-  },
-  "preferences": {
-    "title": "Preferences",
-    "theme": {
-      "label": "Theme",
-      "description": "Select your theme preference.",
-      "items": {
-        "light": "Light",
-        "dark": "Dark",
-        "system": "System"
-      }
     },
-    "language": {
-      "label": "Language",
-      "description": "Select your language preference."
+    "preferences": {
+      "title": "Preferences",
+      "theme": {
+        "label": "Theme",
+        "description": "Select your theme preference.",
+        "items": {
+          "light": "Light",
+          "dark": "Dark",
+          "system": "System"
+        }
+      },
+      "language": {
+        "label": "Language",
+        "description": "Select your language preference."
+      }
     }
   },
   "vault": {

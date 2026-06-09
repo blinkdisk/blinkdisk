@@ -15,7 +15,7 @@ import { TriangleAlertIcon } from "lucide-react";
 import { useState } from "react";
 
 export function SignOutDialog() {
-  const { t } = useAppTranslation("settings.accountPage.signOut.dialog");
+  const { t } = useAppTranslation("settings.account.signOut.dialog");
   const { isOpen, setIsOpen } = useSignOutDialog();
   const { logout } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);

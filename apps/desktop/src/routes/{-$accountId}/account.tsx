@@ -32,7 +32,7 @@ export const Route = createFileRoute("/{-$accountId}/account")({
 });
 
 function RouteComponent() {
-  const { t } = useAppTranslation("settings.accountPage");
+  const { t } = useAppTranslation("settings.account");
   const { isOnlineAccount } = useAccountId();
   const { accounts } = useAccountList();
   const hasAccounts = accounts.length > 0;
@@ -55,7 +55,7 @@ function RouteComponent() {
 }
 
 function AccountSettingsSection() {
-  const { t } = useAppTranslation("settings");
+  const { t } = useAppTranslation("settings.account");
   const { openSignOutDialog } = useSignOutDialog();
   const { isEmailVisible, toggleEmailVisibility } = useEmailVisibility();
   const form = useUpdateAccountForm();
@@ -95,16 +95,16 @@ function AccountSettingsSection() {
             submitIfNeeded();
           }}
         >
-          <SettingsRow title={t("accountPage.profile.fullName")}>
+          <SettingsRow title={t("profile.fullName")}>
             <div className="grid w-full gap-3 md:w-64 md:grid-cols-2">
               <form.AppField name="firstName">
                 {(field) => (
                   <field.Text
                     label={{
-                      title: t("auth:register.firstName.label"),
+                      title: t("profile.firstName.label"),
                       labelClassName: "sr-only",
                     }}
-                    placeholder={t("auth:register.firstName.placeholder")}
+                    placeholder={t("profile.firstName.placeholder")}
                   />
                 )}
               </form.AppField>
@@ -112,16 +112,16 @@ function AccountSettingsSection() {
                 {(field) => (
                   <field.Text
                     label={{
-                      title: t("auth:register.lastName.label"),
+                      title: t("profile.lastName.label"),
                       labelClassName: "sr-only",
                     }}
-                    placeholder={t("auth:register.lastName.placeholder")}
+                    placeholder={t("profile.lastName.placeholder")}
                   />
                 )}
               </form.AppField>
             </div>
           </SettingsRow>
-          <SettingsRow title={t("auth:register.email.label")}>
+          <SettingsRow title={t("profile.email.label")}>
             <div className="flex min-w-0 items-center justify-end gap-2 md:w-64">
               <Email
                 email={email}
@@ -158,7 +158,7 @@ function AccountSettingsSection() {
             </div>
           </SettingsRow>
         </form>
-        <SettingsRow title={t("accountPage.signOut.title")} separated>
+        <SettingsRow title={t("signOut.title")} separated>
           <Button
             type="button"
             variant="destructive-secondary"
@@ -166,7 +166,7 @@ function AccountSettingsSection() {
             className="w-fit"
           >
             <LogOutIcon />
-            {t("accountPage.signOut.button")}
+            {t("signOut.button")}
           </Button>
         </SettingsRow>
       </SettingsPanel>
@@ -176,7 +176,7 @@ function AccountSettingsSection() {
 }
 
 function PreferencesSettingsSection() {
-  const { t } = useAppTranslation("settings.preferences");
+  const { t } = useAppTranslation("settings.account.preferences");
   const form = useUpdatePreferencesForm();
 
   return (
@@ -262,7 +262,7 @@ function PreferencesSettingsSection() {
 }
 
 function LocalAccountSection() {
-  const { t } = useAppTranslation("settings.accountPage.local");
+  const { t } = useAppTranslation("settings.account.local");
   const { openAuthDialog } = useAuthDialog();
 
   return (

@@ -13,7 +13,7 @@ export function Email({
   className,
   hiddenVariant = "hidden",
 }: EmailProps) {
-  const { t } = useAppTranslation("settings.emailVisibility");
+  const { t } = useAppTranslation("settings.account.emailVisibility");
   const { isEmailVisible } = useEmailVisibility();
   const shouldBlurEmail = !isEmailVisible && hiddenVariant === "blur";
 
