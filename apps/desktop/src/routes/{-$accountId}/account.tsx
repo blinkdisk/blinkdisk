@@ -47,19 +47,42 @@ function RouteComponent() {
 }
 
 function AccountSettingsSection() {
-  const { t } = useAppTranslation("settings.account");
+  const { t } = useAppTranslation("settings");
   const form = useUpdateAccountForm();
-  const isDirty = useStore(form.store, () => form.state.isDirty);
+  const [isDirty, isSubmitting] = useStore(form.store, (state) => [
+    state.isDirty,
+    state.isSubmitting,
+  ]);
+
+  const submitIfNeeded = () => {
+    if (!isDirty || isSubmitting) return;
+
+    form.handleSubmit();
+  };
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        form.handleSubmit(e);
+        submitIfNeeded();
+      }}
+      onBlur={(e) => {
+        if (!(e.target instanceof HTMLInputElement)) return;
+        if (!["firstName", "lastName"].includes(e.target.name)) return;
+
+        if (
+          e.relatedTarget instanceof HTMLInputElement &&
+          e.currentTarget.contains(e.relatedTarget) &&
+          ["firstName", "lastName"].includes(e.relatedTarget.name)
+        ) {
+          return;
+        }
+
+        submitIfNeeded();
       }}
     >
       <SettingsPanel>
-        <SettingsRow title={t("settings:accountPage.profile.fullName")}>
+        <SettingsRow title={t("accountPage.profile.fullName")}>
           <div className="grid w-full gap-3 md:w-64 md:grid-cols-2">
             <form.AppField name="firstName">
               {(field) => (
@@ -100,11 +123,6 @@ function AccountSettingsSection() {
               />
             )}
           </form.AppField>
-        </SettingsRow>
-        <SettingsRow>
-          <form.AppForm>
-            <form.Submit disabled={!isDirty}>{t("submit")}</form.Submit>
-          </form.AppForm>
         </SettingsRow>
       </SettingsPanel>
     </form>

@@ -23,9 +23,6 @@
       }
     }
   },
-  "account": {
-    "submit": "Update account"
-  },
   "preferences": {
     "title": "Preferences",
     "theme": {
