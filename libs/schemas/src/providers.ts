@@ -110,6 +110,9 @@ export type ProviderConfig =
 
 export const ZProviderType = z.enum([
   "CLOUDBLINK",
+  "INTERNAL_DRIVE",
+  "EXTERNAL_DRIVE",
+  "NETWORK_DRIVE",
   "FILESYSTEM",
   "NETWORK_ATTACHED_STORAGE",
   "AMAZON_S3",

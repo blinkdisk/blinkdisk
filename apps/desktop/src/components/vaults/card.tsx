@@ -1,3 +1,4 @@
+import { resolveStorageProviderType } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { cn } from "@blinkdisk/utils/class";
@@ -10,7 +11,8 @@ type VaultCardProps = {
 };
 
 export function VaultCard({ vault }: VaultCardProps) {
-  const Icon = providerIcons[vault.provider];
+  const displayProviderType = resolveStorageProviderType(vault.provider);
+  const Icon = providerIcons[displayProviderType];
   const { t } = useAppTranslation("vault");
   const { status, isLoading } = useVaultStatus(vault.id);
   const displayStatus = isLoading ? "STARTING" : (status ?? "STARTING");
@@ -51,7 +53,7 @@ export function VaultCard({ vault }: VaultCardProps) {
           <div className="flex items-center gap-2">
             <Icon className="size-4" />
             <p className="text-sm">
-              {t(`providers.${vault.provider}.shortName`)}
+              {t(`providers.${displayProviderType}.shortName`)}
             </p>
           </div>
         </div>

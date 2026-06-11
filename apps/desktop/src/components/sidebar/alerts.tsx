@@ -1,4 +1,4 @@
-import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
+import { getStorageProvider } from "@blinkdisk/constants/providers";
 import {
   Carousel,
   type CarouselApi,
@@ -47,9 +47,7 @@ export function SidebarAlerts() {
   const onlyLocalVaults =
     !!vaults?.length &&
     vaults.every((vault) => {
-      const provider = STORAGE_PROVIDERS.find(
-        (provider) => provider.type === vault.provider,
-      );
+      const provider = getStorageProvider(vault.provider);
 
       return provider?.local;
     });

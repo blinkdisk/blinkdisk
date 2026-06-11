@@ -1,4 +1,4 @@
-import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
+import { getStorageProvider } from "@blinkdisk/constants/providers";
 import {
   DEFAULT_VAULT_OPTIONS,
   LATEST_VAULT_VERSION,
@@ -53,9 +53,7 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
         config: ProviderConfig;
       },
     ) => {
-      const provider = STORAGE_PROVIDERS.find(
-        (p) => p.type === values.provider,
-      );
+      const provider = getStorageProvider(values.provider);
 
       if (!provider) throw new Error("Invalid provider");
 

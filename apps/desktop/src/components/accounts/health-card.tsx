@@ -1,4 +1,4 @@
-import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
+import { getStorageProvider } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { Card, CardContent } from "@blinkdisk/ui/card";
@@ -17,9 +17,7 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
   const onlyLocalVaults =
     !!vaults?.length &&
     vaults.every((vault) => {
-      const provider = STORAGE_PROVIDERS.find(
-        (provider) => provider.type === vault.provider,
-      );
+      const provider = getStorageProvider(vault.provider);
 
       return provider?.local;
     });

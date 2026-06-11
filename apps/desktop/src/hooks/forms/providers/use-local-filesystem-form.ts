@@ -1,3 +1,7 @@
+import {
+  resolveStorageProviderType,
+  type StorageProviderType,
+} from "@blinkdisk/constants/providers";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZFilesystemConfig,
@@ -8,17 +12,28 @@ import {
   type VaultAction,
 } from "@desktop/hooks/use-config-validation";
 
-export function useNetworkAttachedStorageForm({
+export type LocalFilesystemProviderType = Extract<
+  StorageProviderType,
+  | "INTERNAL_DRIVE"
+  | "EXTERNAL_DRIVE"
+  | "NETWORK_DRIVE"
+  | "FILESYSTEM"
+  | "NETWORK_ATTACHED_STORAGE"
+>;
+
+export function useLocalFilesystemForm({
   action,
   config,
   onSubmit,
+  providerType,
 }: {
   action: VaultAction;
   config?: ZFilesystemConfigType;
   onSubmit: (value: ZFilesystemConfigType) => void;
+  providerType: LocalFilesystemProviderType;
 }) {
   const { onSubmitAsync } = useConfigValidation(
-    "NETWORK_ATTACHED_STORAGE",
+    resolveStorageProviderType(providerType),
     action,
   );
 

@@ -1,4 +1,4 @@
-import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
+import { getStorageProvider } from "@blinkdisk/constants/providers";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
@@ -36,9 +36,7 @@ export function useSetupVault({
     }) => {
       let config = values.config;
 
-      const provider = STORAGE_PROVIDERS.find(
-        (p) => p.type === values.vault.provider,
-      );
+      const provider = getStorageProvider(values.vault.provider);
 
       if (!provider) throw new Error("Invalid provider");
 
@@ -98,7 +96,7 @@ export function useSetupVault({
       if (!config) return setStep("CONFIG");
 
       const validateRes = await window.electron.vault.validate({
-        type: values.vault.provider,
+        type: provider.type,
         version: values.vault.version,
         password: values.password,
         token: cloudBlinkToken,
@@ -124,7 +122,7 @@ export function useSetupVault({
       const connectRes = await window.electron.vault.connect({
         id: values.vault.id,
         name: values.vault.name,
-        provider: values.vault.provider,
+        provider: provider.type,
         version: values.vault.version,
         password: values.password,
         token: cloudBlinkToken,

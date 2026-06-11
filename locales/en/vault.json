@@ -100,10 +100,46 @@
       "name": "CloudBlink",
       "shortName": "CloudBlink"
     },
+    "INTERNAL_DRIVE": {
+      "name": "This computer",
+      "shortName": "This computer",
+      "description": "Save to a folder on this computer",
+      "fields": {
+        "path": {
+          "label": "Backup destination folder",
+          "placeholder": "Select destination folder",
+          "dialogTitle": "Select backup destination folder"
+        }
+      }
+    },
+    "EXTERNAL_DRIVE": {
+      "name": "External drive",
+      "shortName": "External drive",
+      "description": "Save to an external drive",
+      "fields": {
+        "path": {
+          "label": "External drive folder",
+          "placeholder": "Select external drive folder",
+          "dialogTitle": "Select external drive folder"
+        }
+      }
+    },
+    "NETWORK_DRIVE": {
+      "name": "Network drive",
+      "shortName": "Network drive",
+      "description": "Save to a network drive",
+      "fields": {
+        "path": {
+          "label": "Network drive folder",
+          "placeholder": "Select network drive folder",
+          "dialogTitle": "Select network drive folder"
+        }
+      }
+    },
     "FILESYSTEM": {
-      "name": "Local filesystem",
-      "shortName": "Local",
-      "description": "Save to a local folder",
+      "name": "This computer",
+      "shortName": "This computer",
+      "description": "Save to a folder on this computer",
       "fields": {
         "path": {
           "label": "Backup destination folder",
@@ -113,14 +149,14 @@
       }
     },
     "NETWORK_ATTACHED_STORAGE": {
-      "name": "Network attached storage",
-      "shortName": "NAS",
-      "description": "Save to a NAS device",
+      "name": "Network drive",
+      "shortName": "Network drive",
+      "description": "Save to a network drive",
       "fields": {
         "path": {
-          "label": "NAS mount path",
-          "placeholder": "Select NAS mount path",
-          "dialogTitle": "Select NAS mount path"
+          "label": "Network drive folder",
+          "placeholder": "Select network drive folder",
+          "dialogTitle": "Select network drive folder"
         }
       }
     },

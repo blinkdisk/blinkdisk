@@ -1,8 +1,8 @@
-export type FilesystemIconProps = {
+export type ExternalDriveIconProps = {
   className?: string;
 };
 
-export function FilesystemIcon({ className }: FilesystemIconProps) {
+export function ExternalDriveIcon({ className }: ExternalDriveIconProps) {
   return (
     <svg
       width="100"
@@ -12,7 +12,7 @@ export function FilesystemIcon({ className }: FilesystemIconProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <title>Filesystem</title>
+      <title>External drive</title>
       <path
         d="M94.7571 50.0585H5.2431M5.95403 48.0965C5.32678 49.348 5.00012 50.7286 5.00003 52.1285V77C5.00003 79.3869 5.94824 81.6761 7.63607 83.3639C9.3239 85.0518 11.6131 86 14 86H86C88.387 86 90.6761 85.0518 92.364 83.3639C94.0518 81.6761 95 79.3869 95 77V52.1285C94.9999 50.7286 94.6733 49.348 94.046 48.0965L79.475 18.995C78.7299 17.4956 77.5813 16.2337 76.1583 15.3513C74.7353 14.4689 73.0944 14.0009 71.42 14H28.58C26.9056 14.0009 25.2647 14.4689 23.8417 15.3513C22.4187 16.2337 21.2701 17.4956 20.525 18.995L5.95403 48.0965Z"
         stroke="currentColor"

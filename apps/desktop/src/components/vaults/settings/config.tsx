@@ -1,3 +1,4 @@
+import { resolveStorageProviderType } from "@blinkdisk/constants/providers";
 import { FormDisabledContext } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { providerForms } from "@desktop/components/forms/providers";
@@ -14,7 +15,8 @@ export function VaultConfigSettings() {
   const { data: config } = useVaultConfig();
 
   const Form = useMemo(
-    () => (vault ? providerForms[vault.provider] : null),
+    () =>
+      vault ? providerForms[resolveStorageProviderType(vault.provider)] : null,
     [vault],
   );
 
