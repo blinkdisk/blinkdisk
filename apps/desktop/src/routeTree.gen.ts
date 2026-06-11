@@ -16,6 +16,7 @@ import { Route as AccountIdRouteImport } from './routes/{-$accountId}/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AccountIdIndexImport } from './routes/{-$accountId}/index'
 import { Route as AccountIdLoadingImport } from './routes/{-$accountId}/loading'
+import { Route as AccountIdCloudblinkImport } from './routes/{-$accountId}/cloudblink'
 import { Route as AccountIdAccountImport } from './routes/{-$accountId}/account'
 import { Route as AccountIdVaultIdRouteImport } from './routes/{-$accountId}/{-$vaultId}/route'
 import { Route as AccountIdVaultIdIndexImport } from './routes/{-$accountId}/{-$vaultId}/index'
@@ -57,6 +58,12 @@ const AccountIdIndexRoute = AccountIdIndexImport.update({
 const AccountIdLoadingRoute = AccountIdLoadingImport.update({
   id: '/loading',
   path: '/loading',
+  getParentRoute: () => AccountIdRouteRoute,
+} as any)
+
+const AccountIdCloudblinkRoute = AccountIdCloudblinkImport.update({
+  id: '/cloudblink',
+  path: '/cloudblink',
   getParentRoute: () => AccountIdRouteRoute,
 } as any)
 
@@ -176,6 +183,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/{-$accountId}/account'
       preLoaderRoute: typeof AccountIdAccountImport
+      parentRoute: typeof AccountIdRouteImport
+    }
+    '/{-$accountId}/cloudblink': {
+      id: '/{-$accountId}/cloudblink'
+      path: '/cloudblink'
+      fullPath: '/{-$accountId}/cloudblink'
+      preLoaderRoute: typeof AccountIdCloudblinkImport
       parentRoute: typeof AccountIdRouteImport
     }
     '/{-$accountId}/loading': {
@@ -335,6 +349,7 @@ const AccountIdVaultIdRouteRouteWithChildren =
 interface AccountIdRouteRouteChildren {
   AccountIdVaultIdRouteRoute: typeof AccountIdVaultIdRouteRouteWithChildren
   AccountIdAccountRoute: typeof AccountIdAccountRoute
+  AccountIdCloudblinkRoute: typeof AccountIdCloudblinkRoute
   AccountIdLoadingRoute: typeof AccountIdLoadingRoute
   AccountIdIndexRoute: typeof AccountIdIndexRoute
 }
@@ -342,6 +357,7 @@ interface AccountIdRouteRouteChildren {
 const AccountIdRouteRouteChildren: AccountIdRouteRouteChildren = {
   AccountIdVaultIdRouteRoute: AccountIdVaultIdRouteRouteWithChildren,
   AccountIdAccountRoute: AccountIdAccountRoute,
+  AccountIdCloudblinkRoute: AccountIdCloudblinkRoute,
   AccountIdLoadingRoute: AccountIdLoadingRoute,
   AccountIdIndexRoute: AccountIdIndexRoute,
 }
@@ -356,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/welcome': typeof WelcomeRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
   '/{-$accountId}/account': typeof AccountIdAccountRoute
+  '/{-$accountId}/cloudblink': typeof AccountIdCloudblinkRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}/': typeof AccountIdVaultIdIndexRoute
@@ -373,6 +390,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/welcome': typeof WelcomeRoute
   '/{-$accountId}/account': typeof AccountIdAccountRoute
+  '/{-$accountId}/cloudblink': typeof AccountIdCloudblinkRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdIndexRoute
@@ -390,6 +408,7 @@ export interface FileRoutesById {
   '/welcome': typeof WelcomeRoute
   '/{-$accountId}/{-$vaultId}': typeof AccountIdVaultIdRouteRouteWithChildren
   '/{-$accountId}/account': typeof AccountIdAccountRoute
+  '/{-$accountId}/cloudblink': typeof AccountIdCloudblinkRoute
   '/{-$accountId}/loading': typeof AccountIdLoadingRoute
   '/{-$accountId}/': typeof AccountIdIndexRoute
   '/{-$accountId}/{-$vaultId}/': typeof AccountIdVaultIdIndexRoute
@@ -411,6 +430,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/{-$accountId}/{-$vaultId}'
     | '/{-$accountId}/account'
+    | '/{-$accountId}/cloudblink'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
     | '/{-$accountId}/{-$vaultId}/'
@@ -427,6 +447,7 @@ export interface FileRouteTypes {
     | '/'
     | '/welcome'
     | '/{-$accountId}/account'
+    | '/{-$accountId}/cloudblink'
     | '/{-$accountId}/loading'
     | '/{-$accountId}'
     | '/{-$accountId}/{-$vaultId}'
@@ -442,6 +463,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/{-$accountId}/{-$vaultId}'
     | '/{-$accountId}/account'
+    | '/{-$accountId}/cloudblink'
     | '/{-$accountId}/loading'
     | '/{-$accountId}/'
     | '/{-$accountId}/{-$vaultId}/'
@@ -491,6 +513,7 @@ export const routeTree = rootRoute
       "children": [
         "/{-$accountId}/{-$vaultId}",
         "/{-$accountId}/account",
+        "/{-$accountId}/cloudblink",
         "/{-$accountId}/loading",
         "/{-$accountId}/"
       ]
@@ -509,6 +532,10 @@ export const routeTree = rootRoute
     },
     "/{-$accountId}/account": {
       "filePath": "{-$accountId}/account.tsx",
+      "parent": "/{-$accountId}"
+    },
+    "/{-$accountId}/cloudblink": {
+      "filePath": "{-$accountId}/cloudblink.tsx",
       "parent": "/{-$accountId}"
     },
     "/{-$accountId}/loading": {

@@ -13,6 +13,7 @@ i18n.loadNamespaces([
   "directory",
   "backup",
   "subscription",
+  "cloudblink",
   "update",
   "task",
 ]);

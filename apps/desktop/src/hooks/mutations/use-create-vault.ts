@@ -5,6 +5,7 @@ import {
 } from "@blinkdisk/constants/vault";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import type { ZCreateVaultType } from "@blinkdisk/schemas/vault";
+import { getErrorCode } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { removeEmptyStrings } from "@blinkdisk/utils/object";
@@ -22,19 +23,6 @@ import { usePostHog } from "posthog-js/react";
 export type CreateVaultResponse = {
   vaultId: string;
 };
-
-type ErrorDataCode = {
-  data?: {
-    code?: string;
-  };
-};
-
-function getErrorCode(error: unknown) {
-  if (!error || typeof error !== "object") return;
-
-  if ("code" in error && typeof error.code === "string") return error.code;
-  if ("data" in error) return (error as ErrorDataCode).data?.code;
-}
 
 export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
