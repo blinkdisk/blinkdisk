@@ -23,7 +23,12 @@ export const cloudblinkRouter = router({
       .where("Space.accountId", "=", ctx.account.id)
       .executeTakeFirst();
 
-    if (!space) throw new CustomError("SPACE_NOT_FOUND");
+    if (!space)
+      return {
+        used: 0,
+        capacity: 0,
+        trialEndsAt: null,
+      };
 
     const stub = ctx.env.SPACE.getByName(space.id);
 
