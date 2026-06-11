@@ -12,7 +12,7 @@ export function CloudBlinkIcon({ className }: CloudBlinkIconProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <title>CloudBlink Icon</title>
+      <title>CloudBlink</title>
       <path
         d="M60.8333 20.5C47.7693 20.5 37.1348 30.7432 36.4435 43.6278C28.0624 45.1377 21.7 52.4524 21.7 61.2639C21.7 71.1679 29.7321 79.2 39.6361 79.2H82.0306C91.9346 79.2 99.9667 71.1679 99.9667 61.2639C99.9667 52.4524 93.6042 45.1377 85.2232 43.6278C84.5318 30.7432 73.8973 20.5 60.8333 20.5Z"
         fill="currentColor"
