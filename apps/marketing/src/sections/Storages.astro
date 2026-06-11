@@ -1,16 +1,39 @@
 ---
+import { AmazonS3Icon } from "@marketing/components/icons/providers/amazon-s3";
+import { AzureBlobStorageIcon } from "@marketing/components/icons/providers/azure-blob-storage";
+import { CloudBlinkIcon } from "@marketing/components/icons/providers/cloudblink";
+import { ExternalDriveIcon } from "@marketing/components/icons/providers/external-drive";
+import { GoogleCloudStorageIcon } from "@marketing/components/icons/providers/google-cloud-storage";
+import { InternalDriveIcon } from "@marketing/components/icons/providers/internal-drive";
+import { NetworkDriveIcon } from "@marketing/components/icons/providers/network-drive";
+import { RcloneIcon } from "@marketing/components/icons/providers/rclone";
+import { S3CompatibleIcon } from "@marketing/components/icons/providers/s3-compatible";
+import { SftpIcon } from "@marketing/components/icons/providers/sftp";
+import { WebdavIcon } from "@marketing/components/icons/providers/webdav";
 import StorageMarquee from "@marketing/components/StorageMarquee.astro";
+import type { ComponentType } from "react";
 
-const localStorages = [
+type ProviderIcon = ComponentType<{ className?: string }>;
+
+type Storage = {
+  name: string;
+  description: string;
+  image: string;
+  icon?: ProviderIcon;
+};
+
+const localStorages: Storage[] = [
   {
     name: "Your Computer",
     description: "Store backups on any local drive",
     image: "computer.svg",
+    icon: InternalDriveIcon,
   },
   {
     name: "External Drives",
     description: "Backup to external hard drives",
     image: "drive.svg",
+    icon: ExternalDriveIcon,
   },
   {
     name: "USB Sticks",
@@ -21,52 +44,61 @@ const localStorages = [
     name: "Network Attached Storage",
     description: "Use your home or office NAS",
     image: "nas.svg",
+    icon: NetworkDriveIcon,
   },
 ];
 
-const cloudStorages = [
+const cloudStorages: Storage[] = [
   {
     name: "CloudBlink",
     description: "Our managed cloud storage",
     image: "cloudblink.svg",
+    icon: CloudBlinkIcon,
   },
   {
     name: "AWS S3",
     description: "Reliable storage by AWS",
     image: "aws.svg",
+    icon: AmazonS3Icon,
   },
   {
     name: "Google Cloud",
     description: "Google Cloud's storage solution",
     image: "google-cloud-storage.svg",
+    icon: GoogleCloudStorageIcon,
   },
   {
     name: "Azure Blob",
     description: "Azure's cloud storage option",
     image: "azure-blob-storage.svg",
+    icon: AzureBlobStorageIcon,
   },
 ];
 
-const otherStorages = [
+const otherStorages: Storage[] = [
   {
     name: "S3 Compatible",
     description: "Any S3-compatible service",
     image: "s3.svg",
+    icon: S3CompatibleIcon,
   },
   {
     name: "SFTP",
     description: "Backup to secure SFTP server",
     image: "sftp.svg",
+    icon: SftpIcon,
   },
   {
     name: "WebDAV",
     description: "Use any WebDAV server",
     image: "webdav.svg",
+    icon: WebdavIcon,
   },
   {
     name: "Rclone Remote",
     description: "70+ cloud providers via RClone",
     image: "rclone.svg",
+    icon: RcloneIcon,
   },
 ];
 
@@ -138,29 +170,37 @@ const categories = [
                 {cat.count}
               </span>
             </div>
-            {cat.storages.map((storage) => (
-              <div
-                class:list={[
-                  "storages-card bg-card relative flex items-center gap-4 overflow-hidden rounded-xl border p-4 transition-all",
-                ]}
-              >
+            {cat.storages.map((storage) => {
+              const Icon = storage.icon;
+
+              return (
                 <div
-                  class="from-primary/[0.05] pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity"
-                  aria-hidden="true"
-                />
-                <img
-                  src={`/images/providers/${storage.image}`}
-                  class="relative size-8 grayscale transition-all"
-                  alt={storage.name}
-                />
-                <div class="relative min-w-0 flex-1">
-                  <p class="truncate text-sm font-semibold">{storage.name}</p>
-                  <p class="text-muted-foreground truncate text-xs">
-                    {storage.description}
-                  </p>
+                  class:list={[
+                    "storages-card bg-card relative flex items-center gap-4 overflow-hidden rounded-xl border p-4 transition-all",
+                  ]}
+                >
+                  <div
+                    class="from-primary/[0.05] pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity"
+                    aria-hidden="true"
+                  />
+                  {Icon ? (
+                    <Icon className="text-muted-foreground relative size-8 grayscale transition-all" />
+                  ) : (
+                    <img
+                      src={`/images/providers/${storage.image}`}
+                      class="relative size-8 grayscale transition-all"
+                      alt={storage.name}
+                    />
+                  )}
+                  <div class="relative min-w-0 flex-1">
+                    <p class="truncate text-sm font-semibold">{storage.name}</p>
+                    <p class="text-muted-foreground truncate text-xs">
+                      {storage.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ))
       }
