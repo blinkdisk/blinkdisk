@@ -1,4 +1,7 @@
-import type { StorageProviderType } from "@blinkdisk/constants/providers";
+import {
+  resolveStorageProviderType,
+  type StorageProviderType,
+} from "@blinkdisk/constants/providers";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
@@ -23,10 +26,13 @@ export function useCreateVaultForm({
     form.reset();
     onSuccess?.(res);
   });
+  const displayProviderType = providerType
+    ? resolveStorageProviderType(providerType)
+    : undefined;
 
   const form = useAppForm({
     defaultValues: {
-      name: providerType ? t(`${providerType}.name`) : "",
+      name: displayProviderType ? t(`${displayProviderType}.name`) : "",
       password: "",
       confirmPassword: "",
     },

@@ -1,3 +1,4 @@
+import { resolveStorageProviderType } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { providerIcons } from "@desktop/components/icons/providers/index";
@@ -9,7 +10,8 @@ type VaultPreviewProps = {
 export function VaultPreview({ vault }: VaultPreviewProps) {
   const { t } = useAppTranslation("vault");
 
-  const Icon = providerIcons[vault.provider];
+  const displayProviderType = resolveStorageProviderType(vault.provider);
+  const Icon = providerIcons[displayProviderType];
 
   return (
     <div className="flex items-center gap-2.5">
@@ -21,7 +23,7 @@ export function VaultPreview({ vault }: VaultPreviewProps) {
           {vault.name}
         </span>
         <span className="text-muted-foreground truncate text-xs">
-          {t(`providers.${vault.provider}.name`)}
+          {t(`providers.${displayProviderType}.name`)}
         </span>
       </div>
     </div>

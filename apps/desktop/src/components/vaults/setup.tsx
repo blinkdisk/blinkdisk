@@ -1,3 +1,4 @@
+import { resolveStorageProviderType } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { providerForms } from "@desktop/components/forms/providers";
@@ -52,7 +53,7 @@ export function Setup() {
     () =>
       vault
         ? (providerForms[
-            vault.provider
+            resolveStorageProviderType(vault.provider)
           ] as unknown as ComponentType<ConfigFormProps>)
         : null,
     [vault],

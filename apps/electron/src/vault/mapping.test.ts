@@ -1,7 +1,14 @@
+import {
+  getStorageProvider,
+  resolveStorageProviderType,
+} from "@blinkdisk/constants/providers";
 import { mapConfigFields, mapProviderType } from "@electron/vault/mapping";
 
 describe("mapProviderType", () => {
   it("maps standard provider types to core types", () => {
+    expect(mapProviderType("INTERNAL_DRIVE")).toBe("filesystem");
+    expect(mapProviderType("EXTERNAL_DRIVE")).toBe("filesystem");
+    expect(mapProviderType("NETWORK_DRIVE")).toBe("filesystem");
     expect(mapProviderType("FILESYSTEM")).toBe("filesystem");
     expect(mapProviderType("NETWORK_ATTACHED_STORAGE")).toBe("filesystem");
     expect(mapProviderType("AMAZON_S3")).toBe("s3");
@@ -23,6 +30,19 @@ describe("mapProviderType", () => {
   it("throws for unknown provider", () => {
     expect(() => mapProviderType("UNKNOWN")).toThrow(
       "Provider UNKNOWN not found",
+    );
+  });
+});
+
+describe("storage provider compatibility", () => {
+  it("resolves deprecated local providers to their replacement providers", () => {
+    expect(resolveStorageProviderType("FILESYSTEM")).toBe("INTERNAL_DRIVE");
+    expect(resolveStorageProviderType("NETWORK_ATTACHED_STORAGE")).toBe(
+      "NETWORK_DRIVE",
+    );
+    expect(getStorageProvider("FILESYSTEM")?.type).toBe("INTERNAL_DRIVE");
+    expect(getStorageProvider("NETWORK_ATTACHED_STORAGE")?.type).toBe(
+      "NETWORK_DRIVE",
     );
   });
 });

@@ -2,6 +2,9 @@ import type { ConfigLevel } from "@blinkdisk/db/enums";
 
 export type StorageProviderType =
   | "CLOUDBLINK"
+  | "INTERNAL_DRIVE"
+  | "EXTERNAL_DRIVE"
+  | "NETWORK_DRIVE"
   | "FILESYSTEM"
   | "NETWORK_ATTACHED_STORAGE"
   | "AMAZON_S3"
@@ -21,6 +24,8 @@ type StorageProvider = {
   local: boolean;
   coreMapping?: Record<string, string>;
   hidden?: boolean;
+  deprecated?: boolean;
+  replacementType?: StorageProviderType;
 };
 
 const fileSystemBase = {
@@ -49,13 +54,34 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     hidden: true,
   },
   {
+    type: "INTERNAL_DRIVE",
+    level: "PROFILE",
+    ...fileSystemBase,
+  },
+  {
+    type: "EXTERNAL_DRIVE",
+    level: "PROFILE",
+    ...fileSystemBase,
+  },
+  {
+    type: "NETWORK_DRIVE",
+    level: "PROFILE",
+    ...fileSystemBase,
+  },
+  {
     type: "FILESYSTEM",
     level: "PROFILE",
+    hidden: true,
+    deprecated: true,
+    replacementType: "INTERNAL_DRIVE",
     ...fileSystemBase,
   },
   {
     type: "NETWORK_ATTACHED_STORAGE",
     level: "PROFILE",
+    hidden: true,
+    deprecated: true,
+    replacementType: "NETWORK_DRIVE",
     ...fileSystemBase,
   },
   {
@@ -124,3 +150,20 @@ export const STORAGE_PROVIDERS: StorageProvider[] = [
     },
   },
 ];
+
+export function getStorageProvider(providerType: string) {
+  const provider = STORAGE_PROVIDERS.find(
+    (p) => p.type === providerType || p.alias?.includes(providerType),
+  );
+
+  if (!provider) return;
+  if (!provider.replacementType) return provider;
+
+  return STORAGE_PROVIDERS.find((p) => p.type === provider.replacementType);
+}
+
+export function resolveStorageProviderType(
+  providerType: StorageProviderType,
+): StorageProviderType {
+  return getStorageProvider(providerType)?.type ?? providerType;
+}
