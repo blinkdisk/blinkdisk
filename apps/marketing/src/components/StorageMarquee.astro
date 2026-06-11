@@ -1,6 +1,10 @@
 ---
+import type { ComponentType } from "react";
+
+type ProviderIcon = ComponentType<{ className?: string }>;
+
 type Props = {
-  storages: { name: string; image: string }[];
+  storages: { name: string; image: string; icon?: ProviderIcon }[];
   reverse?: boolean;
 };
 
@@ -14,30 +18,46 @@ const { storages, reverse = false } = Astro.props;
   <div class:list={["flex w-max", reverse ? "marquee-reverse" : "marquee"]}>
     <div class="flex items-center gap-6 pl-6">
       {
-        storages.map((storage) => (
-          <div class="bg-card flex items-center gap-3 rounded-xl border px-4 py-3">
-            <img
-              src={`/images/providers/${storage.image}`}
-              class="size-6"
-              alt={storage.name}
-            />
-            <p class="whitespace-nowrap text-sm font-medium">{storage.name}</p>
-          </div>
-        ))
+        storages.map((storage) => {
+          const Icon = storage.icon;
+
+          return (
+            <div class="bg-card flex items-center gap-3 rounded-xl border px-4 py-3">
+              {Icon ? (
+                <Icon className="text-muted-foreground size-6 grayscale" />
+              ) : (
+                <img
+                  src={`/images/providers/${storage.image}`}
+                  class="size-6"
+                  alt={storage.name}
+                />
+              )}
+              <p class="whitespace-nowrap text-sm font-medium">{storage.name}</p>
+            </div>
+          );
+        })
       }
     </div>
     <div class="flex items-center gap-6 pl-6">
       {
-        storages.map((storage) => (
-          <div class="bg-card flex items-center gap-3 rounded-xl border px-4 py-3">
-            <img
-              src={`/images/providers/${storage.image}`}
-              class="size-6"
-              alt={storage.name}
-            />
-            <p class="whitespace-nowrap text-sm font-medium">{storage.name}</p>
-          </div>
-        ))
+        storages.map((storage) => {
+          const Icon = storage.icon;
+
+          return (
+            <div class="bg-card flex items-center gap-3 rounded-xl border px-4 py-3">
+              {Icon ? (
+                <Icon className="text-muted-foreground size-6 grayscale" />
+              ) : (
+                <img
+                  src={`/images/providers/${storage.image}`}
+                  class="size-6"
+                  alt={storage.name}
+                />
+              )}
+              <p class="whitespace-nowrap text-sm font-medium">{storage.name}</p>
+            </div>
+          );
+        })
       }
     </div>
   </div>
