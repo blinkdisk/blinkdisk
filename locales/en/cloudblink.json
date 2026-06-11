@@ -1,0 +1,57 @@
+{
+  "page": {
+    "title": "CloudBlink",
+    "refresh": "Refresh",
+    "storage": {
+      "title": "Storage",
+      "used": "{{used}} of {{capacity}} used",
+      "full": {
+        "title": "Your cloud storage is full",
+        "description": "Upgrade your plan below to continue backing up your files."
+      }
+    },
+    "plan": {
+      "title": "Plan",
+      "current": "{{storageGB}} GB – {{period}}",
+      "amount": {
+        "monthly": "{{amount}} billed monthly",
+        "yearly": "{{amount}} billed yearly"
+      },
+      "period": {
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "status": {
+        "TRIALING": "Trialing",
+        "ACTIVE": "Active",
+        "PAST_DUE": "Past due",
+        "CANCELED": "Canceled"
+      },
+      "trial": {
+        "title": "Free trial",
+        "description": "{{capacity}} of cloud storage included with your trial.",
+        "endsIn": "Ends {{trialEndsIn}}"
+      },
+      "none": {
+        "title": "No active plan",
+        "description": "Choose a plan below to keep using CloudBlink."
+      }
+    },
+    "billing": {
+      "title": "Billing",
+      "portal": {
+        "title": "Billing portal",
+        "description": "Manage your payment method, view invoices and update your subscription.",
+        "button": "Open billing portal"
+      }
+    },
+    "plans": {
+      "title": "Plans"
+    },
+    "empty": {
+      "title": "Start your free CloudBlink trial",
+      "description": "Create your first CloudBlink vault to get {{storage}} of cloud storage free for {{days}} days.",
+      "button": "Create CloudBlink Vault"
+    }
+  }
+}

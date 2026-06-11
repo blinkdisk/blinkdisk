@@ -24,6 +24,7 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
+  CloudIcon,
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
@@ -32,7 +33,7 @@ import {
 import type { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
-  const { isLocalAccount } = useAccountId();
+  const { isLocalAccount, isOnlineAccount } = useAccountId();
   const { data: account } = useAccount();
   const { data: vault } = useVault();
   const { data: folders } = useFolderList();
@@ -74,6 +75,20 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   }
                 />
               </SidebarMenuItem>
+              {isOnlineAccount ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    className="px-3"
+                    isActive={pathname === `/${accountId}/cloudblink`}
+                    render={
+                      <Link to="/{-$accountId}/cloudblink">
+                        <CloudIcon />
+                        {t("cloudblink")}
+                      </Link>
+                    }
+                  />
+                </SidebarMenuItem>
+              ) : null}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   className="px-3"
