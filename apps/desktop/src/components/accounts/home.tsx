@@ -2,6 +2,7 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { cn } from "@blinkdisk/utils/class";
 import { useSync } from "@desktop/hooks/mutations/use-sync";
+import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
@@ -17,6 +18,7 @@ export function AccountHome() {
   const { openCreateVault } = useCreateVaultDialog();
   const { mutate: sync, isPending: isSyncing } = useSync();
   const { data: vaults } = useVaultList();
+  const { data: space } = useSpace();
 
   const openCreateCloudBlink = useCallback(() => {
     openCreateVault({
@@ -30,7 +32,7 @@ export function AccountHome() {
     <div className="flex min-h-full flex-col overflow-y-auto p-6">
       <div className="mb-8 flex flex-row gap-6">
         <HealthCard isLoading={vaults === undefined} vaults={vaults} />
-        {isOnlineAccount ? (
+        {isOnlineAccount && space !== null ? (
           <StorageCard isLoading={vaults === undefined} />
         ) : null}
       </div>
