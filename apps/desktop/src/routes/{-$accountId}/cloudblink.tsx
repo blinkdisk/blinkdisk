@@ -147,6 +147,8 @@ function StorageSection() {
 
   const hasData = !isLoading && !!space;
 
+  if (!isLoading && !space) return null;
+
   return (
     <SettingsGroup title={t("title")}>
       <SettingsPanel>
