@@ -1,6 +1,11 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
-import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
+import {
+  STORAGE_USAGE_CRITICAL_THRESHOLD,
+  STORAGE_USAGE_WARNING_THRESHOLD,
+  TRIAL_DAYS,
+  TRIAL_STORAGE,
+} from "@blinkdisk/constants/space";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Badge } from "@blinkdisk/ui/badge";
@@ -159,6 +164,12 @@ function StorageSection() {
   const storageRatio = storagePercentage || 0;
   const storagePercent = Math.round(storageRatio * 100);
   const filledSegments = Math.round(storageRatio * STORAGE_SEGMENT_COUNT);
+  const filledSegmentClassName =
+    storageRatio >= STORAGE_USAGE_CRITICAL_THRESHOLD
+      ? "bg-destructive"
+      : storageRatio >= STORAGE_USAGE_WARNING_THRESHOLD
+        ? "bg-amber-600 dark:bg-amber-500"
+        : "bg-primary";
 
   if (!isLoading && !space) return null;
 
@@ -200,7 +211,7 @@ function StorageSection() {
                     className={cn(
                       "h-full flex-1 rounded-[3px]",
                       segment < filledSegments
-                        ? "bg-primary"
+                        ? filledSegmentClassName
                         : "bg-gray-200 dark:bg-white/5",
                     )}
                   />
