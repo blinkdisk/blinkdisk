@@ -5,7 +5,6 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
-import { Progress } from "@blinkdisk/ui/progress";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { getErrorCode } from "@blinkdisk/utils/error";
@@ -34,6 +33,12 @@ import {
 } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useMemo } from "react";
+
+const STORAGE_SEGMENT_COUNT = 28;
+const STORAGE_SEGMENTS = Array.from(
+  { length: STORAGE_SEGMENT_COUNT },
+  (_, index) => index,
+);
 
 export const Route = createFileRoute("/{-$accountId}/cloudblink")({
   beforeLoad: ({ params }) => {
@@ -152,6 +157,9 @@ function StorageSection() {
   }, [space]);
 
   const hasData = !isLoading && !!space;
+  const storageRatio = storagePercentage || 0;
+  const storagePercent = Math.round(storageRatio * 100);
+  const filledSegments = Math.round(storageRatio * STORAGE_SEGMENT_COUNT);
 
   if (!isLoading && !space) return null;
 
@@ -160,46 +168,45 @@ function StorageSection() {
       <SettingsPanel>
         <SettingsRow fullWidth>
           {hasData ? (
-            <div className="flex flex-col gap-3 py-1">
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-base font-medium">
-                  {t("used", {
-                    // Show 0B used if less than 20kb. Users were confused that
-                    // there was already space used after creating an empty vault.
-                    used: formatSize(space.used < 20000 ? 0 : space.used),
-                    capacity: formatSize(space.capacity),
-                  })}
+            <div className="grid gap-5 py-1">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <p className="flex items-baseline gap-1">
+                  <span className="text-[2.75rem] font-bold tabular-nums leading-none tracking-normal">
+                    {storagePercent.toLocaleString()}
+                  </span>
+                  <span className="text-xl font-bold">%</span>
+                  <span className="text-muted-foreground ml-1 text-sm font-medium">
+                    {t("usedSuffix")}
+                  </span>
                 </p>
-                <p
-                  className={cn(
-                    "text-sm",
-                    (storagePercentage || 0) >= 0.9
-                      ? "text-destructive"
-                      : (storagePercentage || 0) >= 0.8
-                        ? "text-orange-600"
-                        : (storagePercentage || 0) >= 0.7
-                          ? "text-amber-600"
-                          : "text-muted-foreground",
-                  )}
-                >
-                  {(storagePercentage || 0).toLocaleString(undefined, {
-                    style: "percent",
-                  })}
-                </p>
+                <div className="tabular-nums sm:text-right">
+                  <p className="text-foreground text-base font-semibold">
+                    {
+                      // Show 0B used if less than 20kb. Users were confused that
+                      // there was already space used after creating an empty vault.
+                      formatSize(space.used < 20000 ? 0 : space.used)
+                    }
+                  </p>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    {t("ofCapacity", {
+                      capacity: formatSize(space.capacity),
+                    })}
+                  </p>
+                </div>
               </div>
-              <Progress
-                value={100 * (storagePercentage || 0)}
-                className={cn(
-                  "[&_[data-slot=progress-track]]:h-2",
-                  (storagePercentage || 0) >= 0.9
-                    ? "[&_[data-slot=progress-indicator]]:bg-destructive"
-                    : (storagePercentage || 0) >= 0.8
-                      ? "[&_[data-slot=progress-indicator]]:bg-orange-600"
-                      : (storagePercentage || 0) >= 0.7
-                        ? "[&_[data-slot=progress-indicator]]:bg-amber-600"
-                        : "",
-                )}
-              />
+              <div className="flex h-9 w-full gap-1 overflow-hidden">
+                {STORAGE_SEGMENTS.map((segment) => (
+                  <div
+                    key={segment}
+                    className={cn(
+                      "h-full flex-1 rounded-[3px]",
+                      segment < filledSegments
+                        ? "bg-primary"
+                        : "bg-gray-200 dark:bg-white/5",
+                    )}
+                  />
+                ))}
+              </div>
             </div>
           ) : (
             <div className="flex flex-col gap-3 py-1">

@@ -5,7 +5,8 @@
     "learnMore": "Learn more",
     "storage": {
       "title": "Storage",
-      "used": "{{used}} of {{capacity}} used",
+      "usedSuffix": "used",
+      "ofCapacity": "of {{capacity}}",
       "full": {
         "title": "Your cloud storage is full",
         "description": "Upgrade your plan below to continue backing up your files."
