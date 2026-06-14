@@ -70,11 +70,20 @@ function RouteComponent() {
       <div className="mx-auto flex w-full max-w-[46rem] flex-col gap-10">
         <div className="flex items-center justify-between gap-4">
           <h1 aria-label={t("title")}>
-            <CloudBlinkLogo className="text-foreground h-5 w-auto" />
+            <CloudBlinkLogo className="text-foreground h-4.5 w-auto" />
           </h1>
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
+              size="sm"
+              className="text-muted-foreground px-3"
+              onClick={() => window.open("mailto:cloud@blinkdisk.com")}
+            >
+              <MailIcon />
+              {t("contactUs")}
+            </Button>
+            <Button
+              variant="secondary"
               size="sm"
               className="text-muted-foreground px-3"
               onClick={() =>
@@ -85,15 +94,6 @@ function RouteComponent() {
             >
               <ExternalLinkIcon />
               {t("learnMore")}
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="text-muted-foreground px-3"
-              onClick={() => window.open("mailto:cloud@blinkdisk.com")}
-            >
-              <MailIcon />
-              {t("contactUs")}
             </Button>
           </div>
         </div>
@@ -108,7 +108,6 @@ function RouteComponent() {
         )}
 
         <PlansSection />
-        {!noSpace ? <BillingSection /> : null}
       </div>
     </div>
   );
@@ -234,9 +233,12 @@ function StorageSection() {
 
 function PlanSection() {
   const { t } = useAppTranslation("cloudblink.page.plan");
+  const { t: billingT } = useAppTranslation("cloudblink.page.billing");
   const { data: space, isLoading: isSpaceLoading } = useSpace();
   const { data: subscription, isLoading: isSubscriptionLoading } =
     useSubscription();
+  const { data: billing } = useBilling();
+  const { mutate: openPortal, isPending } = useOpenBillingPortal();
 
   const plan = useMemo(
     () => SUBSCRIPTION_PLANS.find((p) => p.id === subscription?.planId),
@@ -263,29 +265,49 @@ function PlanSection() {
             </div>
           </SettingsRow>
         ) : subscription && plan && price ? (
-          <SettingsRow
-            title={t("current", {
-              storageGB: plan.storageGB.toLocaleString(),
-              period: t(`period.${price.period.toLowerCase()}`),
-            })}
-            description={t(`amount.${price.period.toLowerCase()}`, {
-              amount: price.amount.toLocaleString(undefined, {
-                style: "currency",
-                minimumFractionDigits: 0,
-                currency: price.currency,
-              }),
-            })}
-          >
-            <Badge
-              variant={
-                subscription.status === "ACTIVE" ||
-                subscription.status === "TRIALING"
-                  ? "subtle"
-                  : "destructive"
-              }
-            >
-              {t(`status.${subscription.status}`)}
-            </Badge>
+          <SettingsRow fullWidth>
+            <div className="flex flex-col gap-4 md:min-h-12 md:flex-row md:items-center md:justify-between">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-base font-medium">
+                    {t("current", {
+                      storageGB: plan.storageGB.toLocaleString(),
+                      period: t(`period.${price.period.toLowerCase()}`),
+                    })}
+                  </p>
+                  <Badge
+                    variant={
+                      subscription.status === "ACTIVE" ||
+                      subscription.status === "TRIALING"
+                        ? "subtle"
+                        : "destructive"
+                    }
+                  >
+                    {t(`status.${subscription.status}`)}
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground mt-1 max-w-sm text-sm">
+                  {t(`amount.${price.period.toLowerCase()}`, {
+                    amount: price.amount.toLocaleString(undefined, {
+                      style: "currency",
+                      minimumFractionDigits: 0,
+                      currency: price.currency,
+                    }),
+                  })}
+                </p>
+              </div>
+              {billing?.portalEnabled ? (
+                <Button
+                  variant="secondary"
+                  onClick={() => openPortal()}
+                  loading={isPending}
+                  className="w-fit"
+                >
+                  <ExternalLinkIcon />
+                  {billingT("portal.button")}
+                </Button>
+              ) : null}
+            </div>
           </SettingsRow>
         ) : space?.trialEndsAt ? (
           <SettingsRow
@@ -304,35 +326,6 @@ function PlanSection() {
             {null}
           </SettingsRow>
         )}
-      </SettingsPanel>
-    </SettingsGroup>
-  );
-}
-
-function BillingSection() {
-  const { t } = useAppTranslation("cloudblink.page.billing");
-  const { data: billing } = useBilling();
-  const { mutate: openPortal, isPending } = useOpenBillingPortal();
-
-  if (!billing?.portalEnabled) return null;
-
-  return (
-    <SettingsGroup title={t("title")}>
-      <SettingsPanel>
-        <SettingsRow
-          title={t("portal.title")}
-          description={t("portal.description")}
-        >
-          <Button
-            variant="secondary"
-            onClick={() => openPortal()}
-            loading={isPending}
-            className="w-fit"
-          >
-            <ExternalLinkIcon />
-            {t("portal.button")}
-          </Button>
-        </SettingsRow>
       </SettingsPanel>
     </SettingsGroup>
   );

@@ -4,7 +4,7 @@
     "contactUs": "Contact us",
     "learnMore": "Learn more",
     "storage": {
-      "title": "Storage",
+      "title": "Storage usage",
       "usedSuffix": "used",
       "ofCapacity": "of {{capacity}}",
       "full": {
@@ -13,7 +13,7 @@
       }
     },
     "plan": {
-      "title": "Plan",
+      "title": "Current plan",
       "current": "{{storageGB}} GB – {{period}}",
       "amount": {
         "monthly": "{{amount}} billed monthly",
@@ -40,15 +40,12 @@
       }
     },
     "billing": {
-      "title": "Billing",
       "portal": {
-        "title": "Billing portal",
-        "description": "Manage your payment method, view invoices and update your subscription.",
         "button": "Open billing portal"
       }
     },
     "plans": {
-      "title": "Plans"
+      "title": "Change plan"
     },
     "empty": {
       "title": "Start your free CloudBlink trial",
