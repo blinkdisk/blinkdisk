@@ -1,7 +1,7 @@
 {
   "page": {
     "title": "CloudBlink",
-    "refresh": "Refresh",
+    "learnMore": "Learn more",
     "storage": {
       "title": "Storage",
       "used": "{{used}} of {{capacity}} used",
