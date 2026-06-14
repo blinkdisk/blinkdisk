@@ -93,11 +93,11 @@ function RouteComponent() {
           <>
             <StorageSection />
             <PlanSection />
-            <BillingSection />
           </>
         )}
 
         <PlansSection />
+        {!noSpace ? <BillingSection /> : null}
       </div>
     </div>
   );
