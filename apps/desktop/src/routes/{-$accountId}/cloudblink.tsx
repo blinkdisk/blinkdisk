@@ -9,6 +9,7 @@ import { Progress } from "@blinkdisk/ui/progress";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { getErrorCode } from "@blinkdisk/utils/error";
+import { CloudBlinkLogo } from "@desktop/components/icons/cloudblink";
 import {
   SettingsGroup,
   SettingsPanel,
@@ -29,7 +30,6 @@ import {
   CircleAlertIcon,
   ExternalLinkIcon,
   PlusIcon,
-  RefreshCwIcon,
 } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useMemo } from "react";
@@ -51,7 +51,7 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
 
-  const { error, isFetching } = useSpace();
+  const { error } = useSpace();
   const noSpace = getErrorCode(error) === "SPACE_NOT_FOUND";
 
   useEffect(() => {
@@ -59,31 +59,23 @@ function RouteComponent() {
     queryClient.invalidateQueries({ queryKey: queryKeys.space });
   }, [posthog, queryClient, queryKeys.space]);
 
-  const refresh = () => {
-    queryClient.invalidateQueries({ queryKey: queryKeys.space });
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.subscription.detail(),
-    });
-    queryClient.invalidateQueries({ queryKey: queryKeys.billing.detail() });
-  };
-
   return (
     <div className="flex min-h-full flex-col overflow-y-auto px-6 py-12 md:px-8 md:py-16">
       <div className="mx-auto flex w-full max-w-[46rem] flex-col gap-10">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="text-3xl font-semibold tracking-normal">
-            {t("title")}
+          <h1 aria-label={t("title")}>
+            <CloudBlinkLogo className="text-foreground h-5 w-auto" />
           </h1>
           <Button
-            variant="secondary"
-            size="icon"
-            aria-label={t("refresh")}
-            onClick={refresh}
-            disabled={isFetching}
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground px-3"
+            onClick={() =>
+              window.open(`${process.env.MARKETING_URL}/cloudblink?ref=desktop`)
+            }
           >
-            <RefreshCwIcon
-              className={cn("size-4", isFetching && "animate-spin")}
-            />
+            <ExternalLinkIcon />
+            {t("learnMore")}
           </Button>
         </div>
 
