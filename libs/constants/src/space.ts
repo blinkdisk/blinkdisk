@@ -1,2 +1,5 @@
 export const TRIAL_STORAGE = 1000 * 1000 * 1000 * 100;
 export const TRIAL_DAYS = 30;
+
+export const STORAGE_USAGE_WARNING_THRESHOLD = 0.8;
+export const STORAGE_USAGE_CRITICAL_THRESHOLD = 0.9;

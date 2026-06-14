@@ -1,3 +1,7 @@
+import {
+  STORAGE_USAGE_CRITICAL_THRESHOLD,
+  STORAGE_USAGE_WARNING_THRESHOLD,
+} from "@blinkdisk/constants/space";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Card, CardContent, CardTitle } from "@blinkdisk/ui/card";
 import { CircularProgress } from "@blinkdisk/ui/circular-progress";
@@ -27,13 +31,11 @@ export function StorageCard({ isLoading }: StorageCardProps) {
     <Card
       className={cn(
         "flex shrink-0 items-center justify-center",
-        (storagePercentage || 0) >= 0.9
+        (storagePercentage || 0) >= STORAGE_USAGE_CRITICAL_THRESHOLD
           ? "border-destructive/20 bg-destructive/10 text-destructive [&_.muted]:text-destructive/70"
-          : (storagePercentage || 0) >= 0.8
-            ? "border-orange-600/20 bg-orange-600/10 text-orange-600 [&_.muted]:text-orange-600/70"
-            : (storagePercentage || 0) >= 0.7
-              ? "border-amber-600/20 bg-amber-600/10 text-amber-600 [&_.muted]:text-amber-600/70"
-              : "",
+          : (storagePercentage || 0) >= STORAGE_USAGE_WARNING_THRESHOLD
+            ? "border-amber-500/30 bg-amber-500/5 text-amber-600 dark:text-amber-500 [&_.muted]:text-amber-600/80 dark:[&_.muted]:text-amber-500/80"
+            : "",
       )}
     >
       <CardContent className="flex w-60 flex-col justify-between px-6 py-2">

@@ -1,3 +1,4 @@
+import { STORAGE_USAGE_CRITICAL_THRESHOLD } from "@blinkdisk/constants/space";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
@@ -15,11 +16,12 @@ export function SidebarStorageAlert() {
 
   const percentage = useMemo(() => {
     if (!space) return 0;
+    if (space.capacity === 0) return 1;
     return Math.min(space.used / space.capacity, 1);
   }, [space]);
 
   const full = useMemo(() => {
-    return percentage >= 0.98;
+    return percentage >= STORAGE_USAGE_CRITICAL_THRESHOLD;
   }, [percentage]);
 
   return (
