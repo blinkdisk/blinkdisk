@@ -29,6 +29,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import {
   CircleAlertIcon,
   ExternalLinkIcon,
+  MailIcon,
   PlusIcon,
 } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
@@ -66,17 +67,30 @@ function RouteComponent() {
           <h1 aria-label={t("title")}>
             <CloudBlinkLogo className="text-foreground h-5 w-auto" />
           </h1>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground px-3"
-            onClick={() =>
-              window.open(`${process.env.MARKETING_URL}/cloudblink?ref=desktop`)
-            }
-          >
-            <ExternalLinkIcon />
-            {t("learnMore")}
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground px-3"
+              onClick={() =>
+                window.open(
+                  `${process.env.MARKETING_URL}/cloudblink?ref=desktop`,
+                )
+              }
+            >
+              <ExternalLinkIcon />
+              {t("learnMore")}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="text-muted-foreground px-3"
+              onClick={() => window.open("mailto:cloud@blinkdisk.com")}
+            >
+              <MailIcon />
+              {t("contactUs")}
+            </Button>
+          </div>
         </div>
 
         {noSpace ? (
