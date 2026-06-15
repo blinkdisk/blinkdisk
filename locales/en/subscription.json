@@ -8,7 +8,7 @@
       "badge": "Save ~25%"
     },
     "plan": {
-      "description": "Enjoy {{storageGB}} GB of cloud storage",
+      "description": "of backup cloud storage",
       "originalAmount": "{{original}}/month",
       "monthlyAmount": "{{monthlyAmount}}<0> /month</0> ",
       "yearlySavings": "Save {{yearlySavings}} yearly",

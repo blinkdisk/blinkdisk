@@ -41,26 +41,21 @@ export function SubscriptionPlans({
   plansClassName,
   cardClassName,
 }: SubscriptionPlansProps) {
-  const { t } = useAppTranslation("subscription.upgradeDialog");
-
   useSubscription({
     refetchInterval: 5000,
   });
 
-  const [groupIndex, setGroupIndex] = useState(0);
+  const [selectedPlanIndex, setSelectedPlanIndex] = useState(0);
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
   const [pending, setPending] = useState<{ url: string } | null>(null);
 
   const [changeOpen, setChangeOpen] = useState(false);
   const [change, setChange] = useState<Change | null>(null);
 
-  const groupPlans = useMemo(
-    () => SUBSCRIPTION_PLANS.filter((plan) => plan.group),
-    [],
-  );
-  const groupPlan = useMemo(
-    () => groupPlans[groupIndex],
-    [groupPlans, groupIndex],
+  const plans = useMemo(() => SUBSCRIPTION_PLANS, []);
+  const selectedPlan = useMemo(
+    () => plans[selectedPlanIndex],
+    [plans, selectedPlanIndex],
   );
 
   return (
@@ -78,47 +73,18 @@ export function SubscriptionPlans({
         action={change?.action}
       />
 
-      <div className="flex items-start justify-between gap-3">
-        {header}
-        <Tabs
-          value={period}
-          onValueChange={(to) => setPeriod(to as BillingPeriod)}
-        >
-          <TabsList>
-            <TabsTrigger className="px-6" value="MONTHLY">
-              {t("period.monthly")}
-            </TabsTrigger>
-            <TabsTrigger className="px-3" value="YEARLY">
-              {t("period.yearly")}
-              <Badge variant="subtle">{t("period.badge")}</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
+      {header}
       <div className={plansClassName ?? "mt-8 flex gap-5"}>
-        {SUBSCRIPTION_PLANS.filter((plan) => !plan.group).map((plan) => (
+        {selectedPlan && (
           <Plan
-            key={plan.id}
-            plan={plan}
+            plan={selectedPlan}
             period={period}
+            setPeriod={setPeriod}
             currency={currency}
             cardClassName={cardClassName}
-            setPending={(url) => setPending({ url })}
-            setChange={(change) => {
-              setChange(change);
-              setChangeOpen(true);
-            }}
-          />
-        ))}
-        {groupPlan && (
-          <Plan
-            plan={groupPlan}
-            period={period}
-            currency={currency}
-            cardClassName={cardClassName}
-            groupIndex={groupIndex}
-            setGroupIndex={setGroupIndex}
-            maxGroupIndex={groupPlans.length - 1}
+            planIndex={selectedPlanIndex}
+            setPlanIndex={setSelectedPlanIndex}
+            maxPlanIndex={plans.length - 1}
             setPending={(url) => setPending({ url })}
             setChange={(change) => {
               setChange(change);
@@ -134,11 +100,12 @@ export function SubscriptionPlans({
 type PlanProps = {
   plan: PlanType;
   period: BillingPeriod;
+  setPeriod: (period: BillingPeriod) => void;
   currency: string;
   cardClassName?: string;
-  groupIndex?: number;
-  setGroupIndex?: (index: number) => void;
-  maxGroupIndex?: number;
+  planIndex?: number;
+  setPlanIndex?: (index: number) => void;
+  maxPlanIndex?: number;
   setPending: (url: string) => void;
   setChange: (change: Change) => void;
 };
@@ -146,15 +113,17 @@ type PlanProps = {
 function Plan({
   plan,
   period,
+  setPeriod,
   currency,
   cardClassName,
-  groupIndex,
-  setGroupIndex,
-  maxGroupIndex,
+  planIndex,
+  setPlanIndex,
+  maxPlanIndex,
   setPending,
   setChange,
 }: PlanProps) {
   const { t } = useAppTranslation("subscription.upgradeDialog.plan");
+  const { t: upgradeDialogT } = useAppTranslation("subscription.upgradeDialog");
   const [contact, setContact] = useState(false);
 
   const { data: subscription } = useSubscription();
@@ -208,41 +177,56 @@ function Plan({
       <div className="flex flex-col">
         {!contact ? (
           <>
-            <div className="flex items-center justify-center gap-2 xl:gap-3">
-              {setGroupIndex ? (
+            <div className="flex items-center justify-center gap-4 xl:gap-5">
+              {setPlanIndex ? (
                 <Button
                   size="icon-xs"
                   variant="secondary"
-                  onClick={() => setGroupIndex((groupIndex || 0) - 1)}
-                  disabled={groupIndex === 0}
+                  className="size-8"
+                  onClick={() => setPlanIndex((planIndex || 0) - 1)}
+                  disabled={planIndex === 0}
                 >
-                  <MinusIcon className="size-4" />
+                  <MinusIcon className="size-4.5" />
                 </Button>
               ) : null}
-              <p className="text-center text-3xl font-bold">
+              <p className="w-[8ch] text-center text-[2rem] font-bold leading-none tabular-nums">
                 {plan.storageGB.toLocaleString()} GB
               </p>
-              {setGroupIndex ? (
+              {setPlanIndex ? (
                 <Button
                   size="icon-xs"
+                  className="size-8"
                   onClick={() =>
-                    groupIndex === maxGroupIndex
+                    planIndex === maxPlanIndex
                       ? setContact(true)
-                      : setGroupIndex((groupIndex || 0) + 1)
+                      : setPlanIndex((planIndex || 0) + 1)
                   }
                   disabled={contact}
                 >
-                  <PlusIcon className="size-4" />
+                  <PlusIcon className="size-4.5" />
                 </Button>
               ) : null}
             </div>
             {!contact ? (
               <p className="text-muted-foreground mt-1 text-center text-xs">
-                {t("description", {
-                  storageGB: plan.storageGB.toLocaleString(),
-                })}
+                {t("description")}
               </p>
             ) : null}
+            <Tabs
+              value={period}
+              onValueChange={(to) => setPeriod(to as BillingPeriod)}
+              className="mt-4"
+            >
+              <TabsList className="w-full">
+                <TabsTrigger className="px-6" value="MONTHLY">
+                  {upgradeDialogT("period.monthly")}
+                </TabsTrigger>
+                <TabsTrigger className="px-3" value="YEARLY">
+                  {upgradeDialogT("period.yearly")}
+                  <Badge variant="subtle">{upgradeDialogT("period.badge")}</Badge>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </>
         ) : (
           <Button
