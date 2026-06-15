@@ -20,7 +20,7 @@ import { useCheckout } from "@desktop/hooks/mutations/use-checkout";
 import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-portal";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
-import { ArrowLeftIcon, MinusIcon, PlusIcon } from "lucide-react";
+import { ArrowLeftIcon, CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { type ReactNode, useMemo, useState } from "react";
 
 const currency = "USD";
@@ -92,6 +92,7 @@ export function SubscriptionPlans({
             }}
           />
         )}
+        <BusinessPlan cardClassName={cardClassName} />
       </div>
     </>
   );
@@ -360,6 +361,51 @@ function Plan({
           </Button>
         )}
       </div>
+    </div>
+  );
+}
+
+type BusinessPlanProps = {
+  cardClassName?: string;
+};
+
+function BusinessPlan({ cardClassName }: BusinessPlanProps) {
+  const { t } = useAppTranslation("subscription.upgradeDialog.plan.business");
+
+  return (
+    <div
+      className={cn(
+        "bg-card text-card-foreground flex flex-col justify-between rounded-xl border p-6",
+        cardClassName ?? "w-72",
+      )}
+    >
+      <div>
+        <p className="text-2xl font-bold leading-none">
+          {t("eyebrow")}
+        </p>
+        <p className="text-muted-foreground mt-1 text-sm font-semibold">
+          {t("title")}
+        </p>
+        <ul className="mt-6 grid gap-3 text-sm">
+          {[
+            t("features.discounts"),
+            t("features.billing"),
+            t("features.support"),
+          ].map((feature) => (
+            <li key={feature} className="flex items-center gap-3">
+              <CheckIcon className="text-primary size-4 shrink-0" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Button
+        variant="secondary"
+        className="mt-8 w-full"
+        onClick={() => window.open("mailto:cloud@blinkdisk.com")}
+      >
+        {t("button")}
+      </Button>
     </div>
   );
 }

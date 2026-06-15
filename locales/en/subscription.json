@@ -23,6 +23,16 @@
         "monthly": "Monthly",
         "yearly": "Yearly"
       },
+      "business": {
+        "eyebrow": "Business",
+        "title": "For teams & organizations",
+        "features": {
+          "billing": "Centralized billing",
+          "support": "Priority support",
+          "discounts": "Volume discounts"
+        },
+        "button": "Talk to us"
+      },
       "contact": {
         "back": "Go back",
         "title": "Looking for more storage?",
