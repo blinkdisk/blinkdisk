@@ -175,7 +175,7 @@ function Plan({
   const hasInsufficientStorage = useMemo(() => {
     if (!space) return false;
     const bytes = plan.storageGB * 1000 * 1000 * 1000;
-    return space.used >= bytes;
+    return space.used > bytes;
   }, [plan, space]);
 
   if (!price) return null;
