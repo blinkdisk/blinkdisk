@@ -5,7 +5,7 @@
     "period": {
       "monthly": "Monthly",
       "yearly": "Yearly",
-      "badge": "Save ~25%"
+      "badge": "-25%"
     },
     "plan": {
       "description": "of backup cloud storage",

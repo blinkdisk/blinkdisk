@@ -21,7 +21,7 @@ import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
 import { ArrowLeftIcon, CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 const currency = "USD";
 
@@ -41,7 +41,7 @@ export function SubscriptionPlans({
   plansClassName,
   cardClassName,
 }: SubscriptionPlansProps) {
-  useSubscription({
+  const { data: subscription } = useSubscription({
     refetchInterval: 5000,
   });
 
@@ -57,6 +57,24 @@ export function SubscriptionPlans({
     () => plans[selectedPlanIndex],
     [plans, selectedPlanIndex],
   );
+
+  useEffect(() => {
+    if (!subscription?.planId) return;
+
+    const currentPlanIndex = plans.findIndex(
+      (plan) => plan.id === subscription.planId,
+    );
+    const currentPlan = plans[currentPlanIndex];
+    if (!currentPlan) return;
+
+    const nextPlanIndex = plans.findIndex(
+      (plan) => plan.storageGB > currentPlan.storageGB,
+    );
+
+    setSelectedPlanIndex(
+      nextPlanIndex === -1 ? currentPlanIndex : nextPlanIndex,
+    );
+  }, [plans, subscription?.planId]);
 
   return (
     <>
@@ -164,7 +182,7 @@ function Plan({
   return (
     <div
       className={cn(
-        "bg-card text-card-foreground relative flex flex-col justify-between rounded-xl border p-6",
+        "bg-card text-card-foreground relative flex min-h-[20.5rem] flex-col justify-between rounded-xl border p-6",
         cardClassName ?? "w-72",
       )}
     >
@@ -175,10 +193,10 @@ function Plan({
           </Badge>
         </div>
       ) : null}
-      <div className="flex flex-col">
+      <div className={cn("flex flex-col", !contact && "min-h-[7.25rem]")}>
         {!contact ? (
           <>
-            <div className="flex items-center justify-center gap-4 xl:gap-5">
+            <div className="flex items-center justify-between gap-4">
               {setPlanIndex ? (
                 <Button
                   size="icon-xs"
@@ -190,7 +208,7 @@ function Plan({
                   <MinusIcon className="size-4.5" />
                 </Button>
               ) : null}
-              <p className="w-[8ch] text-center text-[2rem] font-bold leading-none tabular-nums">
+              <p className="flex-1 text-center text-[2rem] font-bold leading-none tabular-nums">
                 {plan.storageGB.toLocaleString()} GB
               </p>
               {setPlanIndex ? (
@@ -281,11 +299,11 @@ function Plan({
           ) : null}
         </div>
       ) : (
-        <div>
-          <p className="text-lg font-semibold tracking-tight">
+        <div className="mx-auto my-3 flex max-w-60 flex-1 flex-col items-center justify-center text-center">
+          <p className="text-lg font-semibold leading-tight tracking-tight">
             {t("contact.title")}
           </p>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground mt-2 text-sm leading-5">
             {t("contact.description")}
           </p>
         </div>

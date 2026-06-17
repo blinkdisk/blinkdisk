@@ -72,7 +72,7 @@ function RouteComponent() {
 
   return (
     <div className="flex min-h-full flex-col overflow-y-auto px-6 py-12 md:px-8 md:py-16">
-      <div className="mx-auto flex w-full max-w-[46rem] flex-col gap-10">
+      <div className="mx-auto flex w-full max-w-[41.5rem] flex-col gap-10">
         <div className="flex items-center justify-between gap-4">
           <h1 aria-label={t("title")}>
             <CloudBlinkLogo className="text-foreground h-4.5 w-auto" />
@@ -344,11 +344,19 @@ function PlanSection() {
 
 function PlansSection() {
   const { t } = useAppTranslation("cloudblink.page.plans");
+  const { t: subscriptionT } = useAppTranslation("subscription.upgradeDialog");
 
   return (
     <section>
       <SubscriptionPlans
-        header={<h2 className="text-xl font-semibold">{t("title")}</h2>}
+        header={
+          <div>
+            <h2 className="text-xl font-semibold">{t("title")}</h2>
+            <p className="text-muted-foreground mt-1 text-xs">
+              {subscriptionT("description")}
+            </p>
+          </div>
+        }
         plansClassName="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2"
         cardClassName="w-full"
       />
