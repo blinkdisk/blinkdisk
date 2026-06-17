@@ -86,12 +86,13 @@ export function SidebarAlerts() {
     });
   }
 
-  if (space?.trialEndsAt) {
+  if (space?.trialStartedAt && space.trialEndsAt) {
     alerts.push({
       key: "trial",
       alert: (
         <SidebarTrialAlert
           capacity={space.capacity}
+          trialStartedAt={space.trialStartedAt}
           trialEndsAt={space.trialEndsAt}
         />
       ),

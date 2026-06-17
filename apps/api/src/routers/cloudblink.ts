@@ -18,6 +18,7 @@ export const cloudblinkRouter = router({
       .select([
         "Space.id as id",
         "Space.capacity as capacity",
+        "Trial.startedAt as trialStartedAt",
         "Trial.endsAt as trialEndsAt",
       ])
       .where("Space.accountId", "=", ctx.account.id)
@@ -34,6 +35,7 @@ export const cloudblinkRouter = router({
     return {
       used,
       capacity: parseInt(space.capacity, 10),
+      trialStartedAt: space.trialStartedAt,
       trialEndsAt: space.trialEndsAt,
     };
   }),
