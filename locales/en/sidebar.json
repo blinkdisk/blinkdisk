@@ -46,7 +46,7 @@
     },
     "warning": {
       "title": "Trial ending soon",
-      "description": "Your trial ends {{trialEndsIn}}. Upgrade to keep CloudBlink backups running."
+      "description": "Your CloudBlink trial ends {{trialEndsIn}}. Upgrade to keep backups running."
     },
     "button": "Upgrade storage"
   },
