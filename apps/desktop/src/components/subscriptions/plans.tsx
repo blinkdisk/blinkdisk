@@ -300,7 +300,7 @@ function Plan({
         </div>
       ) : (
         <div className="mx-auto my-3 flex max-w-60 flex-1 flex-col items-center justify-center text-center">
-          <p className="text-lg font-semibold leading-tight tracking-tight">
+          <p className="text-xl font-semibold leading-tight tracking-tight">
             {t("contact.title")}
           </p>
           <p className="text-muted-foreground mt-2 text-sm leading-5">
