@@ -40,12 +40,19 @@ export function SidebarTrialAlert({
     1,
   );
 
-  const variant =
+  const threshold =
     trialElapsed >= TRIAL_ELAPSED_CRITICAL_THRESHOLD
-      ? "destructive"
+      ? "critical"
       : trialElapsed >= TRIAL_ELAPSED_WARNING_THRESHOLD
+        ? "warning"
+        : "active";
+  const variant =
+    threshold === "critical"
+      ? "destructive"
+      : threshold === "warning"
         ? "warn"
         : "info";
+  const copyThreshold = threshold === "critical" ? "warning" : threshold;
 
   const buttonVariant =
     variant === "destructive"
@@ -57,9 +64,11 @@ export function SidebarTrialAlert({
   return (
     <SidebarMenuItem>
       <Alert variant={variant} className="rounded-xl p-4">
-        <AlertTitle className="text-lg font-semibold">{t("title")}</AlertTitle>
+        <AlertTitle className="text-lg font-semibold">
+          {t(`${copyThreshold}.title`)}
+        </AlertTitle>
         <AlertDescription className="mt-0.5 text-sm">
-          {t("description", {
+          {t(`${copyThreshold}.description`, {
             capacity: formatSize(capacity),
             trialEndsIn,
           })}
