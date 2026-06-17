@@ -224,7 +224,9 @@ function Plan({
                 </TabsTrigger>
                 <TabsTrigger className="px-3" value="YEARLY">
                   {upgradeDialogT("period.yearly")}
-                  <Badge variant="subtle">{upgradeDialogT("period.badge")}</Badge>
+                  <Badge variant="subtle">
+                    {upgradeDialogT("period.badge")}
+                  </Badge>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -379,14 +381,12 @@ function BusinessPlan({ cardClassName }: BusinessPlanProps) {
         cardClassName ?? "w-72",
       )}
     >
-      <div>
-        <p className="text-2xl font-bold leading-none">
-          {t("eyebrow")}
-        </p>
+      <div className="flex flex-1 flex-col">
+        <p className="text-2xl font-bold leading-none">{t("eyebrow")}</p>
         <p className="text-muted-foreground mt-1 text-sm font-semibold">
           {t("title")}
         </p>
-        <ul className="mt-6 grid gap-3 text-sm">
+        <ul className="mt-6 grid flex-1 content-center gap-3 text-sm">
           {[
             t("features.discounts"),
             t("features.billing"),
