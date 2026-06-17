@@ -83,7 +83,8 @@ export async function createVault(payload: {
     return response as { error?: string };
   } catch (e) {
     log.error("Failed to create vault, stopping:", e);
-    stopVault(vault.id);
+    if (vaults[vault.id]) stopVault(vault.id);
+    else vault.server.process.kill();
     return e as { code?: string; error?: string };
   }
 }
