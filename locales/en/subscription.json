@@ -5,10 +5,10 @@
     "period": {
       "monthly": "Monthly",
       "yearly": "Yearly",
-      "badge": "Save ~25%"
+      "badge": "-25%"
     },
     "plan": {
-      "description": "Enjoy {{storageGB}} GB of cloud storage",
+      "description": "of backup cloud storage",
       "originalAmount": "{{original}}/month",
       "monthlyAmount": "{{monthlyAmount}}<0> /month</0> ",
       "yearlySavings": "Save {{yearlySavings}} yearly",
@@ -23,9 +23,19 @@
         "monthly": "Monthly",
         "yearly": "Yearly"
       },
+      "business": {
+        "eyebrow": "Business",
+        "title": "For teams & organizations",
+        "features": {
+          "billing": "Centralized billing",
+          "support": "Priority support",
+          "discounts": "Volume discounts"
+        },
+        "button": "Contact us"
+      },
       "contact": {
         "back": "Go back",
-        "title": "Looking for more storage?",
+        "title": "Need more storage?",
         "description": "Feel free to contact us at cloud@blinkdisk.com for a quote.",
         "button": "Contact us"
       }

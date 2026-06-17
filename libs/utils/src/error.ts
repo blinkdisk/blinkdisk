@@ -37,3 +37,17 @@ export class CoreError extends Error {
     this.message = message;
   }
 }
+
+type ErrorDataCode = {
+  data?: {
+    code?: unknown;
+  };
+};
+
+export function getErrorCode(error: unknown) {
+  if (!error || typeof error !== "object") return;
+
+  if ("code" in error && typeof error.code === "string") return error.code;
+  const dataCode = "data" in error ? (error as ErrorDataCode).data?.code : null;
+  if (typeof dataCode === "string") return dataCode;
+}

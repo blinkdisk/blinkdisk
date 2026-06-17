@@ -1,4 +1,5 @@
 import { getStorageProvider } from "@blinkdisk/constants/providers";
+import { STORAGE_USAGE_WARNING_THRESHOLD } from "@blinkdisk/constants/space";
 import {
   Carousel,
   type CarouselApi,
@@ -43,7 +44,11 @@ export function SidebarAlerts() {
   const [currentAlert, setCurrentAlert] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
-  const storagePercentage = space ? space.used / space.capacity : 0;
+  const storagePercentage = space
+    ? space.capacity === 0
+      ? 1
+      : Math.min(space.used / space.capacity, 1)
+    : 0;
   const onlyLocalVaults =
     !!vaults?.length &&
     vaults.every((vault) => {
@@ -93,7 +98,7 @@ export function SidebarAlerts() {
     });
   }
 
-  if (storagePercentage >= 0.8) {
+  if (storagePercentage >= STORAGE_USAGE_WARNING_THRESHOLD) {
     alerts.push({
       key: "storage",
       alert: <SidebarStorageAlert />,

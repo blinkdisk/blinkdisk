@@ -15,7 +15,6 @@ export type Plan = {
   id: string;
   storageGB: number;
   prices: PlanPrice[];
-  group?: boolean;
 };
 
 export const SUBSCRIPTION_PLANS: Plan[] = [
@@ -96,7 +95,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-2000-gb",
@@ -123,7 +121,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-3000-gb",
@@ -150,7 +147,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-4000-gb",
@@ -177,7 +173,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-5000-gb",
@@ -204,7 +199,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-6000-gb",
@@ -231,7 +225,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-7000-gb",
@@ -258,7 +251,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-8000-gb",
@@ -285,7 +277,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-9000-gb",
@@ -312,7 +303,6 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
   {
     id: "cloud-10000-gb",
@@ -339,6 +329,5 @@ export const SUBSCRIPTION_PLANS: Plan[] = [
         currency: "USD",
       },
     ],
-    group: true,
   },
 ] as const;
