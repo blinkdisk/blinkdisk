@@ -377,6 +377,35 @@ describe("polarWebhook", () => {
     );
   });
 
+  it("does not track affiliate payments for paid orders without referral metadata", async () => {
+    mocks.validateEvent.mockReturnValueOnce({
+      type: "order.paid",
+      data: {
+        subscriptionId: "polar_sub_1",
+        netAmount: 4200,
+      },
+    });
+    const db = createDb({
+      Subscription: [
+        {
+          id: "sub_1",
+          affiliateId: null,
+          accountId: "acct_1",
+          name: "User Name",
+          email: "user@example.com",
+        },
+      ],
+    });
+    const { context } = createContext(db);
+
+    await expect(polarWebhook(context as never)).resolves.toEqual({
+      body: { success: true },
+      status: 202,
+    });
+
+    expect(mocks.trackAffiliatePayment).not.toHaveBeenCalled();
+  });
+
   it("tracks affiliate payments for paid orders with referral metadata", async () => {
     mocks.validateEvent.mockReturnValueOnce({
       type: "order.paid",

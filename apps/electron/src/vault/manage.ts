@@ -15,6 +15,22 @@ import { validationVault } from "@electron/vault/validate";
 
 export const vaults: Record<string, VaultInstance> = {};
 
+function asError(error: unknown) {
+  if (error instanceof Error) return error;
+
+  if (error && typeof error === "object") {
+    const fields = error as { code?: string; error?: string; message?: string };
+    return Object.assign(
+      new Error(
+        fields.message || fields.error || fields.code || "Vault failed",
+      ),
+      fields,
+    );
+  }
+
+  return new Error("Vault failed");
+}
+
 export async function createVault(payload: {
   vault: {
     id: string;
@@ -85,7 +101,7 @@ export async function createVault(payload: {
     log.error("Failed to create vault, stopping:", e);
     if (vaults[vault.id]) stopVault(vault.id);
     else vault.server.process.kill();
-    return e as { code?: string; error?: string };
+    throw asError(e);
   }
 }
 

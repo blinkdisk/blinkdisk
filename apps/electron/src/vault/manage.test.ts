@@ -178,27 +178,30 @@ describe("vault management", () => {
   it("stops a newly started vault when repo creation fails", async () => {
     mocks.fetchVault.mockRejectedValueOnce({ code: "CREATE_FAILED" });
 
-    await expect(
-      createVault({
-        vault: {
-          id: "vlt_1",
-          name: "Backups",
-          provider: "CLOUDBLINK",
-          config: {},
-          options: {
-            version: 2,
-            encryption: "AES256-GCM-HMAC-SHA256",
-            hash: "BLAKE3-256",
-            splitter: "DYNAMIC-4M-BUZHASH",
-            errorCorrectionAlgorithm: "REED-SOLOMON-CRC32",
-            errorCorrectionOverhead: 10,
-          },
-          password: "secret",
+    const promise = createVault({
+      vault: {
+        id: "vlt_1",
+        name: "Backups",
+        provider: "CLOUDBLINK",
+        config: {},
+        options: {
+          version: 2,
+          encryption: "AES256-GCM-HMAC-SHA256",
+          hash: "BLAKE3-256",
+          splitter: "DYNAMIC-4M-BUZHASH",
+          errorCorrectionAlgorithm: "REED-SOLOMON-CRC32",
+          errorCorrectionOverhead: 10,
         },
-        userPolicy: {},
-        globalPolicy: {},
-      }),
-    ).resolves.toEqual({ code: "CREATE_FAILED" });
+        password: "secret",
+      },
+      userPolicy: {},
+      globalPolicy: {},
+    });
+
+    await expect(promise).rejects.toMatchObject({
+      code: "CREATE_FAILED",
+      message: "CREATE_FAILED",
+    });
 
     const startedServer = await mocks.startVaultServer.mock.results[0]?.value;
     expect(startedServer.process.kill).toHaveBeenCalled();
