@@ -6,12 +6,15 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "^22.13.9",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "@blinkdisk/constants": "workspace:*",
