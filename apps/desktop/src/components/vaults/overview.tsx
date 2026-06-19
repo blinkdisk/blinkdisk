@@ -324,30 +324,49 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
   return (
     <div className="flex items-center gap-2">
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            "border-input bg-card hover:bg-card-hover flex h-11 min-w-42 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:z-10",
-          )}
-        >
-          <div className="flex min-w-0 items-center gap-2.5">
-            <MonitorIcon className="size-4.25 shrink-0" />
-            <span className="truncate">{value.hostName || t("host.all")}</span>
-          </div>
-          <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuGroup>
-            <DropdownMenuItem
-              onClick={() =>
+        <div className="relative">
+          <DropdownMenuTrigger
+            className={cn(
+              "border-input bg-card hover:bg-card-hover flex h-11 w-42 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border py-2 pl-3 pr-3 text-sm outline-none transition-colors focus:z-10",
+            )}
+          >
+            <div
+              className={cn(
+                "flex min-w-0 items-center gap-2.5",
+                value.hostName && "pr-6",
+              )}
+            >
+              <MonitorIcon className="size-4.25 shrink-0" />
+              <span className="truncate">
+                {value.hostName || t("host.all")}
+              </span>
+            </div>
+            {!value.hostName ? (
+              <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
+            ) : null}
+          </DropdownMenuTrigger>
+          {value.hostName ? (
+            <button
+              type="button"
+              aria-label={t("host.clear")}
+              title={t("host.clear")}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
                 onChange({
                   ...value,
                   hostName: null,
-                })
-              }
+                });
+              }}
+              className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-2 top-1/2 z-10 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm outline-none transition-colors focus-visible:ring-2"
             >
-              <XIcon />
-              {t("host.all")}
-            </DropdownMenuItem>
+              <XIcon className="size-3.5" />
+            </button>
+          ) : null}
+        </div>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
             {profiles.map((profile) => (
               <DropdownMenuItem
                 key={profile.hostName}
@@ -373,30 +392,49 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            "border-input bg-card hover:bg-card-hover flex h-11 min-w-36 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:z-10",
-          )}
-        >
-          <div className="flex min-w-0 items-center gap-2.5">
-            <UserIcon className="size-4.25 shrink-0" />
-            <span className="truncate">{value.userName || t("user.all")}</span>
-          </div>
-          <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuGroup>
-            <DropdownMenuItem
-              onClick={() =>
+        <div className="relative">
+          <DropdownMenuTrigger
+            className={cn(
+              "border-input bg-card hover:bg-card-hover flex h-11 w-42 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border py-2 pl-3 pr-3 text-sm outline-none transition-colors focus:z-10",
+            )}
+          >
+            <div
+              className={cn(
+                "flex min-w-0 items-center gap-2.5",
+                value.userName && "pr-6",
+              )}
+            >
+              <UserIcon className="size-4.25 shrink-0" />
+              <span className="truncate">
+                {value.userName || t("user.all")}
+              </span>
+            </div>
+            {!value.userName ? (
+              <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
+            ) : null}
+          </DropdownMenuTrigger>
+          {value.userName ? (
+            <button
+              type="button"
+              aria-label={t("user.clear")}
+              title={t("user.clear")}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
                 onChange({
                   ...value,
                   userName: null,
-                })
-              }
+                });
+              }}
+              className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-2 top-1/2 z-10 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm outline-none transition-colors focus-visible:ring-2"
             >
-              <XIcon />
-              {t("user.all")}
-            </DropdownMenuItem>
+              <XIcon className="size-3.5" />
+            </button>
+          ) : null}
+        </div>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
             {userNames.map((userName) => (
               <DropdownMenuItem
                 key={userName}

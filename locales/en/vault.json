@@ -405,10 +405,12 @@
       "select": {
         "host": {
           "all": "All devices",
+          "clear": "Clear device filter",
           "empty": "Select device"
         },
         "user": {
           "all": "All profiles",
+          "clear": "Clear profile filter",
           "empty": "Select profile"
         }
       },
