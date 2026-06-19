@@ -36,6 +36,7 @@ import {
   buildVaultStatHistory,
   buildVaultStats,
 } from "@desktop/lib/vault-stats";
+import { getRouteApi } from "@tanstack/react-router";
 import {
   ChevronDownIcon,
   CloudUploadIcon,
@@ -45,15 +46,19 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 type VaultOverviewProps = {
   vault?: VaultItem;
 };
 
+const vaultRouteApi = getRouteApi("/{-$accountId}/{-$vaultId}");
+
 export function VaultOverview({ vault }: VaultOverviewProps) {
   const { t } = useAppTranslation("vault.overview");
 
+  const navigate = vaultRouteApi.useNavigate();
+  const { otherHostName, otherUserName } = vaultRouteApi.useSearch();
   const { openCreateFolder } = useCreateFolderDialog();
   const { localHostName, localUserName } = useLocalProfile();
 
@@ -72,10 +77,26 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
     [profiles, localProfile],
   );
 
-  const [otherFilters, setOtherFilters] = useState<ProfileFilterSelection>({
-    hostName: null,
-    userName: null,
-  });
+  const otherFilters = useMemo<ProfileFilterSelection>(
+    () => ({
+      hostName: otherHostName || null,
+      userName: otherUserName || null,
+    }),
+    [otherHostName, otherUserName],
+  );
+
+  const setOtherFilters = useCallback(
+    (filters: ProfileFilterSelection) => {
+      navigate({
+        search: (search) => ({
+          ...search,
+          otherHostName: filters.hostName || undefined,
+          otherUserName: filters.userName || undefined,
+        }),
+      });
+    },
+    [navigate],
+  );
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup({
     profileFilter: localProfile,
@@ -248,6 +269,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
                   icon: <FolderPlusIcon />,
                   title: t("otherDevices.empty.title"),
                   description: t("otherDevices.empty.description"),
+                  containerClassName: "mt-8",
                 }
               : undefined
           }
@@ -269,6 +291,7 @@ type FolderSectionProps = {
     icon: React.ReactNode;
     title: string;
     description: string;
+    containerClassName?: string;
     children?: React.ReactNode;
   };
 };
@@ -314,7 +337,10 @@ function FolderSection({
           icon={empty.icon}
           title={empty.title}
           description={empty.description}
-          containerClassName={cn(fillAvailableSpace && "flex-1")}
+          containerClassName={cn(
+            empty.containerClassName,
+            fillAvailableSpace && "flex-1",
+          )}
         >
           {empty.children}
         </Empty>
