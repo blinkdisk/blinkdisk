@@ -423,7 +423,7 @@
       "count_other": "{{count}} folders backed up",
       "addFolder": "Add folder",
       "backupAll": "Backup all",
-      "backupCurrentDevice": "Back up this device",
+      "backupCurrentDevice": "Backup all",
       "empty": {
         "title": "No folders added",
         "description": "You haven't added any folders yet. Add one by pressing the button below."
