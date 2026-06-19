@@ -10,21 +10,29 @@ import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
-import { useState } from "react";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { profileFilterFromParts } from "@desktop/lib/profile";
+import { useMemo, useState } from "react";
 
 type CreateFolderSettingsProps = {
   values: ZCreateFolderFormType;
-  profileFilter?: ProfileFilter;
   onSuccess: () => void;
 };
 
 export function CreateFolderSettings({
   values,
-  profileFilter,
   onSuccess,
 }: CreateFolderSettingsProps) {
   const { t } = useAppTranslation("folder.createDialog");
+  const { localHostName, localUserName } = useLocalProfile();
+  const localProfile = useMemo(
+    () =>
+      profileFilterFromParts({
+        hostName: localHostName,
+        userName: localUserName,
+      }),
+    [localHostName, localUserName],
+  );
 
   const [size, setSize] = useState<number | null>(null);
   const [alertShown, setAlertShown] = useState(false);
@@ -42,7 +50,6 @@ export function CreateFolderSettings({
       }
     },
     onSuccess,
-    profileFilter,
   });
 
   return (
@@ -50,7 +57,7 @@ export function CreateFolderSettings({
       <PolicyContextProvider
         level="FOLDER"
         mock={{ path: values.path }}
-        profileFilter={profileFilter}
+        profileFilter={localProfile}
       >
         {({ loading }) => (
           <>

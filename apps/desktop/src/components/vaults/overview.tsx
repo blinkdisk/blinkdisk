@@ -214,11 +214,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
                   {t("folders.backupAll")}
                 </Button>
               ) : null}
-              <Button
-                onClick={() =>
-                  openCreateFolder(undefined, { profileFilter: localProfile })
-                }
-              >
+              <Button onClick={() => openCreateFolder()}>
                 <PlusIcon />
                 {t("folders.addFolder")}
               </Button>
@@ -232,14 +228,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
                 title: t("folders.empty.title"),
                 description: t("folders.empty.description"),
                 children: (
-                  <Button
-                    onClick={() =>
-                      openCreateFolder(undefined, {
-                        profileFilter: localProfile,
-                      })
-                    }
-                    size="lg"
-                  >
+                  <Button onClick={() => openCreateFolder()} size="lg">
                     <PlusIcon />
                     {t("folders.addFolder")}
                   </Button>

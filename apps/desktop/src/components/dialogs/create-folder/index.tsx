@@ -20,7 +20,7 @@ type CreateFolderStep = "GENERAL" | "SETTINGS";
 export function CreateFolderDialog() {
   const { t } = useAppTranslation("folder.createDialog");
 
-  const { isOpen, setIsOpen, defaultValues, options, clearDefaultValues } =
+  const { isOpen, setIsOpen, defaultValues, clearDefaultValues } =
     useCreateFolderDialog();
 
   const [step, setStep] = useState<CreateFolderStep>("GENERAL");
@@ -74,11 +74,7 @@ export function CreateFolderDialog() {
         {step === "GENERAL" ? (
           <CreateFolderGeneral form={form} />
         ) : (
-          <CreateFolderSettings
-            values={values}
-            profileFilter={options?.profileFilter}
-            onSuccess={onSuccess}
-          />
+          <CreateFolderSettings values={values} onSuccess={onSuccess} />
         )}
       </DialogContent>
     </Dialog>
