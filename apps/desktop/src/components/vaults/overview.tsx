@@ -86,7 +86,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   const { data: allFolders } = useFolderList({ unfiltered: true });
   const { data: backups } = useBackupList({ filters: "none" });
 
-  const otherFolders = useMemo(() => {
+  const otherDeviceFolders = useMemo(() => {
     if (!allFolders || !localProfile) return undefined;
 
     return allFolders.filter((folder) => {
@@ -95,15 +95,23 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
         userName: folder.source.userName,
       };
 
-      return (
-        !isSameProfile(profile, localProfile) &&
-        matchesProfileFilterSelection({
-          profile,
-          filters: otherFilters,
-        })
-      );
+      return !isSameProfile(profile, localProfile);
     });
-  }, [allFolders, localProfile, otherFilters]);
+  }, [allFolders, localProfile]);
+
+  const otherFolders = useMemo(
+    () =>
+      otherDeviceFolders?.filter((folder) =>
+        matchesProfileFilterSelection({
+          profile: {
+            host: folder.source.host,
+            userName: folder.source.userName,
+          },
+          filters: otherFilters,
+        }),
+      ),
+    [otherDeviceFolders, otherFilters],
+  );
 
   const isAnyBackupRunning = useMemo(
     () =>
@@ -128,6 +136,11 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
 
   const isStatsLoading = !vault || !stats || !statHistory;
   const isCurrentFoldersLoading = currentFolders === undefined;
+  const isOverviewEmpty =
+    Array.isArray(currentFolders) &&
+    currentFolders.length === 0 &&
+    Array.isArray(otherDeviceFolders) &&
+    otherDeviceFolders.length === 0;
 
   return (
     <div
@@ -213,8 +226,9 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
               }
             : undefined
         }
+        fillAvailableSpace={isOverviewEmpty}
       />
-      {otherProfiles.length > 0 ? (
+      {otherProfiles.length > 0 && !isOverviewEmpty ? (
         <FolderSection
           title={t("otherDevices.title")}
           count={otherFolders?.length}
@@ -250,6 +264,7 @@ type FolderSectionProps = {
   profileFilter?: ProfileFilter;
   allowBackupActions?: boolean;
   actions?: React.ReactNode;
+  fillAvailableSpace?: boolean;
   empty?: {
     icon: React.ReactNode;
     title: string;
@@ -265,12 +280,18 @@ function FolderSection({
   profileFilter,
   allowBackupActions,
   actions,
+  fillAvailableSpace,
   empty,
 }: FolderSectionProps) {
   const { t } = useAppTranslation("vault.overview");
 
   return (
-    <section className="mt-8">
+    <section
+      className={cn(
+        "mt-8",
+        fillAvailableSpace && "flex min-h-0 flex-1 flex-col",
+      )}
+    >
       <div className="flex items-center justify-between gap-4">
         <div className="flex min-w-0 flex-col">
           <h2 className="truncate text-xl font-semibold">
@@ -293,6 +314,7 @@ function FolderSection({
           icon={empty.icon}
           title={empty.title}
           description={empty.description}
+          containerClassName={cn(fillAvailableSpace && "flex-1")}
         >
           {empty.children}
         </Empty>
