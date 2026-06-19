@@ -1,3 +1,4 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { CircularProgress } from "@blinkdisk/ui/circular-progress";
 import { Loader } from "@blinkdisk/ui/loader";
 import { SidebarMenuButton, SidebarMenuItem } from "@blinkdisk/ui/sidebar";
@@ -11,13 +12,17 @@ type SidebarFolderListProps = {
 };
 
 export function SidebarFolderList({ folders }: SidebarFolderListProps) {
+  const { t } = useAppTranslation("sidebar.folderList");
   const { status } = useVaultStatus();
 
   if (!["STARTING", "RUNNING"].includes(status || "")) return null;
   if (folders !== undefined && folders !== null && !folders.length) return null;
   return (
-    <div className="mt-4 flex flex-col">
-      <div className="flex flex-col gap-2">
+    <div className="mt-6 flex flex-col">
+      <p className="text-muted-foreground pb-1.5 pl-14 pr-2 text-xs font-medium">
+        {t("currentDevice")}
+      </p>
+      <div className="flex flex-col">
         {(folders === undefined || folders === null
           ? (new Array(3).fill(undefined) as undefined[])
           : folders

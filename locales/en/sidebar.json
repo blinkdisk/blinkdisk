@@ -20,6 +20,9 @@
   "accountListMenu": {
     "addAccount": "Add account"
   },
+  "folderList": {
+    "currentDevice": "This device"
+  },
   "links": {
     "home": "Home",
     "account": "Account",
