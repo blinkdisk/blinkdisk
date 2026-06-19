@@ -211,7 +211,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
                   variant="secondary"
                 >
                   <CloudUploadIcon />
-                  {t("folders.backupCurrentDevice")}
+                  {t("folders.backupAll")}
                 </Button>
               ) : null}
               <Button
