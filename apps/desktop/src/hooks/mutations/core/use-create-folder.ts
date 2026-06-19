@@ -4,7 +4,7 @@ import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
@@ -16,17 +16,23 @@ import { usePostHog } from "posthog-js/react";
 export function useCreateFolder({
   onSuccess,
   onError,
+  profileFilter: profileFilterOverride,
 }: {
   onSuccess: () => void;
   onError?: (error: unknown) => void;
+  profileFilter?: ProfileFilter;
 }) {
   const posthog = usePostHog();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { vaultId } = useVaultId();
-  const { profileFilter } = useProfile();
+  const { profileFilter: routeProfileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
+  const profileFilter =
+    profileFilterOverride === undefined
+      ? routeProfileFilter
+      : profileFilterOverride;
 
   const { data: vault } = useVault();
   const { data: space } = useSpace();
@@ -75,7 +81,7 @@ export function useCreateFolder({
         path: values.path,
       });
 
-      return { id, vaultId };
+      return { id, profileFilter, vaultId };
     },
     onError: (error) => {
       onError?.(error);
@@ -92,7 +98,7 @@ export function useCreateFolder({
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId, profileFilter),
+          queryKey: queryKeys.folder.list(vaultId, res.profileFilter),
         }),
         // Policies can be nested inside folders.
         queryClient.invalidateQueries({
@@ -104,6 +110,8 @@ export function useCreateFolder({
         to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
+          hostName: res.profileFilter.host,
+          userName: res.profileFilter.userName,
           folderId: res.id,
         }),
       });

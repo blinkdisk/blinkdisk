@@ -1,6 +1,6 @@
 import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
@@ -91,15 +91,19 @@ export type CoreFolderItem = {
 
 type UseFolderListOptions = {
   unfiltered?: boolean;
+  profileFilter?: ProfileFilter;
 };
 
-export function useFolderList({
-  unfiltered = false,
-}: UseFolderListOptions = {}) {
-  const { profileFilter } = useProfile();
+export function useFolderList(options: UseFolderListOptions = {}) {
+  const { unfiltered = false } = options;
+  const { profileFilter: routeProfileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
+  const profileFilter =
+    options.profileFilter === undefined
+      ? routeProfileFilter
+      : options.profileFilter;
   const params = unfiltered ? undefined : (profileFilter ?? undefined);
 
   return useQuery({

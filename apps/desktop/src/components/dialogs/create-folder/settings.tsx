@@ -10,15 +10,18 @@ import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
+import type { ProfileFilter } from "@desktop/hooks/use-profile";
 import { useState } from "react";
 
 type CreateFolderSettingsProps = {
   values: ZCreateFolderFormType;
+  profileFilter?: ProfileFilter;
   onSuccess: () => void;
 };
 
 export function CreateFolderSettings({
   values,
+  profileFilter,
   onSuccess,
 }: CreateFolderSettingsProps) {
   const { t } = useAppTranslation("folder.createDialog");
@@ -39,11 +42,16 @@ export function CreateFolderSettings({
       }
     },
     onSuccess,
+    profileFilter,
   });
 
   return (
     <>
-      <PolicyContextProvider level="FOLDER" mock={{ path: values.path }}>
+      <PolicyContextProvider
+        level="FOLDER"
+        mock={{ path: values.path }}
+        profileFilter={profileFilter}
+      >
         {({ loading }) => (
           <>
             <Accordion

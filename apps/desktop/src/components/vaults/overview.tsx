@@ -1,9 +1,16 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Button } from "@blinkdisk/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@blinkdisk/ui/dropdown-menu";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { Empty } from "@desktop/components/empty";
 import { FolderList } from "@desktop/components/folders/list";
-import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultStatCard } from "@desktop/components/vaults/stat-card";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
@@ -11,36 +18,100 @@ import {
   type CoreFolderItem,
   useFolderList,
 } from "@desktop/hooks/queries/core/use-folder-list";
+import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import type { ProfileFilter } from "@desktop/hooks/use-profile";
 import { formatCompactInt, formatSize } from "@desktop/lib/number";
+import {
+  getOtherProfiles,
+  getProfileUserNames,
+  isSameProfile,
+  matchesProfileFilterSelection,
+  type ProfileFilterSelection,
+  profileFilterFromParts,
+} from "@desktop/lib/profile";
 import {
   buildVaultStatHistory,
   buildVaultStats,
 } from "@desktop/lib/vault-stats";
-import { CloudUploadIcon, FolderPlusIcon, PlusIcon } from "lucide-react";
-import { useMemo } from "react";
+import {
+  ChevronDownIcon,
+  CloudUploadIcon,
+  FolderPlusIcon,
+  MonitorIcon,
+  PlusIcon,
+  UserIcon,
+  XIcon,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 type VaultOverviewProps = {
   vault?: VaultItem;
-  folders?: CoreFolderItem[];
 };
 
-export function VaultOverview({ vault, folders }: VaultOverviewProps) {
+export function VaultOverview({ vault }: VaultOverviewProps) {
   const { t } = useAppTranslation("vault.overview");
 
   const { openCreateFolder } = useCreateFolderDialog();
-  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
+  const { localHostName, localUserName } = useLocalProfile();
+
+  const localProfile = useMemo(
+    () =>
+      profileFilterFromParts({
+        hostName: localHostName,
+        userName: localUserName,
+      }),
+    [localHostName, localUserName],
+  );
+
+  const { data: profiles } = useVaultProfiles();
+  const otherProfiles = useMemo(
+    () => getOtherProfiles(profiles, localProfile),
+    [profiles, localProfile],
+  );
+
+  const [otherFilters, setOtherFilters] = useState<ProfileFilterSelection>({
+    hostName: null,
+    userName: null,
+  });
+
+  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup({
+    profileFilter: localProfile,
+  });
+  const { data: currentFolders } = useFolderList({
+    profileFilter: localProfile,
+  });
   const { data: allFolders } = useFolderList({ unfiltered: true });
   const { data: backups } = useBackupList({ filters: "none" });
 
+  const otherFolders = useMemo(() => {
+    if (!allFolders || !localProfile) return undefined;
+
+    return allFolders.filter((folder) => {
+      const profile = {
+        host: folder.source.host,
+        userName: folder.source.userName,
+      };
+
+      return (
+        !isSameProfile(profile, localProfile) &&
+        matchesProfileFilterSelection({
+          profile,
+          filters: otherFilters,
+        })
+      );
+    });
+  }, [allFolders, localProfile, otherFilters]);
+
   const isAnyBackupRunning = useMemo(
     () =>
-      folders?.some(
+      currentFolders?.some(
         (folder) =>
           folder.status === "UPLOADING" || folder.status === "PENDING",
       ),
-    [folders],
+    [currentFolders],
   );
 
   const stats = useMemo(() => {
@@ -56,12 +127,13 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
   }, [backups]);
 
   const isStatsLoading = !vault || !stats || !statHistory;
+  const isCurrentFoldersLoading = currentFolders === undefined;
 
   return (
     <div
       className={cn(
         "flex min-h-full flex-col overflow-x-hidden p-6",
-        folders !== undefined ? "overflow-y-auto" : "overflow-hidden",
+        currentFolders !== undefined ? "overflow-y-auto" : "overflow-hidden",
       )}
     >
       <div className="grid grid-cols-3 gap-6">
@@ -84,65 +156,263 @@ export function VaultOverview({ vault, folders }: VaultOverviewProps) {
           isLoading={isStatsLoading}
         />
       </div>
-      <div className="mt-8 flex items-center justify-between">
-        <div className="flex flex-col">
-          <h2 className="text-xl font-semibold">
-            {folders !== undefined ? (
-              t("folders.title")
-            ) : (
-              <Skeleton width={80} />
-            )}
+      <FolderSection
+        title={t("currentDevice.title")}
+        count={currentFolders?.length}
+        folders={currentFolders}
+        profileFilter={localProfile}
+        actions={
+          isCurrentFoldersLoading ? (
+            <>
+              <Skeleton width="8rem" height="2.75rem" />
+              <Skeleton width="11rem" height="2.75rem" />
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() =>
+                  openCreateFolder(undefined, { profileFilter: localProfile })
+                }
+                variant="secondary"
+              >
+                <PlusIcon />
+                {t("folders.addFolder")}
+              </Button>
+              {currentFolders && currentFolders.length > 0 ? (
+                <Button
+                  onClick={() => startBackup({})}
+                  loading={isStartingBackup || isAnyBackupRunning}
+                  disabled={!localProfile}
+                >
+                  <CloudUploadIcon />
+                  {t("folders.backupCurrentDevice")}
+                </Button>
+              ) : null}
+            </>
+          )
+        }
+        empty={
+          currentFolders !== undefined
+            ? {
+                icon: <FolderPlusIcon />,
+                title: t("folders.empty.title"),
+                description: t("folders.empty.description"),
+                children: (
+                  <Button
+                    onClick={() =>
+                      openCreateFolder(undefined, {
+                        profileFilter: localProfile,
+                      })
+                    }
+                    size="lg"
+                  >
+                    <PlusIcon />
+                    {t("folders.addFolder")}
+                  </Button>
+                ),
+              }
+            : undefined
+        }
+      />
+      {otherProfiles.length > 0 ? (
+        <FolderSection
+          title={t("otherDevices.title")}
+          count={otherFolders?.length}
+          folders={otherFolders}
+          profileFilter={null}
+          allowBackupActions={false}
+          actions={
+            <ProfileSelects
+              profiles={otherProfiles}
+              value={otherFilters}
+              onChange={setOtherFilters}
+            />
+          }
+          empty={
+            otherFolders !== undefined
+              ? {
+                  icon: <FolderPlusIcon />,
+                  title: t("otherDevices.empty.title"),
+                  description: t("otherDevices.empty.description"),
+                }
+              : undefined
+          }
+        />
+      ) : null}
+    </div>
+  );
+}
+
+type FolderSectionProps = {
+  title: string;
+  count?: number;
+  folders: CoreFolderItem[] | null | undefined;
+  profileFilter?: ProfileFilter;
+  allowBackupActions?: boolean;
+  actions?: React.ReactNode;
+  empty?: {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+    children?: React.ReactNode;
+  };
+};
+
+function FolderSection({
+  title,
+  count,
+  folders,
+  profileFilter,
+  allowBackupActions,
+  actions,
+  empty,
+}: FolderSectionProps) {
+  const { t } = useAppTranslation("vault.overview");
+
+  return (
+    <section className="mt-8">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex min-w-0 flex-col">
+          <h2 className="truncate text-xl font-semibold">
+            {folders !== undefined ? title : <Skeleton width={120} />}
           </h2>
           <p className="text-muted-foreground text-xs">
-            {folders !== undefined ? (
-              t("folders.count", { count: folders?.length })
+            {folders !== undefined && count !== undefined ? (
+              t("folders.count", { count })
             ) : (
               <Skeleton width={120} />
             )}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          {folders !== undefined ? (
-            <>
-              <LocalButton
-                onClick={() => openCreateFolder()}
-                variant="secondary"
-              >
-                <PlusIcon />
-                {t("folders.addFolder")}
-              </LocalButton>
-              {folders.length > 0 ? (
-                <LocalButton
-                  onClick={() => startBackup({})}
-                  loading={isStartingBackup || isAnyBackupRunning}
-                >
-                  <CloudUploadIcon />
-                  {t("folders.backupAll")}
-                </LocalButton>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <Skeleton width="8rem" height="2.75rem" />
-              <Skeleton width="9rem" height="2.75rem" />
-            </>
-          )}
-        </div>
+        {actions ? (
+          <div className="flex items-center gap-3">{actions}</div>
+        ) : null}
       </div>
-      {folders !== null && folders !== undefined && !folders.length ? (
+      {folders !== null && folders !== undefined && !folders.length && empty ? (
         <Empty
-          icon={<FolderPlusIcon />}
-          title={t("folders.empty.title")}
-          description={t("folders.empty.description")}
+          icon={empty.icon}
+          title={empty.title}
+          description={empty.description}
         >
-          <LocalButton onClick={() => openCreateFolder()} size="lg">
-            <PlusIcon />
-            {t("folders.addFolder")}
-          </LocalButton>
+          {empty.children}
         </Empty>
       ) : (
-        <FolderList folders={folders} />
+        <FolderList
+          folders={folders}
+          profileFilter={profileFilter}
+          allowBackupActions={allowBackupActions}
+        />
       )}
+    </section>
+  );
+}
+
+type ProfileSelectsProps = {
+  profiles: ReturnType<typeof getOtherProfiles>;
+  value: ProfileFilterSelection;
+  onChange: (filters: ProfileFilterSelection) => void;
+};
+
+function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
+  const { t } = useAppTranslation("vault.overview.otherDevices.select");
+
+  const userNames = useMemo(
+    () => getProfileUserNames(profiles, value.hostName),
+    [profiles, value.hostName],
+  );
+
+  return (
+    <div className="flex items-center gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={cn(
+            "border-input bg-card hover:bg-card-hover flex h-11 min-w-42 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:z-10",
+          )}
+        >
+          <div className="flex min-w-0 items-center gap-2.5">
+            <MonitorIcon className="size-4.25 shrink-0" />
+            <span className="truncate">{value.hostName || t("host.all")}</span>
+          </div>
+          <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              onClick={() =>
+                onChange({
+                  ...value,
+                  hostName: null,
+                })
+              }
+            >
+              <XIcon />
+              {t("host.all")}
+            </DropdownMenuItem>
+            {profiles.map((profile) => (
+              <DropdownMenuItem
+                key={profile.hostName}
+                onClick={() => {
+                  const userNames = getProfileUserNames(
+                    profiles,
+                    profile.hostName,
+                  );
+
+                  onChange({
+                    hostName: profile.hostName,
+                    userName:
+                      value.userName && userNames.includes(value.userName)
+                        ? value.userName
+                        : null,
+                  });
+                }}
+              >
+                {profile.hostName}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={cn(
+            "border-input bg-card hover:bg-card-hover flex h-11 min-w-36 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:z-10",
+          )}
+        >
+          <div className="flex min-w-0 items-center gap-2.5">
+            <UserIcon className="size-4.25 shrink-0" />
+            <span className="truncate">{value.userName || t("user.all")}</span>
+          </div>
+          <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              onClick={() =>
+                onChange({
+                  ...value,
+                  userName: null,
+                })
+              }
+            >
+              <XIcon />
+              {t("user.all")}
+            </DropdownMenuItem>
+            {userNames.map((userName) => (
+              <DropdownMenuItem
+                key={userName}
+                onClick={() => {
+                  onChange({
+                    ...value,
+                    userName,
+                  });
+                }}
+              >
+                {userName}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

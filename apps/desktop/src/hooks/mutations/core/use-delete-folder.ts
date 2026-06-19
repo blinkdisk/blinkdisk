@@ -1,17 +1,27 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useDeleteFolder({ onSuccess }: { onSuccess?: () => void }) {
+export function useDeleteFolder({
+  onSuccess,
+  profileFilter: profileFilterOverride,
+}: {
+  onSuccess?: () => void;
+  profileFilter?: ProfileFilter;
+}) {
   const queryClient = useQueryClient();
 
-  const { profileFilter } = useProfile();
+  const { profileFilter: routeProfileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
+  const profileFilter =
+    profileFilterOverride === undefined
+      ? routeProfileFilter
+      : profileFilterOverride;
 
   return useMutation({
     mutationKey: ["core", "folder", "delete"],

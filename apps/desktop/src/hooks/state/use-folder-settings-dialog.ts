@@ -1,8 +1,10 @@
+import type { ProfileFilter } from "@desktop/hooks/use-profile";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
 type FolderSettingsDialogOptions = {
   folderId: string;
+  profileFilter?: ProfileFilter;
 };
 
 const store = new Store<{

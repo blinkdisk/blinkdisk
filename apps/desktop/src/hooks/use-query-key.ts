@@ -92,7 +92,11 @@ export function useQueryKey() {
           profileFilter,
         ],
         folders: () => [...keys.policy.all, "folder"],
-        folder: (folderId?: string) => [...keys.policy.folders(), folderId],
+        folder: (folderId?: string, profileFilter?: ProfileFilter) => [
+          ...keys.policy.folders(),
+          folderId,
+          profileFilter,
+        ],
       },
       task: {
         all: [accountId, "task"],
