@@ -169,25 +169,25 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
             </>
           ) : (
             <>
-              <Button
-                onClick={() =>
-                  openCreateFolder(undefined, { profileFilter: localProfile })
-                }
-                variant="secondary"
-              >
-                <PlusIcon />
-                {t("folders.addFolder")}
-              </Button>
               {currentFolders && currentFolders.length > 0 ? (
                 <Button
                   onClick={() => startBackup({})}
                   loading={isStartingBackup || isAnyBackupRunning}
                   disabled={!localProfile}
+                  variant="secondary"
                 >
                   <CloudUploadIcon />
                   {t("folders.backupCurrentDevice")}
                 </Button>
               ) : null}
+              <Button
+                onClick={() =>
+                  openCreateFolder(undefined, { profileFilter: localProfile })
+                }
+              >
+                <PlusIcon />
+                {t("folders.addFolder")}
+              </Button>
             </>
           )
         }
