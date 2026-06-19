@@ -19,7 +19,7 @@ export function SidebarFolderList({ folders }: SidebarFolderListProps) {
   if (folders !== undefined && folders !== null && !folders.length) return null;
   return (
     <div className="mt-6 flex flex-col">
-      <p className="text-muted-foreground pb-1.5 pl-14 pr-2 text-xs font-medium">
+      <p className="text-muted-foreground pb-1.5 pl-1.5 pr-2 text-xs font-medium">
         {t("currentDevice")}
       </p>
       <div className="flex flex-col">
