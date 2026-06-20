@@ -195,6 +195,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
         count={currentFolders?.length}
         folders={currentFolders}
         profileFilter={localProfile}
+        showSourceProfile
         actions={
           isCurrentFoldersLoading ? (
             <>
