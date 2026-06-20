@@ -22,10 +22,12 @@ import { Link } from "@tanstack/react-router";
 import {
   CloudUploadIcon,
   FolderSearchIcon,
+  MonitorIcon,
   MoreVerticalIcon,
   SettingsIcon,
   SquareIcon,
   TrashIcon,
+  UserIcon,
 } from "lucide-react";
 import { useMemo } from "react";
 
@@ -33,12 +35,14 @@ type FolderListProps = {
   folders: CoreFolderItem[] | undefined | null;
   profileFilter?: ProfileFilter;
   allowBackupActions?: boolean;
+  showSourceProfile?: boolean;
 };
 
 export function FolderList({
   folders,
   profileFilter,
   allowBackupActions = true,
+  showSourceProfile,
 }: FolderListProps) {
   return (
     <div className="mt-6 flex flex-col gap-3">
@@ -51,6 +55,7 @@ export function FolderList({
           folder={folder}
           profileFilter={profileFilter}
           allowBackupActions={allowBackupActions}
+          showSourceProfile={showSourceProfile}
         />
       ))}
     </div>
@@ -61,9 +66,15 @@ type FolderProps = {
   folder: CoreFolderItem | undefined;
   profileFilter?: ProfileFilter;
   allowBackupActions: boolean;
+  showSourceProfile?: boolean;
 };
 
-function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
+function Folder({
+  folder,
+  profileFilter,
+  allowBackupActions,
+  showSourceProfile,
+}: FolderProps) {
   const { t } = useAppTranslation("folder.list.item");
   const formattedTime = useRelativeTime(folder?.lastSnapshot?.startTime);
 
@@ -104,6 +115,8 @@ function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
     userName: folder?.source.userName || params.userName,
     folderId: folder?.id || "",
   });
+  const showRightMeta =
+    (showSourceProfile && !!folder) || !!showStartTime || !!showProgress;
 
   return (
     <div className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2">
@@ -114,16 +127,25 @@ function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
       />
       <FolderPreview folder={folder} />
       <div className="flex items-center gap-3">
-        {showStartTime || showProgress ? (
+        {showRightMeta ? (
           <>
-            {showProgress && folder ? (
-              <BackupProgress upload={folder.upload} size="sm" />
-            ) : showStartTime ? (
-              <p className="text-muted-foreground whitespace-nowrap text-sm">
-                {folder ? formattedTime : <Skeleton width={100} />}
-              </p>
-            ) : null}
-            <div className="h-6 border-r" />
+            <div className="flex min-w-0 flex-col items-end gap-1">
+              {showSourceProfile && folder ? (
+                <FolderSourceProfile folder={folder} />
+              ) : null}
+              {showProgress && folder ? (
+                <BackupProgress upload={folder.upload} size="sm" />
+              ) : showStartTime ? (
+                <p className="text-muted-foreground whitespace-nowrap text-sm">
+                  {folder ? formattedTime : <Skeleton width={100} />}
+                </p>
+              ) : null}
+            </div>
+            <div
+              className={
+                showSourceProfile && folder ? "h-8 border-r" : "h-6 border-r"
+              }
+            />
           </>
         ) : null}
         {folder ? (
@@ -202,6 +224,21 @@ function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
           <Skeleton width="1.25rem" height="1.25rem" />
         )}
       </div>
+    </div>
+  );
+}
+
+function FolderSourceProfile({ folder }: { folder: CoreFolderItem }) {
+  return (
+    <div className="text-muted-foreground ph-no-capture flex max-w-80 min-w-0 items-center justify-end gap-3 text-xs">
+      <span className="flex min-w-0 max-w-40 items-center gap-1.5">
+        <MonitorIcon className="size-3.5 shrink-0" />
+        <span className="truncate">{folder.source.host}</span>
+      </span>
+      <span className="flex min-w-0 max-w-40 items-center gap-1.5">
+        <UserIcon className="size-3.5 shrink-0" />
+        <span className="truncate">{folder.source.userName}</span>
+      </span>
     </div>
   );
 }
