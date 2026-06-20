@@ -3,6 +3,7 @@ import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-
 import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
 import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
+import type { ProfileFilter } from "@desktop/hooks/use-profile";
 import type { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";
 
@@ -10,21 +11,25 @@ function usePolicyContext({
   level,
   folderId,
   mock,
+  profileFilter,
 }: {
   level: ZPolicyLevelType;
   folderId?: string;
   mock?: { path: string };
+  profileFilter?: ProfileFilter;
 }) {
-  const { data: vaultPolicy, isPending: isVaultPolicyPending } =
-    useVaultPolicy();
+  const { data: vaultPolicy, isPending: isVaultPolicyPending } = useVaultPolicy(
+    { profileFilter },
+  );
   const { data: folderPolicy, isPending: isFolderPolicyPending } =
-    useFolderPolicy({ folderId, mock });
+    useFolderPolicy({ folderId, mock, profileFilter });
 
-  const { mutateAsync: mutateVault } = useUpdateVaultPolicy();
+  const { mutateAsync: mutateVault } = useUpdateVaultPolicy({ profileFilter });
 
   const { mutateAsync: mutateFolder } = useUpdateFolderPolicy({
     mock,
     folderId,
+    profileFilter,
   });
 
   const policy = useMemo(
@@ -75,6 +80,7 @@ function usePolicyContext({
     mutate,
     level,
     mock,
+    profileFilter,
   };
 }
 
@@ -91,6 +97,7 @@ const defaultContext = {
   mutate: undefined,
   level: undefined,
   mock: undefined,
+  profileFilter: undefined,
 };
 
 export const PolicyContext = createContext<
@@ -101,6 +108,7 @@ type PolicyContextProviderProps = {
   level: ZPolicyLevelType;
   folderId?: string;
   mock?: { path: string };
+  profileFilter?: ProfileFilter;
 };
 
 export function PolicyContextProvider({

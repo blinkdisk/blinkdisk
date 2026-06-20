@@ -4,14 +4,16 @@ import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
+import { profileFilterFromParts } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
+import { useMemo } from "react";
 
 export function useCreateFolder({
   onSuccess,
@@ -25,8 +27,16 @@ export function useCreateFolder({
   const queryClient = useQueryClient();
 
   const { vaultId } = useVaultId();
-  const { profileFilter } = useProfile();
+  const { localHostName, localUserName } = useLocalProfile();
   const { queryKeys } = useQueryKey();
+  const profileFilter = useMemo(
+    () =>
+      profileFilterFromParts({
+        hostName: localHostName,
+        userName: localUserName,
+      }),
+    [localHostName, localUserName],
+  );
 
   const { data: vault } = useVault();
   const { data: space } = useSpace();
@@ -75,7 +85,7 @@ export function useCreateFolder({
         path: values.path,
       });
 
-      return { id, vaultId };
+      return { id, profileFilter, vaultId };
     },
     onError: (error) => {
       onError?.(error);
@@ -92,7 +102,7 @@ export function useCreateFolder({
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId, profileFilter),
+          queryKey: queryKeys.folder.list(vaultId, res.profileFilter),
         }),
         // Policies can be nested inside folders.
         queryClient.invalidateQueries({
@@ -104,6 +114,8 @@ export function useCreateFolder({
         to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
+          hostName: res.profileFilter.host,
+          userName: res.profileFilter.userName,
           folderId: res.id,
         }),
       });

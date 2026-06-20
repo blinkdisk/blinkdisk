@@ -6,9 +6,14 @@ import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useAccountStorage } from "@desktop/hooks/use-account-storage";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { z } from "zod";
 
 export const Route = createFileRoute("/{-$accountId}/{-$vaultId}")({
   component: RouteComponent,
+  validateSearch: z.object({
+    otherHostName: z.string().optional(),
+    otherUserName: z.string().optional(),
+  }),
 });
 
 function RouteComponent() {

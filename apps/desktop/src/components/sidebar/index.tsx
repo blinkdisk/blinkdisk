@@ -13,11 +13,9 @@ import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
 import { SidebarAlerts } from "@desktop/components/sidebar/alerts";
 import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
-import { SidebarFolderList } from "@desktop/components/sidebar/folder-list";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { VaultMenuDropdown } from "@desktop/components/vaults/menu-dropdown";
 import { VaultPreview } from "@desktop/components/vaults/preview";
-import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useAccount } from "@desktop/hooks/queries/use-account";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
@@ -36,7 +34,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount, isOnlineAccount } = useAccountId();
   const { data: account } = useAccount();
   const { data: vault } = useVault();
-  const { data: folders } = useFolderList();
 
   const { accountId, vaultId, hostName, userName } = useParams({
     strict: false,
@@ -153,7 +150,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   }
                 />
               </SidebarMenuItem>
-              <SidebarFolderList folders={folders} />
             </SidebarMenu>
           )}
         </SidebarContent>

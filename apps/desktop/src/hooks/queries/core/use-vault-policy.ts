@@ -1,6 +1,6 @@
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
@@ -12,11 +12,17 @@ import {
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export function useVaultPolicy() {
-  const { profileFilter } = useProfile();
+export function useVaultPolicy(
+  options: { profileFilter?: ProfileFilter } = {},
+) {
+  const { profileFilter: routeProfileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
+  const profileFilter =
+    options.profileFilter === undefined
+      ? routeProfileFilter
+      : options.profileFilter;
 
   return useQuery({
     queryKey: queryKeys.policy.vault(vaultId, profileFilter),

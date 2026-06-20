@@ -397,6 +397,28 @@
     "vault": "Vault",
     "settings": "Settings",
     "upgrade": "Upgrade storage",
+    "currentDevice": {
+      "title": "Current device"
+    },
+    "otherDevices": {
+      "title": "Other devices",
+      "select": {
+        "host": {
+          "all": "All devices",
+          "clear": "Clear device filter",
+          "empty": "Select device"
+        },
+        "user": {
+          "all": "All profiles",
+          "clear": "Clear profile filter",
+          "empty": "Select profile"
+        }
+      },
+      "empty": {
+        "title": "No folders found",
+        "description": "This device profile has no backed up folders."
+      }
+    },
     "folders": {
       "title": "Folders",
       "count_one": "{{count}} folder backed up",

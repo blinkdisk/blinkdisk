@@ -29,7 +29,11 @@ export function FolderSettingsDialog() {
           {t("description")}
         </DialogDescription>
         <div className="mt-4">
-          <PolicyContextProvider level="FOLDER" folderId={options?.folderId}>
+          <PolicyContextProvider
+            level="FOLDER"
+            folderId={options?.folderId}
+            profileFilter={options?.profileFilter}
+          >
             {({ loading }) => (
               <Accordion
                 className="w-full"

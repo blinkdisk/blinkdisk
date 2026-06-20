@@ -4,7 +4,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-type Profile = {
+export type VaultProfile = {
   hostName: string;
   mock?: boolean;
   userNames: {
@@ -35,7 +35,7 @@ export function useVaultProfiles() {
 
       if (!res.data) return null;
 
-      const profiles: Profile[] = [];
+      const profiles: VaultProfile[] = [];
 
       for (const policy of res.data.policies) {
         if (!policy.target.host || !policy.target.userName) continue;

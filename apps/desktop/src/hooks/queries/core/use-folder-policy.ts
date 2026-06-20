@@ -1,7 +1,7 @@
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useFolder } from "@desktop/hooks/use-folder";
-import { useProfile } from "@desktop/hooks/use-profile";
+import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
@@ -22,22 +22,28 @@ declare global {
 export function useFolderPolicy({
   folderId,
   mock,
+  profileFilter: profileFilterOverride,
 }: {
   folderId?: string;
   mock?: {
     path: string;
   };
+  profileFilter?: ProfileFilter;
 }) {
-  const { profileFilter } = useProfile();
+  const { profileFilter: routeProfileFilter } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
+  const profileFilter =
+    profileFilterOverride === undefined
+      ? routeProfileFilter
+      : profileFilterOverride;
 
-  const { data: folder } = useFolder(folderId);
-  const { data: vaultPolicy } = useVaultPolicy();
+  const { data: folder } = useFolder(folderId, { profileFilter });
+  const { data: vaultPolicy } = useVaultPolicy({ profileFilter });
 
   return useQuery({
-    queryKey: queryKeys.policy.folder(mock ? "mock" : folderId),
+    queryKey: queryKeys.policy.folder(mock ? "mock" : folderId, profileFilter),
     queryFn: async () => {
       if (!profileFilter || !vaultId || !vaultPolicy) return null;
 
