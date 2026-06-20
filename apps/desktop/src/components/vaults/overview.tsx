@@ -195,7 +195,6 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
         count={currentFolders?.length}
         folders={currentFolders}
         profileFilter={localProfile}
-        showSourceProfile
         actions={
           isCurrentFoldersLoading ? (
             <>
@@ -246,7 +245,6 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
           folders={otherFolders}
           profileFilter={null}
           allowBackupActions={false}
-          showSourceProfile
           actions={
             <ProfileSelects
               profiles={otherProfiles}
@@ -276,7 +274,6 @@ type FolderSectionProps = {
   folders: CoreFolderItem[] | null | undefined;
   profileFilter?: ProfileFilter;
   allowBackupActions?: boolean;
-  showSourceProfile?: boolean;
   actions?: React.ReactNode;
   fillAvailableSpace?: boolean;
   empty?: {
@@ -294,7 +291,6 @@ function FolderSection({
   folders,
   profileFilter,
   allowBackupActions,
-  showSourceProfile,
   actions,
   fillAvailableSpace,
   empty,
@@ -342,7 +338,6 @@ function FolderSection({
           folders={folders}
           profileFilter={profileFilter}
           allowBackupActions={allowBackupActions}
-          showSourceProfile={showSourceProfile}
         />
       )}
     </section>

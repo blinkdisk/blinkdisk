@@ -52,7 +52,7 @@ function RouteComponent() {
     >
       <VaultRestores />
       <div className="mb-8 flex items-center justify-between">
-        <FolderPreview folder={folder} showSourceProfile />
+        <FolderPreview folder={folder} />
         <div className="flex items-center gap-2">
           {backups !== null && backups !== undefined ? (
             <>

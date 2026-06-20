@@ -32,15 +32,6 @@
       "excluded": "Excluded files:"
     }
   },
-  "preview": {
-    "stats": "{{fileCount}} files ⸱ {{size}}",
-    "backupPaused": "Backup paused",
-    "backupPending": "Backup pending",
-    "backupRunning": "Backup running",
-    "backupCanceling": "Backup canceling",
-    "backupCanceled": "Backup canceled",
-    "noBackups": "No backups yet"
-  },
   "emojiPicker": {
     "search": "Search emoji...",
     "empty": "No emoji found."
@@ -51,6 +42,7 @@
   },
   "list": {
     "item": {
+      "stats": "{{fileCount}} files ⸱ {{size}}",
       "dropdown": {
         "browse": "Browse backups",
         "backup": "Backup folder",

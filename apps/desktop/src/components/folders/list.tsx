@@ -34,14 +34,12 @@ type FolderListProps = {
   folders: CoreFolderItem[] | undefined | null;
   profileFilter?: ProfileFilter;
   allowBackupActions?: boolean;
-  showSourceProfile?: boolean;
 };
 
 export function FolderList({
   folders,
   profileFilter,
   allowBackupActions = true,
-  showSourceProfile,
 }: FolderListProps) {
   return (
     <div className="mt-6 flex flex-col gap-3">
@@ -54,7 +52,6 @@ export function FolderList({
           folder={folder}
           profileFilter={profileFilter}
           allowBackupActions={allowBackupActions}
-          showSourceProfile={showSourceProfile}
         />
       ))}
     </div>
@@ -65,17 +62,10 @@ type FolderProps = {
   folder: CoreFolderItem | undefined;
   profileFilter?: ProfileFilter;
   allowBackupActions: boolean;
-  showSourceProfile?: boolean;
 };
 
-function Folder({
-  folder,
-  profileFilter,
-  allowBackupActions,
-  showSourceProfile,
-}: FolderProps) {
+function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
   const { t } = useAppTranslation("folder.list.item");
-  const { t: previewT } = useAppTranslation("folder.preview");
   const formattedTime = useRelativeTime(folder?.lastSnapshot?.startTime);
 
   const { mutate: startBackup } = useStartBackup({ profileFilter });
@@ -123,11 +113,7 @@ function Folder({
         params={folderRouteParams}
         className="absolute inset-0"
       />
-      <FolderPreview
-        folder={folder}
-        showSourceProfile={showSourceProfile}
-        snapshotStatsPlacement="right"
-      />
+      <FolderPreview folder={folder} />
       <div className="flex items-center gap-3">
         {showStartTime || showProgress ? (
           <>
@@ -135,12 +121,12 @@ function Folder({
               <BackupProgress upload={folder.upload} size="sm" />
             ) : showStartTime ? (
               <div className="flex flex-col items-end gap-0.5">
-                <p className="text-muted-foreground whitespace-nowrap text-sm">
+                <p className="text-foreground whitespace-nowrap text-sm">
                   {folder ? formattedTime : <Skeleton width={100} />}
                 </p>
                 {folder?.lastSnapshot ? (
                   <p className="text-muted-foreground whitespace-nowrap text-xs">
-                    {previewT("stats", {
+                    {t("stats", {
                       fileCount: formatInt(
                         (folder.lastSnapshot.stats?.cachedFiles || 0) +
                           (folder.lastSnapshot.stats?.nonCachedFiles || 0),
