@@ -73,7 +73,7 @@ function DropdownMenuCheckboxItem({
   );
 }
 
-export type DropdownMenuItemProps = MenuPrimitive.Item.Props & {
+type DropdownMenuItemProps = MenuPrimitive.Item.Props & {
   inset?: boolean;
   variant?: "default" | "destructive";
 };
