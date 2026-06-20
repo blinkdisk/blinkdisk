@@ -1,7 +1,7 @@
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useFolder } from "@desktop/hooks/use-folder";
-import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
+import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
@@ -10,6 +10,7 @@ import {
   emptyPolicy,
   getDefinedFields,
 } from "@desktop/lib/policy";
+import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
@@ -22,30 +23,28 @@ declare global {
 export function useFolderPolicy({
   folderId,
   mock,
-  profileFilter: profileFilterOverride,
+  profile: profileOverride,
 }: {
   folderId?: string;
   mock?: {
     path: string;
   };
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
 }) {
-  const { profileFilter: routeProfileFilter } = useProfile();
+  const { profile: routeSelectedProfile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
-  const profileFilter =
-    profileFilterOverride === undefined
-      ? routeProfileFilter
-      : profileFilterOverride;
+  const profile =
+    profileOverride === undefined ? routeSelectedProfile : profileOverride;
 
-  const { data: folder } = useFolder(folderId, { profileFilter });
-  const { data: vaultPolicy } = useVaultPolicy({ profileFilter });
+  const { data: folder } = useFolder(folderId, { profile });
+  const { data: vaultPolicy } = useVaultPolicy({ profile });
 
   return useQuery({
-    queryKey: queryKeys.policy.folder(mock ? "mock" : folderId, profileFilter),
+    queryKey: queryKeys.policy.folder(mock ? "mock" : folderId, profile),
     queryFn: async () => {
-      if (!profileFilter || !vaultId || !vaultPolicy) return null;
+      if (!profile || !vaultId || !vaultPolicy) return null;
 
       const res = await vaultApi(vaultId).post<{
         defined: CorePolicy;
@@ -58,7 +57,7 @@ export function useFolderPolicy({
         },
         {
           params: {
-            ...profileFilter,
+            ...kopiaParamsFromProfile(profile),
             path: mock ? mock.path : folder ? folder.source.path : "unknown",
           },
         },

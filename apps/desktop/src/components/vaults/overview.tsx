@@ -18,19 +18,19 @@ import {
   type CoreFolderItem,
   useFolderList,
 } from "@desktop/hooks/queries/core/use-folder-list";
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { formatCompactInt, formatSize } from "@desktop/lib/number";
 import {
   getOtherProfiles,
   getProfileUserNames,
   isSameProfile,
-  matchesProfileFilterSelection,
-  type ProfileFilterSelection,
-  profileFilterFromParts,
+  matchesProfileListFilters,
+  type ProfileListFilters,
+  profileFromParts,
 } from "@desktop/lib/profile";
 import {
   buildVaultStatHistory,
@@ -64,33 +64,33 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
 
   const localProfile = useMemo(
     () =>
-      profileFilterFromParts({
+      profileFromParts({
         hostName: localHostName,
         userName: localUserName,
       }),
     [localHostName, localUserName],
   );
 
-  const { data: profiles } = useVaultProfiles();
+  const { data: devices } = useVaultDevices();
   const otherProfiles = useMemo(
-    () => getOtherProfiles(profiles, localProfile),
-    [profiles, localProfile],
+    () => getOtherProfiles(devices, localProfile),
+    [devices, localProfile],
   );
 
-  const otherFilters = useMemo<ProfileFilterSelection>(
+  const otherProfileListFilters = useMemo<ProfileListFilters>(
     () => ({
-      hostName: otherHostName || null,
+      deviceName: otherHostName || null,
       userName: otherUserName || null,
     }),
     [otherHostName, otherUserName],
   );
 
-  const setOtherFilters = useCallback(
-    (filters: ProfileFilterSelection) => {
+  const setOtherProfileListFilters = useCallback(
+    (filters: ProfileListFilters) => {
       navigate({
         search: (search) => ({
           ...search,
-          otherHostName: filters.hostName || undefined,
+          otherHostName: filters.deviceName || undefined,
           otherUserName: filters.userName || undefined,
         }),
       });
@@ -99,20 +99,20 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   );
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup({
-    profileFilter: localProfile,
+    profile: localProfile,
   });
   const { data: currentFolders } = useFolderList({
-    profileFilter: localProfile,
+    profile: localProfile,
   });
   const { data: allFolders } = useFolderList({ unfiltered: true });
   const { data: backups } = useBackupList({ filters: "none" });
 
-  const otherDeviceFolders = useMemo(() => {
+  const otherProfileFolders = useMemo(() => {
     if (!allFolders || !localProfile) return undefined;
 
     return allFolders.filter((folder) => {
       const profile = {
-        host: folder.source.host,
+        deviceName: folder.source.host,
         userName: folder.source.userName,
       };
 
@@ -122,16 +122,16 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
 
   const otherFolders = useMemo(
     () =>
-      otherDeviceFolders?.filter((folder) =>
-        matchesProfileFilterSelection({
+      otherProfileFolders?.filter((folder) =>
+        matchesProfileListFilters({
           profile: {
-            host: folder.source.host,
+            deviceName: folder.source.host,
             userName: folder.source.userName,
           },
-          filters: otherFilters,
+          filters: otherProfileListFilters,
         }),
       ),
-    [otherDeviceFolders, otherFilters],
+    [otherProfileFolders, otherProfileListFilters],
   );
 
   const isAnyBackupRunning = useMemo(
@@ -160,8 +160,8 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   const isOverviewEmpty =
     Array.isArray(currentFolders) &&
     currentFolders.length === 0 &&
-    Array.isArray(otherDeviceFolders) &&
-    otherDeviceFolders.length === 0;
+    Array.isArray(otherProfileFolders) &&
+    otherProfileFolders.length === 0;
 
   return (
     <div
@@ -191,10 +191,10 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
         />
       </div>
       <FolderSection
-        title={t("currentDevice.title")}
+        title={t("currentProfile.title")}
         count={currentFolders?.length}
         folders={currentFolders}
-        profileFilter={localProfile}
+        profile={localProfile}
         actions={
           isCurrentFoldersLoading ? (
             <>
@@ -240,24 +240,24 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
       />
       {otherProfiles.length > 0 && !isOverviewEmpty ? (
         <FolderSection
-          title={t("otherDevices.title")}
+          title={t("otherProfiles.title")}
           count={otherFolders?.length}
           folders={otherFolders}
-          profileFilter={null}
+          profile={null}
           allowBackupActions={false}
           actions={
             <ProfileSelects
               profiles={otherProfiles}
-              value={otherFilters}
-              onChange={setOtherFilters}
+              value={otherProfileListFilters}
+              onChange={setOtherProfileListFilters}
             />
           }
           empty={
             otherFolders !== undefined
               ? {
                   icon: <FolderPlusIcon />,
-                  title: t("otherDevices.empty.title"),
-                  description: t("otherDevices.empty.description"),
+                  title: t("otherProfiles.empty.title"),
+                  description: t("otherProfiles.empty.description"),
                   containerClassName: "mt-8",
                 }
               : undefined
@@ -272,7 +272,7 @@ type FolderSectionProps = {
   title: string;
   count?: number;
   folders: CoreFolderItem[] | null | undefined;
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
   allowBackupActions?: boolean;
   actions?: React.ReactNode;
   fillAvailableSpace?: boolean;
@@ -289,7 +289,7 @@ function FolderSection({
   title,
   count,
   folders,
-  profileFilter,
+  profile,
   allowBackupActions,
   actions,
   fillAvailableSpace,
@@ -336,7 +336,7 @@ function FolderSection({
       ) : (
         <FolderList
           folders={folders}
-          profileFilter={profileFilter}
+          profile={profile}
           allowBackupActions={allowBackupActions}
         />
       )}
@@ -346,16 +346,16 @@ function FolderSection({
 
 type ProfileSelectsProps = {
   profiles: ReturnType<typeof getOtherProfiles>;
-  value: ProfileFilterSelection;
-  onChange: (filters: ProfileFilterSelection) => void;
+  value: ProfileListFilters;
+  onChange: (filters: ProfileListFilters) => void;
 };
 
 function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
-  const { t } = useAppTranslation("vault.overview.otherDevices.select");
+  const { t } = useAppTranslation("vault.overview.otherProfiles.select");
 
   const userNames = useMemo(
-    () => getProfileUserNames(profiles, value.hostName),
-    [profiles, value.hostName],
+    () => getProfileUserNames(profiles, value.deviceName),
+    [profiles, value.deviceName],
   );
 
   return (
@@ -370,30 +370,30 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
             <div
               className={cn(
                 "flex min-w-0 items-center gap-2.5",
-                value.hostName && "pr-6",
+                value.deviceName && "pr-6",
               )}
             >
               <MonitorIcon className="size-4.25 shrink-0" />
               <span className="truncate">
-                {value.hostName || t("host.all")}
+                {value.deviceName || t("device.all")}
               </span>
             </div>
-            {!value.hostName ? (
+            {!value.deviceName ? (
               <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
             ) : null}
           </DropdownMenuTrigger>
-          {value.hostName ? (
+          {value.deviceName ? (
             <button
               type="button"
-              aria-label={t("host.clear")}
-              title={t("host.clear")}
+              aria-label={t("device.clear")}
+              title={t("device.clear")}
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
 
                 onChange({
                   ...value,
-                  hostName: null,
+                  deviceName: null,
                 });
               }}
               className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-2 top-1/2 z-10 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm outline-none transition-colors focus-visible:ring-2"
@@ -404,17 +404,17 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
         </div>
         <DropdownMenuContent align="end">
           <DropdownMenuGroup>
-            {profiles.map((profile) => (
+            {profiles.map((device) => (
               <DropdownMenuItem
-                key={profile.hostName}
+                key={device.hostName}
                 onClick={() => {
                   const userNames = getProfileUserNames(
                     profiles,
-                    profile.hostName,
+                    device.hostName,
                   );
 
                   onChange({
-                    hostName: profile.hostName,
+                    deviceName: device.hostName,
                     userName:
                       value.userName && userNames.includes(value.userName)
                         ? value.userName
@@ -422,7 +422,7 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
                   });
                 }}
               >
-                {profile.hostName}
+                {device.hostName}
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>

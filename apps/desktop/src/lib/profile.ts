@@ -1,63 +1,63 @@
-import type { VaultProfile } from "@desktop/hooks/queries/core/use-vault-profiles";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { VaultDevice } from "@desktop/hooks/queries/core/use-vault-devices";
+import type { Profile, SelectedProfile } from "@desktop/hooks/use-profile";
 
-export type DefinedProfileFilter = NonNullable<ProfileFilter>;
+export type DefinedProfile = Profile;
 
-export function profileFilterFromParts({
+export function profileFromParts({
   hostName,
   userName,
 }: {
   hostName?: string | null;
   userName?: string | null;
-}): DefinedProfileFilter | null {
+}): SelectedProfile {
   if (!hostName || !userName) return null;
 
   return {
-    host: hostName,
+    deviceName: hostName,
     userName,
   };
 }
 
 export function isSameProfile(
-  a: ProfileFilter | undefined,
-  b: ProfileFilter | undefined,
+  a: SelectedProfile | undefined,
+  b: SelectedProfile | undefined,
 ) {
   if (!a || !b) return false;
-  return a.host === b.host && a.userName === b.userName;
+  return a.deviceName === b.deviceName && a.userName === b.userName;
 }
 
 export function getOtherProfiles(
-  profiles: VaultProfile[] | null | undefined,
-  localProfile: ProfileFilter | undefined,
+  devices: VaultDevice[] | null | undefined,
+  localProfile: SelectedProfile | undefined,
 ) {
-  if (!profiles || !localProfile) return [];
+  if (!devices || !localProfile) return [];
 
-  return profiles
-    .map((profile) => ({
-      ...profile,
-      userNames: profile.userNames.filter(
+  return devices
+    .map((device) => ({
+      ...device,
+      users: device.users.filter(
         ({ userName }) =>
           !isSameProfile(localProfile, {
-            host: profile.hostName,
+            deviceName: device.hostName,
             userName,
           }),
       ),
     }))
-    .filter((profile) => profile.userNames.length > 0);
+    .filter((device) => device.users.length > 0);
 }
 
 export function getProfileUserNames(
-  profiles: VaultProfile[] | null | undefined,
-  hostName?: string | null,
+  devices: VaultDevice[] | null | undefined,
+  deviceName?: string | null,
 ) {
-  if (!profiles) return [];
+  if (!devices) return [];
 
   const userNames = new Set<string>();
 
-  for (const profile of profiles) {
-    if (hostName && profile.hostName !== hostName) continue;
+  for (const device of devices) {
+    if (deviceName && device.hostName !== deviceName) continue;
 
-    for (const { userName } of profile.userNames) {
+    for (const { userName } of device.users) {
       userNames.add(userName);
     }
   }
@@ -65,20 +65,28 @@ export function getProfileUserNames(
   return Array.from(userNames);
 }
 
-export type ProfileFilterSelection = {
-  hostName: string | null;
+export type ProfileListFilters = {
+  deviceName: string | null;
   userName: string | null;
 };
 
-export function matchesProfileFilterSelection({
+export function matchesProfileListFilters({
   profile,
   filters,
 }: {
-  profile: DefinedProfileFilter;
-  filters: ProfileFilterSelection;
+  profile: DefinedProfile;
+  filters: ProfileListFilters;
 }) {
-  if (filters.hostName && profile.host !== filters.hostName) return false;
+  if (filters.deviceName && profile.deviceName !== filters.deviceName)
+    return false;
   if (filters.userName && profile.userName !== filters.userName) return false;
 
   return true;
+}
+
+export function kopiaParamsFromProfile(profile: Profile) {
+  return {
+    host: profile.deviceName,
+    userName: profile.userName,
+  };
 }

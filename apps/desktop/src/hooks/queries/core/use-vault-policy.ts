@@ -1,6 +1,6 @@
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
+import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {
@@ -9,31 +9,28 @@ import {
   convertPolicyToCore,
   defaultVaultPolicy,
 } from "@desktop/lib/policy";
+import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export function useVaultPolicy(
-  options: { profileFilter?: ProfileFilter } = {},
-) {
-  const { profileFilter: routeProfileFilter } = useProfile();
+export function useVaultPolicy(options: { profile?: SelectedProfile } = {}) {
+  const { profile: routeSelectedProfile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
-  const profileFilter =
-    options.profileFilter === undefined
-      ? routeProfileFilter
-      : options.profileFilter;
+  const profile =
+    options.profile === undefined ? routeSelectedProfile : options.profile;
 
   return useQuery({
-    queryKey: queryKeys.policy.vault(vaultId, profileFilter),
+    queryKey: queryKeys.policy.vault(vaultId, profile),
     queryFn: async () => {
-      if (!profileFilter) return null;
+      if (!profile) return null;
 
       const [res, error] = await tryCatch(
         vaultApi(vaultId).get<CorePolicy & { code?: string }>(
           "/api/v1/policy",
           {
-            params: profileFilter,
+            params: kopiaParamsFromProfile(profile),
           },
         ),
       );
@@ -45,7 +42,7 @@ export function useVaultPolicy(
           "/api/v1/policy",
           convertPolicyToCore(defaultVaultPolicy),
           {
-            params: profileFilter,
+            params: kopiaParamsFromProfile(profile),
           },
         );
 
@@ -67,6 +64,6 @@ export function useVaultPolicy(
         effective: policy,
       };
     },
-    enabled: !!vaultId && !!profileFilter && running,
+    enabled: !!vaultId && !!profile && running,
   });
 }

@@ -19,14 +19,14 @@ export function DeleteFolderDialog() {
 
   const { isOpen, setIsOpen, options } = useDeleteFolderDialog();
   const { data: folder } = useFolder(options?.folderId, {
-    profileFilter: options?.profileFilter,
+    profile: options?.profile,
   });
 
   const { mutateAsync, isPending } = useDeleteFolder({
     onSuccess: () => {
       setIsOpen(false);
     },
-    profileFilter: options?.profileFilter,
+    profile: options?.profile,
   });
 
   return (

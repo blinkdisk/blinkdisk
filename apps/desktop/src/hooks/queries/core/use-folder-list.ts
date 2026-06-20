@@ -1,9 +1,10 @@
 import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
+import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
+import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
@@ -91,27 +92,26 @@ export type CoreFolderItem = {
 
 type UseFolderListOptions = {
   unfiltered?: boolean;
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
 };
 
 export function useFolderList(options: UseFolderListOptions = {}) {
   const { unfiltered = false } = options;
-  const { profileFilter: routeProfileFilter } = useProfile();
+  const { profile: routeSelectedProfile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
-  const profileFilter =
-    options.profileFilter === undefined
-      ? routeProfileFilter
-      : options.profileFilter;
-  const params = unfiltered ? undefined : (profileFilter ?? undefined);
+  const profile =
+    options.profile === undefined ? routeSelectedProfile : options.profile;
+  const params =
+    unfiltered || !profile ? undefined : kopiaParamsFromProfile(profile);
 
   return useQuery({
     queryKey: unfiltered
       ? [...queryKeys.folder.all, "list", vaultId, "unfiltered"]
-      : queryKeys.folder.list(vaultId, profileFilter),
+      : queryKeys.folder.list(vaultId, profile),
     queryFn: async () => {
-      if (!unfiltered && !profileFilter) return null;
+      if (!unfiltered && !profile) return null;
 
       const res = await vaultApi(vaultId).get<{
         sources: CoreFolderItem[];
@@ -145,6 +145,6 @@ export function useFolderList(options: UseFolderListOptions = {}) {
       return folders;
     },
     refetchInterval: 1000,
-    enabled: !!vaultId && (unfiltered || !!profileFilter) && running,
+    enabled: !!vaultId && (unfiltered || !!profile) && running,
   });
 }

@@ -1,44 +1,44 @@
-import type { VaultProfile } from "@desktop/hooks/queries/core/use-vault-profiles";
+import type { VaultDevice } from "@desktop/hooks/queries/core/use-vault-devices";
 import {
   getOtherProfiles,
   getProfileUserNames,
-  matchesProfileFilterSelection,
+  matchesProfileListFilters,
 } from "@desktop/lib/profile";
 import { describe, expect, it } from "vitest";
 
-const profiles: VaultProfile[] = [
+const devices: VaultDevice[] = [
   {
     hostName: "local-host",
-    userNames: [{ userName: "paul" }, { userName: "guest" }],
+    users: [{ userName: "paul" }, { userName: "guest" }],
   },
   {
     hostName: "remote-host",
-    userNames: [{ userName: "paul" }, { userName: "guest" }],
+    users: [{ userName: "paul" }, { userName: "guest" }],
   },
 ];
 
 describe("profile helpers", () => {
   it("excludes only the current host and user pair", () => {
     expect(
-      getOtherProfiles(profiles, {
-        host: "local-host",
+      getOtherProfiles(devices, {
+        deviceName: "local-host",
         userName: "paul",
       }),
     ).toEqual([
       {
         hostName: "local-host",
-        userNames: [{ userName: "guest" }],
+        users: [{ userName: "guest" }],
       },
       {
         hostName: "remote-host",
-        userNames: [{ userName: "paul" }, { userName: "guest" }],
+        users: [{ userName: "paul" }, { userName: "guest" }],
       },
     ]);
   });
 
   it("returns unique user names across all other profiles", () => {
-    const otherProfiles = getOtherProfiles(profiles, {
-      host: "local-host",
+    const otherProfiles = getOtherProfiles(devices, {
+      deviceName: "local-host",
       userName: "paul",
     });
 
@@ -46,8 +46,8 @@ describe("profile helpers", () => {
   });
 
   it("returns user names for one selected host", () => {
-    const otherProfiles = getOtherProfiles(profiles, {
-      host: "local-host",
+    const otherProfiles = getOtherProfiles(devices, {
+      deviceName: "local-host",
       userName: "paul",
     });
 
@@ -59,28 +59,58 @@ describe("profile helpers", () => {
 
   it("treats empty filter values as all other profiles", () => {
     expect(
-      matchesProfileFilterSelection({
+      matchesProfileListFilters({
         profile: {
-          host: "remote-host",
+          deviceName: "remote-host",
           userName: "paul",
         },
         filters: {
-          hostName: null,
+          deviceName: null,
           userName: null,
         },
       }),
     ).toBe(true);
   });
 
-  it("matches selected host and user filters", () => {
+  it("matches selected device and user filters together", () => {
     expect(
-      matchesProfileFilterSelection({
+      matchesProfileListFilters({
         profile: {
-          host: "remote-host",
+          deviceName: "remote-host",
           userName: "paul",
         },
         filters: {
-          hostName: "remote-host",
+          deviceName: "remote-host",
+          userName: "paul",
+        },
+      }),
+    ).toBe(true);
+  });
+
+  it("matches selected device without requiring a user", () => {
+    expect(
+      matchesProfileListFilters({
+        profile: {
+          deviceName: "remote-host",
+          userName: "paul",
+        },
+        filters: {
+          deviceName: "remote-host",
+          userName: null,
+        },
+      }),
+    ).toBe(true);
+  });
+
+  it("matches selected user without requiring a device", () => {
+    expect(
+      matchesProfileListFilters({
+        profile: {
+          deviceName: "remote-host",
+          userName: "paul",
+        },
+        filters: {
+          deviceName: null,
           userName: "paul",
         },
       }),

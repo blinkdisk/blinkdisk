@@ -15,8 +15,8 @@ import { useContext } from "react";
 export function FolderGeneralSettings() {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
-  const { folderId, profileFilter } = useContext(PolicyContext);
-  const { data: folder } = useFolder(folderId, { profileFilter });
+  const { folderId, profile } = useContext(PolicyContext);
+  const { data: folder } = useFolder(folderId, { profile });
 
   const form = usePolicyGeneralForm();
   const isDirty = useStore(form.store, (state) => state.isDirty);

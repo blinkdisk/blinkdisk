@@ -2,26 +2,26 @@ import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { cn } from "@blinkdisk/utils/class";
 import { SidebarHostNameSelect } from "@desktop/components/sidebar/dropdowns/hostName";
 import { SidebarUserNameSelect } from "@desktop/components/sidebar/dropdowns/userName";
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import { useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
 
 export function SidebarSelects() {
-  const { data: profiles } = useVaultProfiles();
+  const { data: devices } = useVaultDevices();
 
   const { hostName } = useParams({ strict: false });
 
   const userNames = useMemo(
-    () => profiles?.find((profile) => profile.hostName === hostName)?.userNames,
-    [profiles, hostName],
+    () => devices?.find((device) => device.hostName === hostName)?.users,
+    [devices, hostName],
   );
 
   const sections = useMemo(() => {
     return [
-      ...((profiles?.length || 0) > 1 ? ["HOSTNAME"] : []),
+      ...((devices?.length || 0) > 1 ? ["HOSTNAME"] : []),
       ...((userNames?.length || 0) > 1 ? ["USERNAME"] : []),
     ];
-  }, [profiles, userNames]);
+  }, [devices, userNames]);
 
   if (!sections.length) return null;
   return (

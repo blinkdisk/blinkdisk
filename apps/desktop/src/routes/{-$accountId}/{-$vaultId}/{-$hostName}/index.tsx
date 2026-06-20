@@ -1,5 +1,5 @@
 import { VaultOverview } from "@desktop/components/vaults/overview";
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { createFileRoute } from "@tanstack/react-router";
@@ -12,7 +12,7 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const { data: profiles } = useVaultProfiles();
+  const { data: devices } = useVaultDevices();
 
   const { localUserName } = useLocalProfile();
   const { hostName } = useProfile();
@@ -20,17 +20,17 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
 
   useEffect(() => {
-    if (!profiles || !hostName || !localUserName) return;
+    if (!devices || !hostName || !localUserName) return;
 
-    const profile = profiles.find((profile) => profile.hostName === hostName);
+    const device = devices.find((device) => device.hostName === hostName);
 
-    if (!profile)
+    if (!device)
       navigate({
         to: "/{-$accountId}/{-$vaultId}",
         replace: true,
       });
     else {
-      const localUser = profile.userNames.find(
+      const localUser = device.users.find(
         ({ userName }) => userName === localUserName,
       );
 
@@ -40,12 +40,12 @@ function RouteComponent() {
           ...params,
           userName: localUser
             ? localUserName
-            : profile.userNames[0]?.userName || localUserName,
+            : device.users[0]?.userName || localUserName,
         }),
         replace: true,
       });
     }
-  }, [profiles, navigate, localUserName, hostName]);
+  }, [devices, navigate, localUserName, hostName]);
 
   return <VaultOverview />;
 }

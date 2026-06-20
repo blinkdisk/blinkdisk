@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
 
-export type ProfileFilter = {
-  host: string;
+export type Profile = {
+  deviceName: string;
   userName: string;
-} | null;
+};
+
+export type SelectedProfile = Profile | null;
 
 export function useProfile() {
   const navigate = useNavigate();
@@ -37,9 +39,9 @@ export function useProfile() {
     [navigate],
   );
 
-  const profileFilter = useMemo(() => {
+  const profile = useMemo<SelectedProfile>(() => {
     if (!userName || !hostName) return null;
-    return { userName, host: hostName };
+    return { deviceName: hostName, userName };
   }, [userName, hostName]);
 
   return {
@@ -47,6 +49,6 @@ export function useProfile() {
     hostName,
     changeUserName,
     changeHostName,
-    profileFilter,
+    profile,
   };
 }
