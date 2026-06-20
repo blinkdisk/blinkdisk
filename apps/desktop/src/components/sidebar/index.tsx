@@ -23,9 +23,12 @@ import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
   CloudIcon,
+  GaugeIcon,
+  HardDriveIcon,
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
+  ShieldCheckIcon,
   UserIcon,
 } from "lucide-react";
 import type { ComponentProps } from "react";
@@ -44,6 +47,16 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const pathname = useLocation({
     select: ({ pathname }) => pathname,
   });
+
+  const vaultPath =
+    accountId && vaultId && hostName && userName
+      ? `/${accountId}/${vaultId}/${hostName}/${userName}`
+      : undefined;
+  const settingsPath = vaultPath ? `${vaultPath}/settings` : undefined;
+  const isSettingsPath = settingsPath
+    ? pathname === settingsPath || pathname.startsWith(`${settingsPath}/`)
+    : false;
+  const showStorageConfig = vault ? vault.provider !== "CLOUDBLINK" : false;
 
   return (
     <SidebarSkeletonTheme>
@@ -99,6 +112,77 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 />
               </SidebarMenuItem>
             </SidebarMenu>
+          ) : isSettingsPath ? (
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3 text-muted-foreground hover:text-foreground"
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
+                      <ArrowLeftIcon />
+                      {t("backToOverview")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem className="mt-4">
+                <VaultMenuDropdown>
+                  <SidebarMenuButton className="shrink-0" size="lg">
+                    {vault ? <VaultPreview vault={vault} /> : null}
+                  </SidebarMenuButton>
+                </VaultMenuDropdown>
+              </SidebarMenuItem>
+              <SidebarMenuItem className="mt-4">
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `${settingsPath}/general`}
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/general">
+                      <SettingsIcon />
+                      {t("general")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              {showStorageConfig ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    className="px-3"
+                    isActive={pathname === `${settingsPath}/storage-config`}
+                    render={
+                      <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/storage-config">
+                        <HardDriveIcon />
+                        {t("storageConfig")}
+                      </Link>
+                    }
+                  />
+                </SidebarMenuItem>
+              ) : null}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `${settingsPath}/throttle`}
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/throttle">
+                      <GaugeIcon />
+                      {t("throttle")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === `${settingsPath}/policies`}
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies">
+                      <ShieldCheckIcon />
+                      {t("policies")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+            </SidebarMenu>
           ) : (
             <SidebarMenu>
               <SidebarMenuItem>
@@ -143,7 +227,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     `/${accountId}/${vaultId}/${hostName}/${userName}/settings`
                   }
                   render={
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/general">
                       <SettingsIcon />
                       {t("settings")}
                     </Link>

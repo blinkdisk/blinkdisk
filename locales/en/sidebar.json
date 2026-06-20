@@ -26,7 +26,12 @@
     "account": "Account",
     "overview": "Overview",
     "settings": "Settings",
-    "backToAccount": "Back to home"
+    "backToAccount": "Back to home",
+    "backToOverview": "Back to overview",
+    "general": "General",
+    "storageConfig": "Storage config",
+    "throttle": "Throttle",
+    "policies": "Policies"
   },
   "storageAlert": {
     "high": {

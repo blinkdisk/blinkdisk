@@ -1,7 +1,7 @@
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
-import { SettingsCategory } from "@desktop/components/policy/category";
+import { SettingsSection } from "@desktop/components/policy/category";
 import { useUpdateVaultForm } from "@desktop/hooks/forms/use-update-vault-form";
 import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dialog";
 import { useMoveVaultsDialog } from "@desktop/hooks/state/use-move-vaults-dialog";
@@ -22,8 +22,7 @@ export function VaultGeneralSettings() {
   const disabled = useContext(FormDisabledContext);
 
   return (
-    <SettingsCategory
-      id="general"
+    <SettingsSection
       title={t("title")}
       description={t("description")}
       icon={<SettingsIcon />}
@@ -85,6 +84,6 @@ export function VaultGeneralSettings() {
           </Button>
         </div>
       </div>
-    </SettingsCategory>
+    </SettingsSection>
   );
 }

@@ -2,7 +2,7 @@ import { resolveStorageProviderType } from "@blinkdisk/constants/providers";
 import { FormDisabledContext } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { providerForms } from "@desktop/components/forms/providers";
-import { SettingsCategory } from "@desktop/components/policy/category";
+import { SettingsSection } from "@desktop/components/policy/category";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultConfig } from "@desktop/hooks/queries/use-vault-config";
 import { HardDriveIcon } from "lucide-react";
@@ -22,8 +22,7 @@ export function VaultConfigSettings() {
 
   if (!vault || vault.provider === "CLOUDBLINK") return null;
   return (
-    <SettingsCategory
-      id="config"
+    <SettingsSection
       title={t("title")}
       description={t("description")}
       icon={<HardDriveIcon />}
@@ -38,6 +37,6 @@ export function VaultConfigSettings() {
           />
         )}
       </FormDisabledContext.Provider>
-    </SettingsCategory>
+    </SettingsSection>
   );
 }

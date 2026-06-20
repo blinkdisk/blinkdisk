@@ -1,6 +1,6 @@
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { SettingsCategory } from "@desktop/components/policy/category";
+import { SettingsSection } from "@desktop/components/policy/category";
 import { useUpdateThrottleForm } from "@desktop/hooks/forms/use-update-throttle-form";
 import { GaugeIcon } from "lucide-react";
 
@@ -13,8 +13,7 @@ export function VaultThrottleSettings() {
   const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
-    <SettingsCategory
-      id="throttle"
+    <SettingsSection
       title={t("title")}
       description={t("description")}
       icon={<GaugeIcon />}
@@ -74,6 +73,6 @@ export function VaultThrottleSettings() {
           </form.AppForm>
         </form>
       </FormDisabledContext.Provider>
-    </SettingsCategory>
+    </SettingsSection>
   );
 }
