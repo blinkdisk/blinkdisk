@@ -3,10 +3,11 @@ import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
 import { useFolder } from "@desktop/hooks/use-folder";
-import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
+import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertPolicyToCore } from "@desktop/lib/policy";
+import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -14,29 +15,27 @@ export function useUpdateFolderPolicy({
   folderId,
   onSuccess,
   mock,
-  profileFilter: profileFilterOverride,
+  profile: profileOverride,
 }: {
   folderId?: string;
   onSuccess?: () => void;
   mock?: { path: string };
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
 }) {
   const queryClient = useQueryClient();
 
   const { queryKeys } = useQueryKey();
-  const { profileFilter: routeProfileFilter } = useProfile();
+  const { profile: routeSelectedProfile } = useProfile();
   const { vaultId } = useVaultId();
-  const profileFilter =
-    profileFilterOverride === undefined
-      ? routeProfileFilter
-      : profileFilterOverride;
-  const { data: vaultPolicy } = useVaultPolicy({ profileFilter });
-  const { data: folder } = useFolder(folderId, { profileFilter });
+  const profile =
+    profileOverride === undefined ? routeSelectedProfile : profileOverride;
+  const { data: vaultPolicy } = useVaultPolicy({ profile });
+  const { data: folder } = useFolder(folderId, { profile });
 
   return useMutation({
     mutationKey: ["core", "vault", folder?.id, "policy"],
     mutationFn: async (values: ZPolicyType) => {
-      if (!vaultId || !vaultPolicy || !profileFilter)
+      if (!vaultId || !vaultPolicy || !profile)
         throw new CustomError("MISSING_REQUIRED_VALUE");
 
       const policy = convertPolicyToCore(values);
@@ -48,7 +47,7 @@ export function useUpdateFolderPolicy({
 
         await vaultApi(vaultId).put("/api/v1/policy", policy, {
           params: {
-            ...profileFilter,
+            ...kopiaParamsFromProfile(profile),
             path: folder.source.path,
           },
         });
@@ -58,12 +57,12 @@ export function useUpdateFolderPolicy({
     onSuccess: async () => {
       if (mock) {
         await queryClient.invalidateQueries({
-          queryKey: queryKeys.policy.folder("mock", profileFilter),
+          queryKey: queryKeys.policy.folder("mock", profile),
         });
       } else {
         await Promise.all([
           queryClient.invalidateQueries({
-            queryKey: queryKeys.policy.folder(folder?.id, profileFilter),
+            queryKey: queryKeys.policy.folder(folder?.id, profile),
           }),
           // Policies can be nested inside folders.
           queryClient.invalidateQueries({
@@ -71,7 +70,7 @@ export function useUpdateFolderPolicy({
           }),
           // Name and emoji might have changed.
           queryClient.invalidateQueries({
-            queryKey: queryKeys.folder.list(vaultId, profileFilter),
+            queryKey: queryKeys.folder.list(vaultId, profile),
           }),
         ]);
       }

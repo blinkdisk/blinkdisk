@@ -32,7 +32,7 @@ export function FolderSettingsDialog() {
           <PolicyContextProvider
             level="FOLDER"
             folderId={options?.folderId}
-            profileFilter={options?.profileFilter}
+            profile={options?.profile}
           >
             {({ loading }) => (
               <Accordion

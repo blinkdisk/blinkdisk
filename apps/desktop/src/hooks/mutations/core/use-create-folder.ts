@@ -8,7 +8,7 @@ import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
-import { profileFilterFromParts } from "@desktop/lib/profile";
+import { profileFromParts } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -29,9 +29,9 @@ export function useCreateFolder({
   const { vaultId } = useVaultId();
   const { localHostName, localUserName } = useLocalProfile();
   const { queryKeys } = useQueryKey();
-  const profileFilter = useMemo(
+  const profile = useMemo(
     () =>
-      profileFilterFromParts({
+      profileFromParts({
         hostName: localHostName,
         userName: localUserName,
       }),
@@ -49,8 +49,7 @@ export function useCreateFolder({
         size: number | null;
       },
     ) => {
-      if (!vaultId || !profileFilter)
-        throw new CustomError("MISSING_REQUIRED_VALUE");
+      if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (!values.force && space && vault && vault.provider === "CLOUDBLINK") {
         let size = values.size;
@@ -80,12 +79,12 @@ export function useCreateFolder({
       });
 
       const id = await hashFolder({
-        hostName: profileFilter.host,
-        userName: profileFilter.userName,
+        hostName: profile.deviceName,
+        userName: profile.userName,
         path: values.path,
       });
 
-      return { id, profileFilter, vaultId };
+      return { id, profile, vaultId };
     },
     onError: (error) => {
       onError?.(error);
@@ -102,7 +101,7 @@ export function useCreateFolder({
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId, res.profileFilter),
+          queryKey: queryKeys.folder.list(vaultId, res.profile),
         }),
         // Policies can be nested inside folders.
         queryClient.invalidateQueries({
@@ -114,8 +113,8 @@ export function useCreateFolder({
         to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
-          hostName: res.profileFilter.host,
-          userName: res.profileFilter.userName,
+          hostName: res.profile.deviceName,
+          userName: res.profile.userName,
           folderId: res.id,
         }),
       });

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { cn } from "@blinkdisk/utils/class";
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { ChevronDownIcon, UserIcon } from "lucide-react";
@@ -23,14 +23,14 @@ export function SidebarUserNameSelect({
 }: SidebarUserNameSelectProps) {
   const { t } = useAppTranslation("sidebar.selectUserName");
 
-  const { data: profiles } = useVaultProfiles();
+  const { data: devices } = useVaultDevices();
 
   const { localUserName } = useLocalProfile();
   const { userName, hostName, changeUserName } = useProfile();
 
   const userNames = useMemo(
-    () => profiles?.find((profile) => profile.hostName === hostName)?.userNames,
-    [profiles, hostName],
+    () => devices?.find((device) => device.hostName === hostName)?.users,
+    [devices, hostName],
   );
 
   return (

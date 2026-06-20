@@ -16,7 +16,7 @@ import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
 import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatInt, formatSize } from "@desktop/lib/number";
 import { Link } from "@tanstack/react-router";
@@ -32,13 +32,13 @@ import { useMemo } from "react";
 
 type FolderListProps = {
   folders: CoreFolderItem[] | undefined | null;
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
   allowBackupActions?: boolean;
 };
 
 export function FolderList({
   folders,
-  profileFilter,
+  profile,
   allowBackupActions = true,
 }: FolderListProps) {
   return (
@@ -50,7 +50,7 @@ export function FolderList({
         <Folder
           key={folder ? folder.id : index}
           folder={folder}
-          profileFilter={profileFilter}
+          profile={profile}
           allowBackupActions={allowBackupActions}
         />
       ))}
@@ -60,16 +60,16 @@ export function FolderList({
 
 type FolderProps = {
   folder: CoreFolderItem | undefined;
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
   allowBackupActions: boolean;
 };
 
-function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
+function Folder({ folder, profile, allowBackupActions }: FolderProps) {
   const { t } = useAppTranslation("folder.list.item");
   const formattedTime = useRelativeTime(folder?.lastSnapshot?.startTime);
 
-  const { mutate: startBackup } = useStartBackup({ profileFilter });
-  const { mutate: cancelBackup } = useCancelBackup({ profileFilter });
+  const { mutate: startBackup } = useStartBackup({ profile });
+  const { mutate: cancelBackup } = useCancelBackup({ profile });
   const { openFolderSettings } = useFolderSettingsDialog();
   const { openDeleteFolderDialog } = useDeleteFolderDialog();
 
@@ -86,12 +86,12 @@ function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
     [folder],
   );
 
-  const folderProfileFilter: ProfileFilter | undefined = folder
+  const folderSelectedProfile: SelectedProfile | undefined = folder
     ? {
-        host: folder.source.host,
+        deviceName: folder.source.host,
         userName: folder.source.userName,
       }
-    : profileFilter;
+    : profile;
 
   const folderRouteParams = (params: {
     accountId?: string;
@@ -191,7 +191,7 @@ function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
                   onClick={() =>
                     openFolderSettings({
                       folderId: folder.id,
-                      profileFilter: folderProfileFilter,
+                      profile: folderSelectedProfile,
                     })
                   }
                 >
@@ -204,7 +204,7 @@ function Folder({ folder, profileFilter, allowBackupActions }: FolderProps) {
                 onClick={() =>
                   openDeleteFolderDialog({
                     folderId: folder.id,
-                    profileFilter: folderProfileFilter,
+                    profile: folderSelectedProfile,
                   })
                 }
                 variant="destructive"

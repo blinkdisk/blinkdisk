@@ -1,5 +1,5 @@
 import { useAccountId } from "@desktop/hooks/use-account-id";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useMemo } from "react";
 
 export function useQueryKey() {
@@ -31,11 +31,7 @@ export function useQueryKey() {
           vaultId,
           "throttle",
         ],
-        profiles: (vaultId?: string) => [
-          ...keys.vault.all,
-          vaultId,
-          "profiles",
-        ],
+        devices: (vaultId?: string) => [...keys.vault.all, vaultId, "devices"],
       },
       billing: {
         all: [accountId, "billing"],
@@ -66,11 +62,11 @@ export function useQueryKey() {
       },
       folder: {
         all: [accountId, "folder"],
-        list: (vaultId: string | undefined, profileFilter: ProfileFilter) => [
+        list: (vaultId: string | undefined, profile: SelectedProfile) => [
           ...keys.folder.all,
           "list",
           vaultId,
-          profileFilter,
+          profile,
         ],
         restores: (folderId?: string) => [
           ...keys.folder.all,
@@ -86,16 +82,16 @@ export function useQueryKey() {
       },
       policy: {
         all: [accountId, "policy"],
-        vault: (vaultId: string | undefined, profileFilter: ProfileFilter) => [
+        vault: (vaultId: string | undefined, profile: SelectedProfile) => [
           ...keys.policy.all,
           vaultId,
-          profileFilter,
+          profile,
         ],
         folders: () => [...keys.policy.all, "folder"],
-        folder: (folderId?: string, profileFilter?: ProfileFilter) => [
+        folder: (folderId?: string, profile?: SelectedProfile) => [
           ...keys.policy.folders(),
           folderId,
-          profileFilter,
+          profile,
         ],
       },
       task: {

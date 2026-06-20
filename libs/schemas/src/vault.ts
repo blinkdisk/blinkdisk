@@ -4,7 +4,7 @@ import { ZConfigLevel, ZVaultEncryptedConfig } from "@schemas/config";
 import { ZProviderType } from "@schemas/providers";
 import { ZDateString } from "@schemas/shared/date";
 import { ZVaultId } from "@schemas/shared/id";
-import { ZProfileHostName, ZProfileUserName } from "@schemas/shared/profile";
+import { ZKopiaHostName, ZKopiaUserName } from "@schemas/shared/profile";
 import { z } from "zod";
 
 const ZVaultName = z.string().min(1).max(30);
@@ -90,8 +90,8 @@ export const ZCreateVault = z.object({
   name: ZVaultName,
   provider: ZProviderType,
   config: ZVaultEncryptedConfig,
-  userName: ZProfileUserName,
-  hostName: ZProfileHostName,
+  userName: ZKopiaUserName,
+  hostName: ZKopiaHostName,
 });
 
 export type ZCreateVaultType = z.infer<typeof ZCreateVault>;

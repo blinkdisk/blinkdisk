@@ -4,22 +4,22 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export type VaultProfile = {
+export type VaultDevice = {
   hostName: string;
   mock?: boolean;
-  userNames: {
+  users: {
     userName: string;
     mock?: boolean;
   }[];
 };
 
-export function useVaultProfiles() {
+export function useVaultDevices() {
   const { running } = useVaultStatus();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useQuery({
-    queryKey: queryKeys.vault.profiles(vaultId),
+    queryKey: queryKeys.vault.devices(vaultId),
     queryFn: async () => {
       if (!vaultId) return null;
 
@@ -35,27 +35,27 @@ export function useVaultProfiles() {
 
       if (!res.data) return null;
 
-      const profiles: VaultProfile[] = [];
+      const devices: VaultDevice[] = [];
 
       for (const policy of res.data.policies) {
         if (!policy.target.host || !policy.target.userName) continue;
 
-        const index = profiles.findIndex(
-          (profile) => profile.hostName === policy.target.host,
+        const index = devices.findIndex(
+          (device) => device.hostName === policy.target.host,
         );
 
         if (index !== -1) {
           if (
-            profiles[index]?.userNames.find(
+            devices[index]?.users.find(
               ({ userName }) => userName === policy.target.userName,
             )
           )
             continue;
-          profiles[index]?.userNames.push({ userName: policy.target.userName });
+          devices[index]?.users.push({ userName: policy.target.userName });
         } else {
-          profiles.push({
+          devices.push({
             hostName: policy.target.host,
-            userNames: [
+            users: [
               {
                 userName: policy.target.userName,
               },
@@ -67,15 +67,15 @@ export function useVaultProfiles() {
       const localHostName = window.electron.os.hostName(vaultId);
       const localUserName = window.electron.os.userName(vaultId);
 
-      const localProfileIndex = profiles.findIndex(
-        (profile) => profile.hostName === localHostName,
+      const localDeviceIndex = devices.findIndex(
+        (device) => device.hostName === localHostName,
       );
 
-      if (localProfileIndex === -1)
-        profiles.push({
+      if (localDeviceIndex === -1)
+        devices.push({
           hostName: localHostName,
           mock: true,
-          userNames: [
+          users: [
             {
               userName: localUserName,
               mock: true,
@@ -84,17 +84,17 @@ export function useVaultProfiles() {
         });
       else {
         if (
-          !profiles[localProfileIndex]?.userNames.find(
+          !devices[localDeviceIndex]?.users.find(
             ({ userName }) => userName === localUserName,
           )
         )
-          profiles[localProfileIndex]?.userNames.push({
+          devices[localDeviceIndex]?.users.push({
             userName: localUserName,
             mock: true,
           });
       }
 
-      return profiles;
+      return devices;
     },
     enabled: !!vaultId && running,
   });

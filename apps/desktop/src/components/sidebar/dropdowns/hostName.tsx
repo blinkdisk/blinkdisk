@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { cn } from "@blinkdisk/utils/class";
-import { useVaultProfiles } from "@desktop/hooks/queries/core/use-vault-profiles";
+import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { ChevronDownIcon, MonitorIcon } from "lucide-react";
@@ -25,7 +25,7 @@ export function SidebarHostNameSelect({
   const { localHostName } = useLocalProfile();
   const { hostName, changeHostName } = useProfile();
 
-  const { data: profiles } = useVaultProfiles();
+  const { data: devices } = useVaultDevices();
 
   return (
     <DropdownMenu>
@@ -46,7 +46,7 @@ export function SidebarHostNameSelect({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         <DropdownMenuGroup>
-          {profiles?.map(({ hostName: name }) => (
+          {devices?.map(({ hostName: name }) => (
             <DropdownMenuItem key={name} onClick={() => changeHostName(name)}>
               {name}
               {localHostName && name !== localHostName ? (

@@ -1,16 +1,14 @@
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
 import { useFolderId } from "@desktop/hooks/use-folder-id";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useMemo } from "react";
 
 export function useFolder(
   folderId?: string,
-  options: { profileFilter?: ProfileFilter } = {},
+  options: { profile?: SelectedProfile } = {},
 ) {
   const { data: folders } = useFolderList(
-    options.profileFilter === undefined
-      ? undefined
-      : { profileFilter: options.profileFilter },
+    options.profile === undefined ? undefined : { profile: options.profile },
   );
   const { folderId: defaultFolderId } = useFolderId();
 

@@ -1,10 +1,10 @@
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
 type DeleteFolderDialogOptions = {
   folderId: string;
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
 };
 
 const store = new Store<{

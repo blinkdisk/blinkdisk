@@ -3,6 +3,7 @@ import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
@@ -37,7 +38,7 @@ type UseBackupListOptions = {
 export function useBackupList({
   filters = "folder",
 }: UseBackupListOptions = {}) {
-  const { profileFilter } = useProfile();
+  const { profile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
@@ -57,7 +58,7 @@ export function useBackupList({
       }>("/api/v1/snapshots", {
         params: useFolderFilters
           ? {
-              ...profileFilter,
+              ...(profile ? kopiaParamsFromProfile(profile) : {}),
               path: folder?.source.path || "",
               all: "1",
             }

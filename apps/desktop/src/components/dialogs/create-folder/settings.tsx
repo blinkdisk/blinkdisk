@@ -11,7 +11,7 @@ import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
-import { profileFilterFromParts } from "@desktop/lib/profile";
+import { profileFromParts } from "@desktop/lib/profile";
 import { useMemo, useState } from "react";
 
 type CreateFolderSettingsProps = {
@@ -27,7 +27,7 @@ export function CreateFolderSettings({
   const { localHostName, localUserName } = useLocalProfile();
   const localProfile = useMemo(
     () =>
-      profileFilterFromParts({
+      profileFromParts({
         hostName: localHostName,
         userName: localUserName,
       }),
@@ -57,7 +57,7 @@ export function CreateFolderSettings({
       <PolicyContextProvider
         level="FOLDER"
         mock={{ path: values.path }}
-        profileFilter={localProfile}
+        profile={localProfile}
       >
         {({ loading }) => (
           <>

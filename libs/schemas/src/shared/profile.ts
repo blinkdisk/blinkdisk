@@ -1,4 +1,4 @@
 import { z } from "zod";
 
-export const ZProfileUserName = z.string().min(1).max(255);
-export const ZProfileHostName = z.string().min(1).max(255);
+export const ZKopiaUserName = z.string().min(1).max(255);
+export const ZKopiaHostName = z.string().min(1).max(255);

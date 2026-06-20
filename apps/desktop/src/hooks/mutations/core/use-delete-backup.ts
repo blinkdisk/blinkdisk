@@ -4,6 +4,7 @@ import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -11,19 +12,18 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();
 
   const { data: folder } = useFolder();
-  const { profileFilter } = useProfile();
+  const { profile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
   return useMutation({
     mutationKey: ["core", "backup", "delete"],
     mutationFn: async ({ backupId }: { backupId: string }) => {
-      if (!vaultId || !profileFilter)
-        throw new CustomError("MISSING_REQUIRED_VALUE");
+      if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
 
       await vaultApi(vaultId).post("/api/v1/snapshots/delete", {
         source: {
-          ...profileFilter,
+          ...kopiaParamsFromProfile(profile),
           path: folder?.source.path || "",
         },
         snapshotManifestIds: [backupId],

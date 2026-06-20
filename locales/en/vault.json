@@ -397,26 +397,26 @@
     "vault": "Vault",
     "settings": "Settings",
     "upgrade": "Upgrade storage",
-    "currentDevice": {
-      "title": "Current device"
+    "currentProfile": {
+      "title": "Current profile"
     },
-    "otherDevices": {
-      "title": "Other devices",
+    "otherProfiles": {
+      "title": "Other profiles",
       "select": {
-        "host": {
+        "device": {
           "all": "All devices",
           "clear": "Clear device filter",
           "empty": "Select device"
         },
         "user": {
-          "all": "All profiles",
-          "clear": "Clear profile filter",
-          "empty": "Select profile"
+          "all": "All users",
+          "clear": "Clear user filter",
+          "empty": "Select user"
         }
       },
       "empty": {
         "title": "No folders found",
-        "description": "This device profile has no backed up folders."
+        "description": "This profile has no backed up folders."
       }
     },
     "folders": {
@@ -451,8 +451,8 @@
     }
   },
   "remoteTooltip": {
-    "title": "Remote profile",
-    "description": "You are viewing a vault from a different profile or device. You can't perform this action."
+    "title": "Different profile",
+    "description": "You are viewing a different profile. You can't perform this action."
   },
   "moveDialog": {
     "title": "Move vaults",

@@ -1,23 +1,19 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { type ProfileFilter, useProfile } from "@desktop/hooks/use-profile";
+import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useCancelBackup(
-  options: { profileFilter?: ProfileFilter } = {},
-) {
+export function useCancelBackup(options: { profile?: SelectedProfile } = {}) {
   const queryClient = useQueryClient();
 
-  const { profileFilter: routeProfileFilter } = useProfile();
+  const { profile: routeSelectedProfile } = useProfile();
   const { vaultId } = useVaultId();
   const { queryKeys } = useQueryKey();
-  const profileFilter =
-    options.profileFilter === undefined
-      ? routeProfileFilter
-      : options.profileFilter;
+  const profile =
+    options.profile === undefined ? routeSelectedProfile : options.profile;
 
   return useMutation({
     mutationKey: ["vault", vaultId, "backup", "cancel"],
@@ -32,7 +28,7 @@ export function useCancelBackup(
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.list(vaultId, profileFilter),
+        queryKey: queryKeys.folder.list(vaultId, profile),
       });
     },
   });

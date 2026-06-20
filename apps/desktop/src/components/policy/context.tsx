@@ -3,7 +3,7 @@ import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-
 import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
 import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
 import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
-import type { ProfileFilter } from "@desktop/hooks/use-profile";
+import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import type { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";
 
@@ -11,25 +11,25 @@ function usePolicyContext({
   level,
   folderId,
   mock,
-  profileFilter,
+  profile,
 }: {
   level: ZPolicyLevelType;
   folderId?: string;
   mock?: { path: string };
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
 }) {
   const { data: vaultPolicy, isPending: isVaultPolicyPending } = useVaultPolicy(
-    { profileFilter },
+    { profile },
   );
   const { data: folderPolicy, isPending: isFolderPolicyPending } =
-    useFolderPolicy({ folderId, mock, profileFilter });
+    useFolderPolicy({ folderId, mock, profile });
 
-  const { mutateAsync: mutateVault } = useUpdateVaultPolicy({ profileFilter });
+  const { mutateAsync: mutateVault } = useUpdateVaultPolicy({ profile });
 
   const { mutateAsync: mutateFolder } = useUpdateFolderPolicy({
     mock,
     folderId,
-    profileFilter,
+    profile,
   });
 
   const policy = useMemo(
@@ -80,7 +80,7 @@ function usePolicyContext({
     mutate,
     level,
     mock,
-    profileFilter,
+    profile,
   };
 }
 
@@ -97,7 +97,7 @@ const defaultContext = {
   mutate: undefined,
   level: undefined,
   mock: undefined,
-  profileFilter: undefined,
+  profile: undefined,
 };
 
 export const PolicyContext = createContext<
@@ -108,7 +108,7 @@ type PolicyContextProviderProps = {
   level: ZPolicyLevelType;
   folderId?: string;
   mock?: { path: string };
-  profileFilter?: ProfileFilter;
+  profile?: SelectedProfile;
 };
 
 export function PolicyContextProvider({
