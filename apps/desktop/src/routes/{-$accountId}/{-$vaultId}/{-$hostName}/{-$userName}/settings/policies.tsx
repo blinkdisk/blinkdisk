@@ -28,7 +28,6 @@ import {
   type PolicyTreeNode,
   policyTargetFromSearch,
   policyTargetId,
-  policyTargetLabel,
   policyTargetParent,
   policyTargetToSearch,
 } from "@desktop/lib/policy-target";
@@ -52,8 +51,6 @@ const ZPolicySearch = z.object({
   userName: z.string().optional(),
   policyPath: z.string().optional(),
 });
-
-type PolicyPageTranslate = ReturnType<typeof useAppTranslation>["t"];
 
 export const Route = createFileRoute(
   "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
@@ -331,7 +328,6 @@ function PolicyEditor({
     <PolicyContextProvider key={policyTargetId(target)} target={target}>
       {({ policy }) => (
         <div className="flex min-w-0 flex-col gap-8">
-          <SelectedPolicyHeader target={target} />
           {target.kind === "DRAFT_FOLDER" ? (
             <DraftPolicyActions
               target={target}
@@ -349,42 +345,6 @@ function PolicyEditor({
         </div>
       )}
     </PolicyContextProvider>
-  );
-}
-
-function SelectedPolicyHeader({ target }: { target: PolicyTarget }) {
-  const { t } = useAppTranslation("policy.page");
-  const Icon = getPolicyTargetIcon(target.kind);
-
-  return (
-    <SettingsPanel>
-      <div className="flex items-start gap-4 px-5 py-5">
-        <div className="bg-muted text-muted-foreground flex size-12 shrink-0 items-center justify-center rounded-xl border [&>svg]:size-6">
-          <Icon className="size-6" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <h2 className="truncate text-lg font-semibold">
-              {policyTargetLabel(target)}
-            </h2>
-            {target.kind === "DRAFT_FOLDER" ? (
-              <Badge variant="secondary">{t("draft.badge")}</Badge>
-            ) : null}
-          </div>
-          <p className="text-muted-foreground mt-0.5 text-sm">
-            {getPolicyTargetDescription(target, t)}
-          </p>
-          <p
-            className={cn(
-              "text-muted-foreground/80 mt-2 truncate text-xs",
-              target.kind !== "GLOBAL" && "font-mono",
-            )}
-          >
-            {getPolicyTargetPath(target, t)}
-          </p>
-        </div>
-      </div>
-    </SettingsPanel>
   );
 }
 
@@ -477,37 +437,5 @@ function getPolicyTargetIcon(kind: PolicyTargetKind) {
       return FolderIcon;
     case "DRAFT_FOLDER":
       return FileClockIcon;
-  }
-}
-
-function getPolicyTargetDescription(
-  target: PolicyTarget,
-  t: PolicyPageTranslate,
-) {
-  switch (target.kind) {
-    case "GLOBAL":
-      return t("target.global.description");
-    case "HOST":
-      return t("target.host.description", { hostName: target.hostName });
-    case "USER":
-      return t("target.user.description", { userName: target.userName });
-    case "FOLDER":
-      return t("target.folder.description");
-    case "DRAFT_FOLDER":
-      return t("target.draft.description");
-  }
-}
-
-function getPolicyTargetPath(target: PolicyTarget, t: PolicyPageTranslate) {
-  switch (target.kind) {
-    case "GLOBAL":
-      return t("target.global.path");
-    case "HOST":
-      return `@${target.hostName}`;
-    case "USER":
-      return `${target.userName}@${target.hostName}`;
-    case "FOLDER":
-    case "DRAFT_FOLDER":
-      return `${target.userName}@${target.hostName}:${target.path}`;
   }
 }

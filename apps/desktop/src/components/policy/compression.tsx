@@ -23,7 +23,6 @@ import { usePolicyCompressionForm } from "@desktop/hooks/forms/use-policy-compre
 import {
   GaugeIcon,
   Minimize2Icon,
-  PackageIcon,
   PlusIcon,
   TrashIcon,
   ZapIcon,
@@ -61,7 +60,6 @@ export function CompressionSettings() {
       id="compression"
       title={t("title")}
       description={t("description")}
-      icon={<PackageIcon />}
     >
       <form
         onSubmit={(e) => {

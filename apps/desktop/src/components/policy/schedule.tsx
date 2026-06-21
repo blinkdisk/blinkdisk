@@ -10,7 +10,7 @@ import { Cron } from "@desktop/components/cron";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
-import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
 export function ScheduleSettings() {
@@ -26,7 +26,6 @@ export function ScheduleSettings() {
       id="schedule"
       title={t("title")}
       description={t("description")}
-      icon={<ClockIcon />}
     >
       <form
         onSubmit={(e) => {

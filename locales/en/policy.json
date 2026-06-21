@@ -21,24 +21,6 @@
         "description": "Delete this draft policy without creating a folder.",
         "button": "Discard"
       }
-    },
-    "target": {
-      "global": {
-        "description": "Repository-wide defaults",
-        "path": "Inherited by every device, user, and folder."
-      },
-      "host": {
-        "description": "Device policy for {{hostName}}"
-      },
-      "user": {
-        "description": "User policy for {{userName}}"
-      },
-      "folder": {
-        "description": "Folder policy"
-      },
-      "draft": {
-        "description": "Draft folder policy"
-      }
     }
   },
   "schedule": {

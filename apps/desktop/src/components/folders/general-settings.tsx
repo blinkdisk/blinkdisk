@@ -9,7 +9,6 @@ import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyContext } from "@desktop/components/policy/context";
 import { usePolicyGeneralForm } from "@desktop/hooks/forms/use-policy-general-form";
 import { useFolder } from "@desktop/hooks/use-folder";
-import { SettingsIcon } from "lucide-react";
 import { useContext } from "react";
 
 export function FolderGeneralSettings() {
@@ -30,7 +29,6 @@ export function FolderGeneralSettings() {
       id="general"
       title={t("title")}
       description={t("description")}
-      icon={<SettingsIcon />}
     >
       <div>
         <form

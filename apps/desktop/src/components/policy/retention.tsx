@@ -4,7 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyRetentionForm } from "@desktop/hooks/forms/use-policy-retention-form";
-import { ArchiveIcon, InfoIcon } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 
 export function RetentionSettings() {
   const { t } = useAppTranslation("policy.retention");
@@ -17,7 +17,6 @@ export function RetentionSettings() {
       id="retention"
       title={t("title")}
       description={t("description")}
-      icon={<ArchiveIcon />}
     >
       <form
         onSubmit={(e) => {

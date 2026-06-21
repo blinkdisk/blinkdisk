@@ -12,7 +12,7 @@ import { PolicyField } from "@desktop/components/policy/field";
 import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
 import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
 import { parseExclusionRule } from "@desktop/lib/exclusion";
-import { EditIcon, FileXIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { EditIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext, useMemo } from "react";
 
 export function FilesSettings() {
@@ -26,7 +26,6 @@ export function FilesSettings() {
       id="files"
       title={t("title")}
       description={t("description")}
-      icon={<FileXIcon />}
     >
       <form
         onSubmit={(e) => {
