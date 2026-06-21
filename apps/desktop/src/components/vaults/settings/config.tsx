@@ -2,10 +2,13 @@ import { resolveStorageProviderType } from "@blinkdisk/constants/providers";
 import { FormDisabledContext } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { providerForms } from "@desktop/components/forms/providers";
-import { SettingsSection } from "@desktop/components/policy/category";
+import {
+  SettingsGroup,
+  SettingsPanel,
+  SettingsRow,
+} from "@desktop/components/settings";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultConfig } from "@desktop/hooks/queries/use-vault-config";
-import { HardDriveIcon } from "lucide-react";
 import { useMemo } from "react";
 
 export function VaultConfigSettings() {
@@ -22,21 +25,21 @@ export function VaultConfigSettings() {
 
   if (!vault || vault.provider === "CLOUDBLINK") return null;
   return (
-    <SettingsSection
-      title={t("title")}
-      description={t("description")}
-      icon={<HardDriveIcon />}
-    >
-      <FormDisabledContext.Provider value={true}>
-        {Form && config && (
-          <Form
-            action="UPDATE"
-            // @ts-expect-error Find a better way to type this
-            config={config}
-            onSubmit={() => null}
-          />
-        )}
-      </FormDisabledContext.Provider>
-    </SettingsSection>
+    <SettingsGroup title={t("title")}>
+      <SettingsPanel>
+        <SettingsRow fullWidth>
+          <FormDisabledContext.Provider value={true}>
+            {Form && config && (
+              <Form
+                action="UPDATE"
+                // @ts-expect-error Find a better way to type this
+                config={config}
+                onSubmit={() => null}
+              />
+            )}
+          </FormDisabledContext.Provider>
+        </SettingsRow>
+      </SettingsPanel>
+    </SettingsGroup>
   );
 }
