@@ -35,7 +35,7 @@ export function SettingsCategory({
         )}
       </div>
       <SettingsPanel>
-        <SettingsRow fullWidth>
+        <SettingsRow fullWidth className="px-7 py-6">
           {loading ? <Skeleton count={4} height="2.75rem" /> : children}
         </SettingsRow>
       </SettingsPanel>

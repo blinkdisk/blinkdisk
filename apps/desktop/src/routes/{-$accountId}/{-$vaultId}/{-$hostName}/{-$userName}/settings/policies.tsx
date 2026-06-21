@@ -382,6 +382,7 @@ function DraftPolicyActions({
     <>
       <SettingsPanel>
         <SettingsRow
+          className="px-7 py-6"
           title={t("draft.notice.title")}
           description={t("draft.notice.description")}
         >
