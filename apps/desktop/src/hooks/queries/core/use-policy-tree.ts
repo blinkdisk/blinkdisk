@@ -14,7 +14,10 @@ export function usePolicyTree() {
   const { running } = useVaultStatus();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
-  const { data: sources } = useFolderList({ unfiltered: true });
+  const { data: sources } = useFolderList({
+    includeDrafts: true,
+    unfiltered: true,
+  });
 
   const policies = useQuery({
     queryKey: queryKeys.policy.tree(vaultId),

@@ -14,7 +14,12 @@ function RouteComponent() {
   const isPolicyPage = pathname.endsWith("/settings/policies");
 
   return (
-    <div className="flex min-h-full flex-col overflow-y-auto px-6 py-12 md:px-8 md:py-16">
+    <div
+      className={cn(
+        "flex min-h-full flex-col overflow-y-auto px-6 md:px-8",
+        isPolicyPage ? "py-6 md:py-8" : "py-12 md:py-16",
+      )}
+    >
       <div
         className={cn(
           "mx-auto flex w-full flex-col gap-10",

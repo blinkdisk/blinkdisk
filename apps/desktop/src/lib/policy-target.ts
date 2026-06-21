@@ -324,13 +324,22 @@ export function buildPolicyTree({
   }
 
   for (const source of sources) {
+    const userName = getRealPolicyUserName(source.source.userName);
     const node = ensureFolder({
-      kind: "FOLDER",
+      kind: isDraftPolicyUserName(source.source.userName)
+        ? "DRAFT_FOLDER"
+        : "FOLDER",
       hostName: source.source.host,
-      userName: source.source.userName,
+      userName,
       path: source.source.path,
     });
-    node.source = source;
+    node.source = {
+      ...source,
+      source: {
+        ...source.source,
+        userName,
+      },
+    };
     node.label = source.name || node.label;
   }
 

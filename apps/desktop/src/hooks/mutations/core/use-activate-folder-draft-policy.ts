@@ -17,7 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
 
-export function usePublishFolderDraftPolicy({
+export function useActivateFolderDraftPolicy({
   target,
   onError,
   onSuccess,
@@ -35,7 +35,7 @@ export function usePublishFolderDraftPolicy({
   const { data: space } = useSpace();
 
   return useMutation({
-    mutationKey: ["core", "folder", "policy", "draft", "publish"],
+    mutationKey: ["core", "folder", "policy", "draft", "activate"],
     mutationFn: async ({
       policy,
       force,

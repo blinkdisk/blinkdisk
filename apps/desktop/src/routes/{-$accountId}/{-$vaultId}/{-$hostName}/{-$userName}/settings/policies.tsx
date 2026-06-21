@@ -12,13 +12,9 @@ import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
-import {
-  SettingsGroup,
-  SettingsPanel,
-  SettingsRow,
-} from "@desktop/components/settings";
+import { SettingsPanel, SettingsRow } from "@desktop/components/settings";
+import { useActivateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-folder-draft-policy";
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
-import { usePublishFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-publish-folder-draft-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
 import {
   isPolicyTargetEqual,
@@ -34,7 +30,6 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ChevronRightIcon,
-  FileClockIcon,
   FolderIcon,
   MonitorIcon,
   SendIcon,
@@ -201,12 +196,14 @@ function PolicyTreeItem({
           ) : (
             <Icon className="size-4 shrink-0" />
           )}
-          <span className="min-w-0 flex-1 truncate">{node.label}</span>
-          {node.target.kind === "DRAFT_FOLDER" ? (
-            <Badge variant="secondary" className="shrink-0">
-              {t("draft.badge")}
-            </Badge>
-          ) : null}
+          <span className="flex min-w-0 flex-1 items-center gap-2">
+            <span className="min-w-0 truncate">{node.label}</span>
+            {node.target.kind === "DRAFT_FOLDER" ? (
+              <Badge variant="subtle" className="shrink-0">
+                {t("draft.badge")}
+              </Badge>
+            ) : null}
+          </span>
         </button>
         {collapsible ? (
           <button
@@ -360,7 +357,7 @@ function DraftPolicyActions({
   const { t } = useAppTranslation("policy.page");
   const [alertShown, setAlertShown] = useState(false);
 
-  const publish = usePublishFolderDraftPolicy({
+  const activate = useActivateFolderDraftPolicy({
     target,
     onError: (error) => {
       if (
@@ -382,46 +379,43 @@ function DraftPolicyActions({
   });
 
   return (
-    <SettingsGroup title={t("draft.title")}>
+    <>
       <SettingsPanel>
         <SettingsRow
-          title={t("draft.publish.title")}
-          description={t("draft.publish.description")}
+          title={t("draft.notice.title")}
+          description={t("draft.notice.description")}
         >
-          <Button
-            size="sm"
-            onClick={() => policy && publish.mutate({ policy })}
-            disabled={!policy}
-            loading={publish.isPending}
-          >
-            <SendIcon />
-            {t("draft.publish.button")}
-          </Button>
-        </SettingsRow>
-        <SettingsRow
-          title={t("draft.discard.title")}
-          description={t("draft.discard.description")}
-        >
-          <Button
-            size="sm"
-            variant="destructive-secondary"
-            onClick={() => discard.mutate()}
-            loading={discard.isPending}
-          >
-            <TrashIcon />
-            {t("draft.discard.button")}
-          </Button>
+          <div className="flex flex-wrap justify-start gap-2 md:justify-end">
+            <Button
+              size="sm"
+              variant="destructive-secondary"
+              onClick={() => discard.mutate()}
+              loading={discard.isPending}
+            >
+              <TrashIcon />
+              {t("draft.discard.button")}
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => policy && activate.mutate({ policy })}
+              disabled={!policy}
+              loading={activate.isPending}
+            >
+              <SendIcon />
+              {t("draft.activate.button")}
+            </Button>
+          </div>
         </SettingsRow>
       </SettingsPanel>
       {policy ? (
         <ExceedingAlert
           open={alertShown}
           setOpen={setAlertShown}
-          loading={publish.isPending}
-          submit={() => publish.mutate({ policy, force: true })}
+          loading={activate.isPending}
+          submit={() => activate.mutate({ policy, force: true })}
         />
       ) : null}
-    </SettingsGroup>
+    </>
   );
 }
 
@@ -434,8 +428,7 @@ function getPolicyTargetIcon(kind: PolicyTargetKind) {
     case "USER":
       return UserIcon;
     case "FOLDER":
-      return FolderIcon;
     case "DRAFT_FOLDER":
-      return FileClockIcon;
+      return FolderIcon;
   }
 }

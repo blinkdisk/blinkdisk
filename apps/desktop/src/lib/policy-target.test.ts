@@ -199,4 +199,32 @@ describe("buildPolicyTree", () => {
       "DRAFT_FOLDER:device:paul:/Users/paul/Documents",
     );
   });
+
+  it("shows draft folder sources under their intended real user", () => {
+    const tree = buildPolicyTree({
+      policies: [],
+      sources: [
+        {
+          id: "draft-documents",
+          name: "Documents",
+          source: {
+            host: "device",
+            userName: "BLINKDISK-DRAFT-paul",
+            path: "/Users/paul/Documents",
+          },
+        },
+      ],
+    });
+
+    const host = tree.children[0];
+    const user = host?.children[0];
+    const draft = user?.children[0];
+
+    expect(user?.label).toBe("paul");
+    expect(draft?.target.kind).toBe("DRAFT_FOLDER");
+    expect(draft?.source?.source.userName).toBe("paul");
+    expect(policyTargetId(draft?.target || { kind: "GLOBAL" })).toBe(
+      "DRAFT_FOLDER:device:paul:/Users/paul/Documents",
+    );
+  });
 });

@@ -9,16 +9,15 @@
       "custom": "Custom"
     },
     "draft": {
-      "title": "Draft policy",
       "badge": "Draft",
-      "publish": {
-        "title": "Publish folder",
-        "description": "Create the folder with this policy and start using it for future backups.",
-        "button": "Publish"
+      "notice": {
+        "title": "Draft folder policy",
+        "description": "This folder is a draft. Backups will only start after you add the folder."
+      },
+      "activate": {
+        "button": "Add folder"
       },
       "discard": {
-        "title": "Discard draft",
-        "description": "Delete this draft policy without creating a folder.",
         "button": "Discard"
       }
     }
