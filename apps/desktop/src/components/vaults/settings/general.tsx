@@ -23,8 +23,17 @@ export function VaultGeneralSettings() {
   const { isLocalAccount } = useAccountId();
 
   const form = useUpdateVaultForm();
-  const isDirty = useStore(form.store, (state) => state.isDirty);
+  const [isDirty, isSubmitting] = useStore(form.store, (state) => [
+    state.isDirty,
+    state.isSubmitting,
+  ]);
   const disabled = useContext(FormDisabledContext);
+
+  const submitIfNeeded = () => {
+    if (!isDirty || isSubmitting) return;
+
+    form.handleSubmit();
+  };
 
   return (
     <>
@@ -34,36 +43,36 @@ export function VaultGeneralSettings() {
             className="contents"
             onSubmit={(e) => {
               e.preventDefault();
-              form.handleSubmit(e);
+              submitIfNeeded();
+            }}
+            onBlur={(e) => {
+              if (!(e.target instanceof HTMLInputElement)) return;
+              if (e.target.name !== "name") return;
+
+              submitIfNeeded();
             }}
           >
             <SettingsRow title={t("name.label")} description={t("description")}>
-              <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row md:items-center">
-                <form.AppField name="name">
-                  {(field) => (
-                    <field.Text
-                      label={{
-                        title: t("name.label"),
-                        labelClassName: "sr-only",
-                        required: true,
-                      }}
-                      placeholder={t("name.placeholder")}
-                      className="md:w-64"
-                    />
-                  )}
-                </form.AppField>
-                <form.AppForm>
-                  <form.Submit className="w-fit" disabled={!isDirty} size="sm">
-                    {t("save")}
-                  </form.Submit>
-                </form.AppForm>
-              </div>
+              <form.AppField name="name">
+                {(field) => (
+                  <field.Text
+                    label={{
+                      title: t("name.label"),
+                      labelClassName: "sr-only",
+                      required: true,
+                    }}
+                    placeholder={t("name.placeholder")}
+                    className="md:w-64"
+                  />
+                )}
+              </form.AppField>
             </SettingsRow>
           </form>
           {isLocalAccount ? (
             <SettingsRow
               title={t("move.title")}
               description={t("move.description")}
+              separated
             >
               <Button
                 disabled={disabled}
