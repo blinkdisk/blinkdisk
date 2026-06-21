@@ -12,6 +12,10 @@ export type FolderCardProps = {
 
 const defaultColor = "0deg 0% 39%";
 
+export function getEmojiUrl(emoji: string) {
+  return parse(emoji)[0]?.url;
+}
+
 export function FolderCard({
   emoji,
   className,
@@ -28,8 +32,7 @@ export function FolderCard({
       };
     }
 
-    const parsed = parse(emoji);
-    const url = parsed[0]?.url;
+    const url = getEmojiUrl(emoji);
     const code = url?.split("/").pop()?.replace(".svg", "") || "";
     const hue = EMOJI_TO_HUE[code as keyof typeof EMOJI_TO_HUE];
     return {

@@ -188,7 +188,7 @@ export function policyTargetParent(target: PolicyTarget): PolicyTarget | null {
 export function policyTargetLabel(target: PolicyTarget) {
   switch (target.kind) {
     case "GLOBAL":
-      return "Global";
+      return "Vault";
     case "HOST":
       return target.hostName;
     case "USER":
@@ -253,7 +253,7 @@ export function buildPolicyTree({
 }): PolicyTreeNode {
   const root: PolicyTreeNode = {
     id: "GLOBAL",
-    label: "Global",
+    label: "Vault",
     target: { kind: "GLOBAL" },
     children: [],
   };

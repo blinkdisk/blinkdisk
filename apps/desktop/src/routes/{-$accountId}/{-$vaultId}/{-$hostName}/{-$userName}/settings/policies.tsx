@@ -1,3 +1,4 @@
+import { getEmojiUrl } from "@blinkdisk/components/folder-card";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { Badge } from "@blinkdisk/ui/badge";
@@ -33,15 +34,16 @@ import {
 } from "@desktop/lib/policy-target";
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  ChevronRightIcon,
   FileClockIcon,
   FolderIcon,
-  Globe2Icon,
-  LaptopIcon,
+  MonitorIcon,
   SendIcon,
   TrashIcon,
   UserIcon,
+  VaultIcon,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
 const ZPolicySearch = z.object({
@@ -61,7 +63,6 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const { t } = useAppTranslation("policy.page");
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
 
@@ -77,12 +78,6 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground mt-1 max-w-2xl text-sm">
-          {t("description")}
-        </p>
-      </div>
       <div className="grid min-h-0 items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <PolicyTreePanel
           selectedTarget={selectedTarget}
@@ -105,9 +100,38 @@ function PolicyTreePanel({
 }: PolicyTreePanelProps) {
   const { t } = useAppTranslation("policy.page");
   const { data: tree, isPending } = usePolicyTree();
+  const { hostName, userName } = Route.useParams();
+  const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(
+    () => new Set(),
+  );
+
+  useEffect(() => {
+    if (!tree) return;
+
+    setExpandedNodeIds(
+      getInitialExpandedPolicyTreeNodeIds({
+        tree,
+        selectedTarget,
+        hostName,
+        userName,
+      }),
+    );
+  }, [tree, selectedTarget, hostName, userName]);
+
+  const toggleNode = (nodeId: string) => {
+    setExpandedNodeIds((ids) => {
+      const next = new Set(ids);
+      if (next.has(nodeId)) {
+        next.delete(nodeId);
+      } else {
+        next.add(nodeId);
+      }
+      return next;
+    });
+  };
 
   return (
-    <aside className="lg:sticky lg:top-8 lg:self-start">
+    <aside className="lg:sticky lg:top-0 lg:self-start">
       <SettingsPanel>
         <div className="border-border border-b px-4 py-3">
           <h2 className="text-sm font-semibold">{t("tree.title")}</h2>
@@ -122,6 +146,8 @@ function PolicyTreePanel({
             <PolicyTreeItem
               node={tree}
               selectedTarget={selectedTarget}
+              expandedNodeIds={expandedNodeIds}
+              onToggleNode={toggleNode}
               onSelectTarget={onSelectTarget}
             />
           )}
@@ -134,52 +160,82 @@ function PolicyTreePanel({
 type PolicyTreeItemProps = {
   node: PolicyTreeNode;
   selectedTarget: PolicyTarget;
+  expandedNodeIds: Set<string>;
+  onToggleNode: (nodeId: string) => void;
   onSelectTarget: (target: PolicyTarget) => void;
 };
 
 function PolicyTreeItem({
   node,
   selectedTarget,
+  expandedNodeIds,
+  onToggleNode,
   onSelectTarget,
 }: PolicyTreeItemProps) {
   const { t } = useAppTranslation("policy.page");
   const Icon = getPolicyTargetIcon(node.target.kind);
   const active = isPolicyTargetEqual(node.target, selectedTarget);
+  const hasChildren = node.children.length > 0;
+  const collapsible = hasChildren && node.target.kind !== "GLOBAL";
+  const expanded = expandedNodeIds.has(node.id);
   const emoji = node.source?.emoji;
+  const emojiUrl = useMemo(() => {
+    if (!emoji) return undefined;
+    return getEmojiUrl(emoji);
+  }, [emoji]);
 
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
-      <button
-        type="button"
-        onClick={() => onSelectTarget(node.target)}
+      <div
         className={cn(
-          "flex h-9 w-full min-w-0 items-center gap-2 rounded-md px-2 text-left text-sm transition-colors",
+          "flex h-9 w-full min-w-0 items-center rounded-md text-sm transition-colors",
           active
-            ? "bg-primary/10 text-primary font-medium"
+            ? "bg-foreground/6 text-foreground font-medium"
             : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
         )}
       >
-        {emoji ? (
-          <span className="flex size-4 shrink-0 items-center justify-center text-sm leading-none">
-            {emoji}
-          </span>
-        ) : (
-          <Icon className="size-4 shrink-0" />
-        )}
-        <span className="min-w-0 flex-1 truncate">{node.label}</span>
-        {node.target.kind === "DRAFT_FOLDER" ? (
-          <Badge variant="secondary" className="shrink-0">
-            {t("draft.badge")}
-          </Badge>
+        <button
+          type="button"
+          onClick={() => onSelectTarget(node.target)}
+          className="flex h-full min-w-0 flex-1 items-center gap-2 pl-2 text-left"
+        >
+          {emojiUrl ? (
+            <img src={emojiUrl} alt={emoji} className="size-4 shrink-0" />
+          ) : (
+            <Icon className="size-4 shrink-0" />
+          )}
+          <span className="min-w-0 flex-1 truncate">{node.label}</span>
+          {node.target.kind === "DRAFT_FOLDER" ? (
+            <Badge variant="secondary" className="shrink-0">
+              {t("draft.badge")}
+            </Badge>
+          ) : null}
+        </button>
+        {collapsible ? (
+          <button
+            type="button"
+            aria-expanded={expanded}
+            onClick={() => onToggleNode(node.id)}
+            className="flex size-7 shrink-0 items-center justify-center rounded-md text-current opacity-75 transition-opacity hover:opacity-100"
+          >
+            <ChevronRightIcon
+              className={cn(
+                "size-4 transition-transform",
+                expanded && "rotate-90",
+              )}
+            />
+          </button>
         ) : null}
-      </button>
-      {node.children.length > 0 ? (
+      </div>
+      {hasChildren && (expanded || !collapsible) ? (
         <div className="border-border/70 ml-[1.05rem] flex flex-col gap-0.5 border-l pl-2">
           {node.children.map((child) => (
             <PolicyTreeItem
               key={child.id}
               node={child}
               selectedTarget={selectedTarget}
+              expandedNodeIds={expandedNodeIds}
+              onToggleNode={onToggleNode}
               onSelectTarget={onSelectTarget}
             />
           ))}
@@ -187,6 +243,81 @@ function PolicyTreeItem({
       ) : null}
     </div>
   );
+}
+
+function getInitialExpandedPolicyTreeNodeIds({
+  tree,
+  selectedTarget,
+  hostName,
+  userName,
+}: {
+  tree: PolicyTreeNode;
+  selectedTarget: PolicyTarget;
+  hostName?: string;
+  userName?: string;
+}) {
+  if (selectedTarget.kind === "GLOBAL") {
+    return new Set(
+      [
+        tree.id,
+        hostName
+          ? policyTargetId({
+              kind: "HOST",
+              hostName,
+            })
+          : undefined,
+        hostName && userName
+          ? policyTargetId({
+              kind: "USER",
+              hostName,
+              userName,
+            })
+          : undefined,
+      ].filter(
+        (id): id is string => !!id && !!findPolicyTreeNodeById(tree, id),
+      ),
+    );
+  }
+
+  const path = findPolicyTreeTargetPath(tree, selectedTarget);
+  const expandedPath =
+    selectedTarget.kind === "FOLDER" || selectedTarget.kind === "DRAFT_FOLDER"
+      ? path.slice(0, -1)
+      : path;
+
+  return new Set(expandedPath.map((node) => node.id));
+}
+
+function findPolicyTreeTargetPath(
+  node: PolicyTreeNode,
+  target: PolicyTarget,
+): PolicyTreeNode[] {
+  if (isPolicyTargetEqual(node.target, target)) {
+    return [node];
+  }
+
+  for (const child of node.children) {
+    const path = findPolicyTreeTargetPath(child, target);
+    if (path.length > 0) {
+      return [node, ...path];
+    }
+  }
+
+  return [];
+}
+
+function findPolicyTreeNodeById(
+  node: PolicyTreeNode,
+  nodeId: string,
+): PolicyTreeNode | undefined {
+  if (node.id === nodeId) return node;
+
+  for (const child of node.children) {
+    const match = findPolicyTreeNodeById(child, nodeId);
+    if (match) return match;
+  }
+
+  return undefined;
 }
 
 function PolicyEditor({
@@ -229,7 +360,7 @@ function SelectedPolicyHeader({ target }: { target: PolicyTarget }) {
     <SettingsPanel>
       <div className="flex items-start gap-4 px-5 py-5">
         <div className="bg-muted text-muted-foreground flex size-12 shrink-0 items-center justify-center rounded-xl border [&>svg]:size-6">
-          <Icon />
+          <Icon className="size-6" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
@@ -337,9 +468,9 @@ function DraftPolicyActions({
 function getPolicyTargetIcon(kind: PolicyTargetKind) {
   switch (kind) {
     case "GLOBAL":
-      return Globe2Icon;
+      return VaultIcon;
     case "HOST":
-      return LaptopIcon;
+      return MonitorIcon;
     case "USER":
       return UserIcon;
     case "FOLDER":
