@@ -24,7 +24,6 @@ import {
   ArrowLeftIcon,
   CloudIcon,
   GaugeIcon,
-  HardDriveIcon,
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
@@ -56,7 +55,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const isSettingsPath = settingsPath
     ? pathname === settingsPath || pathname.startsWith(`${settingsPath}/`)
     : false;
-  const showStorageConfig = vault ? vault.provider !== "CLOUDBLINK" : false;
 
   return (
     <SidebarSkeletonTheme>
@@ -144,20 +142,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   }
                 />
               </SidebarMenuItem>
-              {showStorageConfig ? (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    className="px-3"
-                    isActive={pathname === `${settingsPath}/storage-config`}
-                    render={
-                      <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/storage-config">
-                        <HardDriveIcon />
-                        {t("storageConfig")}
-                      </Link>
-                    }
-                  />
-                </SidebarMenuItem>
-              ) : null}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   className="px-3"
