@@ -74,7 +74,7 @@
     "home": "Home",
     "general": {
       "title": "General",
-      "description": "Configure general settings of this vault.",
+      "description": "Choose the name shown for this vault.",
       "name": {
         "label": "Vault name",
         "placeholder": "Enter vault name"
