@@ -1,5 +1,6 @@
 import { useFieldContext, useStore } from "@blinkdisk/forms/use-app-form";
-import { Checkbox } from "@blinkdisk/ui/checkbox";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Switch } from "@blinkdisk/ui/switch";
 import { cn } from "@blinkdisk/utils/class";
 import { PolicyContext } from "@desktop/components/policy/context";
 import { useContext } from "react";
@@ -9,6 +10,7 @@ type PolicyFieldProps = {
 };
 
 export function PolicyField({ children }: PolicyFieldProps) {
+  const { t } = useAppTranslation("policy.page");
   const field = useFieldContext();
   const { inherited } = useContext(PolicyContext);
 
@@ -18,37 +20,44 @@ export function PolicyField({ children }: PolicyFieldProps) {
   );
 
   if (!inherited) return children;
-  return (
-    <div className="flex flex-col items-start">
-      <div className="flex items-center gap-2">
-        <Checkbox
-          id={`${field.name}-checkbox`}
-          checked={definedFields?.includes(field.name) || false}
-          onCheckedChange={(to) => {
-            const filtered = (definedFields || []).filter(
-              (v: string) => v !== field.name,
-            );
 
-            field.form.setFieldValue(
-              "definedFields",
-              to ? [...filtered, field.name] : filtered,
-            );
-          }}
+  const overriding = definedFields?.includes(field.name) || false;
+
+  const setOverriding = (to: boolean) => {
+    const filtered = (definedFields || []).filter((v) => v !== field.name);
+    field.form.setFieldValue(
+      "definedFields",
+      to ? [...filtered, field.name] : filtered,
+    );
+  };
+
+  return (
+    <div
+      className={cn(
+        "border-l-2 pl-4 transition-colors",
+        overriding ? "border-primary/40" : "border-border",
+      )}
+    >
+      <div className="mb-2 flex items-center gap-2">
+        <Switch
+          size="sm"
+          checked={overriding}
+          onCheckedChange={setOverriding}
         />
-        <label
-          htmlFor={`${field.name}-checkbox`}
+        <button
+          type="button"
+          onClick={() => setOverriding(!overriding)}
           className={cn(
-            "select-none text-sm",
-            definedFields?.includes(field.name)
-              ? "text-primary"
-              : "text-muted-foreground",
+            "select-none text-xs font-medium transition-colors",
+            overriding ? "text-primary" : "text-muted-foreground",
           )}
         >
-          {/* TODO: Translate keys */}
-          {definedFields?.includes(field.name) ? "Defined" : "Fallback"}
-        </label>
+          {overriding ? t("override.custom") : t("override.inherited")}
+        </button>
       </div>
-      <div className="w-full pl-6">{children}</div>
+      <div className={cn("transition-opacity", !overriding && "opacity-60")}>
+        {children}
+      </div>
     </div>
   );
 }

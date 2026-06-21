@@ -1,8 +1,14 @@
 {
   "page": {
+    "title": "Policies",
+    "description": "Decide how and when your files are backed up. Each level inherits settings from the one above it and can override them.",
     "tree": {
-      "title": "Policy",
-      "description": "Select where settings are defined."
+      "title": "Scope",
+      "description": "Pick a level to view or edit."
+    },
+    "override": {
+      "inherited": "Inherited",
+      "custom": "Custom"
     },
     "draft": {
       "title": "Draft policy",

@@ -61,6 +61,7 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const { t } = useAppTranslation("policy.page");
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
 
@@ -75,12 +76,20 @@ function RouteComponent() {
     });
 
   return (
-    <div className="grid min-h-0 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-      <PolicyTreePanel
-        selectedTarget={selectedTarget}
-        onSelectTarget={selectTarget}
-      />
-      <PolicyEditor target={selectedTarget} onSelectTarget={selectTarget} />
+    <div className="flex flex-col gap-8">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground mt-1 max-w-2xl text-sm">
+          {t("description")}
+        </p>
+      </div>
+      <div className="grid min-h-0 items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <PolicyTreePanel
+          selectedTarget={selectedTarget}
+          onSelectTarget={selectTarget}
+        />
+        <PolicyEditor target={selectedTarget} onSelectTarget={selectTarget} />
+      </div>
     </div>
   );
 }
@@ -100,28 +109,23 @@ function PolicyTreePanel({
   return (
     <aside className="lg:sticky lg:top-8 lg:self-start">
       <SettingsPanel>
-        <SettingsRow fullWidth>
-          <div>
-            <h2 className="font-semibold">{t("tree.title")}</h2>
-            <p className="text-muted-foreground mt-1 text-sm">
-              {t("tree.description")}
-            </p>
-          </div>
-        </SettingsRow>
-        <SettingsRow fullWidth>
-          <div className="flex w-full flex-col gap-1">
-            {isPending || !tree ? (
-              <Skeleton count={8} height="2rem" />
-            ) : (
-              <PolicyTreeItem
-                node={tree}
-                depth={0}
-                selectedTarget={selectedTarget}
-                onSelectTarget={onSelectTarget}
-              />
-            )}
-          </div>
-        </SettingsRow>
+        <div className="border-border border-b px-4 py-3">
+          <h2 className="text-sm font-semibold">{t("tree.title")}</h2>
+          <p className="text-muted-foreground mt-0.5 text-xs">
+            {t("tree.description")}
+          </p>
+        </div>
+        <div className="flex w-full flex-col gap-0.5 p-2">
+          {isPending || !tree ? (
+            <Skeleton count={8} height="2.25rem" />
+          ) : (
+            <PolicyTreeItem
+              node={tree}
+              selectedTarget={selectedTarget}
+              onSelectTarget={onSelectTarget}
+            />
+          )}
+        </div>
       </SettingsPanel>
     </aside>
   );
@@ -129,35 +133,39 @@ function PolicyTreePanel({
 
 type PolicyTreeItemProps = {
   node: PolicyTreeNode;
-  depth: number;
   selectedTarget: PolicyTarget;
   onSelectTarget: (target: PolicyTarget) => void;
 };
 
 function PolicyTreeItem({
   node,
-  depth,
   selectedTarget,
   onSelectTarget,
 }: PolicyTreeItemProps) {
   const { t } = useAppTranslation("policy.page");
   const Icon = getPolicyTargetIcon(node.target.kind);
   const active = isPolicyTargetEqual(node.target, selectedTarget);
+  const emoji = node.source?.emoji;
 
   return (
-    <>
+    <div className="flex min-w-0 flex-col gap-0.5">
       <button
         type="button"
         onClick={() => onSelectTarget(node.target)}
         className={cn(
           "flex h-9 w-full min-w-0 items-center gap-2 rounded-md px-2 text-left text-sm transition-colors",
           active
-            ? "bg-primary/10 text-primary"
+            ? "bg-primary/10 text-primary font-medium"
             : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
         )}
-        style={{ paddingLeft: `${0.5 + depth * 0.9}rem` }}
       >
-        <Icon className="size-4 shrink-0" />
+        {emoji ? (
+          <span className="flex size-4 shrink-0 items-center justify-center text-sm leading-none">
+            {emoji}
+          </span>
+        ) : (
+          <Icon className="size-4 shrink-0" />
+        )}
         <span className="min-w-0 flex-1 truncate">{node.label}</span>
         {node.target.kind === "DRAFT_FOLDER" ? (
           <Badge variant="secondary" className="shrink-0">
@@ -165,16 +173,19 @@ function PolicyTreeItem({
           </Badge>
         ) : null}
       </button>
-      {node.children.map((child) => (
-        <PolicyTreeItem
-          key={child.id}
-          node={child}
-          depth={depth + 1}
-          selectedTarget={selectedTarget}
-          onSelectTarget={onSelectTarget}
-        />
-      ))}
-    </>
+      {node.children.length > 0 ? (
+        <div className="border-border/70 ml-[1.05rem] flex flex-col gap-0.5 border-l pl-2">
+          {node.children.map((child) => (
+            <PolicyTreeItem
+              key={child.id}
+              node={child}
+              selectedTarget={selectedTarget}
+              onSelectTarget={onSelectTarget}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -212,35 +223,37 @@ function PolicyEditor({
 
 function SelectedPolicyHeader({ target }: { target: PolicyTarget }) {
   const { t } = useAppTranslation("policy.page");
+  const Icon = getPolicyTargetIcon(target.kind);
 
   return (
-    <SettingsGroup title={policyTargetLabel(target)}>
-      <SettingsPanel>
-        <SettingsRow fullWidth>
-          <div className="flex items-center gap-3">
-            <div className="bg-muted flex size-10 shrink-0 items-center justify-center rounded-lg border">
-              {(() => {
-                const Icon = getPolicyTargetIcon(target.kind);
-                return <Icon className="size-5" />;
-              })()}
-            </div>
-            <div className="min-w-0">
-              <div className="flex min-w-0 items-center gap-2">
-                <p className="truncate font-medium">
-                  {getPolicyTargetDescription(target, t)}
-                </p>
-                {target.kind === "DRAFT_FOLDER" ? (
-                  <Badge variant="secondary">{t("draft.badge")}</Badge>
-                ) : null}
-              </div>
-              <p className="text-muted-foreground mt-1 truncate text-sm">
-                {getPolicyTargetPath(target, t)}
-              </p>
-            </div>
+    <SettingsPanel>
+      <div className="flex items-start gap-4 px-5 py-5">
+        <div className="bg-muted text-muted-foreground flex size-12 shrink-0 items-center justify-center rounded-xl border [&>svg]:size-6">
+          <Icon />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <h2 className="truncate text-lg font-semibold">
+              {policyTargetLabel(target)}
+            </h2>
+            {target.kind === "DRAFT_FOLDER" ? (
+              <Badge variant="secondary">{t("draft.badge")}</Badge>
+            ) : null}
           </div>
-        </SettingsRow>
-      </SettingsPanel>
-    </SettingsGroup>
+          <p className="text-muted-foreground mt-0.5 text-sm">
+            {getPolicyTargetDescription(target, t)}
+          </p>
+          <p
+            className={cn(
+              "text-muted-foreground/80 mt-2 truncate text-xs",
+              target.kind !== "GLOBAL" && "font-mono",
+            )}
+          >
+            {getPolicyTargetPath(target, t)}
+          </p>
+        </div>
+      </div>
+    </SettingsPanel>
   );
 }
 

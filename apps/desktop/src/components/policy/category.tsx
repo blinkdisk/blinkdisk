@@ -1,11 +1,7 @@
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { PolicyContext } from "@desktop/components/policy/context";
-import {
-  SettingsGroup,
-  SettingsPanel,
-  SettingsRow,
-} from "@desktop/components/settings";
+import { SettingsPanel, SettingsRow } from "@desktop/components/settings";
 import { type ReactNode, useContext } from "react";
 
 type SettingsCategoryProps = {
@@ -16,37 +12,8 @@ type SettingsCategoryProps = {
   icon: ReactNode;
 };
 
-type SettingsCategoryHeaderProps = Omit<
-  SettingsCategoryProps,
-  "children" | "id" | "title"
-> & {
-  loading?: boolean;
-};
-
-function SettingsCategoryHeader({
-  description,
-  icon,
-  loading,
-}: SettingsCategoryHeaderProps) {
-  return (
-    <div className="flex items-center gap-4">
-      {loading ? (
-        <Skeleton className="!size-10 !rounded-lg" />
-      ) : (
-        <div className="bg-card text-muted-foreground flex size-10 items-center justify-center rounded-lg border [&>svg]:size-5">
-          {icon}
-        </div>
-      )}
-      <div className="min-w-0">
-        <p className="text-muted-foreground mt-1 text-sm">
-          {loading ? <Skeleton width={240} /> : description}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export function SettingsCategory({
+  id,
   title,
   description,
   children,
@@ -55,19 +22,33 @@ export function SettingsCategory({
   const { loading } = useContext(PolicyContext);
 
   return (
-    <SettingsGroup title={title}>
+    <section id={id} className="scroll-mt-8">
       <SettingsPanel>
         <SettingsRow fullWidth>
-          <SettingsCategoryHeader
-            description={description}
-            icon={icon}
-            loading={loading}
-          />
+          <div className="flex items-center gap-3">
+            {loading ? (
+              <Skeleton className="!size-10 !rounded-lg" />
+            ) : (
+              <div className="bg-muted text-muted-foreground flex size-10 shrink-0 items-center justify-center rounded-lg border [&>svg]:size-5">
+                {icon}
+              </div>
+            )}
+            <div className="min-w-0">
+              {loading ? (
+                <Skeleton width={150} height="1.1rem" />
+              ) : (
+                <h3 className="font-semibold leading-tight">{title}</h3>
+              )}
+              <p className="text-muted-foreground mt-1 text-sm">
+                {loading ? <Skeleton width={260} /> : description}
+              </p>
+            </div>
+          </div>
         </SettingsRow>
         <SettingsRow fullWidth>
           {loading ? <Skeleton count={4} height="2.75rem" /> : children}
         </SettingsRow>
       </SettingsPanel>
-    </SettingsGroup>
+    </section>
   );
 }
