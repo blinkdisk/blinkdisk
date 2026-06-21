@@ -1,6 +1,11 @@
 import type { ZVaultThrottleType } from "@blinkdisk/schemas/vault";
 import { fromBits, toBits } from "@desktop/lib/bandwith";
 
+export const DEFAULT_THROTTLE_LIMIT = {
+  value: 10,
+  unit: "Mbps",
+} as const;
+
 export type CoreThrottle = {
   readsPerSecond?: number;
   writesPerSecond?: number;
@@ -21,19 +26,13 @@ export function convertThrottleFromCore(
       enabled: !!policy.maxUploadSpeedBytesPerSecond,
       limit: policy.maxUploadSpeedBytesPerSecond
         ? fromBits(policy.maxUploadSpeedBytesPerSecond)
-        : {
-            value: 0,
-            unit: "Mbps",
-          },
+        : DEFAULT_THROTTLE_LIMIT,
     },
     download: {
       enabled: !!policy.maxDownloadSpeedBytesPerSecond,
       limit: policy.maxDownloadSpeedBytesPerSecond
         ? fromBits(policy.maxDownloadSpeedBytesPerSecond)
-        : {
-            value: 0,
-            unit: "Mbps",
-          },
+        : DEFAULT_THROTTLE_LIMIT,
     },
   } satisfies ZVaultThrottleType;
 }

@@ -38,11 +38,11 @@ describe("convertThrottleFromCore", () => {
     expect(result).toEqual({
       upload: {
         enabled: false,
-        limit: { value: 0, unit: "Mbps" },
+        limit: { value: 10, unit: "Mbps" },
       },
       download: {
         enabled: false,
-        limit: { value: 0, unit: "Mbps" },
+        limit: { value: 10, unit: "Mbps" },
       },
     });
   });
@@ -56,11 +56,11 @@ describe("convertThrottleFromCore", () => {
     expect(result).toEqual({
       upload: {
         enabled: false,
-        limit: { value: 0, unit: "Mbps" },
+        limit: { value: 10, unit: "Mbps" },
       },
       download: {
         enabled: false,
-        limit: { value: 0, unit: "Mbps" },
+        limit: { value: 10, unit: "Mbps" },
       },
     });
   });
