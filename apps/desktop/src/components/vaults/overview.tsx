@@ -5,6 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@blinkdisk/ui/dropdown-menu";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
@@ -26,7 +27,6 @@ import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { formatCompactInt, formatSize } from "@desktop/lib/number";
 import {
   getOtherProfiles,
-  getProfileUserNames,
   isSameProfile,
   matchesProfileListFilters,
   type ProfileListFilters,
@@ -38,6 +38,7 @@ import {
 } from "@desktop/lib/vault-stats";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
+  CheckIcon,
   ChevronDownIcon,
   CloudUploadIcon,
   FolderPlusIcon,
@@ -46,7 +47,7 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import { useCallback, useMemo } from "react";
+import { Fragment, useCallback, useMemo } from "react";
 
 type VaultOverviewProps = {
   vault?: VaultItem;
@@ -355,141 +356,131 @@ type ProfileSelectsProps = {
 function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
   const { t } = useAppTranslation("vault.overview.otherProfiles.select");
 
-  const userNames = useMemo(
-    () => getProfileUserNames(profiles, value.deviceName),
-    [profiles, value.deviceName],
-  );
+  const isFiltered = !!value.deviceName || !!value.userName;
+  const selectedLabel =
+    value.deviceName && value.userName
+      ? `${value.deviceName} / ${value.userName}`
+      : value.deviceName || value.userName || t("all");
+  const TriggerIcon = value.userName ? UserIcon : MonitorIcon;
 
   return (
-    <div className="flex items-center gap-2">
-      <DropdownMenu>
-        <div className="relative">
-          <DropdownMenuTrigger
+    <DropdownMenu>
+      <div className="relative">
+        <DropdownMenuTrigger
+          className={cn(
+            "border-input bg-card hover:bg-card-hover flex h-11 w-64 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border py-2 pl-3 pr-3 text-sm outline-none transition-colors focus:z-10",
+          )}
+        >
+          <div
             className={cn(
-              "border-input bg-card hover:bg-card-hover flex h-11 w-42 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border py-2 pl-3 pr-3 text-sm outline-none transition-colors focus:z-10",
+              "flex min-w-0 items-center gap-2.5",
+              isFiltered && "pr-6",
             )}
           >
-            <div
-              className={cn(
-                "flex min-w-0 items-center gap-2.5",
-                value.deviceName && "pr-6",
-              )}
-            >
-              <MonitorIcon className="size-4.25 shrink-0" />
-              <span className="truncate">
-                {value.deviceName || t("device.all")}
-              </span>
-            </div>
-            {!value.deviceName ? (
-              <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
-            ) : null}
-          </DropdownMenuTrigger>
-          {value.deviceName ? (
-            <button
-              type="button"
-              aria-label={t("device.clear")}
-              title={t("device.clear")}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                onChange({
-                  ...value,
-                  deviceName: null,
-                });
-              }}
-              className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-2 top-1/2 z-10 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm outline-none transition-colors focus-visible:ring-2"
-            >
-              <XIcon className="size-3.5" />
-            </button>
+            <TriggerIcon className="size-4.25 shrink-0" />
+            <span className="truncate">{selectedLabel}</span>
+          </div>
+          {!isFiltered ? (
+            <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
           ) : null}
-        </div>
-        <DropdownMenuContent align="end">
-          <DropdownMenuGroup>
-            {profiles.map((device) => (
-              <DropdownMenuItem
-                key={device.hostName}
-                onClick={() => {
-                  const userNames = getProfileUserNames(
-                    profiles,
-                    device.hostName,
+        </DropdownMenuTrigger>
+        {isFiltered ? (
+          <button
+            type="button"
+            aria-label={t("clear")}
+            title={t("clear")}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+
+              onChange({
+                deviceName: null,
+                userName: null,
+              });
+            }}
+            className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-2 top-1/2 z-10 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm outline-none transition-colors focus-visible:ring-2"
+          >
+            <XIcon className="size-3.5" />
+          </button>
+        ) : null}
+      </div>
+      <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            onClick={() => {
+              onChange({
+                deviceName: null,
+                userName: null,
+              });
+            }}
+            className="justify-between"
+          >
+            <span className="flex min-w-0 items-center gap-2">
+              <MonitorIcon className="size-4 shrink-0" />
+              <span className="truncate">{t("all")}</span>
+            </span>
+            {!isFiltered ? (
+              <CheckIcon className="text-primary ml-auto size-4" />
+            ) : null}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          {profiles.map((device, index) => {
+            const isDeviceSelected =
+              value.deviceName === device.hostName && !value.userName;
+
+            return (
+              <Fragment key={device.hostName}>
+                {index > 0 ? <DropdownMenuSeparator /> : null}
+                <DropdownMenuItem
+                  onClick={() => {
+                    onChange({
+                      deviceName: device.hostName,
+                      userName: null,
+                    });
+                  }}
+                  className="justify-between font-medium"
+                >
+                  <span className="flex min-w-0 items-center gap-2">
+                    <MonitorIcon className="size-4 shrink-0" />
+                    <span className="truncate">{device.hostName}</span>
+                  </span>
+                  {isDeviceSelected ? (
+                    <CheckIcon className="text-primary ml-auto size-4" />
+                  ) : null}
+                </DropdownMenuItem>
+                {device.users.map(({ userName }) => {
+                  const isUserSelected =
+                    value.deviceName === device.hostName &&
+                    value.userName === userName;
+
+                  return (
+                    <DropdownMenuItem
+                      key={`${device.hostName}:${userName}`}
+                      onClick={() => {
+                        onChange({
+                          deviceName: device.hostName,
+                          userName,
+                        });
+                      }}
+                      className="justify-between pl-8"
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        <UserIcon className="text-muted-foreground size-4 shrink-0" />
+                        <span className="truncate">{userName}</span>
+                      </span>
+                      {isUserSelected ? (
+                        <CheckIcon className="text-primary ml-auto size-4" />
+                      ) : null}
+                    </DropdownMenuItem>
                   );
-
-                  onChange({
-                    deviceName: device.hostName,
-                    userName:
-                      value.userName && userNames.includes(value.userName)
-                        ? value.userName
-                        : null,
-                  });
-                }}
-              >
-                {device.hostName}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <DropdownMenu>
-        <div className="relative">
-          <DropdownMenuTrigger
-            className={cn(
-              "border-input bg-card hover:bg-card-hover flex h-11 w-42 select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border py-2 pl-3 pr-3 text-sm outline-none transition-colors focus:z-10",
-            )}
-          >
-            <div
-              className={cn(
-                "flex min-w-0 items-center gap-2.5",
-                value.userName && "pr-6",
-              )}
-            >
-              <UserIcon className="size-4.25 shrink-0" />
-              <span className="truncate">
-                {value.userName || t("user.all")}
-              </span>
-            </div>
-            {!value.userName ? (
-              <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0" />
-            ) : null}
-          </DropdownMenuTrigger>
-          {value.userName ? (
-            <button
-              type="button"
-              aria-label={t("user.clear")}
-              title={t("user.clear")}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                onChange({
-                  ...value,
-                  userName: null,
-                });
-              }}
-              className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-2 top-1/2 z-10 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm outline-none transition-colors focus-visible:ring-2"
-            >
-              <XIcon className="size-3.5" />
-            </button>
-          ) : null}
-        </div>
-        <DropdownMenuContent align="end">
-          <DropdownMenuGroup>
-            {userNames.map((userName) => (
-              <DropdownMenuItem
-                key={userName}
-                onClick={() => {
-                  onChange({
-                    ...value,
-                    userName,
-                  });
-                }}
-              >
-                {userName}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+                })}
+              </Fragment>
+            );
+          })}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
