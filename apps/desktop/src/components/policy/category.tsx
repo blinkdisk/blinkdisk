@@ -76,27 +76,3 @@ export function SettingsCategory({
     </AccordionItem>
   );
 }
-
-type SettingsSectionProps = Omit<SettingsCategoryProps, "id"> & {
-  loading?: boolean;
-};
-
-export function SettingsSection({
-  title,
-  description,
-  children,
-  icon,
-  loading = false,
-}: SettingsSectionProps) {
-  return (
-    <section className="grid gap-6">
-      <SettingsCategoryHeader
-        title={title}
-        description={description}
-        icon={icon}
-        loading={loading}
-      />
-      <div className="m-1 pt-2">{children}</div>
-    </section>
-  );
-}
