@@ -27,65 +27,66 @@ export function VaultThrottleSettings() {
           <SettingsPanel>
             <SettingsRow
               title={t("upload.enabled.label")}
-              description={t("description")}
+              description={t("upload.enabled.description")}
             >
-              <form.AppField name="upload.enabled">
-                {(field) => (
-                  <field.Switch
-                    label={{
-                      title: t("upload.enabled.label"),
-                      labelClassName: "sr-only",
-                    }}
-                  />
-                )}
-              </form.AppField>
-            </SettingsRow>
-            {values?.upload?.enabled ? (
-              <SettingsRow
-                title={t("upload.limit.label")}
-                description={t("upload.limit.description")}
-              >
-                <form.AppField name="upload.limit">
+              <div className="flex items-center justify-start gap-3 md:justify-end">
+                {values?.upload?.enabled ? (
+                  <form.AppField name="upload.limit">
+                    {(field) => (
+                      <field.Bandwith
+                        label={{
+                          title: t("upload.limit.label"),
+                          labelClassName: "sr-only",
+                          containerClassName: "w-auto",
+                        }}
+                      />
+                    )}
+                  </form.AppField>
+                ) : null}
+                <form.AppField name="upload.enabled">
                   {(field) => (
-                    <field.Bandwith
+                    <field.Switch
                       label={{
-                        title: t("upload.limit.label"),
+                        title: t("upload.enabled.label"),
                         labelClassName: "sr-only",
+                        containerClassName: "w-auto",
                       }}
                     />
                   )}
                 </form.AppField>
-              </SettingsRow>
-            ) : null}
-            <SettingsRow title={t("download.enabled.label")}>
-              <form.AppField name="download.enabled">
-                {(field) => (
-                  <field.Switch
-                    label={{
-                      title: t("download.enabled.label"),
-                      labelClassName: "sr-only",
-                    }}
-                  />
-                )}
-              </form.AppField>
+              </div>
             </SettingsRow>
-            {values?.download?.enabled ? (
-              <SettingsRow
-                title={t("download.limit.label")}
-                description={t("download.limit.description")}
-              >
-                <form.AppField name="download.limit">
+            <SettingsRow
+              title={t("download.enabled.label")}
+              description={t("download.enabled.description")}
+            >
+              <div className="flex items-center justify-start gap-3 md:justify-end">
+                {values?.download?.enabled ? (
+                  <form.AppField name="download.limit">
+                    {(field) => (
+                      <field.Bandwith
+                        label={{
+                          title: t("download.limit.label"),
+                          labelClassName: "sr-only",
+                          containerClassName: "w-auto",
+                        }}
+                      />
+                    )}
+                  </form.AppField>
+                ) : null}
+                <form.AppField name="download.enabled">
                   {(field) => (
-                    <field.Bandwith
+                    <field.Switch
                       label={{
-                        title: t("download.limit.label"),
+                        title: t("download.enabled.label"),
                         labelClassName: "sr-only",
+                        containerClassName: "w-auto",
                       }}
                     />
                   )}
                 </form.AppField>
-              </SettingsRow>
-            ) : null}
+              </div>
+            </SettingsRow>
             <SettingsRow fullWidth>
               <div className="flex justify-end">
                 <form.AppForm>
