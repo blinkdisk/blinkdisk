@@ -8,7 +8,7 @@ import { pickDefinedFields } from "@desktop/lib/policy";
 import { useContext } from "react";
 
 export function usePolicyRetentionForm() {
-  const { mutate, policy, definedFields, onChange, level } =
+  const { mutate, policy, definedFields, onChange, inherited } =
     useContext(PolicyContext);
 
   const form = useAppForm({
@@ -29,10 +29,9 @@ export function usePolicyRetentionForm() {
       (await mutate(
         {
           ...policy.defined,
-          retention:
-            level === "FOLDER"
-              ? pickDefinedFields(value, value.definedFields || [])
-              : value,
+          retention: inherited
+            ? pickDefinedFields(value, value.definedFields || [])
+            : value,
         },
         {
           onSuccess: () => form.reset(),

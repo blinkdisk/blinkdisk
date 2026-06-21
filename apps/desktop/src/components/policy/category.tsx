@@ -1,11 +1,11 @@
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@blinkdisk/ui/accordion";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { PolicyContext } from "@desktop/components/policy/context";
+import {
+  SettingsGroup,
+  SettingsPanel,
+  SettingsRow,
+} from "@desktop/components/settings";
 import { type ReactNode, useContext } from "react";
 
 type SettingsCategoryProps = {
@@ -18,13 +18,12 @@ type SettingsCategoryProps = {
 
 type SettingsCategoryHeaderProps = Omit<
   SettingsCategoryProps,
-  "children" | "id"
+  "children" | "id" | "title"
 > & {
   loading?: boolean;
 };
 
 function SettingsCategoryHeader({
-  title,
   description,
   icon,
   loading,
@@ -32,20 +31,15 @@ function SettingsCategoryHeader({
   return (
     <div className="flex items-center gap-4">
       {loading ? (
-        <Skeleton className="!size-11 !rounded-lg" />
+        <Skeleton className="!size-10 !rounded-lg" />
       ) : (
-        <div className="bg-card text-muted-foreground flex size-11 items-center justify-center rounded-lg border-2 [&>svg]:size-5">
+        <div className="bg-card text-muted-foreground flex size-10 items-center justify-center rounded-lg border [&>svg]:size-5">
           {icon}
         </div>
       )}
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1.5">
-          <h2 className="text-lg font-semibold">
-            {loading ? <Skeleton width={180} /> : title}
-          </h2>
-        </div>
-        <p className="text-muted-foreground text-xs font-normal">
-          {loading ? <Skeleton width={100} /> : description}
+      <div className="min-w-0">
+        <p className="text-muted-foreground mt-1 text-sm">
+          {loading ? <Skeleton width={240} /> : description}
         </p>
       </div>
     </div>
@@ -53,7 +47,6 @@ function SettingsCategoryHeader({
 }
 
 export function SettingsCategory({
-  id,
   title,
   description,
   children,
@@ -62,17 +55,19 @@ export function SettingsCategory({
   const { loading } = useContext(PolicyContext);
 
   return (
-    <AccordionItem value={id} disabled={loading}>
-      <AccordionTrigger className="items-center" hideArrow={loading}>
-        <SettingsCategoryHeader
-          title={title}
-          description={description}
-          icon={icon}
-          loading={loading}
-        />
-        {loading ? <Skeleton className="!size-4" /> : null}
-      </AccordionTrigger>
-      <AccordionContent className="m-1 pt-2">{children}</AccordionContent>
-    </AccordionItem>
+    <SettingsGroup title={title}>
+      <SettingsPanel>
+        <SettingsRow fullWidth>
+          <SettingsCategoryHeader
+            description={description}
+            icon={icon}
+            loading={loading}
+          />
+        </SettingsRow>
+        <SettingsRow fullWidth>
+          {loading ? <Skeleton count={4} height="2.75rem" /> : children}
+        </SettingsRow>
+      </SettingsPanel>
+    </SettingsGroup>
   );
 }

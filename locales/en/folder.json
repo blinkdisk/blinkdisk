@@ -15,8 +15,8 @@
       "placeholder": "Select folder path",
       "title": "Select folder path"
     },
-    "continue": "Continue",
     "submit": "Add folder",
+    "changePolicy": "Change policy",
     "exceedingAlert": {
       "title": "Not enough cloud storage",
       "description": "This folder likely can’t be backed up because it would exceed your available CloudBlink storage. To back it up, you’ll need to upgrade your CloudBlink plan.",
@@ -47,7 +47,7 @@
         "browse": "Browse backups",
         "backup": "Backup folder",
         "cancel": "Cancel backup",
-        "settings": "Folder settings",
+        "settings": "Folder policy",
         "delete": "Delete folder"
       }
     }

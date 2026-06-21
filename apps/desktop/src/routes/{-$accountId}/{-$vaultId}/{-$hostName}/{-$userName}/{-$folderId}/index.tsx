@@ -11,8 +11,8 @@ import { VaultRestores } from "@desktop/components/vaults/restores";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
-import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
 import { useFolder } from "@desktop/hooks/use-folder";
+import { policyTargetToSearch } from "@desktop/lib/policy-target";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -34,8 +34,8 @@ function RouteComponent() {
   const { t } = useAppTranslation("backup.list");
 
   const { data: folder } = useFolder();
-  const { openFolderSettings } = useFolderSettingsDialog();
   const { data: backups } = useCompletedBackupList();
+  const navigate = Route.useNavigate();
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
   const { mutate: cancelBackup, isPending: isCancellingBackup } =
@@ -60,8 +60,14 @@ function RouteComponent() {
                 variant="secondary"
                 onClick={() =>
                   folder &&
-                  openFolderSettings({
-                    folderId: folder?.id,
+                  navigate({
+                    to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
+                    search: policyTargetToSearch({
+                      kind: "FOLDER",
+                      hostName: folder.source.host,
+                      userName: folder.source.userName,
+                      path: folder.source.path,
+                    }),
                   })
                 }
               >

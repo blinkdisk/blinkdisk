@@ -1,98 +1,95 @@
-import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
-import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
-import { profileFromParts } from "@desktop/lib/profile";
+import { convertPolicyToCore } from "@desktop/lib/policy";
+import {
+  type PolicyTarget,
+  policyTargetToKopiaParams,
+} from "@desktop/lib/policy-target";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
-import { useMemo } from "react";
 
-export function useCreateFolder({
-  onSuccess,
+export function usePublishFolderDraftPolicy({
+  target,
   onError,
+  onSuccess,
 }: {
-  onSuccess: () => void;
+  target: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }> | null | undefined;
   onError?: (error: unknown) => void;
+  onSuccess?: () => void;
 }) {
   const posthog = usePostHog();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const { vaultId } = useVaultId();
-  const { localHostName, localUserName } = useLocalProfile();
   const { queryKeys } = useQueryKey();
-  const profile = useMemo(
-    () =>
-      profileFromParts({
-        hostName: localHostName,
-        userName: localUserName,
-      }),
-    [localHostName, localUserName],
-  );
-
+  const { vaultId } = useVaultId();
   const { data: vault } = useVault();
   const { data: space } = useSpace();
 
   return useMutation({
-    mutationKey: ["folder", "create"],
-    mutationFn: async (
-      values: ZCreateFolderFormType & {
-        force?: boolean;
-        size: number | null;
-      },
-    ) => {
-      if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
+    mutationKey: ["core", "folder", "policy", "draft", "publish"],
+    mutationFn: async ({
+      policy,
+      force,
+    }: {
+      policy: ZPolicyType;
+      force?: boolean;
+    }) => {
+      if (!vaultId || !target) throw new CustomError("MISSING_REQUIRED_VALUE");
 
-      if (!values.force && space && vault && vault.provider === "CLOUDBLINK") {
-        let size = values.size;
+      if (!force && space && vault && vault.provider === "CLOUDBLINK") {
+        const [size] = await tryCatch(
+          async () => await window.electron.fs.folderSize(target.path),
+        );
 
-        if (size === null) {
-          const [res] = await tryCatch(
-            async () => await window.electron.fs.folderSize(values.path),
-          );
-
-          if (res) size = res;
-        }
-
-        if (size !== null) {
+        if (size !== null && size !== undefined) {
           const available = space.capacity - space.used;
           if (size > available) throw new Error("FOLDER_TOO_LARGE");
         }
       }
 
       await vaultApi(vaultId).post("/api/v1/sources", {
-        path: values.path,
+        path: target.path,
         createSnapshot: false,
-        policy: {
-          name: values.name,
-          emoji: values.emoji,
-        },
+        policy: convertPolicyToCore(policy),
+      });
+
+      await vaultApi(vaultId).delete("/api/v1/policy", {
+        params: policyTargetToKopiaParams(target),
       });
 
       const id = await hashFolder({
-        hostName: profile.deviceName,
-        userName: profile.userName,
-        path: values.path,
+        hostName: target.hostName,
+        userName: target.userName,
+        path: target.path,
       });
 
-      return { id, profile, vaultId };
+      return { id, vaultId };
     },
     onError: (error) => {
       onError?.(error);
 
-      if (error.message === "FOLDER_TOO_LARGE") return;
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        error.message === "FOLDER_TOO_LARGE"
+      )
+        return;
 
       showErrorToast(error);
     },
     onSuccess: async (res) => {
+      if (!target) return;
+
       posthog.capture("folder_add", {
         vaultId: res.vaultId,
         folderId: res.id,
@@ -100,11 +97,13 @@ export function useCreateFolder({
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId, res.profile),
+          queryKey: queryKeys.folder.list(vaultId, {
+            deviceName: target.hostName,
+            userName: target.userName,
+          }),
         }),
-        // Policies can be nested inside folders.
         queryClient.invalidateQueries({
-          queryKey: queryKeys.policy.folders(),
+          queryKey: queryKeys.policy.all,
         }),
       ]);
 
@@ -112,8 +111,8 @@ export function useCreateFolder({
         to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
-          hostName: res.profile.deviceName,
-          userName: res.profile.userName,
+          hostName: target.hostName,
+          userName: target.userName,
           folderId: res.id,
         }),
       });

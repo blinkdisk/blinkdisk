@@ -8,7 +8,7 @@ import { pickDefinedFields } from "@desktop/lib/policy";
 import { useContext } from "react";
 
 export function usePolicyCompressionForm() {
-  const { mutate, policy, definedFields, onChange, level } =
+  const { mutate, policy, definedFields, onChange, inherited } =
     useContext(PolicyContext);
 
   const form = useAppForm({
@@ -30,10 +30,9 @@ export function usePolicyCompressionForm() {
       (await mutate(
         {
           ...policy.defined,
-          compression:
-            level === "FOLDER"
-              ? pickDefinedFields(value, value.definedFields || [])
-              : value,
+          compression: inherited
+            ? pickDefinedFields(value, value.definedFields || [])
+            : value,
         },
         {
           onSuccess: () => form.reset(),

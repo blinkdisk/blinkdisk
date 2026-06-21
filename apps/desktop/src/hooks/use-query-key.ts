@@ -82,6 +82,17 @@ export function useQueryKey() {
       },
       policy: {
         all: [accountId, "policy"],
+        target: (vaultId: string | undefined, targetId: string) => [
+          ...keys.policy.all,
+          "target",
+          vaultId,
+          targetId,
+        ],
+        tree: (vaultId: string | undefined) => [
+          ...keys.policy.all,
+          "tree",
+          vaultId,
+        ],
         vault: (vaultId: string | undefined, profile: SelectedProfile) => [
           ...keys.policy.all,
           vaultId,

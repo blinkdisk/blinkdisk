@@ -1,60 +1,76 @@
 import type { ZPolicyLevelType } from "@blinkdisk/schemas/policy";
-import { useUpdateFolderPolicy } from "@desktop/hooks/mutations/core/use-update-folder-policy";
-import { useUpdateVaultPolicy } from "@desktop/hooks/mutations/core/use-update-vault-policy";
-import { useFolderPolicy } from "@desktop/hooks/queries/core/use-folder-policy";
-import { useVaultPolicy } from "@desktop/hooks/queries/core/use-vault-policy";
+import { useUpdatePolicy } from "@desktop/hooks/mutations/core/use-update-policy";
+import { usePolicy } from "@desktop/hooks/queries/core/use-policy";
+import { useFolder } from "@desktop/hooks/use-folder";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
+import {
+  createDraftPolicyTarget,
+  type PolicyTarget,
+} from "@desktop/lib/policy-target";
 import type { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
 import { createContext, useCallback, useMemo } from "react";
 
 function usePolicyContext({
+  target: targetOverride,
   level,
   folderId,
   mock,
   profile,
 }: {
-  level: ZPolicyLevelType;
+  target?: PolicyTarget;
+  level?: ZPolicyLevelType;
   folderId?: string;
   mock?: { path: string };
   profile?: SelectedProfile;
 }) {
-  const { data: vaultPolicy, isPending: isVaultPolicyPending } = useVaultPolicy(
-    { profile },
+  const { data: folder } = useFolder(folderId, { profile });
+
+  const target = useMemo<PolicyTarget | null>(() => {
+    if (targetOverride) return targetOverride;
+
+    if (level === "VAULT") {
+      if (!profile) return { kind: "GLOBAL" };
+      return {
+        kind: "USER",
+        hostName: profile.deviceName,
+        userName: profile.userName,
+      };
+    }
+
+    if (level === "FOLDER" && mock && profile) {
+      return createDraftPolicyTarget({
+        hostName: profile.deviceName,
+        userName: profile.userName,
+        path: mock.path,
+      });
+    }
+
+    if (level === "FOLDER" && folder) {
+      return {
+        kind: "FOLDER",
+        hostName: folder.source.host,
+        userName: folder.source.userName,
+        path: folder.source.path,
+      };
+    }
+
+    return null;
+  }, [folder, level, mock, profile, targetOverride]);
+
+  const { data: policy, isPending } = usePolicy(target);
+
+  const { mutateAsync: mutate } = useUpdatePolicy({ target });
+
+  const inherited = useMemo(
+    () => !!target && target.kind !== "GLOBAL",
+    [target],
   );
-  const { data: folderPolicy, isPending: isFolderPolicyPending } =
-    useFolderPolicy({ folderId, mock, profile });
 
-  const { mutateAsync: mutateVault } = useUpdateVaultPolicy({ profile });
-
-  const { mutateAsync: mutateFolder } = useUpdateFolderPolicy({
-    mock,
-    folderId,
-    profile,
-  });
-
-  const policy = useMemo(
-    () => (level === "FOLDER" ? folderPolicy : vaultPolicy),
-    [folderPolicy, vaultPolicy, level],
-  );
-
-  const loading = useMemo(
-    () => (level === "FOLDER" ? isFolderPolicyPending : isVaultPolicyPending),
-    [level, isFolderPolicyPending, isVaultPolicyPending],
-  );
-
-  const definedFields = useMemo(
-    () => (level === "FOLDER" ? folderPolicy?.definedFields : undefined),
-    [folderPolicy?.definedFields, level],
-  );
-
-  const mutate = useMemo(
-    () => (level === "FOLDER" ? mutateFolder : mutateVault),
-    [mutateFolder, mutateVault, level],
-  );
+  const definedFields = inherited ? policy?.definedFields : undefined;
 
   const onChange = useCallback(
     ({ formApi, fieldApi }: { formApi: AnyFormApi; fieldApi: AnyFieldApi }) => {
-      if (level === "VAULT") return;
+      if (!inherited) return;
 
       // Removes array index from field name
       // e.g. cron[0].expression -> cron
@@ -66,21 +82,26 @@ function usePolicyContext({
 
       formApi.setFieldValue("definedFields", [...(filtered || []), fieldName]);
     },
-    [level],
+    [inherited],
   );
 
   return {
-    loading,
-    vaultPolicy,
-    folderPolicy,
+    loading: isPending,
+    vaultPolicy: target?.kind === "GLOBAL" ? policy : undefined,
+    folderPolicy:
+      target?.kind === "FOLDER" || target?.kind === "DRAFT_FOLDER"
+        ? policy
+        : undefined,
     definedFields,
     onChange,
     folderId,
     policy,
     mutate,
-    level,
+    level: inherited ? "FOLDER" : "VAULT",
+    inherited,
     mock,
     profile,
+    target,
   };
 }
 
@@ -96,8 +117,10 @@ const defaultContext = {
   policy: undefined,
   mutate: undefined,
   level: undefined,
+  inherited: false,
   mock: undefined,
   profile: undefined,
+  target: undefined,
 };
 
 export const PolicyContext = createContext<
@@ -105,7 +128,8 @@ export const PolicyContext = createContext<
 >(defaultContext);
 
 type PolicyContextProviderProps = {
-  level: ZPolicyLevelType;
+  target?: PolicyTarget;
+  level?: ZPolicyLevelType;
   folderId?: string;
   mock?: { path: string };
   profile?: SelectedProfile;

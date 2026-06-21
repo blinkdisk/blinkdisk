@@ -10,14 +10,14 @@ type PolicyFieldProps = {
 
 export function PolicyField({ children }: PolicyFieldProps) {
   const field = useFieldContext();
-  const { level } = useContext(PolicyContext);
+  const { inherited } = useContext(PolicyContext);
 
   const definedFields = useStore(
     field.form.store,
     (state) => state.values.definedFields as string[] | undefined,
   );
 
-  if (level !== "FOLDER") return children;
+  if (!inherited) return children;
   return (
     <div className="flex flex-col items-start">
       <div className="flex items-center gap-2">

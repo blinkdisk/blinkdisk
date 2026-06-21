@@ -122,8 +122,8 @@
     }
   },
   "folder": {
-    "title": "Folder settings",
-    "description": "Configure the folder settings.",
+    "title": "Folder policy",
+    "description": "Configure the folder policy.",
     "general": {
       "title": "General",
       "description": "Configure general settings of this folder.",

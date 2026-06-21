@@ -5,7 +5,7 @@ import { pickDefinedFields } from "@desktop/lib/policy";
 import { useContext } from "react";
 
 export function usePolicyFilesForm() {
-  const { mutate, policy, definedFields, onChange, level } =
+  const { mutate, policy, definedFields, onChange, inherited } =
     useContext(PolicyContext);
 
   const form = useAppForm({
@@ -27,10 +27,9 @@ export function usePolicyFilesForm() {
       (await mutate(
         {
           ...policy.defined,
-          files:
-            level === "FOLDER"
-              ? pickDefinedFields(value, value.definedFields || [])
-              : value,
+          files: inherited
+            ? pickDefinedFields(value, value.definedFields || [])
+            : value,
         },
         {
           onSuccess: () => form.reset(),

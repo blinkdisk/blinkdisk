@@ -93,8 +93,8 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
               password: values.password,
               ...(cloudBlinkToken ? { token: cloudBlinkToken } : {}),
             },
-            userPolicy: convertPolicyToCore(defaultVaultPolicy),
-            globalPolicy: {},
+            userPolicy: {},
+            globalPolicy: convertPolicyToCore(defaultVaultPolicy),
           }),
         );
 

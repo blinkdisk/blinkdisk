@@ -9,7 +9,7 @@ import { pickDefinedFields } from "@desktop/lib/policy";
 import { useContext } from "react";
 
 export function usePolicyScheduleForm() {
-  const { mutate, policy, definedFields, onChange, level } =
+  const { mutate, policy, definedFields, onChange, inherited } =
     useContext(PolicyContext);
 
   const form = useAppForm({
@@ -33,10 +33,9 @@ export function usePolicyScheduleForm() {
       (await mutate(
         {
           ...policy.defined,
-          schedule:
-            level === "FOLDER"
-              ? pickDefinedFields(value, value.definedFields || [])
-              : value,
+          schedule: inherited
+            ? pickDefinedFields(value, value.definedFields || [])
+            : value,
         } satisfies ZPolicyType,
         {
           onSuccess: () => form.reset(),

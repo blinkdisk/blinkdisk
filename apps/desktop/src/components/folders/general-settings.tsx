@@ -15,13 +15,15 @@ import { useContext } from "react";
 export function FolderGeneralSettings() {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
-  const { folderId, profile } = useContext(PolicyContext);
+  const { folderId, profile, target } = useContext(PolicyContext);
   const { data: folder } = useFolder(folderId, { profile });
 
   const form = usePolicyGeneralForm();
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const values = useStore(form.store, (state) => state.values);
   const disabledContext = useContext(FormDisabledContext);
+  const path =
+    target && "path" in target ? target.path : folder?.source?.path || "";
 
   return (
     <SettingsCategory
@@ -77,7 +79,7 @@ export function FolderGeneralSettings() {
             )}
           </form.AppField>
           <DynamicField title={t("path.label")}>
-            <Input value={folder?.source?.path} disabled />
+            <Input value={path} disabled />
           </DynamicField>
           <form.AppForm>
             <form.Submit disabled={!isDirty}>{t("save")}</form.Submit>
