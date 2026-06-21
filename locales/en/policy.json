@@ -2,7 +2,7 @@
   "page": {
     "tree": {
       "title": "Scope",
-      "description": "Pick a level to view or edit."
+      "description": "Choose which policy to edit."
     },
     "override": {
       "inherited": "Inherited",
@@ -12,7 +12,7 @@
       "badge": "Draft",
       "notice": {
         "title": "Draft folder policy",
-        "description": "This folder is a draft. Backups will only start after you add the folder."
+        "description": "Backups start after you add this folder."
       },
       "activate": {
         "button": "Add folder"

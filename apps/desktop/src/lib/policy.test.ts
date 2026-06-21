@@ -349,6 +349,14 @@ describe("roundtrip with defaultVaultPolicy", () => {
 
     expect(ui.logging).toEqual(defaultVaultPolicy.logging);
   });
+
+  it("sets pgzip as the default compression algorithm", () => {
+    const core = convertPolicyToCore(defaultVaultPolicy);
+    const ui = expectValue(convertPolicyFromCore(core));
+
+    expect(core.compression.compressorName).toBe("pgzip");
+    expect(ui.compression.algorithm).toBe("pgzip");
+  });
 });
 
 function minimalCorePolicy(overrides: Partial<CorePolicy> = {}): CorePolicy {

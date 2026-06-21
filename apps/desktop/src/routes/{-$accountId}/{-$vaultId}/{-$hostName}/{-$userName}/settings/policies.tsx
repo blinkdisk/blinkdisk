@@ -70,7 +70,7 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid min-h-0 items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+      <div className="grid min-h-0 justify-center gap-6 lg:grid-cols-[18rem_minmax(0,40rem)]">
         <PolicyTreePanel
           selectedTarget={selectedTarget}
           onSelectTarget={selectTarget}
@@ -124,14 +124,14 @@ function PolicyTreePanel({
 
   return (
     <aside className="lg:sticky lg:top-0 lg:self-start">
-      <SettingsPanel>
-        <div className="border-border border-b px-4 py-3">
-          <h2 className="text-sm font-semibold">{t("tree.title")}</h2>
+      <section className="grid gap-3">
+        <div className="px-2">
+          <h2 className="text-xl font-semibold">{t("tree.title")}</h2>
           <p className="text-muted-foreground mt-0.5 text-xs">
             {t("tree.description")}
           </p>
         </div>
-        <div className="flex w-full flex-col gap-0.5 p-2">
+        <div className="flex w-full flex-col gap-0.5">
           {isPending || !tree ? (
             <Skeleton count={8} height="2.25rem" />
           ) : (
@@ -144,7 +144,7 @@ function PolicyTreePanel({
             />
           )}
         </div>
-      </SettingsPanel>
+      </section>
     </aside>
   );
 }
@@ -324,7 +324,7 @@ function PolicyEditor({
   return (
     <PolicyContextProvider key={policyTargetId(target)} target={target}>
       {({ policy }) => (
-        <div className="flex min-w-0 flex-col gap-8">
+        <div className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8">
           {target.kind === "DRAFT_FOLDER" ? (
             <DraftPolicyActions
               target={target}
