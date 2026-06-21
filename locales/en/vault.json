@@ -403,6 +403,8 @@
     "otherProfiles": {
       "title": "Other profiles",
       "select": {
+        "all": "All profiles",
+        "clear": "Clear profile filter",
         "device": {
           "all": "All devices",
           "clear": "Clear device filter",
