@@ -36,7 +36,7 @@ import {
   buildVaultStatHistory,
   buildVaultStats,
 } from "@desktop/lib/vault-stats";
-import { getRouteApi } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
   ChevronDownIcon,
   CloudUploadIcon,
@@ -52,13 +52,15 @@ type VaultOverviewProps = {
   vault?: VaultItem;
 };
 
-const vaultRouteApi = getRouteApi("/{-$accountId}/{-$vaultId}");
-
 export function VaultOverview({ vault }: VaultOverviewProps) {
   const { t } = useAppTranslation("vault.overview");
 
-  const navigate = vaultRouteApi.useNavigate();
-  const { otherHostName, otherUserName } = vaultRouteApi.useSearch();
+  const navigate = useNavigate({ from: "/{-$accountId}/{-$vaultId}" });
+  const { otherHostName, otherUserName } =
+    useSearch({
+      from: "/{-$accountId}/{-$vaultId}",
+      shouldThrow: false,
+    }) ?? {};
   const { openCreateFolder } = useCreateFolderDialog();
   const { localHostName, localUserName } = useLocalProfile();
 
