@@ -339,9 +339,9 @@ function PolicyEditor({
             <FolderGeneralSettings />
           ) : null}
           <ScheduleSettings />
-          <RetentionSettings />
           <FilesSettings />
           <CompressionSettings />
+          <RetentionSettings />
         </div>
       )}
     </PolicyContextProvider>
