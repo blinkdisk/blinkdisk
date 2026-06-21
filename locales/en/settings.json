@@ -79,7 +79,6 @@
         "label": "Vault name",
         "placeholder": "Enter vault name"
       },
-      "save": "Save",
       "move": {
         "title": "Move to account",
         "description": "Move this vault to another account.",
@@ -93,7 +92,8 @@
     },
     "config": {
       "title": "Storage config",
-      "description": "View the storage location of this vault."
+      "description": "View the storage location of this vault.",
+      "provider": "Storage provider:"
     },
     "throttle": {
       "title": "Network throttle",
