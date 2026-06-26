@@ -59,7 +59,12 @@ describe("profile helpers", () => {
   });
 
   it("requires multiple users before showing user-specific profile choices", () => {
-    expect(hasMultipleProfileUsers(devices[0]!)).toBe(true);
+    expect(
+      hasMultipleProfileUsers({
+        hostName: "multi-user-host",
+        users: [{ userName: "paul" }, { userName: "guest" }],
+      }),
+    ).toBe(true);
     expect(
       hasMultipleProfileUsers({
         hostName: "single-user-host",
