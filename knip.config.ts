@@ -40,6 +40,16 @@ const config: KnipConfig = {
       project: commonProject,
       ignore: [...commonIgnore, "src/preload.ts"],
     },
+    "apps/web": {
+      entry: ["src/main.tsx", "vite.config.ts"],
+      project: commonProject,
+      ignore: commonIgnore,
+      ignoreDependencies: [
+        // Referenced by name in vite.config.ts.
+        "babel-plugin-react-compiler",
+      ],
+      vite: { config: [] },
+    },
     "apps/marketing": {
       entry: [
         "src/pages/**/*.{astro,ts}",
