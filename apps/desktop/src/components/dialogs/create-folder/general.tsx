@@ -96,7 +96,7 @@ export function CreateFolderGeneral({
         <Button
           type="submit"
           loading={isCreatingFolder}
-          disabled={isCreatingDraft}
+          disabled={isCreatingDraft || isCreatingFolder}
           onClick={() => onAction("CREATE")}
         >
           {t("submit")}
@@ -105,7 +105,7 @@ export function CreateFolderGeneral({
           type="submit"
           variant="secondary"
           loading={isCreatingDraft}
-          disabled={isCreatingFolder}
+          disabled={isCreatingFolder || isCreatingDraft}
           onClick={() => onAction("POLICY")}
         >
           {t("changePolicy")}

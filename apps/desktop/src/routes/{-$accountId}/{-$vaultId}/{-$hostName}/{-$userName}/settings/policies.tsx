@@ -9,12 +9,12 @@ import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
 import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
+import { SettingsCategorySkeleton } from "@desktop/components/policy/category";
 import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
-import { SettingsPanel, SettingsRow } from "@desktop/components/settings";
 import {
   getPolicyFromFormValues,
   type PolicyForm,
@@ -544,22 +544,6 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
 
 const policyEditorHeaderClassName =
   "before:content-[''] after:content-[''] before:bg-background bg-background after:bg-border/70 sticky top-0 z-50 -mx-1 -mt-2 px-1 py-3 before:absolute before:inset-x-0 before:-top-8 before:h-8 after:absolute after:inset-x-0 after:bottom-0 after:h-px";
-
-function SettingsCategorySkeleton({ id }: { id: string }) {
-  return (
-    <section id={id} className="grid scroll-mt-8 gap-4">
-      <div className="grid gap-1">
-        <Skeleton width={150} height="1.25rem" />
-        <Skeleton width={260} />
-      </div>
-      <SettingsPanel>
-        <SettingsRow fullWidth className="px-7 py-6">
-          <Skeleton count={4} height="2.75rem" />
-        </SettingsRow>
-      </SettingsPanel>
-    </section>
-  );
-}
 
 function getPolicyTargetIcon(kind: PolicyTargetKind) {
   switch (kind) {

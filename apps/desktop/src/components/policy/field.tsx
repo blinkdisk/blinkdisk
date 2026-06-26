@@ -53,6 +53,9 @@ export function PolicyField({ children }: PolicyFieldProps) {
           size="sm"
           checked={overriding}
           onCheckedChange={setOverriding}
+          aria-label={
+            overriding ? t("override.custom") : t("override.inherited")
+          }
         />
         <button
           type="button"

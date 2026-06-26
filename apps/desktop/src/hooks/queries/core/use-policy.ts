@@ -1,3 +1,4 @@
+import { getErrorCode } from "@blinkdisk/utils/error";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -44,12 +45,7 @@ export function usePolicy(target: PolicyTarget | null | undefined) {
         ),
       );
 
-      const definedErrorCode =
-        definedError &&
-        typeof definedError === "object" &&
-        "code" in definedError
-          ? definedError.code
-          : undefined;
+      const definedErrorCode = getErrorCode(definedError);
 
       if (definedError && definedErrorCode !== "NOT_FOUND") throw definedError;
 

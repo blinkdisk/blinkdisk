@@ -43,11 +43,14 @@ export function useActivateFolderDraftPolicy({
       policy: ZPolicyType;
       force?: boolean;
     }) => {
-      if (!vaultId || !target) throw new CustomError("MISSING_REQUIRED_VALUE");
+      const draftTarget = target;
+
+      if (!vaultId || !draftTarget)
+        throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (!force && space && vault && vault.provider === "CLOUDBLINK") {
         const [size] = await tryCatch(
-          async () => await window.electron.fs.folderSize(target.path),
+          async () => await window.electron.fs.folderSize(draftTarget.path),
         );
 
         if (size !== null && size !== undefined) {
@@ -57,22 +60,22 @@ export function useActivateFolderDraftPolicy({
       }
 
       await vaultApi(vaultId).post("/api/v1/sources", {
-        path: target.path,
+        path: draftTarget.path,
         createSnapshot: false,
         policy: convertPolicyToCore(policy),
       });
 
       await vaultApi(vaultId).delete("/api/v1/policy", {
-        params: policyTargetToKopiaParams(target),
+        params: policyTargetToKopiaParams(draftTarget),
       });
 
       const id = await hashFolder({
-        hostName: target.hostName,
-        userName: target.userName,
-        path: target.path,
+        hostName: draftTarget.hostName,
+        userName: draftTarget.userName,
+        path: draftTarget.path,
       });
 
-      return { id, vaultId };
+      return { id, vaultId, target: draftTarget };
     },
     onError: (error) => {
       onError?.(error);
@@ -88,8 +91,6 @@ export function useActivateFolderDraftPolicy({
       showErrorToast(error);
     },
     onSuccess: async (res) => {
-      if (!target) return;
-
       posthog.capture("folder_add", {
         vaultId: res.vaultId,
         folderId: res.id,
@@ -97,9 +98,9 @@ export function useActivateFolderDraftPolicy({
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId, {
-            deviceName: target.hostName,
-            userName: target.userName,
+          queryKey: queryKeys.folder.list(res.vaultId, {
+            deviceName: res.target.hostName,
+            userName: res.target.userName,
           }),
         }),
         queryClient.invalidateQueries({
@@ -111,8 +112,8 @@ export function useActivateFolderDraftPolicy({
         to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
         params: (params) => ({
           ...params,
-          hostName: target.hostName,
-          userName: target.userName,
+          hostName: res.target.hostName,
+          userName: res.target.userName,
           folderId: res.id,
         }),
       });
