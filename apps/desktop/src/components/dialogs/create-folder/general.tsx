@@ -1,18 +1,26 @@
 import { FolderCard } from "@blinkdisk/components/folder-card";
-import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { Button } from "@blinkdisk/ui/button";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import type { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
 
 type CreateFolderGeneralProps = {
   form: ReturnType<typeof useCreateFolderForm>;
+  values: ZCreateFolderFormType;
+  isCreatingFolder: boolean;
+  isCreatingDraft: boolean;
+  onAction: (action: "CREATE" | "POLICY") => void;
 };
 
-export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
+export function CreateFolderGeneral({
+  form,
+  values,
+  isCreatingFolder,
+  isCreatingDraft,
+  onAction,
+}: CreateFolderGeneralProps) {
   const { language, t } = useAppTranslation("folder.createDialog");
-
-  const values = useStore(form.store, (store) => store.values);
 
   return (
     <form
@@ -84,9 +92,25 @@ export function CreateFolderGeneral({ form }: CreateFolderGeneralProps) {
           />
         )}
       </form.AppField>
-      <form.AppForm>
-        <form.Submit>{t("continue")}</form.Submit>
-      </form.AppForm>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Button
+          type="submit"
+          loading={isCreatingFolder}
+          disabled={isCreatingDraft || isCreatingFolder}
+          onClick={() => onAction("CREATE")}
+        >
+          {t("submit")}
+        </Button>
+        <Button
+          type="submit"
+          variant="secondary"
+          loading={isCreatingDraft}
+          disabled={isCreatingFolder || isCreatingDraft}
+          onClick={() => onAction("POLICY")}
+        >
+          {t("changePolicy")}
+        </Button>
+      </div>
     </form>
   );
 }

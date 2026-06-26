@@ -1,6 +1,7 @@
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { isDraftPolicyUserName } from "@desktop/lib/policy-target";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
@@ -39,6 +40,7 @@ export function useVaultDevices() {
 
       for (const policy of res.data.policies) {
         if (!policy.target.host || !policy.target.userName) continue;
+        if (isDraftPolicyUserName(policy.target.userName)) continue;
 
         const index = devices.findIndex(
           (device) => device.hostName === policy.target.host,

@@ -1,4 +1,31 @@
 {
+  "page": {
+    "tree": {
+      "title": "Scope",
+      "description": "Choose which policy to edit."
+    },
+    "editor": {
+      "title": "Policy",
+      "save": "Save",
+      "mode": {
+        "basic": "Basic",
+        "advanced": "Advanced"
+      }
+    },
+    "override": {
+      "inherited": "Inherited",
+      "custom": "Custom"
+    },
+    "draft": {
+      "badge": "Draft",
+      "activate": {
+        "button": "Add folder"
+      },
+      "discard": {
+        "button": "Discard"
+      }
+    }
+  },
   "schedule": {
     "title": "Backup schedule",
     "description": "Schedule automatic backups of your files.",
@@ -31,8 +58,7 @@
     "cron": {
       "label": "Custom schedule",
       "add": "Add custom schedule"
-    },
-    "save": "Save"
+    }
   },
   "retention": {
     "title": "Backup retention",
@@ -64,8 +90,7 @@
     "info": {
       "title": "How backup retention works",
       "description": "BlinkDisk keeps the number of latest backups you set for each time period. A backup is kept if it matches any rule, others are removed to save space."
-    },
-    "save": "Save"
+    }
   },
   "files": {
     "title": "Excluded files",
@@ -128,8 +153,7 @@
     "excludeCacheDirs": {
       "label": "Exclude cache directories",
       "description": "Exclude common cache directories in backups."
-    },
-    "save": "Save"
+    }
   },
   "compression": {
     "title": "Compression",
@@ -190,7 +214,6 @@
       "description": "Never compress files with these extensions.",
       "add": "Add extension",
       "placeholder": "e.g. .zip"
-    },
-    "save": "Save"
+    }
   }
 }

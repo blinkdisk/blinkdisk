@@ -9,33 +9,32 @@ import { Button } from "@blinkdisk/ui/button";
 import { Cron } from "@desktop/components/cron";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyScheduleForm } from "@desktop/hooks/forms/use-policy-schedule-form";
-import { ClockIcon, PlusIcon, TrashIcon } from "lucide-react";
+import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function ScheduleSettings() {
+export function ScheduleSettings({
+  form,
+  showAdvanced = true,
+}: {
+  form: PolicyForm;
+  showAdvanced?: boolean;
+}) {
   const { t } = useAppTranslation("policy.schedule");
 
-  const form = usePolicyScheduleForm();
-
-  const isDirty = useStore(form.store, (state) => state.isDirty);
-  const trigger = useStore(form.store, (state) => state.values.trigger);
+  const trigger = useStore(
+    form.store,
+    (state) => state.values.schedule.trigger,
+  );
 
   return (
     <SettingsCategory
       id="schedule"
       title={t("title")}
       description={t("description")}
-      icon={<ClockIcon />}
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(e);
-        }}
-        className="flex flex-col gap-4"
-      >
-        <form.AppField name="trigger">
+      <div className="flex flex-col gap-4">
+        <form.AppField name="schedule.trigger">
           {(field) => (
             <PolicyField>
               <field.Tabs
@@ -57,7 +56,7 @@ export function ScheduleSettings() {
         </form.AppField>
         {trigger === "SCHEDULE" ? (
           <>
-            <form.AppField name="interval">
+            <form.AppField name="schedule.interval">
               {(field) => (
                 <PolicyField>
                   <field.Select
@@ -109,27 +108,24 @@ export function ScheduleSettings() {
                 </PolicyField>
               )}
             </form.AppField>
-            <form.AppField name="cron" mode="array">
-              {() => (
-                <PolicyField>
-                  <CronEditor form={form} label={t("cron.label")} />
-                </PolicyField>
-              )}
-            </form.AppField>
+            {showAdvanced ? (
+              <form.AppField name="schedule.cron" mode="array">
+                {() => (
+                  <PolicyField>
+                    <CronEditor form={form} label={t("cron.label")} />
+                  </PolicyField>
+                )}
+              </form.AppField>
+            ) : null}
           </>
         ) : null}
-        <form.AppForm>
-          <form.Submit className="mt-2" disabled={!isDirty}>
-            {t("save")}
-          </form.Submit>
-        </form.AppForm>
-      </form>
+      </div>
     </SettingsCategory>
   );
 }
 
 type CronEditorProps = {
-  form: ReturnType<typeof usePolicyScheduleForm>;
+  form: PolicyForm;
   label: string;
 };
 
@@ -149,7 +145,10 @@ function CronEditor({ label, form }: CronEditorProps) {
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((cron, index) => (
-            <form.Field key={cron.id} name={`cron[${index}].expression`}>
+            <form.Field
+              key={cron.id}
+              name={`schedule.cron[${index}].expression`}
+            >
               {(subField) => (
                 <div className="flex w-full flex-col gap-3">
                   {index !== 0 ? <hr className="w-full" /> : null}

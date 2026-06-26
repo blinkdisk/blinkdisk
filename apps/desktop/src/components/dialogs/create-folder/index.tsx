@@ -1,34 +1,73 @@
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { Button } from "@blinkdisk/ui/button";
+import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
-import { cn } from "@blinkdisk/utils/class";
+import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
 import { CreateFolderGeneral } from "@desktop/components/dialogs/create-folder/general";
-import { CreateFolderSettings } from "@desktop/components/dialogs/create-folder/settings";
 import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
+import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
+import { useCreateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-create-folder-draft-policy";
 import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
-import { ArrowLeftIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { useCallback, useRef, useState } from "react";
 
-type CreateFolderStep = "GENERAL" | "SETTINGS";
+type CreateFolderAction = "CREATE" | "POLICY";
 
 export function CreateFolderDialog() {
   const { t } = useAppTranslation("folder.createDialog");
+  const { localHostName, localUserName } = useLocalProfile();
 
   const { isOpen, setIsOpen, defaultValues, clearDefaultValues } =
     useCreateFolderDialog();
 
-  const [step, setStep] = useState<CreateFolderStep>("GENERAL");
+  const actionRef = useRef<CreateFolderAction>("CREATE");
+  const [alertShown, setAlertShown] = useState(false);
+  const [pendingValues, setPendingValues] =
+    useState<ZCreateFolderFormType | null>(null);
+
+  const onSuccess = useCallback(() => {
+    setIsOpen(false);
+  }, [setIsOpen]);
+
+  const { mutateAsync: createFolder, isPending: isCreatingFolder } =
+    useCreateFolder({
+      onError: (error) => {
+        if (
+          error &&
+          typeof error === "object" &&
+          "message" in error &&
+          error.message === "FOLDER_TOO_LARGE"
+        ) {
+          setAlertShown(true);
+        }
+      },
+      onSuccess,
+    });
+
+  const { mutateAsync: createDraft, isPending: isCreatingDraft } =
+    useCreateFolderDraftPolicy({
+      onSuccess,
+    });
 
   const form = useCreateFolderForm({
     defaultValues,
-    onSubmit: () => {
-      setStep("SETTINGS");
+    onSubmit: async ({ value }) => {
+      if (actionRef.current === "POLICY") {
+        await createDraft({
+          ...value,
+          hostName: localHostName,
+          userName: localUserName,
+        });
+        return;
+      }
+
+      setPendingValues(value);
+      await createFolder({ ...value, size: null });
     },
   });
 
@@ -37,45 +76,36 @@ export function CreateFolderDialog() {
   const reset = useCallback(() => {
     form.reset();
     clearDefaultValues();
-    setStep("GENERAL");
-    window.folderMockPolicy = undefined;
+    setAlertShown(false);
+    setPendingValues(null);
+    actionRef.current = "CREATE";
   }, [form, clearDefaultValues]);
-
-  const onSuccess = useCallback(() => {
-    setIsOpen(false);
-    reset();
-  }, [reset, setIsOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>
-      <DialogContent
-        className={cn(
-          "block max-h-[80vh] overflow-y-auto",
-          step === "GENERAL" ? "max-w-115" : "max-w-140",
-        )}
-      >
-        <div className="flex items-center gap-3">
-          {step !== "GENERAL" ? (
-            <Button
-              onClick={() => {
-                setStep("GENERAL");
-              }}
-              variant="ghost"
-              size="icon-xs"
-            >
-              <ArrowLeftIcon />
-            </Button>
-          ) : null}
-          <DialogTitle>{t("title")}</DialogTitle>
-        </div>
+      <DialogContent className="block max-h-[80vh] max-w-115 overflow-y-auto">
+        <DialogTitle>{t("title")}</DialogTitle>
         <DialogDescription className="sr-only">
           {t("description")}
         </DialogDescription>
-        {step === "GENERAL" ? (
-          <CreateFolderGeneral form={form} />
-        ) : (
-          <CreateFolderSettings values={values} onSuccess={onSuccess} />
-        )}
+        <CreateFolderGeneral
+          form={form}
+          values={values}
+          isCreatingFolder={isCreatingFolder}
+          isCreatingDraft={isCreatingDraft}
+          onAction={(action) => {
+            actionRef.current = action;
+          }}
+        />
+        <ExceedingAlert
+          open={alertShown}
+          setOpen={setAlertShown}
+          loading={isCreatingFolder}
+          submit={() =>
+            pendingValues &&
+            createFolder({ ...pendingValues, force: true, size: null })
+          }
+        />
       </DialogContent>
     </Dialog>
   );

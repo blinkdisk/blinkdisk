@@ -410,7 +410,7 @@ export const defaultVaultPolicy: ZPolicyType = {
     catchup: true,
   },
   compression: {
-    algorithm: "none",
+    algorithm: "pgzip",
   },
   metadata: {
     algorithm: "zstd-fastest",

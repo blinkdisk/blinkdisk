@@ -1,32 +1,21 @@
-import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyRetentionForm } from "@desktop/hooks/forms/use-policy-retention-form";
-import { ArchiveIcon, InfoIcon } from "lucide-react";
+import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
+import { InfoIcon } from "lucide-react";
 
-export function RetentionSettings() {
+export function RetentionSettings({ form }: { form: PolicyForm }) {
   const { t } = useAppTranslation("policy.retention");
-
-  const form = usePolicyRetentionForm();
-  const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
     <SettingsCategory
       id="retention"
       title={t("title")}
       description={t("description")}
-      icon={<ArchiveIcon />}
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(e);
-        }}
-        className="flex flex-col gap-4"
-      >
-        <form.AppField name="latest">
+      <div className="flex flex-col gap-4">
+        <form.AppField name="retention.latest">
           {(field) => (
             <PolicyField>
               <field.Counter
@@ -38,7 +27,7 @@ export function RetentionSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="hourly">
+        <form.AppField name="retention.hourly">
           {(field) => (
             <PolicyField>
               <field.Counter
@@ -50,7 +39,7 @@ export function RetentionSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="daily">
+        <form.AppField name="retention.daily">
           {(field) => (
             <PolicyField>
               <field.Counter
@@ -62,7 +51,7 @@ export function RetentionSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="weekly">
+        <form.AppField name="retention.weekly">
           {(field) => (
             <PolicyField>
               <field.Counter
@@ -74,7 +63,7 @@ export function RetentionSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="monthly">
+        <form.AppField name="retention.monthly">
           {(field) => (
             <PolicyField>
               <field.Counter
@@ -86,7 +75,7 @@ export function RetentionSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="annual">
+        <form.AppField name="retention.annual">
           {(field) => (
             <PolicyField>
               <field.Counter
@@ -105,12 +94,7 @@ export function RetentionSettings() {
             {t("info.description")}
           </AlertDescription>
         </Alert>
-        <form.AppForm>
-          <form.Submit className="mt-2" disabled={!isDirty}>
-            {t("save")}
-          </form.Submit>
-        </form.AppForm>
-      </form>
+      </div>
     </SettingsCategory>
   );
 }

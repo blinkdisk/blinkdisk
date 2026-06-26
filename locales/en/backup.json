@@ -1,7 +1,7 @@
 {
   "list": {
     "back": "Go back",
-    "settings": "Folder settings",
+    "settings": "Folder policy",
     "item": {
       "files_one": "{{formatted}} file",
       "files_other": "{{formatted}} files",

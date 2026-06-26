@@ -1,11 +1,7 @@
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@blinkdisk/ui/accordion";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { PolicyContext } from "@desktop/components/policy/context";
+import { SettingsPanel, SettingsRow } from "@desktop/components/settings";
 import { type ReactNode, useContext } from "react";
 
 type SettingsCategoryProps = {
@@ -13,7 +9,6 @@ type SettingsCategoryProps = {
   title: string;
   description: string;
   children: ReactNode;
-  icon: ReactNode;
 };
 
 export function SettingsCategory({
@@ -21,35 +16,48 @@ export function SettingsCategory({
   title,
   description,
   children,
-  icon,
 }: SettingsCategoryProps) {
   const { loading } = useContext(PolicyContext);
 
   return (
-    <AccordionItem value={id} disabled={loading}>
-      <AccordionTrigger className="items-center" hideArrow={loading}>
-        <div className="flex items-center gap-4">
-          {loading ? (
-            <Skeleton className="!size-11 !rounded-lg" />
-          ) : (
-            <div className="bg-card text-muted-foreground flex size-11 items-center justify-center rounded-lg border-2 [&>svg]:size-5">
-              {icon}
-            </div>
-          )}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <h2 className="text-lg font-semibold">
-                {loading ? <Skeleton width={180} /> : title}
-              </h2>
-            </div>
-            <p className="text-muted-foreground text-xs font-normal">
-              {loading ? <Skeleton width={100} /> : description}
-            </p>
-          </div>
-        </div>
-        {loading ? <Skeleton className="!size-4" /> : null}
-      </AccordionTrigger>
-      <AccordionContent className="m-1 pt-2">{children}</AccordionContent>
-    </AccordionItem>
+    <section id={id} className="grid scroll-mt-8 gap-4">
+      <div>
+        {loading ? (
+          <SettingsCategoryHeadingSkeleton />
+        ) : (
+          <>
+            <h2 className="text-xl font-semibold">{title}</h2>
+            <p className="text-muted-foreground mt-1 text-sm">{description}</p>
+          </>
+        )}
+      </div>
+      <SettingsPanel>
+        <SettingsRow fullWidth className="px-7 py-6">
+          {loading ? <Skeleton count={4} height="2.75rem" /> : children}
+        </SettingsRow>
+      </SettingsPanel>
+    </section>
+  );
+}
+
+function SettingsCategoryHeadingSkeleton() {
+  return (
+    <div className="grid gap-1">
+      <Skeleton width={150} height="1.25rem" />
+      <Skeleton width={260} />
+    </div>
+  );
+}
+
+export function SettingsCategorySkeleton({ id }: { id: string }) {
+  return (
+    <section id={id} className="grid scroll-mt-8 gap-4">
+      <SettingsCategoryHeadingSkeleton />
+      <SettingsPanel>
+        <SettingsRow fullWidth className="px-7 py-6">
+          <Skeleton count={4} height="2.75rem" />
+        </SettingsRow>
+      </SettingsPanel>
+    </section>
   );
 }

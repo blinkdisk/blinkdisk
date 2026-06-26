@@ -15,11 +15,11 @@ import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
 import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
-import { useFolderSettingsDialog } from "@desktop/hooks/state/use-folder-settings-dialog";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatInt, formatSize } from "@desktop/lib/number";
-import { Link } from "@tanstack/react-router";
+import { policyTargetToSearch } from "@desktop/lib/policy-target";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
   CloudUploadIcon,
   FolderSearchIcon,
@@ -70,8 +70,8 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
 
   const { mutate: startBackup } = useStartBackup({ profile });
   const { mutate: cancelBackup } = useCancelBackup({ profile });
-  const { openFolderSettings } = useFolderSettingsDialog();
   const { openDeleteFolderDialog } = useDeleteFolderDialog();
+  const navigate = useNavigate();
 
   const showProgress = useMemo(
     () =>
@@ -189,9 +189,14 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
                 ) : null}
                 <DropdownMenuItem
                   onClick={() =>
-                    openFolderSettings({
-                      folderId: folder.id,
-                      profile: folderSelectedProfile,
+                    navigate({
+                      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
+                      search: policyTargetToSearch({
+                        kind: "FOLDER",
+                        hostName: folder.source.host,
+                        userName: folder.source.userName,
+                        path: folder.source.path,
+                      }),
                     })
                   }
                 >

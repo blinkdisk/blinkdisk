@@ -4,6 +4,7 @@ import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
+import { isDraftPolicyUserName } from "@desktop/lib/policy-target";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
@@ -92,11 +93,12 @@ export type CoreFolderItem = {
 
 type UseFolderListOptions = {
   unfiltered?: boolean;
+  includeDrafts?: boolean;
   profile?: SelectedProfile;
 };
 
 export function useFolderList(options: UseFolderListOptions = {}) {
-  const { unfiltered = false } = options;
+  const { includeDrafts = false, unfiltered = false } = options;
   const { profile: routeSelectedProfile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
@@ -107,9 +109,12 @@ export function useFolderList(options: UseFolderListOptions = {}) {
     unfiltered || !profile ? undefined : kopiaParamsFromProfile(profile);
 
   return useQuery({
-    queryKey: unfiltered
-      ? [...queryKeys.folder.all, "list", vaultId, "unfiltered"]
-      : queryKeys.folder.list(vaultId, profile),
+    queryKey: [
+      ...(unfiltered
+        ? [...queryKeys.folder.all, "list", vaultId, "unfiltered"]
+        : queryKeys.folder.list(vaultId, profile)),
+      includeDrafts ? "with-drafts" : "without-drafts",
+    ],
     queryFn: async () => {
       if (!unfiltered && !profile) return null;
 
@@ -123,6 +128,10 @@ export function useFolderList(options: UseFolderListOptions = {}) {
       const folders: CoreFolderItem[] = [];
 
       for (const folder of res.data.sources) {
+        if (!includeDrafts && isDraftPolicyUserName(folder.source.userName)) {
+          continue;
+        }
+
         if (folder.status === "UPLOADING" && folder.upload) {
           folder.upload.progress = !folder.upload.estimatedBytes
             ? 0

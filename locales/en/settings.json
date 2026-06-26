@@ -74,12 +74,11 @@
     "home": "Home",
     "general": {
       "title": "General",
-      "description": "Configure general settings of this vault.",
+      "description": "Choose the name shown for this vault.",
       "name": {
         "label": "Vault name",
         "placeholder": "Enter vault name"
       },
-      "save": "Save",
       "move": {
         "title": "Move to account",
         "description": "Move this vault to another account.",
@@ -93,35 +92,38 @@
     },
     "config": {
       "title": "Storage config",
-      "description": "View the storage location of this vault."
+      "description": "View the storage location of this vault.",
+      "provider": "Storage provider:"
     },
     "throttle": {
       "title": "Network throttle",
       "description": "Throttle the network usage of this vault.",
       "upload": {
         "enabled": {
-          "label": "Limit upload bandwith"
+          "label": "Limit upload bandwidth",
+          "description": "Cap how quickly this vault can send backup data."
         },
         "limit": {
           "label": "Upload limit",
-          "description": "Limit the upload bandwith of this vault."
+          "description": "Limit the upload bandwidth of this vault."
         }
       },
       "download": {
         "enabled": {
-          "label": "Limit download bandwith"
+          "label": "Limit download bandwidth",
+          "description": "Cap how quickly this vault can download restore data."
         },
         "limit": {
           "label": "Download limit",
-          "description": "Limit the download bandwith of this vault."
+          "description": "Limit the download bandwidth of this vault."
         }
       },
       "save": "Save"
     }
   },
   "folder": {
-    "title": "Folder settings",
-    "description": "Configure the folder settings.",
+    "title": "Folder policy",
+    "description": "Configure the folder policy.",
     "general": {
       "title": "General",
       "description": "Configure general settings of this folder.",
@@ -135,8 +137,7 @@
       "emoji": {
         "change": "Change emoji",
         "clear": "Remove emoji"
-      },
-      "save": "Save"
+      }
     },
     "modified": "Modified"
   }

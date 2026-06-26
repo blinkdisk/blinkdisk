@@ -1,3 +1,4 @@
+import { cn } from "@blinkdisk/utils/class";
 import type { ReactNode } from "react";
 
 type SettingsGroupProps = {
@@ -30,6 +31,7 @@ type SettingsRowProps = {
   title?: string;
   description?: string;
   titleClassName?: string;
+  className?: string;
   fullWidth?: boolean;
   separated?: boolean;
   children: ReactNode;
@@ -39,13 +41,19 @@ export function SettingsRow({
   title,
   description,
   titleClassName,
+  className,
   fullWidth,
   separated,
   children,
 }: SettingsRowProps) {
   if (fullWidth) {
     return (
-      <div className="border-border border-b px-5 py-4 last:border-b-0">
+      <div
+        className={cn(
+          "border-border border-b px-5 py-4 last:border-b-0",
+          className,
+        )}
+      >
         {children}
       </div>
     );
@@ -53,9 +61,11 @@ export function SettingsRow({
 
   return (
     <div
-      className={`border-border flex flex-col gap-4 border-b px-5 py-4 last:border-b-0 md:min-h-20 md:flex-row md:items-center md:justify-between ${
-        separated ? "border-t" : ""
-      }`}
+      className={cn(
+        "border-border flex flex-col gap-4 border-b px-5 py-4 last:border-b-0 md:min-h-20 md:flex-row md:items-center md:justify-between",
+        separated && "border-t",
+        className,
+      )}
     >
       <div className="min-w-0">
         {title ? (
