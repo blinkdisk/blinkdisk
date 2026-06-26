@@ -27,6 +27,7 @@ import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { formatCompactInt, formatSize } from "@desktop/lib/number";
 import {
   getOtherProfiles,
+  hasMultipleProfileUsers,
   isSameProfile,
   matchesProfileListFilters,
   type ProfileListFilters,
@@ -427,8 +428,10 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {profiles.map((device, index) => {
+            const showUsers = hasMultipleProfileUsers(device);
             const isDeviceSelected =
-              value.deviceName === device.hostName && !value.userName;
+              value.deviceName === device.hostName &&
+              (!value.userName || !showUsers);
 
             return (
               <Fragment key={device.hostName}>
@@ -450,32 +453,34 @@ function ProfileSelects({ profiles, value, onChange }: ProfileSelectsProps) {
                     <CheckIcon className="text-primary ml-auto size-4" />
                   ) : null}
                 </DropdownMenuItem>
-                {device.users.map(({ userName }) => {
-                  const isUserSelected =
-                    value.deviceName === device.hostName &&
-                    value.userName === userName;
+                {showUsers
+                  ? device.users.map(({ userName }) => {
+                      const isUserSelected =
+                        value.deviceName === device.hostName &&
+                        value.userName === userName;
 
-                  return (
-                    <DropdownMenuItem
-                      key={`${device.hostName}:${userName}`}
-                      onClick={() => {
-                        onChange({
-                          deviceName: device.hostName,
-                          userName,
-                        });
-                      }}
-                      className="justify-between pl-8"
-                    >
-                      <span className="flex min-w-0 items-center gap-2">
-                        <UserIcon className="text-muted-foreground size-4 shrink-0" />
-                        <span className="truncate">{userName}</span>
-                      </span>
-                      {isUserSelected ? (
-                        <CheckIcon className="text-primary ml-auto size-4" />
-                      ) : null}
-                    </DropdownMenuItem>
-                  );
-                })}
+                      return (
+                        <DropdownMenuItem
+                          key={`${device.hostName}:${userName}`}
+                          onClick={() => {
+                            onChange({
+                              deviceName: device.hostName,
+                              userName,
+                            });
+                          }}
+                          className="justify-between pl-8"
+                        >
+                          <span className="flex min-w-0 items-center gap-2">
+                            <UserIcon className="text-muted-foreground size-4 shrink-0" />
+                            <span className="truncate">{userName}</span>
+                          </span>
+                          {isUserSelected ? (
+                            <CheckIcon className="text-primary ml-auto size-4" />
+                          ) : null}
+                        </DropdownMenuItem>
+                      );
+                    })
+                  : null}
               </Fragment>
             );
           })}

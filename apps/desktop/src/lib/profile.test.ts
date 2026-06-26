@@ -2,6 +2,7 @@ import type { VaultDevice } from "@desktop/hooks/queries/core/use-vault-devices"
 import {
   getOtherProfiles,
   getProfileUserNames,
+  hasMultipleProfileUsers,
   matchesProfileListFilters,
 } from "@desktop/lib/profile";
 import { describe, expect, it } from "vitest";
@@ -55,6 +56,21 @@ describe("profile helpers", () => {
       "paul",
       "guest",
     ]);
+  });
+
+  it("requires multiple users before showing user-specific profile choices", () => {
+    expect(
+      hasMultipleProfileUsers({
+        hostName: "multi-user-host",
+        users: [{ userName: "paul" }, { userName: "guest" }],
+      }),
+    ).toBe(true);
+    expect(
+      hasMultipleProfileUsers({
+        hostName: "single-user-host",
+        users: [{ userName: "paul" }],
+      }),
+    ).toBe(false);
   });
 
   it("treats empty filter values as all other profiles", () => {
