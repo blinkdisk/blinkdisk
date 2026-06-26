@@ -361,7 +361,8 @@ function PolicyEditorForm({
   onSelectTarget: (target: PolicyTarget) => void;
 }) {
   const form = usePolicyForm();
-  const [mode, setMode] = useAppStorage("preferences.mode", "basic");
+  const [storedMode, setMode] = useAppStorage("preferences.mode", "basic");
+  const mode = storedMode ?? "basic";
   const showAdvanced = mode === "advanced";
   const currentPolicy = useStore(form.store, (state) =>
     getPolicyFromFormValues(state.values, policy, target.kind !== "GLOBAL"),

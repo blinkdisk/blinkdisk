@@ -2,7 +2,6 @@ import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
 import { migrateAuthV1 } from "@electron/migrations/auth_v1";
 import { migrateAuthV2 } from "@electron/migrations/auth_v2";
-import { migratePreferencesModeV1 } from "@electron/migrations/preferences_mode_v1";
 import { migrateStoreV1 } from "@electron/migrations/store_v1";
 import { type GlobalStorageType, store } from "@electron/store";
 import { captureException } from "@sentry/electron/main";
@@ -16,10 +15,6 @@ const migrations = [
   {
     id: "auth_v2",
     execute: migrateAuthV2,
-  },
-  {
-    id: "preferences_mode_v1",
-    execute: migratePreferencesModeV1,
   },
 ];
 

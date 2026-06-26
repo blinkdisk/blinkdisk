@@ -18,7 +18,7 @@ export type GlobalStorageType = {
   hasSkippedAuth: boolean;
   preferences: {
     theme: "system" | "dark" | "light";
-    mode: "basic" | "advanced";
+    mode?: "basic" | "advanced";
     hideEmail?: boolean;
   };
   passwords: {
