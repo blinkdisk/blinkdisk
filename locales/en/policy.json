@@ -6,7 +6,11 @@
     },
     "editor": {
       "title": "Policy",
-      "save": "Save"
+      "save": "Save",
+      "mode": {
+        "basic": "Basic",
+        "advanced": "Advanced"
+      }
     },
     "override": {
       "inherited": "Inherited",

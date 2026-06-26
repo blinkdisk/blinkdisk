@@ -5,6 +5,7 @@ import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
 import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
 import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
@@ -22,6 +23,7 @@ import {
 import { useActivateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-folder-draft-policy";
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
+import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import {
   isPolicyTargetEqual,
   type PolicySearch,
@@ -37,15 +39,19 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ChevronRightIcon,
   FolderIcon,
+  ListChecksIcon,
   MonitorIcon,
   PlusIcon,
   SaveIcon,
+  SlidersHorizontalIcon,
   TrashIcon,
   UserIcon,
   VaultIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
+
+type PolicyEditorMode = "basic" | "advanced";
 
 const ZPolicySearch = z.object({
   kind: z.enum(["GLOBAL", "HOST", "USER", "FOLDER", "DRAFT_FOLDER"]).optional(),
@@ -355,6 +361,8 @@ function PolicyEditorForm({
   onSelectTarget: (target: PolicyTarget) => void;
 }) {
   const form = usePolicyForm();
+  const [mode, setMode] = useAppStorage("preferences.mode", "basic");
+  const showAdvanced = mode === "advanced";
   const currentPolicy = useStore(form.store, (state) =>
     getPolicyFromFormValues(state.values, policy, target.kind !== "GLOBAL"),
   );
@@ -371,15 +379,21 @@ function PolicyEditorForm({
         draftPolicy={target.kind === "DRAFT_FOLDER" ? currentPolicy : undefined}
         draftTarget={target.kind === "DRAFT_FOLDER" ? target : undefined}
         form={form}
+        mode={mode}
+        onModeChange={setMode}
         onSelectTarget={onSelectTarget}
       />
       {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
         <FolderGeneralSettings form={form} />
       ) : null}
-      <ScheduleSettings form={form} />
-      <FilesSettings form={form} />
-      <CompressionSettings form={form} />
-      <RetentionSettings form={form} />
+      <ScheduleSettings form={form} showAdvanced={showAdvanced} />
+      <FilesSettings form={form} showAdvanced={showAdvanced} />
+      {showAdvanced ? (
+        <>
+          <CompressionSettings form={form} />
+          <RetentionSettings form={form} />
+        </>
+      ) : null}
     </form>
   );
 }
@@ -388,11 +402,15 @@ function PolicyEditorHeader({
   draftPolicy,
   draftTarget,
   form,
+  mode,
+  onModeChange,
   onSelectTarget,
 }: {
   draftPolicy?: ZPolicyType;
   draftTarget?: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }>;
   form: PolicyForm;
+  mode: PolicyEditorMode;
+  onModeChange: (mode: PolicyEditorMode) => void;
   onSelectTarget: (target: PolicyTarget) => void;
 }) {
   const { t } = useAppTranslation("policy.page");
@@ -424,10 +442,28 @@ function PolicyEditorHeader({
   return (
     <>
       <div className={policyEditorHeaderClassName}>
-        <div className="relative z-10 flex items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold">{t("editor.title")}</h1>
+        <div className="relative z-10 flex flex-wrap items-center gap-3">
+          <h1 className="shrink-0 text-2xl font-bold">{t("editor.title")}</h1>
+          <div className="flex min-w-fit flex-1 justify-center">
+            <Tabs
+              value={mode}
+              onValueChange={(value) => onModeChange(value as PolicyEditorMode)}
+              className="shrink-0"
+            >
+              <TabsList className="h-10">
+                <TabsTrigger value="basic" className="px-4">
+                  <ListChecksIcon />
+                  {t("editor.mode.basic")}
+                </TabsTrigger>
+                <TabsTrigger value="advanced" className="px-4">
+                  <SlidersHorizontalIcon />
+                  {t("editor.mode.advanced")}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
           {draftTarget ? (
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <Button
                 type="button"
                 size="icon"

@@ -13,7 +13,13 @@ import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 
-export function ScheduleSettings({ form }: { form: PolicyForm }) {
+export function ScheduleSettings({
+  form,
+  showAdvanced = true,
+}: {
+  form: PolicyForm;
+  showAdvanced?: boolean;
+}) {
   const { t } = useAppTranslation("policy.schedule");
 
   const trigger = useStore(
@@ -102,13 +108,15 @@ export function ScheduleSettings({ form }: { form: PolicyForm }) {
                 </PolicyField>
               )}
             </form.AppField>
-            <form.AppField name="schedule.cron" mode="array">
-              {() => (
-                <PolicyField>
-                  <CronEditor form={form} label={t("cron.label")} />
-                </PolicyField>
-              )}
-            </form.AppField>
+            {showAdvanced ? (
+              <form.AppField name="schedule.cron" mode="array">
+                {() => (
+                  <PolicyField>
+                    <CronEditor form={form} label={t("cron.label")} />
+                  </PolicyField>
+                )}
+              </form.AppField>
+            ) : null}
           </>
         ) : null}
       </div>

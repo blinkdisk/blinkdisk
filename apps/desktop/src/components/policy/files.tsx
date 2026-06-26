@@ -15,7 +15,13 @@ import { parseExclusionRule } from "@desktop/lib/exclusion";
 import { EditIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext, useMemo } from "react";
 
-export function FilesSettings({ form }: { form: PolicyForm }) {
+export function FilesSettings({
+  form,
+  showAdvanced = true,
+}: {
+  form: PolicyForm;
+  showAdvanced?: boolean;
+}) {
   const { t } = useAppTranslation("policy.files");
 
   return (
@@ -25,40 +31,6 @@ export function FilesSettings({ form }: { form: PolicyForm }) {
       description={t("description")}
     >
       <div className="flex flex-col gap-4">
-        <form.AppField name="files.exclusions">
-          {() => (
-            <PolicyField>
-              <ExclusionsEditor
-                form={form}
-                label={t("exclusions.label")}
-                description={t("exclusions.description")}
-              />
-            </PolicyField>
-          )}
-        </form.AppField>
-        <form.AppField name="files.exclusionRuleFiles">
-          {() => (
-            <PolicyField>
-              <ExclusionRuleFilesEditor
-                form={form}
-                label={t("exclusionRuleFiles.label")}
-                description={t("exclusionRuleFiles.description")}
-              />
-            </PolicyField>
-          )}
-        </form.AppField>
-        <form.AppField name="files.maxFileSize">
-          {(field) => (
-            <PolicyField>
-              <field.Filesize
-                label={{
-                  title: t("maxFileSize.label"),
-                  description: t("maxFileSize.description"),
-                }}
-              />
-            </PolicyField>
-          )}
-        </form.AppField>
         <form.AppField name="files.excludeCacheDirs">
           {(field) => (
             <PolicyField>
@@ -71,6 +43,44 @@ export function FilesSettings({ form }: { form: PolicyForm }) {
             </PolicyField>
           )}
         </form.AppField>
+        <form.AppField name="files.exclusions">
+          {() => (
+            <PolicyField>
+              <ExclusionsEditor
+                form={form}
+                label={t("exclusions.label")}
+                description={t("exclusions.description")}
+              />
+            </PolicyField>
+          )}
+        </form.AppField>
+        {showAdvanced ? (
+          <form.AppField name="files.exclusionRuleFiles">
+            {() => (
+              <PolicyField>
+                <ExclusionRuleFilesEditor
+                  form={form}
+                  label={t("exclusionRuleFiles.label")}
+                  description={t("exclusionRuleFiles.description")}
+                />
+              </PolicyField>
+            )}
+          </form.AppField>
+        ) : null}
+        {showAdvanced ? (
+          <form.AppField name="files.maxFileSize">
+            {(field) => (
+              <PolicyField>
+                <field.Filesize
+                  label={{
+                    title: t("maxFileSize.label"),
+                    description: t("maxFileSize.description"),
+                  }}
+                />
+              </PolicyField>
+            )}
+          </form.AppField>
+        ) : null}
       </div>
     </SettingsCategory>
   );
