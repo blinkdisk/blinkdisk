@@ -1,3 +1,18 @@
 packages:
   - "apps/*"
   - "libs/*"
+
+allowBuilds:
+  '@prisma/engines': true
+  '@sentry/cli': true
+  core-js: true
+  electron: true
+  electron-winstaller: true
+  esbuild: true
+  prisma: true
+  sharp: true
+  workerd: true
+
+overrides:
+  esbuild: 0.25.3
+  wrangler>esbuild: 0.27.3
