@@ -1,4 +1,5 @@
 import { getEmojiUrl } from "@blinkdisk/components/folder-card";
+import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { Badge } from "@blinkdisk/ui/badge";
@@ -13,6 +14,11 @@ import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
 import { SettingsPanel, SettingsRow } from "@desktop/components/settings";
+import {
+  getPolicyFromFormValues,
+  type PolicyForm,
+  usePolicyForm,
+} from "@desktop/hooks/forms/use-policy-form";
 import { useActivateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-folder-draft-policy";
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
@@ -32,6 +38,7 @@ import {
   ChevronRightIcon,
   FolderIcon,
   MonitorIcon,
+  SaveIcon,
   SendIcon,
   TrashIcon,
   UserIcon,
@@ -323,25 +330,114 @@ function PolicyEditor({
 }) {
   return (
     <PolicyContextProvider key={policyTargetId(target)} target={target}>
-      {({ policy }) => (
-        <div className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8">
-          {target.kind === "DRAFT_FOLDER" ? (
-            <DraftPolicyActions
-              target={target}
-              policy={policy?.defined}
-              onSelectTarget={onSelectTarget}
-            />
-          ) : null}
-          {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
-            <FolderGeneralSettings />
-          ) : null}
-          <ScheduleSettings />
-          <FilesSettings />
-          <CompressionSettings />
-          <RetentionSettings />
-        </div>
-      )}
+      {({ policy }) =>
+        policy ? (
+          <PolicyEditorForm
+            target={target}
+            policy={policy.defined}
+            onSelectTarget={onSelectTarget}
+          />
+        ) : (
+          <PolicyEditorLoading target={target} />
+        )
+      }
     </PolicyContextProvider>
+  );
+}
+
+function PolicyEditorForm({
+  target,
+  policy,
+  onSelectTarget,
+}: {
+  target: PolicyTarget;
+  policy: ZPolicyType;
+  onSelectTarget: (target: PolicyTarget) => void;
+}) {
+  const form = usePolicyForm();
+  const currentPolicy = useStore(form.store, (state) =>
+    getPolicyFromFormValues(state.values, policy, target.kind !== "GLOBAL"),
+  );
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit(e);
+      }}
+      className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8"
+    >
+      <PolicyEditorHeader form={form} />
+      {target.kind === "DRAFT_FOLDER" ? (
+        <DraftPolicyActions
+          target={target}
+          policy={currentPolicy}
+          onSelectTarget={onSelectTarget}
+        />
+      ) : null}
+      {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
+        <FolderGeneralSettings form={form} />
+      ) : null}
+      <ScheduleSettings form={form} />
+      <FilesSettings form={form} />
+      <CompressionSettings form={form} />
+      <RetentionSettings form={form} />
+    </form>
+  );
+}
+
+function PolicyEditorHeader({ form }: { form: PolicyForm }) {
+  const { t } = useAppTranslation("policy.page");
+  const isDirty = useStore(form.store, (state) => state.isDirty);
+  const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
+
+  return (
+    <div className="bg-background/95 sticky top-0 z-10 -mx-1 flex items-center justify-between gap-4 px-1 py-2 backdrop-blur">
+      <h1 className="text-xl font-semibold">{t("editor.title")}</h1>
+      <Button
+        type="submit"
+        size="sm"
+        disabled={!isDirty || isSubmitting}
+        loading={isSubmitting}
+      >
+        <SaveIcon />
+        {t("editor.save")}
+      </Button>
+    </div>
+  );
+}
+
+function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
+  return (
+    <div className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8">
+      <div className="bg-background/95 sticky top-0 z-10 -mx-1 flex items-center justify-between gap-4 px-1 py-2 backdrop-blur">
+        <Skeleton width={80} height="1.25rem" />
+        <Skeleton width={88} height="2.25rem" />
+      </div>
+      {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
+        <SettingsCategorySkeleton id="general" />
+      ) : null}
+      <SettingsCategorySkeleton id="schedule" />
+      <SettingsCategorySkeleton id="files" />
+      <SettingsCategorySkeleton id="compression" />
+      <SettingsCategorySkeleton id="retention" />
+    </div>
+  );
+}
+
+function SettingsCategorySkeleton({ id }: { id: string }) {
+  return (
+    <section id={id} className="grid scroll-mt-8 gap-4">
+      <div className="grid gap-1">
+        <Skeleton width={150} height="1.25rem" />
+        <Skeleton width={260} />
+      </div>
+      <SettingsPanel>
+        <SettingsRow fullWidth className="px-7 py-6">
+          <Skeleton count={4} height="2.75rem" />
+        </SettingsRow>
+      </SettingsPanel>
+    </section>
   );
 }
 
@@ -388,6 +484,7 @@ function DraftPolicyActions({
         >
           <div className="flex flex-wrap justify-start gap-2 md:justify-end">
             <Button
+              type="button"
               size="sm"
               variant="destructive-secondary"
               onClick={() => discard.mutate()}
@@ -397,6 +494,7 @@ function DraftPolicyActions({
               {t("draft.discard.button")}
             </Button>
             <Button
+              type="button"
               size="sm"
               onClick={() => policy && activate.mutate({ policy })}
               disabled={!policy}

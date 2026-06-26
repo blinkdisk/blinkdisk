@@ -137,8 +137,7 @@
       "emoji": {
         "change": "Change emoji",
         "clear": "Remove emoji"
-      },
-      "save": "Save"
+      }
     },
     "modified": "Modified"
   }

@@ -3,6 +3,11 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Switch } from "@blinkdisk/ui/switch";
 import { cn } from "@blinkdisk/utils/class";
 import { PolicyContext } from "@desktop/components/policy/context";
+import {
+  getPolicyDefinedFieldPath,
+  type PolicyDefinedFields,
+  setPolicyFieldDefined,
+} from "@desktop/hooks/forms/use-policy-form";
 import { useContext } from "react";
 
 type PolicyFieldProps = {
@@ -13,22 +18,27 @@ export function PolicyField({ children }: PolicyFieldProps) {
   const { t } = useAppTranslation("policy.page");
   const field = useFieldContext();
   const { inherited } = useContext(PolicyContext);
+  const definedFieldPath = getPolicyDefinedFieldPath(field.name);
 
-  const definedFields = useStore(
-    field.form.store,
-    (state) => state.values.definedFields as string[] | undefined,
+  const definedFields = useStore(field.form.store, (state) =>
+    definedFieldPath
+      ? (state.values.definedFields as PolicyDefinedFields | undefined)?.[
+          definedFieldPath.section
+        ]
+      : undefined,
   );
 
-  if (!inherited) return children;
+  if (!inherited || !definedFieldPath) return children;
 
-  const overriding = definedFields?.includes(field.name) || false;
+  const overriding = definedFields?.includes(definedFieldPath.field) || false;
 
   const setOverriding = (to: boolean) => {
-    const filtered = (definedFields || []).filter((v) => v !== field.name);
-    field.form.setFieldValue(
-      "definedFields",
-      to ? [...filtered, field.name] : filtered,
-    );
+    setPolicyFieldDefined({
+      formApi: field.form,
+      section: definedFieldPath.section,
+      field: definedFieldPath.field,
+      defined: to,
+    });
   };
 
   return (

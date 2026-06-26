@@ -9,17 +9,14 @@ import { Button } from "@blinkdisk/ui/button";
 import { Input } from "@blinkdisk/ui/input";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyFilesForm } from "@desktop/hooks/forms/use-policy-files-form";
+import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
 import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
 import { parseExclusionRule } from "@desktop/lib/exclusion";
 import { EditIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useContext, useMemo } from "react";
 
-export function FilesSettings() {
+export function FilesSettings({ form }: { form: PolicyForm }) {
   const { t } = useAppTranslation("policy.files");
-
-  const form = usePolicyFilesForm();
-  const isDirty = useStore(form.store, (state) => state.isDirty);
 
   return (
     <SettingsCategory
@@ -27,14 +24,8 @@ export function FilesSettings() {
       title={t("title")}
       description={t("description")}
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(e);
-        }}
-        className="flex flex-col gap-4"
-      >
-        <form.AppField name="exclusions">
+      <div className="flex flex-col gap-4">
+        <form.AppField name="files.exclusions">
           {() => (
             <PolicyField>
               <ExclusionsEditor
@@ -45,7 +36,7 @@ export function FilesSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="exclusionRuleFiles">
+        <form.AppField name="files.exclusionRuleFiles">
           {() => (
             <PolicyField>
               <ExclusionRuleFilesEditor
@@ -56,7 +47,7 @@ export function FilesSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="maxFileSize">
+        <form.AppField name="files.maxFileSize">
           {(field) => (
             <PolicyField>
               <field.Filesize
@@ -68,7 +59,7 @@ export function FilesSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppField name="excludeCacheDirs">
+        <form.AppField name="files.excludeCacheDirs">
           {(field) => (
             <PolicyField>
               <field.Switch
@@ -80,18 +71,13 @@ export function FilesSettings() {
             </PolicyField>
           )}
         </form.AppField>
-        <form.AppForm>
-          <form.Submit className="mt-2" disabled={!isDirty}>
-            {t("save")}
-          </form.Submit>
-        </form.AppForm>
-      </form>
+      </div>
     </SettingsCategory>
   );
 }
 
 type ExclusionsEditorProps = {
-  form: ReturnType<typeof usePolicyFilesForm>;
+  form: PolicyForm;
   label: string;
   description: string;
 };
@@ -118,7 +104,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
             <form.Field
               // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
               key={index}
-              name={`exclusions[${index}].rule`}
+              name={`files.exclusions[${index}].rule`}
             >
               {(subField) => (
                 <div className="flex items-center justify-between gap-2">
@@ -211,7 +197,7 @@ function ExclusionPreview({ rule }: ExclusionPreviewProps) {
 }
 
 type ExclusionRuleFilesEditorProps = {
-  form: ReturnType<typeof usePolicyFilesForm>;
+  form: PolicyForm;
   label: string;
   description: string;
 };
@@ -256,7 +242,7 @@ function ExclusionRuleFilesEditor({
             <form.Field
               // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
               key={index}
-              name={`exclusionRuleFiles[${index}].filename`}
+              name={`files.exclusionRuleFiles[${index}].filename`}
             >
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">

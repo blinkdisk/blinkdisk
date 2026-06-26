@@ -7,8 +7,7 @@ import {
   createDraftPolicyTarget,
   type PolicyTarget,
 } from "@desktop/lib/policy-target";
-import type { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
-import { createContext, useCallback, useMemo } from "react";
+import { createContext, useMemo } from "react";
 
 function usePolicyContext({
   target: targetOverride,
@@ -68,23 +67,6 @@ function usePolicyContext({
 
   const definedFields = inherited ? policy?.definedFields : undefined;
 
-  const onChange = useCallback(
-    ({ formApi, fieldApi }: { formApi: AnyFormApi; fieldApi: AnyFieldApi }) => {
-      if (!inherited) return;
-
-      // Removes array index from field name
-      // e.g. cron[0].expression -> cron
-      const fieldName = fieldApi.name.split("[")[0];
-      if (fieldName === "definedFields") return;
-
-      const definedFields = formApi.getFieldValue("definedFields") as string[];
-      const filtered = definedFields?.filter((field) => field !== fieldName);
-
-      formApi.setFieldValue("definedFields", [...(filtered || []), fieldName]);
-    },
-    [inherited],
-  );
-
   return {
     loading: isPending,
     vaultPolicy: target?.kind === "GLOBAL" ? policy : undefined,
@@ -93,7 +75,6 @@ function usePolicyContext({
         ? policy
         : undefined,
     definedFields,
-    onChange,
     folderId,
     policy,
     mutate,
@@ -112,7 +93,6 @@ const defaultContext = {
   vaultPolicy: undefined,
   folderPolicy: undefined,
   definedFields: undefined,
-  onChange: undefined,
   folderId: undefined,
   policy: undefined,
   mutate: undefined,

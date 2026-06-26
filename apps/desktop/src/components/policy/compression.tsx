@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
-import { usePolicyCompressionForm } from "@desktop/hooks/forms/use-policy-compression-form";
+import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
 import {
   GaugeIcon,
   Minimize2Icon,
@@ -47,12 +47,13 @@ const PRESET_CARDS = [
   { id: "smaller", icon: Minimize2Icon },
 ] as const;
 
-export function CompressionSettings() {
+export function CompressionSettings({ form }: { form: PolicyForm }) {
   const { t } = useAppTranslation("policy.compression");
 
-  const form = usePolicyCompressionForm();
-  const isDirty = useStore(form.store, (state) => state.isDirty);
-  const algorithm = useStore(form.store, (state) => state.values.algorithm);
+  const algorithm = useStore(
+    form.store,
+    (state) => state.values.compression.algorithm,
+  );
   const isDisabled = !algorithm || algorithm === "none";
 
   return (
@@ -61,14 +62,8 @@ export function CompressionSettings() {
       title={t("title")}
       description={t("description")}
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(e);
-        }}
-        className="flex flex-col gap-4"
-      >
-        <form.AppField name="algorithm">
+      <div className="flex flex-col gap-4">
+        <form.AppField name="compression.algorithm">
           {() => (
             <PolicyField>
               <AlgorithmSelector />
@@ -77,7 +72,7 @@ export function CompressionSettings() {
         </form.AppField>
         {!isDisabled && (
           <>
-            <form.AppField name="minFileSize">
+            <form.AppField name="compression.minFileSize">
               {(field) => (
                 <PolicyField>
                   <field.Filesize
@@ -89,7 +84,7 @@ export function CompressionSettings() {
                 </PolicyField>
               )}
             </form.AppField>
-            <form.AppField name="maxFileSize">
+            <form.AppField name="compression.maxFileSize">
               {(field) => (
                 <PolicyField>
                   <field.Filesize
@@ -101,12 +96,12 @@ export function CompressionSettings() {
                 </PolicyField>
               )}
             </form.AppField>
-            <form.AppField name="extensionAllowlist">
+            <form.AppField name="compression.extensionAllowlist">
               {() => (
                 <PolicyField>
                   <ExtensionListEditor
                     form={form}
-                    fieldName="extensionAllowlist"
+                    fieldName="compression.extensionAllowlist"
                     label={t("extensionAllowlist.label")}
                     description={t("extensionAllowlist.description")}
                     addLabel={t("extensionAllowlist.add")}
@@ -115,12 +110,12 @@ export function CompressionSettings() {
                 </PolicyField>
               )}
             </form.AppField>
-            <form.AppField name="extensionDenylist">
+            <form.AppField name="compression.extensionDenylist">
               {() => (
                 <PolicyField>
                   <ExtensionListEditor
                     form={form}
-                    fieldName="extensionDenylist"
+                    fieldName="compression.extensionDenylist"
                     label={t("extensionDenylist.label")}
                     description={t("extensionDenylist.description")}
                     addLabel={t("extensionDenylist.add")}
@@ -131,12 +126,7 @@ export function CompressionSettings() {
             </form.AppField>
           </>
         )}
-        <form.AppForm>
-          <form.Submit className="mt-2" disabled={!isDirty}>
-            {t("save")}
-          </form.Submit>
-        </form.AppForm>
-      </form>
+      </div>
     </SettingsCategory>
   );
 }
@@ -250,8 +240,8 @@ function AlgorithmSelector() {
 }
 
 type ExtensionListEditorProps = {
-  form: ReturnType<typeof usePolicyCompressionForm>;
-  fieldName: "extensionAllowlist" | "extensionDenylist";
+  form: PolicyForm;
+  fieldName: "compression.extensionAllowlist" | "compression.extensionDenylist";
   label: string;
   description: string;
   addLabel: string;
