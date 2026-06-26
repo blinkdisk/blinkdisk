@@ -14,10 +14,6 @@
     },
     "draft": {
       "badge": "Draft",
-      "notice": {
-        "title": "Draft folder policy",
-        "description": "Backups start after you add this folder."
-      },
       "activate": {
         "button": "Add folder"
       },

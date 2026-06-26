@@ -38,8 +38,8 @@ import {
   ChevronRightIcon,
   FolderIcon,
   MonitorIcon,
+  PlusIcon,
   SaveIcon,
-  SendIcon,
   TrashIcon,
   UserIcon,
   VaultIcon,
@@ -367,14 +367,12 @@ function PolicyEditorForm({
       }}
       className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8"
     >
-      <PolicyEditorHeader form={form} />
-      {target.kind === "DRAFT_FOLDER" ? (
-        <DraftPolicyActions
-          target={target}
-          policy={currentPolicy}
-          onSelectTarget={onSelectTarget}
-        />
-      ) : null}
+      <PolicyEditorHeader
+        draftPolicy={target.kind === "DRAFT_FOLDER" ? currentPolicy : undefined}
+        draftTarget={target.kind === "DRAFT_FOLDER" ? target : undefined}
+        form={form}
+        onSelectTarget={onSelectTarget}
+      />
       {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
         <FolderGeneralSettings form={form} />
       ) : null}
@@ -386,33 +384,116 @@ function PolicyEditorForm({
   );
 }
 
-function PolicyEditorHeader({ form }: { form: PolicyForm }) {
+function PolicyEditorHeader({
+  draftPolicy,
+  draftTarget,
+  form,
+  onSelectTarget,
+}: {
+  draftPolicy?: ZPolicyType;
+  draftTarget?: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }>;
+  form: PolicyForm;
+  onSelectTarget: (target: PolicyTarget) => void;
+}) {
   const { t } = useAppTranslation("policy.page");
+  const [alertShown, setAlertShown] = useState(false);
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
+  const activate = useActivateFolderDraftPolicy({
+    target: draftTarget,
+    onError: (error) => {
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        error.message === "FOLDER_TOO_LARGE"
+      )
+        setAlertShown(true);
+    },
+  });
+  const discard = useDeletePolicy({
+    target: draftTarget,
+    onSuccess: () => {
+      if (!draftTarget) return;
+
+      const parent = policyTargetParent(draftTarget);
+      if (parent) onSelectTarget(parent);
+    },
+  });
 
   return (
-    <div className="bg-background/95 sticky top-0 z-10 -mx-1 flex items-center justify-between gap-4 px-1 py-2 backdrop-blur">
-      <h1 className="text-xl font-semibold">{t("editor.title")}</h1>
-      <Button
-        type="submit"
-        size="sm"
-        disabled={!isDirty || isSubmitting}
-        loading={isSubmitting}
-      >
-        <SaveIcon />
-        {t("editor.save")}
-      </Button>
-    </div>
+    <>
+      <div className={policyEditorHeaderClassName}>
+        <div className="relative z-10 flex items-center justify-between gap-4">
+          <h1 className="text-2xl font-bold">{t("editor.title")}</h1>
+          {draftTarget ? (
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                size="icon"
+                variant="destructive-secondary"
+                aria-label={t("draft.discard.button")}
+                title={t("draft.discard.button")}
+                onClick={() => discard.mutate()}
+                loading={discard.isPending}
+              >
+                <TrashIcon />
+              </Button>
+              <Button
+                type="submit"
+                size="icon"
+                variant="secondary"
+                aria-label={t("editor.save")}
+                title={t("editor.save")}
+                disabled={!isDirty || isSubmitting}
+                loading={isSubmitting}
+              >
+                <SaveIcon />
+              </Button>
+              <Button
+                type="button"
+                onClick={() =>
+                  draftPolicy && activate.mutate({ policy: draftPolicy })
+                }
+                disabled={!draftPolicy}
+                loading={activate.isPending}
+              >
+                <PlusIcon />
+                {t("draft.activate.button")}
+              </Button>
+            </div>
+          ) : (
+            <Button
+              type="submit"
+              disabled={!isDirty || isSubmitting}
+              loading={isSubmitting}
+            >
+              <SaveIcon />
+              {t("editor.save")}
+            </Button>
+          )}
+        </div>
+      </div>
+      {draftPolicy ? (
+        <ExceedingAlert
+          open={alertShown}
+          setOpen={setAlertShown}
+          loading={activate.isPending}
+          submit={() => activate.mutate({ policy: draftPolicy, force: true })}
+        />
+      ) : null}
+    </>
   );
 }
 
 function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
   return (
     <div className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8">
-      <div className="bg-background/95 sticky top-0 z-10 -mx-1 flex items-center justify-between gap-4 px-1 py-2 backdrop-blur">
-        <Skeleton width={80} height="1.25rem" />
-        <Skeleton width={88} height="2.25rem" />
+      <div className={policyEditorHeaderClassName}>
+        <div className="relative z-10 flex items-center justify-between gap-4">
+          <Skeleton width={80} height="1.25rem" />
+          <Skeleton width={88} height="2.25rem" />
+        </div>
       </div>
       {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
         <SettingsCategorySkeleton id="general" />
@@ -424,6 +505,9 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
     </div>
   );
 }
+
+const policyEditorHeaderClassName =
+  "before:content-[''] after:content-[''] before:bg-background bg-background after:bg-border/70 sticky top-0 z-50 -mx-1 -mt-2 px-1 py-3 before:absolute before:inset-x-0 before:-top-8 before:h-8 after:absolute after:inset-x-0 after:bottom-0 after:h-px";
 
 function SettingsCategorySkeleton({ id }: { id: string }) {
   return (
@@ -438,83 +522,6 @@ function SettingsCategorySkeleton({ id }: { id: string }) {
         </SettingsRow>
       </SettingsPanel>
     </section>
-  );
-}
-
-function DraftPolicyActions({
-  target,
-  policy,
-  onSelectTarget,
-}: {
-  target: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }>;
-  policy?: ZPolicyType;
-  onSelectTarget: (target: PolicyTarget) => void;
-}) {
-  const { t } = useAppTranslation("policy.page");
-  const [alertShown, setAlertShown] = useState(false);
-
-  const activate = useActivateFolderDraftPolicy({
-    target,
-    onError: (error) => {
-      if (
-        error &&
-        typeof error === "object" &&
-        "message" in error &&
-        error.message === "FOLDER_TOO_LARGE"
-      )
-        setAlertShown(true);
-    },
-  });
-
-  const discard = useDeletePolicy({
-    target,
-    onSuccess: () => {
-      const parent = policyTargetParent(target);
-      if (parent) onSelectTarget(parent);
-    },
-  });
-
-  return (
-    <>
-      <SettingsPanel>
-        <SettingsRow
-          className="px-7 py-6"
-          title={t("draft.notice.title")}
-          description={t("draft.notice.description")}
-        >
-          <div className="flex flex-wrap justify-start gap-2 md:justify-end">
-            <Button
-              type="button"
-              size="sm"
-              variant="destructive-secondary"
-              onClick={() => discard.mutate()}
-              loading={discard.isPending}
-            >
-              <TrashIcon />
-              {t("draft.discard.button")}
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => policy && activate.mutate({ policy })}
-              disabled={!policy}
-              loading={activate.isPending}
-            >
-              <SendIcon />
-              {t("draft.activate.button")}
-            </Button>
-          </div>
-        </SettingsRow>
-      </SettingsPanel>
-      {policy ? (
-        <ExceedingAlert
-          open={alertShown}
-          setOpen={setAlertShown}
-          loading={activate.isPending}
-          submit={() => activate.mutate({ policy, force: true })}
-        />
-      ) : null}
-    </>
   );
 }
 
