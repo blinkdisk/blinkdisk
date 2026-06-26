@@ -1,12 +1,11 @@
 import { COMPRESSION_ALGORITHMS } from "@blinkdisk/constants/algorithms";
-import { ZFolderEmoji, ZFolderName } from "@schemas/folder";
 import { z } from "zod";
 
 export const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);
 
 export type ZPolicyLevelType = z.infer<typeof ZPolicyLevel>;
 
-export const ZRetentionPolicy = z.object({
+const ZRetentionPolicy = z.object({
   latest: z.number().int().min(0).optional(),
   hourly: z.number().int().min(0).optional(),
   daily: z.number().int().min(0).optional(),
@@ -16,8 +15,6 @@ export const ZRetentionPolicy = z.object({
   ignoreIdentical: z.boolean().optional(),
 });
 
-export type ZRetentionPolicyType = z.infer<typeof ZRetentionPolicy>;
-
 const ZFileSize = z.object({
   value: z.number().min(0).optional(),
   unit: z.enum(["B", "KB", "MB", "GB", "TB"]),
@@ -25,7 +22,7 @@ const ZFileSize = z.object({
 
 export type ZFileSizeType = z.infer<typeof ZFileSize>;
 
-export const ZFilesPolicy = z.object({
+const ZFilesPolicy = z.object({
   exclusions: z.object({ rule: z.string() }).array().optional(),
   ignoreParentExclusions: z.boolean().optional(),
   exclusionRuleFiles: z.object({ filename: z.string() }).array().optional(),
@@ -35,15 +32,13 @@ export const ZFilesPolicy = z.object({
   singleFileSystem: z.boolean().optional(),
 });
 
-export type ZFilesPolicyType = z.infer<typeof ZFilesPolicy>;
-
 const ZErrorsPolicy = z.object({
   ignoreFile: z.boolean().optional(),
   ignoreDirectory: z.boolean().optional(),
   ignoreUnknown: z.boolean().optional(),
 });
 
-export const ZSchedulePolicy = z.object({
+const ZSchedulePolicy = z.object({
   trigger: z.enum(["SCHEDULE", "MANUAL"]).optional(),
   interval: z.union([z.string(), z.literal("NONE")]).optional(),
   times: z
@@ -63,9 +58,7 @@ export const ZSchedulePolicy = z.object({
   catchup: z.boolean().optional(),
 });
 
-export type ZSchedulePolicyType = z.infer<typeof ZSchedulePolicy>;
-
-export const ZCompressionPolicy = z.object({
+const ZCompressionPolicy = z.object({
   algorithm: z
     .enum([
       // Not sure why this is here, but it is.
@@ -79,8 +72,6 @@ export const ZCompressionPolicy = z.object({
   minFileSize: ZFileSize.optional(),
   maxFileSize: ZFileSize.optional(),
 });
-
-export type ZCompressionPolicyType = z.infer<typeof ZCompressionPolicy>;
 
 const ZMetadataPolicy = z.object({
   algorithm: z.enum(["zstd-fastest"]).optional(),
@@ -129,13 +120,6 @@ const ZUploadPolicy = z.object({
 });
 
 const ZIgnoreParentPolicy = z.boolean().optional();
-
-export const ZGeneralPolicyForm = z.object({
-  name: ZFolderName,
-  emoji: ZFolderEmoji.optional(),
-});
-
-export type ZGeneralPolicyFormType = z.infer<typeof ZGeneralPolicyForm>;
 
 export const ZPolicy = z.object({
   name: z.string().optional(),

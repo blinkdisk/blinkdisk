@@ -1,4 +1,4 @@
-export const DRAFT_POLICY_USER_PREFIX = "BLINKDISK-DRAFT-";
+const DRAFT_POLICY_USER_PREFIX = "BLINKDISK-DRAFT-";
 
 export type PolicyTarget =
   | { kind: "GLOBAL" }
@@ -185,7 +185,7 @@ export function policyTargetParent(target: PolicyTarget): PolicyTarget | null {
   }
 }
 
-export function policyTargetLabel(target: PolicyTarget) {
+function policyTargetLabel(target: PolicyTarget) {
   switch (target.kind) {
     case "GLOBAL":
       return "Vault";
