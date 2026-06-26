@@ -65,6 +65,10 @@ export function getProfileUserNames(
   return Array.from(userNames);
 }
 
+export function hasMultipleProfileUsers(device: VaultDevice) {
+  return device.users.length > 1;
+}
+
 export type ProfileListFilters = {
   deviceName: string | null;
   userName: string | null;
