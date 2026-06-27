@@ -8,150 +8,56 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout/success'
+import { Route as CheckoutRedirectRouteImport } from './routes/checkout/redirect'
+import { Route as AuthSuccessRouteImport } from './routes/auth/success'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthMagicRouteImport } from './routes/auth/magic'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/auth/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as CheckoutSuccessImport } from './routes/checkout/success'
-import { Route as CheckoutRedirectImport } from './routes/checkout/redirect'
-import { Route as AuthSuccessImport } from './routes/auth/success'
-import { Route as AuthRegisterImport } from './routes/auth/register'
-import { Route as AuthMagicImport } from './routes/auth/magic'
-import { Route as AuthLoginImport } from './routes/auth/login'
-
-// Create/Update Routes
-
-const AuthRouteRoute = AuthRouteImport.update({
+const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const CheckoutSuccessRoute = CheckoutSuccessImport.update({
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   id: '/checkout/success',
   path: '/checkout/success',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const CheckoutRedirectRoute = CheckoutRedirectImport.update({
+const CheckoutRedirectRoute = CheckoutRedirectRouteImport.update({
   id: '/checkout/redirect',
   path: '/checkout/redirect',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthSuccessRoute = AuthSuccessImport.update({
+const AuthSuccessRoute = AuthSuccessRouteImport.update({
   id: '/success',
   path: '/success',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const AuthRegisterRoute = AuthRegisterImport.update({
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const AuthMagicRoute = AuthMagicImport.update({
+const AuthMagicRoute = AuthMagicRouteImport.update({
   id: '/magic',
   path: '/magic',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const AuthLoginRoute = AuthLoginImport.update({
+const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/auth/magic': {
-      id: '/auth/magic'
-      path: '/magic'
-      fullPath: '/auth/magic'
-      preLoaderRoute: typeof AuthMagicImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/auth/register': {
-      id: '/auth/register'
-      path: '/register'
-      fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/auth/success': {
-      id: '/auth/success'
-      path: '/success'
-      fullPath: '/auth/success'
-      preLoaderRoute: typeof AuthSuccessImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/checkout/redirect': {
-      id: '/checkout/redirect'
-      path: '/checkout/redirect'
-      fullPath: '/checkout/redirect'
-      preLoaderRoute: typeof CheckoutRedirectImport
-      parentRoute: typeof rootRoute
-    }
-    '/checkout/success': {
-      id: '/checkout/success'
-      path: '/checkout/success'
-      fullPath: '/checkout/success'
-      preLoaderRoute: typeof CheckoutSuccessImport
-      parentRoute: typeof rootRoute
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface AuthRouteRouteChildren {
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthMagicRoute: typeof AuthMagicRoute
-  AuthRegisterRoute: typeof AuthRegisterRoute
-  AuthSuccessRoute: typeof AuthSuccessRoute
-}
-
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthLoginRoute: AuthLoginRoute,
-  AuthMagicRoute: AuthMagicRoute,
-  AuthRegisterRoute: AuthRegisterRoute,
-  AuthSuccessRoute: AuthSuccessRoute,
-}
-
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -163,7 +69,6 @@ export interface FileRoutesByFullPath {
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
@@ -174,9 +79,8 @@ export interface FileRoutesByTo {
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
@@ -186,7 +90,6 @@ export interface FileRoutesById {
   '/checkout/redirect': typeof CheckoutRedirectRoute
   '/checkout/success': typeof CheckoutSuccessRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
@@ -220,7 +123,6 @@ export interface FileRouteTypes {
     | '/checkout/success'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
@@ -228,63 +130,91 @@ export interface RootRouteChildren {
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/redirect': {
+      id: '/checkout/redirect'
+      path: '/checkout/redirect'
+      fullPath: '/checkout/redirect'
+      preLoaderRoute: typeof CheckoutRedirectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/success': {
+      id: '/auth/success'
+      path: '/success'
+      fullPath: '/auth/success'
+      preLoaderRoute: typeof AuthSuccessRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/magic': {
+      id: '/auth/magic'
+      path: '/magic'
+      fullPath: '/auth/magic'
+      preLoaderRoute: typeof AuthMagicRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+  }
+}
+
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthMagicRoute: typeof AuthMagicRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthSuccessRoute: typeof AuthSuccessRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthMagicRoute: AuthMagicRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+  AuthSuccessRoute: AuthSuccessRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   CheckoutRedirectRoute: CheckoutRedirectRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/auth",
-        "/checkout/redirect",
-        "/checkout/success"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/auth": {
-      "filePath": "auth/route.tsx",
-      "children": [
-        "/auth/login",
-        "/auth/magic",
-        "/auth/register",
-        "/auth/success"
-      ]
-    },
-    "/auth/login": {
-      "filePath": "auth/login.tsx",
-      "parent": "/auth"
-    },
-    "/auth/magic": {
-      "filePath": "auth/magic.tsx",
-      "parent": "/auth"
-    },
-    "/auth/register": {
-      "filePath": "auth/register.tsx",
-      "parent": "/auth"
-    },
-    "/auth/success": {
-      "filePath": "auth/success.tsx",
-      "parent": "/auth"
-    },
-    "/checkout/redirect": {
-      "filePath": "checkout/redirect.tsx"
-    },
-    "/checkout/success": {
-      "filePath": "checkout/success.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

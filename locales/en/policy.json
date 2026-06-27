@@ -10,6 +10,11 @@
       "mode": {
         "basic": "Basic",
         "advanced": "Advanced"
+      },
+      "advancedBanner": {
+        "title": "Looking for more options?",
+        "description": "Advanced mode includes custom schedules, rule files, compression, retention, and file size limits.",
+        "button": "Switch to advanced"
       }
     },
     "override": {
