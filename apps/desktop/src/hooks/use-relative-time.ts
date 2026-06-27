@@ -11,7 +11,17 @@ const RELATIVE_TIME_UNITS = [
   { unit: "second", ms: 1000 },
 ] as const;
 
-function formatRelativeTime(
+function getRolloverThreshold(unitIndex: number) {
+  const unit = RELATIVE_TIME_UNITS[unitIndex];
+  const largerUnit = RELATIVE_TIME_UNITS[unitIndex - 1];
+
+  if (!unit || !largerUnit) return Number.POSITIVE_INFINITY;
+  if (largerUnit.unit === "year" && unit.unit === "month") return 12;
+
+  return Math.ceil(largerUnit.ms / unit.ms);
+}
+
+export function formatRelativeTime(
   date: Date | string | number,
   language: string,
 ): string {
@@ -20,14 +30,25 @@ function formatRelativeTime(
 
   const diff = timestamp - Date.now();
   const absDiff = Math.abs(diff);
-  const selected =
-    RELATIVE_TIME_UNITS.find(({ ms }) => absDiff >= ms) ||
-    RELATIVE_TIME_UNITS.at(-1);
+  let unitIndex = RELATIVE_TIME_UNITS.findIndex(({ ms }) => absDiff >= ms);
 
-  if (!selected) return "";
+  if (unitIndex === -1) unitIndex = RELATIVE_TIME_UNITS.length - 1;
+
+  let selected = RELATIVE_TIME_UNITS[
+    unitIndex
+  ] as (typeof RELATIVE_TIME_UNITS)[number];
+  let value = Math.round(diff / selected.ms);
+
+  while (unitIndex > 0 && Math.abs(value) >= getRolloverThreshold(unitIndex)) {
+    unitIndex -= 1;
+    selected = RELATIVE_TIME_UNITS[
+      unitIndex
+    ] as (typeof RELATIVE_TIME_UNITS)[number];
+    value = Math.round(diff / selected.ms);
+  }
 
   return new Intl.RelativeTimeFormat(language, { numeric: "auto" }).format(
-    Math.round(diff / selected.ms),
+    value,
     selected.unit,
   );
 }

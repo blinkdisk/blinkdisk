@@ -55,7 +55,7 @@ function PasswordStrengthMeter({
           className="flex-1 rounded-full transition-colors"
           key={bar}
           style={{
-            backgroundColor: bar <= activeBars ? colors[score] : colors[0],
+            backgroundColor: bar <= activeBars ? colors[activeBars] : colors[0],
           }}
         />
       ))}

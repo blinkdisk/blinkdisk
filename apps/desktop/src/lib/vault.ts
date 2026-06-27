@@ -22,7 +22,7 @@ function parseCoreError(data: unknown) {
   if (!data || typeof data !== "object" || !("error" in data)) return;
 
   const error = data.error;
-  const code = "code" in data ? data.code : undefined;
+  const code = getCoreErrorCode(data);
 
   if (error !== "mount point not found") {
     console.error("Core error:", code ? `[${code}]` : "", error);
@@ -32,6 +32,22 @@ function parseCoreError(data: unknown) {
     message: String(error),
     ...(typeof code === "string" && { code }),
   });
+}
+
+function getCoreErrorCode(data: unknown) {
+  if (!data || typeof data !== "object" || !("code" in data)) return;
+  return typeof data.code === "string" ? data.code : undefined;
+}
+
+function getRequestErrorMessage(data: unknown, response: Response) {
+  if (typeof data === "string") return data;
+
+  if (data && typeof data === "object" && "message" in data) {
+    const message = data.message;
+    if (typeof message === "string") return message;
+  }
+
+  return `Request failed: ${response.status}`;
 }
 
 async function parseResponse(response: Response) {
@@ -75,10 +91,13 @@ async function request<T>({
   parseCoreError(data);
 
   if (!response.ok) {
+    const code = getCoreErrorCode(data);
+
     console.error("Request error:", data);
-    throw new Error(
-      typeof data === "string" ? data : `Request failed: ${response.status}`,
-    );
+    throw new CoreError({
+      message: getRequestErrorMessage(data, response),
+      ...(code && { code }),
+    });
   }
 
   return { data: data as T };

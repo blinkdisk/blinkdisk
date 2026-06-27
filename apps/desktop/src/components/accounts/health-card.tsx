@@ -10,6 +10,34 @@ type HealthCardProps = {
   vaults?: ZVaultType[];
 };
 
+const HEALTH_GAUGE_SEGMENTS = [
+  { color: "#ef4444", endDegrees: 224, maxScore: 25, startDegrees: 190 },
+  { color: "#f59e0b", endDegrees: 280, maxScore: 50, startDegrees: 240 },
+  { color: "#b9e51d", endDegrees: 324, maxScore: 75, startDegrees: 296 },
+  { color: "#22c55e", endDegrees: 348, maxScore: 100, startDegrees: 340 },
+];
+
+function getNeedleDegrees(score: number) {
+  const clampedScore = Math.max(0, Math.min(100, score));
+  let minScore = 0;
+
+  for (const segment of HEALTH_GAUGE_SEGMENTS) {
+    if (clampedScore <= segment.maxScore) {
+      const scoreRange = segment.maxScore - minScore;
+      const progress = scoreRange ? (clampedScore - minScore) / scoreRange : 0;
+
+      return (
+        segment.startDegrees +
+        progress * (segment.endDegrees - segment.startDegrees)
+      );
+    }
+
+    minScore = segment.maxScore;
+  }
+
+  return HEALTH_GAUGE_SEGMENTS.at(-1)?.endDegrees ?? 348;
+}
+
 function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
   const centerX = 90;
   const centerY = 82;
@@ -18,7 +46,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
   const needleLength = 45;
   const needleRadius = 5;
   const needleCenterY = centerY - needleRadius / 2;
-  const angle = Math.PI + (score / 100) * Math.PI;
+  const angle = (getNeedleDegrees(score) * Math.PI) / 180;
   const needleTipX = centerX + Math.cos(angle) * needleLength;
   const needleTipY = needleCenterY + Math.sin(angle) * needleLength;
   const needleLeftX = centerX + Math.cos(angle + Math.PI / 2) * needleRadius;
@@ -50,12 +78,10 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
     return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 1 ${end.x} ${end.y}`;
   };
 
-  const segments = [
-    { color: "#ef4444", path: arcPath(190, 224) },
-    { color: "#f59e0b", path: arcPath(240, 280) },
-    { color: "#b9e51d", path: arcPath(296, 324) },
-    { color: "#22c55e", path: arcPath(340, 348) },
-  ];
+  const segments = HEALTH_GAUGE_SEGMENTS.map((segment) => ({
+    color: segment.color,
+    path: arcPath(segment.startDegrees, segment.endDegrees),
+  }));
 
   return (
     <svg

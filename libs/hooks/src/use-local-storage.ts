@@ -2,24 +2,30 @@ import {
   type Dispatch,
   type SetStateAction,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 
-function readLocalStorageValue<T>(key: string, initialValue: T): T {
-  if (typeof window === "undefined") return initialValue;
-
-  let item: string | null;
-  try {
-    item = window.localStorage.getItem(key);
-    if (item === null) return initialValue;
-  } catch {
-    return initialValue;
-  }
+function parseLocalStorageValue<T>(item: string | null, initialValue: T): T {
+  if (item === null) return initialValue;
 
   try {
     return JSON.parse(item) as T;
   } catch {
     return item as T;
+  }
+}
+
+function readLocalStorageValue<T>(key: string, initialValue: T): T {
+  if (typeof window === "undefined") return initialValue;
+
+  try {
+    return parseLocalStorageValue(
+      window.localStorage.getItem(key),
+      initialValue,
+    );
+  } catch {
+    return initialValue;
   }
 }
 
@@ -40,7 +46,9 @@ export function useLocalStorage<T>(
             : nextValue;
 
         try {
-          window.localStorage.setItem(key, JSON.stringify(resolvedValue));
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem(key, JSON.stringify(resolvedValue));
+          }
         } catch {
           return resolvedValue;
         }
@@ -50,6 +58,20 @@ export function useLocalStorage<T>(
     },
     [key],
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.storageArea !== window.localStorage) return;
+      if (event.key !== key && event.key !== null) return;
+
+      setValue(parseLocalStorageValue(event.newValue, initialValue));
+    };
+
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, [initialValue, key]);
 
   return [value, setStoredValue];
 }
