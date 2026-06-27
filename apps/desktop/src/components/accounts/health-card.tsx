@@ -13,10 +13,49 @@ type HealthCardProps = {
 function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
   const centerX = 90;
   const centerY = 82;
-  const needleLength = 48;
+  const radius = 52;
+  const strokeWidth = 9;
+  const needleLength = 45;
+  const needleRadius = 5;
+  const needleCenterY = centerY - needleRadius / 2;
   const angle = Math.PI + (score / 100) * Math.PI;
-  const needleX = centerX + Math.cos(angle) * needleLength;
-  const needleY = centerY + Math.sin(angle) * needleLength;
+  const needleTipX = centerX + Math.cos(angle) * needleLength;
+  const needleTipY = needleCenterY + Math.sin(angle) * needleLength;
+  const needleLeftX = centerX + Math.cos(angle + Math.PI / 2) * needleRadius;
+  const needleLeftY =
+    needleCenterY + Math.sin(angle + Math.PI / 2) * needleRadius;
+  const needleRightX = centerX + Math.cos(angle - Math.PI / 2) * needleRadius;
+  const needleRightY =
+    needleCenterY + Math.sin(angle - Math.PI / 2) * needleRadius;
+  const pointerColor = dark ? "#fff" : "#000";
+  const needlePath = [
+    `M ${needleLeftX} ${needleLeftY}`,
+    `L ${needleTipX} ${needleTipY}`,
+    `L ${needleRightX} ${needleRightY}`,
+    "Z",
+  ].join(" ");
+
+  const getPoint = (degrees: number) => {
+    const radians = (degrees * Math.PI) / 180;
+    return {
+      x: centerX + Math.cos(radians) * radius,
+      y: centerY + Math.sin(radians) * radius,
+    };
+  };
+
+  const arcPath = (startDegrees: number, endDegrees: number) => {
+    const start = getPoint(startDegrees);
+    const end = getPoint(endDegrees);
+
+    return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 1 ${end.x} ${end.y}`;
+  };
+
+  const segments = [
+    { color: "#ef4444", path: arcPath(190, 224) },
+    { color: "#f59e0b", path: arcPath(240, 280) },
+    { color: "#b9e51d", path: arcPath(296, 324) },
+    { color: "#22c55e", path: arcPath(340, 348) },
+  ];
 
   return (
     <svg
@@ -24,35 +63,23 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
       className="mx-[-2rem] mb-[-1rem] mt-[-1.25rem] w-48"
       viewBox="0 0 180 100"
     >
-      <defs>
-        <linearGradient
-          id="health-gauge-gradient"
-          x1="20"
-          x2="160"
-          y1="0"
-          y2="0"
-        >
-          <stop offset="0%" stopColor="#ef4444" />
-          <stop offset="100%" stopColor="#22c55e" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M 25 82 A 65 65 0 0 1 155 82"
-        fill="none"
-        stroke="url(#health-gauge-gradient)"
-        strokeLinecap="round"
-        strokeWidth="14"
+      {segments.map((segment) => (
+        <path
+          d={segment.path}
+          fill="none"
+          key={segment.color}
+          stroke={segment.color}
+          strokeLinecap="round"
+          strokeWidth={strokeWidth}
+        />
+      ))}
+      <path d={needlePath} fill={pointerColor} />
+      <circle
+        cx={centerX}
+        cy={needleCenterY}
+        fill={pointerColor}
+        r={needleRadius}
       />
-      <line
-        stroke={dark ? "#fff" : "#000"}
-        strokeLinecap="round"
-        strokeWidth="4"
-        x1={centerX}
-        x2={needleX}
-        y1={centerY}
-        y2={needleY}
-      />
-      <circle cx={centerX} cy={centerY} fill={dark ? "#fff" : "#000"} r="5" />
     </svg>
   );
 }
