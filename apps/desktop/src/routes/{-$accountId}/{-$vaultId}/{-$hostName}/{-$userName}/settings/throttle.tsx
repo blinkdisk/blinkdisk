@@ -5,7 +5,7 @@ export const Route = createFileRoute(
 )({
   beforeLoad: ({ params }) => {
     throw redirect({
-      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/general",
+      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings",
       params,
     });
   },

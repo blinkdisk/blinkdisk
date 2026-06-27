@@ -1,12 +1,6 @@
 import { Logo } from "@blinkdisk/components/logo";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@blinkdisk/ui/accordion";
-import {
   Sidebar as SidebarContainer,
   SidebarContent,
   SidebarFooter,
@@ -14,9 +8,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@blinkdisk/ui/sidebar";
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
@@ -32,12 +23,13 @@ import { Link, useLocation, useParams } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
   CloudIcon,
+  FileCogIcon,
   HomeIcon,
   LayoutDashboardIcon,
   SettingsIcon,
   UserIcon,
 } from "lucide-react";
-import { type ComponentProps, useEffect, useState } from "react";
+import type { ComponentProps } from "react";
 
 export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { isLocalAccount, isOnlineAccount } = useAccountId();
@@ -59,20 +51,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
       ? `/${accountId}/${vaultId}/${hostName}/${userName}`
       : undefined;
   const settingsPath = vaultPath ? `${vaultPath}/settings` : undefined;
-  const isSettingsPath = settingsPath
-    ? pathname === settingsPath || pathname.startsWith(`${settingsPath}/`)
-    : false;
-  const [openSettings, setOpenSettings] = useState<string[]>(() =>
-    isSettingsPath ? ["settings"] : [],
-  );
-
-  useEffect(() => {
-    if (!isSettingsPath) return;
-
-    setOpenSettings((open) =>
-      open.includes("settings") ? open : [...open, "settings"],
-    );
-  }, [isSettingsPath]);
+  const policiesPath = vaultPath ? `${vaultPath}/policies` : undefined;
 
   return (
     <SidebarSkeletonTheme>
@@ -165,45 +144,28 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 />
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <Accordion
-                  value={openSettings}
-                  onValueChange={setOpenSettings}
-                  multiple
-                  className="w-full"
-                >
-                  <AccordionItem value="settings" className="border-0">
-                    <AccordionTrigger className="my-0 h-11 items-center rounded-lg px-3 py-0 text-sm font-normal hover:bg-foreground/4 focus-visible:ring-2">
-                      <div className="flex min-w-0 items-center gap-2">
-                        <SettingsIcon className="size-4 shrink-0" />
-                        <span className="truncate">{t("settings")}</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pb-0 [&_a]:no-underline">
-                      <SidebarMenuSub className="mt-1">
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton
-                            isActive={pathname === `${settingsPath}/general`}
-                            render={
-                              <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/general">
-                                <span>{t("general")}</span>
-                              </Link>
-                            }
-                          />
-                        </SidebarMenuSubItem>
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton
-                            isActive={pathname === `${settingsPath}/policies`}
-                            render={
-                              <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies">
-                                <span>{t("policies")}</span>
-                              </Link>
-                            }
-                          />
-                        </SidebarMenuSubItem>
-                      </SidebarMenuSub>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === policiesPath}
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies">
+                      <FileCogIcon />
+                      {t("policies")}
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="px-3"
+                  isActive={pathname === settingsPath}
+                  render={
+                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
+                      <SettingsIcon />
+                      {t("settings")}
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
             </SidebarMenu>
           )}

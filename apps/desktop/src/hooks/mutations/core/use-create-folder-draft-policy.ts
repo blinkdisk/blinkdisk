@@ -61,7 +61,7 @@ export function useCreateFolderDraftPolicy({
       });
 
       await navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
+        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
         search: policyTargetToSearch(target),
       });
 

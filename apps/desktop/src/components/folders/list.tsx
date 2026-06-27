@@ -22,9 +22,9 @@ import { policyTargetToSearch } from "@desktop/lib/policy-target";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
   CloudUploadIcon,
+  FileCogIcon,
   FolderSearchIcon,
   MoreVerticalIcon,
-  SettingsIcon,
   SquareIcon,
   TrashIcon,
 } from "lucide-react";
@@ -190,7 +190,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
                 <DropdownMenuItem
                   onClick={() =>
                     navigate({
-                      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
+                      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
                       search: policyTargetToSearch({
                         kind: "FOLDER",
                         hostName: folder.source.host,
@@ -200,7 +200,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
                     })
                   }
                 >
-                  <SettingsIcon />
+                  <FileCogIcon />
                   {t("dropdown.settings")}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
