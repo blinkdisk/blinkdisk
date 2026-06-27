@@ -13,7 +13,6 @@ import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
 import { useFolder } from "@desktop/hooks/use-folder";
 import { policyTargetToSearch } from "@desktop/lib/policy-target";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ClockIcon,
@@ -22,7 +21,6 @@ import {
   ListPlusIcon,
   SquareIcon,
 } from "lucide-react";
-import animation from "/animations/backup.lottie?url";
 
 export const Route = createFileRoute(
   "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
@@ -120,7 +118,11 @@ function RouteComponent() {
         ) : folder?.status === "UPLOADING" ? (
           <div className="flex h-full w-full flex-col items-center justify-center">
             <div className="mt-auto"></div>
-            <DotLottieReact src={animation} autoplay loop className="h-34" />
+            <div className="flex h-34 items-center justify-center">
+              <div className="bg-primary/10 text-primary flex size-24 items-center justify-center rounded-full">
+                <CloudUploadIcon className="size-10 animate-pulse" />
+              </div>
+            </div>
             <h1 className="mt-2 whitespace-pre-wrap text-center text-3xl font-bold">
               {t("empty.initial.title")}
             </h1>

@@ -1,21 +1,29 @@
-import axios from "axios";
+async function postEndorsely(body: Record<string, unknown>, token: string) {
+  const response = await fetch("https://app.endorsely.com/api/public/refer", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Endorsely request failed: ${response.status}`);
+  }
+}
 
 export async function trackAffiliateSignup(
   env: CloudflareBindings,
   referralId: string,
 ) {
-  await axios.post(
-    "https://app.endorsely.com/api/public/refer",
+  await postEndorsely(
     {
       status: "Signed Up",
       referralId: referralId,
       organizationId: env.ENDORSELY_ORGANIZATION_ID,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${env.ENDORSELY_PRIVATE_KEY}`,
-      },
-    },
+    env.ENDORSELY_PRIVATE_KEY,
   );
 }
 
@@ -29,17 +37,11 @@ export async function trackAffiliatePayment(
     customerId: string;
   },
 ) {
-  await axios.post(
-    "https://app.endorsely.com/api/public/refer",
+  await postEndorsely(
     {
       organizationId: env.ENDORSELY_ORGANIZATION_ID,
       ...fields,
     },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${env.ENDORSELY_PRIVATE_KEY}`,
-      },
-    },
+    env.ENDORSELY_PRIVATE_KEY,
   );
 }

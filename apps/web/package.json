@@ -36,7 +36,6 @@
     "react-dom": "^19.0.0",
     "react-loading-skeleton": "^3.5.0",
     "sonner": "^2.0.1",
-    "usehooks-ts": "^3.1.1",
     "vite-plugin-static-copy": "^3.3.0",
     "zod": "^4.3.6"
   },

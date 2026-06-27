@@ -101,15 +101,10 @@ const config: KnipConfig = {
     ".wrangler/**",
     "*.d.ts",
   ],
-  ignoreUnresolved: [
-    // Vite allows adding "?url" to an import
-    /.+\?url$/,
-  ],
   ignoreIssues: {
     "apps/marketing/src/components/react/**": ["exports"],
   },
   ignoreDependencies: [
-    "@types/electron",
     "@blinkdisk/.+",
     "cloudflare",
     "@sentry/cloudflare",

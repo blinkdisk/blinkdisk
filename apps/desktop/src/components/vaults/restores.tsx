@@ -1,8 +1,8 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { CircularProgress } from "@blinkdisk/ui/circular-progress";
+import { cn } from "@blinkdisk/utils/class";
 import { useRestoreList } from "@desktop/hooks/queries/use-restore-list";
-import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon } from "lucide-react";
 
 export function VaultRestores() {
@@ -25,58 +25,29 @@ export function VaultRestores() {
           ></div>
           <div className="flex items-center gap-4 pl-1">
             <div className="relative flex size-6 items-center justify-center">
-              <AnimatePresence>
-                {restore.status === "RUNNING" ? (
-                  <motion.div
-                    key="progress"
-                    initial={{
-                      scale: 1,
-                      opacity: 1,
-                    }}
-                    exit={{
-                      scale: 0.5,
-                      opacity: 0,
-                    }}
-                    transition={{
-                      duration: 0.5,
-                    }}
-                  >
-                    <CircularProgress
-                      value={restore.progress * 100}
-                      size={30}
-                      strokeWidth={4}
-                      progressClassName="opacity-60 dark:opacity-70"
-                    />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="icon"
-                    initial={{
-                      scale: 0.5,
-                      opacity: 0,
-                    }}
-                    animate={{
-                      scale: 1,
-                      opacity: 1,
-                    }}
-                    exit={{
-                      scale: 0.5,
-                      opacity: 0,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                      delay: 0.2,
-                    }}
-                    style={{
-                      translateX: "-50%",
-                      translateY: "-50%",
-                    }}
-                    className="absolute left-1/2 top-1/2"
-                  >
-                    <CheckIcon className="size-5 text-lime-500" />
-                  </motion.div>
+              <div
+                className={cn(
+                  "absolute inset-0 flex items-center justify-center transition-all duration-500",
+                  restore.status === "RUNNING"
+                    ? "scale-100 opacity-100"
+                    : "scale-50 opacity-0",
                 )}
-              </AnimatePresence>
+              >
+                <CircularProgress
+                  value={restore.progress * 100}
+                  size={30}
+                  strokeWidth={4}
+                  progressClassName="opacity-60 dark:opacity-70"
+                />
+              </div>
+              <CheckIcon
+                className={cn(
+                  "absolute left-1/2 top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 text-lime-500 transition-all duration-200",
+                  restore.status === "RUNNING"
+                    ? "scale-50 opacity-0"
+                    : "scale-100 opacity-100 delay-200",
+                )}
+              />
             </div>
             <div className="flex flex-col">
               <p className="font-medium">{t("title")}</p>

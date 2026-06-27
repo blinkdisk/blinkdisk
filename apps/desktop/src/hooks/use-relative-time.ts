@@ -1,7 +1,36 @@
-import { LANGUAGE_DATE_LOCALES } from "@blinkdisk/constants/language";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { formatDistanceToNow } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
+
+const RELATIVE_TIME_UNITS = [
+  { unit: "year", ms: 365 * 24 * 60 * 60 * 1000 },
+  { unit: "month", ms: 30 * 24 * 60 * 60 * 1000 },
+  { unit: "week", ms: 7 * 24 * 60 * 60 * 1000 },
+  { unit: "day", ms: 24 * 60 * 60 * 1000 },
+  { unit: "hour", ms: 60 * 60 * 1000 },
+  { unit: "minute", ms: 60 * 1000 },
+  { unit: "second", ms: 1000 },
+] as const;
+
+function formatRelativeTime(
+  date: Date | string | number,
+  language: string,
+): string {
+  const timestamp = new Date(date).getTime();
+  if (Number.isNaN(timestamp)) return "";
+
+  const diff = timestamp - Date.now();
+  const absDiff = Math.abs(diff);
+  const selected =
+    RELATIVE_TIME_UNITS.find(({ ms }) => absDiff >= ms) ||
+    RELATIVE_TIME_UNITS.at(-1);
+
+  if (!selected) return "";
+
+  return new Intl.RelativeTimeFormat(language, { numeric: "auto" }).format(
+    Math.round(diff / selected.ms),
+    selected.unit,
+  );
+}
 
 export function useRelativeTime(
   date: Date | string | number | undefined | null,
@@ -9,20 +38,7 @@ export function useRelativeTime(
   const { language } = useAppTranslation();
 
   const getRelativeTime = useCallback(
-    () =>
-      !date
-        ? ""
-        : formatDistanceToNow(new Date(date), {
-            addSuffix: true,
-            ...(language in LANGUAGE_DATE_LOCALES
-              ? {
-                  locale:
-                    LANGUAGE_DATE_LOCALES[
-                      language as keyof typeof LANGUAGE_DATE_LOCALES
-                    ],
-                }
-              : {}),
-          }),
+    () => (!date ? "" : formatRelativeTime(date, language)),
     [date, language],
   );
 

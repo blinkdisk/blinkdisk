@@ -1,6 +1,7 @@
+import { useLocalStorage } from "@blinkdisk/hooks/use-local-storage";
+import { useMediaQuery } from "@blinkdisk/hooks/use-media-query";
 import type { Theme } from "@blinkdisk/hooks/use-theme-listener";
 import { useMemo } from "react";
-import { useLocalStorage, useMediaQuery } from "usehooks-ts";
 
 export function useTheme() {
   const [theme, setTheme] = useLocalStorage<Theme>(

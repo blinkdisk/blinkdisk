@@ -1,43 +1,104 @@
 import { PROTOCOL_VAULT_URL } from "@blinkdisk/constants/app";
 import { CoreError } from "@blinkdisk/utils/error";
-import xior from "xior";
 
-const client = xior.create({
-  baseURL: PROTOCOL_VAULT_URL,
-});
+type VaultRequestConfig = {
+  params?: Record<string, boolean | number | string | null | undefined>;
+};
 
-client.interceptors.response.use(
-  (result) => {
-    const data = result.data;
+type VaultResponse<T> = {
+  data: T;
+};
 
-    if (data && typeof data === "object" && data.error) {
-      if (data.error !== "mount point not found")
-        console.error(
-          `Core error:`,
-          data.code ? `[${data.code}]` : "",
-          data.error,
-        );
+function appendParams(url: URL, params?: VaultRequestConfig["params"]) {
+  if (!params) return;
 
-      return Promise.reject(
-        new CoreError({
-          message: data.error.toString(),
-          ...(data.code && { code: data.code }),
-        }),
-      );
-    }
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null) continue;
+    url.searchParams.set(key, String(value));
+  }
+}
 
-    return result;
-  },
-  async (error) => {
-    console.error(`Request error:`, error);
-    return Promise.reject(error);
-  },
-);
+function parseCoreError(data: unknown) {
+  if (!data || typeof data !== "object" || !("error" in data)) return;
+
+  const error = data.error;
+  const code = "code" in data ? data.code : undefined;
+
+  if (error !== "mount point not found") {
+    console.error("Core error:", code ? `[${code}]` : "", error);
+  }
+
+  throw new CoreError({
+    message: String(error),
+    ...(typeof code === "string" && { code }),
+  });
+}
+
+async function parseResponse(response: Response) {
+  const text = await response.text();
+  if (!text) return undefined;
+
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    return text;
+  }
+}
+
+async function request<T>({
+  body,
+  config,
+  method,
+  path,
+  vaultId,
+}: {
+  body?: unknown;
+  config?: VaultRequestConfig;
+  method: "DELETE" | "GET" | "POST" | "PUT";
+  path: string;
+  vaultId?: string;
+}): Promise<VaultResponse<T>> {
+  const url = new URL(path, `${PROTOCOL_VAULT_URL}/`);
+  appendParams(url, config?.params);
+
+  const headers = new Headers();
+  if (vaultId) headers.set("vault-id", vaultId);
+  if (body !== undefined) headers.set("content-type", "application/json");
+
+  const response = await fetch(url, {
+    body: body === undefined ? undefined : JSON.stringify(body),
+    headers,
+    method,
+  });
+  const data = await parseResponse(response);
+
+  parseCoreError(data);
+
+  if (!response.ok) {
+    console.error("Request error:", data);
+    throw new Error(
+      typeof data === "string" ? data : `Request failed: ${response.status}`,
+    );
+  }
+
+  return { data: data as T };
+}
 
 export function vaultApi(vaultId?: string) {
-  if (!client.config) client.config = {};
-  if (!client.config?.headers) client.config.headers = {};
-  client.config.headers["vault-id"] = vaultId;
-
-  return client;
+  return {
+    delete: <T = unknown>(path: string, config?: VaultRequestConfig) =>
+      request<T>({ config, method: "DELETE", path, vaultId }),
+    get: <T = unknown>(path: string, config?: VaultRequestConfig) =>
+      request<T>({ config, method: "GET", path, vaultId }),
+    post: <T = unknown>(
+      path: string,
+      body?: unknown,
+      config?: VaultRequestConfig,
+    ) => request<T>({ body, config, method: "POST", path, vaultId }),
+    put: <T = unknown>(
+      path: string,
+      body?: unknown,
+      config?: VaultRequestConfig,
+    ) => request<T>({ body, config, method: "PUT", path, vaultId }),
+  };
 }

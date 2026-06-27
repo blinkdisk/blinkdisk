@@ -1,11 +1,10 @@
 import { cn } from "@blinkdisk/utils/class";
 import { useTheme } from "@desktop/hooks/use-theme";
+import { getStringHue } from "@desktop/lib/color";
 import { PinIcon, XIcon } from "lucide-react";
-import seedrandom from "seedrandom";
 
 function getPinHue(pin: string) {
-  const rng = seedrandom(pin);
-  return Math.floor(rng() * 360);
+  return getStringHue(pin);
 }
 
 type PinBadgeProps = {
