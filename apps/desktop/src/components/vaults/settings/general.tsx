@@ -14,6 +14,7 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { ArrowUpDownIcon, TrashIcon } from "lucide-react";
 import { useContext } from "react";
 import { VaultConfigSettings } from "./config";
+import { VaultThrottleSettings } from "./throttle";
 
 export function VaultGeneralSettings() {
   const { t } = useAppTranslation("settings.vault.general");
@@ -101,6 +102,7 @@ export function VaultGeneralSettings() {
           </SettingsRow>
         </SettingsPanel>
       </SettingsGroup>
+      <VaultThrottleSettings />
       <VaultConfigSettings />
     </>
   );

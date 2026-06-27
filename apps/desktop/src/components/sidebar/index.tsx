@@ -192,16 +192,6 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                         </SidebarMenuSubItem>
                         <SidebarMenuSubItem>
                           <SidebarMenuSubButton
-                            isActive={pathname === `${settingsPath}/throttle`}
-                            render={
-                              <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/throttle">
-                                <span>{t("throttle")}</span>
-                              </Link>
-                            }
-                          />
-                        </SidebarMenuSubItem>
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton
                             isActive={pathname === `${settingsPath}/policies`}
                             render={
                               <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies">
