@@ -173,6 +173,9 @@ importers:
       '@blinkdisk/utils':
         specifier: workspace:*
         version: link:../../libs/utils
+      '@lottiefiles/dotlottie-react':
+        specifier: ^0.16.4
+        version: 0.16.4(react@19.2.7)
       '@maverick-js/signals':
         specifier: ^6.0.0
         version: 6.0.0
@@ -2211,6 +2214,14 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@lottiefiles/dotlottie-react@0.16.4':
+    resolution: {integrity: sha512-JQHdixKjq8XYJ9ml50PwzIce/Ntn9/vBXkBu1xU7Vw9Tvj4ubjHXGs81DuJTNMO/Xcl9ZslOZz/Vryb42uSQHg==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+
+  '@lottiefiles/dotlottie-web@0.52.1':
+    resolution: {integrity: sha512-R44ZKjdT9LPGMu6GXfdRFu1327quUkkdIBOiPsOU6vRpROotYmJYMhBtjoJWRPbkIXo3Qge0gyU4UMpELQje5A==}
 
   '@lucide/astro@0.563.0':
     resolution: {integrity: sha512-X9fNJvRR6pLJfkIEAFQkizWaNVvcduunJoFyR3fwPu30Y6jOu5S9k4k7HTSk3ZrEfqK2eFEqrBqqWH4fwSNKCg==}
@@ -9757,6 +9768,13 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@lottiefiles/dotlottie-react@0.16.4(react@19.2.7)':
+    dependencies:
+      '@lottiefiles/dotlottie-web': 0.52.1
+      react: 19.2.7
+
+  '@lottiefiles/dotlottie-web@0.52.1': {}
 
   '@lucide/astro@0.563.0(astro@5.18.2(@types/node@24.13.2)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(typescript@5.8.2)(yaml@2.9.0))':
     dependencies:
