@@ -83,7 +83,7 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid min-h-0 justify-center gap-6 lg:grid-cols-[18rem_minmax(0,40rem)]">
+      <div className="grid min-h-0 justify-center gap-y-8 gap-x-6 lg:grid-cols-[18rem_minmax(0,40rem)] xl:gap-x-12 2xl:gap-x-16">
         <PolicyTreePanel
           selectedTarget={selectedTarget}
           onSelectTarget={selectTarget}
