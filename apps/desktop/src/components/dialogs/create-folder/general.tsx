@@ -4,6 +4,7 @@ import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { Button } from "@blinkdisk/ui/button";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import type { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
+import { PlusIcon, SlidersHorizontalIcon } from "lucide-react";
 
 type CreateFolderGeneralProps = {
   form: ReturnType<typeof useCreateFolderForm>;
@@ -95,20 +96,22 @@ export function CreateFolderGeneral({
       <div className="grid gap-2 sm:grid-cols-2">
         <Button
           type="submit"
-          loading={isCreatingFolder}
-          disabled={isCreatingDraft || isCreatingFolder}
-          onClick={() => onAction("CREATE")}
-        >
-          {t("submit")}
-        </Button>
-        <Button
-          type="submit"
           variant="secondary"
           loading={isCreatingDraft}
           disabled={isCreatingFolder || isCreatingDraft}
           onClick={() => onAction("POLICY")}
         >
+          <SlidersHorizontalIcon />
           {t("changePolicy")}
+        </Button>
+        <Button
+          type="submit"
+          loading={isCreatingFolder}
+          disabled={isCreatingDraft || isCreatingFolder}
+          onClick={() => onAction("CREATE")}
+        >
+          <PlusIcon />
+          {t("submit")}
         </Button>
       </div>
     </form>
