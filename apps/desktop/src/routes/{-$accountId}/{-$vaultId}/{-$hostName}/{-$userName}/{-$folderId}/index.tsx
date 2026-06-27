@@ -18,8 +18,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ClockIcon,
   CloudUploadIcon,
+  FileCogIcon,
   ListPlusIcon,
-  SettingsIcon,
   SquareIcon,
 } from "lucide-react";
 import animation from "/animations/backup.lottie?url";
@@ -61,7 +61,7 @@ function RouteComponent() {
                 onClick={() =>
                   folder &&
                   navigate({
-                    to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
+                    to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
                     search: policyTargetToSearch({
                       kind: "FOLDER",
                       hostName: folder.source.host,
@@ -71,7 +71,7 @@ function RouteComponent() {
                   })
                 }
               >
-                <SettingsIcon />
+                <FileCogIcon />
                 {t("settings")}
               </Button>
               {folder && folder.status === "UPLOADING" ? (
