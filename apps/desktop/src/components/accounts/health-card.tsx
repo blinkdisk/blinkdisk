@@ -4,12 +4,111 @@ import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { Card, CardContent } from "@blinkdisk/ui/card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { useTheme } from "@desktop/hooks/use-theme";
-import { GaugeComponent } from "react-gauge-component";
 
 type HealthCardProps = {
   isLoading?: boolean;
   vaults?: ZVaultType[];
 };
+
+const HEALTH_GAUGE_SEGMENTS = [
+  { color: "#ef4444", endDegrees: 224, maxScore: 25, startDegrees: 190 },
+  { color: "#f59e0b", endDegrees: 280, maxScore: 50, startDegrees: 240 },
+  { color: "#b9e51d", endDegrees: 324, maxScore: 75, startDegrees: 296 },
+  { color: "#22c55e", endDegrees: 348, maxScore: 100, startDegrees: 340 },
+];
+
+function getNeedleDegrees(score: number) {
+  const clampedScore = Math.max(0, Math.min(100, score));
+  let minScore = 0;
+
+  for (const segment of HEALTH_GAUGE_SEGMENTS) {
+    if (clampedScore <= segment.maxScore) {
+      const scoreRange = segment.maxScore - minScore;
+      const progress = scoreRange ? (clampedScore - minScore) / scoreRange : 0;
+
+      return (
+        segment.startDegrees +
+        progress * (segment.endDegrees - segment.startDegrees)
+      );
+    }
+
+    minScore = segment.maxScore;
+  }
+
+  return HEALTH_GAUGE_SEGMENTS.at(-1)?.endDegrees ?? 348;
+}
+
+function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
+  const centerX = 90;
+  const centerY = 82;
+  const radius = 52;
+  const strokeWidth = 9;
+  const needleLength = 45;
+  const needleRadius = 5;
+  const needleCenterY = centerY - needleRadius / 2;
+  const angle = (getNeedleDegrees(score) * Math.PI) / 180;
+  const needleTipX = centerX + Math.cos(angle) * needleLength;
+  const needleTipY = needleCenterY + Math.sin(angle) * needleLength;
+  const needleLeftX = centerX + Math.cos(angle + Math.PI / 2) * needleRadius;
+  const needleLeftY =
+    needleCenterY + Math.sin(angle + Math.PI / 2) * needleRadius;
+  const needleRightX = centerX + Math.cos(angle - Math.PI / 2) * needleRadius;
+  const needleRightY =
+    needleCenterY + Math.sin(angle - Math.PI / 2) * needleRadius;
+  const pointerColor = dark ? "#fff" : "#000";
+  const needlePath = [
+    `M ${needleLeftX} ${needleLeftY}`,
+    `L ${needleTipX} ${needleTipY}`,
+    `L ${needleRightX} ${needleRightY}`,
+    "Z",
+  ].join(" ");
+
+  const getPoint = (degrees: number) => {
+    const radians = (degrees * Math.PI) / 180;
+    return {
+      x: centerX + Math.cos(radians) * radius,
+      y: centerY + Math.sin(radians) * radius,
+    };
+  };
+
+  const arcPath = (startDegrees: number, endDegrees: number) => {
+    const start = getPoint(startDegrees);
+    const end = getPoint(endDegrees);
+
+    return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 1 ${end.x} ${end.y}`;
+  };
+
+  const segments = HEALTH_GAUGE_SEGMENTS.map((segment) => ({
+    color: segment.color,
+    path: arcPath(segment.startDegrees, segment.endDegrees),
+  }));
+
+  return (
+    <svg
+      aria-hidden="true"
+      className="mx-[-2rem] mb-[-1rem] mt-[-1.25rem] w-48"
+      viewBox="0 0 180 100"
+    >
+      {segments.map((segment) => (
+        <path
+          d={segment.path}
+          fill="none"
+          key={segment.color}
+          stroke={segment.color}
+          strokeLinecap="round"
+          strokeWidth={strokeWidth}
+        />
+      ))}
+      <path d={needlePath} fill={pointerColor} />
+      <circle
+        cx={centerX}
+        cy={needleCenterY}
+        fill={pointerColor}
+        r={needleRadius}
+      />
+    </svg>
+  );
+}
 
 export function HealthCard({ isLoading, vaults }: HealthCardProps) {
   const { t } = useAppTranslation("vault.overview");
@@ -21,38 +120,14 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
 
       return provider?.local;
     });
-  const score = onlyLocalVaults ? 60 : 100;
+  const score = onlyLocalVaults ? 40 : 100;
   const scoreKey = onlyLocalVaults ? "localOnly" : "excellent";
 
   return (
     <Card className="grow">
       <CardContent className="flex h-full items-center gap-7 px-6 py-2">
         {!isLoading ? (
-          <GaugeComponent
-            labels={{
-              valueLabel: { hide: true },
-              tickLabels: { hideMinMax: true },
-            }}
-            type="semicircle"
-            arc={{
-              colorArray: ["#ef4444", "#22c55e"],
-              padding: 0.05,
-              subArcs: [
-                { limit: 30 },
-                { limit: 60 },
-                { limit: 85 },
-                { limit: 100 },
-                {},
-              ],
-            }}
-            pointer={{
-              type: "needle",
-              animate: false,
-              color: dark ? "#fff" : "#000",
-            }}
-            value={score}
-            className="mx-[-2rem] mb-[-1rem] mt-[-1.25rem] w-48"
-          />
+          <HealthGauge dark={dark} score={score} />
         ) : (
           <Skeleton width="8rem" height="5rem" />
         )}

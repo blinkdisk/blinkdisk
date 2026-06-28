@@ -35,6 +35,8 @@ const config: KnipConfig = {
       entry: ["src/main.tsx"],
       project: commonProject,
       ignore: commonIgnore,
+      // Vite resolves this from apps/desktop/public at build time.
+      ignoreUnresolved: [/^\/animations\/backup\.lottie(\?url)?$/],
     },
     "apps/electron": {
       project: commonProject,
@@ -101,15 +103,10 @@ const config: KnipConfig = {
     ".wrangler/**",
     "*.d.ts",
   ],
-  ignoreUnresolved: [
-    // Vite allows adding "?url" to an import
-    /.+\?url$/,
-  ],
   ignoreIssues: {
     "apps/marketing/src/components/react/**": ["exports"],
   },
   ignoreDependencies: [
-    "@types/electron",
     "@blinkdisk/.+",
     "cloudflare",
     "@sentry/cloudflare",

@@ -35,7 +35,6 @@
     "@polar-sh/sdk": "^0.35.4",
     "@sentry/cloudflare": "^10.42.0",
     "@trpc/server": "^10.45.2",
-    "axios": "^1.13.2",
     "better-auth": "1.5.5",
     "hono": "^4.9.4",
     "kysely": "^0.27.6",

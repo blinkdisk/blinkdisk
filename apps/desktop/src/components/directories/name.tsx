@@ -4,10 +4,10 @@ import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@blinkdisk/ui/tooltip";
 import { cn } from "@blinkdisk/utils/class";
 import type { Item } from "@desktop/components/directories/table";
+import { getStringHue } from "@desktop/lib/color";
 import type { CellContext } from "@tanstack/react-table";
 import { FileSymlinkIcon, FolderIcon } from "lucide-react";
 import { useMemo } from "react";
-import seedrandom from "seedrandom";
 
 type DirectoryNameCellProps = {
   info: CellContext<Item, string> & { isPending?: boolean };
@@ -28,8 +28,7 @@ export function DirectoryNameCell({ info, dark }: DirectoryNameCellProps) {
   const hsl = useMemo(() => {
     if (directory?.type === "DIRECTORY") return "0 0% 50%";
 
-    const rng = seedrandom(extension || "?")();
-    return `${rng * 360} 70% ${dark ? "60%" : "40%"}`;
+    return `${getStringHue(extension || "?")} 70% ${dark ? "60%" : "40%"}`;
   }, [directory, extension, dark]);
 
   return (

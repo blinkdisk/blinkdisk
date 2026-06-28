@@ -1,6 +1,6 @@
+import { useMediaQuery } from "@blinkdisk/hooks/use-media-query";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useMemo } from "react";
-import { useMediaQuery } from "usehooks-ts";
 
 export function useTheme() {
   const [theme, setTheme] = useAppStorage("preferences.theme", "system");

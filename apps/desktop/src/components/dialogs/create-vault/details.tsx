@@ -9,7 +9,6 @@ import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
 import { AlertTriangleIcon, SquarePenIcon } from "lucide-react";
-import PasswordStrengthBar from "react-password-strength-bar";
 
 type CreateVaultDetailsProps = {
   providerType?: StorageProviderType;
@@ -18,6 +17,50 @@ type CreateVaultDetailsProps = {
   autoSelectedProvider?: boolean;
   onChangeStorage?: () => void;
 };
+
+function getPasswordScore(password: string) {
+  if (!password) return 0;
+
+  let score = 0;
+  if (password.length >= 14) score++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^a-zA-Z\d]/.test(password)) score++;
+
+  return Math.min(score, 4);
+}
+
+function PasswordStrengthMeter({
+  dark,
+  password,
+}: {
+  dark: boolean;
+  password: string;
+}) {
+  const score = getPasswordScore(password);
+  const activeBars = password ? Math.max(score, 1) : 0;
+  const colors = [
+    dark ? "#454545" : "#ddd",
+    "#ef4836",
+    "#f6b44d",
+    "#2b90ef",
+    "#25c281",
+  ];
+
+  return (
+    <div aria-hidden="true" className="flex h-1 gap-1">
+      {[1, 2, 3, 4].map((bar) => (
+        <div
+          className="flex-1 rounded-full transition-colors"
+          key={bar}
+          style={{
+            backgroundColor: bar <= activeBars ? colors[activeBars] : colors[0],
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export function CreateVaultDetails({
   providerType,
@@ -97,18 +140,7 @@ export function CreateVaultDetails({
             />
           )}
         </form.AppField>
-        <PasswordStrengthBar
-          password={values.password}
-          minLength={0}
-          barColors={[
-            dark ? "#454545" : "#ddd",
-            "#ef4836",
-            "#f6b44d",
-            "#2b90ef",
-            "#25c281",
-          ]}
-          scoreWordStyle={{ display: "none" }}
-        />
+        <PasswordStrengthMeter dark={dark} password={values.password || ""} />
       </div>
       <form.AppField
         name="confirmPassword"
