@@ -99,8 +99,8 @@
   - [x] `@types/pg` Current: `^8.11.11` New: `8.20.0` Change: `Minor`
 - [x] `posthog-js` Current: `^1.270.1` New: `1.395.0` Change: `Minor`
 - [x] `posthog-node` Current: `^5.9.2` New: `5.38.6` Change: `Minor`
-- [ ] `prisma` Current: `^6.6.0` New: `7.8.0` Change: `Major`
-- [ ] `prisma-kysely` Current: `^1.8.0` New: `3.1.1` Change: `Major`
+- [x] `prisma` Current: `^6.6.0` New: `7.8.0` Change: `Major`
+- [x] `prisma-kysely` Current: `^1.8.0` New: `3.1.1` Change: `Major`
 - [x] `react` Current: `^19.0.0` New: `19.2.7` Change: `Minor`
   - [x] `@types/react` Current: `^19.0.10` New: `19.2.17` Change: `Minor`
 - [x] `react-dom` Current: `^19.0.0` New: `19.2.7` Change: `Minor`
