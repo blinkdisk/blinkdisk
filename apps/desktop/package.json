@@ -57,6 +57,7 @@
     "@sentry/vite-plugin": "catalog:",
     "@tanstack/router-plugin": "catalog:",
     "@types/babel__core": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",

@@ -53,6 +53,7 @@
     "@blinkdisk/assets": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/dom-to-image": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/twemoji-parser": "catalog:",

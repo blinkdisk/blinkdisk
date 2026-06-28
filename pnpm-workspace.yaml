@@ -63,7 +63,7 @@ catalog:
   '@types/auto-launch': '^5.0.5'
   '@types/babel__core': '^7.20.5'
   '@types/dom-to-image': '^2.6.7'
-  '@types/node': '^26.0.1'
+  '@types/node': '24.13.2'
   '@types/nodemailer': '^8.0.1'
   '@types/pg': '^8.20.0'
   '@types/react': '^19.2.17'

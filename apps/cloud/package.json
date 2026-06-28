@@ -22,6 +22,7 @@
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
     "@sentry/cli": "catalog:",
+    "@types/node": "catalog:",
     "dotenv": "catalog:",
     "vite-tsconfig-paths": "catalog:",
     "vitest": "catalog:",
