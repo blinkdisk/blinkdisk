@@ -11,7 +11,6 @@ import {
   text,
   timestamp,
   uniqueIndex,
-  varchar,
 } from "drizzle-orm/pg-core";
 
 export const vaultProvider = pgEnum("VaultProvider", [
@@ -314,31 +313,6 @@ export const config = pgTable(
   ],
 );
 
-export const prismaMigrations = pgTable("_prisma_migrations", {
-  id: varchar("id", { length: 36 }).primaryKey().notNull(),
-  checksum: varchar("checksum", { length: 64 }).notNull(),
-  finishedAt: timestamp("finished_at", {
-    precision: 3,
-    withTimezone: true,
-    mode: "date",
-  }),
-  migrationName: varchar("migration_name", { length: 255 }).notNull(),
-  logs: text("logs"),
-  rolledBackAt: timestamp("rolled_back_at", {
-    precision: 3,
-    withTimezone: true,
-    mode: "date",
-  }),
-  startedAt: timestamp("started_at", {
-    precision: 3,
-    withTimezone: true,
-    mode: "date",
-  })
-    .notNull()
-    .default(sql`now()`),
-  appliedStepsCount: integer("applied_steps_count").notNull().default(0),
-});
-
 export const authSchema = {
   Account: account,
   Session: session,
@@ -356,7 +330,6 @@ export const schema = {
   space,
   vault,
   config,
-  prismaMigrations,
 };
 
 export type Account = typeof account.$inferSelect;

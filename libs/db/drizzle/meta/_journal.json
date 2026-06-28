@@ -8,6 +8,13 @@
       "when": 1782669409957,
       "tag": "0000_prisma_baseline",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782671084614,
+      "tag": "0001_remove_prisma_migrations",
+      "breakpoints": true
     }
   ]
 }
