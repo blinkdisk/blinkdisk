@@ -31,7 +31,6 @@ const Code = React.forwardRef<
         maxLength={maxLength}
         render={render}
         pasteTransformer={(t) => t.replace(/\s|-/g, "")}
-        // biome-ignore lint/correctness/noChildrenProp: Types are weird here
         children={undefined}
         disabled={disabledContext || disabled}
       />

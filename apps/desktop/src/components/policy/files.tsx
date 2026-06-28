@@ -111,11 +111,7 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
-            <form.Field
-              // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
-              key={index}
-              name={`files.exclusions[${index}].rule`}
-            >
+            <form.Field key={index} name={`files.exclusions[${index}].rule`}>
               {(subField) => (
                 <div className="flex items-center justify-between gap-2">
                   <ExclusionPreview rule={subField.state.value as string} />
@@ -250,7 +246,6 @@ function ExclusionRuleFilesEditor({
         <div className="mb-2 mt-1 flex flex-col gap-3">
           {value.map((_, index) => (
             <form.Field
-              // biome-ignore lint/suspicious/noArrayIndexKey: form array fields are addressed by index in TanStack Form.
               key={index}
               name={`files.exclusionRuleFiles[${index}].filename`}
             >
