@@ -1,7 +1,7 @@
 - [x] `@astrojs/check` Current: `^0.9.5` New: `0.9.9` Change: `Patch`
-- [ ] `@astrojs/cloudflare` Current: `^12.5.1` New: `14.0.1` Change: `Major`
-- [ ] `@astrojs/mdx` Current: `^4.3.13` New: `7.0.0` Change: `Major`
-- [ ] `@astrojs/react` Current: `^4.2.1` New: `6.0.0` Change: `Major`
+- [x] `@astrojs/cloudflare` Current: `^12.5.1` New: `14.0.1` Change: `Major`
+- [x] `@astrojs/mdx` Current: `^4.3.13` New: `7.0.0` Change: `Major`
+- [x] `@astrojs/react` Current: `^4.2.1` New: `6.0.0` Change: `Major`
 - [x] `@astrojs/sitemap` Current: `^3.3.1` New: `3.7.3` Change: `Minor`
 - [x] `@aws-sdk/client-s3` Current: `^3.886.0` New: `3.1075.0` Change: `Minor`
 - [x] `@aws-sdk/s3-request-presigner` Current: `^3.886.0` New: `3.1075.0` Change: `Minor`
@@ -15,7 +15,7 @@
 - [x] `@fontsource/space-mono` Current: `^5.2.9` New: `5.2.9` Change: `None`
 - [x] `@hono/trpc-server` Current: `^0.4.0` New: `0.4.2` Change: `Patch`
 - [x] `@lottiefiles/dotlottie-react` Current: `^0.16.4` New: `0.19.5` Change: `Minor`
-- [ ] `@lucide/astro` Current: `^0.563.0` New: `1.21.0` Change: `Major`
+- [x] `@lucide/astro` Current: `^0.563.0` New: `1.21.0` Change: `Major`
 - [x] `@maverick-js/signals` Current: `^6.0.0` New: `6.0.0` Change: `None`
 - [x] `@plunk/node` Current: `^3.0.3` New: `3.0.3` Change: `None`
 - [x] `@polar-sh/sdk` Current: `^0.35.4` New: `0.48.1` Change: `Minor`
@@ -52,8 +52,8 @@
 - [x] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0` New: `3.2.1` Change: `Patch`
 - [x] `@types/node` Current: `^22.13.9` New: `26.0.1` Change: `Major`
 - [x] `@vitejs/plugin-react` Current: `^4.3.4` New: `6.0.3` Change: `Major`
-- [ ] `astro` Current: `^5.17.1` New: `7.0.3` Change: `Major`
-- [ ] `astro-mermaid` Current: `^1.3.1` New: `2.1.0` Change: `Major`
+- [x] `astro` Current: `^5.17.1` New: `7.0.3` Change: `Major`
+- [x] `astro-mermaid` Current: `^1.3.1` New: `2.1.0` Change: `Major`
 - [x] `auto-launch` Current: `^5.0.6` New: `5.0.6` Change: `None`
   - [x] `@types/auto-launch` Current: `^5.0.5` New: `5.0.5` Change: `None`
 - [ ] `babel-plugin-react-compiler` Current: `19.1.0-rc.1` New: `1.0.0` Change: `Major`
