@@ -24,9 +24,7 @@ import {
 } from "lucide-react";
 import animation from "/animations/backup.lottie?url";
 
-export const Route = createFileRoute(
-  "/$accountId/$vaultId/$folderId/",
-)({
+export const Route = createFileRoute("/$accountId/$vaultId/$folderId/")({
   component: RouteComponent,
 });
 

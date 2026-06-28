@@ -6,9 +6,7 @@ import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 
 const reservedVaultPageIds = new Set(["policies", "settings"]);
 
-export const Route = createFileRoute(
-  "/$accountId/$vaultId/$folderId",
-)({
+export const Route = createFileRoute("/$accountId/$vaultId/$folderId")({
   beforeLoad: ({ params }) => {
     if (reservedVaultPageIds.has(params.folderId)) throw notFound();
     if (!parseFolderId(params.folderId)) throw notFound();
