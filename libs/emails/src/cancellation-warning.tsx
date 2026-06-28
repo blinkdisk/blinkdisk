@@ -4,7 +4,7 @@ import {
   type LocaleProps,
   useEmailTranslation,
 } from "@emails/hooks/use-email-translation";
-import { Heading, Text } from "@react-email/components";
+import { Heading, Text } from "react-email";
 
 type CancellationWarningEmailProps = LocaleProps & {
   daysLeft: number;

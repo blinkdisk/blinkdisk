@@ -19,7 +19,7 @@
 - [x] `@maverick-js/signals` Current: `^6.0.0` New: `6.0.0` Change: `None`
 - [x] `@plunk/node` Current: `^3.0.3` New: `3.0.3` Change: `None`
 - [x] `@polar-sh/sdk` Current: `^0.35.4` New: `0.48.1` Change: `Minor`
-- [ ] `@react-email/components` Current: `^0.0.34` New: `1.0.12` Change: `Major`
+- [x] `@react-email/components` Current: `^0.0.34` New: `1.0.12` Change: `Major`
 - [x] `@react-email/render` Current: `^2.0.1` New: `2.0.9` Change: `Patch`
 - [x] `@sentry/astro` Current: `^10.42.0` New: `10.62.0` Change: `Minor`
 - [x] `@sentry/cli` Current: `^3.3.0` New: `3.6.0` Change: `Minor`
@@ -92,8 +92,8 @@
 - [x] `marked` Current: `^17.0.1` New: `18.0.5` Change: `Major`
 - [x] `mermaid` Current: `^11.12.2` New: `11.16.0` Change: `Minor`
 - [x] `nanoid` Current: `^5.1.5` New: `5.1.16` Change: `Patch`
-- [ ] `nodemailer` Current: `^7.0.11` New: `9.0.1` Change: `Major`
-  - [ ] `@types/nodemailer` Current: `^7.0.4` New: `8.0.1` Change: `Major`
+- [x] `nodemailer` Current: `^7.0.11` New: `9.0.1` Change: `Major`
+  - [x] `@types/nodemailer` Current: `^7.0.4` New: `8.0.1` Change: `Major`
 - [x] `p-limit` Current: `^7.1.0` New: `7.3.0` Change: `Minor`
 - [x] `pg` Current: `^8.14.1` New: `8.22.0` Change: `Minor`
   - [x] `@types/pg` Current: `^8.11.11` New: `8.20.0` Change: `Minor`
@@ -106,7 +106,7 @@
 - [x] `react-dom` Current: `^19.0.0` New: `19.2.7` Change: `Minor`
   - [x] `@types/react-dom` Current: `^19.0.4` New: `19.2.3` Change: `Minor`
 - [x] `react-dropzone` Current: `^14.3.8` New: `15.0.0` Change: `Major`
-- [ ] `react-email` Current: `^5.1.1` New: `6.6.5` Change: `Major`
+- [x] `react-email` Current: `^5.1.1` New: `6.6.5` Change: `Major`
 - [x] `react-i18next` Current: `^15.4.1` New: `17.0.8` Change: `Major`
 - [x] `react-loading-skeleton` Current: `^3.5.0` New: `3.5.0` Change: `None`
 - [x] `satori` Current: `^0.19.1` New: `0.26.0` Change: `Minor`
