@@ -83,12 +83,10 @@ export function CreateVaultDetails({
       if (!accountId) return;
 
       await navigate({
-        to: "/$accountId/$vaultId/$hostName/$userName",
+        to: "/$accountId/$vaultId",
         params: (params) => ({
           ...params,
           vaultId: res.vaultId,
-          hostName: window.electron.os.hostName(res.vaultId),
-          userName: window.electron.os.userName(res.vaultId),
         }),
       });
 

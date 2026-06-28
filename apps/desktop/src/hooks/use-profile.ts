@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from "@tanstack/react-router";
-import { useCallback, useMemo } from "react";
+import { useParams } from "@tanstack/react-router";
+import { useMemo } from "react";
 
 export type Profile = {
   deviceName: string;
@@ -9,54 +9,9 @@ export type Profile = {
 export type SelectedProfile = Profile | null;
 
 export function useProfile() {
-  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
-
-  const { accountId, vaultId, userName, hostName } = useParams({
+  const { userName, hostName } = useParams({
     strict: false,
   });
-
-  const changeUserName = useCallback(
-    (userName: string | undefined, hostNameOverride?: string) => {
-      if (!accountId || !vaultId) return;
-
-      const nextHostName = hostNameOverride || hostName;
-      if (!nextHostName) return;
-
-      if (userName)
-        navigate({
-          to: "/$accountId/$vaultId/$hostName/$userName",
-          params: (params) => ({
-            ...params,
-            hostName: nextHostName,
-            userName,
-          }),
-        });
-      else
-        navigate({
-          to: "/$accountId/$vaultId/$hostName",
-          params: (params) => ({
-            ...params,
-            hostName: nextHostName,
-          }),
-        });
-    },
-    [navigate, accountId, vaultId, hostName],
-  );
-
-  const changeHostName = useCallback(
-    (hostName: string) => {
-      if (!accountId || !vaultId) return;
-
-      navigate({
-        to: "/$accountId/$vaultId/$hostName",
-        params: (params) => ({
-          ...params,
-          hostName,
-        }),
-      });
-    },
-    [navigate, accountId, vaultId],
-  );
 
   const profile = useMemo<SelectedProfile>(() => {
     if (!userName || !hostName) return null;
@@ -66,8 +21,6 @@ export function useProfile() {
   return {
     userName,
     hostName,
-    changeUserName,
-    changeHostName,
     profile,
   };
 }

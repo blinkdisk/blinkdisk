@@ -24,6 +24,7 @@ import { useActivateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import {
   isPolicyTargetEqual,
   type PolicySearch,
@@ -60,9 +61,7 @@ const ZPolicySearch = z.object({
   policyPath: z.string().optional(),
 });
 
-export const Route = createFileRoute(
-  "/$accountId/$vaultId/$hostName/$userName/policies",
-)({
+export const Route = createFileRoute("/$accountId/$vaultId/policies")({
   validateSearch: ZPolicySearch,
   component: RouteComponent,
 });
@@ -112,7 +111,7 @@ function PolicyTreePanel({
 }: PolicyTreePanelProps) {
   const { t } = useAppTranslation("policy.page");
   const { data: tree, isPending } = usePolicyTree();
-  const { hostName, userName } = Route.useParams();
+  const { localHostName, localUserName } = useLocalProfile();
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -124,11 +123,11 @@ function PolicyTreePanel({
       getInitialExpandedPolicyTreeNodeIds({
         tree,
         selectedTarget,
-        hostName,
-        userName,
+        hostName: localHostName || undefined,
+        userName: localUserName || undefined,
       }),
     );
-  }, [tree, selectedTarget, hostName, userName]);
+  }, [tree, selectedTarget, localHostName, localUserName]);
 
   const toggleNode = (nodeId: string) => {
     setExpandedNodeIds((ids) => {

@@ -191,12 +191,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
                 <DropdownMenuItem
                   onClick={() =>
                     navigate({
-                      to: "/$accountId/$vaultId/$hostName/$userName/policies",
-                      params: (params) => ({
-                        ...params,
-                        hostName: folder.source.host,
-                        userName: folder.source.userName,
-                      }),
+                      to: "/$accountId/$vaultId/policies",
                       search: policyTargetToSearch({
                         kind: "FOLDER",
                         hostName: folder.source.host,

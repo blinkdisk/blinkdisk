@@ -1,8 +1,23 @@
 import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
-import { useEffect, useRef } from "react";
+import { useLocalProfile } from "@desktop/hooks/use-local-profile";
+import { useProfile } from "@desktop/hooks/use-profile";
+import { profileFromParts } from "@desktop/lib/profile";
+import { useEffect, useMemo, useRef } from "react";
 
 export function useTaskbarProgress() {
-  const { data: folders } = useFolderList();
+  const { profile: routeProfile } = useProfile();
+  const { localHostName, localUserName } = useLocalProfile();
+  const localProfile = useMemo(
+    () =>
+      profileFromParts({
+        hostName: localHostName,
+        userName: localUserName,
+      }),
+    [localHostName, localUserName],
+  );
+  const { data: folders } = useFolderList({
+    profile: routeProfile ?? localProfile,
+  });
   const lastProgressRef = useRef<number>(-1);
 
   useEffect(() => {
