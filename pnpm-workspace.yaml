@@ -27,7 +27,6 @@ catalog:
   '@maverick-js/signals': '^6.0.0'
   '@plunk/node': '^3.0.3'
   '@polar-sh/sdk': '^0.48.1'
-  '@react-email/components': '^1.0.12'
   '@react-email/render': '^2.0.9'
   '@rolldown/plugin-babel': '^0.2.3'
   '@sentry/astro': '^10.62.0'

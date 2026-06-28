@@ -16,7 +16,6 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@react-email/components": "catalog:",
     "react-email": "catalog:",
     "react": "catalog:"
   }
