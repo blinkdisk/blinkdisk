@@ -11,14 +11,14 @@
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@types/node": "^22.13.9",
-    "typescript": "5.8.2",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.18"
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/db": "workspace:*",
-    "zod": "^4.3.6"
+    "zod": "catalog:"
   }
 }

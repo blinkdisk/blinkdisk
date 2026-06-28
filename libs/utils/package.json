@@ -11,28 +11,28 @@
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@types/node": "^22.13.9",
-    "@types/nodemailer": "^7.0.4",
-    "typescript": "5.8.2",
-    "vitest": "^3.1.1",
-    "vite-tsconfig-paths": "^5.1.4"
+    "@types/node": "catalog:",
+    "@types/nodemailer": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "vite-tsconfig-paths": "catalog:"
   },
   "dependencies": {
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/emails": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
-    "@plunk/node": "^3.0.3",
-    "@react-email/render": "^2.0.1",
-    "@tsndr/cloudflare-worker-jwt": "^3.2.0",
-    "clsx": "^2.1.1",
-    "legid-sync": "^0.2.1",
-    "nanoid": "^5.1.5",
-    "nodemailer": "^7.0.11",
-    "sonner": "^2.0.1",
-    "tailwind-merge": "^3.0.2",
-    "i18next": "^24.2.3",
-    "i18next-browser-languagedetector": "^8.0.4",
-    "i18next-http-backend": "^3.0.2",
-    "react-i18next": "^15.4.1"
+    "@plunk/node": "catalog:",
+    "@react-email/render": "catalog:",
+    "@tsndr/cloudflare-worker-jwt": "catalog:",
+    "clsx": "catalog:",
+    "legid-sync": "catalog:",
+    "nanoid": "catalog:",
+    "nodemailer": "catalog:",
+    "sonner": "catalog:",
+    "tailwind-merge": "catalog:",
+    "i18next": "catalog:",
+    "i18next-browser-languagedetector": "catalog:",
+    "i18next-http-backend": "catalog:",
+    "react-i18next": "catalog:"
   }
 }

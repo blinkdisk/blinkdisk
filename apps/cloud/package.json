@@ -11,20 +11,20 @@
     "env:update": "node env.js && pnpm run typegen"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.886.0",
-    "@aws-sdk/s3-request-presigner": "^3.886.0",
+    "@aws-sdk/client-s3": "catalog:",
+    "@aws-sdk/s3-request-presigner": "catalog:",
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/db": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
-    "@sentry/cloudflare": "^10.42.0"
+    "@sentry/cloudflare": "catalog:"
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@sentry/cli": "^3.3.0",
-    "dotenv": "^16.4.7",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.18",
-    "wrangler": "^4.91.0"
+    "@sentry/cli": "catalog:",
+    "dotenv": "catalog:",
+    "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:",
+    "wrangler": "catalog:"
   }
 }

@@ -13,14 +13,14 @@
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@types/node": "^22.13.9",
-    "@types/pg": "^8.11.11",
-    "typescript": "5.8.2"
+    "@types/node": "catalog:",
+    "@types/pg": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "kysely": "^0.27.6",
-    "pg": "^8.14.1",
-    "prisma": "^6.6.0",
-    "prisma-kysely": "^1.8.0"
+    "kysely": "catalog:",
+    "pg": "catalog:",
+    "prisma": "catalog:",
+    "prisma-kysely": "catalog:"
   }
 }
