@@ -66,10 +66,10 @@
   - [x] `@types/dom-to-image` Current: `^2.6.7` New: `2.6.7` Change: `None`
 - [x] `dotenv` Current: `^16.4.7` New: `17.4.2` Change: `Major`
 - [x] `dotenv-cli` Current: `^8.0.0` New: `11.0.0` Change: `Major`
-- [ ] `electron` Current: `^38.1.2` New: `42.5.0` Change: `Major`
+- [x] `electron` Current: `^38.1.2` New: `42.5.0` Change: `Major`
 - [x] `electron-builder` Current: `^26.0.12` New: `26.15.3` Change: `Minor`
 - [x] `electron-log` Current: `^5.3.2` New: `5.4.4` Change: `Minor`
-- [ ] `electron-store` Current: `^10.0.1` New: `11.0.2` Change: `Major`
+- [x] `electron-store` Current: `^10.0.1` New: `11.0.2` Change: `Major`
 - [x] `electron-updater` Current: `^6.6.2` New: `6.8.9` Change: `Minor`
 - [x] `electronmon` Current: `^2.0.3` New: `2.0.4` Change: `Patch`
 - [x] `embla-carousel-auto-height` Current: `8.6.0` New: `8.6.0` Change: `None`
