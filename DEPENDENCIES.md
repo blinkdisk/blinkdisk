@@ -47,8 +47,8 @@
 - [x] `@tanstack/react-table` Current: `^8.21.3` New: `8.21.3` Change: `None`
 - [x] `@tanstack/react-virtual` Current: `^3.13.12` New: `3.14.4` Change: `Minor`
 - [x] `@tanstack/router-plugin` Current: `^1.114.25` New: `1.168.18` Change: `Minor`
-- [ ] `@trpc/client` Current: `^10.45.2` New: `11.18.0` Change: `Major`
-- [ ] `@trpc/server` Current: `^10.45.2` New: `11.18.0` Change: `Major`
+- [x] `@trpc/client` Current: `^10.45.2` New: `11.18.0` Change: `Major`
+- [x] `@trpc/server` Current: `^10.45.2` New: `11.18.0` Change: `Major`
 - [x] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0` New: `3.2.1` Change: `Patch`
 - [ ] `@types/node` Current: `^22.13.9` New: `26.0.1` Change: `Major`
 - [ ] `@vitejs/plugin-react` Current: `^4.3.4` New: `6.0.3` Change: `Major`
