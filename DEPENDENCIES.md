@@ -1,4 +1,4 @@
-- [ ] `@astrojs/check` Current: `^0.9.5` New: `0.9.9` Change: `Patch`
+- [x] `@astrojs/check` Current: `^0.9.5` New: `0.9.9` Change: `Patch`
 - [ ] `@astrojs/cloudflare` Current: `^12.5.1` New: `14.0.1` Change: `Major`
 - [ ] `@astrojs/mdx` Current: `^4.3.13` New: `7.0.0` Change: `Major`
 - [ ] `@astrojs/react` Current: `^4.2.1` New: `6.0.0` Change: `Major`
@@ -13,14 +13,14 @@
 - [x] `@esbuild-plugins/tsconfig-paths` Current: `^0.1.2` New: `0.1.2` Change: `None`
 - [x] `@fontsource/inter` Current: `^5.2.8` New: `5.2.8` Change: `None`
 - [x] `@fontsource/space-mono` Current: `^5.2.9` New: `5.2.9` Change: `None`
-- [ ] `@hono/trpc-server` Current: `^0.4.0` New: `0.4.2` Change: `Patch`
+- [x] `@hono/trpc-server` Current: `^0.4.0` New: `0.4.2` Change: `Patch`
 - [ ] `@lottiefiles/dotlottie-react` Current: `^0.16.4` New: `0.19.5` Change: `Minor`
 - [ ] `@lucide/astro` Current: `^0.563.0` New: `1.21.0` Change: `Major`
 - [x] `@maverick-js/signals` Current: `^6.0.0` New: `6.0.0` Change: `None`
 - [x] `@plunk/node` Current: `^3.0.3` New: `3.0.3` Change: `None`
 - [ ] `@polar-sh/sdk` Current: `^0.35.4` New: `0.48.1` Change: `Minor`
 - [ ] `@react-email/components` Current: `^0.0.34` New: `1.0.12` Change: `Major`
-- [ ] `@react-email/render` Current: `^2.0.1` New: `2.0.9` Change: `Patch`
+- [x] `@react-email/render` Current: `^2.0.1` New: `2.0.9` Change: `Patch`
 - [ ] `@sentry/astro` Current: `^10.42.0` New: `10.62.0` Change: `Minor`
 - [ ] `@sentry/cli` Current: `^3.3.0` New: `3.6.0` Change: `Minor`
 - [ ] `@sentry/cloudflare` Current: `^10.42.0` New: `10.62.0` Change: `Minor`
@@ -33,12 +33,12 @@
 - [x] `@signaldb/maverickjs` Current: `^1.0.0` New: `1.0.0` Change: `None`
 - [x] `@signaldb/react` Current: `^1.0.1` New: `1.0.1` Change: `None`
 - [x] `@signaldb/sync` Current: `^1.3.1` New: `1.3.1` Change: `None`
-- [ ] `@tailwindcss/typography` Current: `^0.5.19` New: `0.5.20` Change: `Patch`
+- [x] `@tailwindcss/typography` Current: `^0.5.19` New: `0.5.20` Change: `Patch`
 - [ ] `@tailwindcss/vite` Current: `^4.1.14` New: `4.3.1` Change: `Minor`
 - [ ] `@tanstack/devtools-vite` Current: `^0.3.12` New: `0.8.1` Change: `Minor`
 - [ ] `@tanstack/react-devtools` Current: `^0.9.2` New: `0.10.8` Change: `Minor`
 - [ ] `@tanstack/react-form` Current: `^1.27.1` New: `1.33.0` Change: `Minor`
-- [ ] `@tanstack/react-form-devtools` Current: `^0.2.4` New: `0.2.29` Change: `Patch`
+- [x] `@tanstack/react-form-devtools` Current: `^0.2.4` New: `0.2.29` Change: `Patch`
 - [ ] `@tanstack/react-query` Current: `^5.69.0` New: `5.101.2` Change: `Minor`
 - [ ] `@tanstack/react-query-devtools` Current: `5.69.0` New: `5.101.2` Change: `Minor`
 - [ ] `@tanstack/react-router` Current: `1.131.7` New: `1.170.16` Change: `Minor`
@@ -49,7 +49,7 @@
 - [ ] `@tanstack/router-plugin` Current: `^1.114.25` New: `1.168.18` Change: `Minor`
 - [ ] `@trpc/client` Current: `^10.45.2` New: `11.18.0` Change: `Major`
 - [ ] `@trpc/server` Current: `^10.45.2` New: `11.18.0` Change: `Major`
-- [ ] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0` New: `3.2.1` Change: `Patch`
+- [x] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0` New: `3.2.1` Change: `Patch`
 - [ ] `@types/node` Current: `^22.13.9` New: `26.0.1` Change: `Major`
 - [ ] `@vitejs/plugin-react` Current: `^4.3.4` New: `6.0.3` Change: `Major`
 - [ ] `astro` Current: `^5.17.1` New: `7.0.3` Change: `Major`
@@ -71,11 +71,11 @@
 - [ ] `electron-log` Current: `^5.3.2` New: `5.4.4` Change: `Minor`
 - [ ] `electron-store` Current: `^10.0.1` New: `11.0.2` Change: `Major`
 - [ ] `electron-updater` Current: `^6.6.2` New: `6.8.9` Change: `Minor`
-- [ ] `electronmon` Current: `^2.0.3` New: `2.0.4` Change: `Patch`
+- [x] `electronmon` Current: `^2.0.3` New: `2.0.4` Change: `Patch`
 - [x] `embla-carousel-auto-height` Current: `8.6.0` New: `8.6.0` Change: `None`
 - [x] `embla-carousel-react` Current: `^8.6.0` New: `8.6.0` Change: `None`
 - [ ] `esbuild` Current: `0.27.3` New: `0.28.1` Change: `Minor`
-- [ ] `filesize` Current: `^11.0.2` New: `11.0.19` Change: `Patch`
+- [x] `filesize` Current: `^11.0.2` New: `11.0.19` Change: `Patch`
 - [x] `frimousse` Current: `^0.3.0` New: `0.3.0` Change: `None`
 - [x] `get-folder-size` Current: `^5.0.0` New: `5.0.0` Change: `None`
 - [ ] `hono` Current: `^4.9.4` New: `4.12.27` Change: `Minor`
@@ -91,7 +91,7 @@
 - [ ] `lucide-react` Current: `^1.7.0` New: `1.21.0` Change: `Minor`
 - [ ] `marked` Current: `^17.0.1` New: `18.0.5` Change: `Major`
 - [ ] `mermaid` Current: `^11.12.2` New: `11.16.0` Change: `Minor`
-- [ ] `nanoid` Current: `^5.1.5` New: `5.1.16` Change: `Patch`
+- [x] `nanoid` Current: `^5.1.5` New: `5.1.16` Change: `Patch`
 - [ ] `nodemailer` Current: `^7.0.11` New: `9.0.1` Change: `Major`
   - [ ] `@types/nodemailer` Current: `^7.0.4` New: `8.0.1` Change: `Major`
 - [ ] `p-limit` Current: `^7.1.0` New: `7.3.0` Change: `Minor`
@@ -110,9 +110,9 @@
 - [ ] `react-i18next` Current: `^15.4.1` New: `17.0.8` Change: `Major`
 - [x] `react-loading-skeleton` Current: `^3.5.0` New: `3.5.0` Change: `None`
 - [ ] `satori` Current: `^0.19.1` New: `0.26.0` Change: `Minor`
-- [ ] `set-cookie-parser` Current: `^3.1.0` New: `3.1.1` Change: `Patch`
+- [x] `set-cookie-parser` Current: `^3.1.0` New: `3.1.1` Change: `Patch`
 - [ ] `sharp` Current: `^0.34.5` New: `0.35.2` Change: `Minor`
-- [ ] `sonner` Current: `^2.0.1` New: `2.0.7` Change: `Patch`
+- [x] `sonner` Current: `^2.0.1` New: `2.0.7` Change: `Patch`
 - [ ] `tailwind-merge` Current: `^3.0.2` New: `3.6.0` Change: `Minor`
 - [ ] `tailwindcss` Current: `^4.0.14` New: `4.3.1` Change: `Minor`
 - [ ] `tough-cookie` Current: `^5.1.2` New: `6.0.1` Change: `Major`
@@ -120,7 +120,7 @@
 - [x] `twemoji-parser` Current: `^14.0.0` New: `14.0.0` Change: `None`
   - [x] `@types/twemoji-parser` Current: `^13.1.4` New: `13.1.4` Change: `None`
 - [ ] `typescript` Current: `5.8.2` New: `6.0.3` Change: `Major`
-- [ ] `ua-parser-js` Current: `^2.0.5` New: `2.0.10` Change: `Patch`
+- [x] `ua-parser-js` Current: `^2.0.5` New: `2.0.10` Change: `Patch`
 - [ ] `vite` Current: `^6.2.0` New: `8.1.0` Change: `Major`
 - [x] `vite-plugin-environment` Current: `^1.1.3` New: `1.1.3` Change: `None`
 - [ ] `vite-plugin-static-copy` Current: `^3.3.0` New: `4.1.1` Change: `Major`
