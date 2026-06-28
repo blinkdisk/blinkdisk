@@ -275,7 +275,7 @@ describe("api router payment procedures", () => {
 
   it("rejects checkout creation when an active subscription exists", async () => {
     const db = createDb({
-      Subscription: [{ id: "sub_1" }],
+      subscription: [{ id: "sub_1" }],
     });
     const { caller } = createCaller({ db });
 
@@ -289,9 +289,9 @@ describe("api router payment procedures", () => {
     const polar = createPolar();
     mocks.getPolar.mockReturnValueOnce(polar);
     const db = createDb({
-      Subscription: [undefined],
-      Space: [undefined],
-      Account: [{ polarId: null }],
+      subscription: [undefined],
+      space: [undefined],
+      account: [{ polarId: null }],
     });
     const { caller, waits } = createCaller({ db });
 
@@ -309,7 +309,7 @@ describe("api router payment procedures", () => {
       name: "User Name",
     });
     expect(db.operations.updates).toEqual([
-      { table: "Account", values: { polarId: "cus_new" } },
+      { table: "account", values: { polarId: "cus_new" } },
     ]);
     expect(polar.checkouts.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -324,8 +324,8 @@ describe("api router payment procedures", () => {
 
   it("blocks checkout when existing cloud usage exceeds selected plan capacity", async () => {
     const db = createDb({
-      Subscription: [undefined],
-      Space: [{ id: "spc_1" }],
+      subscription: [undefined],
+      space: [{ id: "spc_1" }],
     });
     const { caller } = createCaller({
       db,
@@ -341,7 +341,7 @@ describe("api router payment procedures", () => {
 
   it("requires a Polar customer before creating a billing portal session", async () => {
     const db = createDb({
-      Account: [{ polarId: null }],
+      account: [{ polarId: null }],
     });
     const { caller } = createCaller({ db });
 
@@ -360,7 +360,7 @@ describe("api router payment procedures", () => {
     const polar = createPolar();
     mocks.getPolar.mockReturnValueOnce(polar);
     const db = createDb({
-      Subscription: [
+      subscription: [
         {
           id: "sub_1",
           priceId: currentPriceId,
@@ -368,7 +368,7 @@ describe("api router payment procedures", () => {
         },
         { priceId: nextPriceId },
       ],
-      Space: [{ id: "spc_1" }],
+      space: [{ id: "spc_1" }],
     });
     const { caller, waits } = createCaller({ db, spaceUsed: 1 });
 
@@ -396,7 +396,7 @@ describe("api router cloudblink procedures", () => {
 
   it("creates a trial-backed space, vault object, cache entry, and service token", async () => {
     const db = createDb({
-      Space: [undefined],
+      space: [undefined],
     });
     const { caller, ctx, spaceStub, vaultStub, cache } = createCaller({ db });
 
@@ -412,8 +412,8 @@ describe("api router cloudblink procedures", () => {
       100_000_000_000,
     );
     expect(db.operations.inserts.map((op) => op.table)).toEqual([
-      "Trial",
-      "Space",
+      "trial",
+      "space",
     ]);
     expect(mocks.startTrialWorkflow).toHaveBeenCalledWith(
       ctx.env,
@@ -435,7 +435,7 @@ describe("api router cloudblink procedures", () => {
 
   it("blocks CloudBlink vault initialization when existing space has no storage", async () => {
     const db = createDb({
-      Space: [{ id: "spc_1", capacity: 0 }],
+      space: [{ id: "spc_1", capacity: 0 }],
     });
     const { caller } = createCaller({ db });
 
@@ -444,7 +444,7 @@ describe("api router cloudblink procedures", () => {
 
   it("only issues vault tokens for account-owned CloudBlink vaults", async () => {
     const db = createDb({
-      Vault: [{ id: "vlt_1", provider: "FILESYSTEM" }],
+      vault: [{ id: "vlt_1", provider: "FILESYSTEM" }],
     });
     const { caller } = createCaller({ db });
 
@@ -456,7 +456,7 @@ describe("api router cloudblink procedures", () => {
 
   it("allows deleting a pending CloudBlink vault through the account cache", async () => {
     const db = createDb({
-      Vault: [undefined],
+      vault: [undefined],
     });
     const { caller, cache, vaultStub } = createCaller({ db });
     cache.get.mockResolvedValueOnce("acct_1");
@@ -474,7 +474,7 @@ describe("api router sync procedures", () => {
 
   it("omits account ids from pulled vault and config records", async () => {
     const db = createDb({
-      Vault: [
+      vault: [
         [
           {
             id: "vlt_1",
@@ -483,7 +483,7 @@ describe("api router sync procedures", () => {
           },
         ],
       ],
-      Config: [
+      config: [
         [
           {
             id: "cfg_1",
@@ -505,8 +505,8 @@ describe("api router sync procedures", () => {
 
   it("rejects vault pushes when no account space exists", async () => {
     const db = createDb({
-      Vault: [[]],
-      Space: [undefined],
+      vault: [[]],
+      space: [undefined],
     });
     const { caller } = createCaller({ db });
 
@@ -518,8 +518,8 @@ describe("api router sync procedures", () => {
 
   it("rejects invalid vault ids before inserting remote records", async () => {
     const db = createDb({
-      Vault: [[]],
-      Space: [{ id: "spc_1" }],
+      vault: [[]],
+      space: [{ id: "spc_1" }],
     });
     const { caller } = createCaller({ db });
 
@@ -535,8 +535,8 @@ describe("api router sync procedures", () => {
 
   it("rejects added configs for vaults the account cannot access", async () => {
     const db = createDb({
-      Config: [[]],
-      Vault: [[]],
+      config: [[]],
+      vault: [[]],
     });
     const { caller } = createCaller({ db });
 
@@ -552,8 +552,8 @@ describe("api router sync procedures", () => {
   it("rejects modified configs missing from the account", async () => {
     const config = createConfig();
     const db = createDb({
-      Config: [[]],
-      Vault: [[{ id: config.vaultId }]],
+      config: [[]],
+      vault: [[{ id: config.vaultId }]],
     });
     const { caller } = createCaller({ db });
 

@@ -208,10 +208,10 @@ describe("polarWebhook", () => {
       }),
     );
     const db = createDb({
-      Account: [{ id: "acct_1", email: "user@example.com" }],
-      Subscription: [[]],
-      Space: [{ id: "spc_1", capacity: 0 }],
-      Trial: [[{ id: "trial_1", endsAt: trialEndsAt }]],
+      account: [{ id: "acct_1", email: "user@example.com" }],
+      subscription: [[]],
+      space: [{ id: "spc_1", capacity: 0 }],
+      trial: [[{ id: "trial_1", endsAt: trialEndsAt }]],
     });
     const { context, waits, env, spaceStub } = createContext(db);
 
@@ -223,7 +223,7 @@ describe("polarWebhook", () => {
 
     expect(db.operations.inserts).toHaveLength(1);
     expect(db.operations.inserts[0]).toMatchObject({
-      table: "Subscription",
+      table: "subscription",
       values: {
         status: "ACTIVE",
         priceId: "cloud-200-gb-monthly",
@@ -237,14 +237,14 @@ describe("polarWebhook", () => {
     expect(db.operations.updates).toEqual(
       expect.arrayContaining([
         {
-          table: "Space",
+          table: "space",
           values: expect.objectContaining({
             capacity: 200_000_000_000,
             trialId: null,
           }),
         },
         {
-          table: "Trial",
+          table: "trial",
           values: expect.objectContaining({
             status: "ENDED",
             endsAt: null,
@@ -269,7 +269,7 @@ describe("polarWebhook", () => {
       }),
     );
     const db = createDb({
-      Subscription: [
+      subscription: [
         {
           id: "sub_1",
           planId: "cloud-200-gb",
@@ -278,9 +278,9 @@ describe("polarWebhook", () => {
           canceledAt: null,
         },
       ],
-      Account: [{ id: "acct_1", email: "user@example.com" }],
-      Space: [{ id: "spc_1", capacity: 200_000_000_000 }],
-      Trial: [[]],
+      account: [{ id: "acct_1", email: "user@example.com" }],
+      space: [{ id: "spc_1", capacity: 200_000_000_000 }],
+      trial: [[]],
     });
     const { context, spaceStub } = createContext(db);
 
@@ -289,14 +289,14 @@ describe("polarWebhook", () => {
     expect(db.operations.updates).toEqual(
       expect.arrayContaining([
         {
-          table: "Subscription",
+          table: "subscription",
           values: expect.objectContaining({
             priceId: "cloud-500-gb-monthly",
             planId: "cloud-500-gb",
           }),
         },
         {
-          table: "Space",
+          table: "space",
           values: expect.objectContaining({
             capacity: 500_000_000_000,
             subscriptionId: "sub_1",
@@ -319,7 +319,7 @@ describe("polarWebhook", () => {
       }),
     );
     const db = createDb({
-      Subscription: [
+      subscription: [
         {
           id: "sub_1",
           planId: "cloud-200-gb",
@@ -328,7 +328,7 @@ describe("polarWebhook", () => {
           canceledAt: null,
         },
       ],
-      Account: [{ id: "acct_1", email: "user@example.com" }],
+      account: [{ id: "acct_1", email: "user@example.com" }],
     });
     const { context, waits, env } = createContext(db);
 
@@ -336,7 +336,7 @@ describe("polarWebhook", () => {
     await Promise.all(waits);
 
     expect(db.operations.updates).toContainEqual({
-      table: "Subscription",
+      table: "subscription",
       values: expect.objectContaining({
         status: "CANCELED",
         cleanupAt: endedAt,
@@ -359,7 +359,7 @@ describe("polarWebhook", () => {
       subscriptionEvent("subscription.uncanceled"),
     );
     const db = createDb({
-      Subscription: [
+      subscription: [
         {
           id: "sub_1",
           planId: "cloud-200-gb",
@@ -368,7 +368,7 @@ describe("polarWebhook", () => {
           canceledAt: previousCanceledAt,
         },
       ],
-      Account: [{ id: "acct_1", email: "user@example.com" }],
+      account: [{ id: "acct_1", email: "user@example.com" }],
     });
     const { context, waits, env } = createContext(db);
 
@@ -376,7 +376,7 @@ describe("polarWebhook", () => {
     await Promise.all(waits);
 
     expect(db.operations.updates).toContainEqual({
-      table: "Subscription",
+      table: "subscription",
       values: expect.objectContaining({
         status: "ACTIVE",
         cleanupAt: null,
@@ -401,7 +401,7 @@ describe("polarWebhook", () => {
       },
     });
     const db = createDb({
-      Subscription: [
+      subscription: [
         {
           id: "sub_1",
           affiliateId: null,
@@ -430,7 +430,7 @@ describe("polarWebhook", () => {
       },
     });
     const db = createDb({
-      Subscription: [
+      subscription: [
         {
           id: "sub_1",
           affiliateId: "ref_1",

@@ -13,7 +13,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-export const vaultProvider = pgEnum("VaultProvider", [
+export const vaultProvider = pgEnum("vault_provider", [
   "CLOUDBLINK",
   "INTERNAL_DRIVE",
   "EXTERNAL_DRIVE",
@@ -30,13 +30,13 @@ export const vaultProvider = pgEnum("VaultProvider", [
   "WEBDAV",
 ]);
 
-export const vaultStatus = pgEnum("VaultStatus", ["ACTIVE", "DELETED"]);
+export const vaultStatus = pgEnum("vault_status", ["ACTIVE", "DELETED"]);
 
-export const configLevel = pgEnum("ConfigLevel", ["VAULT", "PROFILE"]);
+export const configLevel = pgEnum("config_level", ["VAULT", "PROFILE"]);
 
-export const trialStatus = pgEnum("TrialStatus", ["ACTIVE", "ENDED"]);
+export const trialStatus = pgEnum("trial_status", ["ACTIVE", "ENDED"]);
 
-export const subscriptionStatus = pgEnum("SubscriptionStatus", [
+export const subscriptionStatus = pgEnum("subscription_status", [
   "TRIALING",
   "ACTIVE",
   "PAST_DUE",
@@ -44,55 +44,55 @@ export const subscriptionStatus = pgEnum("SubscriptionStatus", [
 ]);
 
 const createdAt = () =>
-  timestamp("createdAt", { precision: 3, mode: "date" })
+  timestamp("created_at", { precision: 3, mode: "date" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`);
 
 const updatedAt = () =>
-  timestamp("updatedAt", { precision: 3, mode: "date" }).notNull();
+  timestamp("updated_at", { precision: 3, mode: "date" }).notNull();
 
 export const account = pgTable(
-  "Account",
+  "account",
   {
     id: text("id").primaryKey().notNull(),
     name: text("name").notNull(),
     email: text("email").notNull(),
-    emailVerified: boolean("emailVerified").notNull().default(false),
+    emailVerified: boolean("email_verified").notNull().default(false),
     image: text("image"),
     language: text("language"),
-    timeZone: text("timeZone"),
-    polarId: text("polarId"),
+    timeZone: text("time_zone"),
+    polarId: text("polar_id"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
   (table) => [
-    uniqueIndex("Account_email_key").on(table.email),
-    index("Account_email_idx").on(table.email),
+    uniqueIndex("account_email_key").on(table.email),
+    index("account_email_idx").on(table.email),
   ],
 );
 
 export const session = pgTable(
-  "Session",
+  "session",
   {
     id: text("id").primaryKey().notNull(),
-    accountId: text("accountId").notNull(),
+    accountId: text("account_id").notNull(),
     token: text("token").notNull(),
-    expiresAt: timestamp("expiresAt", {
+    expiresAt: timestamp("expires_at", {
       precision: 3,
       mode: "date",
     }).notNull(),
-    ipAddress: text("ipAddress"),
-    userAgent: text("userAgent"),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
   (table) => [
-    uniqueIndex("Session_token_key").on(table.token),
-    index("Session_accountId_idx").on(table.accountId),
+    uniqueIndex("session_token_key").on(table.token),
+    index("session_account_id_idx").on(table.accountId),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "Session_accountId_fkey",
+      name: "session_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
@@ -100,35 +100,35 @@ export const session = pgTable(
 );
 
 export const authMethod = pgTable(
-  "AuthMethod",
+  "auth_method",
   {
     id: text("id").primaryKey().notNull(),
-    accountId: text("accountId").notNull(),
-    authMethodId: text("authMethodId").notNull(),
-    providerId: text("providerId").notNull(),
-    accessToken: text("accessToken"),
-    refreshToken: text("refreshToken"),
-    accessTokenExpiresAt: timestamp("accessTokenExpiresAt", {
+    accountId: text("account_id").notNull(),
+    authMethodId: text("auth_method_id").notNull(),
+    providerId: text("provider_id").notNull(),
+    accessToken: text("access_token"),
+    refreshToken: text("refresh_token"),
+    accessTokenExpiresAt: timestamp("access_token_expires_at", {
       precision: 3,
       mode: "date",
     }),
-    refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt", {
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
       precision: 3,
       mode: "date",
     }),
     scope: text("scope"),
-    idToken: text("idToken"),
+    idToken: text("id_token"),
     password: text("password"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
   (table) => [
-    uniqueIndex("AuthMethod_authMethodId_key").on(table.authMethodId),
-    index("AuthMethod_accountId_idx").on(table.accountId),
+    uniqueIndex("auth_method_auth_method_id_key").on(table.authMethodId),
+    index("auth_method_account_id_idx").on(table.accountId),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "AuthMethod_accountId_fkey",
+      name: "auth_method_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
@@ -136,46 +136,46 @@ export const authMethod = pgTable(
 );
 
 export const verification = pgTable(
-  "Verification",
+  "verification",
   {
     id: text("id").primaryKey().notNull(),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
-    expiresAt: timestamp("expiresAt", {
+    expiresAt: timestamp("expires_at", {
       precision: 3,
       mode: "date",
     }).notNull(),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (table) => [index("Verification_identifier_idx").on(table.identifier)],
+  (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
 export const subscription = pgTable(
-  "Subscription",
+  "subscription",
   {
     id: text("id").primaryKey().notNull(),
     status: subscriptionStatus("status").notNull(),
-    priceId: text("priceId").notNull(),
-    planId: text("planId").notNull(),
-    polarProductId: text("polarProductId").notNull(),
-    polarSubscriptionId: text("polarSubscriptionId").notNull(),
-    polarCustomerId: text("polarCustomerId").notNull(),
-    accountId: text("accountId").notNull(),
-    canceledAt: timestamp("canceledAt", { precision: 3, mode: "date" }),
-    endedAt: timestamp("endedAt", { precision: 3, mode: "date" }),
-    cleanupAt: timestamp("cleanupAt", { precision: 3, mode: "date" }),
+    priceId: text("price_id").notNull(),
+    planId: text("plan_id").notNull(),
+    polarProductId: text("polar_product_id").notNull(),
+    polarSubscriptionId: text("polar_subscription_id").notNull(),
+    polarCustomerId: text("polar_customer_id").notNull(),
+    accountId: text("account_id").notNull(),
+    canceledAt: timestamp("canceled_at", { precision: 3, mode: "date" }),
+    endedAt: timestamp("ended_at", { precision: 3, mode: "date" }),
+    cleanupAt: timestamp("cleanup_at", { precision: 3, mode: "date" }),
     createdAt: createdAt(),
-    affiliateId: text("affiliateId"),
+    affiliateId: text("affiliate_id"),
   },
   (table) => [
-    uniqueIndex("Subscription_polarSubscriptionId_key").on(
+    uniqueIndex("subscription_polar_subscription_id_key").on(
       table.polarSubscriptionId,
     ),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "Subscription_accountId_fkey",
+      name: "subscription_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
@@ -183,28 +183,28 @@ export const subscription = pgTable(
 );
 
 export const trial = pgTable(
-  "Trial",
+  "trial",
   {
     id: text("id").primaryKey().notNull(),
     status: trialStatus("status").notNull().default("ACTIVE"),
     capacity: bigint("capacity", { mode: "number" }).notNull(),
-    accountId: text("accountId").notNull(),
-    startedAt: timestamp("startedAt", {
+    accountId: text("account_id").notNull(),
+    startedAt: timestamp("started_at", {
       precision: 3,
       mode: "date",
     }).notNull(),
-    endsAt: timestamp("endsAt", { precision: 3, mode: "date" }),
-    endedAt: timestamp("endedAt", { precision: 3, mode: "date" }),
+    endsAt: timestamp("ends_at", { precision: 3, mode: "date" }),
+    endedAt: timestamp("ended_at", { precision: 3, mode: "date" }),
     createdAt: createdAt(),
   },
   (table) => [
-    uniqueIndex("Trial_accountId_key").on(table.accountId),
-    index("Trial_status_idx").on(table.status),
-    index("Trial_endsAt_idx").on(table.endsAt),
+    uniqueIndex("trial_account_id_key").on(table.accountId),
+    index("trial_status_idx").on(table.status),
+    index("trial_ends_at_idx").on(table.endsAt),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "Trial_accountId_fkey",
+      name: "trial_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
@@ -212,37 +212,37 @@ export const trial = pgTable(
 );
 
 export const space = pgTable(
-  "Space",
+  "space",
   {
     id: text("id").primaryKey().notNull(),
     capacity: bigint("capacity", { mode: "number" }).notNull(),
     used: bigint("used", { mode: "number" }).notNull(),
-    accountId: text("accountId").notNull(),
-    subscriptionId: text("subscriptionId"),
+    accountId: text("account_id").notNull(),
+    subscriptionId: text("subscription_id"),
     createdAt: createdAt(),
-    trialId: text("trialId"),
+    trialId: text("trial_id"),
   },
   (table) => [
-    uniqueIndex("Space_accountId_key").on(table.accountId),
-    uniqueIndex("Space_trialId_key").on(table.trialId),
+    uniqueIndex("space_account_id_key").on(table.accountId),
+    uniqueIndex("space_trial_id_key").on(table.trialId),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "Space_accountId_fkey",
+      name: "space_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
     foreignKey({
       columns: [table.subscriptionId],
       foreignColumns: [subscription.id],
-      name: "Space_subscriptionId_fkey",
+      name: "space_subscription_id_fkey",
     })
       .onDelete("set null")
       .onUpdate("cascade"),
     foreignKey({
       columns: [table.trialId],
       foreignColumns: [trial.id],
-      name: "Space_trialId_fkey",
+      name: "space_trial_id_fkey",
     })
       .onDelete("set null")
       .onUpdate("cascade"),
@@ -250,32 +250,32 @@ export const space = pgTable(
 );
 
 export const vault = pgTable(
-  "Vault",
+  "vault",
   {
     id: text("id").primaryKey().notNull(),
     status: vaultStatus("status").notNull(),
     version: integer("version").notNull(),
     provider: vaultProvider("provider").notNull(),
-    accountId: text("accountId").notNull(),
-    configLevel: configLevel("configLevel").notNull(),
+    accountId: text("account_id").notNull(),
+    configLevel: configLevel("config_level").notNull(),
     options: jsonb("options").notNull().$type<unknown>(),
-    spaceId: text("spaceId"),
+    spaceId: text("space_id"),
     createdAt: createdAt(),
     name: text("name").notNull(),
-    coreId: text("coreId").notNull(),
+    coreId: text("core_id").notNull(),
   },
   (table) => [
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "Vault_accountId_fkey",
+      name: "vault_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
     foreignKey({
       columns: [table.spaceId],
       foreignColumns: [space.id],
-      name: "Vault_spaceId_fkey",
+      name: "vault_space_id_fkey",
     })
       .onDelete("set null")
       .onUpdate("cascade"),
@@ -283,30 +283,30 @@ export const vault = pgTable(
 );
 
 export const config = pgTable(
-  "Config",
+  "config",
   {
     id: text("id").primaryKey().notNull(),
     data: jsonb("data").notNull().$type<unknown>(),
     level: configLevel("level").notNull(),
-    vaultId: text("vaultId").notNull(),
-    accountId: text("accountId").notNull(),
+    vaultId: text("vault_id").notNull(),
+    accountId: text("account_id").notNull(),
     createdAt: createdAt(),
-    hostName: text("hostName"),
-    userName: text("userName"),
+    hostName: text("host_name"),
+    userName: text("user_name"),
   },
   (table) => [
-    index("Config_level_idx").on(table.level),
+    index("config_level_idx").on(table.level),
     foreignKey({
       columns: [table.accountId],
       foreignColumns: [account.id],
-      name: "Config_accountId_fkey",
+      name: "config_account_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),
     foreignKey({
       columns: [table.vaultId],
       foreignColumns: [vault.id],
-      name: "Config_vaultId_fkey",
+      name: "config_vault_id_fkey",
     })
       .onDelete("restrict")
       .onUpdate("cascade"),

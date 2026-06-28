@@ -15,6 +15,13 @@
       "when": 1782671084614,
       "tag": "0001_remove_prisma_migrations",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782671796412,
+      "tag": "0002_normalize_identifiers",
+      "breakpoints": true
     }
   ]
 }
