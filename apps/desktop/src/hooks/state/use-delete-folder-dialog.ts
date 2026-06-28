@@ -26,10 +26,10 @@ export function useDeleteFolderDialog() {
   }, []);
 
   function openDeleteFolderDialog(options: DeleteFolderDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

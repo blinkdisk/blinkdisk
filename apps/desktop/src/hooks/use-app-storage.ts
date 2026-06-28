@@ -42,7 +42,7 @@ export function useAppStorage<K extends keyof GlobalStorageSchema>(
 export function useStorageListener() {
   useEffect(() => {
     const unsubscribe = window.electron.store.change(() => {
-      store.setState(window.electron.store.get());
+      store.setState(() => window.electron.store.get());
     });
 
     return () => unsubscribe();

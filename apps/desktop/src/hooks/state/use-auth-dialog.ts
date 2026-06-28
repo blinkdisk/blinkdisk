@@ -18,9 +18,9 @@ export function useAuthDialog() {
   }, []);
 
   function openAuthDialog() {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
-    });
+    }));
     window.electron.auth.open();
   }
 

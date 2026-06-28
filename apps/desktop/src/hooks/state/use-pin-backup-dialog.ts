@@ -25,10 +25,10 @@ export function usePinBackupDialog() {
   }, []);
 
   function openPinBackupDialog(options: PinBackupDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

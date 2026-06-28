@@ -1,7 +1,9 @@
 import { storeToken } from "@electron/auth";
 import { store } from "@electron/store";
-import type { SessionResponse } from "better-auth/client";
+import type { Auth } from "better-auth";
 import { safeStorage } from "electron";
+
+type SessionResponse = Auth["$Infer"]["Session"] | null;
 
 export async function migrateAuthV2() {
   const encrypted = store.get("auth.cookie") as string;

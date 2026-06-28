@@ -24,10 +24,10 @@ export function useDeleteVaultDialog() {
   }, []);
 
   function openDeleteVaultDialog(options: DeleteVaultDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

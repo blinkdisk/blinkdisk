@@ -193,8 +193,14 @@ export default defineConfig({
   },
   vite: {
     build: {
+      target: "esnext",
       // Set to hidden to reduce bundle size
       sourcemap: "hidden",
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: "esnext",
+      },
     },
     plugins: [
       tailwindcss(),

@@ -24,10 +24,10 @@ export function useDeleteBackupDialog() {
   }, []);
 
   function openDeleteBackupDialog(options: DeleteBackupDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

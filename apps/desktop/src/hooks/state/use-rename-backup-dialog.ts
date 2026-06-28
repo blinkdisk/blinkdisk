@@ -25,10 +25,10 @@ export function useRenameBackupDialog() {
   }, []);
 
   function openRenameBackupDialog(options: RenameBackupDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

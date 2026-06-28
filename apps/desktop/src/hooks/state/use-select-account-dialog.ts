@@ -25,10 +25,10 @@ export function useSelectAccountDialog() {
   }, []);
 
   function openSelectAccountDialog(options: SelectAccountDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

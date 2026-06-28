@@ -10,13 +10,13 @@ export function useUpgradeDialog() {
   const isOpen = useStore(store);
 
   const setIsOpen = useCallback((to: boolean) => {
-    store.setState(to);
+    store.setState(() => to);
   }, []);
 
   function openUpgradeDialog() {
     posthog.capture("upgrade_show");
 
-    store.setState(true);
+    store.setState(() => true);
   }
 
   return {

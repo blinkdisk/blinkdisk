@@ -36,13 +36,13 @@ export function useCreateVaultDialog() {
 
   const openCreateVault = useCallback(
     (options: Partial<CreateVaultDialogOptions> = {}) => {
-      store.setState({
+      store.setState(() => ({
         isOpen: true,
         options: {
           ...defaultOptions,
           ...options,
         },
-      });
+      }));
     },
     [],
   );
