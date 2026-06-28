@@ -1,130 +1,130 @@
-- [ ] `@astrojs/check` Current: `^0.9.5`
-- [ ] `@astrojs/cloudflare` Current: `^12.5.1`
-- [ ] `@astrojs/mdx` Current: `^4.3.13`
-- [ ] `@astrojs/react` Current: `^4.2.1`
-- [ ] `@astrojs/sitemap` Current: `^3.3.1`
-- [ ] `@aws-sdk/client-s3` Current: `^3.886.0`
-- [ ] `@aws-sdk/s3-request-presigner` Current: `^3.886.0`
-- [ ] `@base-ui/react` Current: `^1.2.0`
-- [ ] `@better-auth/electron` Current: `1.5.5`
-- [ ] `@biomejs/biome` Current: `^2.4.15`
-- [ ] `@blinkdisk/signaldb-electron` Current: `^1.0.2`
-- [ ] `@cloudflare/vite-plugin` Current: `^1.28.0`
-- [ ] `@esbuild-plugins/tsconfig-paths` Current: `^0.1.2`
-- [ ] `@fontsource/inter` Current: `^5.2.8`
-- [ ] `@fontsource/space-mono` Current: `^5.2.9`
-- [ ] `@hono/trpc-server` Current: `^0.4.0`
-- [ ] `@lottiefiles/dotlottie-react` Current: `^0.16.4`
-- [ ] `@lucide/astro` Current: `^0.563.0`
-- [ ] `@maverick-js/signals` Current: `^6.0.0`
-- [ ] `@plunk/node` Current: `^3.0.3`
-- [ ] `@polar-sh/sdk` Current: `^0.35.4`
-- [ ] `@react-email/components` Current: `^0.0.34`
-- [ ] `@react-email/render` Current: `^2.0.1`
-- [ ] `@sentry/astro` Current: `^10.42.0`
-- [ ] `@sentry/cli` Current: `^3.3.0`
-- [ ] `@sentry/cloudflare` Current: `^10.42.0`
-- [ ] `@sentry/electron` Current: `^7.9.0`
-- [ ] `@sentry/esbuild-plugin` Current: `^5.1.1`
-- [ ] `@sentry/react` Current: `10.60.0`
-- [ ] `@sentry/vite-plugin` Current: `^5.1.1`
-- [ ] `@signaldb/core` Current: `^1.8.1`
-- [ ] `@signaldb/fs` Current: `^1.0.1`
-- [ ] `@signaldb/maverickjs` Current: `^1.0.0`
-- [ ] `@signaldb/react` Current: `^1.0.1`
-- [ ] `@signaldb/sync` Current: `^1.3.1`
-- [ ] `@tailwindcss/typography` Current: `^0.5.19`
-- [ ] `@tailwindcss/vite` Current: `^4.1.14`
-- [ ] `@tanstack/devtools-vite` Current: `^0.3.12`
-- [ ] `@tanstack/react-devtools` Current: `^0.9.2`
-- [ ] `@tanstack/react-form` Current: `^1.27.1`
-- [ ] `@tanstack/react-form-devtools` Current: `^0.2.4`
-- [ ] `@tanstack/react-query` Current: `^5.69.0`
-- [ ] `@tanstack/react-query-devtools` Current: `5.69.0`
-- [ ] `@tanstack/react-router` Current: `1.131.7`
-- [ ] `@tanstack/react-router-devtools` Current: `^1.114.25`
-- [ ] `@tanstack/react-store` Current: `^0.8.0`
-- [ ] `@tanstack/react-table` Current: `^8.21.3`
-- [ ] `@tanstack/react-virtual` Current: `^3.13.12`
-- [ ] `@tanstack/router-plugin` Current: `^1.114.25`
-- [ ] `@trpc/client` Current: `^10.45.2`
-- [ ] `@trpc/server` Current: `^10.45.2`
-- [ ] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0`
-- [ ] `@types/node` Current: `^22.13.9`
-- [ ] `@vitejs/plugin-react` Current: `^4.3.4`
-- [ ] `astro` Current: `^5.17.1`
-- [ ] `astro-mermaid` Current: `^1.3.1`
-- [ ] `auto-launch` Current: `^5.0.6`
-  - [ ] `@types/auto-launch` Current: `^5.0.5`
-- [ ] `babel-plugin-react-compiler` Current: `19.1.0-rc.1`
-- [ ] `better-auth` Current: `1.5.5`
-- [ ] `class-variance-authority` Current: `^0.7.1`
-- [ ] `clsx` Current: `^2.1.1`
-- [ ] `concurrently` Current: `^9.1.2`
-- [ ] `country-flag-emoji-polyfill` Current: `^0.1.8`
-- [ ] `dom-to-image` Current: `^2.6.0`
-  - [ ] `@types/dom-to-image` Current: `^2.6.7`
-- [ ] `dotenv` Current: `^16.4.7`
-- [ ] `dotenv-cli` Current: `^8.0.0`
-- [ ] `electron` Current: `^38.1.2`
-- [ ] `electron-builder` Current: `^26.0.12`
-- [ ] `electron-log` Current: `^5.3.2`
-- [ ] `electron-store` Current: `^10.0.1`
-- [ ] `electron-updater` Current: `^6.6.2`
-- [ ] `electronmon` Current: `^2.0.3`
-- [ ] `embla-carousel-auto-height` Current: `8.6.0`
-- [ ] `embla-carousel-react` Current: `^8.6.0`
-- [ ] `esbuild` Current: `0.27.3`
-- [ ] `filesize` Current: `^11.0.2`
-- [ ] `frimousse` Current: `^0.3.0`
-- [ ] `get-folder-size` Current: `^5.0.0`
-- [ ] `hono` Current: `^4.9.4`
-- [ ] `i18next` Current: `^24.2.3`
-- [ ] `i18next-browser-languagedetector` Current: `^8.0.4`
-- [ ] `i18next-http-backend` Current: `^3.0.2`
-- [ ] `input-otp` Current: `^1.4.2`
-- [ ] `js-confetti` Current: `^0.13.1`
-- [ ] `jszip` Current: `^3.10.1`
-- [ ] `knip` Current: `5.82.1`
-- [ ] `kysely` Current: `^0.27.6`
-- [ ] `legid-sync` Current: `^0.2.1`
-- [ ] `lucide-react` Current: `^1.7.0`
-- [ ] `marked` Current: `^17.0.1`
-- [ ] `mermaid` Current: `^11.12.2`
-- [ ] `nanoid` Current: `^5.1.5`
-- [ ] `nodemailer` Current: `^7.0.11`
-  - [ ] `@types/nodemailer` Current: `^7.0.4`
-- [ ] `p-limit` Current: `^7.1.0`
-- [ ] `pg` Current: `^8.14.1`
-  - [ ] `@types/pg` Current: `^8.11.11`
-- [ ] `posthog-js` Current: `^1.270.1`
-- [ ] `posthog-node` Current: `^5.9.2`
-- [ ] `prisma` Current: `^6.6.0`
-- [ ] `prisma-kysely` Current: `^1.8.0`
-- [ ] `react` Current: `^19.0.0`
-  - [ ] `@types/react` Current: `^19.0.10`
-- [ ] `react-dom` Current: `^19.0.0`
-  - [ ] `@types/react-dom` Current: `^19.0.4`
-- [ ] `react-dropzone` Current: `^14.3.8`
-- [ ] `react-email` Current: `^5.1.1`
-- [ ] `react-i18next` Current: `^15.4.1`
-- [ ] `react-loading-skeleton` Current: `^3.5.0`
-- [ ] `satori` Current: `^0.19.1`
-- [ ] `set-cookie-parser` Current: `^3.1.0`
-- [ ] `sharp` Current: `^0.34.5`
-- [ ] `sonner` Current: `^2.0.1`
-- [ ] `tailwind-merge` Current: `^3.0.2`
-- [ ] `tailwindcss` Current: `^4.0.14`
-- [ ] `tough-cookie` Current: `^5.1.2`
-- [ ] `turbo` Current: `^2.4.4`
-- [ ] `twemoji-parser` Current: `^14.0.0`
-  - [ ] `@types/twemoji-parser` Current: `^13.1.4`
-- [ ] `typescript` Current: `5.8.2`
-- [ ] `ua-parser-js` Current: `^2.0.5`
-- [ ] `vite` Current: `^6.2.0`
-- [ ] `vite-plugin-environment` Current: `^1.1.3`
-- [ ] `vite-plugin-static-copy` Current: `^3.3.0`
-- [ ] `vite-tsconfig-paths` Current: `^5.1.4`
-- [ ] `vitest` Current: `^4.0.18`
-- [ ] `wrangler` Current: `^4.91.0`
-- [ ] `zod` Current: `^4.3.6`
+- [ ] `@astrojs/check` Current: `^0.9.5` New: `0.9.9`
+- [ ] `@astrojs/cloudflare` Current: `^12.5.1` New: `14.0.1`
+- [ ] `@astrojs/mdx` Current: `^4.3.13` New: `7.0.0`
+- [ ] `@astrojs/react` Current: `^4.2.1` New: `6.0.0`
+- [ ] `@astrojs/sitemap` Current: `^3.3.1` New: `3.7.3`
+- [ ] `@aws-sdk/client-s3` Current: `^3.886.0` New: `3.1075.0`
+- [ ] `@aws-sdk/s3-request-presigner` Current: `^3.886.0` New: `3.1075.0`
+- [ ] `@base-ui/react` Current: `^1.2.0` New: `1.6.0`
+- [ ] `@better-auth/electron` Current: `1.5.5` New: `1.6.22`
+- [ ] `@biomejs/biome` Current: `^2.4.15` New: `2.5.1`
+- [x] `@blinkdisk/signaldb-electron` Current: `^1.0.2` New: `1.0.2`
+- [ ] `@cloudflare/vite-plugin` Current: `^1.28.0` New: `1.42.3`
+- [x] `@esbuild-plugins/tsconfig-paths` Current: `^0.1.2` New: `0.1.2`
+- [x] `@fontsource/inter` Current: `^5.2.8` New: `5.2.8`
+- [x] `@fontsource/space-mono` Current: `^5.2.9` New: `5.2.9`
+- [ ] `@hono/trpc-server` Current: `^0.4.0` New: `0.4.2`
+- [ ] `@lottiefiles/dotlottie-react` Current: `^0.16.4` New: `0.19.5`
+- [ ] `@lucide/astro` Current: `^0.563.0` New: `1.21.0`
+- [x] `@maverick-js/signals` Current: `^6.0.0` New: `6.0.0`
+- [x] `@plunk/node` Current: `^3.0.3` New: `3.0.3`
+- [ ] `@polar-sh/sdk` Current: `^0.35.4` New: `0.48.1`
+- [ ] `@react-email/components` Current: `^0.0.34` New: `1.0.12`
+- [ ] `@react-email/render` Current: `^2.0.1` New: `2.0.9`
+- [ ] `@sentry/astro` Current: `^10.42.0` New: `10.62.0`
+- [ ] `@sentry/cli` Current: `^3.3.0` New: `3.6.0`
+- [ ] `@sentry/cloudflare` Current: `^10.42.0` New: `10.62.0`
+- [ ] `@sentry/electron` Current: `^7.9.0` New: `7.14.0`
+- [ ] `@sentry/esbuild-plugin` Current: `^5.1.1` New: `5.3.0`
+- [ ] `@sentry/react` Current: `10.60.0` New: `10.62.0`
+- [ ] `@sentry/vite-plugin` Current: `^5.1.1` New: `5.3.0`
+- [x] `@signaldb/core` Current: `^1.8.1` New: `1.8.1`
+- [x] `@signaldb/fs` Current: `^1.0.1` New: `1.0.1`
+- [x] `@signaldb/maverickjs` Current: `^1.0.0` New: `1.0.0`
+- [x] `@signaldb/react` Current: `^1.0.1` New: `1.0.1`
+- [x] `@signaldb/sync` Current: `^1.3.1` New: `1.3.1`
+- [ ] `@tailwindcss/typography` Current: `^0.5.19` New: `0.5.20`
+- [ ] `@tailwindcss/vite` Current: `^4.1.14` New: `4.3.1`
+- [ ] `@tanstack/devtools-vite` Current: `^0.3.12` New: `0.8.1`
+- [ ] `@tanstack/react-devtools` Current: `^0.9.2` New: `0.10.8`
+- [ ] `@tanstack/react-form` Current: `^1.27.1` New: `1.33.0`
+- [ ] `@tanstack/react-form-devtools` Current: `^0.2.4` New: `0.2.29`
+- [ ] `@tanstack/react-query` Current: `^5.69.0` New: `5.101.2`
+- [ ] `@tanstack/react-query-devtools` Current: `5.69.0` New: `5.101.2`
+- [ ] `@tanstack/react-router` Current: `1.131.7` New: `1.170.16`
+- [ ] `@tanstack/react-router-devtools` Current: `^1.114.25` New: `1.167.0`
+- [ ] `@tanstack/react-store` Current: `^0.8.0` New: `0.11.0`
+- [x] `@tanstack/react-table` Current: `^8.21.3` New: `8.21.3`
+- [ ] `@tanstack/react-virtual` Current: `^3.13.12` New: `3.14.4`
+- [ ] `@tanstack/router-plugin` Current: `^1.114.25` New: `1.168.18`
+- [ ] `@trpc/client` Current: `^10.45.2` New: `11.18.0`
+- [ ] `@trpc/server` Current: `^10.45.2` New: `11.18.0`
+- [ ] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0` New: `3.2.1`
+- [ ] `@types/node` Current: `^22.13.9` New: `26.0.1`
+- [ ] `@vitejs/plugin-react` Current: `^4.3.4` New: `6.0.3`
+- [ ] `astro` Current: `^5.17.1` New: `7.0.3`
+- [ ] `astro-mermaid` Current: `^1.3.1` New: `2.1.0`
+- [x] `auto-launch` Current: `^5.0.6` New: `5.0.6`
+  - [x] `@types/auto-launch` Current: `^5.0.5` New: `5.0.5`
+- [ ] `babel-plugin-react-compiler` Current: `19.1.0-rc.1` New: `1.0.0`
+- [ ] `better-auth` Current: `1.5.5` New: `1.6.22`
+- [x] `class-variance-authority` Current: `^0.7.1` New: `0.7.1`
+- [x] `clsx` Current: `^2.1.1` New: `2.1.1`
+- [ ] `concurrently` Current: `^9.1.2` New: `10.0.3`
+- [x] `country-flag-emoji-polyfill` Current: `^0.1.8` New: `0.1.8`
+- [x] `dom-to-image` Current: `^2.6.0` New: `2.6.0`
+  - [x] `@types/dom-to-image` Current: `^2.6.7` New: `2.6.7`
+- [ ] `dotenv` Current: `^16.4.7` New: `17.4.2`
+- [ ] `dotenv-cli` Current: `^8.0.0` New: `11.0.0`
+- [ ] `electron` Current: `^38.1.2` New: `42.5.0`
+- [ ] `electron-builder` Current: `^26.0.12` New: `26.15.3`
+- [ ] `electron-log` Current: `^5.3.2` New: `5.4.4`
+- [ ] `electron-store` Current: `^10.0.1` New: `11.0.2`
+- [ ] `electron-updater` Current: `^6.6.2` New: `6.8.9`
+- [ ] `electronmon` Current: `^2.0.3` New: `2.0.4`
+- [x] `embla-carousel-auto-height` Current: `8.6.0` New: `8.6.0`
+- [x] `embla-carousel-react` Current: `^8.6.0` New: `8.6.0`
+- [ ] `esbuild` Current: `0.27.3` New: `0.28.1`
+- [ ] `filesize` Current: `^11.0.2` New: `11.0.19`
+- [x] `frimousse` Current: `^0.3.0` New: `0.3.0`
+- [x] `get-folder-size` Current: `^5.0.0` New: `5.0.0`
+- [ ] `hono` Current: `^4.9.4` New: `4.12.27`
+- [ ] `i18next` Current: `^24.2.3` New: `26.3.3`
+- [ ] `i18next-browser-languagedetector` Current: `^8.0.4` New: `8.2.1`
+- [ ] `i18next-http-backend` Current: `^3.0.2` New: `4.0.0`
+- [x] `input-otp` Current: `^1.4.2` New: `1.4.2`
+- [x] `js-confetti` Current: `^0.13.1` New: `0.13.1`
+- [x] `jszip` Current: `^3.10.1` New: `3.10.1`
+- [ ] `knip` Current: `5.82.1` New: `6.23.0`
+- [ ] `kysely` Current: `^0.27.6` New: `0.29.2`
+- [x] `legid-sync` Current: `^0.2.1` New: `0.2.1`
+- [ ] `lucide-react` Current: `^1.7.0` New: `1.21.0`
+- [ ] `marked` Current: `^17.0.1` New: `18.0.5`
+- [ ] `mermaid` Current: `^11.12.2` New: `11.16.0`
+- [ ] `nanoid` Current: `^5.1.5` New: `5.1.16`
+- [ ] `nodemailer` Current: `^7.0.11` New: `9.0.1`
+  - [ ] `@types/nodemailer` Current: `^7.0.4` New: `8.0.1`
+- [ ] `p-limit` Current: `^7.1.0` New: `7.3.0`
+- [ ] `pg` Current: `^8.14.1` New: `8.22.0`
+  - [ ] `@types/pg` Current: `^8.11.11` New: `8.20.0`
+- [ ] `posthog-js` Current: `^1.270.1` New: `1.395.0`
+- [ ] `posthog-node` Current: `^5.9.2` New: `5.38.6`
+- [ ] `prisma` Current: `^6.6.0` New: `7.8.0`
+- [ ] `prisma-kysely` Current: `^1.8.0` New: `3.1.1`
+- [ ] `react` Current: `^19.0.0` New: `19.2.7`
+  - [ ] `@types/react` Current: `^19.0.10` New: `19.2.17`
+- [ ] `react-dom` Current: `^19.0.0` New: `19.2.7`
+  - [ ] `@types/react-dom` Current: `^19.0.4` New: `19.2.3`
+- [ ] `react-dropzone` Current: `^14.3.8` New: `15.0.0`
+- [ ] `react-email` Current: `^5.1.1` New: `6.6.5`
+- [ ] `react-i18next` Current: `^15.4.1` New: `17.0.8`
+- [x] `react-loading-skeleton` Current: `^3.5.0` New: `3.5.0`
+- [ ] `satori` Current: `^0.19.1` New: `0.26.0`
+- [ ] `set-cookie-parser` Current: `^3.1.0` New: `3.1.1`
+- [ ] `sharp` Current: `^0.34.5` New: `0.35.2`
+- [ ] `sonner` Current: `^2.0.1` New: `2.0.7`
+- [ ] `tailwind-merge` Current: `^3.0.2` New: `3.6.0`
+- [ ] `tailwindcss` Current: `^4.0.14` New: `4.3.1`
+- [ ] `tough-cookie` Current: `^5.1.2` New: `6.0.1`
+- [ ] `turbo` Current: `^2.4.4` New: `2.10.0`
+- [x] `twemoji-parser` Current: `^14.0.0` New: `14.0.0`
+  - [x] `@types/twemoji-parser` Current: `^13.1.4` New: `13.1.4`
+- [ ] `typescript` Current: `5.8.2` New: `6.0.3`
+- [ ] `ua-parser-js` Current: `^2.0.5` New: `2.0.10`
+- [ ] `vite` Current: `^6.2.0` New: `8.1.0`
+- [x] `vite-plugin-environment` Current: `^1.1.3` New: `1.1.3`
+- [ ] `vite-plugin-static-copy` Current: `^3.3.0` New: `4.1.1`
+- [ ] `vite-tsconfig-paths` Current: `^5.1.4` New: `6.1.1`
+- [ ] `vitest` Current: `^4.0.18` New: `4.1.9`
+- [ ] `wrangler` Current: `^4.91.0` New: `4.105.0`
+- [ ] `zod` Current: `^4.3.6` New: `4.4.3`
