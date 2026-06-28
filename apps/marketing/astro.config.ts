@@ -203,7 +203,7 @@ export default defineConfig({
       },
     },
     plugins: [
-      tailwindcss(),
+      tailwindcss() as never,
       copy({
         targets: [
           {
@@ -211,7 +211,7 @@ export default defineConfig({
             dest: ".",
           },
         ],
-      }),
+      }) as never,
     ],
     resolve: {
       dedupe: [

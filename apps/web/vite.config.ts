@@ -32,11 +32,7 @@ export default defineConfig({
     cloudflare(),
     paths(),
     router({ target: "react", autoCodeSplitting: true }),
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", {}]],
-      },
-    }),
+    react(),
     tailwindcss(),
     env(
       {

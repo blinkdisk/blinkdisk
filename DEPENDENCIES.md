@@ -50,8 +50,8 @@
 - [x] `@trpc/client` Current: `^10.45.2` New: `11.18.0` Change: `Major`
 - [x] `@trpc/server` Current: `^10.45.2` New: `11.18.0` Change: `Major`
 - [x] `@tsndr/cloudflare-worker-jwt` Current: `^3.2.0` New: `3.2.1` Change: `Patch`
-- [ ] `@types/node` Current: `^22.13.9` New: `26.0.1` Change: `Major`
-- [ ] `@vitejs/plugin-react` Current: `^4.3.4` New: `6.0.3` Change: `Major`
+- [x] `@types/node` Current: `^22.13.9` New: `26.0.1` Change: `Major`
+- [x] `@vitejs/plugin-react` Current: `^4.3.4` New: `6.0.3` Change: `Major`
 - [ ] `astro` Current: `^5.17.1` New: `7.0.3` Change: `Major`
 - [ ] `astro-mermaid` Current: `^1.3.1` New: `2.1.0` Change: `Major`
 - [x] `auto-launch` Current: `^5.0.6` New: `5.0.6` Change: `None`
@@ -119,12 +119,12 @@
 - [x] `turbo` Current: `^2.4.4` New: `2.10.0` Change: `Minor`
 - [x] `twemoji-parser` Current: `^14.0.0` New: `14.0.0` Change: `None`
   - [x] `@types/twemoji-parser` Current: `^13.1.4` New: `13.1.4` Change: `None`
-- [ ] `typescript` Current: `5.8.2` New: `6.0.3` Change: `Major`
+- [x] `typescript` Current: `5.8.2` New: `6.0.3` Change: `Major`
 - [x] `ua-parser-js` Current: `^2.0.5` New: `2.0.10` Change: `Patch`
-- [ ] `vite` Current: `^6.2.0` New: `8.1.0` Change: `Major`
+- [x] `vite` Current: `^6.2.0` New: `8.1.0` Change: `Major`
 - [x] `vite-plugin-environment` Current: `^1.1.3` New: `1.1.3` Change: `None`
-- [ ] `vite-plugin-static-copy` Current: `^3.3.0` New: `4.1.1` Change: `Major`
-- [ ] `vite-tsconfig-paths` Current: `^5.1.4` New: `6.1.1` Change: `Major`
+- [x] `vite-plugin-static-copy` Current: `^3.3.0` New: `4.1.1` Change: `Major`
+- [x] `vite-tsconfig-paths` Current: `^5.1.4` New: `6.1.1` Change: `Major`
 - [x] `vitest` Current: `^4.0.18` New: `4.1.9` Change: `Minor`
 - [x] `wrangler` Current: `^4.91.0` New: `4.105.0` Change: `Minor`
 - [x] `zod` Current: `^4.3.6` New: `4.4.3` Change: `Minor`
