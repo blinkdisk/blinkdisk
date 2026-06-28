@@ -56,7 +56,7 @@
 - [x] `astro-mermaid` Current: `^1.3.1` New: `2.1.0` Change: `Major`
 - [x] `auto-launch` Current: `^5.0.6` New: `5.0.6` Change: `None`
   - [x] `@types/auto-launch` Current: `^5.0.5` New: `5.0.5` Change: `None`
-- [ ] `babel-plugin-react-compiler` Current: `19.1.0-rc.1` New: `1.0.0` Change: `Major`
+- [x] `babel-plugin-react-compiler` Current: `19.1.0-rc.1` New: `1.0.0` Change: `Major`
 - [x] `better-auth` Current: `1.5.5` New: `1.6.22` Change: `Minor`
 - [x] `class-variance-authority` Current: `^0.7.1` New: `0.7.1` Change: `None`
 - [x] `clsx` Current: `^2.1.1` New: `2.1.1` Change: `None`

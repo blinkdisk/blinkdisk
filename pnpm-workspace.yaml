@@ -67,7 +67,7 @@ catalog:
   astro: '^7.0.3'
   astro-mermaid: '^2.1.0'
   auto-launch: '^5.0.6'
-  babel-plugin-react-compiler: '19.1.0-rc.1'
+  babel-plugin-react-compiler: '1.0.0'
   better-auth: '1.6.22'
   class-variance-authority: '^0.7.1'
   clsx: '^2.1.1'
