@@ -79,9 +79,9 @@
 - [x] `frimousse` Current: `^0.3.0` New: `0.3.0` Change: `None`
 - [x] `get-folder-size` Current: `^5.0.0` New: `5.0.0` Change: `None`
 - [x] `hono` Current: `^4.9.4` New: `4.12.27` Change: `Minor`
-- [ ] `i18next` Current: `^24.2.3` New: `26.3.3` Change: `Major`
+- [x] `i18next` Current: `^24.2.3` New: `26.3.3` Change: `Major`
 - [x] `i18next-browser-languagedetector` Current: `^8.0.4` New: `8.2.1` Change: `Minor`
-- [ ] `i18next-http-backend` Current: `^3.0.2` New: `4.0.0` Change: `Major`
+- [x] `i18next-http-backend` Current: `^3.0.2` New: `4.0.0` Change: `Major`
 - [x] `input-otp` Current: `^1.4.2` New: `1.4.2` Change: `None`
 - [x] `js-confetti` Current: `^0.13.1` New: `0.13.1` Change: `None`
 - [x] `jszip` Current: `^3.10.1` New: `3.10.1` Change: `None`
@@ -107,7 +107,7 @@
   - [x] `@types/react-dom` Current: `^19.0.4` New: `19.2.3` Change: `Minor`
 - [x] `react-dropzone` Current: `^14.3.8` New: `15.0.0` Change: `Major`
 - [ ] `react-email` Current: `^5.1.1` New: `6.6.5` Change: `Major`
-- [ ] `react-i18next` Current: `^15.4.1` New: `17.0.8` Change: `Major`
+- [x] `react-i18next` Current: `^15.4.1` New: `17.0.8` Change: `Major`
 - [x] `react-loading-skeleton` Current: `^3.5.0` New: `3.5.0` Change: `None`
 - [x] `satori` Current: `^0.19.1` New: `0.26.0` Change: `Minor`
 - [x] `set-cookie-parser` Current: `^3.1.0` New: `3.1.1` Change: `Patch`
