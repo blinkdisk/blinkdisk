@@ -259,8 +259,8 @@ function Backup({ backup }: BackupProps) {
     <div className={cn(cardClassName, "hover:bg-card-hover")}>
       {backup?.id && backup.rootID ? (
         <Link
-          to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
-          from="/$accountId/$vaultId/$hostName/$userName/$folderId/"
+          to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
+          from="/$accountId/$vaultId/$folderId/"
           params={(params) => ({
             ...params,
             backupId: backup.id,
@@ -343,8 +343,8 @@ function Backup({ backup }: BackupProps) {
                 <DropdownMenuItem
                   render={
                     <Link
-                      to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
-                      from="/$accountId/$vaultId/$hostName/$userName/$folderId/"
+                      to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$folderId/"
                       params={(params) => ({
                         ...params,
                         backupId: backup.id,

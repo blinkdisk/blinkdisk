@@ -1,3 +1,4 @@
+import { parseFolderId } from "@desktop/lib/folder";
 import { useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
 
@@ -9,12 +10,19 @@ export type Profile = {
 export type SelectedProfile = Profile | null;
 
 export function useProfile() {
-  const { userName, hostName } = useParams({
+  const { folderId } = useParams({
     strict: false,
   });
 
+  const folderIdParts = useMemo(
+    () => (folderId ? parseFolderId(folderId) : null),
+    [folderId],
+  );
+  const userName = folderIdParts?.user;
+  const hostName = folderIdParts?.device;
+
   const profile = useMemo<SelectedProfile>(() => {
-    if (!userName || !hostName) return null;
+    if (userName === undefined || hostName === undefined) return null;
     return { deviceName: hostName, userName };
   }, [userName, hostName]);
 

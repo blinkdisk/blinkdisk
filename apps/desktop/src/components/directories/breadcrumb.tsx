@@ -59,8 +59,8 @@ export function DirectoryBreadcrumb() {
                   className="text-base"
                   render={
                     <Link
-                      to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
-                      from="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/"
+                      to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$folderId/$backupId/$directoryId/"
                       params={(params) => ({
                         ...params,
                         directoryId: backup.rootID,
@@ -88,8 +88,8 @@ export function DirectoryBreadcrumb() {
                         className="text-base"
                         render={
                           <Link
-                            to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
-                            from="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/"
+                            to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
+                            from="/$accountId/$vaultId/$folderId/$backupId/$directoryId/"
                             params={(params) => ({
                               ...params,
                               directoryId: objectId,
@@ -120,8 +120,8 @@ export function DirectoryBreadcrumb() {
           nativeButton={false}
           render={
             <Link
-              to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
-              from="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/"
+              to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
+              from="/$accountId/$vaultId/$folderId/$backupId/$directoryId/"
               params={(params) => ({
                 ...params,
                 directoryId: parentDirectoryId,

@@ -98,8 +98,6 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
     vaultId: string;
   }) => ({
     ...params,
-    hostName: folder?.source.host || "",
-    userName: folder?.source.userName || "",
     folderId: folder?.id || "",
   });
 
@@ -107,7 +105,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
     <div className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2">
       {folder && folderRouteParams ? (
         <Link
-          to="/$accountId/$vaultId/$hostName/$userName/$folderId"
+          to="/$accountId/$vaultId/$folderId"
           from="/$accountId/$vaultId"
           params={folderRouteParams}
           className="absolute inset-0"
@@ -159,7 +157,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
               <DropdownMenuItem
                 render={
                   <Link
-                    to="/$accountId/$vaultId/$hostName/$userName/$folderId"
+                    to="/$accountId/$vaultId/$folderId"
                     from="/$accountId/$vaultId"
                     params={folderRouteParams}
                   >

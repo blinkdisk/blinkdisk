@@ -25,7 +25,7 @@ import {
 import animation from "/animations/backup.lottie?url";
 
 export const Route = createFileRoute(
-  "/$accountId/$vaultId/$hostName/$userName/$folderId/",
+  "/$accountId/$vaultId/$folderId/",
 )({
   component: RouteComponent,
 });

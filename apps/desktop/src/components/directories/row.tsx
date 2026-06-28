@@ -21,7 +21,7 @@ export function DirectoryItemRow({
   reset,
 }: DirectoryItemRowProps) {
   const navigate = useNavigate({
-    from: "/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/",
+    from: "/$accountId/$vaultId/$folderId/$backupId/$directoryId/",
   });
   const { mutate: startRestore, isPending: isStartingRestore } =
     useStartRestore();
@@ -40,7 +40,7 @@ export function DirectoryItemRow({
           reset();
 
           navigate({
-            to: "/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId",
+            to: "/$accountId/$vaultId/$folderId/$backupId/$directoryId",
             params: (params) => ({
               ...params,
               directoryId: row.original.objectId,
