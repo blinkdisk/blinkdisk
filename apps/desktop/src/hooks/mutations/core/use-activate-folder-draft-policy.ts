@@ -7,7 +7,7 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { buildFolderId, hashFolder } from "@desktop/lib/folder";
+import { buildFolderId } from "@desktop/lib/folder";
 import { convertPolicyToCore } from "@desktop/lib/policy";
 import {
   type PolicyTarget,
@@ -77,13 +77,7 @@ export function useActivateFolderDraftPolicy({
         path: draftTarget.path,
       });
 
-      const folderFingerprint = await hashFolder({
-        hostName: draftTarget.hostName,
-        userName: draftTarget.userName,
-        path: draftTarget.path,
-      });
-
-      return { accountId, folderFingerprint, id, vaultId, target: draftTarget };
+      return { accountId, id, vaultId, target: draftTarget };
     },
     onError: (error) => {
       onError?.(error);
@@ -101,7 +95,6 @@ export function useActivateFolderDraftPolicy({
     onSuccess: async (res) => {
       posthog.capture("folder_add", {
         vaultId: res.vaultId,
-        folderId: res.folderFingerprint,
       });
 
       await Promise.all([
