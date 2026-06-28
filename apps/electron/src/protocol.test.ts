@@ -17,7 +17,31 @@ vi.mock("electron", () => ({
 }));
 
 import path from "node:path";
-import { isPathSafe, resolveProtocolPath } from "@electron/protocol";
+import { INTERNAL_SCHEME } from "@blinkdisk/constants/app";
+import {
+  isPathSafe,
+  registerProtcol,
+  resolveProtocolPath,
+} from "@electron/protocol";
+import { protocol } from "electron";
+
+describe("registerProtcol", () => {
+  it("registers the internal scheme as fetch and CORS capable", () => {
+    registerProtcol();
+
+    expect(protocol.registerSchemesAsPrivileged).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          scheme: INTERNAL_SCHEME,
+          privileges: expect.objectContaining({
+            corsEnabled: true,
+            supportFetchAPI: true,
+          }),
+        }),
+      ]),
+    );
+  });
+});
 
 describe("resolveProtocolPath", () => {
   const baseDir = "/srv/frontend";
