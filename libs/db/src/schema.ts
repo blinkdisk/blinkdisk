@@ -314,7 +314,7 @@ export const config = pgTable(
 );
 
 export const authSchema = {
-  account,
+  user: account,
   authMethod,
   session,
   verification,

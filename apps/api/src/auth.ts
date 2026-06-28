@@ -42,7 +42,7 @@ export const auth = (env: CloudflareBindings, db: Database) => {
       },
     },
     user: {
-      modelName: "account",
+      modelName: "user",
       additionalFields: {
         language: {
           type: "string",
