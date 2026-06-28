@@ -358,8 +358,8 @@ catalogs:
       specifier: ^4.3.1
       version: 4.3.1
     tough-cookie:
-      specifier: ^5.1.2
-      version: 5.1.2
+      specifier: ^6.0.1
+      version: 6.0.1
     turbo:
       specifier: ^2.10.0
       version: 2.10.0
@@ -749,7 +749,7 @@ importers:
         version: 3.1.1
       tough-cookie:
         specifier: 'catalog:'
-        version: 5.1.2
+        version: 6.0.1
       zod:
         specifier: 'catalog:'
         version: 4.4.3
@@ -8156,11 +8156,11 @@ packages:
     resolution: {integrity: sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@6.1.86:
-    resolution: {integrity: sha512-Je6p7pkk+KMzMv2XXKmAE3McmolOQFdxkKw0R8EYNr7sELW46JqnNeTX8ybPiQgvg1ymCoF8LXs5fzFaZvJPTA==}
+  tldts-core@7.4.4:
+    resolution: {integrity: sha512-vwVLJVvvpslm7vqAH7+XNj/neA/Ynq7DT2EEcMuwc5YzN5XaMyRAqxwU+uX3azZ1FQtB2gvrvnLnAEkvYlVdfg==}
 
-  tldts@6.1.86:
-    resolution: {integrity: sha512-WMi/OQ2axVTf/ykqCQgXiIct+mSQDFdH2fkwhPwgEwvJ1kSzZRiinb0zF2Xb8u4+OqPChmyI6MEu4EezNJz+FQ==}
+  tldts@7.4.4:
+    resolution: {integrity: sha512-kFXFK7O4WPextIUAOk8qtnw9dxR9UIXP9CjuH1cTBVBZMDeQcUPgr/IazGiw1B0Yiw5L75gHLWeW4iD793r90g==}
     hasBin: true
 
   tmp-promise@3.0.3:
@@ -8178,8 +8178,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  tough-cookie@5.1.2:
-    resolution: {integrity: sha512-FVDYdxtnj0G6Qm/DhNPSb8Ju59ULcup3tuJxkFb5K8Bv2pUXILbf0xZWU8PX8Ov19OXljbUyveOFwRMwkXzO+A==}
+  tough-cookie@6.0.1:
+    resolution: {integrity: sha512-LktZQb3IeoUWB9lqR5EWTHgW/VTITCXg4D21M+lvybRVdylLrRMnqaIONLVb5mav8vM19m44HIcGq4qASeu2Qw==}
     engines: {node: '>=16'}
 
   tr46@0.0.3:
@@ -16620,11 +16620,11 @@ snapshots:
 
   tinyrainbow@3.1.0: {}
 
-  tldts-core@6.1.86: {}
+  tldts-core@7.4.4: {}
 
-  tldts@6.1.86:
+  tldts@7.4.4:
     dependencies:
-      tldts-core: 6.1.86
+      tldts-core: 7.4.4
 
   tmp-promise@3.0.3:
     dependencies:
@@ -16640,9 +16640,9 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  tough-cookie@5.1.2:
+  tough-cookie@6.0.1:
     dependencies:
-      tldts: 6.1.86
+      tldts: 7.4.4
 
   tr46@0.0.3: {}
 

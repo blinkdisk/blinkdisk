@@ -115,7 +115,7 @@
 - [x] `sonner` Current: `^2.0.1` New: `2.0.7` Change: `Patch`
 - [x] `tailwind-merge` Current: `^3.0.2` New: `3.6.0` Change: `Minor`
 - [x] `tailwindcss` Current: `^4.0.14` New: `4.3.1` Change: `Minor`
-- [ ] `tough-cookie` Current: `^5.1.2` New: `6.0.1` Change: `Major`
+- [x] `tough-cookie` Current: `^5.1.2` New: `6.0.1` Change: `Major`
 - [x] `turbo` Current: `^2.4.4` New: `2.10.0` Change: `Minor`
 - [x] `twemoji-parser` Current: `^14.0.0` New: `14.0.0` Change: `None`
   - [x] `@types/twemoji-parser` Current: `^13.1.4` New: `13.1.4` Change: `None`
