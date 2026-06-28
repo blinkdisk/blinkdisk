@@ -2,12 +2,10 @@ import { VaultOverview } from "@desktop/components/vaults/overview";
 import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/",
-)({
+export const Route = createFileRoute("/$accountId/$vaultId/$hostName/")({
   component: RouteComponent,
 });
 
@@ -17,7 +15,7 @@ function RouteComponent() {
   const { localUserName } = useLocalProfile();
   const { hostName } = useProfile();
 
-  const navigate = Route.useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
 
   useEffect(() => {
     if (!devices || !hostName || !localUserName) return;
@@ -26,7 +24,7 @@ function RouteComponent() {
 
     if (!device)
       navigate({
-        to: "/{-$accountId}/{-$vaultId}",
+        to: "/$accountId/$vaultId",
         replace: true,
       });
     else {
@@ -35,9 +33,10 @@ function RouteComponent() {
       );
 
       navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
+        to: "/$accountId/$vaultId/$hostName/$userName",
         params: (params) => ({
           ...params,
+          hostName,
           userName: localUser
             ? localUserName
             : device.users[0]?.userName || localUserName,

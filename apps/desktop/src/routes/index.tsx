@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/" });
 
   useEffect(() => {
     const hasSkippedAuth = window.electron.store.get("hasSkippedAuth") as
@@ -46,7 +46,7 @@ function RouteComponent() {
       | null;
 
     navigate({
-      to: "/{-$accountId}",
+      to: "/$accountId",
       params: { accountId: accountId || LOCAL_ACCOUNT_ID },
       replace: true,
     });

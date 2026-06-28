@@ -247,7 +247,7 @@ type BackupProps = {
   backup: Backup | undefined;
 };
 
-export function Backup({ backup }: BackupProps) {
+function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
   const { openDeleteBackupDialog } = useDeleteBackupDialog();
   const { openPinBackupDialog } = usePinBackupDialog();
@@ -257,15 +257,18 @@ export function Backup({ backup }: BackupProps) {
 
   return (
     <div className={cn(cardClassName, "hover:bg-card-hover")}>
-      <Link
-        to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-        params={(params) => ({
-          ...params,
-          backupId: backup?.id || "",
-          directoryId: backup && "rootID" in backup ? backup?.rootID : "",
-        })}
-        className="absolute inset-0"
-      />
+      {backup?.id && backup.rootID ? (
+        <Link
+          to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
+          from="/$accountId/$vaultId/$hostName/$userName/$folderId/"
+          params={(params) => ({
+            ...params,
+            backupId: backup.id,
+            directoryId: backup.rootID,
+          })}
+          className="absolute inset-0"
+        />
+      ) : null}
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <p className="text-lg font-semibold">
@@ -336,22 +339,24 @@ export function Backup({ backup }: BackupProps) {
               }
             />
             <DropdownMenuContent className="w-48" align="end">
-              <DropdownMenuItem
-                render={
-                  <Link
-                    to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-                    params={(params) => ({
-                      ...params,
-                      backupId: backup?.id || "",
-                      directoryId:
-                        backup && "rootID" in backup ? backup?.rootID : "",
-                    })}
-                  >
-                    <FileSearchIcon />
-                    {t("dropdown.browse")}
-                  </Link>
-                }
-              />
+              {backup.id && backup.rootID ? (
+                <DropdownMenuItem
+                  render={
+                    <Link
+                      to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$hostName/$userName/$folderId/"
+                      params={(params) => ({
+                        ...params,
+                        backupId: backup.id,
+                        directoryId: backup.rootID,
+                      })}
+                    >
+                      <FileSearchIcon />
+                      {t("dropdown.browse")}
+                    </Link>
+                  }
+                />
+              ) : null}
               <DropdownMenuItem
                 onClick={() =>
                   openRenameBackupDialog({

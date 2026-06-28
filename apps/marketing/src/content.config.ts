@@ -45,14 +45,14 @@ const security = defineCollection({
     credits: z.array(
       z.object({
         name: z.string(),
-        url: z.string().url().optional(),
+        url: z.url().optional(),
       }),
     ),
     references: z
       .array(
         z.object({
           title: z.string(),
-          url: z.string().url(),
+          url: z.url(),
         }),
       )
       .optional(),

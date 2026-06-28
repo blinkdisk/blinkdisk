@@ -18,9 +18,9 @@ export function useSignOutDialog() {
   }, []);
 
   function openSignOutDialog() {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
-    });
+    }));
   }
 
   return {

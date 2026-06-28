@@ -45,12 +45,12 @@ const STORAGE_SEGMENTS = Array.from(
   (_, index) => index,
 );
 
-export const Route = createFileRoute("/{-$accountId}/cloudblink")({
+export const Route = createFileRoute("/$accountId/cloudblink")({
   beforeLoad: ({ params }) => {
     if (params.accountId === LOCAL_ACCOUNT_ID)
       throw redirect({
-        to: "/{-$accountId}",
-        params: { accountId: params.accountId },
+        to: "/$accountId",
+        from: "/$accountId/cloudblink",
       });
   },
   component: RouteComponent,

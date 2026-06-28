@@ -10,18 +10,21 @@ export function AuthListener() {
   const { setIsOpen: setAuthDialogIsOpen } = useAuthDialog();
   const { openMoveVaultsDialog } = useMoveVaultsDialog();
   const { setAuthenticated, accountChanged } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/" });
 
   const onAccountAdd = useCallback(
     async ({ accountId }: { accountId: string }) => {
       setAuthDialogIsOpen(false);
 
       await setAuthenticated(true);
-      await navigate({ to: "/{-$accountId}/loading" });
+      await navigate({
+        to: "/$accountId/loading",
+        params: { accountId },
+      });
 
       await accountChanged(accountId);
 
-      navigate({ to: "/{-$accountId}", params: { accountId } });
+      navigate({ to: "/$accountId", params: { accountId } });
 
       const localVaults = getVaultCollection(LOCAL_ACCOUNT_ID)
         .find({ status: "ACTIVE" })

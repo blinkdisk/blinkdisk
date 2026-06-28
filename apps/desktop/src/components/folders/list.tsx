@@ -71,7 +71,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
   const { mutate: startBackup } = useStartBackup({ profile });
   const { mutate: cancelBackup } = useCancelBackup({ profile });
   const { openDeleteFolderDialog } = useDeleteFolderDialog();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
 
   const showProgress = useMemo(
     () =>
@@ -95,24 +95,24 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
 
   const folderRouteParams = (params: {
     accountId?: string;
-    vaultId?: string;
-    hostName?: string;
-    userName?: string;
-    folderId?: string;
+    vaultId: string;
   }) => ({
     ...params,
-    hostName: folder?.source.host || params.hostName,
-    userName: folder?.source.userName || params.userName,
+    hostName: folder?.source.host || "",
+    userName: folder?.source.userName || "",
     folderId: folder?.id || "",
   });
 
   return (
     <div className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2">
-      <Link
-        to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
-        params={folderRouteParams}
-        className="absolute inset-0"
-      />
+      {folder && folderRouteParams ? (
+        <Link
+          to="/$accountId/$vaultId/$hostName/$userName/$folderId"
+          from="/$accountId/$vaultId"
+          params={folderRouteParams}
+          className="absolute inset-0"
+        />
+      ) : null}
       <FolderPreview folder={folder} />
       <div className="flex items-center gap-3">
         {showStartTime || showProgress ? (
@@ -159,7 +159,8 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
               <DropdownMenuItem
                 render={
                   <Link
-                    to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}"
+                    to="/$accountId/$vaultId/$hostName/$userName/$folderId"
+                    from="/$accountId/$vaultId"
                     params={folderRouteParams}
                   >
                     <FolderSearchIcon />
@@ -190,7 +191,12 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
                 <DropdownMenuItem
                   onClick={() =>
                     navigate({
-                      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
+                      to: "/$accountId/$vaultId/$hostName/$userName/policies",
+                      params: (params) => ({
+                        ...params,
+                        hostName: folder.source.host,
+                        userName: folder.source.userName,
+                      }),
                       search: policyTargetToSearch({
                         kind: "FOLDER",
                         hostName: folder.source.host,

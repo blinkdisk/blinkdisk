@@ -29,10 +29,10 @@ export function useRestoreDirectoryDialog() {
   }, []);
 
   function openRestoreDirectory(options: RestoreDirectoryDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

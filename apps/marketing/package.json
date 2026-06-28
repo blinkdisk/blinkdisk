@@ -13,6 +13,7 @@
   "dependencies": {
     "@astrojs/check": "catalog:",
     "@astrojs/cloudflare": "catalog:",
+    "@astrojs/markdown-remark": "catalog:",
     "@astrojs/mdx": "catalog:",
     "@astrojs/react": "catalog:",
     "@astrojs/sitemap": "catalog:",
@@ -52,6 +53,7 @@
     "@blinkdisk/assets": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/dom-to-image": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/twemoji-parser": "catalog:",

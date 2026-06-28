@@ -46,12 +46,15 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
     select: ({ pathname }) => pathname,
   });
 
+  if (!accountId) return null;
+
   const vaultPath =
     accountId && vaultId && hostName && userName
       ? `/${accountId}/${vaultId}/${hostName}/${userName}`
       : undefined;
   const settingsPath = vaultPath ? `${vaultPath}/settings` : undefined;
   const policiesPath = vaultPath ? `${vaultPath}/policies` : undefined;
+  const hasProfileParams = !!vaultId && !!hostName && !!userName;
 
   return (
     <SidebarSkeletonTheme>
@@ -59,7 +62,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem className="pl-3 py-2">
-              <Link to="/{-$accountId}" tabIndex={-1}>
+              <Link to="/$accountId" from="/$accountId" tabIndex={-1}>
                 <Logo />
               </Link>
             </SidebarMenuItem>
@@ -73,7 +76,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === `/${accountId}`}
                   render={
-                    <Link to="/{-$accountId}">
+                    <Link to="/$accountId" from="/$accountId">
                       <HomeIcon />
                       {t("home")}
                     </Link>
@@ -86,7 +89,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     className="px-3"
                     isActive={pathname === `/${accountId}/cloudblink`}
                     render={
-                      <Link to="/{-$accountId}/cloudblink">
+                      <Link to="/$accountId/cloudblink" from="/$accountId">
                         <CloudIcon />
                         {t("cloudblink")}
                       </Link>
@@ -99,7 +102,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === `/${accountId}/account`}
                   render={
-                    <Link to="/{-$accountId}/account">
+                    <Link to="/$accountId/account" from="/$accountId">
                       <UserIcon />
                       {t("account")}
                     </Link>
@@ -113,7 +116,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 <SidebarMenuButton
                   className="px-3 text-muted-foreground hover:text-foreground"
                   render={
-                    <Link to="/{-$accountId}">
+                    <Link to="/$accountId" from="/$accountId">
                       <ArrowLeftIcon />
                       {t("backToAccount")}
                     </Link>
@@ -136,10 +139,28 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     `/${accountId}/${vaultId}/${hostName}/${userName}`
                   }
                   render={
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}">
-                      <LayoutDashboardIcon />
-                      {t("overview")}
-                    </Link>
+                    hasProfileParams ? (
+                      <Link
+                        to="/$accountId/$vaultId/$hostName/$userName"
+                        from="/$accountId/$vaultId/$hostName/$userName"
+                      >
+                        <LayoutDashboardIcon />
+                        {t("overview")}
+                      </Link>
+                    ) : vaultId ? (
+                      <Link
+                        to="/$accountId/$vaultId"
+                        from="/$accountId/$vaultId"
+                      >
+                        <LayoutDashboardIcon />
+                        {t("overview")}
+                      </Link>
+                    ) : (
+                      <span>
+                        <LayoutDashboardIcon />
+                        {t("overview")}
+                      </span>
+                    )
                   }
                 />
               </SidebarMenuItem>
@@ -148,10 +169,20 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === policiesPath}
                   render={
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies">
-                      <FileCogIcon />
-                      {t("policies")}
-                    </Link>
+                    hasProfileParams ? (
+                      <Link
+                        to="/$accountId/$vaultId/$hostName/$userName/policies"
+                        from="/$accountId/$vaultId/$hostName/$userName"
+                      >
+                        <FileCogIcon />
+                        {t("policies")}
+                      </Link>
+                    ) : (
+                      <span>
+                        <FileCogIcon />
+                        {t("policies")}
+                      </span>
+                    )
                   }
                 />
               </SidebarMenuItem>
@@ -160,10 +191,20 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === settingsPath}
                   render={
-                    <Link to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings">
-                      <SettingsIcon />
-                      {t("settings")}
-                    </Link>
+                    hasProfileParams ? (
+                      <Link
+                        to="/$accountId/$vaultId/$hostName/$userName/settings"
+                        from="/$accountId/$vaultId/$hostName/$userName"
+                      >
+                        <SettingsIcon />
+                        {t("settings")}
+                      </Link>
+                    ) : (
+                      <span>
+                        <SettingsIcon />
+                        {t("settings")}
+                      </span>
+                    )
                   }
                 />
               </SidebarMenuItem>

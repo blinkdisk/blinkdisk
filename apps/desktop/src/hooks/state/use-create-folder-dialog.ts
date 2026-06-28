@@ -21,10 +21,10 @@ export function useCreateFolderDialog() {
   }, []);
 
   function openCreateFolder(values?: Partial<ZCreateFolderFormType>) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       defaultValues: values || null,
-    });
+    }));
   }
 
   function clearDefaultValues() {

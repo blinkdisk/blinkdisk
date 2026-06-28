@@ -26,10 +26,10 @@ export function useMoveVaultsDialog() {
   }, []);
 
   function openMoveVaultsDialog(options?: MoveVaultsDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options: options || null,
-    });
+    }));
   }
 
   return {

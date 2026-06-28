@@ -19,7 +19,8 @@ export function VaultCard({ vault }: VaultCardProps) {
 
   return (
     <Link
-      to="/{-$accountId}/{-$vaultId}"
+      to="/$accountId/$vaultId"
+      from="/$accountId"
       params={(params) => ({ ...params, vaultId: vault.id })}
       className="bg-card hover:bg-card-hover rounded-xl border overflow-hidden shadow-xs flex flex-col justify-evenly gap-2 py-5 relative group"
     >

@@ -23,6 +23,7 @@ export function DownloadButton({ os, className }: Props) {
       variant={isCurrentPlatform ? "default" : "outline"}
       render={<a href="/download" />}
       className={className}
+      nativeButton={false}
     >
       Download
     </Button>

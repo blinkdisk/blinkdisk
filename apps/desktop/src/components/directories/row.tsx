@@ -20,7 +20,9 @@ export function DirectoryItemRow({
   virtualRow,
   reset,
 }: DirectoryItemRowProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigate({
+    from: "/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/",
+  });
   const { mutate: startRestore, isPending: isStartingRestore } =
     useStartRestore();
 
@@ -33,13 +35,15 @@ export function DirectoryItemRow({
         if (target.closest(INTERACTIVE_ROW_TARGET_SELECTOR)) return;
 
         if (row.original?.type === "DIRECTORY") {
+          if (!row.original.objectId) return;
+
           reset();
 
           navigate({
-            to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}",
+            to: "/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId",
             params: (params) => ({
               ...params,
-              directoryId: row.original.objectId || "",
+              directoryId: row.original.objectId,
             }),
             search: (search) => ({
               ...search,

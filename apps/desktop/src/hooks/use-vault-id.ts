@@ -2,19 +2,22 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { useCallback } from "react";
 
 export function useVaultId() {
-  const navigate = useNavigate();
-  const { vaultId } = useParams({ strict: false });
+  const navigate = useNavigate({ from: "/$accountId" });
+  const { accountId, vaultId } = useParams({ strict: false });
 
   const changeVault = useCallback(
     (id: string) => {
+      if (!accountId) return;
+
       navigate({
-        to: "/{-$accountId}/{-$vaultId}",
-        params: {
+        to: "/$accountId/$vaultId",
+        params: (params) => ({
+          ...params,
           vaultId: id,
-        },
+        }),
       });
     },
-    [navigate],
+    [navigate, accountId],
   );
 
   return { vaultId, changeVault };

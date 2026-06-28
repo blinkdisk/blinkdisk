@@ -9,7 +9,7 @@ import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-export type FolderStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";
+type FolderStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";
 
 export type CoreFolderItem = {
   id: string;

@@ -25,7 +25,12 @@ function RouteComponent() {
           <Trans
             i18nKey="auth:magic.description"
             components={[
-              <Link key={0} to="/auth/login" className="link-primary" />,
+              <Link
+                key={0}
+                to="/auth/login"
+                from="/auth/magic"
+                className="link-primary"
+              />,
             ]}
           />
         </div>

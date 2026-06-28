@@ -24,10 +24,10 @@ export function useTaskDialog() {
   }, []);
 
   function openTaskDialog(options: TaskDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

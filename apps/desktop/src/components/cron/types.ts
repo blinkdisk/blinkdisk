@@ -253,20 +253,20 @@ export interface Locale {
 interface SetValueFunctionExtra {
   selectedPeriod: PeriodType;
 }
-export type SetValue = (value: string, extra?: SetValueFunctionExtra) => void;
-export type CronError =
+type SetValue = (value: string, extra?: SetValueFunctionExtra) => void;
+type CronError =
   | {
       type: "invalid_cron";
       description: string;
     }
   | undefined;
-export type OnErrorFunction = (error: CronError) => void;
+type OnErrorFunction = (error: CronError) => void;
 export type OnError =
   | OnErrorFunction
   | Dispatch<SetStateAction<CronError>>
   | undefined;
-export type ClearButtonProps = Omit<ButtonProps, "onClick">;
-export type ClearButtonAction = "empty" | "fill-with-every";
+type ClearButtonProps = Omit<ButtonProps, "onClick">;
+type ClearButtonAction = "empty" | "fill-with-every";
 export type PeriodType =
   | "year"
   | "month"
@@ -276,7 +276,7 @@ export type PeriodType =
   | "minute"
   | "reboot";
 export type AllowEmpty = "always" | "never" | "for-default-value";
-export type CronType =
+type CronType =
   | "period"
   | "months"
   | "month-days"
@@ -296,7 +296,7 @@ export type ShortcutsType =
   | "@hourly"
   | "@reboot";
 export type Shortcuts = boolean | ShortcutsType[];
-export type Mode = "multiple" | "single";
+type Mode = "multiple" | "single";
 export type DropdownConfig = {
   humanizeLabels?: boolean;
   humanizeValue?: boolean;
@@ -319,7 +319,7 @@ export type DropdownsConfig = {
 
 // Internal props
 
-export interface FieldProps {
+interface FieldProps {
   value?: number[];
   setValue: SetValueNumbersOrUndefined;
   locale: Locale;
@@ -457,7 +457,7 @@ export interface Unit {
   total: number;
   alt?: string[];
 }
-export type FilterOption = ({
+type FilterOption = ({
   value,
   label,
 }: {

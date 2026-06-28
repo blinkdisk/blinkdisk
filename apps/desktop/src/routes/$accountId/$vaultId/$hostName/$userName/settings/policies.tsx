@@ -9,13 +9,13 @@ const ZPolicySearch = z.object({
 });
 
 export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings/policies",
+  "/$accountId/$vaultId/$hostName/$userName/settings/policies",
 )({
   validateSearch: ZPolicySearch,
-  beforeLoad: ({ params, search }) => {
+  beforeLoad: ({ search }) => {
     throw redirect({
-      to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
-      params,
+      to: "/$accountId/$vaultId/$hostName/$userName/policies",
+      from: "/$accountId/$vaultId/$hostName/$userName/settings/policies",
       search,
     });
   },

@@ -90,7 +90,7 @@ function RouteComponent() {
         />
       </p>
       <Button
-        render={<Link to="/auth/login" search={search} />}
+        render={<Link to="/auth/login" from="/auth/success" search={search} />}
         nativeButton={false}
         className="mt-6"
       >

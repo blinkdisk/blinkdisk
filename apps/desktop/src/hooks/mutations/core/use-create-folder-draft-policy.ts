@@ -1,6 +1,7 @@
 import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { convertPolicyToCore, emptyPolicy } from "@desktop/lib/policy";
@@ -18,9 +19,10 @@ export function useCreateFolderDraftPolicy({
 }: {
   onSuccess?: () => void;
 } = {}) {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
+  const { accountId } = useAccountId();
   const { vaultId } = useVaultId();
 
   return useMutation({
@@ -31,7 +33,7 @@ export function useCreateFolderDraftPolicy({
         userName: string | null;
       },
     ) => {
-      if (!vaultId || !values.hostName || !values.userName)
+      if (!accountId || !vaultId || !values.hostName || !values.userName)
         throw new CustomError("MISSING_REQUIRED_VALUE");
 
       const target = createDraftPolicyTarget({
@@ -52,16 +54,21 @@ export function useCreateFolderDraftPolicy({
         },
       );
 
-      return target;
+      return { target };
     },
     onError: showErrorToast,
-    onSuccess: async (target) => {
+    onSuccess: async ({ target }) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.policy.all,
       });
 
       await navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
+        to: "/$accountId/$vaultId/$hostName/$userName/policies",
+        params: (params) => ({
+          ...params,
+          hostName: target.hostName,
+          userName: target.userName,
+        }),
         search: policyTargetToSearch(target),
       });
 

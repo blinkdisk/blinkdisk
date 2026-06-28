@@ -25,10 +25,10 @@ export function useEditExclusionDialog() {
   }, []);
 
   function openEditExclusionDialog(options: EditExclusionDialogOptions) {
-    store.setState({
+    store.setState(() => ({
       isOpen: true,
       options,
-    });
+    }));
   }
 
   return {

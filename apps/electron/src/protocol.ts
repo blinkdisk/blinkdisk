@@ -23,6 +23,7 @@ export function registerProtcol() {
       privileges: {
         standard: true,
         secure: true,
+        corsEnabled: true,
         supportFetchAPI: true,
       },
     },

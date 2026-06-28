@@ -2,13 +2,15 @@ import { config } from "dotenv";
 
 config({
   path: "../../.env",
+  quiet: true,
 });
 
+import babel from "@rolldown/plugin-babel";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
 import env from "vite-plugin-environment";
@@ -44,11 +46,8 @@ export default defineConfig({
     injectAppConfig(),
     paths(),
     router({ target: "react", autoCodeSplitting: true }),
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", {}]],
-      },
-    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
     env(
       {

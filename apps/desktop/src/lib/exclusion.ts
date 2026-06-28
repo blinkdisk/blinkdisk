@@ -45,7 +45,7 @@ export function parseExclusionRule(rule: string): ParsedExclusionRule {
   };
 }
 
-export type MatchType = "EXACT" | "STARTS_WITH" | "ENDS_WITH" | "CONTAINS";
+type MatchType = "EXACT" | "STARTS_WITH" | "ENDS_WITH" | "CONTAINS";
 
 export function buildExclusionRule(values: ZExclusionFormType) {
   let newRule = "";

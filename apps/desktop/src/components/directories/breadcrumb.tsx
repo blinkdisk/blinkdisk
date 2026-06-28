@@ -59,7 +59,8 @@ export function DirectoryBreadcrumb() {
                   className="text-base"
                   render={
                     <Link
-                      to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
+                      to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/"
                       params={(params) => ({
                         ...params,
                         directoryId: backup.rootID,
@@ -87,8 +88,9 @@ export function DirectoryBreadcrumb() {
                         className="text-base"
                         render={
                           <Link
-                            to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-                            params={(params: Record<string, string>) => ({
+                            to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
+                            from="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/"
+                            params={(params) => ({
                               ...params,
                               directoryId: objectId,
                             })}
@@ -115,10 +117,12 @@ export function DirectoryBreadcrumb() {
           size="sm"
           aria-label="Go to parent folder"
           className="shrink-0"
+          nativeButton={false}
           render={
             <Link
-              to="/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/{-$backupId}/{-$directoryId}"
-              params={(params: Record<string, string>) => ({
+              to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
+              from="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/"
+              params={(params) => ({
                 ...params,
                 directoryId: parentDirectoryId,
               })}

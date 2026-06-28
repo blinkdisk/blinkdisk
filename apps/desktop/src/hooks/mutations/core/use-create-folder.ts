@@ -4,6 +4,7 @@ import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -23,9 +24,10 @@ export function useCreateFolder({
   onError?: (error: unknown) => void;
 }) {
   const posthog = usePostHog();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
   const queryClient = useQueryClient();
 
+  const { accountId } = useAccountId();
   const { vaultId } = useVaultId();
   const { localHostName, localUserName } = useLocalProfile();
   const { queryKeys } = useQueryKey();
@@ -49,7 +51,8 @@ export function useCreateFolder({
         size: number | null;
       },
     ) => {
-      if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
+      if (!accountId || !vaultId || !profile)
+        throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (!values.force && space && vault && vault.provider === "CLOUDBLINK") {
         let size = values.size;
@@ -83,7 +86,7 @@ export function useCreateFolder({
         path: values.path,
       });
 
-      return { id, profile, vaultId };
+      return { accountId, id, profile, vaultId };
     },
     onError: (error) => {
       onError?.(error);
@@ -109,7 +112,7 @@ export function useCreateFolder({
       ]);
 
       await navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
+        to: "/$accountId/$vaultId/$hostName/$userName/$folderId",
         params: (params) => ({
           ...params,
           hostName: res.profile.deviceName,

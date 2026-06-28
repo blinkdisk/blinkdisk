@@ -2,14 +2,16 @@ import { config } from "dotenv";
 
 config({
   path: "../../.env",
+  quiet: true,
 });
 
 import { cloudflare } from "@cloudflare/vite-plugin";
+import babel from "@rolldown/plugin-babel";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { TanStackRouterVite as router } from "@tanstack/router-plugin/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import env from "vite-plugin-environment";
 import { viteStaticCopy as copy } from "vite-plugin-static-copy";
@@ -31,11 +33,8 @@ export default defineConfig({
     cloudflare(),
     paths(),
     router({ target: "react", autoCodeSplitting: true }),
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", {}]],
-      },
-    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
     env(
       {

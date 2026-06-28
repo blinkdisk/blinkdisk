@@ -7,7 +7,7 @@ import {
   Link,
   Preview,
   Tailwind,
-} from "@react-email/components";
+} from "react-email";
 
 export interface LayoutProps {
   preview: string;

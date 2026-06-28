@@ -21,7 +21,7 @@ import {
   EyeOffIcon,
   LockIcon,
 } from "lucide-react";
-import type { FormEvent, ReactElement } from "react";
+import type { ReactElement, SubmitEvent } from "react";
 import { cloneElement, useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -111,7 +111,7 @@ export function CodeStatsForm({
   );
 
   const submit = useCallback(
-    async (e: FormEvent) => {
+    async (e: SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       if (provider === "gitlab" && !isValidGitlabHost(host)) {

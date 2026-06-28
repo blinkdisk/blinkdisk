@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { CloudBlinkLogo } from "@desktop/components/icons/cloudblink";
 import { useCreateVaultForm } from "@desktop/hooks/forms/use-create-vault-form";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
 import { AlertTriangleIcon, SquarePenIcon } from "lucide-react";
@@ -71,20 +72,24 @@ export function CreateVaultDetails({
 }: CreateVaultDetailsProps) {
   const { t } = useAppTranslation("vault.createDialog.details");
   const { dark } = useTheme();
+  const { accountId } = useAccountId();
 
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId" });
 
   const form = useCreateVaultForm({
     config,
     providerType,
     onSuccess: async (res) => {
+      if (!accountId) return;
+
       await navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
-        params: {
+        to: "/$accountId/$vaultId/$hostName/$userName",
+        params: (params) => ({
+          ...params,
           vaultId: res.vaultId,
           hostName: window.electron.os.hostName(res.vaultId),
           userName: window.electron.os.userName(res.vaultId),
-        },
+        }),
       });
 
       onSubmit?.();

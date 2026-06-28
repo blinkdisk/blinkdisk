@@ -14,7 +14,7 @@ export const ZLogin = z.object({
 
 export type ZLoginType = z.infer<typeof ZLogin>;
 
-export const ZRegister = z.object({
+const ZRegister = z.object({
   firstName: ZAccountFirstName,
   lastName: ZAccountLastName,
   email: ZAccountEmail,
@@ -31,7 +31,7 @@ export const ZRegisterForm = ZRegister.extend(
 
 export type ZRegisterFormType = z.infer<typeof ZRegisterForm>;
 
-export const ZRegisterServer = z.object({
+const ZRegisterServer = z.object({
   name: ZAccountFullName,
   email: ZAccountEmail,
   language: ZAccountLanguage,

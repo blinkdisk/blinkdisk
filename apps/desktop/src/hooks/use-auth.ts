@@ -12,7 +12,7 @@ import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
 export function useAuth() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId" });
   const posthog = usePostHog();
   const queryClient = useQueryClient();
 
@@ -69,12 +69,15 @@ export function useAuth() {
 
   const selectAccount = useCallback(
     async (accountId: string) => {
-      navigate({ to: "/{-$accountId}/loading" });
+      navigate({
+        to: "/$accountId/loading",
+        params: { accountId },
+      });
 
       await accountChanged(accountId);
 
       navigate({
-        to: "/{-$accountId}",
+        to: "/$accountId",
         params: { accountId },
       });
     },
@@ -82,8 +85,11 @@ export function useAuth() {
   );
 
   const logout = useCallback(async () => {
+    const nextAccountId = accountId || LOCAL_ACCOUNT_ID;
+
     await navigate({
-      to: "/{-$accountId}/loading",
+      to: "/$accountId/loading",
+      params: { accountId: nextAccountId },
     });
 
     if (accountId) await window.electron.auth.logout(accountId);
@@ -99,7 +105,7 @@ export function useAuth() {
       setAuthenticated(false);
 
       navigate({
-        to: "/{-$accountId}",
+        to: "/$accountId",
         params: { accountId: LOCAL_ACCOUNT_ID },
       });
     }

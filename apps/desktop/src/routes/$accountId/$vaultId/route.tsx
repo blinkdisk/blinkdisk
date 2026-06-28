@@ -8,7 +8,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { z } from "zod";
 
-export const Route = createFileRoute("/{-$accountId}/{-$vaultId}")({
+export const Route = createFileRoute("/$accountId/$vaultId")({
   component: RouteComponent,
   validateSearch: z.object({
     otherHostName: z.string().optional(),
