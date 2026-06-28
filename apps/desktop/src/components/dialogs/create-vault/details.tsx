@@ -74,7 +74,7 @@ export function CreateVaultDetails({
   const { dark } = useTheme();
   const { accountId } = useAccountId();
 
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId" });
 
   const form = useCreateVaultForm({
     config,
@@ -84,12 +84,12 @@ export function CreateVaultDetails({
 
       await navigate({
         to: "/$accountId/$vaultId/$hostName/$userName",
-        params: {
-          accountId,
+        params: (params) => ({
+          ...params,
           vaultId: res.vaultId,
           hostName: window.electron.os.hostName(res.vaultId),
           userName: window.electron.os.userName(res.vaultId),
-        },
+        }),
       });
 
       onSubmit?.();

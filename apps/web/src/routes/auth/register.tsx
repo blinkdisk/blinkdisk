@@ -33,6 +33,7 @@ function RouteComponent() {
               <Link
                 key={0}
                 to="/auth/login"
+                from="/auth/register"
                 search={search}
                 className="link-primary"
               />,

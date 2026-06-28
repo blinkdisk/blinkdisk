@@ -23,7 +23,7 @@ import { ArrowUpDownIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export function MoveVaultsDialog() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId" });
 
   const { t } = useAppTranslation("vault.moveDialog");
   const { isOpen, setIsOpen, options } = useMoveVaultsDialog();

@@ -48,18 +48,13 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
 
   if (!accountId) return null;
 
-  const accountParams = { accountId };
   const vaultPath =
     accountId && vaultId && hostName && userName
       ? `/${accountId}/${vaultId}/${hostName}/${userName}`
       : undefined;
   const settingsPath = vaultPath ? `${vaultPath}/settings` : undefined;
   const policiesPath = vaultPath ? `${vaultPath}/policies` : undefined;
-  const vaultParams = vaultId ? { ...accountParams, vaultId } : null;
-  const profileParams =
-    vaultParams && hostName && userName
-      ? { ...vaultParams, hostName, userName }
-      : null;
+  const hasProfileParams = !!vaultId && !!hostName && !!userName;
 
   return (
     <SidebarSkeletonTheme>
@@ -67,7 +62,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem className="pl-3 py-2">
-              <Link to="/$accountId" params={accountParams} tabIndex={-1}>
+              <Link to="/$accountId" from="/$accountId" tabIndex={-1}>
                 <Logo />
               </Link>
             </SidebarMenuItem>
@@ -81,7 +76,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === `/${accountId}`}
                   render={
-                    <Link to="/$accountId" params={accountParams}>
+                    <Link to="/$accountId" from="/$accountId">
                       <HomeIcon />
                       {t("home")}
                     </Link>
@@ -94,7 +89,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     className="px-3"
                     isActive={pathname === `/${accountId}/cloudblink`}
                     render={
-                      <Link to="/$accountId/cloudblink" params={accountParams}>
+                      <Link to="/$accountId/cloudblink" from="/$accountId">
                         <CloudIcon />
                         {t("cloudblink")}
                       </Link>
@@ -107,7 +102,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === `/${accountId}/account`}
                   render={
-                    <Link to="/$accountId/account" params={accountParams}>
+                    <Link to="/$accountId/account" from="/$accountId">
                       <UserIcon />
                       {t("account")}
                     </Link>
@@ -121,7 +116,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                 <SidebarMenuButton
                   className="px-3 text-muted-foreground hover:text-foreground"
                   render={
-                    <Link to="/$accountId" params={accountParams}>
+                    <Link to="/$accountId" from="/$accountId">
                       <ArrowLeftIcon />
                       {t("backToAccount")}
                     </Link>
@@ -144,16 +139,19 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                     `/${accountId}/${vaultId}/${hostName}/${userName}`
                   }
                   render={
-                    profileParams ? (
+                    hasProfileParams ? (
                       <Link
                         to="/$accountId/$vaultId/$hostName/$userName"
-                        params={profileParams}
+                        from="/$accountId/$vaultId/$hostName/$userName"
                       >
                         <LayoutDashboardIcon />
                         {t("overview")}
                       </Link>
-                    ) : vaultParams ? (
-                      <Link to="/$accountId/$vaultId" params={vaultParams}>
+                    ) : vaultId ? (
+                      <Link
+                        to="/$accountId/$vaultId"
+                        from="/$accountId/$vaultId"
+                      >
                         <LayoutDashboardIcon />
                         {t("overview")}
                       </Link>
@@ -171,10 +169,10 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === policiesPath}
                   render={
-                    profileParams ? (
+                    hasProfileParams ? (
                       <Link
                         to="/$accountId/$vaultId/$hostName/$userName/policies"
-                        params={profileParams}
+                        from="/$accountId/$vaultId/$hostName/$userName"
                       >
                         <FileCogIcon />
                         {t("policies")}
@@ -193,10 +191,10 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === settingsPath}
                   render={
-                    profileParams ? (
+                    hasProfileParams ? (
                       <Link
                         to="/$accountId/$vaultId/$hostName/$userName/settings"
-                        params={profileParams}
+                        from="/$accountId/$vaultId/$hostName/$userName"
                       >
                         <SettingsIcon />
                         {t("settings")}

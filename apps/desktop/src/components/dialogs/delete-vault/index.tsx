@@ -20,7 +20,9 @@ import { InfoIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
 export function DeleteVaultDialog() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({
+    from: "/$accountId/$vaultId/$hostName/$userName",
+  });
   const { accountId } = useAccountId();
 
   const { t } = useAppTranslation("vault.deleteDialog");
@@ -49,7 +51,6 @@ export function DeleteVaultDialog() {
 
     await navigate({
       to: "/$accountId",
-      params: { accountId },
     });
   }, [navigate, setIsOpen, accountId]);
 

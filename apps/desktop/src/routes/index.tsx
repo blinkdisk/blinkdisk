@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/" });
 
   useEffect(() => {
     const hasSkippedAuth = window.electron.store.get("hasSkippedAuth") as

@@ -10,7 +10,7 @@ export function AuthListener() {
   const { setIsOpen: setAuthDialogIsOpen } = useAuthDialog();
   const { openMoveVaultsDialog } = useMoveVaultsDialog();
   const { setAuthenticated, accountChanged } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/" });
 
   const onAccountAdd = useCallback(
     async ({ accountId }: { accountId: string }) => {

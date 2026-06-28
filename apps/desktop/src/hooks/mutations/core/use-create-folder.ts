@@ -24,7 +24,7 @@ export function useCreateFolder({
   onError?: (error: unknown) => void;
 }) {
   const posthog = usePostHog();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
   const queryClient = useQueryClient();
 
   const { accountId } = useAccountId();
@@ -113,13 +113,12 @@ export function useCreateFolder({
 
       await navigate({
         to: "/$accountId/$vaultId/$hostName/$userName/$folderId",
-        params: {
-          accountId: res.accountId,
-          vaultId: res.vaultId,
+        params: (params) => ({
+          ...params,
           hostName: res.profile.deviceName,
           userName: res.profile.userName,
           folderId: res.id,
-        },
+        }),
       });
 
       onSuccess?.();

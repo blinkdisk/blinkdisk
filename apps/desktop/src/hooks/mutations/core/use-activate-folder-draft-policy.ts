@@ -28,7 +28,7 @@ export function useActivateFolderDraftPolicy({
   onSuccess?: () => void;
 }) {
   const posthog = usePostHog();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
   const { accountId } = useAccountId();
@@ -112,13 +112,12 @@ export function useActivateFolderDraftPolicy({
 
       await navigate({
         to: "/$accountId/$vaultId/$hostName/$userName/$folderId",
-        params: {
-          accountId: res.accountId,
-          vaultId: res.vaultId,
+        params: (params) => ({
+          ...params,
           hostName: res.target.hostName,
           userName: res.target.userName,
           folderId: res.id,
-        },
+        }),
       });
 
       onSuccess?.();

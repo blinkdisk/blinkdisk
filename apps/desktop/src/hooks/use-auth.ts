@@ -12,7 +12,7 @@ import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
 export function useAuth() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId" });
   const posthog = usePostHog();
   const queryClient = useQueryClient();
 

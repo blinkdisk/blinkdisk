@@ -9,7 +9,7 @@ export type Profile = {
 export type SelectedProfile = Profile | null;
 
 export function useProfile() {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
 
   const { accountId, vaultId, userName, hostName } = useParams({
     strict: false,
@@ -25,12 +25,19 @@ export function useProfile() {
       if (userName)
         navigate({
           to: "/$accountId/$vaultId/$hostName/$userName",
-          params: { accountId, vaultId, hostName: nextHostName, userName },
+          params: (params) => ({
+            ...params,
+            hostName: nextHostName,
+            userName,
+          }),
         });
       else
         navigate({
           to: "/$accountId/$vaultId/$hostName",
-          params: { accountId, vaultId, hostName: nextHostName },
+          params: (params) => ({
+            ...params,
+            hostName: nextHostName,
+          }),
         });
     },
     [navigate, accountId, vaultId, hostName],
@@ -42,7 +49,10 @@ export function useProfile() {
 
       navigate({
         to: "/$accountId/$vaultId/$hostName",
-        params: { accountId, vaultId, hostName },
+        params: (params) => ({
+          ...params,
+          hostName,
+        }),
       });
     },
     [navigate, accountId, vaultId],

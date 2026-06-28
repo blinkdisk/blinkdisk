@@ -50,7 +50,7 @@ export const Route = createFileRoute("/$accountId/cloudblink")({
     if (params.accountId === LOCAL_ACCOUNT_ID)
       throw redirect({
         to: "/$accountId",
-        params: { accountId: params.accountId },
+        from: "/$accountId/cloudblink",
       });
   },
   component: RouteComponent,

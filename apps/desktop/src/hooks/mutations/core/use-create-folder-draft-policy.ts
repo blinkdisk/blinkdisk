@@ -19,7 +19,7 @@ export function useCreateFolderDraftPolicy({
 }: {
   onSuccess?: () => void;
 } = {}) {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
   const { accountId } = useAccountId();
@@ -54,22 +54,21 @@ export function useCreateFolderDraftPolicy({
         },
       );
 
-      return { accountId, target, vaultId };
+      return { target };
     },
     onError: showErrorToast,
-    onSuccess: async ({ accountId, target, vaultId }) => {
+    onSuccess: async ({ target }) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.policy.all,
       });
 
       await navigate({
         to: "/$accountId/$vaultId/$hostName/$userName/policies",
-        params: {
-          accountId,
-          vaultId,
+        params: (params) => ({
+          ...params,
           hostName: target.hostName,
           userName: target.userName,
-        },
+        }),
         search: policyTargetToSearch(target),
       });
 

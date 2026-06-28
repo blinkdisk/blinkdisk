@@ -24,6 +24,7 @@ function RouteComponent() {
               <Link
                 key={0}
                 to="/auth/register"
+                from="/auth/login"
                 search={search}
                 className="link-primary"
               />,
