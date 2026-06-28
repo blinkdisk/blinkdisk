@@ -292,8 +292,8 @@ catalogs:
       specifier: ^1.21.0
       version: 1.21.0
     marked:
-      specifier: ^17.0.1
-      version: 17.0.6
+      specifier: ^18.0.5
+      version: 18.0.5
     mermaid:
       specifier: ^11.16.0
       version: 11.16.0
@@ -873,7 +873,7 @@ importers:
         version: 1.21.0(react@19.2.7)
       marked:
         specifier: 'catalog:'
-        version: 17.0.6
+        version: 18.0.5
       mermaid:
         specifier: 'catalog:'
         version: 11.16.0
@@ -6701,8 +6701,8 @@ packages:
     engines: {node: '>= 20'}
     hasBin: true
 
-  marked@17.0.6:
-    resolution: {integrity: sha512-gB0gkNafnonOw0obSTEGZTT86IuhILt2Wfx0mWH/1Au83kybTayroZ/V6nS25mN7u8ASy+5fMhgB3XPNrOZdmA==}
+  marked@18.0.5:
+    resolution: {integrity: sha512-S6GcvALHg6K4ohtu4E7x0a1AqhAjp6cV8KhLSyN9qVapnzJkusVBxZRcIU9AeYsbe6P1hKDusSbEOzGyyuce6w==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -14671,7 +14671,7 @@ snapshots:
 
   marked@16.4.2: {}
 
-  marked@17.0.6: {}
+  marked@18.0.5: {}
 
   marked@7.0.4: {}
 

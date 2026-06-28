@@ -89,7 +89,7 @@
 - [x] `kysely` Current: `^0.27.6` New: `0.29.2` Change: `Minor`
 - [x] `legid-sync` Current: `^0.2.1` New: `0.2.1` Change: `None`
 - [x] `lucide-react` Current: `^1.7.0` New: `1.21.0` Change: `Minor`
-- [ ] `marked` Current: `^17.0.1` New: `18.0.5` Change: `Major`
+- [x] `marked` Current: `^17.0.1` New: `18.0.5` Change: `Major`
 - [x] `mermaid` Current: `^11.12.2` New: `11.16.0` Change: `Minor`
 - [x] `nanoid` Current: `^5.1.5` New: `5.1.16` Change: `Patch`
 - [ ] `nodemailer` Current: `^7.0.11` New: `9.0.1` Change: `Major`
