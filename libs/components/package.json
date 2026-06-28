@@ -10,24 +10,24 @@
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@types/node": "^22.13.9",
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
-    "typescript": "5.8.2"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@blinkdisk/utils": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
-    "@types/twemoji-parser": "^13.1.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "twemoji-parser": "^14.0.0",
-    "@tanstack/react-devtools": "^0.9.2",
-    "@tanstack/react-form-devtools": "^0.2.4",
-    "@tanstack/react-query-devtools": "5.69.0",
-    "@tanstack/react-router-devtools": "^1.114.25",
-    "@tanstack/react-router": "1.131.7"
+    "@types/twemoji-parser": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "twemoji-parser": "catalog:",
+    "@tanstack/react-devtools": "catalog:",
+    "@tanstack/react-form-devtools": "catalog:",
+    "@tanstack/react-query-devtools": "catalog:",
+    "@tanstack/react-router-devtools": "catalog:",
+    "@tanstack/react-router": "catalog:"
   }
 }

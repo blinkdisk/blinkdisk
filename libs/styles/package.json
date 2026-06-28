@@ -6,6 +6,6 @@
     "access": "public"
   },
   "dependencies": {
-    "tailwindcss": "^4.0.14"
+    "tailwindcss": "catalog:"
   }
 }

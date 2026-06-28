@@ -84,7 +84,6 @@ export function Cron(props: CronProps) {
   const [valueCleared, setValueCleared] = useState<boolean>(false);
   const previousValueCleared = usePrevious(valueCleared);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: this mount-only parse initializes internal field state from the initial cron value; later prop changes are handled by the following effect.
   useEffect(() => {
     setValuesFromCronString(
       value,
@@ -104,7 +103,6 @@ export function Cron(props: CronProps) {
     );
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: keep the previous react-js-cron update triggers; changing callback deps here can alter parsing timing.
   useEffect(() => {
     if (value !== internalValueRef.current) {
       setValuesFromCronString(
@@ -126,7 +124,6 @@ export function Cron(props: CronProps) {
     }
   }, [value, allowEmpty, shortcuts, locale]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: preserve the existing field-to-cron update triggers; adding callback/previous-value deps can change when the parent value is emitted.
   useEffect(() => {
     // Only change the value if a user touched a field
     // and if the user didn't use the clear button

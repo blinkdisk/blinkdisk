@@ -144,10 +144,7 @@ export function TaskDialog() {
               )}
             </div>
           ) : (
-            logs.map((log, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: task logs are append-only entries without a stable id from the backend.
-              <LogEntry key={i} log={log} />
-            ))
+            logs.map((log, i) => <LogEntry key={i} log={log} />)
           )}
         </div>
 

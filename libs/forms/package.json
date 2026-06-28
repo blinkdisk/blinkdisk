@@ -10,17 +10,17 @@
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@types/node": "^22.13.9",
-    "@types/react": "19.0.10",
-    "typescript": "5.8.2"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
     "@blinkdisk/components": "workspace:*",
-    "@tanstack/react-form": "^1.27.1",
-    "lucide-react": "^0.483.0",
-    "react": "^19.0.0"
+    "@tanstack/react-form": "catalog:",
+    "lucide-react": "catalog:",
+    "react": "catalog:"
   }
 }

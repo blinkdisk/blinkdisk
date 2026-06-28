@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
-    "@types/node": "^22.13.9",
-    "typescript": "5.8.2"
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@blinkdisk/db": "workspace:*"

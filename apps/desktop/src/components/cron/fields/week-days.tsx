@@ -29,7 +29,6 @@ export function WeekDays(props: WeekDaysProps) {
   const noMonthDays = period === "week" || !monthDays || monthDays.length === 0;
 
   const localeJSON = JSON.stringify(locale);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: preserve existing react-js-cron locale invalidation behavior without changing dependency timing in this vendored component.
   const placeholder = useMemo(() => {
     if (noMonthDays) {
       return locale.emptyWeekDays || DEFAULT_LOCALE_EN.emptyWeekDays;

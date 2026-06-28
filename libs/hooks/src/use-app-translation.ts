@@ -9,7 +9,6 @@ export function useAppTranslation(defaultNS?: string) {
 
   const { t, i18n } = useTranslation(matches?.[1] || defaultNS);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: changing the active language should refresh the translate callback even if the i18n t function identity is stable.
   const translate = useCallback(
     (...args: Parameters<typeof t>) => {
       if (args[0].includes(":")) return t(...args) as string;
