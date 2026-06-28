@@ -8,6 +8,12 @@ import {
 } from "@api/lib/workflows";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
 import type { SubscriptionStatus } from "@blinkdisk/db/enums";
+import {
+  account as accountTable,
+  space as spaceTable,
+  subscription as subscriptionTable,
+  trial as trialTable,
+} from "@blinkdisk/db/schema";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
 import { generateId } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
@@ -17,6 +23,7 @@ import {
   validateEvent,
   WebhookVerificationError,
 } from "@polar-sh/sdk/webhooks";
+import { and, eq, inArray, isNotNull } from "drizzle-orm";
 import type { Context } from "hono";
 import type { BlankInput } from "hono/types";
 
@@ -78,29 +85,35 @@ export async function polarWebhook(
         if (!plan) return c.json({ error: "Plan not found" }, 400);
         if (!price) return c.json({ error: "Price not found" }, 400);
 
-        const account = await db
-          .selectFrom("Account")
-          .select(["id", "email"])
-          .where("polarId", "=", subscription.customerId)
-          .executeTakeFirst();
+        const [account] = await db
+          .select({ id: accountTable.id, email: accountTable.email })
+          .from(accountTable)
+          .where(eq(accountTable.polarId, subscription.customerId))
+          .limit(1);
 
         if (!account) return c.json({ error: "Account not found" }, 400);
 
         const subscriptionsWithCleanup = await db
-          .selectFrom("Subscription")
-          .select(["id", "cleanupAt", "canceledAt"])
-          .where("accountId", "=", account.id)
-          .where("cleanupAt", "is not", null)
-          .execute();
+          .select({
+            id: subscriptionTable.id,
+            cleanupAt: subscriptionTable.cleanupAt,
+            canceledAt: subscriptionTable.canceledAt,
+          })
+          .from(subscriptionTable)
+          .where(
+            and(
+              eq(subscriptionTable.accountId, account.id),
+              isNotNull(subscriptionTable.cleanupAt),
+            ),
+          );
 
         // Clear cleanupAt on any previous subscriptions for this account
         // to prevent stale cleanup emails and data deletion
         if (subscriptionsWithCleanup.length) {
           await db
-            .updateTable("Subscription")
+            .update(subscriptionTable)
             .set({ cleanupAt: null })
-            .where("accountId", "=", account.id)
-            .execute();
+            .where(eq(subscriptionTable.accountId, account.id));
 
           await Promise.all(
             subscriptionsWithCleanup
@@ -126,24 +139,21 @@ export async function polarWebhook(
         subscriptionId = generateId("Subscription");
         planUpdated = true;
 
-        await db
-          .insertInto("Subscription")
-          .values({
-            id: subscriptionId,
-            status: subscription.status.toUpperCase() as SubscriptionStatus,
-            priceId: price.id,
-            planId: plan.id,
-            polarProductId: subscription.productId,
-            polarSubscriptionId: subscription.id,
-            polarCustomerId: subscription.customerId,
-            accountId,
-            ...(subscription.metadata?.affiliateId
-              ? {
-                  affiliateId: subscription.metadata?.affiliateId as string,
-                }
-              : {}),
-          })
-          .execute();
+        await db.insert(subscriptionTable).values({
+          id: subscriptionId,
+          status: subscription.status.toUpperCase() as SubscriptionStatus,
+          priceId: price.id,
+          planId: plan.id,
+          polarProductId: subscription.productId,
+          polarSubscriptionId: subscription.id,
+          polarCustomerId: subscription.customerId,
+          accountId,
+          ...(subscription.metadata?.affiliateId
+            ? {
+                affiliateId: subscription.metadata?.affiliateId as string,
+              }
+            : {}),
+        });
 
         c.executionCtx.waitUntil(
           (async () => {
@@ -171,11 +181,17 @@ export async function polarWebhook(
           "subscription.revoked",
         ].includes(event.type)
       ) {
-        const previous = await db
-          .selectFrom("Subscription")
-          .select(["id", "planId", "accountId", "cleanupAt", "canceledAt"])
-          .where("polarSubscriptionId", "=", subscription.id)
-          .executeTakeFirst();
+        const [previous] = await db
+          .select({
+            id: subscriptionTable.id,
+            planId: subscriptionTable.planId,
+            accountId: subscriptionTable.accountId,
+            cleanupAt: subscriptionTable.cleanupAt,
+            canceledAt: subscriptionTable.canceledAt,
+          })
+          .from(subscriptionTable)
+          .where(eq(subscriptionTable.polarSubscriptionId, subscription.id))
+          .limit(1);
 
         if (!previous) return c.json({ error: "Subscription not found" }, 400);
 
@@ -214,7 +230,7 @@ export async function polarWebhook(
         }
 
         await db
-          .updateTable("Subscription")
+          .update(subscriptionTable)
           .set({
             status: subscription.status.toUpperCase() as SubscriptionStatus,
             polarProductId: subscription.productId,
@@ -224,8 +240,7 @@ export async function polarWebhook(
             ...(price && { priceId: price.id }),
             ...(plan && { planId: plan.id }),
           })
-          .where("id", "=", previous.id)
-          .execute();
+          .where(eq(subscriptionTable.id, previous.id));
 
         if (cleanupAt && !previous.cleanupAt) {
           if (!subscription.canceledAt)
@@ -255,11 +270,11 @@ export async function polarWebhook(
 
         if (plan && plan.id !== previous.planId) planUpdated = true;
 
-        const account = await db
-          .selectFrom("Account")
-          .select(["id", "email"])
-          .where("id", "=", accountId)
-          .executeTakeFirst();
+        const [account] = await db
+          .select({ id: accountTable.id, email: accountTable.email })
+          .from(accountTable)
+          .where(eq(accountTable.id, accountId))
+          .limit(1);
 
         if (event.type === "subscription.canceled") {
           c.executionCtx.waitUntil(
@@ -303,47 +318,49 @@ export async function polarWebhook(
       }
 
       if (planUpdated && accountId && plan) {
-        const space = await db
-          .selectFrom("Space")
-          .select(["id", "capacity"])
-          .where("accountId", "=", accountId)
-          .executeTakeFirst();
+        const [space] = await db
+          .select({ id: spaceTable.id, capacity: spaceTable.capacity })
+          .from(spaceTable)
+          .where(eq(spaceTable.accountId, accountId))
+          .limit(1);
 
         if (!space) return c.json({ error: "Space not found" }, 400);
 
         const capacity = plan.storageGB * 1000 * 1000 * 1000;
 
         await db
-          .updateTable("Space")
+          .update(spaceTable)
           .set({
-            capacity: capacity.toString(),
+            capacity,
             subscriptionId,
             trialId: null,
           })
-          .where("id", "=", space.id)
-          .execute();
+          .where(eq(spaceTable.id, space.id));
 
         const activeTrials = await db
-          .selectFrom("Trial")
-          .select(["id", "endsAt"])
-          .where("accountId", "=", accountId)
-          .where("status", "=", "ACTIVE")
-          .execute();
+          .select({ id: trialTable.id, endsAt: trialTable.endsAt })
+          .from(trialTable)
+          .where(
+            and(
+              eq(trialTable.accountId, accountId),
+              eq(trialTable.status, "ACTIVE"),
+            ),
+          );
 
         if (activeTrials.length) {
           await db
-            .updateTable("Trial")
+            .update(trialTable)
             .set({
               status: "ENDED",
               endsAt: null,
               endedAt: new Date(),
             })
             .where(
-              "id",
-              "in",
-              activeTrials.map((t) => t.id),
-            )
-            .execute();
+              inArray(
+                trialTable.id,
+                activeTrials.map((t) => t.id),
+              ),
+            );
 
           await Promise.all(
             activeTrials
@@ -375,18 +392,21 @@ export async function polarWebhook(
         if (!subscriptionId)
           return c.json({ error: "Subscription id not found" }, 400);
 
-        const subscription = await db
-          .selectFrom("Subscription")
-          .innerJoin("Account", "Account.id", "Subscription.accountId")
-          .select([
-            "Subscription.id",
-            "Subscription.affiliateId",
-            "Subscription.accountId",
-            "Account.name",
-            "Account.email",
-          ])
-          .where("Subscription.polarSubscriptionId", "=", subscriptionId)
-          .executeTakeFirst();
+        const [subscription] = await db
+          .select({
+            id: subscriptionTable.id,
+            affiliateId: subscriptionTable.affiliateId,
+            accountId: subscriptionTable.accountId,
+            name: accountTable.name,
+            email: accountTable.email,
+          })
+          .from(subscriptionTable)
+          .innerJoin(
+            accountTable,
+            eq(accountTable.id, subscriptionTable.accountId),
+          )
+          .where(eq(subscriptionTable.polarSubscriptionId, subscriptionId))
+          .limit(1);
 
         if (!subscription)
           return c.json({ error: "Subscription not found" }, 400);

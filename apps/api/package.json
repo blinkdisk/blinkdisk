@@ -26,6 +26,7 @@
     "wrangler": "catalog:"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "catalog:",
     "@better-auth/electron": "catalog:",
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/db": "workspace:*",
@@ -36,8 +37,8 @@
     "@sentry/cloudflare": "catalog:",
     "@trpc/server": "catalog:",
     "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
     "hono": "catalog:",
-    "kysely": "catalog:",
     "posthog-node": "catalog:",
     "zod": "catalog:"
   }

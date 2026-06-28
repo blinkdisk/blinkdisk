@@ -17,6 +17,7 @@
     "@blinkdisk/db": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
+    "drizzle-orm": "catalog:",
     "@sentry/cloudflare": "catalog:"
   },
   "devDependencies": {

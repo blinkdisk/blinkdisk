@@ -2,6 +2,7 @@ import { startTrialWorkflow } from "@api/lib/workflows";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
+import { space, trial, vault } from "@blinkdisk/db/schema";
 import {
   ZDeleteCloudBlinkVault,
   ZGetCloudBlinkToken,
@@ -9,24 +10,26 @@ import {
 import { CustomError } from "@blinkdisk/utils/error";
 import { generateId } from "@blinkdisk/utils/id";
 import { generateServiceToken } from "@blinkdisk/utils/token";
+import { and, eq } from "drizzle-orm";
 
 export const cloudblinkRouter = router({
   space: authedProcedure.query(async ({ ctx }) => {
-    const space = await ctx.db
-      .selectFrom("Space")
-      .leftJoin("Trial", "Trial.id", "Space.trialId")
-      .select([
-        "Space.id as id",
-        "Space.capacity as capacity",
-        "Trial.startedAt as trialStartedAt",
-        "Trial.endsAt as trialEndsAt",
-      ])
-      .where("Space.accountId", "=", ctx.account.id)
-      .executeTakeFirst();
+    const spaceRows = await ctx.db
+      .select({
+        id: space.id,
+        capacity: space.capacity,
+        trialStartedAt: trial.startedAt,
+        trialEndsAt: trial.endsAt,
+      })
+      .from(space)
+      .leftJoin(trial, eq(trial.id, space.trialId))
+      .where(eq(space.accountId, ctx.account.id))
+      .limit(1);
 
-    if (!space) return null;
+    const accountSpace = spaceRows[0];
+    if (!accountSpace) return null;
 
-    const stub = ctx.env.SPACE.getByName(space.id);
+    const stub = ctx.env.SPACE.getByName(accountSpace.id);
 
     const used = await (
       stub as unknown as { getUsed: () => Promise<number> }
@@ -34,27 +37,26 @@ export const cloudblinkRouter = router({
 
     return {
       used,
-      capacity: parseInt(space.capacity, 10),
-      trialStartedAt: space.trialStartedAt,
-      trialEndsAt: space.trialEndsAt,
+      capacity: accountSpace.capacity,
+      trialStartedAt: accountSpace.trialStartedAt,
+      trialEndsAt: accountSpace.trialEndsAt,
     };
   }),
   initVault: authedProcedure.mutation(async ({ ctx }) => {
     const vaultId = generateId("Vault");
 
-    const space = await ctx.db
-      .selectFrom("Space")
-      .select(["id", "capacity"])
-      .where("accountId", "=", ctx.account.id)
-      .executeTakeFirst();
+    const [accountSpace] = await ctx.db
+      .select({ id: space.id, capacity: space.capacity })
+      .from(space)
+      .where(eq(space.accountId, ctx.account.id))
+      .limit(1);
 
     let spaceId: string;
 
-    if (space) {
-      if (parseInt(space.capacity, 10) === 0)
-        throw new CustomError("NO_STORAGE");
+    if (accountSpace) {
+      if (accountSpace.capacity === 0) throw new CustomError("NO_STORAGE");
 
-      spaceId = space.id;
+      spaceId = accountSpace.id;
     } else {
       spaceId = generateId("Space");
       const trialId = generateId("Trial");
@@ -69,28 +71,22 @@ export const cloudblinkRouter = router({
         }
       ).init(spaceId, TRIAL_STORAGE);
 
-      await ctx.db.transaction().execute(async (trx) => {
-        await trx
-          .insertInto("Trial")
-          .values({
-            id: trialId,
-            capacity: TRIAL_STORAGE.toString(),
-            accountId: ctx.account.id,
-            startedAt,
-            endsAt,
-          })
-          .execute();
+      await ctx.db.transaction(async (trx) => {
+        await trx.insert(trial).values({
+          id: trialId,
+          capacity: TRIAL_STORAGE,
+          accountId: ctx.account.id,
+          startedAt,
+          endsAt,
+        });
 
-        await trx
-          .insertInto("Space")
-          .values({
-            id: spaceId,
-            capacity: TRIAL_STORAGE.toString(),
-            used: "0",
-            accountId: ctx.account.id,
-            trialId,
-          })
-          .execute();
+        await trx.insert(space).values({
+          id: spaceId,
+          capacity: TRIAL_STORAGE,
+          used: 0,
+          accountId: ctx.account.id,
+          trialId,
+        });
       });
 
       await startTrialWorkflow(ctx.env, {
@@ -127,21 +123,29 @@ export const cloudblinkRouter = router({
   getVaultToken: authedProcedure
     .input(ZGetCloudBlinkToken)
     .query(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["id", "coreId", "name", "provider", "version", "configLevel"])
-        .where("accountId", "=", ctx.account.id)
-        .where("id", "=", input.vaultId)
-        .executeTakeFirst();
+      const [accountVault] = await ctx.db
+        .select({
+          id: vault.id,
+          coreId: vault.coreId,
+          name: vault.name,
+          provider: vault.provider,
+          version: vault.version,
+          configLevel: vault.configLevel,
+        })
+        .from(vault)
+        .where(
+          and(eq(vault.accountId, ctx.account.id), eq(vault.id, input.vaultId)),
+        )
+        .limit(1);
 
-      if (!vault) throw new CustomError("VAULT_NOT_FOUND");
+      if (!accountVault) throw new CustomError("VAULT_NOT_FOUND");
 
-      if (vault.provider !== "CLOUDBLINK")
+      if (accountVault.provider !== "CLOUDBLINK")
         throw new CustomError("INCORRECT_VAULT");
 
       const token = await generateServiceToken(
         {
-          vaultId: vault.id,
+          vaultId: accountVault.id,
         },
         // The dotenv parser somtimes leaves a trailing backslash
         ctx.env.CLOUD_JWT_PRIVATE_KEY.replace(/\\+$/gm, ""),
@@ -152,20 +156,25 @@ export const cloudblinkRouter = router({
   deleteVault: authedProcedure
     .input(ZDeleteCloudBlinkVault)
     .mutation(async ({ input, ctx }) => {
-      const vault = await ctx.db
-        .selectFrom("Vault")
-        .select(["Vault.id", "Vault.provider", "Vault.name"])
-        .where("Vault.accountId", "=", ctx.account.id)
-        .where("Vault.id", "=", input.vaultId)
-        .executeTakeFirst();
+      const [accountVault] = await ctx.db
+        .select({
+          id: vault.id,
+          provider: vault.provider,
+          name: vault.name,
+        })
+        .from(vault)
+        .where(
+          and(eq(vault.accountId, ctx.account.id), eq(vault.id, input.vaultId)),
+        )
+        .limit(1);
 
-      if (!vault) {
+      if (!accountVault) {
         const accountId = await ctx.env.CACHE.get(`${input.vaultId}:accountId`);
         if (!accountId || accountId !== ctx.account.id)
           throw new CustomError("VAULT_NOT_FOUND");
       }
 
-      if (vault && vault.provider !== "CLOUDBLINK")
+      if (accountVault && accountVault.provider !== "CLOUDBLINK")
         throw new CustomError("INCORRECT_VAULT");
 
       const stub = ctx.env.VAULT.getByName(input.vaultId);

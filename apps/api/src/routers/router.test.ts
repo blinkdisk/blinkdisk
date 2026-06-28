@@ -5,9 +5,6 @@ import { generateId } from "@blinkdisk/utils/id";
 import { TRPCError } from "@trpc/server";
 
 const mocks = vi.hoisted(() => ({
-  getActiveSubscription: vi.fn(
-    (_accountId: unknown, _db: unknown): unknown => undefined,
-  ),
   getPolar: vi.fn(
     (_environment: unknown, _token: unknown): unknown => undefined,
   ),
@@ -30,11 +27,6 @@ vi.mock("@api/lib/posthog", () => ({
   posthog: (event: unknown) => mocks.posthog(event),
 }));
 
-vi.mock("@api/lib/subscription", () => ({
-  getActiveSubscription: (accountId: unknown, db: unknown) =>
-    mocks.getActiveSubscription(accountId, db),
-}));
-
 vi.mock("@api/lib/workflows", () => ({
   startTrialWorkflow: (env: unknown, params: unknown) =>
     mocks.startTrialWorkflow(env, params),
@@ -54,21 +46,30 @@ vi.mock("@sentry/cloudflare", () => ({
 }));
 
 type SelectResults = Record<string, unknown[]>;
+type SelectQuery = Promise<unknown[]> & {
+  from: ReturnType<typeof vi.fn>;
+  leftJoin: ReturnType<typeof vi.fn>;
+  innerJoin: ReturnType<typeof vi.fn>;
+  where: ReturnType<typeof vi.fn>;
+  limit: ReturnType<typeof vi.fn>;
+};
 
-function createQuery(result: unknown) {
-  const query = {
-    leftJoin: vi.fn(() => query),
-    innerJoin: vi.fn(() => query),
-    select: vi.fn(() => query),
-    selectAll: vi.fn(() => query),
-    where: vi.fn(() => query),
-    execute: vi.fn(async () => (Array.isArray(result) ? result : [])),
-    executeTakeFirst: vi.fn(async () =>
-      Array.isArray(result) ? result[0] : result,
-    ),
-  };
+function getTableName(table: unknown) {
+  if (!table || typeof table !== "object") return String(table);
 
-  return query;
+  const symbol = Object.getOwnPropertySymbols(table).find(
+    (symbol) => symbol.description === "drizzle:Name",
+  );
+
+  return symbol
+    ? String((table as Record<symbol, unknown>)[symbol])
+    : "unknown";
+}
+
+function toRows(result: unknown) {
+  if (Array.isArray(result)) return result;
+  if (!result) return [];
+  return [result];
 }
 
 function createDb(selects: SelectResults = {}) {
@@ -82,53 +83,48 @@ function createDb(selects: SelectResults = {}) {
     deletes: [],
   };
 
+  const take = (table: unknown) => {
+    const queue = selects[getTableName(table)] || [];
+    return queue.length ? queue.shift() : undefined;
+  };
+
+  const createSelectQuery = () => {
+    let result: unknown;
+    const query = Promise.resolve().then(() => toRows(result)) as SelectQuery;
+    query.from = vi.fn((table: unknown) => {
+      result = take(table);
+      return query;
+    });
+    query.leftJoin = vi.fn(() => query);
+    query.innerJoin = vi.fn(() => query);
+    query.where = vi.fn(() => query);
+    query.limit = vi.fn(() => query);
+
+    return query;
+  };
+
   const db = {
     operations,
-    selectFrom: vi.fn((table: string) => {
-      const queue = selects[table] || [];
-      const result = queue.length ? queue.shift() : undefined;
-      return createQuery(result);
-    }),
-    insertInto: vi.fn((table: string) => {
-      const query = {
-        values: vi.fn((values: unknown) => {
-          operations.inserts.push({ table, values });
-          return query;
-        }),
-        execute: vi.fn(async () => undefined),
-      };
-
-      return query;
-    }),
-    updateTable: vi.fn((table: string) => {
-      const query = {
-        set: vi.fn((values: unknown) => {
-          operations.updates.push({ table, values });
-          return query;
-        }),
-        where: vi.fn(() => query),
-        execute: vi.fn(async () => undefined),
-      };
-
-      return query;
-    }),
-    transaction: vi.fn(() => ({
-      execute: vi.fn(async (callback: (trx: never) => Promise<void>) =>
-        callback(db as never),
-      ),
+    select: vi.fn(() => createSelectQuery()),
+    insert: vi.fn((table: unknown) => ({
+      values: vi.fn(async (values: unknown) => {
+        operations.inserts.push({ table: getTableName(table), values });
+      }),
     })),
+    update: vi.fn((table: unknown) => ({
+      set: vi.fn((values: unknown) => {
+        operations.updates.push({ table: getTableName(table), values });
+        return {
+          where: vi.fn(async () => undefined),
+        };
+      }),
+    })),
+    transaction: vi.fn(async (callback: (trx: never) => Promise<void>) =>
+      callback(db as never),
+    ),
   };
 
   return db;
-}
-
-function activeSubscription(result: unknown) {
-  const query = {
-    select: vi.fn(() => query),
-    executeTakeFirst: vi.fn(async () => result),
-  };
-
-  return query;
 }
 
 function createPolar() {
@@ -278,10 +274,10 @@ describe("api router payment procedures", () => {
   });
 
   it("rejects checkout creation when an active subscription exists", async () => {
-    mocks.getActiveSubscription.mockReturnValueOnce(
-      activeSubscription({ id: "sub_1" }),
-    );
-    const { caller } = createCaller();
+    const db = createDb({
+      Subscription: [{ id: "sub_1" }],
+    });
+    const { caller } = createCaller({ db });
 
     await expectCustomError(
       caller.payment.checkout({ priceId: "cloud-200-gb-monthly" }),
@@ -292,8 +288,8 @@ describe("api router payment procedures", () => {
   it("creates a Polar customer and checkout for new subscribers", async () => {
     const polar = createPolar();
     mocks.getPolar.mockReturnValueOnce(polar);
-    mocks.getActiveSubscription.mockReturnValueOnce(activeSubscription(null));
     const db = createDb({
+      Subscription: [undefined],
       Space: [undefined],
       Account: [{ polarId: null }],
     });
@@ -327,8 +323,8 @@ describe("api router payment procedures", () => {
   });
 
   it("blocks checkout when existing cloud usage exceeds selected plan capacity", async () => {
-    mocks.getActiveSubscription.mockReturnValueOnce(activeSubscription(null));
     const db = createDb({
+      Subscription: [undefined],
       Space: [{ id: "spc_1" }],
     });
     const { caller } = createCaller({
@@ -363,16 +359,16 @@ describe("api router payment procedures", () => {
   ])("emits %s -> %s change analytics as %s", async (currentPriceId, nextPriceId, event) => {
     const polar = createPolar();
     mocks.getPolar.mockReturnValueOnce(polar);
-    mocks.getActiveSubscription.mockReturnValueOnce(
-      activeSubscription({
-        id: "sub_1",
-        priceId: currentPriceId,
-        polarSubscriptionId: "polar_sub_1",
-      }),
-    );
     const db = createDb({
+      Subscription: [
+        {
+          id: "sub_1",
+          priceId: currentPriceId,
+          polarSubscriptionId: "polar_sub_1",
+        },
+        { priceId: nextPriceId },
+      ],
       Space: [{ id: "spc_1" }],
-      Subscription: [{ priceId: nextPriceId }],
     });
     const { caller, waits } = createCaller({ db, spaceUsed: 1 });
 
@@ -439,7 +435,7 @@ describe("api router cloudblink procedures", () => {
 
   it("blocks CloudBlink vault initialization when existing space has no storage", async () => {
     const db = createDb({
-      Space: [{ id: "spc_1", capacity: "0" }],
+      Space: [{ id: "spc_1", capacity: 0 }],
     });
     const { caller } = createCaller({ db });
 

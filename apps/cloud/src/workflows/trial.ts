@@ -4,9 +4,16 @@ import {
   type WorkflowStep,
 } from "cloudflare:workers";
 import { database } from "@blinkdisk/db/index";
+import {
+  account,
+  space,
+  trial as trialTable,
+  vault,
+} from "@blinkdisk/db/schema";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { deleteVaults } from "@cloud/utils/vault";
 import { waitUntil } from "@cloud/utils/workflows";
+import { and, eq } from "drizzle-orm";
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 
@@ -41,18 +48,22 @@ export class TrialWorkflow extends WorkflowEntrypoint<
         `send trial warning email ${daysLeft} days left`,
         async () => {
           const db = database(this.env.HYPERDRIVE.connectionString);
-          const trial = await db
-            .selectFrom("Trial")
-            .innerJoin("Account", "Account.id", "Trial.accountId")
-            .select([
-              "Trial.id",
-              "Trial.endsAt",
-              "Account.email",
-              "Account.language",
-            ])
-            .where("Trial.id", "=", event.payload.trialId)
-            .where("Trial.status", "=", "ACTIVE")
-            .executeTakeFirst();
+          const [trial] = await db
+            .select({
+              id: trialTable.id,
+              endsAt: trialTable.endsAt,
+              email: account.email,
+              language: account.language,
+            })
+            .from(trialTable)
+            .innerJoin(account, eq(account.id, trialTable.accountId))
+            .where(
+              and(
+                eq(trialTable.id, event.payload.trialId),
+                eq(trialTable.status, "ACTIVE"),
+              ),
+            )
+            .limit(1);
 
           if (!trial || !datesMatch(trial.endsAt, endsAt))
             return { skipped: true };
@@ -70,13 +81,21 @@ export class TrialWorkflow extends WorkflowEntrypoint<
 
     await step.do("end trial and delete vaults", async () => {
       const db = database(this.env.HYPERDRIVE.connectionString);
-      const trial = await db
-        .selectFrom("Trial")
-        .innerJoin("Space", "Space.trialId", "Trial.id")
-        .select(["Trial.id", "Trial.endsAt", "Space.id as spaceId"])
-        .where("Trial.id", "=", event.payload.trialId)
-        .where("Trial.status", "=", "ACTIVE")
-        .executeTakeFirst();
+      const [trial] = await db
+        .select({
+          id: trialTable.id,
+          endsAt: trialTable.endsAt,
+          spaceId: space.id,
+        })
+        .from(trialTable)
+        .innerJoin(space, eq(space.trialId, trialTable.id))
+        .where(
+          and(
+            eq(trialTable.id, event.payload.trialId),
+            eq(trialTable.status, "ACTIVE"),
+          ),
+        )
+        .limit(1);
 
       if (!trial || !datesMatch(trial.endsAt, endsAt)) return { skipped: true };
 
@@ -84,33 +103,34 @@ export class TrialWorkflow extends WorkflowEntrypoint<
       await stub.updateCapacity(0);
 
       const vaults = await db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("provider", "=", "CLOUDBLINK")
-        .where("spaceId", "=", trial.spaceId)
-        .where("status", "=", "ACTIVE")
-        .execute();
+        .select({ id: vault.id })
+        .from(vault)
+        .where(
+          and(
+            eq(vault.provider, "CLOUDBLINK"),
+            eq(vault.spaceId, trial.spaceId),
+            eq(vault.status, "ACTIVE"),
+          ),
+        );
 
       if (vaults.length) await deleteVaults(db, this.env, vaults);
 
       await db
-        .updateTable("Space")
+        .update(space)
         .set({
-          used: "0",
-          capacity: "0",
+          used: 0,
+          capacity: 0,
           trialId: null,
         })
-        .where("id", "=", trial.spaceId)
-        .execute();
+        .where(eq(space.id, trial.spaceId));
 
       await db
-        .updateTable("Trial")
+        .update(trialTable)
         .set({
           status: "ENDED",
           endedAt: new Date(),
         })
-        .where("id", "=", trial.id)
-        .execute();
+        .where(eq(trialTable.id, trial.id));
 
       return { skipped: false, vaults: vaults.length };
     });
