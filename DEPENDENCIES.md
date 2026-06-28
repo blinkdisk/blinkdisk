@@ -105,7 +105,7 @@
   - [x] `@types/react` Current: `^19.0.10` New: `19.2.17` Change: `Minor`
 - [x] `react-dom` Current: `^19.0.0` New: `19.2.7` Change: `Minor`
   - [x] `@types/react-dom` Current: `^19.0.4` New: `19.2.3` Change: `Minor`
-- [ ] `react-dropzone` Current: `^14.3.8` New: `15.0.0` Change: `Major`
+- [x] `react-dropzone` Current: `^14.3.8` New: `15.0.0` Change: `Major`
 - [ ] `react-email` Current: `^5.1.1` New: `6.6.5` Change: `Major`
 - [ ] `react-i18next` Current: `^15.4.1` New: `17.0.8` Change: `Major`
 - [x] `react-loading-skeleton` Current: `^3.5.0` New: `3.5.0` Change: `None`

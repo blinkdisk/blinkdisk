@@ -111,7 +111,7 @@ catalog:
   prisma-kysely: '^1.8.0'
   react: '^19.2.7'
   react-dom: '^19.2.7'
-  react-dropzone: '^14.3.8'
+  react-dropzone: '^15.0.0'
   react-email: '^5.1.1'
   react-i18next: '^15.4.1'
   react-loading-skeleton: '^3.5.0'

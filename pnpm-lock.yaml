@@ -328,8 +328,8 @@ catalogs:
       specifier: ^19.2.7
       version: 19.2.7
     react-dropzone:
-      specifier: ^14.3.8
-      version: 14.4.1
+      specifier: ^15.0.0
+      version: 15.0.0
     react-email:
       specifier: ^5.1.1
       version: 5.2.11
@@ -885,7 +885,7 @@ importers:
         version: 19.2.7(react@19.2.7)
       react-dropzone:
         specifier: 'catalog:'
-        version: 14.4.1(react@19.2.7)
+        version: 15.0.0(react@19.2.7)
       satori:
         specifier: 'catalog:'
         version: 0.26.0
@@ -7537,8 +7537,8 @@ packages:
     peerDependencies:
       react: ^19.2.7
 
-  react-dropzone@14.4.1:
-    resolution: {integrity: sha512-QDuV76v3uKbHiH34SpwifZ+gOLi1+RdsCO1kl5vxMT4wW8R82+sthjvBw4th3NHF/XX6FBsqDYZVNN+pnhaw0g==}
+  react-dropzone@15.0.0:
+    resolution: {integrity: sha512-lGjYV/EoqEjEWPnmiSvH4v5IoIAwQM2W4Z1C0Q/Pw2xD0eVzKPS359BQTUMum+1fa0kH2nrKjuavmTPOGhpLPg==}
     engines: {node: '>= 10.13'}
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
@@ -15826,7 +15826,7 @@ snapshots:
       react: 19.2.7
       scheduler: 0.27.0
 
-  react-dropzone@14.4.1(react@19.2.7):
+  react-dropzone@15.0.0(react@19.2.7):
     dependencies:
       attr-accept: 2.2.5
       file-selector: 2.1.2
