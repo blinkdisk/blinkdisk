@@ -10,6 +10,7 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@react-email/ui": "catalog:",
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

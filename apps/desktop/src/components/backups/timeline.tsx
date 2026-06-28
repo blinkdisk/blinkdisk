@@ -247,7 +247,7 @@ type BackupProps = {
   backup: Backup | undefined;
 };
 
-export function Backup({ backup }: BackupProps) {
+function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
   const { openDeleteBackupDialog } = useDeleteBackupDialog();
   const { openPinBackupDialog } = usePinBackupDialog();

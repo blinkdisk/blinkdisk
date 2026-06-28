@@ -1,6 +1,5 @@
 import type { DB as Schema } from "@db/schema";
 import { Kysely, PostgresDialect } from "kysely";
-import { jsonArrayFrom } from "kysely/helpers/postgres";
 import { Pool } from "pg";
 
 export const dialect = (databaseUrl: string) =>
@@ -19,5 +18,3 @@ export const database = (databaseUrl: string) => {
 
 export type Database = Kysely<Schema>;
 export type DB = Schema;
-
-export { jsonArrayFrom };

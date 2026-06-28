@@ -10,7 +10,7 @@ export type CellValue =
     }
   | null;
 
-export type CountryCellValue =
+type CountryCellValue =
   | CountryCode
   | {
       value: CountryCode;

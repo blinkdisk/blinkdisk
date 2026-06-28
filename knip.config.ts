@@ -4,57 +4,39 @@ import type { KnipConfig } from "knip";
 const tsconfigRaw = readFileSync("./libs/typescript/base.json", "utf8");
 const tsconfig = JSON.parse(tsconfigRaw);
 
-const commonIgnore = [
-  "src/**/*.test.{ts,tsx}",
-  "src/**/*.spec.{ts,tsx}",
-  "src/**/__tests__/**",
-  "src/**/*.d.ts",
-];
-
 const commonProject = ["src/**/*.{ts,tsx}"];
 
 const config: KnipConfig = {
   compilers: {
+    json: () => "",
     mdx: true,
+    grit: () => "",
   },
   workspaces: {
     ".": {
-      entry: [],
-      project: ["turbo.json"],
+      entry: ["turbo.json"],
+      project: [],
     },
     "apps/api": {
       project: commonProject,
-      ignore: commonIgnore,
     },
     "apps/cloud": {
-      entry: ["src/index.ts"],
       project: commonProject,
-      ignore: commonIgnore,
     },
     "apps/desktop": {
-      entry: ["src/main.tsx", "vite.config.ts"],
+      entry: ["vite.config.ts"],
       project: commonProject,
-      ignore: commonIgnore,
-      ignoreDependencies: [
-        // Referenced by name in vite.config.ts.
-        "babel-plugin-react-compiler",
-      ],
       // Vite resolves this from apps/desktop/public at build time.
       ignoreUnresolved: [/^\/animations\/backup\.lottie(\?url)?$/],
       vite: { config: [] },
     },
     "apps/electron": {
       project: commonProject,
-      ignore: [...commonIgnore, "src/preload.ts"],
+      ignoreBinaries: ["ssh-keyscan"],
     },
     "apps/web": {
-      entry: ["src/main.tsx", "vite.config.ts"],
+      entry: ["vite.config.ts"],
       project: commonProject,
-      ignore: commonIgnore,
-      ignoreDependencies: [
-        // Referenced by name in vite.config.ts.
-        "babel-plugin-react-compiler",
-      ],
       vite: { config: [] },
     },
     "apps/marketing": {
@@ -64,8 +46,9 @@ const config: KnipConfig = {
         "src/components/Callout.astro",
       ],
       project: ["src/**/*.{astro,mdx,ts,tsx}"],
-      ignore: commonIgnore,
       ignoreDependencies: [
+        // Imported from an Astro client script that Knip does not resolve.
+        "country-flag-emoji-polyfill",
         // Used in CSS url() imports which knip doesn't detect
         "@fontsource/space-mono",
         // Used in CSS
@@ -75,12 +58,9 @@ const config: KnipConfig = {
     "libs/*": {
       includeEntryExports: true,
       project: commonProject,
-      ignore: commonIgnore,
-    },
-    "libs/db": {
-      ignore: ["src/schema.ts"],
     },
     "libs/biome": {
+      entry: ["*.grit"],
       project: ["*.grit"],
     },
     "libs/styles": {
@@ -96,27 +76,11 @@ const config: KnipConfig = {
       project: [],
     },
   },
-  ignore: [
-    "node_modules/**",
-    ".next/**",
-    "dist/**",
-    "build/**",
-    ".turbo/**",
-    "**/*.config.{js,ts,mjs,cjs}",
-    "**/.turbo/**",
-    "coverage/**",
-    ".wrangler/**",
-    "*.d.ts",
-  ],
   ignoreIssues: {
+    "libs/db/src/schema.ts": ["exports", "types"],
     "apps/marketing/src/components/react/**": ["exports"],
   },
-  ignoreDependencies: [
-    "@blinkdisk/.+",
-    "cloudflare",
-    "@sentry/cloudflare",
-    "@sentry/cli",
-  ],
+  ignoreDependencies: ["@blinkdisk/.+", "cloudflare", "@sentry/cloudflare"],
   paths: tsconfig.compilerOptions.paths,
 };
 

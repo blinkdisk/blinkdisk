@@ -84,7 +84,7 @@ export const ZVault = z.object({
 
 export type ZVaultType = z.infer<typeof ZVault>;
 
-export const ZCreateVault = z.object({
+const ZCreateVault = z.object({
   id: ZVaultId,
   coreId: ZVaultCoreId.optional(),
   name: ZVaultName,
@@ -114,7 +114,7 @@ export const ZUpdateVaultForm = z.object({
 
 export type ZUpdateVaultFormType = z.infer<typeof ZUpdateVaultForm>;
 
-export const ZBandwith = z.object({
+const ZBandwith = z.object({
   value: z.number().min(1).optional(),
   unit: z.enum(["bps", "Kbps", "Mbps", "Gbps"]),
 });

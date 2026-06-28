@@ -2,7 +2,7 @@ import { z } from "zod";
 
 declare const emptyCloudBlinkConfig: unique symbol;
 
-export type ZCloudBlinkConfigType = {
+type ZCloudBlinkConfigType = {
   [emptyCloudBlinkConfig]?: never;
 };
 

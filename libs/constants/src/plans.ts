@@ -1,6 +1,6 @@
 export type BillingPeriod = "YEARLY" | "MONTHLY";
 
-export type PlanPrice = {
+type PlanPrice = {
   id: string;
   polarId?: {
     sandbox: string;

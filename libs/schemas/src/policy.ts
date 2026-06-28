@@ -1,7 +1,7 @@
 import { COMPRESSION_ALGORITHMS } from "@blinkdisk/constants/algorithms";
 import { z } from "zod";
 
-export const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);
+const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);
 
 export type ZPolicyLevelType = z.infer<typeof ZPolicyLevel>;
 
