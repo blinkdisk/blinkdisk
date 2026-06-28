@@ -117,6 +117,7 @@ export function DirectoryBreadcrumb() {
           size="sm"
           aria-label="Go to parent folder"
           className="shrink-0"
+          nativeButton={false}
           render={
             <Link
               to="/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId"
