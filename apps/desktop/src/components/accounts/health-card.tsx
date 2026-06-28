@@ -120,7 +120,7 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
 
       return provider?.local;
     });
-  const score = onlyLocalVaults ? 60 : 100;
+  const score = onlyLocalVaults ? 40 : 100;
   const scoreKey = onlyLocalVaults ? "localOnly" : "excellent";
 
   return (
