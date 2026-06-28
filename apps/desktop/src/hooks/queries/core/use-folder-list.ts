@@ -3,7 +3,7 @@ import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { hashFolder } from "@desktop/lib/folder";
+import { buildFolderId } from "@desktop/lib/folder";
 import { isDraftPolicyUserName } from "@desktop/lib/policy-target";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
@@ -139,9 +139,9 @@ export function useFolderList(options: UseFolderListOptions = {}) {
               folder.upload.estimatedBytes;
         }
 
-        const id = await hashFolder({
-          hostName: folder.source.host,
-          userName: folder.source.userName,
+        const id = buildFolderId({
+          device: folder.source.host,
+          user: folder.source.userName,
           path: folder.source.path,
         });
 

@@ -8,7 +8,7 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { hashFolder } from "@desktop/lib/folder";
+import { buildFolderId } from "@desktop/lib/folder";
 import { profileFromParts } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -80,9 +80,9 @@ export function useCreateFolder({
         },
       });
 
-      const id = await hashFolder({
-        hostName: profile.deviceName,
-        userName: profile.userName,
+      const id = buildFolderId({
+        device: profile.deviceName,
+        user: profile.userName,
         path: values.path,
       });
 
@@ -98,7 +98,6 @@ export function useCreateFolder({
     onSuccess: async (res) => {
       posthog.capture("folder_add", {
         vaultId: res.vaultId,
-        folderId: res.id,
       });
 
       await Promise.all([
@@ -112,11 +111,9 @@ export function useCreateFolder({
       ]);
 
       await navigate({
-        to: "/$accountId/$vaultId/$hostName/$userName/$folderId",
+        to: "/$accountId/$vaultId/$folderId",
         params: (params) => ({
           ...params,
-          hostName: res.profile.deviceName,
-          userName: res.profile.userName,
           folderId: res.id,
         }),
       });

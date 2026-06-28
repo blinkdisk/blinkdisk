@@ -21,7 +21,7 @@ import { useCallback, useState } from "react";
 
 export function DeleteVaultDialog() {
   const navigate = useNavigate({
-    from: "/$accountId/$vaultId/$hostName/$userName",
+    from: "/$accountId/$vaultId",
   });
   const { accountId } = useAccountId();
 

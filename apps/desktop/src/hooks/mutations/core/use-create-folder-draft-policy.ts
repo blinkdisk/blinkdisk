@@ -63,12 +63,7 @@ export function useCreateFolderDraftPolicy({
       });
 
       await navigate({
-        to: "/$accountId/$vaultId/$hostName/$userName/policies",
-        params: (params) => ({
-          ...params,
-          hostName: target.hostName,
-          userName: target.userName,
-        }),
+        to: "/$accountId/$vaultId/policies",
         search: policyTargetToSearch(target),
       });
 

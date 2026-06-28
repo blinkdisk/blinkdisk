@@ -26,7 +26,7 @@ type DirectoryTableSelection = {
 };
 
 export const Route = createFileRoute(
-  "/$accountId/$vaultId/$hostName/$userName/$folderId/$backupId/$directoryId/",
+  "/$accountId/$vaultId/$folderId/$backupId/$directoryId/",
 )({
   component: RouteComponent,
   validateSearch: z.object({

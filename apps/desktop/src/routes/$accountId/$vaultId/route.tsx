@@ -1,9 +1,16 @@
+import { CreateFolderDialog } from "@desktop/components/dialogs/create-folder";
+import { DeleteFolderDialog } from "@desktop/components/dialogs/delete-folder";
+import { DeleteVaultDialog } from "@desktop/components/dialogs/delete-vault";
+import { EditExclusionDialog } from "@desktop/components/dialogs/edit-exclusion";
 import { TaskDialog } from "@desktop/components/dialogs/task";
+import { FolderDropzone } from "@desktop/components/folders/dropzone";
 import { Setup } from "@desktop/components/vaults/setup";
 import { VaultStarting } from "@desktop/components/vaults/starting";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useAccountStorage } from "@desktop/hooks/use-account-storage";
+import { useSpaceUpdate } from "@desktop/hooks/use-space-update";
+import { useTaskbarProgress } from "@desktop/hooks/use-taskbar-progress";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { z } from "zod";
@@ -19,6 +26,10 @@ export const Route = createFileRoute("/$accountId/$vaultId")({
 function RouteComponent() {
   const { data: vault } = useVault();
   const { status } = useVaultStatus();
+
+  useSpaceUpdate();
+
+  useTaskbarProgress();
 
   const [, setLastUsedVaultId] = useAccountStorage("lastUsedVaultId");
 
@@ -36,7 +47,16 @@ function RouteComponent() {
       ) : vault && status === "SETUP" ? (
         <Setup />
       ) : (
-        <Outlet />
+        <>
+          <FolderDropzone />
+
+          <CreateFolderDialog />
+          <DeleteFolderDialog />
+          <EditExclusionDialog />
+          <DeleteVaultDialog />
+
+          <Outlet />
+        </>
       )}
     </>
   );

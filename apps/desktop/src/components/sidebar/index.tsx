@@ -12,7 +12,6 @@ import {
 import { AccountPreview } from "@desktop/components/accounts/preview";
 import { AccountSelectDropdown } from "@desktop/components/accounts/select-dropdown";
 import { SidebarAlerts } from "@desktop/components/sidebar/alerts";
-import { SidebarSelects } from "@desktop/components/sidebar/dropdowns";
 import { SidebarSkeletonTheme } from "@desktop/components/sidebar/skeleton-theme";
 import { VaultMenuDropdown } from "@desktop/components/vaults/menu-dropdown";
 import { VaultPreview } from "@desktop/components/vaults/preview";
@@ -36,7 +35,7 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   const { data: account } = useAccount();
   const { data: vault } = useVault();
 
-  const { accountId, vaultId, hostName, userName } = useParams({
+  const { accountId, vaultId } = useParams({
     strict: false,
   });
 
@@ -49,12 +48,9 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
   if (!accountId) return null;
 
   const vaultPath =
-    accountId && vaultId && hostName && userName
-      ? `/${accountId}/${vaultId}/${hostName}/${userName}`
-      : undefined;
+    accountId && vaultId ? `/${accountId}/${vaultId}` : undefined;
   const settingsPath = vaultPath ? `${vaultPath}/settings` : undefined;
   const policiesPath = vaultPath ? `${vaultPath}/policies` : undefined;
-  const hasProfileParams = !!vaultId && !!hostName && !!userName;
 
   return (
     <SidebarSkeletonTheme>
@@ -130,24 +126,12 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   </SidebarMenuButton>
                 </VaultMenuDropdown>
               </SidebarMenuItem>
-              <SidebarSelects />
               <SidebarMenuItem className="mt-4">
                 <SidebarMenuButton
                   className="px-3"
-                  isActive={
-                    pathname ===
-                    `/${accountId}/${vaultId}/${hostName}/${userName}`
-                  }
+                  isActive={pathname === vaultPath}
                   render={
-                    hasProfileParams ? (
-                      <Link
-                        to="/$accountId/$vaultId/$hostName/$userName"
-                        from="/$accountId/$vaultId/$hostName/$userName"
-                      >
-                        <LayoutDashboardIcon />
-                        {t("overview")}
-                      </Link>
-                    ) : vaultId ? (
+                    vaultId ? (
                       <Link
                         to="/$accountId/$vaultId"
                         from="/$accountId/$vaultId"
@@ -169,10 +153,10 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === policiesPath}
                   render={
-                    hasProfileParams ? (
+                    vaultId ? (
                       <Link
-                        to="/$accountId/$vaultId/$hostName/$userName/policies"
-                        from="/$accountId/$vaultId/$hostName/$userName"
+                        to="/$accountId/$vaultId/policies"
+                        from="/$accountId/$vaultId"
                       >
                         <FileCogIcon />
                         {t("policies")}
@@ -191,10 +175,10 @@ export function Sidebar({ ...props }: ComponentProps<typeof SidebarContainer>) {
                   className="px-3"
                   isActive={pathname === settingsPath}
                   render={
-                    hasProfileParams ? (
+                    vaultId ? (
                       <Link
-                        to="/$accountId/$vaultId/$hostName/$userName/settings"
-                        from="/$accountId/$vaultId/$hostName/$userName"
+                        to="/$accountId/$vaultId/settings"
+                        from="/$accountId/$vaultId"
                       >
                         <SettingsIcon />
                         {t("settings")}

@@ -1,13 +1,5 @@
 {
   "addFolder": "Add folder",
-  "selectHostName": {
-    "empty": "Select device",
-    "remote": "Remote"
-  },
-  "selectUserName": {
-    "empty": "Select user",
-    "remote": "Remote"
-  },
   "selectVault": {
     "empty": "Select vault",
     "createVault": "Create vault",
