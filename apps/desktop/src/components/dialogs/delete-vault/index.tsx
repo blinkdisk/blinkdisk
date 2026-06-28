@@ -14,12 +14,14 @@ import { Input } from "@blinkdisk/ui/input";
 import { useDeleteVault } from "@desktop/hooks/mutations/use-delete-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dialog";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useNavigate } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
 export function DeleteVaultDialog() {
   const navigate = useNavigate();
+  const { accountId } = useAccountId();
 
   const { t } = useAppTranslation("vault.deleteDialog");
 
@@ -43,10 +45,13 @@ export function DeleteVaultDialog() {
   const onSuccess = useCallback(async () => {
     setIsOpen(false);
 
+    if (!accountId) return;
+
     await navigate({
-      to: "/{-$accountId}",
+      to: "/$accountId",
+      params: { accountId },
     });
-  }, [navigate, setIsOpen]);
+  }, [navigate, setIsOpen, accountId]);
 
   const { mutate: mutateDelete, isPending: isDeletePending } = useDeleteVault({
     onSuccess,

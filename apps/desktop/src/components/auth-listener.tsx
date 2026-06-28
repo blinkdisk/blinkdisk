@@ -17,11 +17,14 @@ export function AuthListener() {
       setAuthDialogIsOpen(false);
 
       await setAuthenticated(true);
-      await navigate({ to: "/{-$accountId}/loading" });
+      await navigate({
+        to: "/$accountId/loading",
+        params: { accountId },
+      });
 
       await accountChanged(accountId);
 
-      navigate({ to: "/{-$accountId}", params: { accountId } });
+      navigate({ to: "/$accountId", params: { accountId } });
 
       const localVaults = getVaultCollection(LOCAL_ACCOUNT_ID)
         .find({ status: "ACTIVE" })

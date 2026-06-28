@@ -11,32 +11,41 @@ export type SelectedProfile = Profile | null;
 export function useProfile() {
   const navigate = useNavigate();
 
-  const { userName, hostName } = useParams({ strict: false });
+  const { accountId, vaultId, userName, hostName } = useParams({
+    strict: false,
+  });
 
   const changeUserName = useCallback(
     (userName: string | undefined, hostNameOverride?: string) => {
+      if (!accountId || !vaultId) return;
+
+      const nextHostName = hostNameOverride || hostName;
+      if (!nextHostName) return;
+
       if (userName)
         navigate({
-          to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
-          params: { hostName: hostNameOverride || hostName, userName },
+          to: "/$accountId/$vaultId/$hostName/$userName",
+          params: { accountId, vaultId, hostName: nextHostName, userName },
         });
       else
         navigate({
-          to: "/{-$accountId}/{-$vaultId}/{-$hostName}",
-          params: { hostName: hostNameOverride || hostName },
+          to: "/$accountId/$vaultId/$hostName",
+          params: { accountId, vaultId, hostName: nextHostName },
         });
     },
-    [navigate, hostName],
+    [navigate, accountId, vaultId, hostName],
   );
 
   const changeHostName = useCallback(
     (hostName: string) => {
+      if (!accountId || !vaultId) return;
+
       navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}",
-        params: { hostName: hostName },
+        to: "/$accountId/$vaultId/$hostName",
+        params: { accountId, vaultId, hostName },
       });
     },
-    [navigate],
+    [navigate, accountId, vaultId],
   );
 
   const profile = useMemo<SelectedProfile>(() => {

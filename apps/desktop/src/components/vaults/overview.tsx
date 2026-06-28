@@ -57,10 +57,10 @@ type VaultOverviewProps = {
 export function VaultOverview({ vault }: VaultOverviewProps) {
   const { t } = useAppTranslation("vault.overview");
 
-  const navigate = useNavigate({ from: "/{-$accountId}/{-$vaultId}" });
+  const navigate = useNavigate({ from: "/$accountId/$vaultId" });
   const { otherHostName, otherUserName } =
     useSearch({
-      from: "/{-$accountId}/{-$vaultId}",
+      from: "/$accountId/$vaultId",
       shouldThrow: false,
     }) ?? {};
   const { openCreateFolder } = useCreateFolderDialog();

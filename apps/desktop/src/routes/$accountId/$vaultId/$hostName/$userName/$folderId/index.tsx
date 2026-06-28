@@ -25,7 +25,7 @@ import {
 import animation from "/animations/backup.lottie?url";
 
 export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}/",
+  "/$accountId/$vaultId/$hostName/$userName/$folderId/",
 )({
   component: RouteComponent,
 });
@@ -61,7 +61,7 @@ function RouteComponent() {
                 onClick={() =>
                   folder &&
                   navigate({
-                    to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
+                    to: "/$accountId/$vaultId/$hostName/$userName/policies",
                     search: policyTargetToSearch({
                       kind: "FOLDER",
                       hostName: folder.source.host,

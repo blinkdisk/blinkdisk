@@ -3,18 +3,21 @@ import { useCallback } from "react";
 
 export function useVaultId() {
   const navigate = useNavigate();
-  const { vaultId } = useParams({ strict: false });
+  const { accountId, vaultId } = useParams({ strict: false });
 
   const changeVault = useCallback(
     (id: string) => {
+      if (!accountId) return;
+
       navigate({
-        to: "/{-$accountId}/{-$vaultId}",
+        to: "/$accountId/$vaultId",
         params: {
+          accountId,
           vaultId: id,
         },
       });
     },
-    [navigate],
+    [navigate, accountId],
   );
 
   return { vaultId, changeVault };

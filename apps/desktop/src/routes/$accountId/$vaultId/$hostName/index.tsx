@@ -5,9 +5,7 @@ import { useProfile } from "@desktop/hooks/use-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/",
-)({
+export const Route = createFileRoute("/$accountId/$vaultId/$hostName/")({
   component: RouteComponent,
 });
 
@@ -26,7 +24,7 @@ function RouteComponent() {
 
     if (!device)
       navigate({
-        to: "/{-$accountId}/{-$vaultId}",
+        to: "/$accountId/$vaultId",
         replace: true,
       });
     else {
@@ -35,7 +33,7 @@ function RouteComponent() {
       );
 
       navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
+        to: "/$accountId/$vaultId/$hostName/$userName",
         params: (params) => ({
           ...params,
           userName: localUser

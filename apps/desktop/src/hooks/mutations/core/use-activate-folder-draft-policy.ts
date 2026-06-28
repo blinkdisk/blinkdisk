@@ -4,6 +4,7 @@ import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useVault } from "@desktop/hooks/queries/use-vault";
+import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { hashFolder } from "@desktop/lib/folder";
@@ -30,6 +31,7 @@ export function useActivateFolderDraftPolicy({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
+  const { accountId } = useAccountId();
   const { vaultId } = useVaultId();
   const { data: vault } = useVault();
   const { data: space } = useSpace();
@@ -45,7 +47,7 @@ export function useActivateFolderDraftPolicy({
     }) => {
       const draftTarget = target;
 
-      if (!vaultId || !draftTarget)
+      if (!accountId || !vaultId || !draftTarget)
         throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (!force && space && vault && vault.provider === "CLOUDBLINK") {
@@ -75,7 +77,7 @@ export function useActivateFolderDraftPolicy({
         path: draftTarget.path,
       });
 
-      return { id, vaultId, target: draftTarget };
+      return { accountId, id, vaultId, target: draftTarget };
     },
     onError: (error) => {
       onError?.(error);
@@ -109,13 +111,14 @@ export function useActivateFolderDraftPolicy({
       ]);
 
       await navigate({
-        to: "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/{-$folderId}",
-        params: (params) => ({
-          ...params,
+        to: "/$accountId/$vaultId/$hostName/$userName/$folderId",
+        params: {
+          accountId: res.accountId,
+          vaultId: res.vaultId,
           hostName: res.target.hostName,
           userName: res.target.userName,
           folderId: res.id,
-        }),
+        },
       });
 
       onSuccess?.();

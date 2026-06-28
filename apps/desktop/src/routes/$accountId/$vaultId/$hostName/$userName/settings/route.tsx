@@ -2,7 +2,7 @@ import { VaultGeneralSettings } from "@desktop/components/vaults/settings/genera
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/settings",
+  "/$accountId/$vaultId/$hostName/$userName/settings",
 )({
   component: RouteComponent,
 });

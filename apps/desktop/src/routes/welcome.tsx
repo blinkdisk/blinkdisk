@@ -36,7 +36,7 @@ function RouteComponent() {
     await window.electron.store.set("currentAccountId", LOCAL_ACCOUNT_ID);
 
     navigate({
-      to: "/{-$accountId}",
+      to: "/$accountId",
       params: { accountId: LOCAL_ACCOUNT_ID },
       replace: true,
     });

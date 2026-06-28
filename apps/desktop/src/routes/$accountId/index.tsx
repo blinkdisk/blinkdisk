@@ -10,7 +10,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CloudAlertIcon, PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useCallback } from "react";
 
-export const Route = createFileRoute("/{-$accountId}/")({
+export const Route = createFileRoute("/$accountId/")({
   component: RouteComponent,
 });
 

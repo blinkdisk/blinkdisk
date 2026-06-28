@@ -46,7 +46,7 @@ function RouteComponent() {
       | null;
 
     navigate({
-      to: "/{-$accountId}",
+      to: "/$accountId",
       params: { accountId: accountId || LOCAL_ACCOUNT_ID },
       replace: true,
     });

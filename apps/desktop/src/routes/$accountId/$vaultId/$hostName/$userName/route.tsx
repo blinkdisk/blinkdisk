@@ -8,7 +8,7 @@ import { useTaskbarProgress } from "@desktop/hooks/use-taskbar-progress";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}",
+  "/$accountId/$vaultId/$hostName/$userName",
 )({
   component: RouteComponent,
 });

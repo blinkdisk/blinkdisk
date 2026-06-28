@@ -13,6 +13,10 @@ export type PolicyTarget =
     };
 
 export type PolicyTargetKind = PolicyTarget["kind"];
+export type DraftFolderPolicyTarget = Extract<
+  PolicyTarget,
+  { kind: "DRAFT_FOLDER" }
+>;
 
 export type PolicySearch = {
   kind?: PolicyTargetKind;
@@ -211,7 +215,7 @@ export function createDraftPolicyTarget({
   hostName: string;
   userName: string;
   path: string;
-}): PolicyTarget {
+}): DraftFolderPolicyTarget {
   return {
     kind: "DRAFT_FOLDER",
     hostName,

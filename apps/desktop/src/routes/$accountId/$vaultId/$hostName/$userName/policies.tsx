@@ -61,7 +61,7 @@ const ZPolicySearch = z.object({
 });
 
 export const Route = createFileRoute(
-  "/{-$accountId}/{-$vaultId}/{-$hostName}/{-$userName}/policies",
+  "/$accountId/$vaultId/$hostName/$userName/policies",
 )({
   validateSearch: ZPolicySearch,
   component: RouteComponent,

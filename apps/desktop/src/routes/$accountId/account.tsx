@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
-export const Route = createFileRoute("/{-$accountId}/account")({
+export const Route = createFileRoute("/$accountId/account")({
   component: RouteComponent,
 });
 
