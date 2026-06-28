@@ -2,6 +2,7 @@ import { config } from "dotenv";
 
 config({
   path: "../../.env",
+  quiet: true,
 });
 
 import { sentryVitePlugin } from "@sentry/vite-plugin";

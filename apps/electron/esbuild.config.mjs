@@ -2,6 +2,7 @@ import { config } from "dotenv";
 
 config({
   path: "../../.env",
+  quiet: true,
 });
 
 import { TsconfigPathsPlugin } from "@esbuild-plugins/tsconfig-paths";

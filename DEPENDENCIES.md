@@ -60,12 +60,12 @@
 - [x] `better-auth` Current: `1.5.5` New: `1.6.22` Change: `Minor`
 - [x] `class-variance-authority` Current: `^0.7.1` New: `0.7.1` Change: `None`
 - [x] `clsx` Current: `^2.1.1` New: `2.1.1` Change: `None`
-- [ ] `concurrently` Current: `^9.1.2` New: `10.0.3` Change: `Major`
+- [x] `concurrently` Current: `^9.1.2` New: `10.0.3` Change: `Major`
 - [x] `country-flag-emoji-polyfill` Current: `^0.1.8` New: `0.1.8` Change: `None`
 - [x] `dom-to-image` Current: `^2.6.0` New: `2.6.0` Change: `None`
   - [x] `@types/dom-to-image` Current: `^2.6.7` New: `2.6.7` Change: `None`
-- [ ] `dotenv` Current: `^16.4.7` New: `17.4.2` Change: `Major`
-- [ ] `dotenv-cli` Current: `^8.0.0` New: `11.0.0` Change: `Major`
+- [x] `dotenv` Current: `^16.4.7` New: `17.4.2` Change: `Major`
+- [x] `dotenv-cli` Current: `^8.0.0` New: `11.0.0` Change: `Major`
 - [ ] `electron` Current: `^38.1.2` New: `42.5.0` Change: `Major`
 - [x] `electron-builder` Current: `^26.0.12` New: `26.15.3` Change: `Minor`
 - [x] `electron-log` Current: `^5.3.2` New: `5.4.4` Change: `Minor`
@@ -85,7 +85,7 @@
 - [x] `input-otp` Current: `^1.4.2` New: `1.4.2` Change: `None`
 - [x] `js-confetti` Current: `^0.13.1` New: `0.13.1` Change: `None`
 - [x] `jszip` Current: `^3.10.1` New: `3.10.1` Change: `None`
-- [ ] `knip` Current: `5.82.1` New: `6.23.0` Change: `Major`
+- [x] `knip` Current: `5.82.1` New: `6.21.0` Change: `Major`
 - [x] `kysely` Current: `^0.27.6` New: `0.29.2` Change: `Minor`
 - [x] `legid-sync` Current: `^0.2.1` New: `0.2.1` Change: `None`
 - [x] `lucide-react` Current: `^1.7.0` New: `1.21.0` Change: `Minor`

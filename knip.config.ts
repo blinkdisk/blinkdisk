@@ -32,11 +32,16 @@ const config: KnipConfig = {
       ignore: commonIgnore,
     },
     "apps/desktop": {
-      entry: ["src/main.tsx"],
+      entry: ["src/main.tsx", "vite.config.ts"],
       project: commonProject,
       ignore: commonIgnore,
+      ignoreDependencies: [
+        // Referenced by name in vite.config.ts.
+        "babel-plugin-react-compiler",
+      ],
       // Vite resolves this from apps/desktop/public at build time.
       ignoreUnresolved: [/^\/animations\/backup\.lottie(\?url)?$/],
+      vite: { config: [] },
     },
     "apps/electron": {
       project: commonProject,
