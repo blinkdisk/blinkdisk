@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cloudflare from "@astrojs/cloudflare";
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -74,6 +75,9 @@ export default defineConfig({
   prefetch: true,
   trailingSlash: "never",
   markdown: {
+    processor: unified({
+      rehypePlugins: [openExternalBlogLinksInNewTab],
+    }),
     shikiConfig: {
       themes: {
         light: "github-light",
@@ -131,9 +135,7 @@ export default defineConfig({
         },
       },
     }),
-    mdx({
-      rehypePlugins: [openExternalBlogLinksInNewTab],
-    }),
+    mdx(),
     react(),
     sitemap({
       customPages: getComparisonSitemap(site),
@@ -196,11 +198,6 @@ export default defineConfig({
       target: "esnext",
       // Set to hidden to reduce bundle size
       sourcemap: "hidden",
-    },
-    optimizeDeps: {
-      esbuildOptions: {
-        target: "esnext",
-      },
     },
     plugins: [
       tailwindcss(),

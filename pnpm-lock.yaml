@@ -12,6 +12,9 @@ catalogs:
     '@astrojs/cloudflare':
       specifier: ^14.0.1
       version: 14.0.1
+    '@astrojs/markdown-remark':
+      specifier: ^7.2.0
+      version: 7.2.0
     '@astrojs/mdx':
       specifier: ^7.0.0
       version: 7.0.0
@@ -832,6 +835,9 @@ importers:
       '@astrojs/cloudflare':
         specifier: 'catalog:'
         version: 14.0.1(@types/node@26.0.1)(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@26.0.1)(jiti@2.7.0)(rollup@4.62.2)(yaml@2.9.0))(esbuild@0.28.1)(jiti@2.7.0)(wrangler@4.105.0(@cloudflare/workers-types@4.20260627.1))(yaml@2.9.0)
+      '@astrojs/markdown-remark':
+        specifier: 'catalog:'
+        version: 7.2.0
       '@astrojs/mdx':
         specifier: 'catalog:'
         version: 7.0.0(@astrojs/markdown-satteri@0.3.2)(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@26.0.1)(jiti@2.7.0)(rollup@4.62.2)(yaml@2.9.0))

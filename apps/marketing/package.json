@@ -13,6 +13,7 @@
   "dependencies": {
     "@astrojs/check": "catalog:",
     "@astrojs/cloudflare": "catalog:",
+    "@astrojs/markdown-remark": "catalog:",
     "@astrojs/mdx": "catalog:",
     "@astrojs/react": "catalog:",
     "@astrojs/sitemap": "catalog:",
