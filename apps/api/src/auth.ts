@@ -35,14 +35,14 @@ export const auth = (env: CloudflareBindings, db: Database) => {
     appName: "BlinkDisk",
     basePath: "/api/auth",
     account: {
-      modelName: "AuthMethod",
+      modelName: "authMethod",
       fields: {
         accountId: "authMethodId",
         userId: "accountId",
       },
     },
     user: {
-      modelName: "Account",
+      modelName: "account",
       additionalFields: {
         language: {
           type: "string",
@@ -55,7 +55,7 @@ export const auth = (env: CloudflareBindings, db: Database) => {
       },
     },
     session: {
-      modelName: "Session",
+      modelName: "session",
       fields: {
         userId: "accountId",
       },
@@ -67,7 +67,7 @@ export const auth = (env: CloudflareBindings, db: Database) => {
       freshAge: 60 * 60 * 24,
     },
     verification: {
-      modelName: "Verification",
+      modelName: "verification",
     },
     database: drizzleAdapter(db, {
       provider: "pg",

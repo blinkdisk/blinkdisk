@@ -314,10 +314,10 @@ export const config = pgTable(
 );
 
 export const authSchema = {
-  Account: account,
-  Session: session,
-  AuthMethod: authMethod,
-  Verification: verification,
+  account,
+  authMethod,
+  session,
+  verification,
 };
 
 export const schema = {
