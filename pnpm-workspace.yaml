@@ -152,3 +152,6 @@ allowBuilds:
 overrides:
   esbuild: "catalog:"
   wrangler>esbuild: "catalog:"
+
+patchedDependencies:
+  '@aws-sdk/xml-builder': patches/@aws-sdk__xml-builder.patch
