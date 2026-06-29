@@ -1,4 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import {
@@ -12,7 +13,6 @@ import {
 import { useDeleteSource } from "@desktop/hooks/mutations/core/use-delete-source";
 import { useDeleteSourceDialog } from "@desktop/hooks/state/use-delete-source-dialog";
 import { useSource } from "@desktop/hooks/use-source";
-import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { InfoIcon } from "lucide-react";
 
 export function DeleteSourceDialog() {

@@ -1,8 +1,8 @@
 import type { KopiaEntryType } from "@blinkdisk/schemas/source";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useSource } from "@desktop/hooks/use-source";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useSource } from "@desktop/hooks/use-source";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";

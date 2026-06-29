@@ -7,12 +7,12 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { buildSourceId } from "@desktop/lib/source";
 import { convertPolicyToCore } from "@desktop/lib/policy";
 import {
   type PolicyTarget,
   policyTargetToKopiaParams,
 } from "@desktop/lib/policy-target";
+import { buildSourceId } from "@desktop/lib/source";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";

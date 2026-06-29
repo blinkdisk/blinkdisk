@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ZSourceType = z.enum(["directory", "file", "symlink"]);
 export type SourceType = z.infer<typeof ZSourceType>;
 
-export const ZKopiaEntryType = z.enum(["d", "f", "s"]);
+const ZKopiaEntryType = z.enum(["d", "f", "s"]);
 export type KopiaEntryType = z.infer<typeof ZKopiaEntryType>;
 
 export function sourceTypeFromKopiaEntryType(

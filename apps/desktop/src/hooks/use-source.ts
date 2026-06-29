@@ -1,6 +1,6 @@
 import { useSourceList } from "@desktop/hooks/queries/core/use-source-list";
-import { useSourceId } from "@desktop/hooks/use-source-id";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
+import { useSourceId } from "@desktop/hooks/use-source-id";
 import { useMemo } from "react";
 
 export function useSource(

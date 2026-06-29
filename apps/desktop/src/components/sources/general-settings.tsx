@@ -2,7 +2,10 @@ import { DynamicField } from "@blinkdisk/components/dynamic-field";
 import { SourceCard } from "@blinkdisk/components/source-card";
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { isFileLikeSource, sourceTypeWithFallback } from "@blinkdisk/schemas/source";
+import {
+  isFileLikeSource,
+  sourceTypeWithFallback,
+} from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import { Input } from "@blinkdisk/ui/input";
@@ -47,11 +50,7 @@ export function SourceGeneralSettings({ form }: { form: PolicyForm }) {
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
               <button disabled={disabledContext} type="button">
-                <SourceCard
-                  emoji={values.emoji}
-                  type={sourceType}
-                  size={3.5}
-                />
+                <SourceCard emoji={values.emoji} type={sourceType} size={3.5} />
               </button>
             </EmojiPicker>
             <EmojiPicker

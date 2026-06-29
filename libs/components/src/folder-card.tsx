@@ -1,5 +1,4 @@
 export {
-  SourceCard as FolderCard,
-  type SourceCardProps as FolderCardProps,
   getEmojiUrl,
+  SourceCard as FolderCard,
 } from "./source-card";
