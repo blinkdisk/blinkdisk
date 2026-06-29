@@ -192,7 +192,6 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "Account_email_key" ON "Account" USING btree ("email");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "Account_email_idx" ON "Account" USING btree ("email");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "AuthMethod_authMethodId_key" ON "AuthMethod" USING btree ("authMethodId");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "AuthMethod_accountId_idx" ON "AuthMethod" USING btree ("accountId");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "Config_level_idx" ON "Config" USING btree ("level");--> statement-breakpoint

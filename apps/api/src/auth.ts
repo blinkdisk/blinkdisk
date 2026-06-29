@@ -29,6 +29,19 @@ const cookieSettings = {
   },
 } as const;
 
+const authModelPrefixes = {
+  account: "AuthMethod",
+  authMethod: "AuthMethod",
+  session: "Session",
+  user: "Account",
+  verification: "Verification",
+} as const satisfies Record<string, Prefix>;
+
+const getAuthModelPrefix = (model: string): Prefix | undefined => {
+  if (model in authModelPrefixes)
+    return authModelPrefixes[model as keyof typeof authModelPrefixes];
+};
+
 export const auth = (env: CloudflareBindings, db: Database) => {
   return betterAuth({
     baseURL: env.API_URL,
@@ -100,9 +113,7 @@ export const auth = (env: CloudflareBindings, db: Database) => {
       },
       database: {
         generateId: ({ model }) => {
-          return generateId(
-            `${model === "session" ? "Session" : model === "user" ? "Account" : model === "account" ? "AuthMethod" : ""}` as Prefix,
-          );
+          return generateId(getAuthModelPrefix(model));
         },
       },
     },

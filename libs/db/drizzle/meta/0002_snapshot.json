@@ -86,21 +86,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "account_email_idx": {
-          "name": "account_email_idx",
-          "columns": [
-            {
-              "expression": "email",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {},

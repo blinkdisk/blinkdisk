@@ -1,11 +1,11 @@
 {
-  "id": "4578af82-39da-4831-8529-e6aa76567394",
-  "prevId": "a3a9839e-0cfb-42b4-b41a-4e6a58159fbe",
+  "id": "d4919bc9-346a-4b04-bfbd-1d6020cc62d5",
+  "prevId": "da7c8ee0-ad90-4bdb-8640-aa48187673cc",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.Account": {
-      "name": "Account",
+    "public.account": {
+      "name": "account",
       "schema": "",
       "columns": {
         "id": {
@@ -26,8 +26,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "emailVerified": {
-          "name": "emailVerified",
+        "email_verified": {
+          "name": "email_verified",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
@@ -45,35 +45,35 @@
           "primaryKey": false,
           "notNull": false
         },
-        "timeZone": {
-          "name": "timeZone",
+        "time_zone": {
+          "name": "time_zone",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "polarId": {
-          "name": "polarId",
+        "polar_id": {
+          "name": "polar_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "Account_email_key": {
-          "name": "Account_email_key",
+        "account_email_key": {
+          "name": "account_email_key",
           "columns": [
             {
               "expression": "email",
@@ -95,8 +95,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.AuthMethod": {
-      "name": "AuthMethod",
+    "public.auth_method": {
+      "name": "auth_method",
       "schema": "",
       "columns": {
         "id": {
@@ -105,44 +105,44 @@
           "primaryKey": true,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "authMethodId": {
-          "name": "authMethodId",
+        "auth_method_id": {
+          "name": "auth_method_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "providerId": {
-          "name": "providerId",
+        "provider_id": {
+          "name": "provider_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "accessToken": {
-          "name": "accessToken",
+        "access_token": {
+          "name": "access_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "refreshToken": {
-          "name": "refreshToken",
+        "refresh_token": {
+          "name": "refresh_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "accessTokenExpiresAt": {
-          "name": "accessTokenExpiresAt",
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
         },
-        "refreshTokenExpiresAt": {
-          "name": "refreshTokenExpiresAt",
+        "refresh_token_expires_at": {
+          "name": "refresh_token_expires_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
@@ -153,8 +153,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "idToken": {
-          "name": "idToken",
+        "id_token": {
+          "name": "id_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -165,26 +165,26 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "AuthMethod_authMethodId_key": {
-          "name": "AuthMethod_authMethodId_key",
+        "auth_method_auth_method_id_key": {
+          "name": "auth_method_auth_method_id_key",
           "columns": [
             {
-              "expression": "authMethodId",
+              "expression": "auth_method_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -195,11 +195,11 @@
           "method": "btree",
           "with": {}
         },
-        "AuthMethod_accountId_idx": {
-          "name": "AuthMethod_accountId_idx",
+        "auth_method_account_id_idx": {
+          "name": "auth_method_account_id_idx",
           "columns": [
             {
-              "expression": "accountId",
+              "expression": "account_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -212,12 +212,12 @@
         }
       },
       "foreignKeys": {
-        "AuthMethod_accountId_fkey": {
-          "name": "AuthMethod_accountId_fkey",
-          "tableFrom": "AuthMethod",
-          "tableTo": "Account",
+        "auth_method_account_id_fkey": {
+          "name": "auth_method_account_id_fkey",
+          "tableFrom": "auth_method",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -232,8 +232,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Config": {
-      "name": "Config",
+    "public.config": {
+      "name": "config",
       "schema": "",
       "columns": {
         "id": {
@@ -250,46 +250,46 @@
         },
         "level": {
           "name": "level",
-          "type": "ConfigLevel",
+          "type": "config_level",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "vaultId": {
-          "name": "vaultId",
+        "vault_id": {
+          "name": "vault_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "hostName": {
-          "name": "hostName",
+        "host_name": {
+          "name": "host_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "userName": {
-          "name": "userName",
+        "user_name": {
+          "name": "user_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {
-        "Config_level_idx": {
-          "name": "Config_level_idx",
+        "config_level_idx": {
+          "name": "config_level_idx",
           "columns": [
             {
               "expression": "level",
@@ -305,12 +305,12 @@
         }
       },
       "foreignKeys": {
-        "Config_accountId_fkey": {
-          "name": "Config_accountId_fkey",
-          "tableFrom": "Config",
-          "tableTo": "Account",
+        "config_account_id_fkey": {
+          "name": "config_account_id_fkey",
+          "tableFrom": "config",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -318,12 +318,12 @@
           "onDelete": "restrict",
           "onUpdate": "cascade"
         },
-        "Config_vaultId_fkey": {
-          "name": "Config_vaultId_fkey",
-          "tableFrom": "Config",
-          "tableTo": "Vault",
+        "config_vault_id_fkey": {
+          "name": "config_vault_id_fkey",
+          "tableFrom": "config",
+          "tableTo": "vault",
           "columnsFrom": [
-            "vaultId"
+            "vault_id"
           ],
           "columnsTo": [
             "id"
@@ -338,8 +338,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Session": {
-      "name": "Session",
+    "public.session": {
+      "name": "session",
       "schema": "",
       "columns": {
         "id": {
@@ -348,8 +348,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -360,41 +360,41 @@
           "primaryKey": false,
           "notNull": true
         },
-        "expiresAt": {
-          "name": "expiresAt",
+        "expires_at": {
+          "name": "expires_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         },
-        "ipAddress": {
-          "name": "ipAddress",
+        "ip_address": {
+          "name": "ip_address",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "userAgent": {
-          "name": "userAgent",
+        "user_agent": {
+          "name": "user_agent",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "Session_token_key": {
-          "name": "Session_token_key",
+        "session_token_key": {
+          "name": "session_token_key",
           "columns": [
             {
               "expression": "token",
@@ -408,11 +408,11 @@
           "method": "btree",
           "with": {}
         },
-        "Session_accountId_idx": {
-          "name": "Session_accountId_idx",
+        "session_account_id_idx": {
+          "name": "session_account_id_idx",
           "columns": [
             {
-              "expression": "accountId",
+              "expression": "account_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -425,12 +425,12 @@
         }
       },
       "foreignKeys": {
-        "Session_accountId_fkey": {
-          "name": "Session_accountId_fkey",
-          "tableFrom": "Session",
-          "tableTo": "Account",
+        "session_account_id_fkey": {
+          "name": "session_account_id_fkey",
+          "tableFrom": "session",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -445,8 +445,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Space": {
-      "name": "Space",
+    "public.space": {
+      "name": "space",
       "schema": "",
       "columns": {
         "id": {
@@ -467,38 +467,38 @@
           "primaryKey": false,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "subscriptionId": {
-          "name": "subscriptionId",
+        "subscription_id": {
+          "name": "subscription_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "trialId": {
-          "name": "trialId",
+        "trial_id": {
+          "name": "trial_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {
-        "Space_accountId_key": {
-          "name": "Space_accountId_key",
+        "space_account_id_key": {
+          "name": "space_account_id_key",
           "columns": [
             {
-              "expression": "accountId",
+              "expression": "account_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -509,11 +509,11 @@
           "method": "btree",
           "with": {}
         },
-        "Space_trialId_key": {
-          "name": "Space_trialId_key",
+        "space_trial_id_key": {
+          "name": "space_trial_id_key",
           "columns": [
             {
-              "expression": "trialId",
+              "expression": "trial_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -526,12 +526,12 @@
         }
       },
       "foreignKeys": {
-        "Space_accountId_fkey": {
-          "name": "Space_accountId_fkey",
-          "tableFrom": "Space",
-          "tableTo": "Account",
+        "space_account_id_fkey": {
+          "name": "space_account_id_fkey",
+          "tableFrom": "space",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -539,12 +539,12 @@
           "onDelete": "restrict",
           "onUpdate": "cascade"
         },
-        "Space_subscriptionId_fkey": {
-          "name": "Space_subscriptionId_fkey",
-          "tableFrom": "Space",
-          "tableTo": "Subscription",
+        "space_subscription_id_fkey": {
+          "name": "space_subscription_id_fkey",
+          "tableFrom": "space",
+          "tableTo": "subscription",
           "columnsFrom": [
-            "subscriptionId"
+            "subscription_id"
           ],
           "columnsTo": [
             "id"
@@ -552,12 +552,12 @@
           "onDelete": "set null",
           "onUpdate": "cascade"
         },
-        "Space_trialId_fkey": {
-          "name": "Space_trialId_fkey",
-          "tableFrom": "Space",
-          "tableTo": "Trial",
+        "space_trial_id_fkey": {
+          "name": "space_trial_id_fkey",
+          "tableFrom": "space",
+          "tableTo": "trial",
           "columnsFrom": [
-            "trialId"
+            "trial_id"
           ],
           "columnsTo": [
             "id"
@@ -572,8 +572,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Subscription": {
-      "name": "Subscription",
+    "public.subscription": {
+      "name": "subscription",
       "schema": "",
       "columns": {
         "id": {
@@ -584,85 +584,85 @@
         },
         "status": {
           "name": "status",
-          "type": "SubscriptionStatus",
+          "type": "subscription_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "priceId": {
-          "name": "priceId",
+        "price_id": {
+          "name": "price_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "planId": {
-          "name": "planId",
+        "plan_id": {
+          "name": "plan_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "polarProductId": {
-          "name": "polarProductId",
+        "polar_product_id": {
+          "name": "polar_product_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "polarSubscriptionId": {
-          "name": "polarSubscriptionId",
+        "polar_subscription_id": {
+          "name": "polar_subscription_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "polarCustomerId": {
-          "name": "polarCustomerId",
+        "polar_customer_id": {
+          "name": "polar_customer_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "canceledAt": {
-          "name": "canceledAt",
+        "canceled_at": {
+          "name": "canceled_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
         },
-        "endedAt": {
-          "name": "endedAt",
+        "ended_at": {
+          "name": "ended_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
         },
-        "cleanupAt": {
-          "name": "cleanupAt",
+        "cleanup_at": {
+          "name": "cleanup_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "affiliateId": {
-          "name": "affiliateId",
+        "affiliate_id": {
+          "name": "affiliate_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {
-        "Subscription_polarSubscriptionId_key": {
-          "name": "Subscription_polarSubscriptionId_key",
+        "subscription_polar_subscription_id_key": {
+          "name": "subscription_polar_subscription_id_key",
           "columns": [
             {
-              "expression": "polarSubscriptionId",
+              "expression": "polar_subscription_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -675,12 +675,12 @@
         }
       },
       "foreignKeys": {
-        "Subscription_accountId_fkey": {
-          "name": "Subscription_accountId_fkey",
-          "tableFrom": "Subscription",
-          "tableTo": "Account",
+        "subscription_account_id_fkey": {
+          "name": "subscription_account_id_fkey",
+          "tableFrom": "subscription",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -695,8 +695,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Trial": {
-      "name": "Trial",
+    "public.trial": {
+      "name": "trial",
       "schema": "",
       "columns": {
         "id": {
@@ -707,7 +707,7 @@
         },
         "status": {
           "name": "status",
-          "type": "TrialStatus",
+          "type": "trial_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
@@ -719,32 +719,32 @@
           "primaryKey": false,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "startedAt": {
-          "name": "startedAt",
+        "started_at": {
+          "name": "started_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         },
-        "endsAt": {
-          "name": "endsAt",
+        "ends_at": {
+          "name": "ends_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
         },
-        "endedAt": {
-          "name": "endedAt",
+        "ended_at": {
+          "name": "ended_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
@@ -752,11 +752,11 @@
         }
       },
       "indexes": {
-        "Trial_accountId_key": {
-          "name": "Trial_accountId_key",
+        "trial_account_id_key": {
+          "name": "trial_account_id_key",
           "columns": [
             {
-              "expression": "accountId",
+              "expression": "account_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -767,8 +767,8 @@
           "method": "btree",
           "with": {}
         },
-        "Trial_status_idx": {
-          "name": "Trial_status_idx",
+        "trial_status_idx": {
+          "name": "trial_status_idx",
           "columns": [
             {
               "expression": "status",
@@ -782,11 +782,11 @@
           "method": "btree",
           "with": {}
         },
-        "Trial_endsAt_idx": {
-          "name": "Trial_endsAt_idx",
+        "trial_ends_at_idx": {
+          "name": "trial_ends_at_idx",
           "columns": [
             {
-              "expression": "endsAt",
+              "expression": "ends_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -799,12 +799,12 @@
         }
       },
       "foreignKeys": {
-        "Trial_accountId_fkey": {
-          "name": "Trial_accountId_fkey",
-          "tableFrom": "Trial",
-          "tableTo": "Account",
+        "trial_account_id_fkey": {
+          "name": "trial_account_id_fkey",
+          "tableFrom": "trial",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -819,8 +819,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Vault": {
-      "name": "Vault",
+    "public.vault": {
+      "name": "vault",
       "schema": "",
       "columns": {
         "id": {
@@ -831,7 +831,7 @@
         },
         "status": {
           "name": "status",
-          "type": "VaultStatus",
+          "type": "vault_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -844,20 +844,20 @@
         },
         "provider": {
           "name": "provider",
-          "type": "VaultProvider",
+          "type": "vault_provider",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "configLevel": {
-          "name": "configLevel",
-          "type": "ConfigLevel",
+        "config_level": {
+          "name": "config_level",
+          "type": "config_level",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -868,14 +868,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "spaceId": {
-          "name": "spaceId",
+        "space_id": {
+          "name": "space_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
@@ -887,8 +887,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "coreId": {
-          "name": "coreId",
+        "core_id": {
+          "name": "core_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -896,12 +896,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "Vault_accountId_fkey": {
-          "name": "Vault_accountId_fkey",
-          "tableFrom": "Vault",
-          "tableTo": "Account",
+        "vault_account_id_fkey": {
+          "name": "vault_account_id_fkey",
+          "tableFrom": "vault",
+          "tableTo": "account",
           "columnsFrom": [
-            "accountId"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -909,12 +909,12 @@
           "onDelete": "restrict",
           "onUpdate": "cascade"
         },
-        "Vault_spaceId_fkey": {
-          "name": "Vault_spaceId_fkey",
-          "tableFrom": "Vault",
-          "tableTo": "Space",
+        "vault_space_id_fkey": {
+          "name": "vault_space_id_fkey",
+          "tableFrom": "vault",
+          "tableTo": "space",
           "columnsFrom": [
-            "spaceId"
+            "space_id"
           ],
           "columnsTo": [
             "id"
@@ -929,8 +929,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Verification": {
-      "name": "Verification",
+    "public.verification": {
+      "name": "verification",
       "schema": "",
       "columns": {
         "id": {
@@ -951,29 +951,29 @@
           "primaryKey": false,
           "notNull": true
         },
-        "expiresAt": {
-          "name": "expiresAt",
+        "expires_at": {
+          "name": "expires_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "Verification_identifier_idx": {
-          "name": "Verification_identifier_idx",
+        "verification_identifier_idx": {
+          "name": "verification_identifier_idx",
           "columns": [
             {
               "expression": "identifier",
@@ -997,16 +997,16 @@
     }
   },
   "enums": {
-    "public.ConfigLevel": {
-      "name": "ConfigLevel",
+    "public.config_level": {
+      "name": "config_level",
       "schema": "public",
       "values": [
         "VAULT",
         "PROFILE"
       ]
     },
-    "public.SubscriptionStatus": {
-      "name": "SubscriptionStatus",
+    "public.subscription_status": {
+      "name": "subscription_status",
       "schema": "public",
       "values": [
         "TRIALING",
@@ -1015,16 +1015,16 @@
         "CANCELED"
       ]
     },
-    "public.TrialStatus": {
-      "name": "TrialStatus",
+    "public.trial_status": {
+      "name": "trial_status",
       "schema": "public",
       "values": [
         "ACTIVE",
         "ENDED"
       ]
     },
-    "public.VaultProvider": {
-      "name": "VaultProvider",
+    "public.vault_provider": {
+      "name": "vault_provider",
       "schema": "public",
       "values": [
         "CLOUDBLINK",
@@ -1043,8 +1043,8 @@
         "WEBDAV"
       ]
     },
-    "public.VaultStatus": {
-      "name": "VaultStatus",
+    "public.vault_status": {
+      "name": "vault_status",
       "schema": "public",
       "values": [
         "ACTIVE",

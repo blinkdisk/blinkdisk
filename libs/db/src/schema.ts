@@ -119,10 +119,7 @@ export const account = pgTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (table) => [
-    uniqueIndex("account_email_key").on(table.email),
-    index("account_email_idx").on(table.email),
-  ],
+  (table) => [uniqueIndex("account_email_key").on(table.email)],
 );
 
 export const session = pgTable(
