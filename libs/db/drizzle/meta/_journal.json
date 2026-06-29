@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1782669409957,
+      "tag": "0000_prisma_baseline",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782671084614,
+      "tag": "0001_remove_prisma_migrations",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782671796412,
+      "tag": "0002_normalize_identifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1782749699648,
+      "tag": "0003_drop_account_email_idx",
+      "breakpoints": true
+    }
+  ]
+}

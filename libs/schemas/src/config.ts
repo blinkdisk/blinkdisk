@@ -1,4 +1,4 @@
-import { ConfigLevel } from "@blinkdisk/db/enums";
+import { ConfigLevel } from "@blinkdisk/db/schema";
 import { ZDateString } from "@schemas/shared/date";
 import { ZVaultId } from "@schemas/shared/id";
 import { ZKopiaHostName, ZKopiaUserName } from "@schemas/shared/profile";

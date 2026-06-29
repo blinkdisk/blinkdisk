@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "check-types": "tsc --noEmit",
-    "migrate:dev": "prisma migrate dev",
-    "migrate:prod": "prisma migrate deploy",
-    "studio": "prisma studio"
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "studio": "drizzle-kit studio"
   },
   "exports": {
     "./*": "./src/*.ts"
@@ -15,12 +15,11 @@
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
+    "drizzle-kit": "catalog:",
     "typescript": "catalog:"
   },
   "dependencies": {
-    "kysely": "catalog:",
-    "pg": "catalog:",
-    "prisma": "catalog:",
-    "prisma-kysely": "catalog:"
+    "drizzle-orm": "catalog:",
+    "pg": "catalog:"
   }
 }

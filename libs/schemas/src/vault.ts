@@ -1,5 +1,5 @@
 import { LATEST_VAULT_VERSION } from "@blinkdisk/constants/vault";
-import { VaultStatus } from "@blinkdisk/db/enums";
+import { VaultStatus } from "@blinkdisk/db/schema";
 import { ZConfigLevel, ZVaultEncryptedConfig } from "@schemas/config";
 import { ZProviderType } from "@schemas/providers";
 import { ZDateString } from "@schemas/shared/date";

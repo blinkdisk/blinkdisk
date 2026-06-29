@@ -1,21 +1,29 @@
 import { getPolar } from "@api/lib/polar";
 import { posthog } from "@api/lib/posthog";
-import { getActiveSubscription } from "@api/lib/subscription";
+import { activeSubscriptionFilter } from "@api/lib/subscription";
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
+import {
+  account,
+  space as spaceTable,
+  subscription as subscriptionTable,
+} from "@blinkdisk/db/schema";
 import { ZChangePlan, ZCreateCheckout } from "@blinkdisk/schemas/payment";
 import { CustomError } from "@blinkdisk/utils/error";
 import { formatSubscriptionEn } from "@blinkdisk/utils/format";
 import { logsnag } from "@blinkdisk/utils/logsnag";
+import { eq } from "drizzle-orm";
 
 export const paymentRouter = router({
   checkout: authedProcedure
     .input(ZCreateCheckout)
     .mutation(async ({ input, ctx }) => {
-      const subscription = await getActiveSubscription(ctx.account.id, ctx.db)
-        .select(["id"])
-        .executeTakeFirst();
+      const [subscription] = await ctx.db
+        .select({ id: subscriptionTable.id })
+        .from(subscriptionTable)
+        .where(activeSubscriptionFilter(ctx.account.id))
+        .limit(1);
 
       if (subscription) throw new CustomError("SUBSCRIPTION_EXISTS");
 
@@ -28,11 +36,11 @@ export const paymentRouter = router({
       const price = plan.prices.find((p) => p.id === input.priceId);
       if (!price?.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
-      const space = await ctx.db
-        .selectFrom("Space")
-        .select(["id"])
-        .where("accountId", "=", ctx.account.id)
-        .executeTakeFirst();
+      const [space] = await ctx.db
+        .select({ id: spaceTable.id })
+        .from(spaceTable)
+        .where(eq(spaceTable.accountId, ctx.account.id))
+        .limit(1);
 
       if (space) {
         const stub = ctx.env.SPACE.getByName(space.id);
@@ -44,18 +52,18 @@ export const paymentRouter = router({
         if (used > bytes) throw new CustomError("NOT_ALLOWED");
       }
 
-      const account = await ctx.db
-        .selectFrom("Account")
-        .select(["polarId"])
-        .where("id", "=", ctx.account.id)
-        .executeTakeFirst();
+      const [accountRecord] = await ctx.db
+        .select({ polarId: account.polarId })
+        .from(account)
+        .where(eq(account.id, ctx.account.id))
+        .limit(1);
 
-      if (!account || !ctx.account) throw new CustomError("NOT_ALLOWED");
+      if (!accountRecord || !ctx.account) throw new CustomError("NOT_ALLOWED");
 
       const polar = getPolar(ctx.env.POLAR_ENVIRONMENT, ctx.env.POLAR_TOKEN);
 
-      let polarId = account.polarId;
-      if (!account.polarId) {
+      let polarId = accountRecord.polarId;
+      if (!accountRecord.polarId) {
         const customer = await polar.customers.create({
           externalId: ctx.account.id,
           email: ctx.account.email,
@@ -65,12 +73,11 @@ export const paymentRouter = router({
         polarId = customer.id;
 
         await ctx.db
-          .updateTable("Account")
+          .update(account)
           .set({
             polarId,
           })
-          .where("id", "=", ctx.account.id)
-          .execute();
+          .where(eq(account.id, ctx.account.id));
       }
 
       const checkout = await polar.checkouts.create({
@@ -115,37 +122,44 @@ export const paymentRouter = router({
       return { id: checkout.id, url: checkout.url };
     }),
   getSubscription: authedProcedure.query(async ({ ctx }) => {
-    const subscription = await getActiveSubscription(ctx.account.id, ctx.db)
-      .select(["id", "status", "planId", "priceId"])
-      .executeTakeFirst();
+    const [subscription] = await ctx.db
+      .select({
+        id: subscriptionTable.id,
+        status: subscriptionTable.status,
+        planId: subscriptionTable.planId,
+        priceId: subscriptionTable.priceId,
+      })
+      .from(subscriptionTable)
+      .where(activeSubscriptionFilter(ctx.account.id))
+      .limit(1);
 
     if (!subscription) return null;
     return subscription;
   }),
   billing: authedProcedure.query(async ({ ctx }) => {
-    const account = await ctx.db
-      .selectFrom("Account")
-      .select(["polarId"])
-      .where("id", "=", ctx.account.id)
-      .executeTakeFirst();
+    const [accountRecord] = await ctx.db
+      .select({ polarId: account.polarId })
+      .from(account)
+      .where(eq(account.id, ctx.account.id))
+      .limit(1);
 
     return {
-      portalEnabled: !!account?.polarId,
+      portalEnabled: !!accountRecord?.polarId,
     };
   }),
   portal: authedProcedure.query(async ({ ctx }) => {
-    const account = await ctx.db
-      .selectFrom("Account")
-      .select(["polarId"])
-      .where("id", "=", ctx.account.id)
-      .executeTakeFirst();
+    const [accountRecord] = await ctx.db
+      .select({ polarId: account.polarId })
+      .from(account)
+      .where(eq(account.id, ctx.account.id))
+      .limit(1);
 
-    if (!account?.polarId) throw new CustomError("NOT_ALLOWED");
+    if (!accountRecord?.polarId) throw new CustomError("NOT_ALLOWED");
 
     const polar = getPolar(ctx.env.POLAR_ENVIRONMENT, ctx.env.POLAR_TOKEN);
 
     const portal = await polar.customerSessions.create({
-      customerId: account.polarId,
+      customerId: accountRecord.polarId,
     });
 
     return {
@@ -163,9 +177,15 @@ export const paymentRouter = router({
       const price = plan.prices.find((p) => p.id === input.priceId);
       if (!price?.polarId) throw new CustomError("PRICE_NOT_FOUND");
 
-      const current = await getActiveSubscription(ctx.account.id, ctx.db)
-        .select(["id", "priceId", "polarSubscriptionId"])
-        .executeTakeFirst();
+      const [current] = await ctx.db
+        .select({
+          id: subscriptionTable.id,
+          priceId: subscriptionTable.priceId,
+          polarSubscriptionId: subscriptionTable.polarSubscriptionId,
+        })
+        .from(subscriptionTable)
+        .where(activeSubscriptionFilter(ctx.account.id))
+        .limit(1);
 
       if (!current) throw new CustomError("SUBSCRIPTION_NOT_FOUND");
 
@@ -180,11 +200,11 @@ export const paymentRouter = router({
       if (input.priceId === current.priceId)
         throw new CustomError("NOT_ALLOWED");
 
-      const space = await ctx.db
-        .selectFrom("Space")
-        .select(["id"])
-        .where("subscriptionId", "=", current.id)
-        .executeTakeFirst();
+      const [space] = await ctx.db
+        .select({ id: spaceTable.id })
+        .from(spaceTable)
+        .where(eq(spaceTable.subscriptionId, current.id))
+        .limit(1);
 
       if (!space) throw new CustomError("SPACE_NOT_FOUND");
 
@@ -272,12 +292,12 @@ export const paymentRouter = router({
 
       for (let i = 0; i < 10; i++) {
         const updatedSubscription = await ctx.db
-          .selectFrom("Subscription")
-          .select(["priceId"])
-          .where("id", "=", current.id)
-          .executeTakeFirst();
+          .select({ priceId: subscriptionTable.priceId })
+          .from(subscriptionTable)
+          .where(eq(subscriptionTable.id, current.id))
+          .limit(1);
 
-        if (updatedSubscription?.priceId === input.priceId) break;
+        if (updatedSubscription[0]?.priceId === input.priceId) break;
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }),

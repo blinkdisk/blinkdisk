@@ -1,9 +1,9 @@
-import type { DB } from "@blinkdisk/db/schema";
-import type { Kysely } from "kysely";
+import { subscription } from "@blinkdisk/db/schema";
+import { and, eq, ne } from "drizzle-orm";
 
-export function getActiveSubscription(accountId: string, db: Kysely<DB>) {
-  return db
-    .selectFrom("Subscription")
-    .where("accountId", "=", accountId)
-    .where("status", "!=", "CANCELED");
+export function activeSubscriptionFilter(accountId: string) {
+  return and(
+    eq(subscription.accountId, accountId),
+    ne(subscription.status, "CANCELED"),
+  );
 }

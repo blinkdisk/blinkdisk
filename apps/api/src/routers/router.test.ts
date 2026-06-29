@@ -5,9 +5,6 @@ import { generateId } from "@blinkdisk/utils/id";
 import { TRPCError } from "@trpc/server";
 
 const mocks = vi.hoisted(() => ({
-  getActiveSubscription: vi.fn(
-    (_accountId: unknown, _db: unknown): unknown => undefined,
-  ),
   getPolar: vi.fn(
     (_environment: unknown, _token: unknown): unknown => undefined,
   ),
@@ -30,11 +27,6 @@ vi.mock("@api/lib/posthog", () => ({
   posthog: (event: unknown) => mocks.posthog(event),
 }));
 
-vi.mock("@api/lib/subscription", () => ({
-  getActiveSubscription: (accountId: unknown, db: unknown) =>
-    mocks.getActiveSubscription(accountId, db),
-}));
-
 vi.mock("@api/lib/workflows", () => ({
   startTrialWorkflow: (env: unknown, params: unknown) =>
     mocks.startTrialWorkflow(env, params),
@@ -54,21 +46,30 @@ vi.mock("@sentry/cloudflare", () => ({
 }));
 
 type SelectResults = Record<string, unknown[]>;
+type SelectQuery = Promise<unknown[]> & {
+  from: ReturnType<typeof vi.fn>;
+  leftJoin: ReturnType<typeof vi.fn>;
+  innerJoin: ReturnType<typeof vi.fn>;
+  where: ReturnType<typeof vi.fn>;
+  limit: ReturnType<typeof vi.fn>;
+};
 
-function createQuery(result: unknown) {
-  const query = {
-    leftJoin: vi.fn(() => query),
-    innerJoin: vi.fn(() => query),
-    select: vi.fn(() => query),
-    selectAll: vi.fn(() => query),
-    where: vi.fn(() => query),
-    execute: vi.fn(async () => (Array.isArray(result) ? result : [])),
-    executeTakeFirst: vi.fn(async () =>
-      Array.isArray(result) ? result[0] : result,
-    ),
-  };
+function getTableName(table: unknown) {
+  if (!table || typeof table !== "object") return String(table);
 
-  return query;
+  const symbol = Object.getOwnPropertySymbols(table).find(
+    (symbol) => symbol.description === "drizzle:Name",
+  );
+
+  return symbol
+    ? String((table as Record<symbol, unknown>)[symbol])
+    : "unknown";
+}
+
+function toRows(result: unknown) {
+  if (Array.isArray(result)) return result;
+  if (!result) return [];
+  return [result];
 }
 
 function createDb(selects: SelectResults = {}) {
@@ -82,53 +83,48 @@ function createDb(selects: SelectResults = {}) {
     deletes: [],
   };
 
+  const take = (table: unknown) => {
+    const queue = selects[getTableName(table)] || [];
+    return queue.length ? queue.shift() : undefined;
+  };
+
+  const createSelectQuery = () => {
+    let result: unknown;
+    const query = Promise.resolve().then(() => toRows(result)) as SelectQuery;
+    query.from = vi.fn((table: unknown) => {
+      result = take(table);
+      return query;
+    });
+    query.leftJoin = vi.fn(() => query);
+    query.innerJoin = vi.fn(() => query);
+    query.where = vi.fn(() => query);
+    query.limit = vi.fn(() => query);
+
+    return query;
+  };
+
   const db = {
     operations,
-    selectFrom: vi.fn((table: string) => {
-      const queue = selects[table] || [];
-      const result = queue.length ? queue.shift() : undefined;
-      return createQuery(result);
-    }),
-    insertInto: vi.fn((table: string) => {
-      const query = {
-        values: vi.fn((values: unknown) => {
-          operations.inserts.push({ table, values });
-          return query;
-        }),
-        execute: vi.fn(async () => undefined),
-      };
-
-      return query;
-    }),
-    updateTable: vi.fn((table: string) => {
-      const query = {
-        set: vi.fn((values: unknown) => {
-          operations.updates.push({ table, values });
-          return query;
-        }),
-        where: vi.fn(() => query),
-        execute: vi.fn(async () => undefined),
-      };
-
-      return query;
-    }),
-    transaction: vi.fn(() => ({
-      execute: vi.fn(async (callback: (trx: never) => Promise<void>) =>
-        callback(db as never),
-      ),
+    select: vi.fn(() => createSelectQuery()),
+    insert: vi.fn((table: unknown) => ({
+      values: vi.fn(async (values: unknown) => {
+        operations.inserts.push({ table: getTableName(table), values });
+      }),
     })),
+    update: vi.fn((table: unknown) => ({
+      set: vi.fn((values: unknown) => {
+        operations.updates.push({ table: getTableName(table), values });
+        return {
+          where: vi.fn(async () => undefined),
+        };
+      }),
+    })),
+    transaction: vi.fn(async (callback: (trx: never) => Promise<void>) =>
+      callback(db as never),
+    ),
   };
 
   return db;
-}
-
-function activeSubscription(result: unknown) {
-  const query = {
-    select: vi.fn(() => query),
-    executeTakeFirst: vi.fn(async () => result),
-  };
-
-  return query;
 }
 
 function createPolar() {
@@ -278,10 +274,10 @@ describe("api router payment procedures", () => {
   });
 
   it("rejects checkout creation when an active subscription exists", async () => {
-    mocks.getActiveSubscription.mockReturnValueOnce(
-      activeSubscription({ id: "sub_1" }),
-    );
-    const { caller } = createCaller();
+    const db = createDb({
+      subscription: [{ id: "sub_1" }],
+    });
+    const { caller } = createCaller({ db });
 
     await expectCustomError(
       caller.payment.checkout({ priceId: "cloud-200-gb-monthly" }),
@@ -292,10 +288,10 @@ describe("api router payment procedures", () => {
   it("creates a Polar customer and checkout for new subscribers", async () => {
     const polar = createPolar();
     mocks.getPolar.mockReturnValueOnce(polar);
-    mocks.getActiveSubscription.mockReturnValueOnce(activeSubscription(null));
     const db = createDb({
-      Space: [undefined],
-      Account: [{ polarId: null }],
+      subscription: [undefined],
+      space: [undefined],
+      account: [{ polarId: null }],
     });
     const { caller, waits } = createCaller({ db });
 
@@ -313,7 +309,7 @@ describe("api router payment procedures", () => {
       name: "User Name",
     });
     expect(db.operations.updates).toEqual([
-      { table: "Account", values: { polarId: "cus_new" } },
+      { table: "account", values: { polarId: "cus_new" } },
     ]);
     expect(polar.checkouts.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -327,9 +323,9 @@ describe("api router payment procedures", () => {
   });
 
   it("blocks checkout when existing cloud usage exceeds selected plan capacity", async () => {
-    mocks.getActiveSubscription.mockReturnValueOnce(activeSubscription(null));
     const db = createDb({
-      Space: [{ id: "spc_1" }],
+      subscription: [undefined],
+      space: [{ id: "spc_1" }],
     });
     const { caller } = createCaller({
       db,
@@ -345,7 +341,7 @@ describe("api router payment procedures", () => {
 
   it("requires a Polar customer before creating a billing portal session", async () => {
     const db = createDb({
-      Account: [{ polarId: null }],
+      account: [{ polarId: null }],
     });
     const { caller } = createCaller({ db });
 
@@ -363,16 +359,16 @@ describe("api router payment procedures", () => {
   ])("emits %s -> %s change analytics as %s", async (currentPriceId, nextPriceId, event) => {
     const polar = createPolar();
     mocks.getPolar.mockReturnValueOnce(polar);
-    mocks.getActiveSubscription.mockReturnValueOnce(
-      activeSubscription({
-        id: "sub_1",
-        priceId: currentPriceId,
-        polarSubscriptionId: "polar_sub_1",
-      }),
-    );
     const db = createDb({
-      Space: [{ id: "spc_1" }],
-      Subscription: [{ priceId: nextPriceId }],
+      subscription: [
+        {
+          id: "sub_1",
+          priceId: currentPriceId,
+          polarSubscriptionId: "polar_sub_1",
+        },
+        { priceId: nextPriceId },
+      ],
+      space: [{ id: "spc_1" }],
     });
     const { caller, waits } = createCaller({ db, spaceUsed: 1 });
 
@@ -400,7 +396,7 @@ describe("api router cloudblink procedures", () => {
 
   it("creates a trial-backed space, vault object, cache entry, and service token", async () => {
     const db = createDb({
-      Space: [undefined],
+      space: [undefined],
     });
     const { caller, ctx, spaceStub, vaultStub, cache } = createCaller({ db });
 
@@ -416,8 +412,8 @@ describe("api router cloudblink procedures", () => {
       100_000_000_000,
     );
     expect(db.operations.inserts.map((op) => op.table)).toEqual([
-      "Trial",
-      "Space",
+      "trial",
+      "space",
     ]);
     expect(mocks.startTrialWorkflow).toHaveBeenCalledWith(
       ctx.env,
@@ -439,7 +435,7 @@ describe("api router cloudblink procedures", () => {
 
   it("blocks CloudBlink vault initialization when existing space has no storage", async () => {
     const db = createDb({
-      Space: [{ id: "spc_1", capacity: "0" }],
+      space: [{ id: "spc_1", capacity: 0 }],
     });
     const { caller } = createCaller({ db });
 
@@ -448,7 +444,7 @@ describe("api router cloudblink procedures", () => {
 
   it("only issues vault tokens for account-owned CloudBlink vaults", async () => {
     const db = createDb({
-      Vault: [{ id: "vlt_1", provider: "FILESYSTEM" }],
+      vault: [{ id: "vlt_1", provider: "FILESYSTEM" }],
     });
     const { caller } = createCaller({ db });
 
@@ -460,7 +456,7 @@ describe("api router cloudblink procedures", () => {
 
   it("allows deleting a pending CloudBlink vault through the account cache", async () => {
     const db = createDb({
-      Vault: [undefined],
+      vault: [undefined],
     });
     const { caller, cache, vaultStub } = createCaller({ db });
     cache.get.mockResolvedValueOnce("acct_1");
@@ -478,7 +474,7 @@ describe("api router sync procedures", () => {
 
   it("omits account ids from pulled vault and config records", async () => {
     const db = createDb({
-      Vault: [
+      vault: [
         [
           {
             id: "vlt_1",
@@ -487,7 +483,7 @@ describe("api router sync procedures", () => {
           },
         ],
       ],
-      Config: [
+      config: [
         [
           {
             id: "cfg_1",
@@ -509,8 +505,8 @@ describe("api router sync procedures", () => {
 
   it("rejects vault pushes when no account space exists", async () => {
     const db = createDb({
-      Vault: [[]],
-      Space: [undefined],
+      vault: [[]],
+      space: [undefined],
     });
     const { caller } = createCaller({ db });
 
@@ -522,8 +518,8 @@ describe("api router sync procedures", () => {
 
   it("rejects invalid vault ids before inserting remote records", async () => {
     const db = createDb({
-      Vault: [[]],
-      Space: [{ id: "spc_1" }],
+      vault: [[]],
+      space: [{ id: "spc_1" }],
     });
     const { caller } = createCaller({ db });
 
@@ -539,8 +535,8 @@ describe("api router sync procedures", () => {
 
   it("rejects added configs for vaults the account cannot access", async () => {
     const db = createDb({
-      Config: [[]],
-      Vault: [[]],
+      config: [[]],
+      vault: [[]],
     });
     const { caller } = createCaller({ db });
 
@@ -556,8 +552,8 @@ describe("api router sync procedures", () => {
   it("rejects modified configs missing from the account", async () => {
     const config = createConfig();
     const db = createDb({
-      Config: [[]],
-      Vault: [[{ id: config.vaultId }]],
+      config: [[]],
+      vault: [[{ id: config.vaultId }]],
     });
     const { caller } = createCaller({ db });
 

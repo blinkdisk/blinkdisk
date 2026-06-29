@@ -4,18 +4,17 @@ import { ratelimit } from "@api/middlewares/limit";
 import { appRouter } from "@api/router";
 import { polarWebhook } from "@api/webhooks/polar";
 import { PROTOCOL_FRONTEND_URL } from "@blinkdisk/constants/app";
-import type { DB } from "@blinkdisk/db/index";
+import type { Database } from "@blinkdisk/db/index";
 import { database } from "@blinkdisk/db/index";
 import { trpcServer } from "@hono/trpc-server";
 import * as Sentry from "@sentry/cloudflare";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import type { Kysely } from "kysely";
 
 export type HonoContextOptions = {
   Bindings: CloudflareBindings;
   Variables: {
-    db: Kysely<DB>;
+    db: Database;
   };
 };
 

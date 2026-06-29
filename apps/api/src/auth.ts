@@ -1,5 +1,6 @@
 import { trackAffiliateSignup } from "@api/lib/affiliate";
 import { getPostHog, posthog } from "@api/lib/posthog";
+import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { electron } from "@better-auth/electron";
 import { APP_ID_ORIGIN } from "@blinkdisk/constants/app";
 import {
@@ -12,14 +13,15 @@ import {
   TIMEZONE_HEADER,
 } from "@blinkdisk/constants/header";
 import { DEFAULT_LANGUAGE_CODE } from "@blinkdisk/constants/language";
-import { type DB, dialect } from "@blinkdisk/db/index";
+import type { Database } from "@blinkdisk/db/index";
+import { account as accountTable, authSchema } from "@blinkdisk/db/schema";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { generateCode, generateId, type Prefix } from "@blinkdisk/utils/id";
 import { logsnag } from "@blinkdisk/utils/logsnag";
 import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { magicLink } from "better-auth/plugins";
-import type { Kysely } from "kysely";
+import { eq } from "drizzle-orm";
 
 const cookieSettings = {
   attributes: {
@@ -27,20 +29,33 @@ const cookieSettings = {
   },
 } as const;
 
-export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
+const authModelPrefixes = {
+  account: "AuthMethod",
+  authMethod: "AuthMethod",
+  session: "Session",
+  user: "Account",
+  verification: "Verification",
+} as const satisfies Record<string, Prefix>;
+
+const getAuthModelPrefix = (model: string): Prefix | undefined => {
+  if (model in authModelPrefixes)
+    return authModelPrefixes[model as keyof typeof authModelPrefixes];
+};
+
+export const auth = (env: CloudflareBindings, db: Database) => {
   return betterAuth({
     baseURL: env.API_URL,
     appName: "BlinkDisk",
     basePath: "/api/auth",
     account: {
-      modelName: "AuthMethod",
+      modelName: "authMethod",
       fields: {
         accountId: "authMethodId",
         userId: "accountId",
       },
     },
     user: {
-      modelName: "Account",
+      modelName: "user",
       additionalFields: {
         language: {
           type: "string",
@@ -53,7 +68,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       },
     },
     session: {
-      modelName: "Session",
+      modelName: "session",
       fields: {
         userId: "accountId",
       },
@@ -65,12 +80,13 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       freshAge: 60 * 60 * 24,
     },
     verification: {
-      modelName: "Verification",
+      modelName: "verification",
     },
-    database: {
-      dialect: dialect(env.HYPERDRIVE.connectionString),
-      type: "postgres",
-    },
+    database: drizzleAdapter(db, {
+      provider: "pg",
+      schema: authSchema,
+      transaction: true,
+    }),
     trustedOrigins: [
       process.env.WEB_URL,
       process.env.DESKTOP_URL || "",
@@ -97,9 +113,7 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
       },
       database: {
         generateId: ({ model }) => {
-          return generateId(
-            `${model === "session" ? "Session" : model === "user" ? "Account" : model === "account" ? "AuthMethod" : ""}` as Prefix,
-          );
+          return generateId(getAuthModelPrefix(model));
         },
       },
     },
@@ -129,11 +143,11 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
     hooks: {
       before: createAuthMiddleware(async (ctx) => {
         if (ctx.path === "/sign-in/magic-link" && !ctx.body.name) {
-          const account = await db
-            .selectFrom("Account")
-            .select(["id"])
-            .where("email", "=", ctx.body.email)
-            .executeTakeFirst();
+          const [account] = await db
+            .select({ id: accountTable.id })
+            .from(accountTable)
+            .where(eq(accountTable.email, ctx.body.email))
+            .limit(1);
 
           if (!account)
             throw new APIError("BAD_REQUEST", {
@@ -156,13 +170,12 @@ export const auth = (env: CloudflareBindings, db: Kysely<DB>) => {
 
             if (language || timeZone) {
               await db
-                .updateTable("Account")
+                .update(accountTable)
                 .set({
                   ...(language ? { language } : {}),
                   ...(timeZone ? { timeZone } : {}),
                 })
-                .where("id", "=", account.id)
-                .execute();
+                .where(eq(accountTable.id, account.id));
             }
 
             const posthog = getPostHog();

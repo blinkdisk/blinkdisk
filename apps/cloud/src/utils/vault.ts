@@ -1,4 +1,6 @@
 import type { Database } from "@blinkdisk/db/index";
+import { vault as vaultTable } from "@blinkdisk/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function deleteVaults(
   db: Database,
@@ -10,9 +12,8 @@ export async function deleteVaults(
     await stub.delete(vault.id);
 
     await db
-      .updateTable("Vault")
+      .update(vaultTable)
       .set({ status: "DELETED" })
-      .where("id", "=", vault.id)
-      .execute();
+      .where(eq(vaultTable.id, vault.id));
   }
 }

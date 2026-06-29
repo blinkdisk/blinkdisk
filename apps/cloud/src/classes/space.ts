@@ -1,8 +1,10 @@
 import { DurableObject } from "cloudflare:workers";
 import { database } from "@blinkdisk/db/index";
+import { account, space as spaceTable } from "@blinkdisk/db/schema";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { logsnag } from "@blinkdisk/utils/logsnag";
 import { scheduleSpaceAlarm } from "@cloud/utils/alarm";
+import { eq } from "drizzle-orm";
 
 export class Space extends DurableObject<Cloudflare.Env> {
   db: ReturnType<typeof database>;
@@ -68,11 +70,7 @@ export class Space extends DurableObject<Cloudflare.Env> {
     const used = await this.getUsed();
     const capacity = await this.getCapacity();
 
-    await this.db
-      .updateTable("Space")
-      .set({ used: used.toString() })
-      .where("id", "=", id)
-      .execute();
+    await this.db.update(spaceTable).set({ used }).where(eq(spaceTable.id, id));
 
     const percentage = used / capacity;
 
@@ -92,17 +90,17 @@ export class Space extends DurableObject<Cloudflare.Env> {
         channel: "storages",
       });
 
-      const account = await this.db
-        .selectFrom("Space")
-        .innerJoin("Account", "Account.id", "Space.accountId")
-        .select(["Account.email", "Account.language"])
-        .where("Space.id", "=", id)
-        .executeTakeFirst();
+      const [accountRecord] = await this.db
+        .select({ email: account.email, language: account.language })
+        .from(spaceTable)
+        .innerJoin(account, eq(account.id, spaceTable.accountId))
+        .where(eq(spaceTable.id, id))
+        .limit(1);
 
-      if (account) {
-        if (threshold >= 0.98) await sendEmail("storageFull", account);
+      if (accountRecord) {
+        if (threshold >= 0.98) await sendEmail("storageFull", accountRecord);
         else
-          await sendEmail("storageThreshold", account, {
+          await sendEmail("storageThreshold", accountRecord, {
             percentage: Math.round(percentage * 100),
           });
       }

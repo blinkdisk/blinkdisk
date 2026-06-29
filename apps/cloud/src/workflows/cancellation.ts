@@ -4,9 +4,16 @@ import {
   type WorkflowStep,
 } from "cloudflare:workers";
 import { database } from "@blinkdisk/db/index";
+import {
+  account,
+  space,
+  subscription as subscriptionTable,
+  vault,
+} from "@blinkdisk/db/schema";
 import { sendEmail } from "@blinkdisk/utils/email";
 import { deleteVaults } from "@cloud/utils/vault";
 import { waitUntil } from "@cloud/utils/workflows";
+import { and, eq, inArray } from "drizzle-orm";
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 
@@ -44,17 +51,17 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
         `send cancellation warning email ${daysLeft} days left`,
         async () => {
           const db = database(this.env.HYPERDRIVE.connectionString);
-          const subscription = await db
-            .selectFrom("Subscription")
-            .innerJoin("Account", "Account.id", "Subscription.accountId")
-            .select([
-              "Subscription.id",
-              "Subscription.cleanupAt",
-              "Account.email",
-              "Account.language",
-            ])
-            .where("Subscription.id", "=", event.payload.subscriptionId)
-            .executeTakeFirst();
+          const [subscription] = await db
+            .select({
+              id: subscriptionTable.id,
+              cleanupAt: subscriptionTable.cleanupAt,
+              email: account.email,
+              language: account.language,
+            })
+            .from(subscriptionTable)
+            .innerJoin(account, eq(account.id, subscriptionTable.accountId))
+            .where(eq(subscriptionTable.id, event.payload.subscriptionId))
+            .limit(1);
 
           if (!subscription || !datesMatch(subscription.cleanupAt, cleanupAt))
             return { skipped: true };
@@ -77,20 +84,22 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
 
     await step.do("delete cancelled subscription vaults", async () => {
       const db = database(this.env.HYPERDRIVE.connectionString);
-      const subscription = await db
-        .selectFrom("Subscription")
-        .select(["id", "cleanupAt"])
-        .where("id", "=", event.payload.subscriptionId)
-        .executeTakeFirst();
+      const [subscription] = await db
+        .select({
+          id: subscriptionTable.id,
+          cleanupAt: subscriptionTable.cleanupAt,
+        })
+        .from(subscriptionTable)
+        .where(eq(subscriptionTable.id, event.payload.subscriptionId))
+        .limit(1);
 
       if (!subscription || !datesMatch(subscription.cleanupAt, cleanupAt))
         return { skipped: true };
 
       const spaces = await db
-        .selectFrom("Space")
-        .select(["id", "accountId"])
-        .where("subscriptionId", "=", subscription.id)
-        .execute();
+        .select({ id: space.id, accountId: space.accountId })
+        .from(space)
+        .where(eq(space.subscriptionId, subscription.id));
 
       if (!spaces.length) return { skipped: false, vaults: 0 };
 
@@ -100,32 +109,34 @@ export class CancellationWorkflow extends WorkflowEntrypoint<
       }
 
       const vaults = await db
-        .selectFrom("Vault")
-        .select(["id"])
-        .where("provider", "=", "CLOUDBLINK")
+        .select({ id: vault.id })
+        .from(vault)
         .where(
-          "spaceId",
-          "in",
-          spaces.map((space) => space.id),
-        )
-        .where("status", "=", "ACTIVE")
-        .execute();
+          and(
+            eq(vault.provider, "CLOUDBLINK"),
+            inArray(
+              vault.spaceId,
+              spaces.map((space) => space.id),
+            ),
+            eq(vault.status, "ACTIVE"),
+          ),
+        );
 
       if (vaults.length) await deleteVaults(db, this.env, vaults);
 
       await db
-        .updateTable("Space")
+        .update(space)
         .set({
-          used: "0",
-          capacity: "0",
+          used: 0,
+          capacity: 0,
           subscriptionId: null,
         })
         .where(
-          "id",
-          "in",
-          spaces.map((space) => space.id),
-        )
-        .execute();
+          inArray(
+            space.id,
+            spaces.map((space) => space.id),
+          ),
+        );
 
       return { skipped: false, vaults: vaults.length };
     });

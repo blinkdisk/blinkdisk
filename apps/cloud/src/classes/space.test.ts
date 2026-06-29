@@ -48,23 +48,28 @@ function createStorage(seed?: Record<string, unknown>) {
 }
 
 function createDb(account?: { email: string; language: string }) {
+  type SelectQuery = Promise<unknown[]> & {
+    from: ReturnType<typeof vi.fn>;
+    innerJoin: ReturnType<typeof vi.fn>;
+    where: ReturnType<typeof vi.fn>;
+    limit: ReturnType<typeof vi.fn>;
+  };
+
+  const selectQuery = Promise.resolve().then(() =>
+    account ? [account] : [],
+  ) as SelectQuery;
+  selectQuery.from = vi.fn(() => selectQuery);
+  selectQuery.innerJoin = vi.fn(() => selectQuery);
+  selectQuery.where = vi.fn(() => selectQuery);
+  selectQuery.limit = vi.fn(() => selectQuery);
+
   return {
-    updateTable: vi.fn(() => ({
+    update: vi.fn(() => ({
       set: vi.fn(() => ({
-        where: vi.fn(() => ({
-          execute: vi.fn(async () => undefined),
-        })),
+        where: vi.fn(async () => undefined),
       })),
     })),
-    selectFrom: vi.fn(() => ({
-      innerJoin: vi.fn(() => ({
-        select: vi.fn(() => ({
-          where: vi.fn(() => ({
-            executeTakeFirst: vi.fn(async () => account),
-          })),
-        })),
-      })),
-    })),
+    select: vi.fn(() => selectQuery),
   };
 }
 

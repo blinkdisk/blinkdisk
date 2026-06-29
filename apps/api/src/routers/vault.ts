@@ -1,16 +1,17 @@
 import { authedProcedure } from "@api/procedures/authed";
 import { router } from "@api/trpc";
+import { space, vault as vaultTable } from "@blinkdisk/db/schema";
 import { ZPushVaults } from "@blinkdisk/schemas/vault";
 import { CustomError } from "@blinkdisk/utils/error";
 import { verifyId } from "@blinkdisk/utils/id";
+import { and, eq } from "drizzle-orm";
 
 export const vaultRouter = router({
   pull: authedProcedure.query(async ({ ctx }) => {
     const rawVaults = await ctx.db
-      .selectFrom("Vault")
-      .selectAll()
-      .where("accountId", "=", ctx.account.id)
-      .execute();
+      .select()
+      .from(vaultTable)
+      .where(eq(vaultTable.accountId, ctx.account.id));
 
     const vaults = rawVaults.map((vault) => {
       const { accountId, ...rest } = vault;
@@ -21,41 +22,37 @@ export const vaultRouter = router({
   }),
   push: authedProcedure.input(ZPushVaults).mutation(async ({ input, ctx }) => {
     const currentVaults = await ctx.db
-      .selectFrom("Vault")
-      .select(["id"])
-      .where("accountId", "=", ctx.account.id)
-      .execute();
+      .select({ id: vaultTable.id })
+      .from(vaultTable)
+      .where(eq(vaultTable.accountId, ctx.account.id));
 
     const currentVaultIds = currentVaults.map((vault) => vault.id);
 
-    const space = await ctx.db
-      .selectFrom("Space")
-      .select(["id"])
-      .where("accountId", "=", ctx.account.id)
-      .executeTakeFirst();
+    const [accountSpace] = await ctx.db
+      .select({ id: space.id })
+      .from(space)
+      .where(eq(space.accountId, ctx.account.id))
+      .limit(1);
 
-    if (!space) throw new CustomError("SPACE_NOT_FOUND");
+    if (!accountSpace) throw new CustomError("SPACE_NOT_FOUND");
 
-    await ctx.db.transaction().execute(async (trx) => {
+    await ctx.db.transaction(async (trx) => {
       for (const vault of input.added) {
         if (!verifyId(vault.id)) throw new CustomError("INCORRECT_VAULT");
 
-        await trx
-          .insertInto("Vault")
-          .values({
-            id: vault.id,
-            coreId: vault.coreId,
-            status: vault.status,
-            name: vault.name,
-            version: vault.version,
-            provider: vault.provider,
-            configLevel: vault.configLevel,
-            options: vault.options,
-            createdAt: vault.createdAt,
-            accountId: ctx.account.id,
-            ...(vault.spaceId ? { spaceId: space.id } : {}),
-          })
-          .execute();
+        await trx.insert(vaultTable).values({
+          id: vault.id,
+          coreId: vault.coreId,
+          status: vault.status,
+          name: vault.name,
+          version: vault.version,
+          provider: vault.provider,
+          configLevel: vault.configLevel,
+          options: vault.options,
+          createdAt: new Date(vault.createdAt),
+          accountId: ctx.account.id,
+          ...(vault.spaceId ? { spaceId: accountSpace.id } : {}),
+        });
       }
 
       for (const vault of input.modified) {
@@ -63,7 +60,7 @@ export const vaultRouter = router({
           throw new CustomError("VAULT_NOT_FOUND");
 
         await trx
-          .updateTable("Vault")
+          .update(vaultTable)
           .set({
             coreId: vault.coreId,
             status: vault.status,
@@ -73,9 +70,12 @@ export const vaultRouter = router({
             configLevel: vault.configLevel,
             options: vault.options,
           })
-          .where("id", "=", vault.id)
-          .where("accountId", "=", ctx.account.id)
-          .execute();
+          .where(
+            and(
+              eq(vaultTable.id, vault.id),
+              eq(vaultTable.accountId, ctx.account.id),
+            ),
+          );
       }
     });
   }),
