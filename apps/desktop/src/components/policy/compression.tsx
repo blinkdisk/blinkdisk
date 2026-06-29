@@ -47,7 +47,13 @@ const PRESET_CARDS = [
   { id: "smaller", icon: Minimize2Icon },
 ] as const;
 
-export function CompressionSettings({ form }: { form: PolicyForm }) {
+export function CompressionSettings({
+  form,
+  showExtensionFilters = true,
+}: {
+  form: PolicyForm;
+  showExtensionFilters?: boolean;
+}) {
   const { t } = useAppTranslation("policy.compression");
 
   const algorithm = useStore(
@@ -96,34 +102,38 @@ export function CompressionSettings({ form }: { form: PolicyForm }) {
                 </PolicyField>
               )}
             </form.AppField>
-            <form.AppField name="compression.extensionAllowlist">
-              {() => (
-                <PolicyField>
-                  <ExtensionListEditor
-                    form={form}
-                    fieldName="compression.extensionAllowlist"
-                    label={t("extensionAllowlist.label")}
-                    description={t("extensionAllowlist.description")}
-                    addLabel={t("extensionAllowlist.add")}
-                    placeholder={t("extensionAllowlist.placeholder")}
-                  />
-                </PolicyField>
-              )}
-            </form.AppField>
-            <form.AppField name="compression.extensionDenylist">
-              {() => (
-                <PolicyField>
-                  <ExtensionListEditor
-                    form={form}
-                    fieldName="compression.extensionDenylist"
-                    label={t("extensionDenylist.label")}
-                    description={t("extensionDenylist.description")}
-                    addLabel={t("extensionDenylist.add")}
-                    placeholder={t("extensionDenylist.placeholder")}
-                  />
-                </PolicyField>
-              )}
-            </form.AppField>
+            {showExtensionFilters ? (
+              <>
+                <form.AppField name="compression.extensionAllowlist">
+                  {() => (
+                    <PolicyField>
+                      <ExtensionListEditor
+                        form={form}
+                        fieldName="compression.extensionAllowlist"
+                        label={t("extensionAllowlist.label")}
+                        description={t("extensionAllowlist.description")}
+                        addLabel={t("extensionAllowlist.add")}
+                        placeholder={t("extensionAllowlist.placeholder")}
+                      />
+                    </PolicyField>
+                  )}
+                </form.AppField>
+                <form.AppField name="compression.extensionDenylist">
+                  {() => (
+                    <PolicyField>
+                      <ExtensionListEditor
+                        form={form}
+                        fieldName="compression.extensionDenylist"
+                        label={t("extensionDenylist.label")}
+                        description={t("extensionDenylist.description")}
+                        addLabel={t("extensionDenylist.add")}
+                        placeholder={t("extensionDenylist.placeholder")}
+                      />
+                    </PolicyField>
+                  )}
+                </form.AppField>
+              </>
+            ) : null}
           </>
         )}
       </div>

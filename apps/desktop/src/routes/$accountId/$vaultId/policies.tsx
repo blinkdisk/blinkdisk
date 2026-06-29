@@ -24,9 +24,14 @@ import {
 import { useActivateSourceDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-source-draft-policy";
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
+import {
+  type CoreSourceItem,
+  useSourceList,
+} from "@desktop/hooks/queries/core/use-source-list";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import {
+  getRealPolicyUserName,
   isPolicyTargetEqual,
   type PolicySearch,
   type PolicyTarget,
@@ -394,6 +399,13 @@ function PolicyEditorForm({
   const [storedMode, setMode] = useAppStorage("preferences.mode", "basic");
   const mode = storedMode ?? "basic";
   const showAdvanced = mode === "advanced";
+  const { data: sources } = useSourceList({
+    unfiltered: true,
+    includeDrafts: true,
+  });
+  const policySourceType =
+    getPolicyTargetSource(target, sources)?.type || policy.initialSourceType;
+  const isFileLikePolicy = isFileLikeSource(policySourceType);
   const currentPolicy = useStore(form.store, (state) =>
     getPolicyFromFormValues(state.values, policy, target.kind !== "GLOBAL"),
   );
@@ -418,10 +430,15 @@ function PolicyEditorForm({
         <SourceGeneralSettings form={form} />
       ) : null}
       <ScheduleSettings form={form} showAdvanced={showAdvanced} />
-      <FilesSettings form={form} showAdvanced={showAdvanced} />
+      {isFileLikePolicy ? null : (
+        <FilesSettings form={form} showAdvanced={showAdvanced} />
+      )}
       {showAdvanced ? (
         <>
-          <CompressionSettings form={form} />
+          <CompressionSettings
+            form={form}
+            showExtensionFilters={!isFileLikePolicy}
+          />
           <RetentionSettings form={form} />
         </>
       ) : (
@@ -430,6 +447,22 @@ function PolicyEditorForm({
         />
       )}
     </form>
+  );
+}
+
+function getPolicyTargetSource(
+  target: PolicyTarget,
+  sources: CoreSourceItem[] | null | undefined,
+) {
+  if (target.kind !== "SOURCE" && target.kind !== "DRAFT_SOURCE") {
+    return undefined;
+  }
+
+  return sources?.find(
+    (source) =>
+      source.source.host === target.hostName &&
+      getRealPolicyUserName(source.source.userName) === target.userName &&
+      source.source.path === target.path,
   );
 }
 
