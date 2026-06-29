@@ -29,7 +29,7 @@ describe("policy target params", () => {
     expect(policyTargetToKopiaParams({ kind: "GLOBAL" })).toBeUndefined();
   });
 
-  it("maps host, user and folder targets to Kopia params", () => {
+  it("maps host, user and source targets to Kopia params", () => {
     expect(
       policyTargetToKopiaParams({ kind: "HOST", hostName: "device" }),
     ).toEqual({ host: "device" });
@@ -44,7 +44,7 @@ describe("policy target params", () => {
 
     expect(
       policyTargetToKopiaParams({
-        kind: "FOLDER",
+        kind: "SOURCE",
         hostName: "device",
         userName: "paul",
         path: "/Users/paul/Documents",
@@ -94,14 +94,14 @@ describe("policy target parsing", () => {
         path: "/Users/paul/Documents",
       }),
     ).toEqual({
-      kind: "FOLDER",
+      kind: "SOURCE",
       hostName: "device",
       userName: "paul",
       path: "/Users/paul/Documents",
     });
   });
 
-  it("parses draft targets as draft folders under the real user", () => {
+  it("parses draft targets as draft sources under the real user", () => {
     expect(
       parseKopiaPolicyTarget({
         host: "device",
@@ -109,7 +109,7 @@ describe("policy target parsing", () => {
         path: "/Users/paul/Documents",
       }),
     ).toEqual({
-      kind: "DRAFT_FOLDER",
+      kind: "DRAFT_SOURCE",
       hostName: "device",
       userName: "paul",
       path: "/Users/paul/Documents",
@@ -118,7 +118,7 @@ describe("policy target parsing", () => {
 
   it("roundtrips through route search state", () => {
     const target = {
-      kind: "FOLDER" as const,
+      kind: "SOURCE" as const,
       hostName: "device",
       userName: "paul",
       path: "/Users/paul/Documents",
@@ -128,10 +128,40 @@ describe("policy target parsing", () => {
       target,
     );
   });
+
+  it("accepts legacy folder route search kinds", () => {
+    expect(
+      policyTargetFromSearch({
+        kind: "FOLDER",
+        hostName: "device",
+        userName: "paul",
+        policyPath: "/Users/paul/Documents",
+      }),
+    ).toEqual({
+      kind: "SOURCE",
+      hostName: "device",
+      userName: "paul",
+      path: "/Users/paul/Documents",
+    });
+
+    expect(
+      policyTargetFromSearch({
+        kind: "DRAFT_FOLDER",
+        hostName: "device",
+        userName: "paul",
+        policyPath: "/Users/paul/Documents",
+      }),
+    ).toEqual({
+      kind: "DRAFT_SOURCE",
+      hostName: "device",
+      userName: "paul",
+      path: "/Users/paul/Documents",
+    });
+  });
 });
 
 describe("buildPolicyTree", () => {
-  it("builds host, user, folder and nested folder nodes", () => {
+  it("builds host, user, source and nested source nodes", () => {
     const tree = buildPolicyTree({
       policies: [
         { target: {} },
@@ -162,20 +192,20 @@ describe("buildPolicyTree", () => {
 
     const host = tree.children[0];
     const user = host?.children[0];
-    const folder = user?.children[0];
-    const child = folder?.children[0];
+    const source = user?.children[0];
+    const child = source?.children[0];
 
     expect(host?.target.kind).toBe("HOST");
     expect(host?.hasPolicy).toBe(true);
     expect(user?.target.kind).toBe("USER");
     expect(user?.hasPolicy).toBe(true);
-    expect(folder?.label).toBe("Documents");
-    expect(folder?.source?.id).toBe("documents");
+    expect(source?.label).toBe("Documents");
+    expect(source?.source?.id).toBe("documents");
     expect(child?.label).toBe("Invoices");
     expect(child?.hasPolicy).toBe(true);
   });
 
-  it("shows draft folder policies under their intended real user", () => {
+  it("shows draft source policies under their intended real user", () => {
     const tree = buildPolicyTree({
       policies: [
         {
@@ -194,13 +224,13 @@ describe("buildPolicyTree", () => {
     const draft = user?.children[0];
 
     expect(user?.label).toBe("paul");
-    expect(draft?.target.kind).toBe("DRAFT_FOLDER");
+    expect(draft?.target.kind).toBe("DRAFT_SOURCE");
     expect(policyTargetId(draft?.target || { kind: "GLOBAL" })).toBe(
-      "DRAFT_FOLDER:device:paul:/Users/paul/Documents",
+      "DRAFT_SOURCE:device:paul:/Users/paul/Documents",
     );
   });
 
-  it("shows draft folder sources under their intended real user", () => {
+  it("shows draft sources under their intended real user", () => {
     const tree = buildPolicyTree({
       policies: [],
       sources: [
@@ -221,10 +251,10 @@ describe("buildPolicyTree", () => {
     const draft = user?.children[0];
 
     expect(user?.label).toBe("paul");
-    expect(draft?.target.kind).toBe("DRAFT_FOLDER");
+    expect(draft?.target.kind).toBe("DRAFT_SOURCE");
     expect(draft?.source?.source.userName).toBe("paul");
     expect(policyTargetId(draft?.target || { kind: "GLOBAL" })).toBe(
-      "DRAFT_FOLDER:device:paul:/Users/paul/Documents",
+      "DRAFT_SOURCE:device:paul:/Users/paul/Documents",
     );
   });
 });

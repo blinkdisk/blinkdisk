@@ -3,8 +3,8 @@ import type { ZRestoreDirectoryType } from "@blinkdisk/schemas/directory";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import type { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
-import { useFolderId } from "@desktop/hooks/use-folder-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useSourceId } from "@desktop/hooks/use-source-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -14,7 +14,7 @@ export function useStartRestore(options?: { onSuccess?: () => void }) {
   const { t } = useAppTranslation("directory.table.restore");
 
   const { vaultId } = useVaultId();
-  const { folderId } = useFolderId();
+  const { sourceId } = useSourceId();
   const { queryKeys } = useQueryKey();
 
   return useMutation({
@@ -29,13 +29,13 @@ export function useStartRestore(options?: { onSuccess?: () => void }) {
             values: ZRestoreDirectoryType;
           },
     ) => {
-      if (!vaultId || !folderId)
+      if (!vaultId || !sourceId)
         throw new CustomError("MISSING_REQUIRED_VALUE");
 
       if (options.variant === "single")
         return await window.electron.vault.restore.single({
           vaultId,
-          folderId,
+          sourceId,
           item: options.item,
           dialogTitle: t("single.dialog.title"),
         });
@@ -43,7 +43,7 @@ export function useStartRestore(options?: { onSuccess?: () => void }) {
       if (options.variant === "multiple")
         return await window.electron.vault.restore.multiple({
           vaultId,
-          folderId,
+          sourceId,
           items: options.items,
           dialogTitle: t("multiple.dialog.title"),
         });
@@ -51,7 +51,7 @@ export function useStartRestore(options?: { onSuccess?: () => void }) {
       if (options.variant === "directory")
         return await window.electron.vault.restore.directory({
           vaultId,
-          folderId,
+          sourceId,
           options: options.values,
           objectId: options.objectId,
         });
@@ -61,7 +61,7 @@ export function useStartRestore(options?: { onSuccess?: () => void }) {
       if (res !== true) return;
 
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.restores(folderId),
+        queryKey: queryKeys.source.restores(sourceId),
       });
 
       options?.onSuccess?.();

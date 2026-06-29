@@ -1,4 +1,4 @@
-import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
+import { useSourceList } from "@desktop/hooks/queries/core/use-source-list";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { profileFromParts } from "@desktop/lib/profile";
@@ -15,13 +15,13 @@ export function useTaskbarProgress() {
       }),
     [localHostName, localUserName],
   );
-  const { data: folders } = useFolderList({
+  const { data: sources } = useSourceList({
     profile: routeProfile ?? localProfile,
   });
   const lastProgressRef = useRef<number>(-1);
 
   useEffect(() => {
-    if (!folders) {
+    if (!sources) {
       if (lastProgressRef.current !== -1) {
         window.electron.window.setProgressBar(-1);
         lastProgressRef.current = -1;
@@ -29,11 +29,11 @@ export function useTaskbarProgress() {
       return;
     }
 
-    const uploadingFolders = folders.filter(
-      (folder) => folder.status === "UPLOADING" && folder.upload,
+    const uploadingSources = sources.filter(
+      (source) => source.status === "UPLOADING" && source.upload,
     );
 
-    if (uploadingFolders.length === 0) {
+    if (uploadingSources.length === 0) {
       if (lastProgressRef.current !== -1) {
         window.electron.window.setProgressBar(-1);
         lastProgressRef.current = -1;
@@ -44,10 +44,10 @@ export function useTaskbarProgress() {
     let totalProcessed = 0;
     let totalEstimated = 0;
 
-    for (const folder of uploadingFolders) {
-      if (folder.upload?.estimatedBytes) {
-        totalProcessed += folder.upload.hashedBytes + folder.upload.cachedBytes;
-        totalEstimated += folder.upload.estimatedBytes;
+    for (const source of uploadingSources) {
+      if (source.upload?.estimatedBytes) {
+        totalProcessed += source.upload.hashedBytes + source.upload.cachedBytes;
+        totalEstimated += source.upload.estimatedBytes;
       }
     }
 
@@ -59,7 +59,7 @@ export function useTaskbarProgress() {
       window.electron.window.setProgressBar(clampedProgress);
       lastProgressRef.current = clampedProgress;
     }
-  }, [folders]);
+  }, [sources]);
 
   useEffect(() => {
     return () => {

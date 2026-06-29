@@ -1,4 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import {
   DropdownMenu,
@@ -12,17 +13,20 @@ import { PinBadge } from "@desktop/components/backups/pin-badge";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
+import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
+import type { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
 import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
-import { useFolder } from "@desktop/hooks/use-folder";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
+import { useSource } from "@desktop/hooks/use-source";
 import { formatBackupDate } from "@desktop/lib/backup";
 import { formatSize } from "@desktop/lib/number";
 import { Link } from "@tanstack/react-router";
 import {
   CalendarClockIcon,
   CalendarIcon,
+  CloudDownloadIcon,
   FileSearchIcon,
   FilesIcon,
   HardDriveIcon,
@@ -43,6 +47,7 @@ interface Backup {
   summary: {
     size: number;
     files: number;
+    symlinks?: number;
   };
 }
 
@@ -62,7 +67,7 @@ function formatDate(dateString: string): string {
 }
 
 export function BackupTimeline({ backups }: BackupTimelineProps) {
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
 
   const groupedBackups = useMemo(() => {
     if (!backups)
@@ -183,7 +188,7 @@ const cardClassName =
 
 function FakeBackup() {
   const { t } = useAppTranslation("backup.list");
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
 
@@ -249,24 +254,54 @@ type BackupProps = {
 
 function Backup({ backup }: BackupProps) {
   const { t } = useAppTranslation("backup.list.item");
+  const { data: source } = useSource();
   const { openDeleteBackupDialog } = useDeleteBackupDialog();
   const { openPinBackupDialog } = usePinBackupDialog();
   const { openRenameBackupDialog } = useRenameBackupDialog();
+  const { mutate: startRestore } = useStartRestore();
 
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
+  const backupSourceType = source?.type || "directory";
+  const isFileLikeBackup = isFileLikeSource(backupSourceType);
+  const fileCount =
+    (backup?.summary?.files || 0) + (backup?.summary?.symlinks || 0);
+
+  const restoreRootBackup = async () => {
+    if (!backup?.rootID || !source) return;
+
+    const name = await window.electron.path.basename(source.source.path);
+    const item: DirectoryItem = {
+      id: `${backup.rootID}:${name}`,
+      objectId: backup.rootID,
+      name,
+      type: backupSourceType === "symlink" ? "SYMLINK" : "FILE",
+      meta: { mode: "", uid: 0, gid: 0 },
+      stats: { size: backup.summary?.size || 0 },
+      modifiedAt: backup.startTime,
+    };
+
+    startRestore({ variant: "single", item });
+  };
 
   return (
     <div className={cn(cardClassName, "hover:bg-card-hover")}>
-      {backup?.id && backup.rootID ? (
+      {backup?.id && backup.rootID && !isFileLikeBackup ? (
         <Link
-          to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-          from="/$accountId/$vaultId/$folderId/"
+          to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+          from="/$accountId/$vaultId/$sourceId/"
           params={(params) => ({
             ...params,
             backupId: backup.id,
             directoryId: backup.rootID,
           })}
           className="absolute inset-0"
+        />
+      ) : backup?.id && backup.rootID ? (
+        <button
+          type="button"
+          onClick={restoreRootBackup}
+          className="absolute inset-0"
+          aria-label={t("dropdown.restoreFile")}
         />
       ) : null}
       <div className="flex flex-col">
@@ -304,8 +339,8 @@ function Backup({ backup }: BackupProps) {
               <span>
                 {backup ? (
                   t("files", {
-                    count: backup.summary?.files,
-                    formatted: backup.summary?.files.toLocaleString(),
+                    count: fileCount,
+                    formatted: fileCount.toLocaleString(),
                   })
                 ) : (
                   <Skeleton width={70} />
@@ -339,12 +374,12 @@ function Backup({ backup }: BackupProps) {
               }
             />
             <DropdownMenuContent className="w-48" align="end">
-              {backup.id && backup.rootID ? (
+              {backup.id && backup.rootID && !isFileLikeBackup ? (
                 <DropdownMenuItem
                   render={
                     <Link
-                      to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-                      from="/$accountId/$vaultId/$folderId/"
+                      to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$sourceId/"
                       params={(params) => ({
                         ...params,
                         backupId: backup.id,
@@ -356,6 +391,11 @@ function Backup({ backup }: BackupProps) {
                     </Link>
                   }
                 />
+              ) : backup.id && backup.rootID ? (
+                <DropdownMenuItem onClick={restoreRootBackup}>
+                  <CloudDownloadIcon />
+                  {t("dropdown.restoreFile")}
+                </DropdownMenuItem>
               ) : null}
               <DropdownMenuItem
                 onClick={() =>

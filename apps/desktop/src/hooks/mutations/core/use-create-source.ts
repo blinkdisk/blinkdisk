@@ -1,4 +1,4 @@
-import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZCreateSourceFormType } from "@blinkdisk/schemas/source";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
@@ -8,15 +8,15 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { buildFolderId } from "@desktop/lib/folder";
 import { profileFromParts } from "@desktop/lib/profile";
+import { buildSourceId } from "@desktop/lib/source";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
 import { useMemo } from "react";
 
-export function useCreateFolder({
+export function useCreateSource({
   onSuccess,
   onError,
 }: {
@@ -44,9 +44,9 @@ export function useCreateFolder({
   const { data: space } = useSpace();
 
   return useMutation({
-    mutationKey: ["folder", "create"],
+    mutationKey: ["source", "create"],
     mutationFn: async (
-      values: ZCreateFolderFormType & {
+      values: ZCreateSourceFormType & {
         force?: boolean;
         size: number | null;
       },
@@ -59,7 +59,7 @@ export function useCreateFolder({
 
         if (size === null) {
           const [res] = await tryCatch(
-            async () => await window.electron.fs.folderSize(values.path),
+            async () => await window.electron.fs.sourceSize(values.path),
           );
 
           if (res) size = res;
@@ -67,7 +67,7 @@ export function useCreateFolder({
 
         if (size !== null) {
           const available = space.capacity - space.used;
-          if (size > available) throw new Error("FOLDER_TOO_LARGE");
+          if (size > available) throw new Error("SOURCE_TOO_LARGE");
         }
       }
 
@@ -77,10 +77,11 @@ export function useCreateFolder({
         policy: {
           name: values.name,
           emoji: values.emoji,
+          initialSourceType: values.type,
         },
       });
 
-      const id = buildFolderId({
+      const id = buildSourceId({
         device: profile.deviceName,
         user: profile.userName,
         path: values.path,
@@ -91,30 +92,30 @@ export function useCreateFolder({
     onError: (error) => {
       onError?.(error);
 
-      if (error.message === "FOLDER_TOO_LARGE") return;
+      if (error.message === "SOURCE_TOO_LARGE") return;
 
       showErrorToast(error);
     },
     onSuccess: async (res) => {
-      posthog.capture("folder_add", {
+      posthog.capture("source_add", {
         vaultId: res.vaultId,
       });
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(vaultId, res.profile),
+          queryKey: queryKeys.source.list(vaultId, res.profile),
         }),
-        // Policies can be nested inside folders.
+        // Policies can be nested inside sources.
         queryClient.invalidateQueries({
-          queryKey: queryKeys.policy.folders(),
+          queryKey: queryKeys.policy.sources(),
         }),
       ]);
 
       await navigate({
-        to: "/$accountId/$vaultId/$folderId",
+        to: "/$accountId/$vaultId/$sourceId",
         params: (params) => ({
           ...params,
-          folderId: res.id,
+          sourceId: res.id,
         }),
       });
 

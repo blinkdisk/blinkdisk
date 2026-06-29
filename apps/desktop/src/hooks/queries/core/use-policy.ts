@@ -75,7 +75,7 @@ export function usePolicy(target: PolicyTarget | null | undefined) {
       }>(
         "/api/v1/policy/resolve",
         {
-          ...(target.kind === "DRAFT_FOLDER" ? { updates: definedCore } : {}),
+          ...(target.kind === "DRAFT_SOURCE" ? { updates: definedCore } : {}),
           numUpcomingSnapshotTimes: 0,
         },
         {

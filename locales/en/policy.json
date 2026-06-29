@@ -24,7 +24,7 @@
     "draft": {
       "badge": "Draft",
       "activate": {
-        "button": "Add folder"
+        "button": "Add file/folder"
       },
       "discard": {
         "button": "Discard"

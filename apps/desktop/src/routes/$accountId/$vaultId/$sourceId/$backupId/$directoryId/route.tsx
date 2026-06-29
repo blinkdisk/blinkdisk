@@ -2,7 +2,7 @@ import { RestoreDirectoryDialog } from "@desktop/components/dialogs/restore-dire
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/$accountId/$vaultId/$folderId/$backupId/$directoryId",
+  "/$accountId/$vaultId/$sourceId/$backupId/$directoryId",
 )({
   component: RouteComponent,
 });

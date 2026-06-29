@@ -53,28 +53,28 @@ export function useQueryKey() {
       },
       backup: {
         all: [accountId, "backup"],
-        list: (folderId?: string) => [...keys.backup.all, "list", folderId],
+        list: (sourceId?: string) => [...keys.backup.all, "list", sourceId],
         unfiltered: (vaultId?: string) => [
           ...keys.backup.all,
           "unfiltered",
           vaultId,
         ],
       },
-      folder: {
-        all: [accountId, "folder"],
+      source: {
+        all: [accountId, "source"],
         list: (vaultId: string | undefined, profile: SelectedProfile) => [
-          ...keys.folder.all,
+          ...keys.source.all,
           "list",
           vaultId,
           profile,
         ],
-        restores: (folderId?: string) => [
-          ...keys.folder.all,
-          folderId,
+        restores: (sourceId?: string) => [
+          ...keys.source.all,
+          sourceId,
           "restores",
         ],
         size: (vaultId?: string, taskId?: string | null) => [
-          ...keys.folder.all,
+          ...keys.source.all,
           vaultId,
           "size",
           taskId,
@@ -98,10 +98,10 @@ export function useQueryKey() {
           vaultId,
           profile,
         ],
-        folders: () => [...keys.policy.all, "folder"],
-        folder: (folderId?: string, profile?: SelectedProfile) => [
-          ...keys.policy.folders(),
-          folderId,
+        sources: () => [...keys.policy.all, "source"],
+        source: (sourceId?: string, profile?: SelectedProfile) => [
+          ...keys.policy.sources(),
+          sourceId,
           profile,
         ],
       },

@@ -23,6 +23,7 @@ import type {
   decryptVaultConfig,
   encryptVaultConfig,
 } from "@electron/encryption";
+import type { sourceType } from "@electron/fs";
 import type { getPasswordCache, setPasswordCache } from "@electron/password";
 import type {
   checkEmpty,
@@ -135,6 +136,12 @@ const api = {
       ipcRenderer.invoke("fs.folderSize", path) as Promise<number>,
     isDirectory: (path: string) =>
       ipcRenderer.invoke("fs.isDirectory", path) as Promise<boolean>,
+    sourceType: (path: string) =>
+      ipcRenderer.invoke("fs.sourceType", path) as Promise<
+        Awaited<ReturnType<typeof sourceType>>
+      >,
+    sourceSize: (path: string) =>
+      ipcRenderer.invoke("fs.sourceSize", path) as Promise<number>,
     getPathFromFile: (file: File) => webUtils.getPathForFile(file),
   },
   vault: {

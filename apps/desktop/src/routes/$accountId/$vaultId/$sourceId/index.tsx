@@ -1,17 +1,18 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { BackupTimeline } from "@desktop/components/backups/timeline";
 import { Empty } from "@desktop/components/empty";
-import { FolderPreview } from "@desktop/components/folders/preview";
+import { SourcePreview } from "@desktop/components/sources/preview";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { policyTargetToSearch } from "@desktop/lib/policy-target";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -24,16 +25,17 @@ import {
 } from "lucide-react";
 import animation from "/animations/backup.lottie?url";
 
-export const Route = createFileRoute("/$accountId/$vaultId/$folderId/")({
+export const Route = createFileRoute("/$accountId/$vaultId/$sourceId/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { t } = useAppTranslation("backup.list");
 
-  const { data: folder } = useFolder();
+  const { data: source } = useSource();
   const { data: backups } = useCompletedBackupList();
   const navigate = Route.useNavigate();
+  const sourceTypeKey = isFileLikeSource(source?.type) ? "file" : "folder";
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
   const { mutate: cancelBackup, isPending: isCancellingBackup } =
@@ -50,38 +52,38 @@ function RouteComponent() {
     >
       <VaultRestores />
       <div className="mb-8 flex items-center justify-between">
-        <FolderPreview folder={folder} />
+        <SourcePreview source={source} />
         <div className="flex items-center gap-2">
           {backups !== null && backups !== undefined ? (
             <>
               <Button
                 variant="secondary"
                 onClick={() =>
-                  folder &&
+                  source &&
                   navigate({
                     to: "/$accountId/$vaultId/policies",
                     search: policyTargetToSearch({
-                      kind: "FOLDER",
-                      hostName: folder.source.host,
-                      userName: folder.source.userName,
-                      path: folder.source.path,
+                      kind: "SOURCE",
+                      hostName: source.source.host,
+                      userName: source.source.userName,
+                      path: source.source.path,
                     }),
                   })
                 }
               >
                 <FileCogIcon />
-                {t("settings")}
+                {t(`settings.${sourceTypeKey}`)}
               </Button>
-              {folder && folder.status === "UPLOADING" ? (
+              {source && source.status === "UPLOADING" ? (
                 <LocalButton
                   variant="secondary"
                   onClick={() =>
-                    folder.currentTask &&
-                    cancelBackup({ taskId: folder.currentTask })
+                    source.currentTask &&
+                    cancelBackup({ taskId: source.currentTask })
                   }
                   loading={
                     isCancellingBackup ||
-                    folder?.currentTaskStatus === "CANCELING"
+                    source?.currentTaskStatus === "CANCELING"
                   }
                 >
                   <SquareIcon />
@@ -90,12 +92,12 @@ function RouteComponent() {
               ) : (
                 <LocalButton
                   onClick={() =>
-                    folder && startBackup({ path: folder.source.path })
+                    source && startBackup({ path: source.source.path })
                   }
-                  loading={isStartingBackup || folder?.status === "PENDING"}
+                  loading={isStartingBackup || source?.status === "PENDING"}
                 >
                   <CloudUploadIcon />
-                  {t("backup")}
+                  {t(`backup.${sourceTypeKey}`)}
                 </LocalButton>
               )}
             </>
@@ -108,14 +110,14 @@ function RouteComponent() {
         </div>
       </div>
       {backups !== null && backups !== undefined && backups.length === 0 ? (
-        folder?.status === "UPLOADING" &&
-        folder.currentTaskStatus === "CANCELING" ? (
+        source?.status === "UPLOADING" &&
+        source.currentTaskStatus === "CANCELING" ? (
           <Empty
             icon={<SquareIcon />}
             title={t("empty.canceling.title")}
             description={t("empty.canceling.description")}
           />
-        ) : folder?.status === "UPLOADING" ? (
+        ) : source?.status === "UPLOADING" ? (
           <div className="flex h-full w-full flex-col items-center justify-center">
             <div className="mt-auto"></div>
             <DotLottieReact src={animation} autoplay loop className="h-34" />
@@ -126,11 +128,11 @@ function RouteComponent() {
               {t("empty.initial.description")}
             </p>
             <div className="mt-10">
-              <BackupProgress upload={folder.upload} />
+              <BackupProgress upload={source.upload} />
             </div>
             <div className="mb-auto"></div>
           </div>
-        ) : folder?.status === "PENDING" ? (
+        ) : source?.status === "PENDING" ? (
           <Empty
             icon={<ClockIcon />}
             title={t("empty.pending.title")}
@@ -144,10 +146,10 @@ function RouteComponent() {
           >
             <LocalButton
               onClick={() =>
-                folder && startBackup({ path: folder.source.path })
+                source && startBackup({ path: source.source.path })
               }
               loading={isStartingBackup}
-              disabled={!folder}
+              disabled={!source}
               size="lg"
             >
               <CloudUploadIcon />

@@ -1,8 +1,8 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useSource } from "@desktop/hooks/use-source";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();
 
-  const { data: folder } = useFolder();
+  const { data: source } = useSource();
   const { profile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
@@ -24,7 +24,7 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
       await vaultApi(vaultId).post("/api/v1/snapshots/delete", {
         source: {
           ...kopiaParamsFromProfile(profile),
-          path: folder?.source.path || "",
+          path: source?.source.path || "",
         },
         snapshotManifestIds: [backupId],
         deleteSourceAndPolicy: false,
@@ -33,7 +33,7 @@ export function useDeleteBackup({ onSuccess }: { onSuccess?: () => void }) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.backup.list(folder?.id),
+        queryKey: queryKeys.backup.list(source?.id),
       });
 
       onSuccess?.();

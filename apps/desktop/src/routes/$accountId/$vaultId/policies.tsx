@@ -2,30 +2,36 @@ import { getEmojiUrl } from "@blinkdisk/components/folder-card";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
-import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
-import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
+import { ExceedingAlert } from "@desktop/components/dialogs/create-source/exceeding-alert";
 import { SettingsCategorySkeleton } from "@desktop/components/policy/category";
 import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
+import { SourceGeneralSettings } from "@desktop/components/sources/general-settings";
 import {
   getPolicyFromFormValues,
   type PolicyForm,
   usePolicyForm,
 } from "@desktop/hooks/forms/use-policy-form";
-import { useActivateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-folder-draft-policy";
+import { useActivateSourceDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-source-draft-policy";
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
+import {
+  type CoreSourceItem,
+  useSourceList,
+} from "@desktop/hooks/queries/core/use-source-list";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import {
+  getRealPolicyUserName,
   isPolicyTargetEqual,
   type PolicySearch,
   type PolicyTarget,
@@ -39,6 +45,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ChevronRightIcon,
+  FileIcon,
   FolderIcon,
   ListChecksIcon,
   MonitorIcon,
@@ -54,12 +61,34 @@ import { z } from "zod";
 
 type PolicyEditorMode = "basic" | "advanced";
 
-const ZPolicySearch = z.object({
-  kind: z.enum(["GLOBAL", "HOST", "USER", "FOLDER", "DRAFT_FOLDER"]).optional(),
-  hostName: z.string().optional(),
-  userName: z.string().optional(),
-  policyPath: z.string().optional(),
-});
+const ZPolicySearch = z
+  .object({
+    kind: z
+      .enum([
+        "GLOBAL",
+        "HOST",
+        "USER",
+        "SOURCE",
+        "DRAFT_SOURCE",
+        "FOLDER",
+        "DRAFT_FOLDER",
+      ])
+      .optional(),
+    hostName: z.string().optional(),
+    userName: z.string().optional(),
+    policyPath: z.string().optional(),
+  })
+  .transform(
+    (search): PolicySearch => ({
+      ...search,
+      kind:
+        search.kind === "FOLDER"
+          ? "SOURCE"
+          : search.kind === "DRAFT_FOLDER"
+            ? "DRAFT_SOURCE"
+            : search.kind,
+    }),
+  );
 
 export const Route = createFileRoute("/$accountId/$vaultId/policies")({
   validateSearch: ZPolicySearch,
@@ -71,7 +100,7 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
 
   const selectedTarget = useMemo(
-    () => policyTargetFromSearch(search as PolicySearch),
+    () => policyTargetFromSearch(search),
     [search],
   );
 
@@ -184,7 +213,7 @@ function PolicyTreeItem({
   onSelectTarget,
 }: PolicyTreeItemProps) {
   const { t } = useAppTranslation("policy.page");
-  const Icon = getPolicyTargetIcon(node.target.kind);
+  const Icon = getPolicyTreeItemIcon(node);
   const active = isPolicyTargetEqual(node.target, selectedTarget);
   const hasChildren = node.children.length > 0;
   const collapsible = hasChildren && node.target.kind !== "GLOBAL";
@@ -217,7 +246,7 @@ function PolicyTreeItem({
           )}
           <span className="flex min-w-0 flex-1 items-center gap-2">
             <span className="min-w-0 truncate">{node.label}</span>
-            {node.target.kind === "DRAFT_FOLDER" ? (
+            {node.target.kind === "DRAFT_SOURCE" ? (
               <Badge variant="subtle" className="shrink-0">
                 {t("draft.badge")}
               </Badge>
@@ -294,7 +323,7 @@ function getInitialExpandedPolicyTreeNodeIds({
 
   const path = findPolicyTreeTargetPath(tree, selectedTarget);
   const expandedPath =
-    selectedTarget.kind === "FOLDER" || selectedTarget.kind === "DRAFT_FOLDER"
+    selectedTarget.kind === "SOURCE" || selectedTarget.kind === "DRAFT_SOURCE"
       ? path.slice(0, -1)
       : path;
 
@@ -370,6 +399,13 @@ function PolicyEditorForm({
   const [storedMode, setMode] = useAppStorage("preferences.mode", "basic");
   const mode = storedMode ?? "basic";
   const showAdvanced = mode === "advanced";
+  const { data: sources } = useSourceList({
+    unfiltered: true,
+    includeDrafts: true,
+  });
+  const policySourceType =
+    getPolicyTargetSource(target, sources)?.type || policy.initialSourceType;
+  const isFileLikePolicy = isFileLikeSource(policySourceType);
   const currentPolicy = useStore(form.store, (state) =>
     getPolicyFromFormValues(state.values, policy, target.kind !== "GLOBAL"),
   );
@@ -383,21 +419,26 @@ function PolicyEditorForm({
       className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8"
     >
       <PolicyEditorHeader
-        draftPolicy={target.kind === "DRAFT_FOLDER" ? currentPolicy : undefined}
-        draftTarget={target.kind === "DRAFT_FOLDER" ? target : undefined}
+        draftPolicy={target.kind === "DRAFT_SOURCE" ? currentPolicy : undefined}
+        draftTarget={target.kind === "DRAFT_SOURCE" ? target : undefined}
         form={form}
         mode={mode}
         onModeChange={setMode}
         onSelectTarget={onSelectTarget}
       />
-      {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
-        <FolderGeneralSettings form={form} />
+      {target.kind === "SOURCE" || target.kind === "DRAFT_SOURCE" ? (
+        <SourceGeneralSettings form={form} />
       ) : null}
       <ScheduleSettings form={form} showAdvanced={showAdvanced} />
-      <FilesSettings form={form} showAdvanced={showAdvanced} />
+      {isFileLikePolicy ? null : (
+        <FilesSettings form={form} showAdvanced={showAdvanced} />
+      )}
       {showAdvanced ? (
         <>
-          <CompressionSettings form={form} />
+          <CompressionSettings
+            form={form}
+            showExtensionFilters={!isFileLikePolicy}
+          />
           <RetentionSettings form={form} />
         </>
       ) : (
@@ -406,6 +447,22 @@ function PolicyEditorForm({
         />
       )}
     </form>
+  );
+}
+
+function getPolicyTargetSource(
+  target: PolicyTarget,
+  sources: CoreSourceItem[] | null | undefined,
+) {
+  if (target.kind !== "SOURCE" && target.kind !== "DRAFT_SOURCE") {
+    return undefined;
+  }
+
+  return sources?.find(
+    (source) =>
+      source.source.host === target.hostName &&
+      getRealPolicyUserName(source.source.userName) === target.userName &&
+      source.source.path === target.path,
   );
 }
 
@@ -448,7 +505,7 @@ function PolicyEditorHeader({
   onSelectTarget,
 }: {
   draftPolicy?: ZPolicyType;
-  draftTarget?: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }>;
+  draftTarget?: Extract<PolicyTarget, { kind: "DRAFT_SOURCE" }>;
   form: PolicyForm;
   mode: PolicyEditorMode;
   onModeChange: (mode: PolicyEditorMode) => void;
@@ -458,14 +515,14 @@ function PolicyEditorHeader({
   const [alertShown, setAlertShown] = useState(false);
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
-  const activate = useActivateFolderDraftPolicy({
+  const activate = useActivateSourceDraftPolicy({
     target: draftTarget,
     onError: (error) => {
       if (
         error &&
         typeof error === "object" &&
         "message" in error &&
-        error.message === "FOLDER_TOO_LARGE"
+        error.message === "SOURCE_TOO_LARGE"
       )
         setAlertShown(true);
     },
@@ -572,7 +629,7 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
           <Skeleton width={88} height="2.25rem" />
         </div>
       </div>
-      {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
+      {target.kind === "SOURCE" || target.kind === "DRAFT_SOURCE" ? (
         <SettingsCategorySkeleton id="general" />
       ) : null}
       <SettingsCategorySkeleton id="schedule" />
@@ -586,6 +643,14 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
 const policyEditorHeaderClassName =
   "before:content-[''] after:content-[''] before:bg-background bg-background after:bg-border/70 sticky top-0 z-50 -mx-1 -mt-2 px-1 py-3 before:absolute before:inset-x-0 before:-top-8 before:h-8 after:absolute after:inset-x-0 after:bottom-0 after:h-px";
 
+function getPolicyTreeItemIcon(node: PolicyTreeNode) {
+  if (node.target.kind === "SOURCE" || node.target.kind === "DRAFT_SOURCE") {
+    return isFileLikeSource(node.source?.type) ? FileIcon : FolderIcon;
+  }
+
+  return getPolicyTargetIcon(node.target.kind);
+}
+
 function getPolicyTargetIcon(kind: PolicyTargetKind) {
   switch (kind) {
     case "GLOBAL":
@@ -594,8 +659,8 @@ function getPolicyTargetIcon(kind: PolicyTargetKind) {
       return MonitorIcon;
     case "USER":
       return UserIcon;
-    case "FOLDER":
-    case "DRAFT_FOLDER":
+    case "SOURCE":
+    case "DRAFT_SOURCE":
       return FolderIcon;
   }
 }

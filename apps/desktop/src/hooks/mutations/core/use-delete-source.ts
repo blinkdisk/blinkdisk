@@ -7,7 +7,7 @@ import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useDeleteFolder({
+export function useDeleteSource({
   onSuccess,
   profile: profileOverride,
 }: {
@@ -23,7 +23,7 @@ export function useDeleteFolder({
     profileOverride === undefined ? routeSelectedProfile : profileOverride;
 
   return useMutation({
-    mutationKey: ["core", "folder", "delete"],
+    mutationKey: ["core", "source", "delete"],
     mutationFn: async ({ path }: { path: string }) => {
       if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
 
@@ -39,7 +39,7 @@ export function useDeleteFolder({
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.list(vaultId, profile),
+        queryKey: queryKeys.source.list(vaultId, profile),
       });
 
       onSuccess?.();

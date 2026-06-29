@@ -49,7 +49,7 @@ export function useUpdatePolicy({
           queryKey: queryKeys.policy.all,
         }),
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.all,
+          queryKey: queryKeys.source.all,
         }),
       ]);
 

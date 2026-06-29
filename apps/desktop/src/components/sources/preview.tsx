@@ -1,16 +1,16 @@
-import { FolderCard } from "@blinkdisk/components/folder-card";
+import { SourceCard } from "@blinkdisk/components/source-card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
-import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { MonitorIcon, UserIcon } from "lucide-react";
 
-type FolderPreviewProps = {
-  folder?: CoreFolderItem;
+type SourcePreviewProps = {
+  source?: CoreSourceItem;
   size?: "sm" | "default";
 };
 
-export function FolderPreview({ folder, size }: FolderPreviewProps) {
+export function SourcePreview({ source, size }: SourcePreviewProps) {
   const { dark } = useTheme();
 
   return (
@@ -20,9 +20,10 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
         size === "sm" && "gap-3",
       )}
     >
-      {folder ? (
-        <FolderCard
-          emoji={folder.emoji}
+      {source ? (
+        <SourceCard
+          emoji={source.emoji}
+          type={source.type}
           size={size === "sm" ? 2.25 : 2.8}
           theme={dark ? "dark" : "light"}
         />
@@ -41,15 +42,15 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
               size === "sm" && "text-sm",
             )}
           >
-            {folder ? (
-              folder.name || folder.source.path
+            {source ? (
+              source.name || source.source.path
             ) : (
               <Skeleton width={100} />
             )}
           </h2>
         </div>
-        {folder ? (
-          <FolderSourceProfile folder={folder} size={size} />
+        {source ? (
+          <SourceProfile source={source} size={size} />
         ) : (
           <Skeleton width={120} />
         )}
@@ -58,11 +59,11 @@ export function FolderPreview({ folder, size }: FolderPreviewProps) {
   );
 }
 
-function FolderSourceProfile({
-  folder,
+function SourceProfile({
+  source,
   size,
 }: {
-  folder: CoreFolderItem;
+  source: CoreSourceItem;
   size?: "sm" | "default";
 }) {
   return (
@@ -74,11 +75,11 @@ function FolderSourceProfile({
     >
       <span className="flex min-w-0 max-w-48 items-center gap-1.5">
         <MonitorIcon className="size-3.5 shrink-0" />
-        <span className="truncate">{folder.source.host}</span>
+        <span className="truncate">{source.source.host}</span>
       </span>
       <span className="flex min-w-0 max-w-48 items-center gap-1.5">
         <UserIcon className="size-3.5 shrink-0" />
-        <span className="truncate">{folder.source.userName}</span>
+        <span className="truncate">{source.source.userName}</span>
       </span>
     </div>
   );

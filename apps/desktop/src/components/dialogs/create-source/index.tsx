@@ -1,47 +1,47 @@
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZCreateSourceFormType } from "@blinkdisk/schemas/source";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
-import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
-import { CreateFolderGeneral } from "@desktop/components/dialogs/create-folder/general";
-import { useCreateFolderForm } from "@desktop/hooks/forms/use-create-folder-form";
-import { useCreateFolder } from "@desktop/hooks/mutations/core/use-create-folder";
-import { useCreateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-create-folder-draft-policy";
-import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
+import { ExceedingAlert } from "@desktop/components/dialogs/create-source/exceeding-alert";
+import { CreateSourceGeneral } from "@desktop/components/dialogs/create-source/general";
+import { useCreateSourceForm } from "@desktop/hooks/forms/use-create-source-form";
+import { useCreateSource } from "@desktop/hooks/mutations/core/use-create-source";
+import { useCreateSourceDraftPolicy } from "@desktop/hooks/mutations/core/use-create-source-draft-policy";
+import { useCreateSourceDialog } from "@desktop/hooks/state/use-create-source-dialog";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useCallback, useRef, useState } from "react";
 
-type CreateFolderAction = "CREATE" | "POLICY";
+type CreateSourceAction = "CREATE" | "POLICY";
 
-export function CreateFolderDialog() {
+export function CreateSourceDialog() {
   const { t } = useAppTranslation("folder.createDialog");
   const { localHostName, localUserName } = useLocalProfile();
 
   const { isOpen, setIsOpen, defaultValues, clearDefaultValues } =
-    useCreateFolderDialog();
+    useCreateSourceDialog();
 
-  const actionRef = useRef<CreateFolderAction>("CREATE");
+  const actionRef = useRef<CreateSourceAction>("CREATE");
   const [alertShown, setAlertShown] = useState(false);
   const [pendingValues, setPendingValues] =
-    useState<ZCreateFolderFormType | null>(null);
+    useState<ZCreateSourceFormType | null>(null);
 
   const onSuccess = useCallback(() => {
     setIsOpen(false);
   }, [setIsOpen]);
 
-  const { mutateAsync: createFolder, isPending: isCreatingFolder } =
-    useCreateFolder({
+  const { mutateAsync: createSource, isPending: isCreatingSource } =
+    useCreateSource({
       onError: (error) => {
         if (
           error &&
           typeof error === "object" &&
           "message" in error &&
-          error.message === "FOLDER_TOO_LARGE"
+          error.message === "SOURCE_TOO_LARGE"
         ) {
           setAlertShown(true);
         }
@@ -50,11 +50,11 @@ export function CreateFolderDialog() {
     });
 
   const { mutateAsync: createDraft, isPending: isCreatingDraft } =
-    useCreateFolderDraftPolicy({
+    useCreateSourceDraftPolicy({
       onSuccess,
     });
 
-  const form = useCreateFolderForm({
+  const form = useCreateSourceForm({
     defaultValues,
     onSubmit: async ({ value }) => {
       if (actionRef.current === "POLICY") {
@@ -67,7 +67,7 @@ export function CreateFolderDialog() {
       }
 
       setPendingValues(value);
-      await createFolder({ ...value, size: null });
+      await createSource({ ...value, size: null });
     },
   });
 
@@ -88,10 +88,10 @@ export function CreateFolderDialog() {
         <DialogDescription className="sr-only">
           {t("description")}
         </DialogDescription>
-        <CreateFolderGeneral
+        <CreateSourceGeneral
           form={form}
           values={values}
-          isCreatingFolder={isCreatingFolder}
+          isCreatingSource={isCreatingSource}
           isCreatingDraft={isCreatingDraft}
           onAction={(action) => {
             actionRef.current = action;
@@ -100,10 +100,10 @@ export function CreateFolderDialog() {
         <ExceedingAlert
           open={alertShown}
           setOpen={setAlertShown}
-          loading={isCreatingFolder}
+          loading={isCreatingSource}
           submit={() =>
             pendingValues &&
-            createFolder({ ...pendingValues, force: true, size: null })
+            createSource({ ...pendingValues, force: true, size: null })
           }
         />
       </DialogContent>

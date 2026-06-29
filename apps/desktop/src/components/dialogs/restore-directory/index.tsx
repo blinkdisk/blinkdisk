@@ -127,7 +127,7 @@ export function RestoreDirectoryDialog() {
                         (options?.path?.length
                           ? options.path.at(-1)?.name
                           : undefined) ||
-                        options?.folder?.name ||
+                        options?.source?.name ||
                         "Folder",
                       date: options?.backup?.startTime
                         ? new Date(options.backup.startTime)

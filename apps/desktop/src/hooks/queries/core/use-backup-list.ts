@@ -1,7 +1,8 @@
+import type { KopiaEntryType } from "@blinkdisk/schemas/source";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useFolder } from "@desktop/hooks/use-folder";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { useSource } from "@desktop/hooks/use-source";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
@@ -27,47 +28,63 @@ export type CoreBackupItem = {
     numFailed: number;
   };
   rootID: string;
+  rootEntryType: KopiaEntryType;
   retention: string[];
   pins: string[];
 };
 
 type UseBackupListOptions = {
-  filters?: "folder" | "none";
+  filters?: "source" | "none";
 };
 
 export function useBackupList({
-  filters = "folder",
+  filters = "source",
 }: UseBackupListOptions = {}) {
   const { profile } = useProfile();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
-  const { data: folder } = useFolder();
-  const useFolderFilters = filters === "folder";
+  const { data: source } = useSource();
+  const useSourceFilters = filters === "source";
 
   return useQuery({
-    queryKey: useFolderFilters
-      ? queryKeys.backup.list(folder?.id)
+    queryKey: useSourceFilters
+      ? queryKeys.backup.list(source?.id)
       : queryKeys.backup.unfiltered(vaultId),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<{
-        snapshots: CoreBackupItem[];
+        snapshots: (Omit<CoreBackupItem, "rootEntryType"> & {
+          rootEntryType?: KopiaEntryType | null;
+        })[];
         unfilteredCount: number;
         uniqueCount: number;
         error?: string;
       }>("/api/v1/snapshots", {
-        params: useFolderFilters
+        params: useSourceFilters
           ? {
               ...(profile ? kopiaParamsFromProfile(profile) : {}),
-              path: folder?.source.path || "",
+              path: source?.source.path || "",
               all: "1",
             }
           : undefined,
       });
 
-      return res.data.snapshots.reverse();
+      return res.data.snapshots
+        .map((snapshot) => ({
+          ...snapshot,
+          rootEntryType: snapshot.rootEntryType || "d",
+          summary: snapshot.summary || {
+            size: 0,
+            files: 0,
+            symlinks: 0,
+            dirs: 0,
+            maxTime: snapshot.endTime,
+            numFailed: 0,
+          },
+        }))
+        .reverse();
     },
     refetchInterval: 1000,
-    enabled: !!vaultId && (!useFolderFilters || !!folder) && running,
+    enabled: !!vaultId && (!useSourceFilters || !!source) && running,
   });
 }

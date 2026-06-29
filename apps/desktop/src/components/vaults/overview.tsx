@@ -11,17 +11,17 @@ import {
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { Empty } from "@desktop/components/empty";
-import { FolderList } from "@desktop/components/folders/list";
+import { SourceList } from "@desktop/components/sources/list";
 import { VaultStatCard } from "@desktop/components/vaults/stat-card";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
 import {
-  type CoreFolderItem,
-  useFolderList,
-} from "@desktop/hooks/queries/core/use-folder-list";
+  type CoreSourceItem,
+  useSourceList,
+} from "@desktop/hooks/queries/core/use-source-list";
 import { useVaultDevices } from "@desktop/hooks/queries/core/use-vault-devices";
 import type { VaultItem } from "@desktop/hooks/queries/use-vault";
-import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
+import { useCreateSourceDialog } from "@desktop/hooks/state/use-create-source-dialog";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { formatCompactInt, formatSize } from "@desktop/lib/number";
@@ -63,7 +63,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
       from: "/$accountId/$vaultId",
       shouldThrow: false,
     }) ?? {};
-  const { openCreateFolder } = useCreateFolderDialog();
+  const { openCreateSource } = useCreateSourceDialog();
   const { localHostName, localUserName } = useLocalProfile();
 
   const localProfile = useMemo(
@@ -105,53 +105,53 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup({
     profile: localProfile,
   });
-  const { data: currentFolders } = useFolderList({
+  const { data: currentSources } = useSourceList({
     profile: localProfile,
   });
-  const { data: allFolders } = useFolderList({ unfiltered: true });
+  const { data: allSources } = useSourceList({ unfiltered: true });
   const { data: backups } = useBackupList({ filters: "none" });
 
-  const otherProfileFolders = useMemo(() => {
-    if (!allFolders || !localProfile) return undefined;
+  const otherProfileSources = useMemo(() => {
+    if (!allSources || !localProfile) return undefined;
 
-    return allFolders.filter((folder) => {
+    return allSources.filter((source) => {
       const profile = {
-        deviceName: folder.source.host,
-        userName: folder.source.userName,
+        deviceName: source.source.host,
+        userName: source.source.userName,
       };
 
       return !isSameProfile(profile, localProfile);
     });
-  }, [allFolders, localProfile]);
+  }, [allSources, localProfile]);
 
-  const otherFolders = useMemo(
+  const otherSources = useMemo(
     () =>
-      otherProfileFolders?.filter((folder) =>
+      otherProfileSources?.filter((source) =>
         matchesProfileListFilters({
           profile: {
-            deviceName: folder.source.host,
-            userName: folder.source.userName,
+            deviceName: source.source.host,
+            userName: source.source.userName,
           },
           filters: otherProfileListFilters,
         }),
       ),
-    [otherProfileFolders, otherProfileListFilters],
+    [otherProfileSources, otherProfileListFilters],
   );
 
   const isAnyBackupRunning = useMemo(
     () =>
-      currentFolders?.some(
-        (folder) =>
-          folder.status === "UPLOADING" || folder.status === "PENDING",
+      currentSources?.some(
+        (source) =>
+          source.status === "UPLOADING" || source.status === "PENDING",
       ),
-    [currentFolders],
+    [currentSources],
   );
 
   const stats = useMemo(() => {
-    if (!allFolders) return null;
+    if (!allSources) return null;
 
-    return buildVaultStats(allFolders);
-  }, [allFolders]);
+    return buildVaultStats(allSources);
+  }, [allSources]);
 
   const statHistory = useMemo(() => {
     if (!backups) return null;
@@ -160,18 +160,18 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   }, [backups]);
 
   const isStatsLoading = !vault || !stats || !statHistory;
-  const isCurrentFoldersLoading = currentFolders === undefined;
+  const isCurrentSourcesLoading = currentSources === undefined;
   const isOverviewEmpty =
-    Array.isArray(currentFolders) &&
-    currentFolders.length === 0 &&
-    Array.isArray(otherProfileFolders) &&
-    otherProfileFolders.length === 0;
+    Array.isArray(currentSources) &&
+    currentSources.length === 0 &&
+    Array.isArray(otherProfileSources) &&
+    otherProfileSources.length === 0;
 
   return (
     <div
       className={cn(
         "flex min-h-full flex-col overflow-x-hidden p-6",
-        currentFolders !== undefined ? "overflow-y-auto" : "overflow-hidden",
+        currentSources !== undefined ? "overflow-y-auto" : "overflow-hidden",
       )}
     >
       <div className="grid grid-cols-3 gap-6">
@@ -194,20 +194,20 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
           isLoading={isStatsLoading}
         />
       </div>
-      <FolderSection
+      <SourceSection
         title={t("currentProfile.title")}
-        count={currentFolders?.length}
-        folders={currentFolders}
+        count={currentSources?.length}
+        sources={currentSources}
         profile={localProfile}
         actions={
-          isCurrentFoldersLoading ? (
+          isCurrentSourcesLoading ? (
             <>
               <Skeleton width="8rem" height="2.75rem" />
               <Skeleton width="11rem" height="2.75rem" />
             </>
           ) : (
             <>
-              {currentFolders && currentFolders.length > 0 ? (
+              {currentSources && currentSources.length > 0 ? (
                 <Button
                   onClick={() => startBackup({})}
                   loading={isStartingBackup || isAnyBackupRunning}
@@ -215,26 +215,26 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
                   variant="secondary"
                 >
                   <CloudUploadIcon />
-                  {t("folders.backupAll")}
+                  {t("sources.backupAll")}
                 </Button>
               ) : null}
-              <Button onClick={() => openCreateFolder()}>
+              <Button onClick={() => openCreateSource()}>
                 <PlusIcon />
-                {t("folders.addFolder")}
+                {t("sources.addSource")}
               </Button>
             </>
           )
         }
         empty={
-          currentFolders !== undefined
+          currentSources !== undefined
             ? {
                 icon: <FolderPlusIcon />,
-                title: t("folders.empty.title"),
-                description: t("folders.empty.description"),
+                title: t("sources.empty.title"),
+                description: t("sources.empty.description"),
                 children: (
-                  <Button onClick={() => openCreateFolder()} size="lg">
+                  <Button onClick={() => openCreateSource()} size="lg">
                     <PlusIcon />
-                    {t("folders.addFolder")}
+                    {t("sources.addSource")}
                   </Button>
                 ),
               }
@@ -243,10 +243,10 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
         fillAvailableSpace={isOverviewEmpty}
       />
       {otherProfiles.length > 0 && !isOverviewEmpty ? (
-        <FolderSection
+        <SourceSection
           title={t("otherProfiles.title")}
-          count={otherFolders?.length}
-          folders={otherFolders}
+          count={otherSources?.length}
+          sources={otherSources}
           profile={null}
           allowBackupActions={false}
           actions={
@@ -257,7 +257,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
             />
           }
           empty={
-            otherFolders !== undefined
+            otherSources !== undefined
               ? {
                   icon: <FolderPlusIcon />,
                   title: t("otherProfiles.empty.title"),
@@ -272,10 +272,10 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   );
 }
 
-type FolderSectionProps = {
+type SourceSectionProps = {
   title: string;
   count?: number;
-  folders: CoreFolderItem[] | null | undefined;
+  sources: CoreSourceItem[] | null | undefined;
   profile?: SelectedProfile;
   allowBackupActions?: boolean;
   actions?: React.ReactNode;
@@ -289,16 +289,16 @@ type FolderSectionProps = {
   };
 };
 
-function FolderSection({
+function SourceSection({
   title,
   count,
-  folders,
+  sources,
   profile,
   allowBackupActions,
   actions,
   fillAvailableSpace,
   empty,
-}: FolderSectionProps) {
+}: SourceSectionProps) {
   const { t } = useAppTranslation("vault.overview");
 
   return (
@@ -311,11 +311,11 @@ function FolderSection({
       <div className="flex items-center justify-between gap-4">
         <div className="flex min-w-0 flex-col">
           <h2 className="truncate text-xl font-semibold">
-            {folders !== undefined ? title : <Skeleton width={120} />}
+            {sources !== undefined ? title : <Skeleton width={120} />}
           </h2>
           <p className="text-muted-foreground text-xs">
-            {folders !== undefined && count !== undefined ? (
-              t("folders.count", { count })
+            {sources !== undefined && count !== undefined ? (
+              t("sources.count", { count })
             ) : (
               <Skeleton width={120} />
             )}
@@ -325,7 +325,7 @@ function FolderSection({
           <div className="flex items-center gap-3">{actions}</div>
         ) : null}
       </div>
-      {folders !== null && folders !== undefined && !folders.length && empty ? (
+      {sources !== null && sources !== undefined && !sources.length && empty ? (
         <Empty
           icon={empty.icon}
           title={empty.title}
@@ -338,8 +338,8 @@ function FolderSection({
           {empty.children}
         </Empty>
       ) : (
-        <FolderList
-          folders={folders}
+        <SourceList
+          sources={sources}
           profile={profile}
           allowBackupActions={allowBackupActions}
         />

@@ -122,17 +122,18 @@
     }
   },
   "folder": {
-    "title": "Folder policy",
-    "description": "Configure the folder policy.",
+    "title": "Backup policy",
+    "description": "Configure the backup policy.",
     "general": {
       "title": "General",
-      "description": "Configure general settings of this folder.",
+      "description": "Configure general settings.",
       "name": {
-        "label": "Folder name",
-        "placeholder": "Enter folder name"
+        "label": "Name",
+        "placeholder": "Enter name"
       },
       "path": {
-        "label": "Folder path"
+        "label": "Folder path",
+        "fileLabel": "File path"
       },
       "emoji": {
         "change": "Change emoji",

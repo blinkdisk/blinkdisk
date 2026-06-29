@@ -20,10 +20,10 @@ import { Route as AccountIdVaultIdRouteRouteImport } from './routes/$accountId/$
 import { Route as AccountIdVaultIdIndexRouteImport } from './routes/$accountId/$vaultId/index'
 import { Route as AccountIdVaultIdPoliciesRouteImport } from './routes/$accountId/$vaultId/policies'
 import { Route as AccountIdVaultIdSettingsRouteRouteImport } from './routes/$accountId/$vaultId/settings/route'
-import { Route as AccountIdVaultIdFolderIdRouteRouteImport } from './routes/$accountId/$vaultId/$folderId/route'
-import { Route as AccountIdVaultIdFolderIdIndexRouteImport } from './routes/$accountId/$vaultId/$folderId/index'
-import { Route as AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteImport } from './routes/$accountId/$vaultId/$folderId/$backupId/$directoryId/route'
-import { Route as AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRouteImport } from './routes/$accountId/$vaultId/$folderId/$backupId/$directoryId/index'
+import { Route as AccountIdVaultIdSourceIdRouteRouteImport } from './routes/$accountId/$vaultId/$sourceId/route'
+import { Route as AccountIdVaultIdSourceIdIndexRouteImport } from './routes/$accountId/$vaultId/$sourceId/index'
+import { Route as AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteImport } from './routes/$accountId/$vaultId/$sourceId/$backupId/$directoryId/route'
+import { Route as AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRouteImport } from './routes/$accountId/$vaultId/$sourceId/$backupId/$directoryId/index'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -82,29 +82,29 @@ const AccountIdVaultIdSettingsRouteRoute =
     path: '/settings',
     getParentRoute: () => AccountIdVaultIdRouteRoute,
   } as any)
-const AccountIdVaultIdFolderIdRouteRoute =
-  AccountIdVaultIdFolderIdRouteRouteImport.update({
-    id: '/$folderId',
-    path: '/$folderId',
+const AccountIdVaultIdSourceIdRouteRoute =
+  AccountIdVaultIdSourceIdRouteRouteImport.update({
+    id: '/$sourceId',
+    path: '/$sourceId',
     getParentRoute: () => AccountIdVaultIdRouteRoute,
   } as any)
-const AccountIdVaultIdFolderIdIndexRoute =
-  AccountIdVaultIdFolderIdIndexRouteImport.update({
+const AccountIdVaultIdSourceIdIndexRoute =
+  AccountIdVaultIdSourceIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AccountIdVaultIdFolderIdRouteRoute,
+    getParentRoute: () => AccountIdVaultIdSourceIdRouteRoute,
   } as any)
-const AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute =
-  AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteImport.update({
+const AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRoute =
+  AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteImport.update({
     id: '/$backupId/$directoryId',
     path: '/$backupId/$directoryId',
-    getParentRoute: () => AccountIdVaultIdFolderIdRouteRoute,
+    getParentRoute: () => AccountIdVaultIdSourceIdRouteRoute,
   } as any)
-const AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute =
-  AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRouteImport.update({
+const AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute =
+  AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute,
+    getParentRoute: () => AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -116,13 +116,13 @@ export interface FileRoutesByFullPath {
   '/$accountId/cloudblink': typeof AccountIdCloudblinkRoute
   '/$accountId/loading': typeof AccountIdLoadingRoute
   '/$accountId/': typeof AccountIdIndexRoute
-  '/$accountId/$vaultId/$folderId': typeof AccountIdVaultIdFolderIdRouteRouteWithChildren
+  '/$accountId/$vaultId/$sourceId': typeof AccountIdVaultIdSourceIdRouteRouteWithChildren
   '/$accountId/$vaultId/settings': typeof AccountIdVaultIdSettingsRouteRoute
   '/$accountId/$vaultId/policies': typeof AccountIdVaultIdPoliciesRoute
   '/$accountId/$vaultId/': typeof AccountIdVaultIdIndexRoute
-  '/$accountId/$vaultId/$folderId/': typeof AccountIdVaultIdFolderIdIndexRoute
-  '/$accountId/$vaultId/$folderId/$backupId/$directoryId': typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren
-  '/$accountId/$vaultId/$folderId/$backupId/$directoryId/': typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+  '/$accountId/$vaultId/$sourceId/': typeof AccountIdVaultIdSourceIdIndexRoute
+  '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren
+  '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,8 +134,8 @@ export interface FileRoutesByTo {
   '/$accountId/$vaultId/settings': typeof AccountIdVaultIdSettingsRouteRoute
   '/$accountId/$vaultId/policies': typeof AccountIdVaultIdPoliciesRoute
   '/$accountId/$vaultId': typeof AccountIdVaultIdIndexRoute
-  '/$accountId/$vaultId/$folderId': typeof AccountIdVaultIdFolderIdIndexRoute
-  '/$accountId/$vaultId/$folderId/$backupId/$directoryId': typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+  '/$accountId/$vaultId/$sourceId': typeof AccountIdVaultIdSourceIdIndexRoute
+  '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -147,13 +147,13 @@ export interface FileRoutesById {
   '/$accountId/cloudblink': typeof AccountIdCloudblinkRoute
   '/$accountId/loading': typeof AccountIdLoadingRoute
   '/$accountId/': typeof AccountIdIndexRoute
-  '/$accountId/$vaultId/$folderId': typeof AccountIdVaultIdFolderIdRouteRouteWithChildren
+  '/$accountId/$vaultId/$sourceId': typeof AccountIdVaultIdSourceIdRouteRouteWithChildren
   '/$accountId/$vaultId/settings': typeof AccountIdVaultIdSettingsRouteRoute
   '/$accountId/$vaultId/policies': typeof AccountIdVaultIdPoliciesRoute
   '/$accountId/$vaultId/': typeof AccountIdVaultIdIndexRoute
-  '/$accountId/$vaultId/$folderId/': typeof AccountIdVaultIdFolderIdIndexRoute
-  '/$accountId/$vaultId/$folderId/$backupId/$directoryId': typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren
-  '/$accountId/$vaultId/$folderId/$backupId/$directoryId/': typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+  '/$accountId/$vaultId/$sourceId/': typeof AccountIdVaultIdSourceIdIndexRoute
+  '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren
+  '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -166,13 +166,13 @@ export interface FileRouteTypes {
     | '/$accountId/cloudblink'
     | '/$accountId/loading'
     | '/$accountId/'
-    | '/$accountId/$vaultId/$folderId'
+    | '/$accountId/$vaultId/$sourceId'
     | '/$accountId/$vaultId/settings'
     | '/$accountId/$vaultId/policies'
     | '/$accountId/$vaultId/'
-    | '/$accountId/$vaultId/$folderId/'
-    | '/$accountId/$vaultId/$folderId/$backupId/$directoryId'
-    | '/$accountId/$vaultId/$folderId/$backupId/$directoryId/'
+    | '/$accountId/$vaultId/$sourceId/'
+    | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
+    | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,8 +184,8 @@ export interface FileRouteTypes {
     | '/$accountId/$vaultId/settings'
     | '/$accountId/$vaultId/policies'
     | '/$accountId/$vaultId'
-    | '/$accountId/$vaultId/$folderId'
-    | '/$accountId/$vaultId/$folderId/$backupId/$directoryId'
+    | '/$accountId/$vaultId/$sourceId'
+    | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
   id:
     | '__root__'
     | '/'
@@ -196,13 +196,13 @@ export interface FileRouteTypes {
     | '/$accountId/cloudblink'
     | '/$accountId/loading'
     | '/$accountId/'
-    | '/$accountId/$vaultId/$folderId'
+    | '/$accountId/$vaultId/$sourceId'
     | '/$accountId/$vaultId/settings'
     | '/$accountId/$vaultId/policies'
     | '/$accountId/$vaultId/'
-    | '/$accountId/$vaultId/$folderId/'
-    | '/$accountId/$vaultId/$folderId/$backupId/$directoryId'
-    | '/$accountId/$vaultId/$folderId/$backupId/$directoryId/'
+    | '/$accountId/$vaultId/$sourceId/'
+    | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
+    | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -290,79 +290,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIdVaultIdSettingsRouteRouteImport
       parentRoute: typeof AccountIdVaultIdRouteRoute
     }
-    '/$accountId/$vaultId/$folderId': {
-      id: '/$accountId/$vaultId/$folderId'
-      path: '/$folderId'
-      fullPath: '/$accountId/$vaultId/$folderId'
-      preLoaderRoute: typeof AccountIdVaultIdFolderIdRouteRouteImport
+    '/$accountId/$vaultId/$sourceId': {
+      id: '/$accountId/$vaultId/$sourceId'
+      path: '/$sourceId'
+      fullPath: '/$accountId/$vaultId/$sourceId'
+      preLoaderRoute: typeof AccountIdVaultIdSourceIdRouteRouteImport
       parentRoute: typeof AccountIdVaultIdRouteRoute
     }
-    '/$accountId/$vaultId/$folderId/': {
-      id: '/$accountId/$vaultId/$folderId/'
+    '/$accountId/$vaultId/$sourceId/': {
+      id: '/$accountId/$vaultId/$sourceId/'
       path: '/'
-      fullPath: '/$accountId/$vaultId/$folderId/'
-      preLoaderRoute: typeof AccountIdVaultIdFolderIdIndexRouteImport
-      parentRoute: typeof AccountIdVaultIdFolderIdRouteRoute
+      fullPath: '/$accountId/$vaultId/$sourceId/'
+      preLoaderRoute: typeof AccountIdVaultIdSourceIdIndexRouteImport
+      parentRoute: typeof AccountIdVaultIdSourceIdRouteRoute
     }
-    '/$accountId/$vaultId/$folderId/$backupId/$directoryId': {
-      id: '/$accountId/$vaultId/$folderId/$backupId/$directoryId'
+    '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': {
+      id: '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
       path: '/$backupId/$directoryId'
-      fullPath: '/$accountId/$vaultId/$folderId/$backupId/$directoryId'
-      preLoaderRoute: typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteImport
-      parentRoute: typeof AccountIdVaultIdFolderIdRouteRoute
+      fullPath: '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
+      preLoaderRoute: typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteImport
+      parentRoute: typeof AccountIdVaultIdSourceIdRouteRoute
     }
-    '/$accountId/$vaultId/$folderId/$backupId/$directoryId/': {
-      id: '/$accountId/$vaultId/$folderId/$backupId/$directoryId/'
+    '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/': {
+      id: '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/'
       path: '/'
-      fullPath: '/$accountId/$vaultId/$folderId/$backupId/$directoryId/'
-      preLoaderRoute: typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRouteImport
-      parentRoute: typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute
+      fullPath: '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/'
+      preLoaderRoute: typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRouteImport
+      parentRoute: typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRoute
     }
   }
 }
 
-interface AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren {
-  AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute: typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute
+interface AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteChildren {
+  AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute: typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
 }
 
-const AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren: AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren =
+const AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteChildren: AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteChildren =
   {
-    AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute:
-      AccountIdVaultIdFolderIdBackupIdDirectoryIdIndexRoute,
+    AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute:
+      AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute,
   }
 
-const AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren =
-  AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute._addFileChildren(
-    AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteChildren,
+const AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren =
+  AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRoute._addFileChildren(
+    AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteChildren,
   )
 
-interface AccountIdVaultIdFolderIdRouteRouteChildren {
-  AccountIdVaultIdFolderIdIndexRoute: typeof AccountIdVaultIdFolderIdIndexRoute
-  AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute: typeof AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren
+interface AccountIdVaultIdSourceIdRouteRouteChildren {
+  AccountIdVaultIdSourceIdIndexRoute: typeof AccountIdVaultIdSourceIdIndexRoute
+  AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRoute: typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren
 }
 
-const AccountIdVaultIdFolderIdRouteRouteChildren: AccountIdVaultIdFolderIdRouteRouteChildren =
+const AccountIdVaultIdSourceIdRouteRouteChildren: AccountIdVaultIdSourceIdRouteRouteChildren =
   {
-    AccountIdVaultIdFolderIdIndexRoute: AccountIdVaultIdFolderIdIndexRoute,
-    AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRoute:
-      AccountIdVaultIdFolderIdBackupIdDirectoryIdRouteRouteWithChildren,
+    AccountIdVaultIdSourceIdIndexRoute: AccountIdVaultIdSourceIdIndexRoute,
+    AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRoute:
+      AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren,
   }
 
-const AccountIdVaultIdFolderIdRouteRouteWithChildren =
-  AccountIdVaultIdFolderIdRouteRoute._addFileChildren(
-    AccountIdVaultIdFolderIdRouteRouteChildren,
+const AccountIdVaultIdSourceIdRouteRouteWithChildren =
+  AccountIdVaultIdSourceIdRouteRoute._addFileChildren(
+    AccountIdVaultIdSourceIdRouteRouteChildren,
   )
 
 interface AccountIdVaultIdRouteRouteChildren {
-  AccountIdVaultIdFolderIdRouteRoute: typeof AccountIdVaultIdFolderIdRouteRouteWithChildren
+  AccountIdVaultIdSourceIdRouteRoute: typeof AccountIdVaultIdSourceIdRouteRouteWithChildren
   AccountIdVaultIdSettingsRouteRoute: typeof AccountIdVaultIdSettingsRouteRoute
   AccountIdVaultIdPoliciesRoute: typeof AccountIdVaultIdPoliciesRoute
   AccountIdVaultIdIndexRoute: typeof AccountIdVaultIdIndexRoute
 }
 
 const AccountIdVaultIdRouteRouteChildren: AccountIdVaultIdRouteRouteChildren = {
-  AccountIdVaultIdFolderIdRouteRoute:
-    AccountIdVaultIdFolderIdRouteRouteWithChildren,
+  AccountIdVaultIdSourceIdRouteRoute:
+    AccountIdVaultIdSourceIdRouteRouteWithChildren,
   AccountIdVaultIdSettingsRouteRoute: AccountIdVaultIdSettingsRouteRoute,
   AccountIdVaultIdPoliciesRoute: AccountIdVaultIdPoliciesRoute,
   AccountIdVaultIdIndexRoute: AccountIdVaultIdIndexRoute,

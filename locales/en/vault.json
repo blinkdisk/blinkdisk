@@ -417,19 +417,19 @@
         }
       },
       "empty": {
-        "title": "No folders found",
-        "description": "This profile has no backed up folders."
+        "title": "No files or folders found",
+        "description": "This profile has no backed up files or folders."
       }
     },
-    "folders": {
-      "title": "Folders",
-      "count_one": "{{count}} folder backed up",
-      "count_other": "{{count}} folders backed up",
-      "addFolder": "Add folder",
+    "sources": {
+      "title": "Files/Folders",
+      "count_one": "{{count}} file/folder protected",
+      "count_other": "{{count}} files/folders protected",
+      "addSource": "Add file/folder",
       "backupAll": "Backup all",
       "empty": {
-        "title": "No folders added",
-        "description": "You haven't added any folders yet. Add one by pressing the button below."
+        "title": "No files or folders added",
+        "description": "You haven't added any files or folders yet. Add one by pressing the button below."
       }
     },
     "stats": {

@@ -1,12 +1,16 @@
 {
   "list": {
     "back": "Go back",
-    "settings": "Folder policy",
+    "settings": {
+      "folder": "Folder policy",
+      "file": "File policy"
+    },
     "item": {
       "files_one": "{{formatted}} file",
       "files_other": "{{formatted}} files",
       "dropdown": {
         "browse": "Browse files",
+        "restoreFile": "Restore file",
         "rename": "Rename backup",
         "pin": "Pin backup",
         "delete": "Delete backup"
@@ -29,11 +33,11 @@
       },
       "pending": {
         "title": "Backup pending",
-        "description": "Another folder is currently being backed up. The initial backup for this folder is in the queue."
+        "description": "Another backup is currently running. This backup is in the queue."
       },
       "initial": {
         "title": "Running initial backup",
-        "description": "This is the initial backup of this folder, so it may take a while. BlinkDisk only uploads changed files after this, making all future backups much faster and lighter."
+        "description": "This is the initial backup, so it may take a while. BlinkDisk only uploads changed files after this, making all future backups much faster and lighter."
       },
       "canceling": {
         "title": "Canceling backup",
@@ -41,7 +45,10 @@
       }
     },
     "cancel": "Cancel backup",
-    "backup": "Backup folder"
+    "backup": {
+      "folder": "Backup folder",
+      "file": "Backup file"
+    }
   },
   "progress": {
     "title": {

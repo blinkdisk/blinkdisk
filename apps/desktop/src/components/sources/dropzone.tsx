@@ -1,13 +1,13 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Empty } from "@desktop/components/empty";
-import { useCreateFolderDialog } from "@desktop/hooks/state/use-create-folder-dialog";
+import { useCreateSourceDialog } from "@desktop/hooks/state/use-create-source-dialog";
 import { FolderPlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
-export function FolderDropzone() {
+export function SourceDropzone() {
   const { t } = useAppTranslation("folder.dropzone");
   const [isDragging, setIsDragging] = useState(false);
-  const { openCreateFolder } = useCreateFolderDialog();
+  const { openCreateSource } = useCreateSourceDialog();
 
   const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
@@ -49,17 +49,14 @@ export function FolderDropzone() {
 
       const firstPath = window.electron.fs.getPathFromFile(firstFile);
 
-      const isDir = await window.electron.fs.isDirectory(firstPath);
+      const [type, name] = await Promise.all([
+        window.electron.fs.sourceType(firstPath),
+        window.electron.path.basename(firstPath),
+      ]);
 
-      const targetPath = isDir
-        ? firstPath
-        : await window.electron.path.dirname(firstPath);
-
-      const targetName = await window.electron.path.basename(targetPath);
-
-      openCreateFolder({ path: targetPath, name: targetName });
+      openCreateSource({ path: firstPath, name, type });
     },
-    [openCreateFolder],
+    [openCreateSource],
   );
 
   useEffect(() => {
