@@ -2,20 +2,20 @@ import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
-type DeleteFolderDialogOptions = {
-  folderId: string;
+type DeleteSourceDialogOptions = {
+  sourceId: string;
   profile?: SelectedProfile;
 };
 
 const store = new Store<{
   isOpen: boolean;
-  options: DeleteFolderDialogOptions | null;
+  options: DeleteSourceDialogOptions | null;
 }>({
   isOpen: false,
   options: null,
 });
 
-export function useDeleteFolderDialog() {
+export function useDeleteSourceDialog() {
   const { isOpen, options } = useStore(store);
 
   const setIsOpen = useCallback((to: boolean) => {
@@ -25,7 +25,7 @@ export function useDeleteFolderDialog() {
     }));
   }, []);
 
-  function openDeleteFolderDialog(options: DeleteFolderDialogOptions) {
+  function openDeleteSourceDialog(options: DeleteSourceDialogOptions) {
     store.setState(() => ({
       isOpen: true,
       options,
@@ -35,7 +35,7 @@ export function useDeleteFolderDialog() {
   return {
     isOpen,
     setIsOpen,
-    openDeleteFolderDialog,
+    openDeleteSourceDialog,
     options,
   };
 }

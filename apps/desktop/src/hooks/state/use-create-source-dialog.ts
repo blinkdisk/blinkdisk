@@ -1,16 +1,16 @@
-import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZCreateSourceFormType } from "@blinkdisk/schemas/source";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
 const store = new Store<{
   isOpen: boolean;
-  defaultValues: Partial<ZCreateFolderFormType> | null;
+  defaultValues: Partial<ZCreateSourceFormType> | null;
 }>({
   isOpen: false,
   defaultValues: null,
 });
 
-export function useCreateFolderDialog() {
+export function useCreateSourceDialog() {
   const { isOpen, defaultValues } = useStore(store);
 
   const setIsOpen = useCallback((to: boolean) => {
@@ -20,7 +20,7 @@ export function useCreateFolderDialog() {
     }));
   }, []);
 
-  function openCreateFolder(values?: Partial<ZCreateFolderFormType>) {
+  function openCreateSource(values?: Partial<ZCreateSourceFormType>) {
     store.setState(() => ({
       isOpen: true,
       defaultValues: values || null,
@@ -38,7 +38,7 @@ export function useCreateFolderDialog() {
     isOpen,
     setIsOpen,
     defaultValues,
-    openCreateFolder,
+    openCreateSource,
     clearDefaultValues,
   };
 }

@@ -1,11 +1,11 @@
 import type { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
-import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
 type RestoreDirectoryDialogOptions = {
   directoryId: string;
-  folder: CoreFolderItem | undefined;
+  folder: CoreSourceItem | undefined;
   backup: CoreBackupItem | undefined;
   path: { objectId: string; name: string }[] | undefined;
 };

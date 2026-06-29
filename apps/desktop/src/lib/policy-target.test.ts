@@ -44,7 +44,7 @@ describe("policy target params", () => {
 
     expect(
       policyTargetToKopiaParams({
-        kind: "FOLDER",
+        kind: "SOURCE",
         hostName: "device",
         userName: "paul",
         path: "/Users/paul/Documents",
@@ -94,7 +94,7 @@ describe("policy target parsing", () => {
         path: "/Users/paul/Documents",
       }),
     ).toEqual({
-      kind: "FOLDER",
+      kind: "SOURCE",
       hostName: "device",
       userName: "paul",
       path: "/Users/paul/Documents",
@@ -109,7 +109,7 @@ describe("policy target parsing", () => {
         path: "/Users/paul/Documents",
       }),
     ).toEqual({
-      kind: "DRAFT_FOLDER",
+      kind: "DRAFT_SOURCE",
       hostName: "device",
       userName: "paul",
       path: "/Users/paul/Documents",
@@ -118,7 +118,7 @@ describe("policy target parsing", () => {
 
   it("roundtrips through route search state", () => {
     const target = {
-      kind: "FOLDER" as const,
+      kind: "SOURCE" as const,
       hostName: "device",
       userName: "paul",
       path: "/Users/paul/Documents",
@@ -194,9 +194,9 @@ describe("buildPolicyTree", () => {
     const draft = user?.children[0];
 
     expect(user?.label).toBe("paul");
-    expect(draft?.target.kind).toBe("DRAFT_FOLDER");
+    expect(draft?.target.kind).toBe("DRAFT_SOURCE");
     expect(policyTargetId(draft?.target || { kind: "GLOBAL" })).toBe(
-      "DRAFT_FOLDER:device:paul:/Users/paul/Documents",
+      "DRAFT_SOURCE:device:paul:/Users/paul/Documents",
     );
   });
 
@@ -221,10 +221,10 @@ describe("buildPolicyTree", () => {
     const draft = user?.children[0];
 
     expect(user?.label).toBe("paul");
-    expect(draft?.target.kind).toBe("DRAFT_FOLDER");
+    expect(draft?.target.kind).toBe("DRAFT_SOURCE");
     expect(draft?.source?.source.userName).toBe("paul");
     expect(policyTargetId(draft?.target || { kind: "GLOBAL" })).toBe(
-      "DRAFT_FOLDER:device:paul:/Users/paul/Documents",
+      "DRAFT_SOURCE:device:paul:/Users/paul/Documents",
     );
   });
 });

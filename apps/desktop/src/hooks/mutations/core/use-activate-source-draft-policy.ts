@@ -7,7 +7,7 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { buildFolderId } from "@desktop/lib/folder";
+import { buildSourceId } from "@desktop/lib/source";
 import { convertPolicyToCore } from "@desktop/lib/policy";
 import {
   type PolicyTarget,
@@ -18,12 +18,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
 
-export function useActivateFolderDraftPolicy({
+export function useActivateSourceDraftPolicy({
   target,
   onError,
   onSuccess,
 }: {
-  target: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }> | null | undefined;
+  target: Extract<PolicyTarget, { kind: "DRAFT_SOURCE" }> | null | undefined;
   onError?: (error: unknown) => void;
   onSuccess?: () => void;
 }) {
@@ -37,7 +37,7 @@ export function useActivateFolderDraftPolicy({
   const { data: space } = useSpace();
 
   return useMutation({
-    mutationKey: ["core", "folder", "policy", "draft", "activate"],
+    mutationKey: ["core", "source", "policy", "draft", "activate"],
     mutationFn: async ({
       policy,
       force,
@@ -52,12 +52,12 @@ export function useActivateFolderDraftPolicy({
 
       if (!force && space && vault && vault.provider === "CLOUDBLINK") {
         const [size] = await tryCatch(
-          async () => await window.electron.fs.folderSize(draftTarget.path),
+          async () => await window.electron.fs.sourceSize(draftTarget.path),
         );
 
         if (size !== null && size !== undefined) {
           const available = space.capacity - space.used;
-          if (size > available) throw new Error("FOLDER_TOO_LARGE");
+          if (size > available) throw new Error("SOURCE_TOO_LARGE");
         }
       }
 
@@ -71,7 +71,7 @@ export function useActivateFolderDraftPolicy({
         params: policyTargetToKopiaParams(draftTarget),
       });
 
-      const id = buildFolderId({
+      const id = buildSourceId({
         device: draftTarget.hostName,
         user: draftTarget.userName,
         path: draftTarget.path,
@@ -86,20 +86,20 @@ export function useActivateFolderDraftPolicy({
         error &&
         typeof error === "object" &&
         "message" in error &&
-        error.message === "FOLDER_TOO_LARGE"
+        error.message === "SOURCE_TOO_LARGE"
       )
         return;
 
       showErrorToast(error);
     },
     onSuccess: async (res) => {
-      posthog.capture("folder_add", {
+      posthog.capture("source_add", {
         vaultId: res.vaultId,
       });
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: queryKeys.folder.list(res.vaultId, {
+          queryKey: queryKeys.source.list(res.vaultId, {
             deviceName: res.target.hostName,
             userName: res.target.userName,
           }),
@@ -110,10 +110,10 @@ export function useActivateFolderDraftPolicy({
       ]);
 
       await navigate({
-        to: "/$accountId/$vaultId/$folderId",
+        to: "/$accountId/$vaultId/$sourceId",
         params: (params) => ({
           ...params,
-          folderId: res.id,
+          sourceId: res.id,
         }),
       });
 

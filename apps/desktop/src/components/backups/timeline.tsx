@@ -15,7 +15,7 @@ import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
 import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
 import { useRenameBackupDialog } from "@desktop/hooks/state/use-rename-backup-dialog";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatBackupDate } from "@desktop/lib/backup";
 import { formatSize } from "@desktop/lib/number";
@@ -62,7 +62,7 @@ function formatDate(dateString: string): string {
 }
 
 export function BackupTimeline({ backups }: BackupTimelineProps) {
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
 
   const groupedBackups = useMemo(() => {
     if (!backups)
@@ -183,7 +183,7 @@ const cardClassName =
 
 function FakeBackup() {
   const { t } = useAppTranslation("backup.list");
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
 
@@ -259,8 +259,8 @@ function Backup({ backup }: BackupProps) {
     <div className={cn(cardClassName, "hover:bg-card-hover")}>
       {backup?.id && backup.rootID ? (
         <Link
-          to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-          from="/$accountId/$vaultId/$folderId/"
+          to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+          from="/$accountId/$vaultId/$sourceId/"
           params={(params) => ({
             ...params,
             backupId: backup.id,
@@ -343,8 +343,8 @@ function Backup({ backup }: BackupProps) {
                 <DropdownMenuItem
                   render={
                     <Link
-                      to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-                      from="/$accountId/$vaultId/$folderId/"
+                      to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$sourceId/"
                       params={(params) => ({
                         ...params,
                         backupId: backup.id,

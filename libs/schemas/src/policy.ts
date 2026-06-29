@@ -1,5 +1,6 @@
 import { COMPRESSION_ALGORITHMS } from "@blinkdisk/constants/algorithms";
 import { z } from "zod";
+import { ZSourceType } from "./source";
 
 const ZPolicyLevel = z.enum(["VAULT", "FOLDER"]);
 
@@ -124,6 +125,7 @@ const ZIgnoreParentPolicy = z.boolean().optional();
 export const ZPolicy = z.object({
   name: z.string().optional(),
   emoji: z.string().optional(),
+  initialSourceType: ZSourceType.optional(),
   retention: ZRetentionPolicy,
   files: ZFilesPolicy,
   errors: ZErrorsPolicy,

@@ -1,4 +1,4 @@
-import type { ZCreateFolderFormType } from "@blinkdisk/schemas/folder";
+import type { ZCreateSourceFormType } from "@blinkdisk/schemas/source";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useAccountId } from "@desktop/hooks/use-account-id";
@@ -14,7 +14,7 @@ import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-export function useCreateFolderDraftPolicy({
+export function useCreateSourceDraftPolicy({
   onSuccess,
 }: {
   onSuccess?: () => void;
@@ -26,9 +26,9 @@ export function useCreateFolderDraftPolicy({
   const { vaultId } = useVaultId();
 
   return useMutation({
-    mutationKey: ["core", "folder", "policy", "draft", "create"],
+    mutationKey: ["core", "source", "policy", "draft", "create"],
     mutationFn: async (
-      values: ZCreateFolderFormType & {
+      values: ZCreateSourceFormType & {
         hostName: string | null;
         userName: string | null;
       },
@@ -48,6 +48,7 @@ export function useCreateFolderDraftPolicy({
           ...emptyPolicy,
           name: values.name,
           emoji: values.emoji,
+          initialSourceType: values.type,
         }),
         {
           params: policyTargetToKopiaParams(target),

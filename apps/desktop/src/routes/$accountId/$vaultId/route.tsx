@@ -1,9 +1,9 @@
-import { CreateFolderDialog } from "@desktop/components/dialogs/create-folder";
-import { DeleteFolderDialog } from "@desktop/components/dialogs/delete-folder";
+import { CreateSourceDialog } from "@desktop/components/dialogs/create-source";
+import { DeleteSourceDialog } from "@desktop/components/dialogs/delete-source";
 import { DeleteVaultDialog } from "@desktop/components/dialogs/delete-vault";
 import { EditExclusionDialog } from "@desktop/components/dialogs/edit-exclusion";
 import { TaskDialog } from "@desktop/components/dialogs/task";
-import { FolderDropzone } from "@desktop/components/folders/dropzone";
+import { SourceDropzone } from "@desktop/components/sources/dropzone";
 import { Setup } from "@desktop/components/vaults/setup";
 import { VaultStarting } from "@desktop/components/vaults/starting";
 import { useVault } from "@desktop/hooks/queries/use-vault";
@@ -48,10 +48,10 @@ function RouteComponent() {
         <Setup />
       ) : (
         <>
-          <FolderDropzone />
+          <SourceDropzone />
 
-          <CreateFolderDialog />
-          <DeleteFolderDialog />
+          <CreateSourceDialog />
+          <DeleteSourceDialog />
           <EditExclusionDialog />
           <DeleteVaultDialog />
 

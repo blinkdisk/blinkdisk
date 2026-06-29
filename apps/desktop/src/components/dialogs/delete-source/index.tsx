@@ -9,20 +9,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
-import { useDeleteFolder } from "@desktop/hooks/mutations/core/use-delete-folder";
-import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useDeleteSource } from "@desktop/hooks/mutations/core/use-delete-source";
+import { useDeleteSourceDialog } from "@desktop/hooks/state/use-delete-source-dialog";
+import { useSource } from "@desktop/hooks/use-source";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { InfoIcon } from "lucide-react";
 
-export function DeleteFolderDialog() {
+export function DeleteSourceDialog() {
   const { t } = useAppTranslation("folder.deleteDialog");
 
-  const { isOpen, setIsOpen, options } = useDeleteFolderDialog();
-  const { data: folder } = useFolder(options?.folderId, {
+  const { isOpen, setIsOpen, options } = useDeleteSourceDialog();
+  const { data: source } = useSource(options?.sourceId, {
     profile: options?.profile,
   });
+  const typeKey = isFileLikeSource(source?.type) ? "file" : "folder";
 
-  const { mutateAsync, isPending } = useDeleteFolder({
+  const { mutateAsync, isPending } = useDeleteSource({
     onSuccess: () => {
       setIsOpen(false);
     },
@@ -33,8 +35,8 @@ export function DeleteFolderDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="w-105">
         <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+          <DialogTitle>{t(`title.${typeKey}`)}</DialogTitle>
+          <DialogDescription>{t(`description.${typeKey}`)}</DialogDescription>
         </DialogHeader>
         <Alert className="mb-6 mt-4 w-full">
           <InfoIcon />
@@ -50,14 +52,14 @@ export function DeleteFolderDialog() {
           <Button
             loading={isPending}
             onClick={() =>
-              folder &&
+              source &&
               mutateAsync({
-                path: folder.source.path,
+                path: source.source.path,
               })
             }
             variant="destructive"
           >
-            {t("continue")}
+            {t(`continue.${typeKey}`)}
           </Button>
         </DialogFooter>
       </DialogContent>

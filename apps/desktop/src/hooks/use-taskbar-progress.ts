@@ -1,4 +1,4 @@
-import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
+import { useSourceList } from "@desktop/hooks/queries/core/use-source-list";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { profileFromParts } from "@desktop/lib/profile";
@@ -15,7 +15,7 @@ export function useTaskbarProgress() {
       }),
     [localHostName, localUserName],
   );
-  const { data: folders } = useFolderList({
+  const { data: folders } = useSourceList({
     profile: routeProfile ?? localProfile,
   });
   const lastProgressRef = useRef<number>(-1);

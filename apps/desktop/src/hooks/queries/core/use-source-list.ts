@@ -1,26 +1,33 @@
 import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
+import {
+  type SourceType,
+  sourceTypeFromKopiaEntryType,
+  sourceTypeWithFallback,
+} from "@blinkdisk/schemas/source";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { buildFolderId } from "@desktop/lib/folder";
+import { buildSourceId } from "@desktop/lib/source";
 import { isDraftPolicyUserName } from "@desktop/lib/policy-target";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
-type FolderStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";
+type SourceStatus = "IDLE" | "PENDING" | "UPLOADING" | "REMOTE";
 
-export type CoreFolderItem = {
+export type CoreSourceItem = {
   id: string;
   name?: string;
   emoji?: string;
+  type: SourceType;
+  initialSourceType?: SourceType;
   source: {
     host: string;
     userName: string;
     path: string;
   };
-  status: FolderStatus;
+  status: SourceStatus;
   schedule: {
     runMissed: boolean;
   };
@@ -49,13 +56,13 @@ export type CoreFolderItem = {
     };
     rootEntry: {
       name: string;
-      type: string;
+      type?: string;
       mode: string;
       mtime: string;
       uid: number;
       gid: number;
       obj: string;
-      summ: {
+      summ?: {
         size: number;
         files: number;
         symlinks: number;
@@ -91,13 +98,13 @@ export type CoreFolderItem = {
     | "FAILED";
 };
 
-type UseFolderListOptions = {
+type UseSourceListOptions = {
   unfiltered?: boolean;
   includeDrafts?: boolean;
   profile?: SelectedProfile;
 };
 
-export function useFolderList(options: UseFolderListOptions = {}) {
+export function useSourceList(options: UseSourceListOptions = {}) {
   const { includeDrafts = false, unfiltered = false } = options;
   const { profile: routeSelectedProfile } = useProfile();
   const { queryKeys } = useQueryKey();
@@ -111,47 +118,55 @@ export function useFolderList(options: UseFolderListOptions = {}) {
   return useQuery({
     queryKey: [
       ...(unfiltered
-        ? [...queryKeys.folder.all, "list", vaultId, "unfiltered"]
-        : queryKeys.folder.list(vaultId, profile)),
+        ? [...queryKeys.source.all, "list", vaultId, "unfiltered"]
+        : queryKeys.source.list(vaultId, profile)),
       includeDrafts ? "with-drafts" : "without-drafts",
     ],
     queryFn: async () => {
       if (!unfiltered && !profile) return null;
 
       const res = await vaultApi(vaultId).get<{
-        sources: CoreFolderItem[];
+        sources: (Omit<CoreSourceItem, "id" | "type"> & {
+          type?: SourceType;
+        })[];
         error?: string;
       }>("/api/v1/sources", {
         params,
       });
 
-      const folders: CoreFolderItem[] = [];
+      const sources: CoreSourceItem[] = [];
 
-      for (const folder of res.data.sources) {
-        if (!includeDrafts && isDraftPolicyUserName(folder.source.userName)) {
+      for (const source of res.data.sources) {
+        if (!includeDrafts && isDraftPolicyUserName(source.source.userName)) {
           continue;
         }
 
-        if (folder.status === "UPLOADING" && folder.upload) {
-          folder.upload.progress = !folder.upload.estimatedBytes
+        if (source.status === "UPLOADING" && source.upload) {
+          source.upload.progress = !source.upload.estimatedBytes
             ? 0
-            : (folder.upload.hashedBytes + folder.upload.cachedBytes) /
-              folder.upload.estimatedBytes;
+            : (source.upload.hashedBytes + source.upload.cachedBytes) /
+              source.upload.estimatedBytes;
         }
 
-        const id = buildFolderId({
-          device: folder.source.host,
-          user: folder.source.userName,
-          path: folder.source.path,
+        const id = buildSourceId({
+          device: source.source.host,
+          user: source.source.userName,
+          path: source.source.path,
         });
 
-        folders.push({
-          ...folder,
+        const type =
+          source.type ||
+          sourceTypeFromKopiaEntryType(source.lastSnapshot?.rootEntry?.type) ||
+          sourceTypeWithFallback(source.initialSourceType);
+
+        sources.push({
+          ...source,
           id,
+          type,
         });
       }
 
-      return folders;
+      return sources;
     },
     refetchInterval: 1000,
     enabled: !!vaultId && (unfiltered || !!profile) && running,

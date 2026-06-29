@@ -14,7 +14,7 @@ import { usePlatform } from "@desktop/hooks/queries/use-platform";
 import { useRestoreDirectoryDialog } from "@desktop/hooks/state/use-restore-directory-dialog";
 import { useBackup } from "@desktop/hooks/use-backup";
 import { useDirectoryId } from "@desktop/hooks/use-directory-id";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { createFileRoute } from "@tanstack/react-router";
 import { CloudDownloadIcon, FilePlusIcon, FolderOpenIcon } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
@@ -26,7 +26,7 @@ type DirectoryTableSelection = {
 };
 
 export const Route = createFileRoute(
-  "/$accountId/$vaultId/$folderId/$backupId/$directoryId/",
+  "/$accountId/$vaultId/$sourceId/$backupId/$directoryId/",
 )({
   component: RouteComponent,
   validateSearch: z.object({
@@ -51,7 +51,7 @@ function RouteComponent() {
   const { path } = Route.useSearch();
   const { directoryId } = useDirectoryId();
 
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
   const { data: backup } = useBackup();
   const { data: directory } = useDirectory();
   const { data: platform } = usePlatform();
@@ -74,7 +74,7 @@ function RouteComponent() {
     >
       <div className="mb-6 flex h-10 w-full items-center justify-between gap-4">
         {backup && folder ? (
-          <BackupPreview backup={backup} folder={folder} />
+          <BackupPreview backup={backup} source={source} />
         ) : (
           <div />
         )}

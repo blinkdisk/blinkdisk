@@ -1,7 +1,7 @@
 import type { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
-import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
+import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 
-export function buildVaultStats(folders: CoreFolderItem[]) {
+export function buildVaultStats(folders: CoreSourceItem[]) {
   return {
     totalSize: folders.reduce(
       (sum, folder) => sum + (folder.lastSnapshot?.stats.totalSize || 0),

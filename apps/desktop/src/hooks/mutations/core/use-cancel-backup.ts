@@ -28,7 +28,7 @@ export function useCancelBackup(options: { profile?: SelectedProfile } = {}) {
     onError: showErrorToast,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.folder.list(vaultId, profile),
+        queryKey: queryKeys.source.list(vaultId, profile),
       });
     },
   });

@@ -10,11 +10,11 @@ import {
 } from "@blinkdisk/ui/dropdown-menu";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { BackupProgress } from "@desktop/components/backups/progress";
-import { FolderPreview } from "@desktop/components/folders/preview";
+import { SourcePreview } from "@desktop/components/sources/preview";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
-import type { CoreFolderItem } from "@desktop/hooks/queries/core/use-folder-list";
-import { useDeleteFolderDialog } from "@desktop/hooks/state/use-delete-folder-dialog";
+import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
+import { useDeleteSourceDialog } from "@desktop/hooks/state/use-delete-source-dialog";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatInt, formatSize } from "@desktop/lib/number";
@@ -30,26 +30,26 @@ import {
 } from "lucide-react";
 import { useMemo } from "react";
 
-type FolderListProps = {
-  folders: CoreFolderItem[] | undefined | null;
+type SourceListProps = {
+  sources: CoreSourceItem[] | undefined | null;
   profile?: SelectedProfile;
   allowBackupActions?: boolean;
 };
 
-export function FolderList({
-  folders,
+export function SourceList({
+  sources,
   profile,
   allowBackupActions = true,
-}: FolderListProps) {
+}: SourceListProps) {
   return (
     <div className="mt-6 flex flex-col gap-3">
-      {(folders === undefined || folders === null
+      {(sources === undefined || sources === null
         ? (new Array(20).fill(undefined) as undefined[])
-        : folders
-      ).map((folder, index) => (
-        <Folder
-          key={folder ? folder.id : index}
-          folder={folder}
+        : sources
+      ).map((source, index) => (
+        <Source
+          key={source ? source.id : index}
+          source={source}
           profile={profile}
           allowBackupActions={allowBackupActions}
         />
@@ -58,79 +58,79 @@ export function FolderList({
   );
 }
 
-type FolderProps = {
-  folder: CoreFolderItem | undefined;
+type SourceProps = {
+  source: CoreSourceItem | undefined;
   profile?: SelectedProfile;
   allowBackupActions: boolean;
 };
 
-function Folder({ folder, profile, allowBackupActions }: FolderProps) {
+function Source({ source, profile, allowBackupActions }: SourceProps) {
   const { t } = useAppTranslation("folder.list.item");
-  const formattedTime = useRelativeTime(folder?.lastSnapshot?.startTime);
+  const formattedTime = useRelativeTime(source?.lastSnapshot?.startTime);
 
   const { mutate: startBackup } = useStartBackup({ profile });
   const { mutate: cancelBackup } = useCancelBackup({ profile });
-  const { openDeleteFolderDialog } = useDeleteFolderDialog();
+  const { openDeleteSourceDialog } = useDeleteSourceDialog();
   const navigate = useNavigate({ from: "/$accountId/$vaultId" });
 
   const showProgress = useMemo(
     () =>
-      folder &&
-      folder.status === "UPLOADING" &&
-      folder.currentTaskStatus !== "CANCELING",
-    [folder],
+      source &&
+      source.status === "UPLOADING" &&
+      source.currentTaskStatus !== "CANCELING",
+    [source],
   );
 
   const showStartTime = useMemo(
-    () => folder?.lastSnapshot && !folder.lastSnapshot.incomplete,
-    [folder],
+    () => source?.lastSnapshot && !source.lastSnapshot.incomplete,
+    [source],
   );
 
-  const folderSelectedProfile: SelectedProfile | undefined = folder
+  const sourceSelectedProfile: SelectedProfile | undefined = source
     ? {
-        deviceName: folder.source.host,
-        userName: folder.source.userName,
+        deviceName: source.source.host,
+        userName: source.source.userName,
       }
     : profile;
 
-  const folderRouteParams = (params: {
+  const sourceRouteParams = (params: {
     accountId?: string;
     vaultId: string;
   }) => ({
     ...params,
-    folderId: folder?.id || "",
+    sourceId: source?.id || "",
   });
 
   return (
     <div className="bg-card hover:bg-card-hover ring-ring relative flex flex-row items-center justify-between gap-2 rounded-2xl border p-4 outline-none transition-colors focus-visible:ring-2">
-      {folder && folderRouteParams ? (
+      {source && sourceRouteParams ? (
         <Link
-          to="/$accountId/$vaultId/$folderId"
+          to="/$accountId/$vaultId/$sourceId"
           from="/$accountId/$vaultId"
-          params={folderRouteParams}
+          params={sourceRouteParams}
           className="absolute inset-0"
         />
       ) : null}
-      <FolderPreview folder={folder} />
+      <SourcePreview source={source} />
       <div className="flex items-center gap-3">
         {showStartTime || showProgress ? (
           <>
-            {showProgress && folder ? (
-              <BackupProgress upload={folder.upload} size="sm" />
+            {showProgress && source ? (
+              <BackupProgress upload={source.upload} size="sm" />
             ) : showStartTime ? (
               <div className="flex flex-col items-end gap-0.5">
                 <p className="text-foreground whitespace-nowrap text-sm">
-                  {folder ? formattedTime : <Skeleton width={100} />}
+                  {source ? formattedTime : <Skeleton width={100} />}
                 </p>
-                {folder?.lastSnapshot ? (
+                {source?.lastSnapshot ? (
                   <p className="text-muted-foreground whitespace-nowrap text-xs">
                     {t("stats", {
                       fileCount: formatInt(
-                        (folder.lastSnapshot.stats?.cachedFiles || 0) +
-                          (folder.lastSnapshot.stats?.nonCachedFiles || 0),
+                        (source.lastSnapshot.stats?.cachedFiles || 0) +
+                          (source.lastSnapshot.stats?.nonCachedFiles || 0),
                       ),
                       size: formatSize(
-                        folder.lastSnapshot.stats?.totalSize || 0,
+                        source.lastSnapshot.stats?.totalSize || 0,
                       ),
                     })}
                   </p>
@@ -140,7 +140,7 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
             <div className={showStartTime ? "h-8 border-r" : "h-6 border-r"} />
           </>
         ) : null}
-        {folder ? (
+        {source ? (
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -157,9 +157,9 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
               <DropdownMenuItem
                 render={
                   <Link
-                    to="/$accountId/$vaultId/$folderId"
+                    to="/$accountId/$vaultId/$sourceId"
                     from="/$accountId/$vaultId"
-                    params={folderRouteParams}
+                    params={sourceRouteParams}
                   >
                     <FolderSearchIcon />
                     {t("dropdown.browse")}
@@ -169,18 +169,18 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 {allowBackupActions &&
-                folder.status === "UPLOADING" &&
-                folder.currentTaskStatus !== "CANCELING" ? (
+                source.status === "UPLOADING" &&
+                source.currentTaskStatus !== "CANCELING" ? (
                   <DropdownMenuItem
-                    onClick={() => cancelBackup({ taskId: folder.currentTask })}
+                    onClick={() => cancelBackup({ taskId: source.currentTask })}
                   >
                     <SquareIcon />
                     {t("dropdown.cancel")}
                   </DropdownMenuItem>
                 ) : allowBackupActions &&
-                  ["IDLE", "REMOTE"].includes(folder.status) ? (
+                  ["IDLE", "REMOTE"].includes(source.status) ? (
                   <DropdownMenuItem
-                    onClick={() => startBackup({ path: folder.source.path })}
+                    onClick={() => startBackup({ path: source.source.path })}
                   >
                     <CloudUploadIcon />
                     {t("dropdown.backup")}
@@ -191,10 +191,10 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
                     navigate({
                       to: "/$accountId/$vaultId/policies",
                       search: policyTargetToSearch({
-                        kind: "FOLDER",
-                        hostName: folder.source.host,
-                        userName: folder.source.userName,
-                        path: folder.source.path,
+                        kind: "SOURCE",
+                        hostName: source.source.host,
+                        userName: source.source.userName,
+                        path: source.source.path,
                       }),
                     })
                   }
@@ -206,9 +206,9 @@ function Folder({ folder, profile, allowBackupActions }: FolderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
-                  openDeleteFolderDialog({
-                    folderId: folder.id,
-                    profile: folderSelectedProfile,
+                  openDeleteSourceDialog({
+                    sourceId: source.id,
+                    profile: sourceSelectedProfile,
                   })
                 }
                 variant="destructive"

@@ -5,13 +5,13 @@ import { cn } from "@blinkdisk/utils/class";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { BackupTimeline } from "@desktop/components/backups/timeline";
 import { Empty } from "@desktop/components/empty";
-import { FolderPreview } from "@desktop/components/folders/preview";
+import { SourcePreview } from "@desktop/components/sources/preview";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { policyTargetToSearch } from "@desktop/lib/policy-target";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -24,14 +24,14 @@ import {
 } from "lucide-react";
 import animation from "/animations/backup.lottie?url";
 
-export const Route = createFileRoute("/$accountId/$vaultId/$folderId/")({
+export const Route = createFileRoute("/$accountId/$vaultId/$sourceId/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { t } = useAppTranslation("backup.list");
 
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
   const { data: backups } = useCompletedBackupList();
   const navigate = Route.useNavigate();
 
@@ -50,7 +50,7 @@ function RouteComponent() {
     >
       <VaultRestores />
       <div className="mb-8 flex items-center justify-between">
-        <FolderPreview folder={folder} />
+        <SourcePreview source={folder} />
         <div className="flex items-center gap-2">
           {backups !== null && backups !== undefined ? (
             <>
@@ -61,7 +61,7 @@ function RouteComponent() {
                   navigate({
                     to: "/$accountId/$vaultId/policies",
                     search: policyTargetToSearch({
-                      kind: "FOLDER",
+                      kind: "SOURCE",
                       hostName: folder.source.host,
                       userName: folder.source.userName,
                       path: folder.source.path,

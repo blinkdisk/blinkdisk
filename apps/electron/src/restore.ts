@@ -12,7 +12,7 @@ import pLimit from "p-limit";
 type Restore = {
   id: string;
   status: "RUNNING" | "COMPLETE";
-  folderId: string;
+  sourceId: string;
   destination: string;
   progress: number;
   files?: number;
@@ -155,12 +155,12 @@ async function restore(
 export async function restoreSingle({
   item,
   vaultId,
-  folderId,
+  sourceId,
   dialogTitle,
 }: {
   item: RestoreItem;
   vaultId: string;
-  folderId: string;
+  sourceId: string;
   dialogTitle: string;
 }) {
   if (!window) throw new Error("WINDOW_NOT_INITIALIZED");
@@ -187,7 +187,7 @@ export async function restoreSingle({
       progress: 0,
       files: item.type !== "DIRECTORY" ? 1 : 0,
       directories: item.type === "DIRECTORY" ? 1 : 0,
-      folderId,
+      sourceId,
     });
 
     await restore(item, destination, vault, (progress) =>
@@ -202,12 +202,12 @@ export async function restoreSingle({
 
 export async function restoreMultiple({
   vaultId,
-  folderId,
+  sourceId,
   items,
   dialogTitle,
 }: {
   vaultId: string;
-  folderId: string;
+  sourceId: string;
   items: RestoreItem[];
   dialogTitle: string;
 }) {
@@ -236,7 +236,7 @@ export async function restoreMultiple({
       files: items.filter((item) => item.type !== "DIRECTORY").length,
       directories: items.filter((item) => item.type === "DIRECTORY").length,
       progress: 0,
-      folderId,
+      sourceId,
     });
 
     const tasks = items.map((item) =>
@@ -258,12 +258,12 @@ export async function restoreMultiple({
 
 export async function restoreDirectory({
   vaultId,
-  folderId,
+  sourceId,
   objectId,
   options,
 }: {
   vaultId: string;
-  folderId: string;
+  sourceId: string;
   objectId: string;
   options: ZRestoreDirectoryType;
 }) {
@@ -283,7 +283,7 @@ export async function restoreDirectory({
       files: 0,
       directories: 1,
       progress: 0,
-      folderId,
+      sourceId,
     });
 
     const res = (await fetchVault(vault, {
@@ -412,8 +412,8 @@ export async function checkEmpty({ directoryPath }: { directoryPath: string }) {
   return files.length === 0;
 }
 
-export async function listRestores({ folderId }: { folderId: string }) {
-  return restores.filter((restore) => restore.folderId === folderId);
+export async function listRestores({ sourceId }: { sourceId: string }) {
+  return restores.filter((restore) => restore.sourceId === sourceId);
 }
 
 function updateRestore(id: string, update: Partial<Restore>) {

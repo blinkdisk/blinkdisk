@@ -1,24 +1,24 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
-import { useFolderId } from "@desktop/hooks/use-folder-id";
+import { useSourceId } from "@desktop/hooks/use-source-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useQuery } from "@tanstack/react-query";
 
 export function useRestoreList() {
   const { queryKeys } = useQueryKey();
-  const { folderId } = useFolderId();
+  const { sourceId } = useSourceId();
   const { running } = useVaultStatus();
 
   return useQuery({
-    queryKey: queryKeys.folder.restores(folderId),
+    queryKey: queryKeys.source.restores(sourceId),
     queryFn: async () => {
-      if (!folderId) throw new CustomError("MISSING_REQUIRED_VALUE");
+      if (!sourceId) throw new CustomError("MISSING_REQUIRED_VALUE");
 
       return await window.electron.vault.restore.list({
-        folderId,
+        sourceId,
       });
     },
     refetchInterval: 1000,
-    enabled: !!folderId && running,
+    enabled: !!sourceId && running,
   });
 }

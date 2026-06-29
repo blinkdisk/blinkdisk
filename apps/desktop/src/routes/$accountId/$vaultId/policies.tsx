@@ -7,8 +7,8 @@ import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
-import { ExceedingAlert } from "@desktop/components/dialogs/create-folder/exceeding-alert";
-import { FolderGeneralSettings } from "@desktop/components/folders/general-settings";
+import { ExceedingAlert } from "@desktop/components/dialogs/create-source/exceeding-alert";
+import { SourceGeneralSettings } from "@desktop/components/sources/general-settings";
 import { SettingsCategorySkeleton } from "@desktop/components/policy/category";
 import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
@@ -20,7 +20,7 @@ import {
   type PolicyForm,
   usePolicyForm,
 } from "@desktop/hooks/forms/use-policy-form";
-import { useActivateFolderDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-folder-draft-policy";
+import { useActivateSourceDraftPolicy } from "@desktop/hooks/mutations/core/use-activate-source-draft-policy";
 import { useDeletePolicy } from "@desktop/hooks/mutations/core/use-delete-policy";
 import { usePolicyTree } from "@desktop/hooks/queries/core/use-policy-tree";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
@@ -55,7 +55,7 @@ import { z } from "zod";
 type PolicyEditorMode = "basic" | "advanced";
 
 const ZPolicySearch = z.object({
-  kind: z.enum(["GLOBAL", "HOST", "USER", "FOLDER", "DRAFT_FOLDER"]).optional(),
+  kind: z.enum(["GLOBAL", "HOST", "USER", "SOURCE", "DRAFT_SOURCE"]).optional(),
   hostName: z.string().optional(),
   userName: z.string().optional(),
   policyPath: z.string().optional(),
@@ -217,7 +217,7 @@ function PolicyTreeItem({
           )}
           <span className="flex min-w-0 flex-1 items-center gap-2">
             <span className="min-w-0 truncate">{node.label}</span>
-            {node.target.kind === "DRAFT_FOLDER" ? (
+            {node.target.kind === "DRAFT_SOURCE" ? (
               <Badge variant="subtle" className="shrink-0">
                 {t("draft.badge")}
               </Badge>
@@ -294,7 +294,7 @@ function getInitialExpandedPolicyTreeNodeIds({
 
   const path = findPolicyTreeTargetPath(tree, selectedTarget);
   const expandedPath =
-    selectedTarget.kind === "FOLDER" || selectedTarget.kind === "DRAFT_FOLDER"
+    selectedTarget.kind === "SOURCE" || selectedTarget.kind === "DRAFT_SOURCE"
       ? path.slice(0, -1)
       : path;
 
@@ -383,15 +383,15 @@ function PolicyEditorForm({
       className="flex w-full max-w-[40rem] min-w-0 flex-col gap-8"
     >
       <PolicyEditorHeader
-        draftPolicy={target.kind === "DRAFT_FOLDER" ? currentPolicy : undefined}
-        draftTarget={target.kind === "DRAFT_FOLDER" ? target : undefined}
+        draftPolicy={target.kind === "DRAFT_SOURCE" ? currentPolicy : undefined}
+        draftTarget={target.kind === "DRAFT_SOURCE" ? target : undefined}
         form={form}
         mode={mode}
         onModeChange={setMode}
         onSelectTarget={onSelectTarget}
       />
-      {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
-        <FolderGeneralSettings form={form} />
+      {target.kind === "SOURCE" || target.kind === "DRAFT_SOURCE" ? (
+        <SourceGeneralSettings form={form} />
       ) : null}
       <ScheduleSettings form={form} showAdvanced={showAdvanced} />
       <FilesSettings form={form} showAdvanced={showAdvanced} />
@@ -448,7 +448,7 @@ function PolicyEditorHeader({
   onSelectTarget,
 }: {
   draftPolicy?: ZPolicyType;
-  draftTarget?: Extract<PolicyTarget, { kind: "DRAFT_FOLDER" }>;
+  draftTarget?: Extract<PolicyTarget, { kind: "DRAFT_SOURCE" }>;
   form: PolicyForm;
   mode: PolicyEditorMode;
   onModeChange: (mode: PolicyEditorMode) => void;
@@ -458,14 +458,14 @@ function PolicyEditorHeader({
   const [alertShown, setAlertShown] = useState(false);
   const isDirty = useStore(form.store, (state) => state.isDirty);
   const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
-  const activate = useActivateFolderDraftPolicy({
+  const activate = useActivateSourceDraftPolicy({
     target: draftTarget,
     onError: (error) => {
       if (
         error &&
         typeof error === "object" &&
         "message" in error &&
-        error.message === "FOLDER_TOO_LARGE"
+        error.message === "SOURCE_TOO_LARGE"
       )
         setAlertShown(true);
     },
@@ -572,7 +572,7 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
           <Skeleton width={88} height="2.25rem" />
         </div>
       </div>
-      {target.kind === "FOLDER" || target.kind === "DRAFT_FOLDER" ? (
+      {target.kind === "SOURCE" || target.kind === "DRAFT_SOURCE" ? (
         <SettingsCategorySkeleton id="general" />
       ) : null}
       <SettingsCategorySkeleton id="schedule" />
@@ -594,8 +594,8 @@ function getPolicyTargetIcon(kind: PolicyTargetKind) {
       return MonitorIcon;
     case "USER":
       return UserIcon;
-    case "FOLDER":
-    case "DRAFT_FOLDER":
+    case "SOURCE":
+    case "DRAFT_SOURCE":
       return FolderIcon;
   }
 }

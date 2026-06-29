@@ -1,7 +1,7 @@
 import type { ZPolicyLevelType } from "@blinkdisk/schemas/policy";
 import { useUpdatePolicy } from "@desktop/hooks/mutations/core/use-update-policy";
 import { usePolicy } from "@desktop/hooks/queries/core/use-policy";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import {
   createDraftPolicyTarget,
@@ -12,17 +12,17 @@ import { createContext, useMemo } from "react";
 function usePolicyContext({
   target: targetOverride,
   level,
-  folderId,
+  sourceId,
   mock,
   profile,
 }: {
   target?: PolicyTarget;
   level?: ZPolicyLevelType;
-  folderId?: string;
+  sourceId?: string;
   mock?: { path: string };
   profile?: SelectedProfile;
 }) {
-  const { data: folder } = useFolder(folderId, { profile });
+  const { data: folder } = useSource(sourceId, { profile });
 
   const target = useMemo<PolicyTarget | null>(() => {
     if (targetOverride) return targetOverride;
@@ -36,7 +36,7 @@ function usePolicyContext({
       };
     }
 
-    if (level === "FOLDER" && mock && profile) {
+    if (level === "SOURCE" && mock && profile) {
       return createDraftPolicyTarget({
         hostName: profile.deviceName,
         userName: profile.userName,
@@ -44,9 +44,9 @@ function usePolicyContext({
       });
     }
 
-    if (level === "FOLDER" && folder) {
+    if (level === "SOURCE" && folder) {
       return {
-        kind: "FOLDER",
+        kind: "SOURCE",
         hostName: folder.source.host,
         userName: folder.source.userName,
         path: folder.source.path,
@@ -71,14 +71,14 @@ function usePolicyContext({
     loading: isPending,
     vaultPolicy: target?.kind === "GLOBAL" ? policy : undefined,
     folderPolicy:
-      target?.kind === "FOLDER" || target?.kind === "DRAFT_FOLDER"
+      target?.kind === "SOURCE" || target?.kind === "DRAFT_SOURCE"
         ? policy
         : undefined,
     definedFields,
-    folderId,
+    sourceId,
     policy,
     mutate,
-    level: inherited ? "FOLDER" : "VAULT",
+    level: inherited ? "SOURCE" : "VAULT",
     inherited,
     mock,
     profile,
@@ -93,7 +93,7 @@ const defaultContext = {
   vaultPolicy: undefined,
   folderPolicy: undefined,
   definedFields: undefined,
-  folderId: undefined,
+  sourceId: undefined,
   policy: undefined,
   mutate: undefined,
   level: undefined,
@@ -110,7 +110,7 @@ export const PolicyContext = createContext<
 type PolicyContextProviderProps = {
   target?: PolicyTarget;
   level?: ZPolicyLevelType;
-  folderId?: string;
+  sourceId?: string;
   mock?: { path: string };
   profile?: SelectedProfile;
 };

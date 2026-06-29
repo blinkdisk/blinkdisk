@@ -1,26 +1,31 @@
 import { DynamicField } from "@blinkdisk/components/dynamic-field";
-import { FolderCard } from "@blinkdisk/components/folder-card";
+import { SourceCard } from "@blinkdisk/components/source-card";
 import { FormDisabledContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { isFileLikeSource, sourceTypeWithFallback } from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import { Input } from "@blinkdisk/ui/input";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyContext } from "@desktop/components/policy/context";
 import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { useContext } from "react";
 
-export function FolderGeneralSettings({ form }: { form: PolicyForm }) {
+export function SourceGeneralSettings({ form }: { form: PolicyForm }) {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
-  const { folderId, profile, target } = useContext(PolicyContext);
-  const { data: folder } = useFolder(folderId, { profile });
+  const { sourceId, profile, target } = useContext(PolicyContext);
+  const { data: source } = useSource(sourceId, { profile });
 
   const values = useStore(form.store, (state) => state.values);
   const disabledContext = useContext(FormDisabledContext);
   const path =
-    target && "path" in target ? target.path : folder?.source?.path || "";
+    target && "path" in target ? target.path : source?.source?.path || "";
+  const sourceType = sourceTypeWithFallback(
+    source?.type || values.initialSourceType,
+  );
+  const fileLike = isFileLikeSource(sourceType);
 
   return (
     <SettingsCategory
@@ -42,7 +47,11 @@ export function FolderGeneralSettings({ form }: { form: PolicyForm }) {
               onEmojiSelect={(emoji) => form.setFieldValue("emoji", emoji)}
             >
               <button disabled={disabledContext} type="button">
-                <FolderCard emoji={values.emoji} size={3.5} />
+                <SourceCard
+                  emoji={values.emoji}
+                  type={sourceType}
+                  size={3.5}
+                />
               </button>
             </EmojiPicker>
             <EmojiPicker
@@ -72,7 +81,7 @@ export function FolderGeneralSettings({ form }: { form: PolicyForm }) {
               />
             )}
           </form.AppField>
-          <DynamicField title={t("path.label")}>
+          <DynamicField title={t(fileLike ? "path.fileLabel" : "path.label")}>
             <Input value={path} disabled />
           </DynamicField>
         </div>

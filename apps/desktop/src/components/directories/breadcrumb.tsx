@@ -9,7 +9,7 @@ import {
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { useBackup } from "@desktop/hooks/use-backup";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { Link, useSearch } from "@tanstack/react-router";
 import { ArrowLeftIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
@@ -28,7 +28,7 @@ export function useDirectoryBreadcrumbPath() {
 
 export function DirectoryBreadcrumb() {
   const path = useDirectoryBreadcrumbPath();
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
   const { data: backup } = useBackup();
 
   if (!path?.length) {
@@ -59,8 +59,8 @@ export function DirectoryBreadcrumb() {
                   className="text-base"
                   render={
                     <Link
-                      to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-                      from="/$accountId/$vaultId/$folderId/$backupId/$directoryId/"
+                      to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+                      from="/$accountId/$vaultId/$sourceId/$backupId/$directoryId/"
                       params={(params) => ({
                         ...params,
                         directoryId: backup.rootID,
@@ -88,8 +88,8 @@ export function DirectoryBreadcrumb() {
                         className="text-base"
                         render={
                           <Link
-                            to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-                            from="/$accountId/$vaultId/$folderId/$backupId/$directoryId/"
+                            to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+                            from="/$accountId/$vaultId/$sourceId/$backupId/$directoryId/"
                             params={(params) => ({
                               ...params,
                               directoryId: objectId,
@@ -120,8 +120,8 @@ export function DirectoryBreadcrumb() {
           nativeButton={false}
           render={
             <Link
-              to="/$accountId/$vaultId/$folderId/$backupId/$directoryId"
-              from="/$accountId/$vaultId/$folderId/$backupId/$directoryId/"
+              to="/$accountId/$vaultId/$sourceId/$backupId/$directoryId"
+              from="/$accountId/$vaultId/$sourceId/$backupId/$directoryId/"
               params={(params) => ({
                 ...params,
                 directoryId: parentDirectoryId,

@@ -1,9 +1,11 @@
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
+import type { SourceType } from "@blinkdisk/schemas/source";
 import { fromBytes, toBytes } from "@desktop/lib/filesize";
 
 export type CorePolicy = {
   name?: string;
   emoji?: string;
+  initialSourceType?: SourceType;
   retention: {
     keepLatest?: number;
     keepHourly?: number;
@@ -124,6 +126,7 @@ export function convertPolicyFromCore(
   return {
     name: policy.name,
     emoji: policy.emoji || undefined,
+    initialSourceType: policy.initialSourceType,
     retention: {
       latest: policy.retention?.keepLatest,
       hourly: policy.retention?.keepHourly,
@@ -241,6 +244,7 @@ export function convertPolicyToCore(policy: ZPolicyType) {
   const policyCore: CorePolicy = {
     name: policy.name,
     emoji: policy.emoji,
+    initialSourceType: policy.initialSourceType,
     retention: {
       keepLatest: policy.retention?.latest,
       keepHourly: policy.retention?.hourly,
@@ -446,6 +450,7 @@ export const defaultVaultPolicy: ZPolicyType = {
 export const emptyPolicy: ZPolicyType = {
   name: undefined,
   emoji: undefined,
+  initialSourceType: undefined,
   retention: {},
   files: {},
   errors: {},

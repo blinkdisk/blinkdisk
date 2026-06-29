@@ -1,4 +1,4 @@
-import { useFolderList } from "@desktop/hooks/queries/core/use-folder-list";
+import { useSourceList } from "@desktop/hooks/queries/core/use-source-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -14,7 +14,7 @@ export function usePolicyTree() {
   const { running } = useVaultStatus();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
-  const { data: sources } = useFolderList({
+  const { data: sources } = useSourceList({
     includeDrafts: true,
     unfiltered: true,
   });

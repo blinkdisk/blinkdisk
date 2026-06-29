@@ -1,6 +1,6 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { useFolder } from "@desktop/hooks/use-folder";
+import { useSource } from "@desktop/hooks/use-source";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useEditBackup({ onSuccess }: { onSuccess?: () => void }) {
   const queryClient = useQueryClient();
 
-  const { data: folder } = useFolder();
+  const { data: folder } = useSource();
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
 
