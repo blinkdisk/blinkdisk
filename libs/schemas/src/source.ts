@@ -37,7 +37,9 @@ export function kopiaEntryTypeFromSourceType(
 export function sourceTypeWithFallback(
   type: SourceType | string | null | undefined,
 ): SourceType {
-  return ZSourceType.safeParse(type).success ? (type as SourceType) : "directory";
+  return ZSourceType.safeParse(type).success
+    ? (type as SourceType)
+    : "directory";
 }
 
 export function isFileLikeSource(type: SourceType | null | undefined): boolean {
@@ -51,7 +53,7 @@ export const ZCreateSourceForm = z.object({
   name: ZSourceName,
   emoji: ZSourceEmoji.optional(),
   path: z.string().min(1),
-  type: ZSourceType.default("directory"),
+  type: ZSourceType,
 });
 
 export type ZCreateSourceFormType = z.infer<typeof ZCreateSourceForm>;

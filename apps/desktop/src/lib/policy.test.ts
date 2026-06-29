@@ -83,6 +83,16 @@ describe("convertPolicyFromCore", () => {
     });
   });
 
+  it("preserves initial source type", () => {
+    const core = minimalCorePolicy({
+      initialSourceType: "file",
+    });
+
+    const result = expectValue(convertPolicyFromCore(core));
+
+    expect(result.initialSourceType).toBe("file");
+  });
+
   it("maps file exclusions", () => {
     const core = minimalCorePolicy({
       files: { ignore: ["*.log", "temp*"] },
@@ -235,6 +245,15 @@ describe("convertPolicyToCore", () => {
 
     expect(result.retention.keepLatest).toBe(10);
     expect(result.retention.keepHourly).toBe(24);
+  });
+
+  it("maps initial source type back", () => {
+    const result = convertPolicyToCore({
+      ...emptyPolicy,
+      initialSourceType: "symlink",
+    });
+
+    expect(result.initialSourceType).toBe("symlink");
   });
 
   it("maps MANUAL trigger to manual: true", () => {

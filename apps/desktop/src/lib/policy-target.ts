@@ -19,10 +19,14 @@ export type DraftSourcePolicyTarget = Extract<
 >;
 
 export type PolicySearch = {
-  kind?: PolicyTargetKind | "FOLDER" | "DRAFT_FOLDER";
+  kind?: PolicyTargetKind;
   hostName?: string;
   userName?: string;
   policyPath?: string;
+};
+
+export type LegacyPolicySearch = Omit<PolicySearch, "kind"> & {
+  kind?: PolicyTargetKind | "FOLDER" | "DRAFT_FOLDER";
 };
 
 export type KopiaPolicyTarget = {
@@ -96,7 +100,9 @@ export function policyTargetToSearch(target: PolicyTarget): PolicySearch {
   };
 }
 
-export function policyTargetFromSearch(search: PolicySearch): PolicyTarget {
+export function policyTargetFromSearch(
+  search: LegacyPolicySearch,
+): PolicyTarget {
   switch (search.kind) {
     case "HOST":
       return search.hostName

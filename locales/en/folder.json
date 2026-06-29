@@ -1,33 +1,50 @@
 {
   "createDialog": {
-    "title": "Add folder",
-    "description": "Create a new folder to backup your files.",
+    "title": "Add file/folder",
+    "description": "Choose a file or folder to back up.",
+    "type": {
+      "folder": "Folder",
+      "file": "File"
+    },
     "name": {
-      "label": "Folder name",
-      "placeholder": "Enter folder name"
+      "directory": {
+        "label": "Folder name",
+        "placeholder": "Enter folder name"
+      },
+      "file": {
+        "label": "File name",
+        "placeholder": "Enter file name"
+      }
     },
     "emoji": {
       "change": "Change emoji",
       "clear": "Remove emoji"
     },
     "path": {
-      "label": "Folder path",
-      "placeholder": "Select folder path",
-      "title": "Select folder path"
+      "directory": {
+        "label": "Folder path",
+        "placeholder": "Select folder path",
+        "title": "Select folder path"
+      },
+      "file": {
+        "label": "File path",
+        "placeholder": "Select file path",
+        "title": "Select file path"
+      }
     },
-    "submit": "Add folder",
+    "submit": "Add file/folder",
     "changePolicy": "Change policy",
     "exceedingAlert": {
       "title": "Not enough cloud storage",
-      "description": "This folder likely can’t be backed up because it would exceed your available CloudBlink storage. To back it up, you’ll need to upgrade your CloudBlink plan.",
+      "description": "This file or folder likely can’t be backed up because it would exceed your available CloudBlink storage. To back it up, you’ll need to upgrade your CloudBlink plan.",
       "continue": "Add anyway",
       "upgrade": "Upgrade storage"
     },
     "size": {
-      "title": "Calculate folder size",
-      "description": "Estimate the size of this folder.",
+      "title": "Calculate size",
+      "description": "Estimate the size of this file or folder.",
       "button": "Calculate",
-      "error": "Failed to estimate folder size",
+      "error": "Failed to estimate size",
       "included": "Included files:",
       "excluded": "Excluded files:"
     }
@@ -37,29 +54,47 @@
     "empty": "No emoji found."
   },
   "dropzone": {
-    "title": "Drop folder to add",
-    "description": "Drop any files or folders to add it to your vault and start backing them up."
+    "title": "Drop file/folder to add",
+    "description": "Drop a file or folder to add it to your vault and start backing it up."
   },
   "list": {
     "item": {
       "stats": "{{fileCount}} files ⸱ {{size}}",
       "dropdown": {
         "browse": "Browse backups",
-        "backup": "Backup folder",
+        "backup": {
+          "folder": "Backup folder",
+          "file": "Backup file"
+        },
         "cancel": "Cancel backup",
-        "settings": "Folder policy",
-        "delete": "Delete folder"
+        "settings": {
+          "folder": "Folder policy",
+          "file": "File policy"
+        },
+        "delete": {
+          "folder": "Delete folder",
+          "file": "Delete file"
+        }
       }
     }
   },
   "deleteDialog": {
-    "title": "Delete folder",
-    "description": "Are you sure you want to delete this folder? This action cannot be undone.",
+    "title": {
+      "folder": "Delete folder",
+      "file": "Delete file"
+    },
+    "description": {
+      "folder": "Are you sure you want to delete this folder? This action cannot be undone.",
+      "file": "Are you sure you want to delete this file? This action cannot be undone."
+    },
     "alert": {
       "title": "Cleanup happens over time",
       "description": "Storage space won’t be freed instantly. BlinkDisk cleans up unused data later to ensure reliability."
     },
     "cancel": "Cancel",
-    "continue": "Delete folder"
+    "continue": {
+      "folder": "Delete folder",
+      "file": "Delete file"
+    }
   }
 }

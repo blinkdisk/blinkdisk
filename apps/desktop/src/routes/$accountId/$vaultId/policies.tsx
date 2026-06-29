@@ -8,13 +8,13 @@ import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { cn } from "@blinkdisk/utils/class";
 import { ExceedingAlert } from "@desktop/components/dialogs/create-source/exceeding-alert";
-import { SourceGeneralSettings } from "@desktop/components/sources/general-settings";
 import { SettingsCategorySkeleton } from "@desktop/components/policy/category";
 import { CompressionSettings } from "@desktop/components/policy/compression";
 import { PolicyContextProvider } from "@desktop/components/policy/context";
 import { FilesSettings } from "@desktop/components/policy/files";
 import { RetentionSettings } from "@desktop/components/policy/retention";
 import { ScheduleSettings } from "@desktop/components/policy/schedule";
+import { SourceGeneralSettings } from "@desktop/components/sources/general-settings";
 import {
   getPolicyFromFormValues,
   type PolicyForm,
@@ -54,12 +54,34 @@ import { z } from "zod";
 
 type PolicyEditorMode = "basic" | "advanced";
 
-const ZPolicySearch = z.object({
-  kind: z.enum(["GLOBAL", "HOST", "USER", "SOURCE", "DRAFT_SOURCE"]).optional(),
-  hostName: z.string().optional(),
-  userName: z.string().optional(),
-  policyPath: z.string().optional(),
-});
+const ZPolicySearch = z
+  .object({
+    kind: z
+      .enum([
+        "GLOBAL",
+        "HOST",
+        "USER",
+        "SOURCE",
+        "DRAFT_SOURCE",
+        "FOLDER",
+        "DRAFT_FOLDER",
+      ])
+      .optional(),
+    hostName: z.string().optional(),
+    userName: z.string().optional(),
+    policyPath: z.string().optional(),
+  })
+  .transform(
+    (search): PolicySearch => ({
+      ...search,
+      kind:
+        search.kind === "FOLDER"
+          ? "SOURCE"
+          : search.kind === "DRAFT_FOLDER"
+            ? "DRAFT_SOURCE"
+            : search.kind,
+    }),
+  );
 
 export const Route = createFileRoute("/$accountId/$vaultId/policies")({
   validateSearch: ZPolicySearch,
@@ -71,7 +93,7 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
 
   const selectedTarget = useMemo(
-    () => policyTargetFromSearch(search as PolicySearch),
+    () => policyTargetFromSearch(search),
     [search],
   );
 

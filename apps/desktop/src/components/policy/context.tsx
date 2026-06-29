@@ -1,8 +1,8 @@
 import type { ZPolicyLevelType } from "@blinkdisk/schemas/policy";
 import { useUpdatePolicy } from "@desktop/hooks/mutations/core/use-update-policy";
 import { usePolicy } from "@desktop/hooks/queries/core/use-policy";
-import { useSource } from "@desktop/hooks/use-source";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
+import { useSource } from "@desktop/hooks/use-source";
 import {
   createDraftPolicyTarget,
   type PolicyTarget,
@@ -22,7 +22,7 @@ function usePolicyContext({
   mock?: { path: string };
   profile?: SelectedProfile;
 }) {
-  const { data: folder } = useSource(sourceId, { profile });
+  const { data: source } = useSource(sourceId, { profile });
 
   const target = useMemo<PolicyTarget | null>(() => {
     if (targetOverride) return targetOverride;
@@ -44,17 +44,17 @@ function usePolicyContext({
       });
     }
 
-    if (level === "SOURCE" && folder) {
+    if (level === "SOURCE" && source) {
       return {
         kind: "SOURCE",
-        hostName: folder.source.host,
-        userName: folder.source.userName,
-        path: folder.source.path,
+        hostName: source.source.host,
+        userName: source.source.userName,
+        path: source.source.path,
       };
     }
 
     return null;
-  }, [folder, level, mock, profile, targetOverride]);
+  }, [source, level, mock, profile, targetOverride]);
 
   const { data: policy, isPending } = usePolicy(target);
 
@@ -70,7 +70,7 @@ function usePolicyContext({
   return {
     loading: isPending,
     vaultPolicy: target?.kind === "GLOBAL" ? policy : undefined,
-    folderPolicy:
+    sourcePolicy:
       target?.kind === "SOURCE" || target?.kind === "DRAFT_SOURCE"
         ? policy
         : undefined,
@@ -91,7 +91,7 @@ export type PolicyContextType = ReturnType<typeof usePolicyContext>;
 const defaultContext = {
   loading: true,
   vaultPolicy: undefined,
-  folderPolicy: undefined,
+  sourcePolicy: undefined,
   definedFields: undefined,
   sourceId: undefined,
   policy: undefined,

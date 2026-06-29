@@ -51,7 +51,7 @@ function RouteComponent() {
   const { path } = Route.useSearch();
   const { directoryId } = useDirectoryId();
 
-  const { data: folder } = useSource();
+  const { data: source } = useSource();
   const { data: backup } = useBackup();
   const { data: directory } = useDirectory();
   const { data: platform } = usePlatform();
@@ -73,7 +73,7 @@ function RouteComponent() {
       className="flex h-full w-full flex-col overflow-hidden p-6"
     >
       <div className="mb-6 flex h-10 w-full items-center justify-between gap-4">
-        {backup && folder ? (
+        {backup && source ? (
           <BackupPreview backup={backup} source={source} />
         ) : (
           <div />
@@ -101,7 +101,7 @@ function RouteComponent() {
                 openRestoreDirectory({
                   directoryId: directoryId || "",
                   path,
-                  folder,
+                  source,
                   backup,
                 });
                 return;

@@ -28,7 +28,7 @@ export function useDirectoryBreadcrumbPath() {
 
 export function DirectoryBreadcrumb() {
   const path = useDirectoryBreadcrumbPath();
-  const { data: folder } = useSource();
+  const { data: source } = useSource();
   const { data: backup } = useBackup();
 
   if (!path?.length) {
@@ -40,13 +40,13 @@ export function DirectoryBreadcrumb() {
     parentPath.length > 0
       ? parentPath[parentPath.length - 1]?.objectId
       : backup?.rootID;
-  const folderName = folder?.name || folder?.source.path || "";
+  const sourceName = source?.name || source?.source.path || "";
 
   return (
     <div className="mt-6 flex items-center justify-between gap-4">
       <Breadcrumb className="min-w-0 overflow-x-auto">
         <BreadcrumbList className="flex flex-nowrap whitespace-nowrap">
-          {!folder || !backup ? (
+          {!source || !backup ? (
             <BreadcrumbItem>
               <BreadcrumbPage className="text-base">
                 <Skeleton width={100} />
@@ -70,7 +70,7 @@ export function DirectoryBreadcrumb() {
                         path: undefined,
                       })}
                     >
-                      {folderName}
+                      {sourceName}
                     </Link>
                   }
                 />

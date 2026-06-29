@@ -5,7 +5,7 @@ import { useCallback } from "react";
 
 type RestoreDirectoryDialogOptions = {
   directoryId: string;
-  folder: CoreSourceItem | undefined;
+  source: CoreSourceItem | undefined;
   backup: CoreBackupItem | undefined;
   path: { objectId: string; name: string }[] | undefined;
 };

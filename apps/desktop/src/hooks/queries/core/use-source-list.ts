@@ -1,16 +1,16 @@
-import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import {
   type SourceType,
   sourceTypeFromKopiaEntryType,
   sourceTypeWithFallback,
 } from "@blinkdisk/schemas/source";
+import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { buildSourceId } from "@desktop/lib/source";
 import { isDraftPolicyUserName } from "@desktop/lib/policy-target";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
+import { buildSourceId } from "@desktop/lib/source";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
@@ -54,7 +54,7 @@ export type CoreSourceItem = {
       ignoredErrorCount: number;
       errorCount: number;
     };
-    rootEntry: {
+    rootEntry?: {
       name: string;
       type?: string;
       mode: string;

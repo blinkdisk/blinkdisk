@@ -1,4 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import {
   DropdownMenu,
@@ -67,6 +68,7 @@ type SourceProps = {
 function Source({ source, profile, allowBackupActions }: SourceProps) {
   const { t } = useAppTranslation("folder.list.item");
   const formattedTime = useRelativeTime(source?.lastSnapshot?.startTime);
+  const sourceTypeKey = isFileLikeSource(source?.type) ? "file" : "folder";
 
   const { mutate: startBackup } = useStartBackup({ profile });
   const { mutate: cancelBackup } = useCancelBackup({ profile });
@@ -183,7 +185,7 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
                     onClick={() => startBackup({ path: source.source.path })}
                   >
                     <CloudUploadIcon />
-                    {t("dropdown.backup")}
+                    {t(`dropdown.backup.${sourceTypeKey}`)}
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuItem
@@ -200,7 +202,7 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
                   }
                 >
                   <FileCogIcon />
-                  {t("dropdown.settings")}
+                  {t(`dropdown.settings.${sourceTypeKey}`)}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -214,7 +216,7 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
                 variant="destructive"
               >
                 <TrashIcon />
-                {t("dropdown.delete")}
+                {t(`dropdown.delete.${sourceTypeKey}`)}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

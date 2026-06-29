@@ -1,21 +1,52 @@
 import type { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 
-export function buildVaultStats(folders: CoreSourceItem[]) {
+function sourceSummary(source: CoreSourceItem) {
+  return source.lastSnapshot?.rootEntry?.summ;
+}
+
+function sourceFileCount(source: CoreSourceItem) {
+  const statsFileCount =
+    (source.lastSnapshot?.stats.nonCachedFiles || 0) +
+    (source.lastSnapshot?.stats.cachedFiles || 0);
+  const summaryFileCount =
+    (sourceSummary(source)?.files || 0) +
+    (sourceSummary(source)?.symlinks || 0);
+
+  if (statsFileCount > 0) {
+    return statsFileCount + (sourceSummary(source)?.symlinks || 0);
+  }
+
+  if (summaryFileCount > 0) {
+    return summaryFileCount;
+  }
+
+  return source.lastSnapshot &&
+    (source.type === "file" || source.type === "symlink")
+    ? 1
+    : 0;
+}
+
+export function buildVaultStats(sources: CoreSourceItem[]) {
   return {
-    totalSize: folders.reduce(
-      (sum, folder) => sum + (folder.lastSnapshot?.stats.totalSize || 0),
-      0,
-    ),
-    fileCount: folders.reduce(
-      (sum, folder) =>
+    totalSize: sources.reduce(
+      (sum, source) =>
         sum +
-        (folder.lastSnapshot?.stats.nonCachedFiles || 0) +
-        (folder.lastSnapshot?.stats.cachedFiles || 0),
+        (source.lastSnapshot?.stats.totalSize ||
+          sourceSummary(source)?.size ||
+          0),
       0,
     ),
-    directoryCount: folders.reduce(
-      (sum, folder) => sum + (folder.lastSnapshot?.stats.dirCount || 0),
+    fileCount: sources.reduce(
+      (sum, source) => sum + sourceFileCount(source),
+      0,
+    ),
+    directoryCount: sources.reduce(
+      (sum, source) =>
+        sum +
+        (source.lastSnapshot?.stats.dirCount ||
+          sourceSummary(source)?.dirs ||
+          0),
       0,
     ),
   };
@@ -53,7 +84,8 @@ export function buildVaultStatHistory(backups: CoreBackupItem[]) {
       const totals = Array.from(latestByRoot.values()).reduce(
         (sum, backup) => ({
           totalSize: sum.totalSize + backup.summary.size,
-          fileCount: sum.fileCount + backup.summary.files,
+          fileCount:
+            sum.fileCount + backup.summary.files + backup.summary.symlinks,
           directoryCount: sum.directoryCount + backup.summary.dirs,
         }),
         { totalSize: 0, fileCount: 0, directoryCount: 0 },
