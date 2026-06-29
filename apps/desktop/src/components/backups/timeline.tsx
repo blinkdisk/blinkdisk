@@ -1,9 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import {
-  isFileLikeSource,
-  type KopiaEntryType,
-  sourceTypeFromKopiaEntryType,
-} from "@blinkdisk/schemas/source";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import {
   DropdownMenu,
@@ -47,7 +43,6 @@ interface Backup {
   description: string;
   startTime: string;
   rootID: string;
-  rootEntryType?: KopiaEntryType;
   pins: string[];
   summary: {
     size: number;
@@ -266,10 +261,7 @@ function Backup({ backup }: BackupProps) {
   const { mutate: startRestore } = useStartRestore();
 
   const formattedTime = useRelativeTime(backup ? backup.startTime : 0);
-  const backupSourceType =
-    sourceTypeFromKopiaEntryType(backup?.rootEntryType) ||
-    source?.type ||
-    "directory";
+  const backupSourceType = source?.type || "directory";
   const isFileLikeBackup = isFileLikeSource(backupSourceType);
   const fileCount =
     (backup?.summary?.files || 0) + (backup?.summary?.symlinks || 0);
