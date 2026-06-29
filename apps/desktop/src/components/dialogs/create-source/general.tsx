@@ -148,7 +148,7 @@ export function CreateSourceGeneral({
           onClick={() => onAction("CREATE")}
         >
           <PlusIcon />
-          {t("submit")}
+          {t(`submit.${pathType}`)}
         </Button>
       </div>
     </form>

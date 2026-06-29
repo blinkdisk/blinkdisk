@@ -32,7 +32,10 @@
         "title": "Select file path"
       }
     },
-    "submit": "Add file/folder",
+    "submit": {
+      "directory": "Add folder",
+      "file": "Add file"
+    },
     "changePolicy": "Change policy",
     "exceedingAlert": {
       "title": "Not enough cloud storage",
