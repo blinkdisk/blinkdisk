@@ -13,34 +13,88 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
+export const VaultProvider = {
+  CLOUDBLINK: "CLOUDBLINK",
+  INTERNAL_DRIVE: "INTERNAL_DRIVE",
+  EXTERNAL_DRIVE: "EXTERNAL_DRIVE",
+  NETWORK_DRIVE: "NETWORK_DRIVE",
+  FILESYSTEM: "FILESYSTEM",
+  NETWORK_ATTACHED_STORAGE: "NETWORK_ATTACHED_STORAGE",
+  AMAZON_S3: "AMAZON_S3",
+  S3_COMPATIBLE: "S3_COMPATIBLE",
+  GOOGLE_CLOUD_STORAGE: "GOOGLE_CLOUD_STORAGE",
+  BACKBLAZE: "BACKBLAZE",
+  AZURE_BLOB_STORAGE: "AZURE_BLOB_STORAGE",
+  SFTP: "SFTP",
+  RCLONE: "RCLONE",
+  WEBDAV: "WEBDAV",
+} as const;
+export type VaultProvider = (typeof VaultProvider)[keyof typeof VaultProvider];
+
+export const VaultStatus = {
+  ACTIVE: "ACTIVE",
+  DELETED: "DELETED",
+} as const;
+export type VaultStatus = (typeof VaultStatus)[keyof typeof VaultStatus];
+
+export const ConfigLevel = {
+  VAULT: "VAULT",
+  PROFILE: "PROFILE",
+} as const;
+export type ConfigLevel = (typeof ConfigLevel)[keyof typeof ConfigLevel];
+
+export const TrialStatus = {
+  ACTIVE: "ACTIVE",
+  ENDED: "ENDED",
+} as const;
+export type TrialStatus = (typeof TrialStatus)[keyof typeof TrialStatus];
+
+export const SubscriptionStatus = {
+  TRIALING: "TRIALING",
+  ACTIVE: "ACTIVE",
+  PAST_DUE: "PAST_DUE",
+  CANCELED: "CANCELED",
+} as const;
+export type SubscriptionStatus =
+  (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus];
+
 export const vaultProvider = pgEnum("vault_provider", [
-  "CLOUDBLINK",
-  "INTERNAL_DRIVE",
-  "EXTERNAL_DRIVE",
-  "NETWORK_DRIVE",
-  "FILESYSTEM",
-  "NETWORK_ATTACHED_STORAGE",
-  "AMAZON_S3",
-  "S3_COMPATIBLE",
-  "GOOGLE_CLOUD_STORAGE",
-  "BACKBLAZE",
-  "AZURE_BLOB_STORAGE",
-  "SFTP",
-  "RCLONE",
-  "WEBDAV",
+  VaultProvider.CLOUDBLINK,
+  VaultProvider.INTERNAL_DRIVE,
+  VaultProvider.EXTERNAL_DRIVE,
+  VaultProvider.NETWORK_DRIVE,
+  VaultProvider.FILESYSTEM,
+  VaultProvider.NETWORK_ATTACHED_STORAGE,
+  VaultProvider.AMAZON_S3,
+  VaultProvider.S3_COMPATIBLE,
+  VaultProvider.GOOGLE_CLOUD_STORAGE,
+  VaultProvider.BACKBLAZE,
+  VaultProvider.AZURE_BLOB_STORAGE,
+  VaultProvider.SFTP,
+  VaultProvider.RCLONE,
+  VaultProvider.WEBDAV,
 ]);
 
-export const vaultStatus = pgEnum("vault_status", ["ACTIVE", "DELETED"]);
+export const vaultStatus = pgEnum("vault_status", [
+  VaultStatus.ACTIVE,
+  VaultStatus.DELETED,
+]);
 
-export const configLevel = pgEnum("config_level", ["VAULT", "PROFILE"]);
+export const configLevel = pgEnum("config_level", [
+  ConfigLevel.VAULT,
+  ConfigLevel.PROFILE,
+]);
 
-export const trialStatus = pgEnum("trial_status", ["ACTIVE", "ENDED"]);
+export const trialStatus = pgEnum("trial_status", [
+  TrialStatus.ACTIVE,
+  TrialStatus.ENDED,
+]);
 
 export const subscriptionStatus = pgEnum("subscription_status", [
-  "TRIALING",
-  "ACTIVE",
-  "PAST_DUE",
-  "CANCELED",
+  SubscriptionStatus.TRIALING,
+  SubscriptionStatus.ACTIVE,
+  SubscriptionStatus.PAST_DUE,
+  SubscriptionStatus.CANCELED,
 ]);
 
 const createdAt = () =>

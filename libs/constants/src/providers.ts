@@ -1,4 +1,4 @@
-import type { ConfigLevel } from "@blinkdisk/db/enums";
+import type { ConfigLevel } from "@blinkdisk/db/schema";
 
 export type StorageProviderType =
   | "CLOUDBLINK"

@@ -7,9 +7,9 @@ import {
   stopTrialWorkflow,
 } from "@api/lib/workflows";
 import { SUBSCRIPTION_PLANS } from "@blinkdisk/constants/plans";
-import type { SubscriptionStatus } from "@blinkdisk/db/enums";
 import {
   account as accountTable,
+  type SubscriptionStatus,
   space as spaceTable,
   subscription as subscriptionTable,
   trial as trialTable,
