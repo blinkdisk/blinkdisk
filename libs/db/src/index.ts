@@ -12,4 +12,3 @@ export const database = (databaseUrl: string) => {
 };
 
 export type Database = NodePgDatabase<typeof schema>;
-export type DB = typeof schema;
