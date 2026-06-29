@@ -65,22 +65,13 @@ export function SourceCard({
       >
         <title>{isFile ? "File" : "Folder"}</title>
         {isFile ? (
-          <>
-            <path
-              d="M16 5H40.5L57 21.5V49.5C57 54.7467 52.7467 59 47.5 59H16C10.4772 59 6 54.5228 6 49V15C6 9.47715 10.4772 5 16 5Z"
-              fill={`color-mix(in srgb, ${color} ${fillMix}%, var(--background))`}
-              stroke={`color-mix(in srgb, ${color} ${strokeMix}%, var(--background))`}
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M40.5 5V17.5C40.5 19.7091 42.2909 21.5 44.5 21.5H57"
-              stroke={`color-mix(in srgb, ${color} ${strokeMix}%, var(--background))`}
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </>
+          <path
+            d="M16 5H37.5C40.2 5 42.8 6.1 44.7 8L54 17.3C55.9 19.2 57 21.8 57 24.5V49.5C57 54.7467 52.7467 59 47.5 59H16C10.4772 59 6 54.5228 6 49V15C6 9.47715 10.4772 5 16 5Z"
+            fill={`color-mix(in srgb, ${color} ${fillMix}%, var(--background))`}
+            stroke={`color-mix(in srgb, ${color} ${strokeMix}%, var(--background))`}
+            strokeWidth="3"
+            strokeLinejoin="round"
+          />
         ) : (
           <path
             xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +90,7 @@ export function SourceCard({
           alt={emoji}
           className={cn(
             "absolute size-[35%] left-[50%] -translate-x-1/2",
-            isFile ? "bottom-[24%]" : "bottom-[27%]",
+            isFile ? "bottom-[29%]" : "bottom-[27%]",
           )}
         />
       ) : null}

@@ -2,6 +2,7 @@ import { getEmojiUrl } from "@blinkdisk/components/folder-card";
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Badge } from "@blinkdisk/ui/badge";
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
@@ -39,6 +40,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ChevronRightIcon,
+  FileIcon,
   FolderIcon,
   ListChecksIcon,
   MonitorIcon,
@@ -206,7 +208,7 @@ function PolicyTreeItem({
   onSelectTarget,
 }: PolicyTreeItemProps) {
   const { t } = useAppTranslation("policy.page");
-  const Icon = getPolicyTargetIcon(node.target.kind);
+  const Icon = getPolicyTreeItemIcon(node);
   const active = isPolicyTargetEqual(node.target, selectedTarget);
   const hasChildren = node.children.length > 0;
   const collapsible = hasChildren && node.target.kind !== "GLOBAL";
@@ -607,6 +609,14 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
 
 const policyEditorHeaderClassName =
   "before:content-[''] after:content-[''] before:bg-background bg-background after:bg-border/70 sticky top-0 z-50 -mx-1 -mt-2 px-1 py-3 before:absolute before:inset-x-0 before:-top-8 before:h-8 after:absolute after:inset-x-0 after:bottom-0 after:h-px";
+
+function getPolicyTreeItemIcon(node: PolicyTreeNode) {
+  if (node.target.kind === "SOURCE" || node.target.kind === "DRAFT_SOURCE") {
+    return isFileLikeSource(node.source?.type) ? FileIcon : FolderIcon;
+  }
+
+  return getPolicyTargetIcon(node.target.kind);
+}
 
 function getPolicyTargetIcon(kind: PolicyTargetKind) {
   switch (kind) {
