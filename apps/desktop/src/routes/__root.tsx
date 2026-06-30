@@ -33,7 +33,6 @@ function RootComponent() {
 
   useThemeListener(theme);
   useShortcutListener();
-  useDeeplinkListener();
   useStorageListener();
   useUpdateListener();
 
@@ -61,19 +60,33 @@ function RootComponent() {
             }}
           >
             <QueryClientProvider client={queryClient}>
-              <Devtools />
-              <SkeletonTheme dark={theme.dark}>
-                <Outlet />
-                <Toaster dark={theme.dark} />
-                <AuthDialog />
-                <SelectAccountDialog />
-                <AuthListener />
-                <UpdateDialog />
-              </SkeletonTheme>
+              <RootContent theme={theme} />
             </QueryClientProvider>
           </PostHogProvider>
         </SidebarProvider>
       </TooltipProvider>
     </I18nextProvider>
+  );
+}
+
+type RootContentProps = {
+  theme: ReturnType<typeof useTheme>;
+};
+
+function RootContent({ theme }: RootContentProps) {
+  useDeeplinkListener();
+
+  return (
+    <>
+      <Devtools />
+      <SkeletonTheme dark={theme.dark}>
+        <Outlet />
+        <Toaster dark={theme.dark} />
+        <AuthDialog />
+        <SelectAccountDialog />
+        <AuthListener />
+        <UpdateDialog />
+      </SkeletonTheme>
+    </>
   );
 }
