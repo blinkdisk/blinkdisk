@@ -15,22 +15,26 @@ BlinkDisk is a minimalistic and user-friendly desktop application that makes fil
 Users can pick between these two options:
 
 - CloudBlink: Our managed cloud storage with a free tier and affordable subscription plans.
-- Custom Storage: Use your own storage for 100% free (supports a wide variants of options)
+- Custom Storage: Use your own storage for 100% free (supports many storage options).
 
-- We have a managed model called "CloudBlink" that offers an affordable solution with no setup required.
-- I also offer a bring-your-own-keys model where people can enter their own cloud credentials and use the desktop app for completely free, but this requires more knowledge and time to setup.
+- CloudBlink offers an affordable managed solution with no setup required.
+- The bring-your-own-keys model lets people enter their own cloud credentials and use the desktop app for free, but it requires more knowledge and time to set up.
 
 ## Commands
 
 ```bash
-pnpm lint                       # Lint all projects
-pnpm typecheck                  # Check typescript types of all project
+pnpm check --error-on-warnings  # Run Biome checks across the repo
+pnpm typecheck                  # Typecheck all packages with a typecheck script
+pnpm test                       # Run all package test suites
+pnpm unused                     # Run Knip unused code/dependency checks
+pnpm build                      # Build all packages with a build script
 ```
 
-This project uses Turborepo which relies on pnpm workspaces, so you can filter for projects by running commands like:
+This project uses Turborepo with pnpm workspaces, so you can filter for projects by package name:
 
 ```bash
-pnpm --filter=api lint
+pnpm --filter @blinkdisk/api typecheck
+pnpm --filter @blinkdisk/desktop test
 ```
 
 ## Project Structure
@@ -40,19 +44,26 @@ pnpm --filter=api lint
 - **core** - The core "engine" for handling the backups, forked from the Kopia project.
 - **api** - Hono + tRPC backend used for syncing configuration with a user's account.
 - **cloud** - Cloudflare Workers + Durable Object project for our optional managed cloud storage solution.
-- **desktop** - React + Tanstack Router frontend for the desktop app UI.
+- **desktop** - React + TanStack Router frontend for the desktop app UI.
 - **electron** - Electron backend (main process) for the desktop app.
 - **marketing** - Astro marketing site.
+- **web** - Vite web app.
 
 ### Shared Libraries (libs/)
 
-- **config** - Some configuration constants
-- **db** - Kysely ORM setup and prisma schema
-- **ui** - Shared react components
+- **assets** - Shared static assets.
+- **biome** - Shared Biome configuration package.
+- **components** - Shared React app components.
+- **constants** - Shared constants.
+- **db** - Drizzle ORM schema and database tooling.
+- **emails** - Email templates using React Email.
+- **forms** - Shared form components and helpers.
+- **hooks** - Shared React hooks.
 - **schemas** - Zod validation schemas
+- **styles** - Shared Tailwind/CSS styles.
+- **typescript** - Shared TypeScript configuration.
+- **ui** - Shared React UI primitives.
 - **utils** - Shared utility functions
-- **hooks** - Shared React hooks library
-- **emails** - Email templates using React Email
 
 ## Code Style
 
