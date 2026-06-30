@@ -22,13 +22,12 @@ Users can pick between these two options:
 
 ## Commands
 
-```bash
-pnpm types                      # Check if typescript types are valid
-pnpm test                       # Run all test suites
-pnpm lint                       # Run biome to check linting and formatting
-pnpm format                     # Automatically format all files with biome 
-pnpm unused                     # Run knip to find dead code
-```
+- `pnpm types`: Runs tsc to check if all typescript types are valid.
+- `pnpm test`: Runs all test suites with vitest.
+- `pnpm lint`: Runs biome to check for linting and formatting mistakes. 
+  - `pnpm lint --write` to apply safe fixes which don't change the behaviour.
+  - `pnpm lint --write --unsafe` to also write unsafe changes after you've reviewed them.
+- `pnpm unused`: Runs knip to find unused code, exports and dependencies.
 
 ## Project Structure
 
