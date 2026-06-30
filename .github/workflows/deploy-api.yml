@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: Migrate database
-        run: pnpm --filter db migrate:prod
+        run: pnpm --filter db migrate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
