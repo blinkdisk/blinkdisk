@@ -7,7 +7,7 @@
     "target": "ESNext",
     "jsx": "react-jsx",
     "sourceMap": false,
-    "types": ["../api/worker-configuration.d.ts", "vitest/globals"]
+    "types": ["../api/worker-configuration.d.ts", "node", "vitest/globals"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

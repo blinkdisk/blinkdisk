@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "lib": ["ESNext"],
     "jsx": "react-jsx",
-    "types": ["./worker-configuration.d.ts", "vitest/globals"],
+    "types": ["./worker-configuration.d.ts", "node", "vitest/globals"],
   },
   "include": ["src"],
   "exclude": ["node_modules"],
