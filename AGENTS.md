@@ -23,7 +23,7 @@ Users can pick between these two options:
 ## Commands
 
 ```bash
-pnpm check --error-on-warnings  # Run Biome checks across the repo
+pnpm lint:ci                    # Run Biome CI checks with warnings as errors
 pnpm typecheck                  # Typecheck all packages with a typecheck script
 pnpm test                       # Run all package test suites
 pnpm unused                     # Run Knip unused code/dependency checks

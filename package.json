@@ -13,7 +13,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "unused": "knip",
-    "check": "biome check ."
+    "lint:ci": "biome ci . --error-on-warnings"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
