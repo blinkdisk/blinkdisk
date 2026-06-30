@@ -23,17 +23,11 @@ Users can pick between these two options:
 ## Commands
 
 ```bash
-pnpm lint                       # Run normal Biome checks
-pnpm typecheck                  # Typecheck all packages with a typecheck script
-pnpm test                       # Run all package test suites
-pnpm unused                     # Run Knip unused code/dependency checks
-```
-
-This project uses Turborepo with pnpm workspaces, so you can filter for projects by package name:
-
-```bash
-pnpm --filter @blinkdisk/api typecheck
-pnpm --filter @blinkdisk/desktop test
+pnpm typecheck                  # Check if typescript types are valid
+pnpm test                       # Run all test suites
+pnpm lint                       # Run biome to check linting and formatting
+pnpm format                     # Automatically format all files with biome 
+pnpm unused                     # Run knip to find dead code
 ```
 
 ## Project Structure
