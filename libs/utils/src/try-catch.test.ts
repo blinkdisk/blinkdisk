@@ -10,7 +10,7 @@ describe("tryCatch", () => {
     });
 
     it("returns error on throw", () => {
-      const [data, error] = tryCatch(() => {
+      const [data, error] = tryCatch((): number => {
         throw new Error("fail");
       });
       expect(data).toBeUndefined();
@@ -53,7 +53,7 @@ describe("tryCatch", () => {
 
   it("preserves custom error type", () => {
     const customErr = new CustomError("VAULT_NOT_FOUND");
-    const [data, error] = tryCatch(() => {
+    const [data, error] = tryCatch((): string => {
       throw customErr;
     });
     expect(data).toBeUndefined();

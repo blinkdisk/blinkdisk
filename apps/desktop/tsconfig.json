@@ -18,7 +18,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "types": ["../api/worker-configuration.d.ts", "vitest/globals"],
+    "types": ["../api/worker-configuration.d.ts", "node", "vitest/globals"],
   },
   "include": ["src"],
 }

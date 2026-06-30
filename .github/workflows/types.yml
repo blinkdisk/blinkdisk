@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  typecheck:
+  types:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run typecheck
-        run: pnpm typecheck
+      - name: Run types
+        run: pnpm types

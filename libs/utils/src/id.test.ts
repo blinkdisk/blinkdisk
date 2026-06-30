@@ -35,6 +35,7 @@ describe("generateId", () => {
       Folder: "fld",
       Space: "spc",
       Subscription: "sub",
+      Trial: "trial",
     };
 
     for (const [key, prefix] of Object.entries(expectedPrefixes)) {

@@ -10,10 +10,11 @@
     "db:migrate": "dotenv -- pnpm --filter db migrate",
     "db:studio": "dotenv -- pnpm --filter db studio",
     "emails:studio": "dotenv -- pnpm --filter emails studio",
-    "typecheck": "turbo run typecheck",
+    "types": "turbo run types",
     "test": "turbo run test",
     "unused": "knip",
-    "check": "biome check ."
+    "lint": "biome check .",
+    "lint:ci": "biome ci . --error-on-warnings"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

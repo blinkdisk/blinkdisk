@@ -7,7 +7,7 @@
   },
   "scripts": {
     "studio": "email dev --dir src/ --port 3001",
-    "check-types": "tsc --noEmit"
+    "types": "tsc --noEmit"
   },
   "devDependencies": {
     "@react-email/ui": "catalog:",
