@@ -6,7 +6,7 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "types": "tsc --noEmit",
     "test": "vitest run"
   },
   "devDependencies": {

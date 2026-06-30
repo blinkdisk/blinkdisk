@@ -7,7 +7,7 @@
     "dev": "cp ../../.env .env && astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "typecheck": "astro check",
+    "types": "astro check",
     "deploy": "wrangler deploy"
   },
   "dependencies": {

@@ -23,7 +23,7 @@ Users can pick between these two options:
 ## Commands
 
 ```bash
-pnpm typecheck                  # Check if typescript types are valid
+pnpm types                      # Check if typescript types are valid
 pnpm test                       # Run all test suites
 pnpm lint                       # Run biome to check linting and formatting
 pnpm format                     # Automatically format all files with biome 

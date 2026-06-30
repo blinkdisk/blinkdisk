@@ -51,8 +51,8 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
+    "types": {
+      "dependsOn": ["^types"]
     },
     "env:update": {
       "dependsOn": ["^env:update"]
