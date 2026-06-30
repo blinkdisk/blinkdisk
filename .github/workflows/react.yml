@@ -24,3 +24,5 @@ jobs:
         with:
           fetch-depth: 0
       - uses: millionco/react-doctor@v2
+        with:
+          blocking: warning
