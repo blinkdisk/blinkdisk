@@ -60,5 +60,5 @@ Users can pick between these two options:
 ## Code Style
 
 - **Typescript**: Always use `type` not `interface`
-- **Imports**: Use path aliases (see available aliases above) for imports
+- **Imports**: Use the package-local path alias for imports within the same package, such as `@desktop/...`. Use the workspace package name for cross-package imports, such as `@blinkdisk/utils/...`.
 - **Comments**: Only write comments if the code is not self-explanatory
