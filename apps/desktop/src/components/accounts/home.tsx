@@ -7,7 +7,6 @@ import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { PlusIcon, RefreshCwIcon } from "lucide-react";
-import { useCallback } from "react";
 import { VaultCard } from "../vaults/card";
 import { HealthCard } from "./health-card";
 import { StorageCard } from "./storage-card";
@@ -20,13 +19,13 @@ export function AccountHome() {
   const { data: vaults } = useVaultList();
   const { data: space } = useSpace();
 
-  const openCreateCloudBlink = useCallback(() => {
+  const openCreateCloudBlink = () => {
     openCreateVault({
       step: "DETAILS",
       provider: "CLOUDBLINK",
       autoSelectedProvider: true,
     });
-  }, [openCreateVault]);
+  };
 
   return (
     <div className="flex min-h-full flex-col overflow-y-auto p-6">

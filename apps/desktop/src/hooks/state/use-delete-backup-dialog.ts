@@ -1,5 +1,4 @@
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type DeleteBackupDialogOptions = {
   backupId: string;
@@ -13,22 +12,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openDeleteBackupDialog(options: DeleteBackupDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options,
+  }));
+}
+
 export function useDeleteBackupDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openDeleteBackupDialog(options: DeleteBackupDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options,
-    }));
-  }
 
   return {
     isOpen,

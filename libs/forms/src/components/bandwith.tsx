@@ -16,8 +16,9 @@ import {
   FormDisabledContext,
   useFieldContext,
   useStore,
-} from "@forms/use-app-form";
-import React, { useContext } from "react";
+} from "@forms/form-context";
+import type { ChangeEvent, Ref } from "react";
+import { use } from "react";
 
 const bandwidthUnits = [
   { value: "bps", label: "bps" },
@@ -26,12 +27,20 @@ const bandwidthUnits = [
   { value: "Gbps", label: "Gbps" },
 ] as const satisfies { value: string; label: string }[];
 
-const Bandwith = React.forwardRef<
-  HTMLInputElement,
-  InputProps & { label: DynamicFieldProps }
->(({ className, label, disabled, ...props }, ref) => {
+type BandwithProps = InputProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLInputElement>;
+};
+
+function Bandwith({
+  className,
+  label,
+  disabled,
+  ref,
+  ...props
+}: BandwithProps) {
   const field = useFieldContext<ZBandwithType | undefined>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
   const formValue = useStore(field.store, (state) => state.value);
 
   return (
@@ -54,9 +63,7 @@ const Bandwith = React.forwardRef<
           value={formValue?.value !== undefined ? formValue.value : ""}
           onBlur={() => field.handleBlur()}
           onChange={(
-            e:
-              | React.ChangeEvent<HTMLInputElement>
-              | React.ChangeEvent<HTMLTextAreaElement>,
+            e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
           ) =>
             field.handleChange({
               value:
@@ -97,8 +104,6 @@ const Bandwith = React.forwardRef<
       </div>
     </DynamicField>
   );
-});
-
-Bandwith.displayName = "Bandwith";
+}
 
 export { Bandwith };

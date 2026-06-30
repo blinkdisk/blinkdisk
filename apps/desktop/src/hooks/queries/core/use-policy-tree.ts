@@ -8,7 +8,6 @@ import {
 } from "@desktop/lib/policy-target";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 
 export function usePolicyTree() {
   const { running } = useVaultStatus();
@@ -33,14 +32,14 @@ export function usePolicyTree() {
     enabled: !!vaultId && running,
   });
 
-  const tree = useMemo(() => {
+  const tree = (() => {
     if (!policies || !sources) return null;
 
     return buildPolicyTree({
       policies,
       sources,
     });
-  }, [policies, sources]);
+  })();
 
   return {
     data: tree,

@@ -584,9 +584,6 @@ importers:
       '@blinkdisk/signaldb-electron':
         specifier: 'catalog:'
         version: 1.0.2(@signaldb/core@1.8.1)(electron@42.5.0)
-      '@blinkdisk/styles':
-        specifier: workspace:*
-        version: link:../../libs/styles
       '@blinkdisk/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -844,9 +841,6 @@ importers:
 
   apps/marketing:
     dependencies:
-      '@astrojs/check':
-        specifier: 'catalog:'
-        version: 0.9.9(prettier@3.9.0)(typescript@6.0.3)
       '@astrojs/cloudflare':
         specifier: 'catalog:'
         version: 14.0.1(@types/node@24.13.2)(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.2)(jiti@2.7.0)(rollup@4.62.2)(tsx@4.22.4)(yaml@2.9.0))(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(wrangler@4.105.0(@cloudflare/workers-types@4.20260627.1))(yaml@2.9.0)
@@ -871,9 +865,6 @@ importers:
       '@blinkdisk/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
-      '@blinkdisk/styles':
-        specifier: workspace:*
-        version: link:../../libs/styles
       '@blinkdisk/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -892,9 +883,6 @@ importers:
       '@sentry/astro':
         specifier: 'catalog:'
         version: 10.62.0(@opentelemetry/core@2.8.0(@opentelemetry/api@1.9.1))(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.2)(jiti@2.7.0)(rollup@4.62.2)(tsx@4.22.4)(yaml@2.9.0))(rollup@4.62.2)
-      '@sentry/cloudflare':
-        specifier: 'catalog:'
-        version: 10.62.0(@cloudflare/workers-types@4.20260627.1)
       '@tailwindcss/typography':
         specifier: 'catalog:'
         version: 0.5.20
@@ -956,9 +944,6 @@ importers:
         specifier: 'catalog:'
         version: 4.1.1(vite@8.1.0(@types/node@24.13.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
     devDependencies:
-      '@blinkdisk/assets':
-        specifier: workspace:*
-        version: link:../../libs/assets
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../../libs/typescript
@@ -983,6 +968,10 @@ importers:
       wrangler:
         specifier: 'catalog:'
         version: 4.105.0(@cloudflare/workers-types@4.20260627.1)
+    optionalDependencies:
+      '@astrojs/check':
+        specifier: 'catalog:'
+        version: 0.9.9(prettier@3.9.0)(typescript@6.0.3)
 
   apps/web:
     dependencies:
@@ -1007,9 +996,6 @@ importers:
       '@blinkdisk/schemas':
         specifier: workspace:*
         version: link:../../libs/schemas
-      '@blinkdisk/styles':
-        specifier: workspace:*
-        version: link:../../libs/styles
       '@blinkdisk/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -1077,9 +1063,6 @@ importers:
       '@babel/runtime':
         specifier: 'catalog:'
         version: 8.0.0
-      '@blinkdisk/assets':
-        specifier: workspace:*
-        version: link:../../libs/assets
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../../libs/typescript
@@ -1190,9 +1173,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
-      vite:
-        specifier: 'catalog:'
-        version: 8.1.0(@types/node@24.13.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0)
 
   libs/constants:
     dependencies:
@@ -1247,9 +1227,6 @@ importers:
       '@blinkdisk/typescript':
         specifier: workspace:*
         version: link:../typescript
-      '@react-email/ui':
-        specifier: 'catalog:'
-        version: 6.6.5(@opentelemetry/api@1.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.2
@@ -1259,6 +1236,10 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+    optionalDependencies:
+      '@react-email/ui':
+        specifier: 'catalog:'
+        version: 6.6.5(@opentelemetry/api@1.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
 
   libs/forms:
     dependencies:
@@ -1397,9 +1378,6 @@ importers:
         specifier: 'catalog:'
         version: 14.0.0
     devDependencies:
-      '@blinkdisk/constants':
-        specifier: workspace:*
-        version: link:../constants
       '@blinkdisk/hooks':
         specifier: workspace:*
         version: link:../hooks
@@ -8947,6 +8925,7 @@ snapshots:
     transitivePeerDependencies:
       - prettier
       - prettier-plugin-astro
+    optional: true
 
   '@astrojs/cloudflare@14.0.1(@types/node@24.13.2)(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.2)(jiti@2.7.0)(rollup@4.62.2)(tsx@4.22.4)(yaml@2.9.0))(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(wrangler@4.105.0(@cloudflare/workers-types@4.20260627.1))(yaml@2.9.0)':
     dependencies:
@@ -9028,7 +9007,8 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
-  '@astrojs/compiler@2.13.1': {}
+  '@astrojs/compiler@2.13.1':
+    optional: true
 
   '@astrojs/internal-helpers@0.10.0':
     dependencies:
@@ -9065,6 +9045,7 @@ snapshots:
       prettier: 3.9.0
     transitivePeerDependencies:
       - typescript
+    optional: true
 
   '@astrojs/markdown-remark@7.2.0':
     dependencies:
@@ -9166,6 +9147,7 @@ snapshots:
   '@astrojs/yaml2ts@0.2.4':
     dependencies:
       yaml: 2.9.0
+    optional: true
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -9973,25 +9955,32 @@ snapshots:
   '@emmetio/abbreviation@2.3.3':
     dependencies:
       '@emmetio/scanner': 1.0.4
+    optional: true
 
   '@emmetio/css-abbreviation@2.1.8':
     dependencies:
       '@emmetio/scanner': 1.0.4
+    optional: true
 
   '@emmetio/css-parser@0.4.1':
     dependencies:
       '@emmetio/stream-reader': 2.2.0
       '@emmetio/stream-reader-utils': 0.1.0
+    optional: true
 
   '@emmetio/html-matcher@1.3.0':
     dependencies:
       '@emmetio/scanner': 1.0.4
+    optional: true
 
-  '@emmetio/scanner@1.0.4': {}
+  '@emmetio/scanner@1.0.4':
+    optional: true
 
-  '@emmetio/stream-reader-utils@0.1.0': {}
+  '@emmetio/stream-reader-utils@0.1.0':
+    optional: true
 
-  '@emmetio/stream-reader@2.2.0': {}
+  '@emmetio/stream-reader@2.2.0':
+    optional: true
 
   '@emnapi/core@1.11.0':
     dependencies:
@@ -10462,7 +10451,8 @@ snapshots:
       '@tybys/wasm-util': 0.10.3
     optional: true
 
-  '@next/env@16.2.6': {}
+  '@next/env@16.2.6':
+    optional: true
 
   '@next/swc-darwin-arm64@16.2.6':
     optional: true
@@ -10947,6 +10937,7 @@ snapshots:
       - react
       - react-dom
       - sass
+    optional: true
 
   '@rolldown/binding-android-arm64@1.1.3':
     optional: true
@@ -11579,6 +11570,7 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   '@szmarczak/http-timer@4.0.6':
     dependencies:
@@ -12278,10 +12270,12 @@ snapshots:
       typescript: 6.0.3
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
+    optional: true
 
   '@volar/language-core@2.4.28':
     dependencies:
       '@volar/source-map': 2.4.28
+    optional: true
 
   '@volar/language-server@2.4.28':
     dependencies:
@@ -12294,6 +12288,7 @@ snapshots:
       vscode-languageserver-protocol: 3.18.1
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
+    optional: true
 
   '@volar/language-service@2.4.28':
     dependencies:
@@ -12301,14 +12296,17 @@ snapshots:
       vscode-languageserver-protocol: 3.18.1
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
+    optional: true
 
-  '@volar/source-map@2.4.28': {}
+  '@volar/source-map@2.4.28':
+    optional: true
 
   '@volar/typescript@2.4.28':
     dependencies:
       '@volar/language-core': 2.4.28
       path-browserify: 1.0.1
       vscode-uri: 3.1.0
+    optional: true
 
   '@vscode/emmet-helper@2.11.0':
     dependencies:
@@ -12317,8 +12315,10 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-languageserver-types: 3.18.0
       vscode-uri: 3.1.0
+    optional: true
 
-  '@vscode/l10n@0.0.18': {}
+  '@vscode/l10n@0.0.18':
+    optional: true
 
   '@xmldom/xmldom@0.8.13': {}
 
@@ -12350,6 +12350,7 @@ snapshots:
   ajv-draft-04@1.0.0(ajv@8.20.0):
     optionalDependencies:
       ajv: 8.20.0
+    optional: true
 
   ajv-formats@3.0.1(ajv@8.20.0):
     optionalDependencies:
@@ -12830,7 +12831,8 @@ snapshots:
     dependencies:
       clsx: 2.1.1
 
-  client-only@0.0.1: {}
+  client-only@0.0.1:
+    optional: true
 
   cliui@8.0.1:
     dependencies:
@@ -13457,6 +13459,7 @@ snapshots:
     dependencies:
       '@emmetio/abbreviation': 2.3.3
       '@emmetio/css-abbreviation': 2.1.8
+    optional: true
 
   emoji-regex-xs@2.0.1: {}
 
@@ -14257,7 +14260,8 @@ snapshots:
 
   json5@2.2.3: {}
 
-  jsonc-parser@2.3.1: {}
+  jsonc-parser@2.3.1:
+    optional: true
 
   jsonc-parser@3.3.1: {}
 
@@ -14995,7 +14999,8 @@ snapshots:
 
   ms@2.1.3: {}
 
-  muggle-string@0.4.1: {}
+  muggle-string@0.4.1:
+    optional: true
 
   mysql2@3.15.3:
     dependencies:
@@ -15050,6 +15055,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    optional: true
 
   nlcst-to-string@4.0.0:
     dependencies:
@@ -15276,7 +15282,8 @@ snapshots:
       leac: 0.6.0
       peberminta: 0.9.0
 
-  path-browserify@1.0.1: {}
+  path-browserify@1.0.1:
+    optional: true
 
   path-data-parser@0.1.0: {}
 
@@ -15390,6 +15397,7 @@ snapshots:
       nanoid: 3.3.15
       picocolors: 1.1.1
       source-map-js: 1.2.1
+    optional: true
 
   postcss@8.5.15:
     dependencies:
@@ -15729,9 +15737,11 @@ snapshots:
 
   remove-trailing-separator@1.1.0: {}
 
-  request-light@0.5.8: {}
+  request-light@0.5.8:
+    optional: true
 
-  request-light@0.7.0: {}
+  request-light@0.7.0:
+    optional: true
 
   require-directory@2.1.1: {}
 
@@ -16192,6 +16202,7 @@ snapshots:
       react: 19.2.7
     optionalDependencies:
       '@babel/core': 8.0.1
+    optional: true
 
   stylis@4.4.0: {}
 
@@ -16338,11 +16349,13 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typesafe-path@0.2.2: {}
+  typesafe-path@0.2.2:
+    optional: true
 
   typescript-auto-import-cache@0.3.6:
     dependencies:
       semver: 7.8.5
+    optional: true
 
   typescript@5.9.3:
     optional: true
@@ -16610,6 +16623,7 @@ snapshots:
       vscode-uri: 3.1.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
+    optional: true
 
   volar-service-emmet@0.0.70(@volar/language-service@2.4.28):
     dependencies:
@@ -16619,6 +16633,7 @@ snapshots:
       vscode-uri: 3.1.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
+    optional: true
 
   volar-service-html@0.0.70(@volar/language-service@2.4.28):
     dependencies:
@@ -16627,6 +16642,7 @@ snapshots:
       vscode-uri: 3.1.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
+    optional: true
 
   volar-service-prettier@0.0.70(@volar/language-service@2.4.28)(prettier@3.9.0):
     dependencies:
@@ -16634,12 +16650,14 @@ snapshots:
     optionalDependencies:
       '@volar/language-service': 2.4.28
       prettier: 3.9.0
+    optional: true
 
   volar-service-typescript-twoslash-queries@0.0.70(@volar/language-service@2.4.28):
     dependencies:
       vscode-uri: 3.1.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
+    optional: true
 
   volar-service-typescript@0.0.70(@volar/language-service@2.4.28):
     dependencies:
@@ -16651,6 +16669,7 @@ snapshots:
       vscode-uri: 3.1.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
+    optional: true
 
   volar-service-yaml@0.0.70(@volar/language-service@2.4.28):
     dependencies:
@@ -16658,6 +16677,7 @@ snapshots:
       yaml-language-server: 1.20.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
+    optional: true
 
   vscode-css-languageservice@6.3.10:
     dependencies:
@@ -16665,6 +16685,7 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-languageserver-types: 3.17.5
       vscode-uri: 3.1.0
+    optional: true
 
   vscode-html-languageservice@5.6.2:
     dependencies:
@@ -16672,6 +16693,7 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-languageserver-types: 3.18.0
       vscode-uri: 3.1.0
+    optional: true
 
   vscode-json-languageservice@4.1.8:
     dependencies:
@@ -16680,34 +16702,45 @@ snapshots:
       vscode-languageserver-types: 3.18.0
       vscode-nls: 5.2.0
       vscode-uri: 3.1.0
+    optional: true
 
-  vscode-jsonrpc@8.2.0: {}
+  vscode-jsonrpc@8.2.0:
+    optional: true
 
-  vscode-jsonrpc@9.0.0: {}
+  vscode-jsonrpc@9.0.0:
+    optional: true
 
   vscode-languageserver-protocol@3.17.5:
     dependencies:
       vscode-jsonrpc: 8.2.0
       vscode-languageserver-types: 3.17.5
+    optional: true
 
   vscode-languageserver-protocol@3.18.1:
     dependencies:
       vscode-jsonrpc: 9.0.0
       vscode-languageserver-types: 3.18.0
+    optional: true
 
-  vscode-languageserver-textdocument@1.0.12: {}
+  vscode-languageserver-textdocument@1.0.12:
+    optional: true
 
-  vscode-languageserver-types@3.17.5: {}
+  vscode-languageserver-types@3.17.5:
+    optional: true
 
-  vscode-languageserver-types@3.18.0: {}
+  vscode-languageserver-types@3.18.0:
+    optional: true
 
   vscode-languageserver@9.0.1:
     dependencies:
       vscode-languageserver-protocol: 3.17.5
+    optional: true
 
-  vscode-nls@5.2.0: {}
+  vscode-nls@5.2.0:
+    optional: true
 
-  vscode-uri@3.1.0: {}
+  vscode-uri@3.1.0:
+    optional: true
 
   walk-up-path@4.0.0: {}
 
@@ -16830,8 +16863,10 @@ snapshots:
       vscode-languageserver-types: 3.18.0
       vscode-uri: 3.1.0
       yaml: 2.7.1
+    optional: true
 
-  yaml@2.7.1: {}
+  yaml@2.7.1:
+    optional: true
 
   yaml@2.9.0: {}
 

@@ -1,5 +1,4 @@
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type RenameBackupDialogOptions = {
   backupId: string;
@@ -14,22 +13,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openRenameBackupDialog(options: RenameBackupDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options,
+  }));
+}
+
 export function useRenameBackupDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openRenameBackupDialog(options: RenameBackupDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options,
-    }));
-  }
 
   return {
     isOpen,

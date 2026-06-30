@@ -10,19 +10,19 @@ import { Button } from "@blinkdisk/ui/button";
 import { EmojiPicker } from "@blinkdisk/ui/emoji-picker";
 import { Input } from "@blinkdisk/ui/input";
 import { SettingsCategory } from "@desktop/components/policy/category";
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "@desktop/components/policy/policy-context";
 import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
 import { useSource } from "@desktop/hooks/use-source";
-import { useContext } from "react";
+import { use } from "react";
 
 export function SourceGeneralSettings({ form }: { form: PolicyForm }) {
   const { t } = useAppTranslation("settings.folder.general");
   const { language } = useAppTranslation();
-  const { sourceId, profile, target } = useContext(PolicyContext);
+  const { sourceId, profile, target } = use(PolicyContext);
   const { data: source } = useSource(sourceId, { profile });
 
   const values = useStore(form.store, (state) => state.values);
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
   const path =
     target && "path" in target ? target.path : source?.source?.path || "";
   const sourceType = sourceTypeWithFallback(

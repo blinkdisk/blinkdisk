@@ -36,7 +36,6 @@ import {
   PlayIcon,
   TrashIcon,
 } from "lucide-react";
-import { useMemo } from "react";
 
 interface Backup {
   id: string;
@@ -69,7 +68,7 @@ function formatDate(dateString: string): string {
 export function BackupTimeline({ backups }: BackupTimelineProps) {
   const { data: folder } = useSource();
 
-  const groupedBackups = useMemo(() => {
+  const groupedBackups = (() => {
     if (!backups)
       return [
         ["1", [undefined, undefined]],
@@ -120,7 +119,7 @@ export function BackupTimeline({ backups }: BackupTimelineProps) {
     });
 
     return sortedGroups;
-  }, [folder, backups]);
+  })();
 
   return (
     <div className="relative">

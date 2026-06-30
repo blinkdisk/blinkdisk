@@ -11,16 +11,13 @@ import { Switch } from "@forms/components/switch";
 import { Tabs } from "@forms/components/tabs";
 import { Text } from "@forms/components/text";
 import {
-  createFormHook,
-  createFormHookContexts,
+  FormDisabledContext,
+  fieldContext,
+  formContext,
+  useFieldContext,
   useStore,
-} from "@tanstack/react-form";
-import { createContext } from "react";
-
-export const FormDisabledContext = createContext<boolean>(false);
-
-const { fieldContext, formContext, useFormContext, useFieldContext } =
-  createFormHookContexts();
+} from "@forms/form-context";
+import { createFormHook } from "@tanstack/react-form";
 
 const { useAppForm } = createFormHook({
   fieldComponents: {
@@ -43,4 +40,4 @@ const { useAppForm } = createFormHook({
   formContext,
 });
 
-export { useAppForm, useFieldContext, useFormContext, useStore };
+export { FormDisabledContext, useAppForm, useFieldContext, useStore };

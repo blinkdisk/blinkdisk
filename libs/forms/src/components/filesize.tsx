@@ -16,8 +16,9 @@ import {
   FormDisabledContext,
   useFieldContext,
   useStore,
-} from "@forms/use-app-form";
-import React, { useContext } from "react";
+} from "@forms/form-context";
+import type { ChangeEvent, Ref } from "react";
+import { use } from "react";
 
 const filesizeUnits = [
   { value: "B", label: "Bytes" },
@@ -27,12 +28,20 @@ const filesizeUnits = [
   { value: "TB", label: "TB" },
 ] as const satisfies { value: string; label: string }[];
 
-const Filesize = React.forwardRef<
-  HTMLInputElement,
-  InputProps & { label: DynamicFieldProps }
->(({ className, label, disabled, ...props }, ref) => {
+type FilesizeProps = InputProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLInputElement>;
+};
+
+function Filesize({
+  className,
+  label,
+  disabled,
+  ref,
+  ...props
+}: FilesizeProps) {
   const field = useFieldContext<ZFileSizeType | undefined>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
   const formValue = useStore(field.store, (state) => state.value);
 
   return (
@@ -55,9 +64,7 @@ const Filesize = React.forwardRef<
           value={formValue?.value !== undefined ? formValue.value : ""}
           onBlur={() => field.handleBlur()}
           onChange={(
-            e:
-              | React.ChangeEvent<HTMLInputElement>
-              | React.ChangeEvent<HTMLTextAreaElement>,
+            e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
           ) =>
             field.handleChange({
               value:
@@ -98,8 +105,6 @@ const Filesize = React.forwardRef<
       </div>
     </DynamicField>
   );
-});
-
-Filesize.displayName = "Filesize";
+}
 
 export { Filesize };

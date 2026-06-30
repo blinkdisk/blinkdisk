@@ -81,12 +81,20 @@ function RouteComponent() {
               key={0}
               className="text-primary"
               href="mailto:support@blinkdisk.com"
+              aria-label="support@blinkdisk.com"
             />,
           ]}
         />
       </p>
       <Button
-        render={<Link to="/auth/login" from="/auth/success" search={search} />}
+        render={
+          <Link
+            to="/auth/login"
+            from="/auth/success"
+            search={search}
+            aria-label={t("failed.button")}
+          />
+        }
         nativeButton={false}
         className="mt-6"
       >

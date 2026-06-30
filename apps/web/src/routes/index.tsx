@@ -17,6 +17,7 @@ function RouteComponent() {
             href={`${process.env.MARKETING_URL}/download`}
             target="_blank"
             rel="noreferrer"
+            aria-label="Download BlinkDisk"
           />
         }
         size="xl"

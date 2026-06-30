@@ -6,7 +6,7 @@ import { useSetupPasswordForm } from "@desktop/hooks/forms/use-setup-password-fo
 import { useSetupVault } from "@desktop/hooks/mutations/use-setup-vault";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { SettingsIcon } from "lucide-react";
-import { type ComponentType, useMemo, useState } from "react";
+import { type ComponentType, useRef, useState } from "react";
 
 type ConfigFormProps = {
   action: "SETUP";
@@ -22,12 +22,12 @@ export function Setup() {
 
   const [step, setStep] = useState<SetupStep>("PASSWORD");
 
-  const [password, setPassword] = useState("");
   const [initialConfig, setInitialConfig] = useState<ProviderConfig | null>(
     null,
   );
 
-  const [config, setConfig] = useState<ProviderConfig | null>(null);
+  const passwordRef = useRef("");
+  const configRef = useRef<ProviderConfig | null>(null);
 
   const { mutateAsync } = useSetupVault({
     setStep,
@@ -39,25 +39,21 @@ export function Setup() {
     onSubmit: async ({ value }) => {
       if (!vault) return;
 
-      setPassword(value.password);
+      passwordRef.current = value.password;
 
       await mutateAsync({
         vault,
-        config,
+        config: configRef.current,
         password: value.password,
       });
     },
   });
 
-  const ConfigForm = useMemo<ComponentType<ConfigFormProps> | null>(
-    () =>
-      vault
-        ? (providerForms[
-            resolveStorageProviderType(vault.provider)
-          ] as unknown as ComponentType<ConfigFormProps>)
-        : null,
-    [vault],
-  );
+  const ConfigForm = vault
+    ? (providerForms[
+        resolveStorageProviderType(vault.provider)
+      ] as unknown as ComponentType<ConfigFormProps>)
+    : null;
 
   return (
     <div className="flex h-full w-full flex-col items-center overflow-y-auto py-12">
@@ -97,14 +93,14 @@ export function Setup() {
                 action="SETUP"
                 config={initialConfig ?? undefined}
                 onSubmit={async (config) => {
-                  setConfig(config);
+                  configRef.current = config;
 
                   if (!vault) return;
 
                   await mutateAsync({
                     vault,
                     config,
-                    password,
+                    password: passwordRef.current,
                   });
                 }}
               />

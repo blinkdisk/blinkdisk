@@ -4,16 +4,25 @@ import {
 } from "@blinkdisk/components/dynamic-field";
 import { Input } from "@blinkdisk/ui/input";
 import { cn } from "@blinkdisk/utils/class";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import React, { useContext, useState } from "react";
+import type { ComponentProps, Ref } from "react";
+import { use, useState } from "react";
 
-const Password = React.forwardRef<
-  HTMLInputElement,
-  React.ComponentProps<"input"> & { label: DynamicFieldProps }
->(({ className, label, disabled, ...props }, ref) => {
+type PasswordProps = ComponentProps<"input"> & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLInputElement>;
+};
+
+function Password({
+  className,
+  label,
+  disabled,
+  ref,
+  ...props
+}: PasswordProps) {
   const field = useFieldContext<string>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -50,8 +59,6 @@ const Password = React.forwardRef<
       </button>
     </DynamicField>
   );
-});
-
-Password.displayName = "Password";
+}
 
 export { Password };

@@ -22,7 +22,7 @@ import { PostHogProvider } from "posthog-js/react";
 
 import "react-loading-skeleton/dist/skeleton.css";
 
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
   component: RootComponent,

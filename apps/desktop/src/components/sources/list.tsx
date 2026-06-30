@@ -29,7 +29,6 @@ import {
   SquareIcon,
   TrashIcon,
 } from "lucide-react";
-import { useMemo } from "react";
 
 type SourceListProps = {
   sources: CoreSourceItem[] | undefined | null;
@@ -75,18 +74,12 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
   const { openDeleteSourceDialog } = useDeleteSourceDialog();
   const navigate = useNavigate({ from: "/$accountId/$vaultId" });
 
-  const showProgress = useMemo(
-    () =>
-      source &&
-      source.status === "UPLOADING" &&
-      source.currentTaskStatus !== "CANCELING",
-    [source],
-  );
+  const showProgress =
+    source &&
+    source.status === "UPLOADING" &&
+    source.currentTaskStatus !== "CANCELING";
 
-  const showStartTime = useMemo(
-    () => source?.lastSnapshot && !source.lastSnapshot.incomplete,
-    [source],
-  );
+  const showStartTime = source?.lastSnapshot && !source.lastSnapshot.incomplete;
 
   const sourceSelectedProfile: SelectedProfile | undefined = source
     ? {

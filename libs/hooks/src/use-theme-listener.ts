@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export type Theme = "light" | "dark" | "system";
 
@@ -31,15 +31,13 @@ export function useThemeListener({
     };
   }, [dark]);
 
-  const onKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "y" && e.ctrlKey) {
-        e.preventDefault();
-        setTheme(theme === "dark" ? "light" : "dark");
-      }
-    },
-    [theme, setTheme],
-  );
+  const handlerRef = useRef<(e: KeyboardEvent) => void>(() => {});
+  handlerRef.current = (e: KeyboardEvent) => {
+    if (e.key === "y" && e.ctrlKey) {
+      e.preventDefault();
+      setTheme(theme === "dark" ? "light" : "dark");
+    }
+  };
 
   useEffect(() => {
     if (
@@ -48,7 +46,9 @@ export function useThemeListener({
     )
       return;
 
+    const onKeyDown = (e: KeyboardEvent) => handlerRef.current(e);
+
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onKeyDown]);
+  }, []);
 }

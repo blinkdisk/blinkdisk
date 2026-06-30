@@ -167,16 +167,16 @@ export function convertPolicyFromCore(
       interval: policy.scheduling.intervalSeconds
         ? policy.scheduling.intervalSeconds.toString()
         : undefined,
-      times: policy.scheduling.timeOfDay
-        ?.map(({ hour, min }) =>
-          hour && min
-            ? {
+      times: policy.scheduling.timeOfDay?.flatMap(({ hour, min }) =>
+        hour && min
+          ? [
+              {
                 hour,
                 minute: min,
-              }
-            : null,
-        )
-        .filter(Boolean) as {
+              },
+            ]
+          : [],
+      ) as {
         hour: number;
         minute: number;
       }[],
@@ -255,13 +255,13 @@ export function convertPolicyToCore(policy: ZPolicyType) {
       ignoreIdenticalSnapshots: policy.retention?.ignoreIdentical,
     },
     files: {
-      ignore: policy.files?.exclusions
-        ?.filter(Boolean)
-        ?.map(({ rule }) => rule),
+      ignore: policy.files?.exclusions?.flatMap((exclusion) =>
+        exclusion ? [exclusion.rule] : [],
+      ),
       noParentIgnore: policy.files?.ignoreParentExclusions,
-      ignoreDotFiles: policy.files?.exclusionRuleFiles
-        ?.filter(Boolean)
-        ?.map(({ filename }) => filename),
+      ignoreDotFiles: policy.files?.exclusionRuleFiles?.flatMap((file) =>
+        file ? [file.filename] : [],
+      ),
       noParentDotFiles: policy.files?.ignoreParentExclusionRuleFiles,
       ignoreCacheDirs: policy.files?.excludeCacheDirs,
       maxFileSize:

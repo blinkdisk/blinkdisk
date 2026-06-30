@@ -1,5 +1,4 @@
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type MoveVaultsDialogOptions = {
   allVaults?: boolean;
@@ -15,22 +14,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openMoveVaultsDialog(options?: MoveVaultsDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options: options || null,
+  }));
+}
+
 export function useMoveVaultsDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openMoveVaultsDialog(options?: MoveVaultsDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options: options || null,
-    }));
-  }
 
   return {
     isOpen,

@@ -36,45 +36,33 @@ export function useVaultDevices() {
 
       if (!res.data) return null;
 
-      const devices: VaultDevice[] = [];
+      const devicesByHost = new Map<string, VaultDevice>();
 
       for (const policy of res.data.policies) {
-        if (!policy.target.host || !policy.target.userName) continue;
-        if (isDraftPolicyUserName(policy.target.userName)) continue;
+        const { host, userName } = policy.target;
+        if (!host || !userName) continue;
+        if (isDraftPolicyUserName(userName)) continue;
 
-        const index = devices.findIndex(
-          (device) => device.hostName === policy.target.host,
-        );
+        let device = devicesByHost.get(host);
 
-        if (index !== -1) {
-          if (
-            devices[index]?.users.find(
-              ({ userName }) => userName === policy.target.userName,
-            )
-          )
-            continue;
-          devices[index]?.users.push({ userName: policy.target.userName });
-        } else {
-          devices.push({
-            hostName: policy.target.host,
-            users: [
-              {
-                userName: policy.target.userName,
-              },
-            ],
-          });
+        if (!device) {
+          device = {
+            hostName: host,
+            users: [],
+          };
+          devicesByHost.set(host, device);
         }
+
+        if (device.users.some((user) => user.userName === userName)) continue;
+        device.users.push({ userName });
       }
 
       const localHostName = window.electron.os.hostName(vaultId);
       const localUserName = window.electron.os.userName(vaultId);
+      const localDevice = devicesByHost.get(localHostName);
 
-      const localDeviceIndex = devices.findIndex(
-        (device) => device.hostName === localHostName,
-      );
-
-      if (localDeviceIndex === -1)
-        devices.push({
+      if (!localDevice) {
+        devicesByHost.set(localHostName, {
           hostName: localHostName,
           mock: true,
           users: [
@@ -84,19 +72,15 @@ export function useVaultDevices() {
             },
           ],
         });
-      else {
-        if (
-          !devices[localDeviceIndex]?.users.find(
-            ({ userName }) => userName === localUserName,
-          )
-        )
-          devices[localDeviceIndex]?.users.push({
+      } else {
+        if (!localDevice.users.some((user) => user.userName === localUserName))
+          localDevice.users.push({
             userName: localUserName,
             mock: true,
           });
       }
 
-      return devices;
+      return Array.from(devicesByHost.values());
     },
     enabled: !!vaultId && running,
   });

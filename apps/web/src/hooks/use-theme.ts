@@ -1,7 +1,6 @@
 import { useLocalStorage } from "@blinkdisk/hooks/use-local-storage";
 import { useMediaQuery } from "@blinkdisk/hooks/use-media-query";
 import type { Theme } from "@blinkdisk/hooks/use-theme-listener";
-import { useMemo } from "react";
 
 export function useTheme() {
   const [theme, setTheme] = useLocalStorage<Theme>(
@@ -10,10 +9,10 @@ export function useTheme() {
   );
   const media = useMediaQuery("(prefers-color-scheme: dark)");
 
-  const shownTheme = useMemo(() => {
+  const shownTheme = (() => {
     if (theme !== "system") return theme;
     return media ? "dark" : "light";
-  }, [theme, media]);
+  })();
 
   return {
     dark: shownTheme === "dark",

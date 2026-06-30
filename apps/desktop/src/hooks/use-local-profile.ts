@@ -1,13 +1,12 @@
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
-import { useMemo } from "react";
 
 export function useLocalProfile() {
   const { vaultId } = useVaultId();
 
   const { userName, hostName } = useProfile();
 
-  const { localHostName, localUserName } = useMemo(() => {
+  const { localHostName, localUserName } = (() => {
     if (!vaultId) {
       return {
         localHostName: null,
@@ -19,16 +18,16 @@ export function useLocalProfile() {
       localHostName: window.electron.os.hostName(vaultId),
       localUserName: window.electron.os.userName(vaultId),
     };
-  }, [vaultId]);
+  })();
 
-  const remote = useMemo(() => {
+  const remote = (() => {
     if (!localUserName || !localHostName) return null;
 
     return (
       (!!userName && userName !== localUserName) ||
       (!!hostName && hostName !== localHostName)
     );
-  }, [userName, hostName, localUserName, localHostName]);
+  })();
 
   return {
     localUserName,

@@ -2,13 +2,13 @@ import { useFieldContext, useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Switch } from "@blinkdisk/ui/switch";
 import { cn } from "@blinkdisk/utils/class";
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "@desktop/components/policy/policy-context";
 import {
   getPolicyDefinedFieldPath,
   type PolicyDefinedFields,
   setPolicyFieldDefined,
 } from "@desktop/hooks/forms/use-policy-form";
-import { useContext } from "react";
+import { use } from "react";
 
 type PolicyFieldProps = {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ type PolicyFieldProps = {
 export function PolicyField({ children }: PolicyFieldProps) {
   const { t } = useAppTranslation("policy.page");
   const field = useFieldContext();
-  const { inherited } = useContext(PolicyContext);
+  const { inherited } = use(PolicyContext);
   const definedFieldPath = getPolicyDefinedFieldPath(field.name);
 
   const definedFields = useStore(field.form.store, (state) =>

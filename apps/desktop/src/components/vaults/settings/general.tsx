@@ -12,7 +12,7 @@ import { useMoveVaultsDialog } from "@desktop/hooks/state/use-move-vaults-dialog
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { ArrowUpDownIcon, TrashIcon } from "lucide-react";
-import { useContext } from "react";
+import { use } from "react";
 import { VaultConfigSettings } from "./config";
 import { VaultThrottleSettings } from "./throttle";
 
@@ -28,7 +28,7 @@ export function VaultGeneralSettings() {
     state.isDirty,
     state.isSubmitting,
   ]);
-  const disabled = useContext(FormDisabledContext);
+  const disabled = use(FormDisabledContext);
 
   const submitIfNeeded = () => {
     if (!isDirty || isSubmitting) return;

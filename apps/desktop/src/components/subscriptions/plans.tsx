@@ -21,7 +21,7 @@ import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
 import { ArrowLeftIcon, CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useReducer, useState } from "react";
 
 const currency = "USD";
 
@@ -36,6 +36,44 @@ type SubscriptionPlansProps = {
   cardClassName?: string;
 };
 
+type SubscriptionPlansState = {
+  selectedPlanIndexOverride: number | null;
+  period: BillingPeriod;
+  pending: { url: string } | null;
+  change: Change | null;
+};
+
+type SubscriptionPlansAction =
+  | { type: "selectPlan"; index: number }
+  | { type: "setPeriod"; period: BillingPeriod }
+  | { type: "setPending"; url: string | null }
+  | { type: "setChange"; change: Change | null };
+
+const initialSubscriptionPlansState: SubscriptionPlansState = {
+  selectedPlanIndexOverride: null,
+  period: "YEARLY",
+  pending: null,
+  change: null,
+};
+
+function subscriptionPlansReducer(
+  state: SubscriptionPlansState,
+  action: SubscriptionPlansAction,
+) {
+  switch (action.type) {
+    case "selectPlan":
+      return { ...state, selectedPlanIndexOverride: action.index };
+    case "setPeriod":
+      return { ...state, period: action.period };
+    case "setPending":
+      return { ...state, pending: action.url ? { url: action.url } : null };
+    case "setChange":
+      return { ...state, change: action.change };
+  }
+
+  return state;
+}
+
 export function SubscriptionPlans({
   header,
   plansClassName,
@@ -45,40 +83,38 @@ export function SubscriptionPlans({
     refetchInterval: 5000,
   });
 
-  const [selectedPlanIndexOverride, setSelectedPlanIndex] = useState<
-    number | null
-  >(null);
-  const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
-  const [pending, setPending] = useState<{ url: string } | null>(null);
+  const [state, dispatch] = useReducer(
+    subscriptionPlansReducer,
+    initialSubscriptionPlansState,
+  );
 
-  const [changeOpen, setChangeOpen] = useState(false);
-  const [change, setChange] = useState<Change | null>(null);
-
-  const plans = useMemo(() => SUBSCRIPTION_PLANS, []);
+  const plans = SUBSCRIPTION_PLANS;
   const defaultSelectedPlanIndex = getDefaultSelectedPlanIndex(
     plans,
     subscription?.planId,
   );
   const selectedPlanIndex =
-    selectedPlanIndexOverride ?? defaultSelectedPlanIndex;
-  const selectedPlan = useMemo(
-    () => plans[selectedPlanIndex],
-    [plans, selectedPlanIndex],
-  );
+    state.selectedPlanIndexOverride ?? defaultSelectedPlanIndex;
+  const selectedPlan = plans[selectedPlanIndex];
 
   return (
     <>
       <PendingCheckoutDialog
-        isOpen={!!pending}
-        setIsOpen={() => setPending(null)}
-        url={pending?.url}
+        isOpen={!!state.pending}
+        setIsOpen={() => dispatch({ type: "setPending", url: null })}
+        url={state.pending?.url}
       />
 
       <PlanChangeDialog
-        isOpen={changeOpen}
-        setIsOpen={setChangeOpen}
-        priceId={change?.priceId}
-        action={change?.action}
+        isOpen={!!state.change}
+        setIsOpen={(open) =>
+          dispatch({
+            type: "setChange",
+            change: open ? state.change : null,
+          })
+        }
+        priceId={state.change?.priceId}
+        action={state.change?.action}
       />
 
       {header}
@@ -86,18 +122,15 @@ export function SubscriptionPlans({
         {selectedPlan && (
           <Plan
             plan={selectedPlan}
-            period={period}
-            setPeriod={setPeriod}
+            period={state.period}
+            setPeriod={(period) => dispatch({ type: "setPeriod", period })}
             currency={currency}
             cardClassName={cardClassName}
             planIndex={selectedPlanIndex}
-            setPlanIndex={setSelectedPlanIndex}
+            setPlanIndex={(index) => dispatch({ type: "selectPlan", index })}
             maxPlanIndex={plans.length - 1}
-            setPending={(url) => setPending({ url })}
-            setChange={(change) => {
-              setChange(change);
-              setChangeOpen(true);
-            }}
+            setPending={(url) => dispatch({ type: "setPending", url })}
+            setChange={(change) => dispatch({ type: "setChange", change })}
           />
         )}
         <BusinessPlan cardClassName={cardClassName} />
@@ -166,7 +199,7 @@ function Plan({
     currency,
   );
 
-  const action = useMemo(() => {
+  const action = (() => {
     const currentPlan = SUBSCRIPTION_PLANS.find(
       (p) => p.id === subscription?.planId,
     );
@@ -177,13 +210,13 @@ function Plan({
     if (plan.storageGB < currentPlan.storageGB) return "DOWNGRADE";
     if (plan.storageGB === currentPlan.storageGB) return "PERIOD_CHANGE";
     return "UPGRADE";
-  }, [plan, price, subscription]);
+  })();
 
-  const hasInsufficientStorage = useMemo(() => {
+  const hasInsufficientStorage = (() => {
     if (!space) return false;
     const bytes = plan.storageGB * 1000 * 1000 * 1000;
     return space.used > bytes;
-  }, [plan, space]);
+  })();
 
   if (!price) return null;
   return (

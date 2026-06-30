@@ -4,7 +4,6 @@ import { Loader } from "@blinkdisk/ui/loader";
 import { cn } from "@blinkdisk/utils/class";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { formatInt, formatSize } from "@desktop/lib/number";
-import { useMemo } from "react";
 
 type BackupProgressProps = {
   upload: CoreSourceItem["upload"];
@@ -19,21 +18,19 @@ export function BackupProgress({
 
   const fallback = !upload?.estimatedBytes;
 
-  const numbers = useMemo(() => {
-    return {
-      completed: formatSize(
-        (upload?.cachedBytes || 0) + (upload?.hashedBytes || 0),
-        { round: 1 },
-      ),
-      total: upload?.estimatedBytes
-        ? formatSize(upload?.estimatedBytes || 0, { round: 1 })
-        : "",
-      percentage: (upload?.progress || 0).toLocaleString(undefined, {
-        style: "percent",
-      }),
-      files: formatInt((upload?.hashedFiles || 0) + (upload?.cachedFiles || 0)),
-    };
-  }, [upload]);
+  const numbers = {
+    completed: formatSize(
+      (upload?.cachedBytes || 0) + (upload?.hashedBytes || 0),
+      { round: 1 },
+    ),
+    total: upload?.estimatedBytes
+      ? formatSize(upload?.estimatedBytes || 0, { round: 1 })
+      : "",
+    percentage: (upload?.progress || 0).toLocaleString(undefined, {
+      style: "percent",
+    }),
+    files: formatInt((upload?.hashedFiles || 0) + (upload?.cachedFiles || 0)),
+  };
 
   return (
     <div className="flex items-center gap-3">

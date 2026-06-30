@@ -48,7 +48,7 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import { Fragment, useCallback, useMemo } from "react";
+import { Fragment } from "react";
 
 type VaultOverviewProps = {
   vault?: VaultItem;
@@ -66,41 +66,28 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   const { openCreateSource } = useCreateSourceDialog();
   const { localHostName, localUserName } = useLocalProfile();
 
-  const localProfile = useMemo(
-    () =>
-      profileFromParts({
-        hostName: localHostName,
-        userName: localUserName,
-      }),
-    [localHostName, localUserName],
-  );
+  const localProfile = profileFromParts({
+    hostName: localHostName,
+    userName: localUserName,
+  });
 
   const { data: devices } = useVaultDevices();
-  const otherProfiles = useMemo(
-    () => getOtherProfiles(devices, localProfile),
-    [devices, localProfile],
-  );
+  const otherProfiles = getOtherProfiles(devices, localProfile);
 
-  const otherProfileListFilters = useMemo<ProfileListFilters>(
-    () => ({
-      deviceName: otherHostName || null,
-      userName: otherUserName || null,
-    }),
-    [otherHostName, otherUserName],
-  );
+  const otherProfileListFilters = {
+    deviceName: otherHostName || null,
+    userName: otherUserName || null,
+  };
 
-  const setOtherProfileListFilters = useCallback(
-    (filters: ProfileListFilters) => {
-      navigate({
-        search: (search) => ({
-          ...search,
-          otherHostName: filters.deviceName || undefined,
-          otherUserName: filters.userName || undefined,
-        }),
-      });
-    },
-    [navigate],
-  );
+  const setOtherProfileListFilters = (filters: ProfileListFilters) => {
+    navigate({
+      search: (search) => ({
+        ...search,
+        otherHostName: filters.deviceName || undefined,
+        otherUserName: filters.userName || undefined,
+      }),
+    });
+  };
 
   const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup({
     profile: localProfile,
@@ -111,7 +98,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   const { data: allSources } = useSourceList({ unfiltered: true });
   const { data: backups } = useBackupList({ filters: "none" });
 
-  const otherProfileSources = useMemo(() => {
+  const otherProfileSources = (() => {
     if (!allSources || !localProfile) return undefined;
 
     return allSources.filter((source) => {
@@ -122,42 +109,33 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
 
       return !isSameProfile(profile, localProfile);
     });
-  }, [allSources, localProfile]);
+  })();
 
-  const otherSources = useMemo(
-    () =>
-      otherProfileSources?.filter((source) =>
-        matchesProfileListFilters({
-          profile: {
-            deviceName: source.source.host,
-            userName: source.source.userName,
-          },
-          filters: otherProfileListFilters,
-        }),
-      ),
-    [otherProfileSources, otherProfileListFilters],
+  const otherSources = otherProfileSources?.filter((source) =>
+    matchesProfileListFilters({
+      profile: {
+        deviceName: source.source.host,
+        userName: source.source.userName,
+      },
+      filters: otherProfileListFilters,
+    }),
   );
 
-  const isAnyBackupRunning = useMemo(
-    () =>
-      currentSources?.some(
-        (source) =>
-          source.status === "UPLOADING" || source.status === "PENDING",
-      ),
-    [currentSources],
+  const isAnyBackupRunning = currentSources?.some(
+    (source) => source.status === "UPLOADING" || source.status === "PENDING",
   );
 
-  const stats = useMemo(() => {
+  const stats = (() => {
     if (!allSources) return null;
 
     return buildVaultStats(allSources);
-  }, [allSources]);
+  })();
 
-  const statHistory = useMemo(() => {
+  const statHistory = (() => {
     if (!backups) return null;
 
     return buildVaultStatHistory(backups);
-  }, [backups]);
+  })();
 
   const isStatsLoading = !vault || !stats || !statHistory;
   const isCurrentSourcesLoading = currentSources === undefined;

@@ -9,7 +9,6 @@
     "./*": "./src/*.tsx"
   },
   "devDependencies": {
-    "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@blinkdisk/utils": "workspace:*",

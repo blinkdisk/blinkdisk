@@ -11,7 +11,6 @@ import {
 } from "@blinkdisk/ui/select";
 import { formatValue } from "@desktop/components/cron/converter";
 import type { CustomSelectProps } from "@desktop/components/cron/types";
-import { useCallback, useMemo } from "react";
 
 export function CustomSelect(props: CustomSelectProps) {
   const {
@@ -28,64 +27,58 @@ export function CustomSelect(props: CustomSelectProps) {
     placeholder,
   } = props;
 
-  const stringValue = useMemo(() => {
+  const stringValue = (() => {
     if (value && Array.isArray(value)) {
       return value.map((value: number) => value.toString());
     }
-  }, [value]);
+  })();
 
-  const options = useMemo(() => {
+  const options = (() => {
+    const result: { value: string; label: string }[] = [];
+
     if (optionsList) {
-      return optionsList
-        .map((option, index) => {
-          const number = unit.min === 0 ? index : index + 1;
+      for (const [index, option] of optionsList.entries()) {
+        const number = unit.min === 0 ? index : index + 1;
+        const item = {
+          value: number.toString(),
+          label: option,
+        };
 
-          return {
-            value: number.toString(),
-            label: option,
-          };
-        })
-        .filter(filterOption);
+        if (filterOption(item)) result.push(item);
+      }
+
+      return result;
     }
 
-    return [...Array(unit.total)]
-      .map((_, index) => {
-        const number = unit.min === 0 ? index : index + 1;
+    for (let index = 0; index < unit.total; index++) {
+      const number = unit.min === 0 ? index : index + 1;
+      const item = {
+        value: number.toString(),
+        label: formatValue(
+          number,
+          unit,
+          humanizeLabels,
+          leadingZero,
+          clockFormat,
+        ),
+      };
 
-        return {
-          value: number.toString(),
-          label: formatValue(
-            number,
-            unit,
-            humanizeLabels,
-            leadingZero,
-            clockFormat,
-          ),
-        };
-      })
-      .filter(filterOption);
-  }, [
-    optionsList,
-    leadingZero,
-    humanizeLabels,
-    clockFormat,
-    unit,
-    filterOption,
-  ]);
+      if (filterOption(item)) result.push(item);
+    }
 
-  const onOptionClick = useCallback(
-    (values: string[]) => {
-      if (readOnly) return;
-      const newValue = values;
+    return result;
+  })();
 
-      if (newValue.length === unit.total) {
-        setValue([]);
-      } else {
-        setValue(newValue.map((v) => Number(v)));
-      }
-    },
-    [readOnly, setValue, unit.total],
-  );
+  const onOptionClick = (values: string[]) => {
+    if (readOnly) return;
+    const newValue = values;
+
+    if (newValue.length === unit.total) {
+      setValue([]);
+    } else {
+      setValue(newValue.map((v) => Number(v)));
+    }
+  };
 
   return (
     <Select

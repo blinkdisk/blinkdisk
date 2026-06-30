@@ -14,7 +14,6 @@ import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
-import { useMemo } from "react";
 
 export function useCreateSource({
   onSuccess,
@@ -31,14 +30,10 @@ export function useCreateSource({
   const { vaultId } = useVaultId();
   const { localHostName, localUserName } = useLocalProfile();
   const { queryKeys } = useQueryKey();
-  const profile = useMemo(
-    () =>
-      profileFromParts({
-        hostName: localHostName,
-        userName: localUserName,
-      }),
-    [localHostName, localUserName],
-  );
+  const profile = profileFromParts({
+    hostName: localHostName,
+    userName: localUserName,
+  });
 
   const { data: vault } = useVault();
   const { data: space } = useSpace();

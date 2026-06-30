@@ -17,7 +17,7 @@ import { useDirectoryId } from "@desktop/hooks/use-directory-id";
 import { useSource } from "@desktop/hooks/use-source";
 import { createFileRoute } from "@tanstack/react-router";
 import { CloudDownloadIcon, FilePlusIcon, FolderOpenIcon } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { z } from "zod";
 
 type DirectoryTableSelection = {
@@ -61,9 +61,9 @@ function RouteComponent() {
   const { mutate: startRestore, isPending: isStartingRestore } =
     useStartRestore();
 
-  const updateSelection = useCallback((selection: DirectoryTableSelection) => {
+  const updateSelection = (selection: DirectoryTableSelection) => {
     setSelection(selection);
-  }, []);
+  };
 
   const selectedItemCount = selection.items.length;
 

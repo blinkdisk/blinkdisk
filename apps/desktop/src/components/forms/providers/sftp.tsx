@@ -7,9 +7,8 @@ import { CreateVaultAlerts } from "@desktop/components/dialogs/create-vault/aler
 import { ProviderSubmitButton } from "@desktop/components/forms/providers/submit-button";
 import { useSftpForm } from "@desktop/hooks/forms/providers/use-sftp-form";
 import type { VaultAction } from "@desktop/hooks/use-config-validation";
-import { useMutation } from "@tanstack/react-query";
 import { TriangleAlertIcon } from "lucide-react";
-import { useContext } from "react";
+import { use, useState, useTransition } from "react";
 
 export type SftpFormProps = {
   action: VaultAction;
@@ -17,9 +16,15 @@ export type SftpFormProps = {
   onSubmit: (config: ZSftpConfigType) => void;
 };
 
+async function scanKnownHosts(values: ZSftpConfigType) {
+  const result = await window.electron.ssh.keyscan(values);
+  if (result.error) throw new Error(String(result.error));
+  return result.output || "";
+}
+
 export function SftpForm({ action, config, onSubmit }: SftpFormProps) {
   const { t } = useAppTranslation("vault.providers.SFTP.fields");
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   const form = useSftpForm({
     action,
@@ -28,19 +33,21 @@ export function SftpForm({ action, config, onSubmit }: SftpFormProps) {
   });
 
   const values = useStore(form.store, (store) => store.values);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const {
-    mutateAsync: scan,
-    error,
-    isPending,
-  } = useMutation({
-    mutationFn: async () => {
-      const result = await window.electron.ssh.keyscan(values);
-      if (result.error) throw result.error;
+  const scan = () => {
+    startTransition(async () => {
+      setError(null);
 
-      form.setFieldValue("knownHosts", result.output || "");
-    },
-  });
+      try {
+        const knownHosts = await scanKnownHosts(values);
+        form.setFieldValue("knownHosts", knownHosts);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : String(error));
+      }
+    });
+  };
 
   return (
     <form

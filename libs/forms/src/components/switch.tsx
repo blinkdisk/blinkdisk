@@ -4,15 +4,24 @@ import {
 } from "@blinkdisk/components/dynamic-field";
 import { type SwitchProps, Switch as SwitchRoot } from "@blinkdisk/ui/switch";
 import { cn } from "@blinkdisk/utils/class";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { useContext } from "react";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
+import type { Ref } from "react";
+import { use } from "react";
 
-const Switch = React.forwardRef<
-  HTMLButtonElement,
-  SwitchProps & { label: DynamicFieldProps }
->(({ className, disabled, label, ...props }, ref) => {
+type SwitchFieldProps = SwitchProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLButtonElement>;
+};
+
+function Switch({
+  className,
+  disabled,
+  label,
+  ref,
+  ...props
+}: SwitchFieldProps) {
   const field = useFieldContext<boolean>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField
@@ -36,8 +45,6 @@ const Switch = React.forwardRef<
       />
     </DynamicField>
   );
-});
-
-Switch.displayName = "Switch";
+}
 
 export { Switch };

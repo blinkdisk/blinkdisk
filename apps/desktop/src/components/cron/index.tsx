@@ -18,8 +18,161 @@ import type {
   CronProps,
   Locale,
   PeriodType,
+  SetValueNumbersOrUndefined,
+  SetValuePeriod,
+  Shortcuts,
 } from "@desktop/components/cron/types";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type SetStateAction, useEffect, useReducer } from "react";
+
+type CronState = {
+  period?: PeriodType;
+  monthDays?: number[];
+  months?: number[];
+  weekDays?: number[];
+  hours?: number[];
+  minutes?: number[];
+};
+
+type NumberField = "monthDays" | "months" | "weekDays" | "hours" | "minutes";
+
+type CronAction =
+  | { type: "replace"; state: CronState }
+  | { type: "period"; value: SetStateAction<PeriodType | undefined> }
+  | {
+      type: "number";
+      field: NumberField;
+      value: SetStateAction<number[] | undefined>;
+    };
+
+const DEFAULT_SHORTCUTS: Shortcuts = [
+  "@yearly",
+  "@annually",
+  "@monthly",
+  "@weekly",
+  "@daily",
+  "@midnight",
+  "@hourly",
+];
+
+const CLOCK_FORMAT_SAMPLE_DATE = new Date(Date.UTC(2020, 0, 1, 13, 0, 0));
+const CLOCK_FORMATTER = new Intl.DateTimeFormat(undefined, {
+  hour: "numeric",
+  hour12: undefined,
+});
+const CLOCK_FORMAT = /AM|PM/i.test(
+  CLOCK_FORMATTER.format(CLOCK_FORMAT_SAMPLE_DATE),
+)
+  ? "12-hour-clock"
+  : "24-hour-clock";
+
+function resolveStateAction<T>(action: SetStateAction<T>, current: T) {
+  return typeof action === "function"
+    ? (action as (current: T) => T)(current)
+    : action;
+}
+
+function cronReducer(state: CronState, action: CronAction): CronState {
+  if (action.type === "replace") {
+    return areCronStatesEqual(state, action.state) ? state : action.state;
+  }
+
+  if (action.type === "period") {
+    return {
+      ...state,
+      period: resolveStateAction(action.value, state.period),
+    };
+  }
+
+  return {
+    ...state,
+    [action.field]: resolveStateAction(action.value, state[action.field]),
+  };
+}
+
+function areNumberArraysEqual(
+  left: number[] | undefined,
+  right: number[] | undefined,
+) {
+  if (left === right) return true;
+  if (!left || !right) return false;
+  if (left.length !== right.length) return false;
+
+  for (let index = 0; index < left.length; index += 1) {
+    if (left[index] !== right[index]) return false;
+  }
+
+  return true;
+}
+
+function areCronStatesEqual(left: CronState, right: CronState) {
+  return (
+    left.period === right.period &&
+    areNumberArraysEqual(left.monthDays, right.monthDays) &&
+    areNumberArraysEqual(left.months, right.months) &&
+    areNumberArraysEqual(left.weekDays, right.weekDays) &&
+    areNumberArraysEqual(left.hours, right.hours) &&
+    areNumberArraysEqual(left.minutes, right.minutes)
+  );
+}
+
+function getCronStateFromString({
+  value,
+  allowEmpty,
+  firstRender,
+  locale,
+  shortcuts,
+}: {
+  value: string;
+  allowEmpty: NonNullable<CronProps["allowEmpty"]>;
+  firstRender: boolean;
+  locale: Locale;
+  shortcuts: Shortcuts;
+}) {
+  const state: CronState = {};
+  const internalValueRef = { current: value };
+
+  setValuesFromCronString(
+    value,
+    () => {},
+    undefined,
+    allowEmpty,
+    internalValueRef,
+    firstRender,
+    locale,
+    shortcuts,
+    (next) => {
+      state.minutes = resolveStateAction(next, state.minutes);
+    },
+    (next) => {
+      state.hours = resolveStateAction(next, state.hours);
+    },
+    (next) => {
+      state.monthDays = resolveStateAction(next, state.monthDays);
+    },
+    (next) => {
+      state.months = resolveStateAction(next, state.months);
+    },
+    (next) => {
+      state.weekDays = resolveStateAction(next, state.weekDays);
+    },
+    (next) => {
+      state.period = resolveStateAction(next, state.period);
+    },
+  );
+
+  return state;
+}
+
+function hasCronStateValue(state: CronState) {
+  return !!(
+    state.period ||
+    state.minutes ||
+    state.months ||
+    state.monthDays ||
+    state.weekDays ||
+    state.hours
+  );
+}
 
 export function Cron(props: CronProps) {
   const { t } = useAppTranslation("cron");
@@ -40,15 +193,7 @@ export function Cron(props: CronProps) {
     disabled = false,
     readOnly = false,
     leadingZero = false,
-    shortcuts = [
-      "@yearly",
-      "@annually",
-      "@monthly",
-      "@weekly",
-      "@daily",
-      "@midnight",
-      "@hourly",
-    ],
+    shortcuts = DEFAULT_SHORTCUTS,
     periodicityOnDoubleClick = true,
     mode = "multiple",
     allowedDropdowns = [
@@ -72,97 +217,71 @@ export function Cron(props: CronProps) {
     dropdownsConfig,
     getPopupContainer,
   } = props;
-  const internalValueRef = useRef<string>(value);
-  const [period, setPeriod] = useState<PeriodType | undefined>();
-  const [monthDays, setMonthDays] = useState<number[] | undefined>();
-  const [months, setMonths] = useState<number[] | undefined>();
-  const [weekDays, setWeekDays] = useState<number[] | undefined>();
-  const [hours, setHours] = useState<number[] | undefined>();
-  const [minutes, setMinutes] = useState<number[] | undefined>();
-
-  useEffect(() => {
-    setValuesFromCronString(
+  const [state, dispatch] = useReducer(cronReducer, null, () =>
+    getCronStateFromString({
       value,
-      () => {},
-      onError,
       allowEmpty,
-      internalValueRef,
-      true,
+      firstRender: true,
       locale,
       shortcuts,
-      setMinutes,
-      setHours,
-      setMonthDays,
-      setMonths,
-      setWeekDays,
-      setPeriod,
+    }),
+  );
+  const { period, monthDays, months, weekDays, hours, minutes } = state;
+
+  useEffect(() => {
+    const parsed = getCronStateFromString({
+      value,
+      allowEmpty,
+      firstRender: false,
+      locale,
+      shortcuts,
+    });
+    dispatch({ type: "replace", state: parsed });
+  }, [value, allowEmpty, locale, shortcuts]);
+
+  const applyState = (nextState: CronState) => {
+    dispatch({ type: "replace", state: nextState });
+
+    if (!hasCronStateValue(nextState)) return;
+
+    const selectedPeriod = nextState.period || defaultPeriod;
+    const cron = getCronStringFromValues(
+      selectedPeriod,
+      nextState.months,
+      nextState.monthDays,
+      nextState.weekDays,
+      nextState.hours,
+      nextState.minutes,
+      humanizeValue,
+      dropdownsConfig,
     );
-  }, []);
 
-  useEffect(() => {
-    if (value !== internalValueRef.current) {
-      setValuesFromCronString(
-        value,
-        () => {},
-        onError,
-        allowEmpty,
-        internalValueRef,
-        false,
-        locale,
-        shortcuts,
-        setMinutes,
-        setHours,
-        setMonthDays,
-        setMonths,
-        setWeekDays,
-        setPeriod,
-      );
-    }
-  }, [value, allowEmpty, shortcuts, locale]);
+    setValue(cron, { selectedPeriod });
+    onError?.(undefined);
+  };
 
-  useEffect(() => {
-    // Only change the value if a user touched a field
-    // and if the user didn't use the clear button
-    if (period || minutes || months || monthDays || weekDays || hours) {
-      const selectedPeriod = period || defaultPeriod;
-      const cron = getCronStringFromValues(
-        selectedPeriod,
-        months,
-        monthDays,
-        weekDays,
-        hours,
-        minutes,
-        humanizeValue,
-        dropdownsConfig,
-      );
+  const setPeriod: SetValuePeriod = (next) => {
+    const nextState = cronReducer(state, { type: "period", value: next });
+    if (!nextState.period) return;
+    applyState(nextState);
+  };
 
-      setValue(cron, { selectedPeriod });
-      internalValueRef.current = cron;
+  const setNumberField =
+    (field: NumberField): SetValueNumbersOrUndefined =>
+    (next) => {
+      const nextState = cronReducer(state, {
+        type: "number",
+        field,
+        value: next,
+      });
+      applyState(nextState);
+    };
 
-      if (onError) onError(undefined);
-    }
-  }, [
-    period,
-    monthDays,
-    months,
-    weekDays,
-    hours,
-    minutes,
-    defaultPeriod,
-    humanizeValue,
-    dropdownsConfig,
-  ]);
-
-  const clockFormat = useMemo(() => {
-    const date = new Date(Date.UTC(2020, 0, 1, 13, 0, 0)); // 1:00 PM UTC
-    const formatted = new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      hour12: undefined, // Let the system decide
-    }).format(date);
-
-    const hasAMPM = /AM|PM/i.test(formatted);
-    return hasAMPM ? "12-hour-clock" : "24-hour-clock";
-  }, []);
+  const setMonthDays = setNumberField("monthDays");
+  const setMonths = setNumberField("months");
+  const setWeekDays = setNumberField("weekDays");
+  const setHours = setNumberField("hours");
+  const setMinutes = setNumberField("minutes");
 
   const periodForRender = period || defaultPeriod;
 
@@ -171,12 +290,7 @@ export function Cron(props: CronProps) {
       {allowedDropdowns.includes("period") && (
         <Period
           value={periodForRender}
-          setValue={(to) => {
-            // This prevents the component from overriding
-            // the period on mount.
-            if (!to) return;
-            setPeriod(to as PeriodType);
-          }}
+          setValue={setPeriod}
           locale={locale}
           disabled={dropdownsConfig?.period?.disabled ?? disabled}
           readOnly={dropdownsConfig?.period?.readOnly ?? readOnly}
@@ -274,7 +388,7 @@ export function Cron(props: CronProps) {
               disabled={dropdownsConfig?.hours?.disabled ?? disabled}
               readOnly={dropdownsConfig?.hours?.readOnly ?? readOnly}
               leadingZero={dropdownsConfig?.hours?.leadingZero ?? leadingZero}
-              clockFormat={clockFormat}
+              clockFormat={CLOCK_FORMAT}
               period={periodForRender}
               periodicityOnDoubleClick={
                 dropdownsConfig?.hours?.periodicityOnDoubleClick ??
@@ -297,7 +411,7 @@ export function Cron(props: CronProps) {
               disabled={dropdownsConfig?.minutes?.disabled ?? disabled}
               readOnly={dropdownsConfig?.minutes?.readOnly ?? readOnly}
               leadingZero={dropdownsConfig?.minutes?.leadingZero ?? leadingZero}
-              clockFormat={clockFormat}
+              clockFormat={CLOCK_FORMAT}
               periodicityOnDoubleClick={
                 dropdownsConfig?.minutes?.periodicityOnDoubleClick ??
                 periodicityOnDoubleClick

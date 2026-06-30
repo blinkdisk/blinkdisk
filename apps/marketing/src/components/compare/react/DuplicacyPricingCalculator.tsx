@@ -95,7 +95,9 @@ export default function DuplicacyPricingCalculator() {
           </label>
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => setComputers(Math.max(1, computers - 1))}
+              onClick={() =>
+                setComputers((current) => Math.max(1, current - 1))
+              }
               type="button"
               size="icon-sm"
               variant="secondary"
@@ -115,7 +117,7 @@ export default function DuplicacyPricingCalculator() {
               }}
             />
             <Button
-              onClick={() => setComputers(computers + 1)}
+              onClick={() => setComputers((current) => current + 1)}
               type="button"
               size="icon-sm"
               variant="secondary"

@@ -12,7 +12,6 @@ import {
 } from "@blinkdisk/ui/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
 import type { PeriodProps, PeriodType } from "@desktop/components/cron/types";
-import { useCallback } from "react";
 
 export function Period(props: PeriodProps) {
   const {
@@ -82,14 +81,11 @@ export function Period(props: PeriodProps) {
     });
   }
 
-  const handleChange = useCallback(
-    (newValue: PeriodType | null) => {
-      if (!readOnly && newValue) {
-        setValue(newValue);
-      }
-    },
-    [setValue, readOnly],
-  );
+  const handleChange = (newValue: PeriodType | null) => {
+    if (!readOnly && newValue) {
+      setValue(newValue);
+    }
+  };
 
   return (
     <div className="flex items-center gap-2">

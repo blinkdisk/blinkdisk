@@ -3,15 +3,27 @@ import {
   type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
 import { InputOTP, type InputOTPProps } from "@blinkdisk/ui/input-otp";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { useContext } from "react";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
+import type { Ref } from "react";
+import { use } from "react";
 
-const Code = React.forwardRef<
-  HTMLInputElement,
-  { label?: DynamicFieldProps } & InputOTPProps
->(({ className, label, maxLength, render, disabled }, ref) => {
+type CodeProps = {
+  label?: DynamicFieldProps;
+  ref?: Ref<HTMLInputElement>;
+} & Omit<InputOTPProps, "children" | "render"> & {
+    render: Exclude<InputOTPProps["render"], undefined>;
+  };
+
+function Code({
+  className,
+  label,
+  maxLength,
+  render,
+  disabled,
+  ref,
+}: CodeProps) {
   const field = useFieldContext<string>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField
@@ -31,13 +43,10 @@ const Code = React.forwardRef<
         maxLength={maxLength}
         render={render}
         pasteTransformer={(t) => t.replace(/\s|-/g, "")}
-        children={undefined}
         disabled={disabledContext || disabled}
       />
     </DynamicField>
   );
-});
-
-Code.displayName = "Code";
+}
 
 export { Code };

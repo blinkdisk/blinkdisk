@@ -1,6 +1,7 @@
 import { cn } from "@blinkdisk/utils/class";
 import { OTPInput, OTPInputContext } from "input-otp";
-import * as React from "react";
+import type * as React from "react";
+import { use } from "react";
 
 export type InputOTPProps = React.ComponentProps<typeof OTPInput> & {
   containerClassName?: string;
@@ -34,7 +35,7 @@ function InputOTPSlot({
   hasFakeCaret?: boolean;
   isActive?: boolean;
 }) {
-  const inputOTPContext = React.useContext(OTPInputContext);
+  const inputOTPContext = use(OTPInputContext);
   const slot = inputOTPContext?.slots?.[index];
   const char = charProp ?? slot?.char;
   const hasFakeCaret = hasFakeCaretProp ?? slot?.hasFakeCaret;

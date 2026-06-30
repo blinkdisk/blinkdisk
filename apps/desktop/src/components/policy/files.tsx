@@ -13,7 +13,7 @@ import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
 import { useEditExclusionDialog } from "@desktop/hooks/state/use-edit-exclusion-dialog";
 import { parseExclusionRule } from "@desktop/lib/exclusion";
 import { EditIcon, PlusIcon, TrashIcon } from "lucide-react";
-import { useContext, useMemo } from "react";
+import { use } from "react";
 
 export function FilesSettings({
   form,
@@ -103,15 +103,18 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
     | undefined
   >();
 
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
   const value = useStore(field.store, (state) => state.value);
 
   return (
     <DynamicField title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
-          {value.map((_, index) => (
-            <form.Field key={index} name={`files.exclusions[${index}].rule`}>
+          {value.map((exclusion, index) => (
+            <form.Field
+              key={exclusion.rule}
+              name={`files.exclusions[${index}].rule`}
+            >
               {(subField) => (
                 <div className="flex items-center justify-between gap-2">
                   <ExclusionPreview rule={subField.state.value as string} />
@@ -180,7 +183,7 @@ type ExclusionPreviewProps = {
 
 function ExclusionPreview({ rule }: ExclusionPreviewProps) {
   const { t } = useAppTranslation("policy.files.exclusions.preview");
-  const parsed = useMemo(() => parseExclusionRule(rule), [rule]);
+  const parsed = parseExclusionRule(rule);
 
   return (
     <div className="flex flex-col">
@@ -223,7 +226,7 @@ function ExclusionRuleFilesEditor({
   >();
 
   const value = useStore(field.store, (state) => state.value);
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField
@@ -244,9 +247,9 @@ function ExclusionRuleFilesEditor({
     >
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
-          {value.map((_, index) => (
+          {value.map((filename, index) => (
             <form.Field
-              key={index}
+              key={filename.filename}
               name={`files.exclusionRuleFiles[${index}].filename`}
             >
               {(subField) => (

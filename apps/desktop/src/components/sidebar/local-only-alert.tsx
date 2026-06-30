@@ -13,6 +13,10 @@ export function SidebarLocalOnlyAlert() {
     "sidebarAlerts.dismissed.cloudBackup",
   );
 
+  const dismiss = () => {
+    setCloudBackupDismissedAt(new Date().toISOString());
+  };
+
   return (
     <SidebarMenuItem>
       <Alert variant="warn" className="relative rounded-xl p-4">
@@ -21,7 +25,7 @@ export function SidebarLocalOnlyAlert() {
           size="icon-xs"
           aria-label={t("dismiss")}
           className="absolute right-2 top-2 text-amber-600/70 hover:bg-amber-500/10 hover:text-amber-600 dark:text-amber-500/70 dark:hover:text-amber-500"
-          onClick={() => setCloudBackupDismissedAt(new Date().toISOString())}
+          onClick={dismiss}
         >
           <XIcon />
         </Button>

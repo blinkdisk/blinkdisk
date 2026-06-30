@@ -6,7 +6,6 @@ import { UNITS } from "@desktop/components/cron/constants";
 import { CustomSelect } from "@desktop/components/cron/fields/select";
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
 import type { WeekDaysProps } from "@desktop/components/cron/types";
-import { useMemo } from "react";
 
 export function WeekDays(props: WeekDaysProps) {
   const {
@@ -28,14 +27,13 @@ export function WeekDays(props: WeekDaysProps) {
   const optionsList = locale.weekDays || DEFAULT_LOCALE_EN.weekDays;
   const noMonthDays = period === "week" || !monthDays || monthDays.length === 0;
 
-  const localeJSON = JSON.stringify(locale);
-  const placeholder = useMemo(() => {
+  const placeholder = (() => {
     if (noMonthDays) {
       return locale.emptyWeekDays || DEFAULT_LOCALE_EN.emptyWeekDays;
     }
 
     return locale.emptyWeekDaysShort || DEFAULT_LOCALE_EN.emptyWeekDaysShort;
-  }, [noMonthDays, localeJSON]);
+  })();
 
   const displayWeekDays =
     period === "week" ||

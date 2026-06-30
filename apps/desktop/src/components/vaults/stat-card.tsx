@@ -1,6 +1,7 @@
 import { Card, CardContent, CardTitle } from "@blinkdisk/ui/card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Sparkline } from "@blinkdisk/ui/sparkline";
+import { getHistoryTrend } from "@desktop/components/vaults/stat-card-utils";
 import { ArrowDownRightIcon, ArrowUpRightIcon, MinusIcon } from "lucide-react";
 
 type VaultStatCardProps = {
@@ -52,18 +53,6 @@ export function VaultStatCard({
       </CardContent>
     </Card>
   );
-}
-
-export function getHistoryTrend(history?: number[]) {
-  const first = history?.find((value) => value > 0) ?? history?.[0] ?? 0;
-  const last = history?.[history.length - 1] ?? 0;
-  const percent =
-    first === 0 ? (last > 0 ? 100 : 0) : ((last - first) / first) * 100;
-
-  return {
-    direction: percent < 0 ? "down" : percent > 0 ? "up" : "flat",
-    percent: Math.abs(percent),
-  };
 }
 
 function formatTrendPercent(percent: number) {

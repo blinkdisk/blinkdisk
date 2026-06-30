@@ -2,19 +2,15 @@ import { useSourceList } from "@desktop/hooks/queries/core/use-source-list";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { profileFromParts } from "@desktop/lib/profile";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export function useTaskbarProgress() {
   const { profile: routeProfile } = useProfile();
   const { localHostName, localUserName } = useLocalProfile();
-  const localProfile = useMemo(
-    () =>
-      profileFromParts({
-        hostName: localHostName,
-        userName: localUserName,
-      }),
-    [localHostName, localUserName],
-  );
+  const localProfile = profileFromParts({
+    hostName: localHostName,
+    userName: localUserName,
+  });
   const { data: sources } = useSourceList({
     profile: routeProfile ?? localProfile,
   });

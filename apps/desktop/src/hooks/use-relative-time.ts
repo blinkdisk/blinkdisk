@@ -11,6 +11,25 @@ const RELATIVE_TIME_UNITS = [
   { unit: "second", ms: 1000 },
 ] as const;
 
+export const EN_RELATIVE_TIME_FORMATTER = new Intl.RelativeTimeFormat("en", {
+  numeric: "auto",
+});
+const relativeTimeFormatters = new Map<string, Intl.RelativeTimeFormat>([
+  ["en", EN_RELATIVE_TIME_FORMATTER],
+]);
+
+function getRelativeTimeFormatter(language: string) {
+  const cached = relativeTimeFormatters.get(language);
+  if (cached) return cached;
+
+  const formatter = Reflect.construct(Intl.RelativeTimeFormat, [
+    language,
+    { numeric: "auto" },
+  ]) as Intl.RelativeTimeFormat;
+  relativeTimeFormatters.set(language, formatter);
+  return formatter;
+}
+
 function getRolloverThreshold(unitIndex: number) {
   const unit = RELATIVE_TIME_UNITS[unitIndex];
   const largerUnit = RELATIVE_TIME_UNITS[unitIndex - 1];
@@ -23,7 +42,7 @@ function getRolloverThreshold(unitIndex: number) {
 
 export function formatRelativeTime(
   date: Date | string | number,
-  language: string,
+  formatter: Intl.RelativeTimeFormat,
   now = Date.now(),
 ): string {
   const timestamp = new Date(date).getTime();
@@ -48,10 +67,7 @@ export function formatRelativeTime(
     value = Math.round(diff / selected.ms);
   }
 
-  return new Intl.RelativeTimeFormat(language, { numeric: "auto" }).format(
-    value,
-    selected.unit,
-  );
+  return formatter.format(value, selected.unit);
 }
 
 export function useRelativeTime(
@@ -59,6 +75,7 @@ export function useRelativeTime(
 ): string {
   const { language } = useAppTranslation();
   const now = useNow(10_000);
+  const formatter = getRelativeTimeFormatter(language);
 
-  return date ? formatRelativeTime(date, language, now) : "";
+  return date ? formatRelativeTime(date, formatter, now) : "";
 }

@@ -3,15 +3,18 @@ import {
   type DynamicFieldProps,
 } from "@blinkdisk/components/dynamic-field";
 import { Input, type InputProps } from "@blinkdisk/ui/input";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { useContext } from "react";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
+import type { ChangeEvent, Ref } from "react";
+import { use } from "react";
 
-const Text = React.forwardRef<
-  HTMLInputElement,
-  InputProps & { label: DynamicFieldProps }
->(({ type, className, label, disabled, ...props }, ref) => {
+type TextProps = InputProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLInputElement>;
+};
+
+function Text({ type, className, label, disabled, ref, ...props }: TextProps) {
   const field = useFieldContext<string | number>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField {...label} errors={field.state.meta.errors} name={field.name}>
@@ -24,9 +27,7 @@ const Text = React.forwardRef<
         value={field.state.value ?? ""}
         onBlur={() => field.handleBlur()}
         onChange={(
-          e:
-            | React.ChangeEvent<HTMLInputElement>
-            | React.ChangeEvent<HTMLTextAreaElement>,
+          e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
         ) =>
           type === "number" && "valueAsNumber" in e.target
             ? field.handleChange(e.target.valueAsNumber)
@@ -37,8 +38,6 @@ const Text = React.forwardRef<
       />
     </DynamicField>
   );
-});
-
-Text.displayName = "TextField";
+}
 
 export { Text };

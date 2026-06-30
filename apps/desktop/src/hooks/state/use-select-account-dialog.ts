@@ -1,5 +1,4 @@
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type SelectAccountDialogOptions = {
   onSelect: (accountId: string) => void;
@@ -14,22 +13,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openSelectAccountDialog(options: SelectAccountDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options,
+  }));
+}
+
 export function useSelectAccountDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openSelectAccountDialog(options: SelectAccountDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options,
-    }));
-  }
 
   return {
     isOpen,

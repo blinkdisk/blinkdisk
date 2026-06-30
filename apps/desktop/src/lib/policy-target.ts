@@ -12,7 +12,7 @@ export type PolicyTarget =
       path: string;
     };
 
-export type PolicyTargetKind = PolicyTarget["kind"];
+type PolicyTargetKind = PolicyTarget["kind"];
 export type DraftSourcePolicyTarget = Extract<
   PolicyTarget,
   { kind: "DRAFT_SOURCE" }
@@ -388,14 +388,19 @@ export function buildPolicyTree({
     });
 
     for (const node of nodes) {
-      const parent = [...nodes]
-        .filter((candidate) => candidate.id !== node.id)
-        .filter((candidate) =>
-          isChildPath(getNodePath(candidate), getNodePath(node)),
-        )
-        .sort(
-          (a, b) => getPathDepth(getNodePath(b)) - getPathDepth(getNodePath(a)),
-        )[0];
+      let parent: PolicyTreeNode | undefined;
+      let parentDepth = -1;
+
+      for (const candidate of nodes) {
+        if (candidate.id === node.id) continue;
+        if (!isChildPath(getNodePath(candidate), getNodePath(node))) continue;
+
+        const depth = getPathDepth(getNodePath(candidate));
+        if (depth <= parentDepth) continue;
+
+        parent = candidate;
+        parentDepth = depth;
+      }
 
       if (parent) parent.children.push(node);
       else userNode.children.push(node);

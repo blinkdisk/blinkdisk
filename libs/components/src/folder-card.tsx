@@ -1,4 +1,1 @@
-export {
-  getEmojiUrl,
-  SourceCard as FolderCard,
-} from "./source-card";
+export { SourceCard as FolderCard } from "./source-card";

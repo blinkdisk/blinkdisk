@@ -1,4 +1,4 @@
-import { getHistoryTrend } from "@desktop/components/vaults/stat-card";
+import { getHistoryTrend } from "@desktop/components/vaults/stat-card-utils";
 
 describe("getHistoryTrend", () => {
   it.each([

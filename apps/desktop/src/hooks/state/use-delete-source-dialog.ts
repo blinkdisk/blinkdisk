@@ -1,6 +1,5 @@
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type DeleteSourceDialogOptions = {
   sourceId: string;
@@ -15,22 +14,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openDeleteSourceDialog(options: DeleteSourceDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options,
+  }));
+}
+
 export function useDeleteSourceDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openDeleteSourceDialog(options: DeleteSourceDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options,
-    }));
-  }
 
   return {
     isOpen,

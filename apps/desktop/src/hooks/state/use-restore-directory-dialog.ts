@@ -1,7 +1,6 @@
 import type { CoreBackupItem } from "@desktop/hooks/queries/core/use-backup-list";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type RestoreDirectoryDialogOptions = {
   directoryId: string;
@@ -18,22 +17,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openRestoreDirectory(options: RestoreDirectoryDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options,
+  }));
+}
+
 export function useRestoreDirectoryDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openRestoreDirectory(options: RestoreDirectoryDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options,
-    }));
-  }
 
   return {
     isOpen,

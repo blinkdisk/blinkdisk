@@ -1,32 +1,47 @@
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 const store = new Store<{
   isOpen: boolean;
+  onAccountAdd?: (accountId: string) => void;
 }>({
   isOpen: false,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+    onAccountAdd: to ? state.onAccountAdd : undefined,
+  }));
+}
+
+function openAuthDialog(options?: {
+  onAccountAdd?: (accountId: string) => void;
+}) {
+  store.setState(() => ({
+    isOpen: true,
+    onAccountAdd: options?.onAccountAdd,
+  }));
+  window.electron.auth.open();
+}
+
+function completeAuthDialog(accountId: string) {
+  const { onAccountAdd } = store.state;
+  store.setState((state) => ({
+    ...state,
+    isOpen: false,
+    onAccountAdd: undefined,
+  }));
+  onAccountAdd?.(accountId);
+}
+
 export function useAuthDialog() {
   const { isOpen } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openAuthDialog() {
-    store.setState(() => ({
-      isOpen: true,
-    }));
-    window.electron.auth.open();
-  }
 
   return {
     isOpen,
     setIsOpen,
     openAuthDialog,
+    completeAuthDialog,
   };
 }

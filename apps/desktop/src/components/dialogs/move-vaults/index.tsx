@@ -20,7 +20,7 @@ import { useReactivity } from "@desktop/hooks/use-reactivity";
 import { getVaultCollection } from "@desktop/lib/db";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowUpDownIcon } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
 
 type DialogState<T> = {
   key: string;
@@ -62,23 +62,15 @@ export function MoveVaultsDialog() {
       getVaultCollection(LOCAL_ACCOUNT_ID).find({ status: "ACTIVE" }).fetch(),
     [],
   );
-  const initialVaultIds = useMemo(
-    () =>
-      new Set(
-        options?.allVaults
-          ? (localVaults ?? []).map((vault) => vault.id)
-          : (options?.vaultIds ?? []),
-      ),
-    [options, localVaults],
+  const initialVaultIds = new Set(
+    options?.allVaults
+      ? (localVaults ?? []).map((vault) => vault.id)
+      : (options?.vaultIds ?? []),
   );
-  const optionsKey = useMemo(
-    () =>
-      JSON.stringify({
-        vaultIds: Array.from(initialVaultIds),
-        toAccountId: options?.toAccountId ?? null,
-      }),
-    [initialVaultIds, options?.toAccountId],
-  );
+  const optionsKey = JSON.stringify({
+    vaultIds: Array.from(initialVaultIds),
+    toAccountId: options?.toAccountId ?? null,
+  });
   const selectedVaultIds =
     selectedVaultIdsState?.key === optionsKey
       ? selectedVaultIdsState.value
@@ -88,55 +80,45 @@ export function MoveVaultsDialog() {
       ? toAccountIdState.value
       : (options?.toAccountId ?? null);
 
-  const toAccount = useMemo(
-    () => accounts.find((a) => a.id === toAccountId),
-    [accounts, toAccountId],
-  );
+  const toAccount = accounts.find((a) => a.id === toAccountId);
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setSelectedVaultIdsState(null);
     setToAccountIdState(null);
-  }, []);
+  };
 
-  const updateSelectedVaultIds = useCallback(
-    (updater: (value: Set<string>) => Set<string>) => {
-      setSelectedVaultIdsState((current) => ({
-        key: optionsKey,
-        value: updater(
-          current?.key === optionsKey ? current.value : initialVaultIds,
-        ),
-      }));
-    },
-    [initialVaultIds, optionsKey],
-  );
+  const updateSelectedVaultIds = (
+    updater: (value: Set<string>) => Set<string>,
+  ) => {
+    setSelectedVaultIdsState((current) => ({
+      key: optionsKey,
+      value: updater(
+        current?.key === optionsKey ? current.value : initialVaultIds,
+      ),
+    }));
+  };
 
-  const setToAccountId = useCallback(
-    (accountId: string | null) => {
-      setToAccountIdState({ key: optionsKey, value: accountId });
-    },
-    [optionsKey],
-  );
+  const setToAccountId = (accountId: string | null) => {
+    setToAccountIdState({ key: optionsKey, value: accountId });
+  };
 
-  const toggleVault = useCallback(
-    (vaultId: string, checked: boolean) => {
-      updateSelectedVaultIds((prev) => {
-        const next = new Set(prev);
-        if (checked) {
-          next.add(vaultId);
-        } else {
-          next.delete(vaultId);
-        }
-        return next;
-      });
-    },
-    [updateSelectedVaultIds],
-  );
+  const toggleVault = (vaultId: string, checked: boolean) => {
+    updateSelectedVaultIds((prev) => {
+      const next = new Set(prev);
+      if (checked) {
+        next.add(vaultId);
+      } else {
+        next.delete(vaultId);
+      }
+      return next;
+    });
+  };
 
-  const handleSelectAccount = useCallback(() => {
+  const handleSelectAccount = () => {
     openSelectAccountDialog({
       onSelect: (accountId) => setToAccountId(accountId),
     });
-  }, [openSelectAccountDialog, setToAccountId]);
+  };
 
   const canSubmit = selectedVaultIds.size > 0 && !!toAccountId;
 

@@ -11,7 +11,7 @@ import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyField } from "@desktop/components/policy/field";
 import type { PolicyForm } from "@desktop/hooks/forms/use-policy-form";
 import { PlusIcon, TrashIcon } from "lucide-react";
-import { useContext } from "react";
+import { use } from "react";
 
 export function ScheduleSettings({
   form,
@@ -132,13 +132,19 @@ type CronEditorProps = {
 function CronEditor({ label, form }: CronEditorProps) {
   const { t } = useAppTranslation("policy.schedule");
 
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   const field = useFieldContext<
     { id: string; expression: string }[] | undefined
   >();
 
   const value = useStore(field.store, (state) => state.value);
+  const addCronExpression = () => {
+    field.pushValue({
+      id: Math.random().toString(16),
+      expression: "0 0 * * *",
+    });
+  };
 
   return (
     <DynamicField title={label}>
@@ -184,12 +190,7 @@ function CronEditor({ label, form }: CronEditorProps) {
       <Button
         variant="secondary"
         type="button"
-        onClick={() => {
-          field.pushValue({
-            id: Math.random().toString(16),
-            expression: "0 0 * * *",
-          });
-        }}
+        onClick={addCronExpression}
         disabled={disabledContext}
       >
         <PlusIcon />

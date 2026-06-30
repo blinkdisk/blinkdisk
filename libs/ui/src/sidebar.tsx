@@ -6,6 +6,7 @@ import { cn } from "@blinkdisk/utils/class";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
+import { use } from "react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -23,7 +24,7 @@ type SidebarContextProps = {
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
 
 function useSidebar() {
-  const context = React.useContext(SidebarContext);
+  const context = use(SidebarContext);
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider.");
   }

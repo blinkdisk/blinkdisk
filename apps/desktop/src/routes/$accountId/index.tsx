@@ -8,7 +8,6 @@ import { useCreateVaultDialog } from "@desktop/hooks/state/use-create-vault-dial
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { createFileRoute } from "@tanstack/react-router";
 import { CloudAlertIcon, PlusIcon, RefreshCwIcon } from "lucide-react";
-import { useCallback } from "react";
 
 export const Route = createFileRoute("/$accountId/")({
   component: RouteComponent,
@@ -22,13 +21,13 @@ function RouteComponent() {
 
   const { mutate: sync, isPending: isSyncing } = useSync();
 
-  const openCreateCloudBlink = useCallback(() => {
+  const openCreateCloudBlink = () => {
     openCreateVault({
       step: "DETAILS",
       provider: "CLOUDBLINK",
       autoSelectedProvider: true,
     });
-  }, [openCreateVault]);
+  };
 
   if (!vaults?.length)
     return (

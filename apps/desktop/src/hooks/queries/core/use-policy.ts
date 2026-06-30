@@ -19,17 +19,13 @@ import {
 } from "@desktop/lib/policy-target";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 
 export function usePolicy(target: PolicyTarget | null | undefined) {
   const { queryKeys } = useQueryKey();
   const { vaultId } = useVaultId();
   const { running } = useVaultStatus();
 
-  const targetId = useMemo(
-    () => (target ? policyTargetId(target) : "missing"),
-    [target],
-  );
+  const targetId = target ? policyTargetId(target) : "missing";
 
   return useQuery({
     queryKey: queryKeys.policy.target(vaultId, targetId),

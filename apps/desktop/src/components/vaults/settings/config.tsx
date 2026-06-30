@@ -10,7 +10,6 @@ import {
 } from "@desktop/components/settings";
 import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultConfig } from "@desktop/hooks/queries/use-vault-config";
-import { useMemo } from "react";
 
 export function VaultConfigSettings() {
   const { t } = useAppTranslation("settings.vault.config");
@@ -23,10 +22,7 @@ export function VaultConfigSettings() {
     : null;
   const Icon = displayProviderType ? providerIcons[displayProviderType] : null;
 
-  const Form = useMemo(
-    () => (displayProviderType ? providerForms[displayProviderType] : null),
-    [displayProviderType],
-  );
+  const Form = displayProviderType ? providerForms[displayProviderType] : null;
 
   if (!vault || vault.provider === "CLOUDBLINK") return null;
   return (

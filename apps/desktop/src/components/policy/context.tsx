@@ -7,7 +7,7 @@ import {
   createDraftPolicyTarget,
   type PolicyTarget,
 } from "@desktop/lib/policy-target";
-import { createContext, useMemo } from "react";
+import { PolicyContext } from "./policy-context";
 
 function usePolicyContext({
   target: targetOverride,
@@ -24,7 +24,7 @@ function usePolicyContext({
 }) {
   const { data: source } = useSource(sourceId, { profile });
 
-  const target = useMemo<PolicyTarget | null>(() => {
+  const target: PolicyTarget | null = (() => {
     if (targetOverride) return targetOverride;
 
     if (level === "VAULT") {
@@ -54,16 +54,13 @@ function usePolicyContext({
     }
 
     return null;
-  }, [source, level, mock, profile, targetOverride]);
+  })();
 
   const { data: policy, isPending } = usePolicy(target);
 
   const { mutateAsync: mutate } = useUpdatePolicy({ target });
 
-  const inherited = useMemo(
-    () => !!target && target.kind !== "GLOBAL",
-    [target],
-  );
+  const inherited = !!target && target.kind !== "GLOBAL";
 
   const definedFields = inherited ? policy?.definedFields : undefined;
 
@@ -87,25 +84,6 @@ function usePolicyContext({
 }
 
 export type PolicyContextType = ReturnType<typeof usePolicyContext>;
-
-const defaultContext = {
-  loading: true,
-  vaultPolicy: undefined,
-  sourcePolicy: undefined,
-  definedFields: undefined,
-  sourceId: undefined,
-  policy: undefined,
-  mutate: undefined,
-  level: undefined,
-  inherited: false,
-  mock: undefined,
-  profile: undefined,
-  target: undefined,
-};
-
-export const PolicyContext = createContext<
-  PolicyContextType | typeof defaultContext
->(defaultContext);
 
 type PolicyContextProviderProps = {
   target?: PolicyTarget;

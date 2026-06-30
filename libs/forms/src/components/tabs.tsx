@@ -8,17 +8,27 @@ import {
   Tabs as TabsRoot,
   TabsTrigger,
 } from "@blinkdisk/ui/tabs";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { type ReactNode, useContext } from "react";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
+import type { ReactNode, Ref } from "react";
+import { use } from "react";
 
-const Tabs = React.forwardRef<
-  HTMLDivElement,
-  TabsProps & { label: DynamicFieldProps } & {
-    items: { value: string; label: ReactNode }[];
-  }
->(({ className, onValueChange, label, items, ...props }, ref) => {
+type TabsFieldProps = TabsProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLDivElement>;
+} & {
+  items: { value: string; label: ReactNode }[];
+};
+
+function Tabs({
+  className,
+  onValueChange,
+  label,
+  items,
+  ref,
+  ...props
+}: TabsFieldProps) {
   const field = useFieldContext<string>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField {...label} errors={field.state.meta.errors} name={field.name}>
@@ -41,8 +51,6 @@ const Tabs = React.forwardRef<
       </TabsRoot>
     </DynamicField>
   );
-});
-
-Tabs.displayName = "Tabs";
+}
 
 export { Tabs };

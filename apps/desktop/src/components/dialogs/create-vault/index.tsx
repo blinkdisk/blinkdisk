@@ -16,7 +16,6 @@ import {
   useCreateVaultDialog,
 } from "@desktop/hooks/state/use-create-vault-dialog";
 import { ArrowLeftIcon } from "lucide-react";
-import { useCallback } from "react";
 
 const backButton: Record<CreateVaultStep, CreateVaultStep> = {
   VARIANT: "VARIANT",
@@ -32,13 +31,13 @@ export function CreateVaultDialog() {
     useCreateVaultDialog();
   const { step, provider, config, autoSelectedProvider } = options;
 
-  const close = useCallback(() => {
+  const close = () => {
     setIsOpen(false);
-  }, [setIsOpen]);
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     resetOptions();
-  }, [resetOptions]);
+  };
 
   const showFirstVaultTitle = !vaults?.length;
 

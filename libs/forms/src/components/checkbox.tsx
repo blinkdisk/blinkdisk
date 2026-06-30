@@ -7,15 +7,24 @@ import {
   Checkbox as CheckboxRoot,
 } from "@blinkdisk/ui/checkbox";
 import { cn } from "@blinkdisk/utils/class";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { useContext } from "react";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
+import type { Ref } from "react";
+import { use } from "react";
 
-const Checkbox = React.forwardRef<
-  HTMLButtonElement,
-  CheckboxProps & { label: DynamicFieldProps }
->(({ label, className, disabled, ...props }, ref) => {
+type CheckboxFieldProps = CheckboxProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLButtonElement>;
+};
+
+function Checkbox({
+  label,
+  className,
+  disabled,
+  ref,
+  ...props
+}: CheckboxFieldProps) {
   const field = useFieldContext<boolean>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField
@@ -39,8 +48,6 @@ const Checkbox = React.forwardRef<
       />
     </DynamicField>
   );
-});
-
-Checkbox.displayName = "Checkbox";
+}
 
 export { Checkbox };

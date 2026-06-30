@@ -4,7 +4,7 @@ import { Button } from "@blinkdisk/ui/button";
 import { cn } from "@blinkdisk/utils/class";
 import type { NormalizedBackupTool } from "@blinkdisk/utils/tools";
 import { SlidersHorizontalIcon } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 
 import { ComparisonBar } from "./backup-finder/ComparisonBar";
 import { COUNTRY_OPTIONS, EUROPE_OPTION } from "./backup-finder/constants";
@@ -35,22 +35,128 @@ type BackupFinderProps = {
 
 const DEFAULT_OPEN_GROUPS: FilterGroupId[] = ["platforms"];
 
+type BackupFinderState = {
+  filters: Filters;
+  openGroups: FilterGroupId[];
+  mobileFiltersOpen: boolean;
+  countryQuery: string;
+  selectedComparisonSlugs: string[];
+};
+
+type BackupFinderAction =
+  | { type: "setFilters"; filters: Filters }
+  | { type: "toggleGroup"; group: FilterGroupId }
+  | { type: "setMobileFiltersOpen"; open: boolean }
+  | { type: "setCountryQuery"; query: string }
+  | { type: "toggleComparisonSelection"; slug: string }
+  | { type: "clearComparisonSelection" }
+  | { type: "resetFilters" };
+
 function getInitialOpenGroups(filters: Filters): FilterGroupId[] {
   const openGroups = getOpenGroupsFromFilters(filters);
 
   return openGroups.length > 0 ? openGroups : DEFAULT_OPEN_GROUPS;
 }
 
+function getInitialState(): BackupFinderState {
+  if (typeof window === "undefined") {
+    return {
+      filters: emptyFilters(),
+      openGroups: DEFAULT_OPEN_GROUPS,
+      mobileFiltersOpen: false,
+      countryQuery: "",
+      selectedComparisonSlugs: [],
+    };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const filters =
+    Array.from(params.keys()).length > 0
+      ? parseFromParams(params)
+      : emptyFilters();
+
+  return {
+    filters,
+    openGroups: getInitialOpenGroups(filters),
+    mobileFiltersOpen: false,
+    countryQuery: "",
+    selectedComparisonSlugs: [],
+  };
+}
+
+function backupFinderReducer(
+  state: BackupFinderState,
+  action: BackupFinderAction,
+): BackupFinderState {
+  switch (action.type) {
+    case "setFilters":
+      return { ...state, filters: action.filters };
+    case "toggleGroup":
+      return {
+        ...state,
+        openGroups: state.openGroups.includes(action.group)
+          ? state.openGroups.filter((value) => value !== action.group)
+          : [...state.openGroups, action.group],
+      };
+    case "setMobileFiltersOpen":
+      return { ...state, mobileFiltersOpen: action.open };
+    case "setCountryQuery":
+      return { ...state, countryQuery: action.query };
+    case "toggleComparisonSelection":
+      return {
+        ...state,
+        selectedComparisonSlugs: state.selectedComparisonSlugs.includes(
+          action.slug,
+        )
+          ? state.selectedComparisonSlugs.filter(
+              (value) => value !== action.slug,
+            )
+          : [...state.selectedComparisonSlugs, action.slug],
+      };
+    case "clearComparisonSelection":
+      return { ...state, selectedComparisonSlugs: [] };
+    case "resetFilters":
+      return {
+        ...state,
+        filters: emptyFilters(),
+        countryQuery: "",
+      };
+  }
+}
+
+function getAvailableFilters(
+  filters: Filters,
+  availableOriginCountryCodes: Set<CountryCode>,
+) {
+  const nextOriginCountries = new Set(
+    Array.from(filters.originCountries).filter(
+      (code) =>
+        code === EUROPE_OPTION.code || availableOriginCountryCodes.has(code),
+    ),
+  );
+
+  if (nextOriginCountries.size === filters.originCountries.size) {
+    return filters;
+  }
+
+  return {
+    ...filters,
+    originCountries: nextOriginCountries,
+  };
+}
+
 export function BackupFinder({ tools }: BackupFinderProps) {
-  const [filters, setFilters] = useState<Filters>(emptyFilters);
-  const [openGroups, setOpenGroups] =
-    useState<FilterGroupId[]>(DEFAULT_OPEN_GROUPS);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [countryQuery, setCountryQuery] = useState("");
-  const [selectedComparisonSlugs, setSelectedComparisonSlugs] = useState<
-    string[]
-  >([]);
-  const hydrated = useRef(false);
+  const [state, dispatch] = useReducer(
+    backupFinderReducer,
+    null,
+    getInitialState,
+  );
+  const {
+    countryQuery,
+    mobileFiltersOpen,
+    openGroups,
+    selectedComparisonSlugs,
+  } = state;
 
   const availableReleaseYears = useMemo(
     () =>
@@ -84,6 +190,11 @@ export function BackupFinder({ tools }: BackupFinderProps) {
     [availableOriginCountryCodes],
   );
 
+  const filters = useMemo(
+    () => getAvailableFilters(state.filters, availableOriginCountryCodes),
+    [availableOriginCountryCodes, state.filters],
+  );
+
   const selectedCountryOptions = useMemo(
     () =>
       originOptions.filter((option) =>
@@ -94,41 +205,6 @@ export function BackupFinder({ tools }: BackupFinderProps) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
-    const params = new URLSearchParams(window.location.search);
-    if (Array.from(params.keys()).length > 0) {
-      const parsedFilters = parseFromParams(params);
-      setFilters(parsedFilters);
-      setOpenGroups(getInitialOpenGroups(parsedFilters));
-    }
-
-    hydrated.current = true;
-  }, []);
-
-  useEffect(() => {
-    setFilters((current) => {
-      const nextOriginCountries = new Set(
-        Array.from(current.originCountries).filter(
-          (code) =>
-            code === EUROPE_OPTION.code ||
-            availableOriginCountryCodes.has(code),
-        ),
-      );
-
-      if (nextOriginCountries.size === current.originCountries.size) {
-        return current;
-      }
-
-      return {
-        ...current,
-        originCountries: nextOriginCountries,
-      };
-    });
-  }, [availableOriginCountryCodes]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!hydrated.current) return;
 
     const params = serialiseToParams(filters);
     const queryString = params.toString();
@@ -174,71 +250,68 @@ export function BackupFinder({ tools }: BackupFinderProps) {
   const canCompare = selectedComparisonSlugs.length >= 1;
 
   const toggleGroup = (group: FilterGroupId) => {
-    setOpenGroups((current) =>
-      current.includes(group)
-        ? current.filter((value) => value !== group)
-        : [...current, group],
-    );
+    dispatch({ type: "toggleGroup", group });
   };
 
   const togglePricing = (value: NormalizedBackupTool["pricing"]) => {
-    setFilters((current) => {
-      const nextPricing = new Set(current.pricing);
-      if (nextPricing.has(value)) nextPricing.delete(value);
-      else nextPricing.add(value);
+    const nextPricing = new Set(filters.pricing);
+    if (nextPricing.has(value)) nextPricing.delete(value);
+    else nextPricing.add(value);
 
-      return { ...current, pricing: nextPricing };
+    dispatch({
+      type: "setFilters",
+      filters: { ...filters, pricing: nextPricing },
     });
   };
 
   const toggleCategoryKey = (category: FilterCategory, key: string) => {
-    setFilters((current) => {
-      const nextCategoryFilters = new Set(current.byCategory[category]);
-      if (nextCategoryFilters.has(key)) nextCategoryFilters.delete(key);
-      else nextCategoryFilters.add(key);
+    const nextCategoryFilters = new Set(filters.byCategory[category]);
+    if (nextCategoryFilters.has(key)) nextCategoryFilters.delete(key);
+    else nextCategoryFilters.add(key);
 
-      return {
-        ...current,
+    dispatch({
+      type: "setFilters",
+      filters: {
+        ...filters,
         byCategory: {
-          ...current.byCategory,
+          ...filters.byCategory,
           [category]: nextCategoryFilters,
         },
-      };
+      },
     });
   };
 
   const updateReleaseYear = (bound: keyof ReleaseYearRange, value: string) => {
     const normalized = value.replace(/[^\d]/g, "").slice(0, 4);
 
-    setFilters((current) => ({
-      ...current,
-      releaseYear: {
-        ...current.releaseYear,
-        [bound]: normalized,
+    dispatch({
+      type: "setFilters",
+      filters: {
+        ...filters,
+        releaseYear: {
+          ...filters.releaseYear,
+          [bound]: normalized,
+        },
       },
-    }));
+    });
   };
 
   const updateOriginCountries = (options: OriginOption[]) => {
-    setFilters((current) => ({
-      ...current,
-      originCountries: new Set(options.map((option) => option.code)),
-    }));
+    dispatch({
+      type: "setFilters",
+      filters: {
+        ...filters,
+        originCountries: new Set(options.map((option) => option.code)),
+      },
+    });
   };
 
   const resetAll = () => {
-    setCountryQuery("");
-    setFilters(emptyFilters());
+    dispatch({ type: "resetFilters" });
   };
 
   const toggleComparisonSelection = (slug: string) => {
-    setSelectedComparisonSlugs((current) => {
-      if (current.includes(slug)) {
-        return current.filter((value) => value !== slug);
-      }
-
-      return [...current, slug];
-    });
+    dispatch({ type: "toggleComparisonSelection", slug });
   };
 
   const startComparison = () => {
@@ -252,7 +325,7 @@ export function BackupFinder({ tools }: BackupFinderProps) {
   };
 
   const clearComparisonSelection = () => {
-    setSelectedComparisonSlugs([]);
+    dispatch({ type: "clearComparisonSelection" });
   };
 
   return (
@@ -267,7 +340,9 @@ export function BackupFinder({ tools }: BackupFinderProps) {
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => setMobileFiltersOpen(true)}
+            onClick={() =>
+              dispatch({ type: "setMobileFiltersOpen", open: true })
+            }
           >
             <SlidersHorizontalIcon className="size-4" />
             Filters
@@ -298,9 +373,13 @@ export function BackupFinder({ tools }: BackupFinderProps) {
           onToggleCategoryKey={toggleCategoryKey}
           onUpdateReleaseYear={updateReleaseYear}
           onOriginCountriesChange={updateOriginCountries}
-          onCountryQueryChange={setCountryQuery}
+          onCountryQueryChange={(query) =>
+            dispatch({ type: "setCountryQuery", query })
+          }
           onResetAll={resetAll}
-          onCloseMobileFilters={() => setMobileFiltersOpen(false)}
+          onCloseMobileFilters={() =>
+            dispatch({ type: "setMobileFiltersOpen", open: false })
+          }
         />
 
         <ResultsSection
