@@ -7,7 +7,7 @@ import { getVaultCollection } from "@desktop/lib/db";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation } from "@tanstack/react-query";
 
-export function useUpdateVault(onSuccess: () => void) {
+export function useUpdateVault(onSuccess?: () => void) {
   const { vaultId } = useVaultId();
   const { accountId } = useAccountId();
 

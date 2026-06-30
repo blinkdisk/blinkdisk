@@ -21,7 +21,7 @@ import { useOpenBillingPortal } from "@desktop/hooks/mutations/use-open-billing-
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { useSubscription } from "@desktop/hooks/queries/use-subscription";
 import { ArrowLeftIcon, CheckIcon, MinusIcon, PlusIcon } from "lucide-react";
-import { type ReactNode, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 
 const currency = "USD";
 
@@ -45,7 +45,9 @@ export function SubscriptionPlans({
     refetchInterval: 5000,
   });
 
-  const [selectedPlanIndex, setSelectedPlanIndex] = useState(0);
+  const [selectedPlanIndexOverride, setSelectedPlanIndex] = useState<
+    number | null
+  >(null);
   const [period, setPeriod] = useState<BillingPeriod>("YEARLY");
   const [pending, setPending] = useState<{ url: string } | null>(null);
 
@@ -53,28 +55,16 @@ export function SubscriptionPlans({
   const [change, setChange] = useState<Change | null>(null);
 
   const plans = useMemo(() => SUBSCRIPTION_PLANS, []);
+  const defaultSelectedPlanIndex = getDefaultSelectedPlanIndex(
+    plans,
+    subscription?.planId,
+  );
+  const selectedPlanIndex =
+    selectedPlanIndexOverride ?? defaultSelectedPlanIndex;
   const selectedPlan = useMemo(
     () => plans[selectedPlanIndex],
     [plans, selectedPlanIndex],
   );
-
-  useEffect(() => {
-    if (!subscription?.planId) return;
-
-    const currentPlanIndex = plans.findIndex(
-      (plan) => plan.id === subscription.planId,
-    );
-    const currentPlan = plans[currentPlanIndex];
-    if (!currentPlan) return;
-
-    const nextPlanIndex = plans.findIndex(
-      (plan) => plan.storageGB > currentPlan.storageGB,
-    );
-
-    setSelectedPlanIndex(
-      nextPlanIndex === -1 ? currentPlanIndex : nextPlanIndex,
-    );
-  }, [plans, subscription?.planId]);
 
   return (
     <>
@@ -114,6 +104,23 @@ export function SubscriptionPlans({
       </div>
     </>
   );
+}
+
+function getDefaultSelectedPlanIndex(
+  plans: PlanType[],
+  currentPlanId: string | null | undefined,
+) {
+  if (!currentPlanId) return 0;
+
+  const currentPlanIndex = plans.findIndex((plan) => plan.id === currentPlanId);
+  const currentPlan = plans[currentPlanIndex];
+  if (!currentPlan) return 0;
+
+  const nextPlanIndex = plans.findIndex(
+    (plan) => plan.storageGB > currentPlan.storageGB,
+  );
+
+  return nextPlanIndex === -1 ? currentPlanIndex : nextPlanIndex;
 }
 
 type PlanProps = {

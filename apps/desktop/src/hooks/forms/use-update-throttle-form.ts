@@ -9,7 +9,7 @@ import { DEFAULT_THROTTLE_LIMIT } from "@desktop/lib/throttle";
 
 export function useUpdateThrottleForm() {
   const { data: throttle } = useVaultThrottle();
-  const { mutateAsync } = useUpdateThrottle(() => form.reset());
+  const { mutateAsync } = useUpdateThrottle();
 
   const form = useAppForm({
     defaultValues: {
@@ -25,7 +25,10 @@ export function useUpdateThrottleForm() {
     validators: {
       onSubmit: ZVaultThrottle,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: async ({ value }) => {
+      await mutateAsync(value);
+      form.reset();
+    },
   });
 
   return form;

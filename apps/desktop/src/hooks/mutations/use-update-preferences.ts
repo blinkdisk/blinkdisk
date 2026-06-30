@@ -6,7 +6,7 @@ import { useTheme } from "@desktop/hooks/use-theme";
 import { i18n } from "@desktop/i18n";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useUpdatePreferences(onSuccess: () => void) {
+export function useUpdatePreferences(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   const { setTheme } = useTheme();

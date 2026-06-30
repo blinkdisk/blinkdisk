@@ -22,10 +22,7 @@ export function useCreateVaultForm({
 }) {
   const { t } = useAppTranslation("vault.providers");
 
-  const { mutateAsync } = useCreateVault((res) => {
-    form.reset();
-    onSuccess?.(res);
-  });
+  const { mutateAsync } = useCreateVault();
   const displayProviderType = providerType
     ? resolveStorageProviderType(providerType)
     : undefined;
@@ -39,14 +36,19 @@ export function useCreateVaultForm({
     validators: {
       onSubmit: ZCreateVaultDetails,
     },
-    onSubmit: async ({ value }) =>
-      providerType &&
-      (await mutateAsync({
+    onSubmit: async ({ value }) => {
+      if (!providerType) return;
+
+      const res = await mutateAsync({
         name: value.name,
         provider: providerType,
         config: config || {},
         password: value.password,
-      })),
+      });
+
+      form.reset();
+      onSuccess?.(res);
+    },
   });
 
   return form;

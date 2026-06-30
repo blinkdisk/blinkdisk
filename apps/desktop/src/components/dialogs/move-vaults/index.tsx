@@ -20,7 +20,12 @@ import { useReactivity } from "@desktop/hooks/use-reactivity";
 import { getVaultCollection } from "@desktop/lib/db";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowUpDownIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+
+type DialogState<T> = {
+  key: string;
+  value: T;
+};
 
 export function MoveVaultsDialog() {
   const navigate = useNavigate({ from: "/$accountId" });
@@ -29,11 +34,11 @@ export function MoveVaultsDialog() {
   const { isOpen, setIsOpen, options } = useMoveVaultsDialog();
   const { openSelectAccountDialog } = useSelectAccountDialog();
   const { accounts } = useAccountList();
-
-  const [selectedVaultIds, setSelectedVaultIds] = useState<Set<string>>(
-    new Set(),
-  );
-  const [toAccountId, setToAccountId] = useState<string | null>(null);
+  const [selectedVaultIdsState, setSelectedVaultIdsState] =
+    useState<DialogState<Set<string>> | null>(null);
+  const [toAccountIdState, setToAccountIdState] = useState<DialogState<
+    string | null
+  > | null>(null);
 
   const { mutate, isPending } = useMoveVaults({
     onSuccess: async (values) => {
@@ -57,6 +62,31 @@ export function MoveVaultsDialog() {
       getVaultCollection(LOCAL_ACCOUNT_ID).find({ status: "ACTIVE" }).fetch(),
     [],
   );
+  const initialVaultIds = useMemo(
+    () =>
+      new Set(
+        options?.allVaults
+          ? (localVaults ?? []).map((vault) => vault.id)
+          : (options?.vaultIds ?? []),
+      ),
+    [options, localVaults],
+  );
+  const optionsKey = useMemo(
+    () =>
+      JSON.stringify({
+        vaultIds: Array.from(initialVaultIds),
+        toAccountId: options?.toAccountId ?? null,
+      }),
+    [initialVaultIds, options?.toAccountId],
+  );
+  const selectedVaultIds =
+    selectedVaultIdsState?.key === optionsKey
+      ? selectedVaultIdsState.value
+      : initialVaultIds;
+  const toAccountId =
+    toAccountIdState?.key === optionsKey
+      ? toAccountIdState.value
+      : (options?.toAccountId ?? null);
 
   const toAccount = useMemo(
     () => accounts.find((a) => a.id === toAccountId),
@@ -64,37 +94,49 @@ export function MoveVaultsDialog() {
   );
 
   const reset = useCallback(() => {
-    setSelectedVaultIds(new Set());
-    setToAccountId(null);
+    setSelectedVaultIdsState(null);
+    setToAccountIdState(null);
   }, []);
 
-  useEffect(() => {
-    if (isOpen && options) {
-      if (options.allVaults)
-        setSelectedVaultIds(new Set(localVaults.map((vault) => vault.id)));
-      else setSelectedVaultIds(new Set(options.vaultIds || []));
+  const updateSelectedVaultIds = useCallback(
+    (updater: (value: Set<string>) => Set<string>) => {
+      setSelectedVaultIdsState((current) => ({
+        key: optionsKey,
+        value: updater(
+          current?.key === optionsKey ? current.value : initialVaultIds,
+        ),
+      }));
+    },
+    [initialVaultIds, optionsKey],
+  );
 
-      setToAccountId(options.toAccountId || null);
-    }
-  }, [options, isOpen, localVaults]);
+  const setToAccountId = useCallback(
+    (accountId: string | null) => {
+      setToAccountIdState({ key: optionsKey, value: accountId });
+    },
+    [optionsKey],
+  );
 
-  const toggleVault = useCallback((vaultId: string, checked: boolean) => {
-    setSelectedVaultIds((prev) => {
-      const next = new Set(prev);
-      if (checked) {
-        next.add(vaultId);
-      } else {
-        next.delete(vaultId);
-      }
-      return next;
-    });
-  }, []);
+  const toggleVault = useCallback(
+    (vaultId: string, checked: boolean) => {
+      updateSelectedVaultIds((prev) => {
+        const next = new Set(prev);
+        if (checked) {
+          next.add(vaultId);
+        } else {
+          next.delete(vaultId);
+        }
+        return next;
+      });
+    },
+    [updateSelectedVaultIds],
+  );
 
   const handleSelectAccount = useCallback(() => {
     openSelectAccountDialog({
       onSelect: (accountId) => setToAccountId(accountId),
     });
-  }, [openSelectAccountDialog]);
+  }, [openSelectAccountDialog, setToAccountId]);
 
   const canSubmit = selectedVaultIds.size > 0 && !!toAccountId;
 

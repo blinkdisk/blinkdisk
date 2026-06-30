@@ -22,12 +22,7 @@ export function SignOutDialog() {
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
-
-    try {
-      await logout();
-    } finally {
-      setIsSigningOut(false);
-    }
+    await logout().finally(() => setIsSigningOut(false));
   };
 
   return (

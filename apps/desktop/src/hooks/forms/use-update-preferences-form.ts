@@ -7,7 +7,7 @@ import { i18n } from "@desktop/i18n";
 
 export function useUpdatePreferencesForm() {
   const { theme } = useTheme();
-  const { mutateAsync } = useUpdatePreferences(() => form.reset());
+  const { mutateAsync } = useUpdatePreferences();
 
   const form = useAppForm({
     defaultValues: {
@@ -22,7 +22,10 @@ export function useUpdatePreferencesForm() {
         if (formApi.state.isValid) formApi.handleSubmit();
       },
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: async ({ value }) => {
+      await mutateAsync(value);
+      form.reset();
+    },
   });
 
   return form;

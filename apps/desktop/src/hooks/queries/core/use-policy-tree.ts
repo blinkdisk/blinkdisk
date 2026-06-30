@@ -19,7 +19,7 @@ export function usePolicyTree() {
     unfiltered: true,
   });
 
-  const policies = useQuery({
+  const { data: policies, isPending } = useQuery({
     queryKey: queryKeys.policy.tree(vaultId),
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<{
@@ -34,16 +34,16 @@ export function usePolicyTree() {
   });
 
   const tree = useMemo(() => {
-    if (!policies.data || !sources) return null;
+    if (!policies || !sources) return null;
 
     return buildPolicyTree({
-      policies: policies.data,
+      policies,
       sources,
     });
-  }, [policies.data, sources]);
+  }, [policies, sources]);
 
   return {
-    ...policies,
     data: tree,
+    isPending,
   };
 }

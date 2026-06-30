@@ -6,7 +6,7 @@ import { useMemo } from "react";
 
 export function useUpdateAccountForm() {
   const { data: account } = useAccount();
-  const { mutateAsync } = useUpdateAccount(() => form.reset());
+  const { mutateAsync } = useUpdateAccount();
 
   const [firstName, lastName] = useMemo(() => {
     if (!account) return [null, null];
@@ -27,7 +27,10 @@ export function useUpdateAccountForm() {
     validators: {
       onSubmit: ZUpdateAccount,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: async ({ value }) => {
+      await mutateAsync(value);
+      form.reset();
+    },
   });
 
   return form;

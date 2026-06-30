@@ -4,7 +4,6 @@
 
 import { DEFAULT_LOCALE_EN } from "@desktop/components/cron/locale";
 import type { Locale, OnError } from "@desktop/components/cron/types";
-import { useEffect, useRef } from "react";
 
 /**
  * Creates an array of integers from start to end, inclusive
@@ -54,19 +53,6 @@ export function setError(onError: OnError, locale: Locale) {
         locale.errorInvalidCron || DEFAULT_LOCALE_EN.errorInvalidCron,
     });
   }
-}
-
-/**
- * React useEffect hook to return the previous value
- */
-export function usePrevious<T>(value: T): T {
-  const ref = useRef(value);
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
 }
 
 /**

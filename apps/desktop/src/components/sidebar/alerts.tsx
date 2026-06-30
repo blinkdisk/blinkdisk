@@ -19,6 +19,7 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
+import { useNow } from "@desktop/hooks/use-now";
 import { useOffline } from "@desktop/hooks/use-offline";
 import AutoHeight from "embla-carousel-auto-height";
 import { type ReactNode, useEffect, useState } from "react";
@@ -43,6 +44,7 @@ export function SidebarAlerts() {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentAlert, setCurrentAlert] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const now = useNow();
 
   const storagePercentage = space
     ? space.capacity === 0
@@ -60,8 +62,7 @@ export function SidebarAlerts() {
   const showReviewAlert =
     !reviewDismissedAt &&
     !!vault?.createdAt &&
-    Date.now() - new Date(vault.createdAt).getTime() >
-      REVIEW_ALERT_VAULT_AGE_MS;
+    now - new Date(vault.createdAt).getTime() > REVIEW_ALERT_VAULT_AGE_MS;
 
   const alerts: SidebarAlertSlide[] = [];
 

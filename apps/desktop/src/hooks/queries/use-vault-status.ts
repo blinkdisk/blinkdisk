@@ -8,7 +8,7 @@ export function useVaultStatus(vaultIdOverride?: string) {
   const { vaultId: routeVaultId } = useVaultId();
   const vaultId = vaultIdOverride ?? routeVaultId;
 
-  const query = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: queryKeys.vault.status(vaultId),
     queryFn: async () => {
       if (!vaultId) throw new CustomError("MISSING_REQUIRED_VALUE");
@@ -24,9 +24,10 @@ export function useVaultStatus(vaultIdOverride?: string) {
   });
 
   return {
-    ...query,
-    status: query.data?.status,
-    initTask: query.data?.initTask,
-    running: query.data?.status === "RUNNING",
+    data,
+    isLoading,
+    status: data?.status,
+    initTask: data?.initTask,
+    running: data?.status === "RUNNING",
   };
 }

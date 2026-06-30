@@ -5,7 +5,7 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 
 export function useUpdateVaultForm() {
   const { data: vault } = useVault();
-  const { mutateAsync } = useUpdateVault(() => form.reset());
+  const { mutateAsync } = useUpdateVault();
 
   const form = useAppForm({
     defaultValues: {
@@ -14,7 +14,10 @@ export function useUpdateVaultForm() {
     validators: {
       onSubmit: ZUpdateVaultForm,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: async ({ value }) => {
+      await mutateAsync(value);
+      form.reset();
+    },
   });
 
   return form;

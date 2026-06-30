@@ -1,5 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { useCallback, useEffect, useState } from "react";
+import { useNow } from "@desktop/hooks/use-now";
 
 const RELATIVE_TIME_UNITS = [
   { unit: "year", ms: 365 * 24 * 60 * 60 * 1000 },
@@ -24,11 +24,12 @@ function getRolloverThreshold(unitIndex: number) {
 export function formatRelativeTime(
   date: Date | string | number,
   language: string,
+  now = Date.now(),
 ): string {
   const timestamp = new Date(date).getTime();
   if (Number.isNaN(timestamp)) return "";
 
-  const diff = timestamp - Date.now();
+  const diff = timestamp - now;
   const absDiff = Math.abs(diff);
   let unitIndex = RELATIVE_TIME_UNITS.findIndex(({ ms }) => absDiff >= ms);
 
@@ -57,23 +58,7 @@ export function useRelativeTime(
   date: Date | string | number | undefined | null,
 ): string {
   const { language } = useAppTranslation();
+  const now = useNow(10_000);
 
-  const getRelativeTime = useCallback(
-    () => (!date ? "" : formatRelativeTime(date, language)),
-    [date, language],
-  );
-
-  const [relativeTime, setRelativeTime] = useState<string>(getRelativeTime);
-
-  useEffect(() => {
-    setRelativeTime(getRelativeTime());
-
-    const interval = setInterval(() => {
-      setRelativeTime(getRelativeTime());
-    }, 10_000);
-
-    return () => clearInterval(interval);
-  }, [getRelativeTime]);
-
-  return relativeTime;
+  return date ? formatRelativeTime(date, language, now) : "";
 }

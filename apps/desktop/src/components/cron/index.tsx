@@ -19,7 +19,6 @@ import type {
   Locale,
   PeriodType,
 } from "@desktop/components/cron/types";
-import { usePrevious } from "@desktop/components/cron/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export function Cron(props: CronProps) {
@@ -74,15 +73,12 @@ export function Cron(props: CronProps) {
     getPopupContainer,
   } = props;
   const internalValueRef = useRef<string>(value);
-  const defaultPeriodRef = useRef<PeriodType>(defaultPeriod);
   const [period, setPeriod] = useState<PeriodType | undefined>();
   const [monthDays, setMonthDays] = useState<number[] | undefined>();
   const [months, setMonths] = useState<number[] | undefined>();
   const [weekDays, setWeekDays] = useState<number[] | undefined>();
   const [hours, setHours] = useState<number[] | undefined>();
   const [minutes, setMinutes] = useState<number[] | undefined>();
-  const [valueCleared, setValueCleared] = useState<boolean>(false);
-  const previousValueCleared = usePrevious(valueCleared);
 
   useEffect(() => {
     setValuesFromCronString(
@@ -127,12 +123,8 @@ export function Cron(props: CronProps) {
   useEffect(() => {
     // Only change the value if a user touched a field
     // and if the user didn't use the clear button
-    if (
-      (period || minutes || months || monthDays || weekDays || hours) &&
-      !valueCleared &&
-      !previousValueCleared
-    ) {
-      const selectedPeriod = period || defaultPeriodRef.current;
+    if (period || minutes || months || monthDays || weekDays || hours) {
+      const selectedPeriod = period || defaultPeriod;
       const cron = getCronStringFromValues(
         selectedPeriod,
         months,
@@ -148,8 +140,6 @@ export function Cron(props: CronProps) {
       internalValueRef.current = cron;
 
       if (onError) onError(undefined);
-    } else if (valueCleared) {
-      setValueCleared(false);
     }
   }, [
     period,
@@ -158,8 +148,8 @@ export function Cron(props: CronProps) {
     weekDays,
     hours,
     minutes,
+    defaultPeriod,
     humanizeValue,
-    valueCleared,
     dropdownsConfig,
   ]);
 
@@ -174,7 +164,7 @@ export function Cron(props: CronProps) {
     return hasAMPM ? "12-hour-clock" : "24-hour-clock";
   }, []);
 
-  const periodForRender = period || defaultPeriodRef.current;
+  const periodForRender = period || defaultPeriod;
 
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>

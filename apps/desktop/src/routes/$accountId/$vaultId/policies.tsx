@@ -35,7 +35,6 @@ import {
   isPolicyTargetEqual,
   type PolicySearch,
   type PolicyTarget,
-  type PolicyTargetKind,
   type PolicyTreeNode,
   policyTargetFromSearch,
   policyTargetId,
@@ -56,7 +55,7 @@ import {
   UserIcon,
   VaultIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { z } from "zod";
 
 type PolicyEditorMode = "basic" | "advanced";
@@ -134,6 +133,13 @@ type PolicyTreePanelProps = {
   onSelectTarget: (target: PolicyTarget) => void;
 };
 
+const EMPTY_EXPANDED_NODE_IDS = new Set<string>();
+
+type PolicyTreeExpansionState = {
+  key: string;
+  toggledNodeIds: Set<string>;
+};
+
 function PolicyTreePanel({
   selectedTarget,
   onSelectTarget,
@@ -141,32 +147,54 @@ function PolicyTreePanel({
   const { t } = useAppTranslation("policy.page");
   const { data: tree, isPending } = usePolicyTree();
   const { localHostName, localUserName } = useLocalProfile();
-  const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(
-    () => new Set(),
+  const [expansionState, setExpansionState] =
+    useState<PolicyTreeExpansionState | null>(null);
+  const expansionKey = `${tree?.id ?? ""}:${policyTargetId(selectedTarget)}:${localHostName ?? ""}:${localUserName ?? ""}`;
+  const defaultExpandedNodeIds = useMemo(
+    () =>
+      tree
+        ? getInitialExpandedPolicyTreeNodeIds({
+            tree,
+            selectedTarget,
+            hostName: localHostName || undefined,
+            userName: localUserName || undefined,
+          })
+        : EMPTY_EXPANDED_NODE_IDS,
+    [tree, selectedTarget, localHostName, localUserName],
   );
-
-  useEffect(() => {
-    if (!tree) return;
-
-    setExpandedNodeIds(
-      getInitialExpandedPolicyTreeNodeIds({
-        tree,
-        selectedTarget,
-        hostName: localHostName || undefined,
-        userName: localUserName || undefined,
-      }),
-    );
-  }, [tree, selectedTarget, localHostName, localUserName]);
-
-  const toggleNode = (nodeId: string) => {
-    setExpandedNodeIds((ids) => {
-      const next = new Set(ids);
+  const toggledNodeIds =
+    expansionState?.key === expansionKey
+      ? expansionState.toggledNodeIds
+      : EMPTY_EXPANDED_NODE_IDS;
+  const expandedNodeIds = useMemo(() => {
+    const next = new Set(defaultExpandedNodeIds);
+    for (const nodeId of toggledNodeIds) {
       if (next.has(nodeId)) {
         next.delete(nodeId);
       } else {
         next.add(nodeId);
       }
-      return next;
+    }
+    return next;
+  }, [defaultExpandedNodeIds, toggledNodeIds]);
+
+  const toggleNode = (nodeId: string) => {
+    setExpansionState((current) => {
+      const next =
+        current?.key === expansionKey
+          ? new Set(current.toggledNodeIds)
+          : new Set<string>();
+
+      if (next.has(nodeId)) {
+        next.delete(nodeId);
+      } else {
+        next.add(nodeId);
+      }
+
+      return {
+        key: expansionKey,
+        toggledNodeIds: next,
+      };
     });
   };
 
@@ -213,7 +241,6 @@ function PolicyTreeItem({
   onSelectTarget,
 }: PolicyTreeItemProps) {
   const { t } = useAppTranslation("policy.page");
-  const Icon = getPolicyTreeItemIcon(node);
   const active = isPolicyTargetEqual(node.target, selectedTarget);
   const hasChildren = node.children.length > 0;
   const collapsible = hasChildren && node.target.kind !== "GLOBAL";
@@ -242,7 +269,7 @@ function PolicyTreeItem({
           {emojiUrl ? (
             <img src={emojiUrl} alt={emoji} className="size-4 shrink-0" />
           ) : (
-            <Icon className="size-4 shrink-0" />
+            <PolicyTreeItemIcon node={node} />
           )}
           <span className="flex min-w-0 flex-1 items-center gap-2">
             <span className="min-w-0 truncate">{node.label}</span>
@@ -285,6 +312,25 @@ function PolicyTreeItem({
       ) : null}
     </div>
   );
+}
+
+function PolicyTreeItemIcon({ node }: { node: PolicyTreeNode }) {
+  if (node.target.kind === "SOURCE" || node.target.kind === "DRAFT_SOURCE") {
+    return isFileLikeSource(node.source?.type) ? (
+      <FileIcon className="size-4 shrink-0" />
+    ) : (
+      <FolderIcon className="size-4 shrink-0" />
+    );
+  }
+
+  switch (node.target.kind) {
+    case "GLOBAL":
+      return <VaultIcon className="size-4 shrink-0" />;
+    case "HOST":
+      return <MonitorIcon className="size-4 shrink-0" />;
+    case "USER":
+      return <UserIcon className="size-4 shrink-0" />;
+  }
 }
 
 function getInitialExpandedPolicyTreeNodeIds({
@@ -642,25 +688,3 @@ function PolicyEditorLoading({ target }: { target: PolicyTarget }) {
 
 const policyEditorHeaderClassName =
   "before:content-[''] after:content-[''] before:bg-background bg-background after:bg-border/70 sticky top-0 z-50 -mx-1 -mt-2 px-1 py-3 before:absolute before:inset-x-0 before:-top-8 before:h-8 after:absolute after:inset-x-0 after:bottom-0 after:h-px";
-
-function getPolicyTreeItemIcon(node: PolicyTreeNode) {
-  if (node.target.kind === "SOURCE" || node.target.kind === "DRAFT_SOURCE") {
-    return isFileLikeSource(node.source?.type) ? FileIcon : FolderIcon;
-  }
-
-  return getPolicyTargetIcon(node.target.kind);
-}
-
-function getPolicyTargetIcon(kind: PolicyTargetKind) {
-  switch (kind) {
-    case "GLOBAL":
-      return VaultIcon;
-    case "HOST":
-      return MonitorIcon;
-    case "USER":
-      return UserIcon;
-    case "SOURCE":
-    case "DRAFT_SOURCE":
-      return FolderIcon;
-  }
-}

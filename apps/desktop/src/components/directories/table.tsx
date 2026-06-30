@@ -1,3 +1,5 @@
+"use no memo";
+
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
@@ -32,17 +34,27 @@ import { formatSize } from "@desktop/lib/number";
 import {
   type ColumnFiltersState,
   createColumnHelper,
+  createTable,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
   type Row,
+  type RowData,
   type SortingState,
+  type TableOptions,
+  type TableOptionsResolved,
   type Table as TableType,
-  useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import {
+  elementScroll,
+  observeElementOffset,
+  observeElementRect,
+  type PartialKeys,
+  Virtualizer,
+  type VirtualizerOptions,
+} from "@tanstack/react-virtual";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -50,7 +62,14 @@ import {
   FileSearchIcon,
   SearchIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 
 export type Item = DirectoryItemType & {
   skeleton?: boolean;
@@ -186,7 +205,7 @@ export function DirectoryTable({
     ];
   }, [t, dark]);
 
-  const table = useReactTable({
+  const table = useDirectoryTable({
     data: items || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -207,7 +226,7 @@ export function DirectoryTable({
 
   const { rows } = table.getRowModel();
 
-  const virtualizer = useVirtualizer({
+  const virtualizer = useDirectoryVirtualizer({
     count: rows?.length || 0,
     getScrollElement: () => parent.current,
     estimateSize: () => 50,
@@ -377,4 +396,71 @@ export function DirectoryTable({
       )}
     </>
   );
+}
+
+const useIsomorphicLayoutEffect =
+  typeof document === "undefined" ? useEffect : useLayoutEffect;
+
+function useDirectoryVirtualizer<
+  TScrollElement extends Element,
+  TItemElement extends Element,
+>(
+  options: PartialKeys<
+    VirtualizerOptions<TScrollElement, TItemElement>,
+    "observeElementRect" | "observeElementOffset" | "scrollToFn"
+  >,
+) {
+  "use no memo";
+
+  const rerender = useReducer((x: number) => x + 1, 0)[1];
+  const resolvedOptions: VirtualizerOptions<TScrollElement, TItemElement> = {
+    observeElementRect,
+    observeElementOffset,
+    scrollToFn: elementScroll,
+    ...options,
+    onChange: (instance, sync) => {
+      rerender();
+      options.onChange?.(instance, sync);
+    },
+  };
+  const [instance] = useState(
+    () => new Virtualizer<TScrollElement, TItemElement>(resolvedOptions),
+  );
+
+  instance.setOptions(resolvedOptions);
+
+  useIsomorphicLayoutEffect(() => instance._didMount(), [instance]);
+  useIsomorphicLayoutEffect(() => instance._willUpdate());
+
+  return instance;
+}
+
+function useDirectoryTable<TData extends RowData>(
+  options: TableOptions<TData>,
+) {
+  "use no memo";
+
+  const resolvedOptions: TableOptionsResolved<TData> = {
+    state: {},
+    onStateChange: () => {},
+    renderFallbackValue: null,
+    ...options,
+  };
+  const [table] = useState(() => createTable<TData>(resolvedOptions));
+  const [state, setState] = useState(() => table.initialState);
+
+  table.setOptions((prev) => ({
+    ...prev,
+    ...options,
+    state: {
+      ...state,
+      ...options.state,
+    },
+    onStateChange: (updater) => {
+      setState(updater);
+      options.onStateChange?.(updater);
+    },
+  }));
+
+  return table;
 }

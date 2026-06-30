@@ -14,14 +14,21 @@ export function useThemeListener({
   useEffect(() => {
     document.body.classList.add("disable-transitions");
 
-    setTimeout(() => {
+    let transitionTimeout: ReturnType<typeof setTimeout> | undefined;
+    const themeTimeout = setTimeout(() => {
       if (dark) document.body.classList.add("dark");
       else document.body.classList.remove("dark");
 
-      setTimeout(() => {
+      transitionTimeout = setTimeout(() => {
         document.body.classList.remove("disable-transitions");
       }, 25);
     }, 25);
+
+    return () => {
+      clearTimeout(themeTimeout);
+      if (transitionTimeout) clearTimeout(transitionTimeout);
+      document.body.classList.remove("disable-transitions");
+    };
   }, [dark]);
 
   const onKeyDown = useCallback(
