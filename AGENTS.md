@@ -23,11 +23,10 @@ Users can pick between these two options:
 ## Commands
 
 ```bash
-pnpm lint:ci                    # Run Biome CI checks with warnings as errors
+pnpm lint                       # Run normal Biome checks
 pnpm typecheck                  # Typecheck all packages with a typecheck script
 pnpm test                       # Run all package test suites
 pnpm unused                     # Run Knip unused code/dependency checks
-pnpm build                      # Build all packages with a build script
 ```
 
 This project uses Turborepo with pnpm workspaces, so you can filter for projects by package name:

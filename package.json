@@ -13,6 +13,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "unused": "knip",
+    "lint": "biome check .",
     "lint:ci": "biome ci . --error-on-warnings"
   },
   "devDependencies": {
