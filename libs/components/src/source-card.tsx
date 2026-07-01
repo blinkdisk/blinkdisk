@@ -1,7 +1,7 @@
 import { EMOJI_TO_HUE } from "@blinkdisk/constants/emoji";
 import { cn } from "@blinkdisk/utils/class";
 import { useMemo } from "react";
-import { parse } from "twemoji-parser";
+import { getEmojiUrl } from "./emoji";
 
 export type SourceCardProps = {
   emoji?: string;
@@ -12,10 +12,6 @@ export type SourceCardProps = {
 };
 
 const defaultColor = "0deg 0% 39%";
-
-export function getEmojiUrl(emoji: string) {
-  return parse(emoji)[0]?.url;
-}
 
 export function SourceCard({
   emoji,
@@ -66,7 +62,7 @@ export function SourceCard({
         <title>{isFile ? "File" : "Folder"}</title>
         {isFile ? (
           <path
-            d="M16 5H37.5C40.2 5 42.8 6.1 44.7 8L54 17.3C55.9 19.2 57 21.8 57 24.5V49.5C57 54.7467 52.7467 59 47.5 59H16C10.4772 59 6 54.5228 6 49V15C6 9.47715 10.4772 5 16 5Z"
+            d="M16 5H37.5C40.2 5 42.8 6.1 44.7 8L54 17.3C55.9 19.2 57 21.8 57 24.5V49.5C57 54.75 52.75 59 47.5 59H16C10.48 59 6 54.52 6 49V15C6 9.48 10.48 5 16 5Z"
             fill={`color-mix(in srgb, ${color} ${fillMix}%, var(--background))`}
             stroke={`color-mix(in srgb, ${color} ${strokeMix}%, var(--background))`}
             strokeWidth="3"
@@ -75,7 +71,7 @@ export function SourceCard({
         ) : (
           <path
             xmlns="http://www.w3.org/2000/svg"
-            d="M61 19.5V49.3923C61 51.9404 59.9817 54.3842 58.169 56.186C56.3564 57.9878 53.8979 59 51.3344 59H12.6656C10.1021 59 7.64365 57.9878 5.831 56.186C4.01834 54.3842 3 51.9404 3 49.3923V14.6077C3 12.0596 4.01834 9.61582 5.831 7.81403C7.64365 6.01224 10.1021 5 12.6656 5L22.3344 5C23.9293 4.99926 25.4998 5.27735 26.9056 5.80947C28.3115 6.3416 29.5091 7.11122 30.3917 8.04972L33.1286 10.9865C33.6305 11.5117 34.3071 11.9418 35.0992 12.2391C35.8912 12.5365 36.7745 12.6919 37.6715 12.6918H51.3344C53.8927 12.6924 56.3465 13.4093 58.1581 14.6853C59.9698 15.9614 60.9917 17.6927 61 19.5Z"
+            d="M61 19.5V49.39C61 51.94 59.98 54.38 58.17 56.19C56.36 57.99 53.9 59 51.33 59H12.67C10.1 59 7.64 57.99 5.83 56.19C4.02 54.38 3 51.94 3 49.39V14.61C3 12.06 4.02 9.62 5.83 7.81C7.64 6.01 10.1 5 12.67 5L22.33 5C23.93 5 25.5 5.28 26.91 5.81C28.31 6.34 29.51 7.11 30.39 8.05L33.13 10.99C33.63 11.51 34.31 11.94 35.1 12.24C35.89 12.54 36.77 12.69 37.67 12.69H51.33C53.89 12.69 56.35 13.41 58.16 14.69C59.97 15.96 60.99 17.69 61 19.5Z"
             fill={`color-mix(in srgb, ${color} ${fillMix}%, var(--background))`}
             stroke={`color-mix(in srgb, ${color} ${strokeMix}%, var(--background))`}
             strokeWidth="3"

@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { SidebarMenuItem } from "@blinkdisk/ui/sidebar";
 import { useUpgradeDialog } from "@desktop/hooks/state/use-upgrade-dialog";
+import { useNow } from "@desktop/hooks/use-now";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
 import { formatSize } from "@desktop/lib/number";
 import { CircleFadingArrowUpIcon } from "lucide-react";
@@ -26,15 +27,14 @@ export function SidebarTrialAlert({
   const { openUpgradeDialog } = useUpgradeDialog();
 
   const trialEndsIn = useRelativeTime(trialEndsAt);
+  const now = useNow();
 
   const trialStartedAtMs = new Date(trialStartedAt).getTime();
   const trialEndsAtMs = new Date(trialEndsAt).getTime();
   const trialDurationMs = trialEndsAtMs - trialStartedAtMs;
   const trialElapsed = Math.min(
     Math.max(
-      trialDurationMs <= 0
-        ? 1
-        : (Date.now() - trialStartedAtMs) / trialDurationMs,
+      trialDurationMs <= 0 ? 1 : (now - trialStartedAtMs) / trialDurationMs,
       0,
     ),
     1,

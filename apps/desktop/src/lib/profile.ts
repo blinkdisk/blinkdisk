@@ -32,18 +32,17 @@ export function getOtherProfiles(
 ) {
   if (!devices || !localProfile) return [];
 
-  return devices
-    .map((device) => ({
-      ...device,
-      users: device.users.filter(
-        ({ userName }) =>
-          !isSameProfile(localProfile, {
-            deviceName: device.hostName,
-            userName,
-          }),
-      ),
-    }))
-    .filter((device) => device.users.length > 0);
+  return devices.flatMap((device) => {
+    const users = device.users.filter(
+      ({ userName }) =>
+        !isSameProfile(localProfile, {
+          deviceName: device.hostName,
+          userName,
+        }),
+    );
+
+    return users.length > 0 ? [{ ...device, users }] : [];
+  });
 }
 
 export function getProfileUserNames(

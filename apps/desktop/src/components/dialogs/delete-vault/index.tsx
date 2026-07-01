@@ -17,7 +17,7 @@ import { useDeleteVaultDialog } from "@desktop/hooks/state/use-delete-vault-dial
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useNavigate } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 export function DeleteVaultDialog() {
   const navigate = useNavigate({
@@ -39,12 +39,12 @@ export function DeleteVaultDialog() {
       vault.name.replace(/\s/g, "").toLowerCase()
     : false;
 
-  const reset = useCallback(async () => {
+  const reset = async () => {
     setConfirmName("");
     setShowError(false);
-  }, []);
+  };
 
-  const onSuccess = useCallback(async () => {
+  const onSuccess = async () => {
     setIsOpen(false);
 
     if (!accountId) return;
@@ -52,7 +52,7 @@ export function DeleteVaultDialog() {
     await navigate({
       to: "/$accountId",
     });
-  }, [navigate, setIsOpen, accountId]);
+  };
 
   const { mutate: mutateDelete, isPending: isDeletePending } = useDeleteVault({
     onSuccess,

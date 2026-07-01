@@ -19,17 +19,13 @@ function RouteComponent() {
   const { t } = useAppTranslation("auth.success");
   const { copy } = useClipboard();
   const [waiting, setWaiting] = useState(true);
-  const [code, setLoadedCode] = useState<string | null>();
+  const [code] = useState<string | null>(() =>
+    authClient.electron.getAuthorizationCode(),
+  );
 
   useEffect(() => {
     const timeout = setTimeout(() => setWaiting(false), 5000);
     return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    const authCode = authClient.electron.getAuthorizationCode();
-    if (!authCode) return;
-    setLoadedCode(authCode);
   }, []);
 
   useEffect(() => {
@@ -85,12 +81,20 @@ function RouteComponent() {
               key={0}
               className="text-primary"
               href="mailto:support@blinkdisk.com"
+              aria-label="support@blinkdisk.com"
             />,
           ]}
         />
       </p>
       <Button
-        render={<Link to="/auth/login" from="/auth/success" search={search} />}
+        render={
+          <Link
+            to="/auth/login"
+            from="/auth/success"
+            search={search}
+            aria-label={t("failed.button")}
+          />
+        }
         nativeButton={false}
         className="mt-6"
       >

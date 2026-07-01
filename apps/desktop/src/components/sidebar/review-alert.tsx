@@ -11,6 +11,10 @@ export function SidebarReviewAlert() {
     "sidebarAlerts.dismissed.review",
   );
 
+  const dismiss = () => {
+    setReviewDismissedAt(new Date().toISOString());
+  };
+
   return (
     <SidebarMenuItem>
       <Alert variant="default" className="relative rounded-xl p-4">
@@ -19,7 +23,7 @@ export function SidebarReviewAlert() {
           size="icon-xs"
           aria-label={t("dismiss")}
           className="text-muted-foreground absolute right-2 top-2"
-          onClick={() => setReviewDismissedAt(new Date().toISOString())}
+          onClick={dismiss}
         >
           <XIcon />
         </Button>
@@ -36,6 +40,7 @@ export function SidebarReviewAlert() {
                 href="https://alternativeto.net/software/blinkdisk/about/"
                 target="_blank"
                 rel="noreferrer"
+                aria-label={t("button")}
               />
             }
           >

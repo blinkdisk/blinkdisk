@@ -159,6 +159,7 @@ export function FinderResultCard({
                 href={tool.website}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`${tool.name} website`}
               />
             }
             variant="secondary"

@@ -7,7 +7,6 @@ import type { Item } from "@desktop/components/directories/table";
 import { getStringHue } from "@desktop/lib/color";
 import type { CellContext } from "@tanstack/react-table";
 import { FileSymlinkIcon, FolderIcon } from "lucide-react";
-import { useMemo } from "react";
 
 type DirectoryNameCellProps = {
   info: CellContext<Item, string> & { isPending?: boolean };
@@ -18,18 +17,18 @@ export function DirectoryNameCell({ info, dark }: DirectoryNameCellProps) {
   const directory = info.row.original;
   const { t } = useAppTranslation("directory.table");
 
-  const extension = useMemo(() => {
+  const extension = (() => {
     if (!directory || directory.type === "DIRECTORY") return null;
     const parts = directory?.name.split(".");
     if (parts.length < 2) return null;
     return parts.at(-1);
-  }, [directory]);
+  })();
 
-  const hsl = useMemo(() => {
+  const hsl = (() => {
     if (directory?.type === "DIRECTORY") return "0 0% 50%";
 
     return `${getStringHue(extension || "?")} 70% ${dark ? "60%" : "40%"}`;
-  }, [directory, extension, dark]);
+  })();
 
   return (
     <>

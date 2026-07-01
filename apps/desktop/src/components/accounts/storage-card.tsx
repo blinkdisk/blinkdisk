@@ -9,7 +9,6 @@ import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { useSpace } from "@desktop/hooks/queries/use-space";
 import { formatSize } from "@desktop/lib/number";
-import { useMemo } from "react";
 
 type StorageCardProps = {
   isLoading?: boolean;
@@ -19,11 +18,11 @@ export function StorageCard({ isLoading }: StorageCardProps) {
   const { t } = useAppTranslation("vault.overview");
   const { data: space } = useSpace();
 
-  const storagePercentage = useMemo(() => {
+  const storagePercentage = (() => {
     if (!space) return null;
     if (space.capacity === 0) return 1;
     return Math.min(space.used / space.capacity, 1);
-  }, [space]);
+  })();
 
   const hasData = !isLoading && !!space;
 

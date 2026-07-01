@@ -5,7 +5,7 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useUpdateAccount(onSuccess: () => void) {
+export function useUpdateAccount(onSuccess?: () => void) {
   const queryClient = useQueryClient();
   const { queryKeys } = useQueryKey();
   const { accountId } = useAccountId();

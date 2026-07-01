@@ -32,6 +32,7 @@ export function CodeStatsDropzone({
   return (
     <button
       {...getRootProps()}
+      type="button"
       className={cn(
         "border-foreground/20 mt-4 cursor-pointer rounded-xl border-2 border-dashed p-1 transition-colors focus-visible:outline-none",
         isDragActive

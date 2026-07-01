@@ -1,8 +1,8 @@
 import type { ZPolicyType } from "@blinkdisk/schemas/policy";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "@desktop/components/policy/policy-context";
 import { SettingsPanel, SettingsRow } from "@desktop/components/settings";
-import { type ReactNode, useContext } from "react";
+import { type ReactNode, use } from "react";
 
 type SettingsCategoryProps = {
   id: keyof ZPolicyType | string;
@@ -17,7 +17,7 @@ export function SettingsCategory({
   description,
   children,
 }: SettingsCategoryProps) {
-  const { loading } = useContext(PolicyContext);
+  const { loading } = use(PolicyContext);
 
   return (
     <section id={id} className="grid scroll-mt-8 gap-4">

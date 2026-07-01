@@ -12,23 +12,23 @@ import {
 import { Progress } from "@blinkdisk/ui/progress";
 import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
 import { CircleAlertIcon, DownloadIcon, ExternalLinkIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
+
+async function downloadManually() {
+  await window.electron.shell.open.browser(
+    `${process.env.MARKETING_URL}/download`,
+  );
+}
 
 export function UpdateDialog() {
   const { t } = useAppTranslation("update");
   const { dismiss, isOpen, setIsOpen, status } = useUpdateDialog();
   const [confirmDismissOpen, setConfirmDismissOpen] = useState(false);
 
-  const downloadManually = useCallback(async () => {
-    await window.electron.shell.open.browser(
-      `${process.env.MARKETING_URL}/download`,
-    );
-  }, []);
-
-  const confirmDismiss = useCallback(async () => {
+  const confirmDismiss = async () => {
     await dismiss();
     setConfirmDismissOpen(false);
-  }, [dismiss]);
+  };
 
   return (
     <>

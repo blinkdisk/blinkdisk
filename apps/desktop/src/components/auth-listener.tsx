@@ -4,18 +4,16 @@ import { useMoveVaultsDialog } from "@desktop/hooks/state/use-move-vaults-dialog
 import { useAuth } from "@desktop/hooks/use-auth";
 import { getVaultCollection } from "@desktop/lib/db";
 import { useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 export function AuthListener() {
-  const { setIsOpen: setAuthDialogIsOpen } = useAuthDialog();
+  const { completeAuthDialog } = useAuthDialog();
   const { openMoveVaultsDialog } = useMoveVaultsDialog();
   const { setAuthenticated, accountChanged } = useAuth();
   const navigate = useNavigate({ from: "/" });
 
-  const onAccountAdd = useCallback(
-    async ({ accountId }: { accountId: string }) => {
-      setAuthDialogIsOpen(false);
-
+  useEffect(() => {
+    const onAccountAdd = async ({ accountId }: { accountId: string }) => {
       await setAuthenticated(true);
       await navigate({
         to: "/$accountId/loading",
@@ -25,6 +23,7 @@ export function AuthListener() {
       await accountChanged(accountId);
 
       navigate({ to: "/$accountId", params: { accountId } });
+      completeAuthDialog(accountId);
 
       const localVaults = getVaultCollection(LOCAL_ACCOUNT_ID)
         .find({ status: "ACTIVE" })
@@ -36,19 +35,16 @@ export function AuthListener() {
           toAccountId: accountId,
         });
       }
-    },
-    [
-      setAuthDialogIsOpen,
-      setAuthenticated,
-      accountChanged,
-      navigate,
-      openMoveVaultsDialog,
-    ],
-  );
+    };
 
-  useEffect(() => {
     return window.electron.auth.onAccountAdd(onAccountAdd);
-  }, [onAccountAdd]);
+  }, [
+    accountChanged,
+    completeAuthDialog,
+    navigate,
+    openMoveVaultsDialog,
+    setAuthenticated,
+  ]);
 
   return null;
 }

@@ -1,617 +1,334 @@
-// Modified from react-js-cron (MIT licensed)
-// Original copyright (c) 2021 Xavier Rutayisire
-// https://github.com/xrutayisire/react-js-cron
-
-import { SUPPORTED_SHORTCUTS, UNITS } from "@desktop/components/cron/constants";
-import type {
-  AllowEmpty,
-  ClockFormat,
-  DropdownConfig,
-  DropdownsConfig,
-  LeadingZero,
-  LeadingZeroType,
-  Locale,
-  OnError,
-  PeriodType,
-  SetInternalError,
-  SetValueNumbersOrUndefined,
-  SetValuePeriod,
-  Shortcuts,
-  ShortcutsType,
-  Unit,
-} from "@desktop/components/cron/types";
 import {
-  convertStringToNumber,
-  dedup,
-  range,
-  setError,
-  sort,
-} from "@desktop/components/cron/utils";
-import type { MutableRefObject } from "react";
+  CRON_PART_UNITS,
+  CRON_UNITS,
+  SHORTCUT_EXPRESSIONS,
+} from "@desktop/components/cron/constants";
+import type {
+  ClockFormat,
+  CronSchedule,
+  CronUnit,
+  Period,
+} from "@desktop/components/cron/types";
 
-/**
- * Set values from cron string
- */
-export function setValuesFromCronString(
-  cronString: string,
-  setInternalError: SetInternalError,
-  onError: OnError,
-  allowEmpty: AllowEmpty,
-  internalValueRef: MutableRefObject<string>,
-  firstRender: boolean,
-  locale: Locale,
-  shortcuts: Shortcuts,
-  setMinutes: SetValueNumbersOrUndefined,
-  setHours: SetValueNumbersOrUndefined,
-  setMonthDays: SetValueNumbersOrUndefined,
-  setMonths: SetValueNumbersOrUndefined,
-  setWeekDays: SetValueNumbersOrUndefined,
-  setPeriod: SetValuePeriod,
-) {
-  if (onError) onError(undefined);
-  setInternalError(false);
+type ScheduleField = keyof Omit<CronSchedule, "period">;
 
-  let error = false;
+const FIELDS_BY_PERIOD: Record<Period, readonly ScheduleField[]> = {
+  year: ["months", "monthDays", "weekDays", "hours", "minutes"],
+  month: ["monthDays", "weekDays", "hours", "minutes"],
+  week: ["weekDays", "hours", "minutes"],
+  day: ["hours", "minutes"],
+  hour: ["minutes"],
+  minute: [],
+};
 
-  // Handle empty cron string
-  if (!cronString) {
-    if (
-      allowEmpty === "always" ||
-      (firstRender && allowEmpty === "for-default-value")
-    ) {
-      return;
-    }
+export function parseCronExpression(expression: string): CronSchedule | null {
+  const normalized = normalizeExpression(expression);
+  if (!normalized) return null;
 
-    error = true;
-  }
+  const parts = normalized.split(" ");
+  if (parts.length !== CRON_PART_UNITS.length) return null;
 
-  if (!error) {
-    // Shortcuts management
-    if (
-      shortcuts &&
-      (shortcuts === true ||
-        (typeof shortcuts === "object" &&
-          shortcuts.includes(cronString as ShortcutsType)))
-    ) {
-      if (cronString === "@reboot") {
-        setPeriod("reboot");
+  try {
+    const [minutes, hours, monthDays, months, weekDays] = parts.map(
+      (part, index) => {
+        const unit = CRON_PART_UNITS[index];
+        if (!unit) throw new Error("Unknown cron unit");
 
-        return;
-      }
+        return parseCronPart(part, unit);
+      },
+    );
 
-      // Convert a shortcut to a valid cron string
-      const shortcutObject = SUPPORTED_SHORTCUTS.find(
-        (supportedShortcut) => supportedShortcut.name === cronString,
-      );
+    if (!minutes || !hours || !monthDays || !months || !weekDays) return null;
 
-      if (shortcutObject) {
-        cronString = shortcutObject.value;
-      }
-    }
-
-    try {
-      const cronParts = parseCronString(cronString);
-      const period = getPeriodFromCronParts(cronParts);
-
-      setPeriod(period);
-      setMinutes(cronParts[0]);
-      setHours(cronParts[1]);
-      setMonthDays(cronParts[2]);
-      setMonths(cronParts[3]);
-      setWeekDays(cronParts[4]);
-    } catch {
-      // Specific errors are not handle (yet)
-      error = true;
-    }
-  }
-  if (error) {
-    internalValueRef.current = cronString;
-    setInternalError(true);
-    setError(onError, locale);
+    return {
+      period: inferPeriod({ minutes, hours, monthDays, months, weekDays }),
+      minutes,
+      hours,
+      monthDays,
+      months,
+      weekDays,
+    };
+  } catch {
+    return null;
   }
 }
 
-/**
- * Get cron string from values
- */
+export function formatCronExpression(schedule: CronSchedule) {
+  return [
+    formatCronPart(
+      isPeriodField(schedule.period, "minutes") ? schedule.minutes : [],
+      CRON_UNITS.minutes,
+    ),
+    formatCronPart(
+      isPeriodField(schedule.period, "hours") ? schedule.hours : [],
+      CRON_UNITS.hours,
+    ),
+    formatCronPart(
+      isPeriodField(schedule.period, "monthDays") ? schedule.monthDays : [],
+      CRON_UNITS.monthDays,
+    ),
+    formatCronPart(
+      isPeriodField(schedule.period, "months") ? schedule.months : [],
+      CRON_UNITS.months,
+    ),
+    formatCronPart(
+      isPeriodField(schedule.period, "weekDays") ? schedule.weekDays : [],
+      CRON_UNITS.weekDays,
+    ),
+  ].join(" ");
+}
+
 export function getCronStringFromValues(
-  period: PeriodType,
+  period: Period,
   months: number[] | undefined,
   monthDays: number[] | undefined,
   weekDays: number[] | undefined,
   hours: number[] | undefined,
   minutes: number[] | undefined,
-  humanizeValue: boolean | undefined,
-  dropdownsConfig: DropdownsConfig | undefined,
 ) {
-  if (period === "reboot") {
-    return "@reboot";
-  }
-
-  const newMonths = period === "year" && months ? months : [];
-  const newMonthDays =
-    (period === "year" || period === "month") && monthDays ? monthDays : [];
-  const newWeekDays =
-    (period === "year" || period === "month" || period === "week") && weekDays
-      ? weekDays
-      : [];
-  const newHours =
-    period !== "minute" && period !== "hour" && hours ? hours : [];
-  const newMinutes = period !== "minute" && minutes ? minutes : [];
-
-  const parsedArray = parseCronArray(
-    [newMinutes, newHours, newMonthDays, newMonths, newWeekDays],
-    humanizeValue,
-    dropdownsConfig,
-  );
-
-  return cronToString(parsedArray);
-}
-
-/**
- * Returns the cron part array as a string.
- */
-function partToString(
-  cronPart: number[],
-  unit: Unit,
-  humanize?: boolean,
-  leadingZero?: LeadingZero,
-  clockFormat?: ClockFormat,
-) {
-  let retval = "";
-
-  if (isFull(cronPart, unit) || cronPart.length === 0) {
-    retval = "*";
-  } else {
-    const step = getStep(cronPart);
-
-    if (step && isInterval(cronPart, step)) {
-      if (isFullInterval(cronPart, unit, step)) {
-        retval = `*/${step}`;
-      } else {
-        retval = `${formatValue(
-          getMin(cronPart),
-          unit,
-          humanize,
-          leadingZero,
-          clockFormat,
-        )}-${formatValue(
-          getMax(cronPart),
-          unit,
-          humanize,
-          leadingZero,
-          clockFormat,
-        )}/${step}`;
-      }
-    } else {
-      retval = toRanges(cronPart)
-        .map((range: number | [number, number]) => {
-          if (Array.isArray(range)) {
-            const [start, end] = range;
-            return `${formatValue(
-              start,
-              unit,
-              humanize,
-              leadingZero,
-              clockFormat,
-            )}-${formatValue(end, unit, humanize, leadingZero, clockFormat)}`;
-          }
-
-          return formatValue(range, unit, humanize, leadingZero, clockFormat);
-        })
-        .join(",");
-    }
-  }
-  return retval;
-}
-
-/**
- * Format the value
- */
-export function formatValue(
-  value: number,
-  unit: Unit,
-  humanize?: boolean,
-  leadingZero?: LeadingZero,
-  clockFormat?: ClockFormat,
-) {
-  let cronPartString = value.toString();
-  const { type, alt, min } = unit;
-
-  const needLeadingZero =
-    leadingZero &&
-    (leadingZero === true || leadingZero.includes(type as LeadingZeroType));
-  const need24HourClock =
-    clockFormat === "24-hour-clock" && (type === "hours" || type === "minutes");
-
-  if ((humanize && type === "week-days") || (humanize && type === "months")) {
-    cronPartString = alt?.[value - min] || cronPartString;
-  } else if (value < 10 && (needLeadingZero || need24HourClock)) {
-    cronPartString = cronPartString.padStart(2, "0");
-  }
-
-  if (type === "hours" && clockFormat === "12-hour-clock") {
-    const suffix = value >= 12 ? "PM" : "AM";
-    let hour: number | string = value % 12 || 12;
-
-    if (hour < 10 && needLeadingZero) {
-      hour = hour.toString().padStart(2, "0");
-    }
-
-    cronPartString = `${hour}${suffix}`;
-  }
-
-  return cronPartString;
-}
-
-/**
- * Validates a range of positive integers
- */
-function parsePartArray(arr: number[], unit: Unit) {
-  const values = sort(dedup(fixSunday(arr, unit)));
-
-  if (values.length === 0) {
-    return values;
-  }
-
-  const value = outOfRange(values, unit);
-
-  if (typeof value !== "undefined") {
-    throw new Error(`Value "${value}" out of range for ${unit.type}`);
-  }
-
-  return values;
-}
-
-/**
- * Parses a 2-dimensional array of integers as a cron schedule
- */
-function parseCronArray(
-  cronArr: number[][],
-  humanizeValue: boolean | undefined,
-  dropdownsConfig: DropdownsConfig | undefined,
-) {
-  return cronArr.map((partArr, idx) => {
-    const unit = UNITS[idx];
-    if (!unit) throw new Error(`Unit at index ${idx} is undefined`);
-    const parsedArray = parsePartArray(partArr, unit);
-    const dropdownOption: DropdownConfig | undefined =
-      dropdownsConfig?.[unit.type];
-
-    return partToString(
-      parsedArray,
-      unit,
-      dropdownOption?.humanizeValue ?? humanizeValue,
-    );
+  return formatCronExpression({
+    period,
+    months: months ?? [],
+    monthDays: monthDays ?? [],
+    weekDays: weekDays ?? [],
+    hours: hours ?? [],
+    minutes: minutes ?? [],
   });
 }
 
-/**
- * Returns the cron array as a string
- */
-function cronToString(parts: string[]) {
-  return parts.join(" ");
+export function formatCronValue(
+  value: number,
+  unit: CronUnit,
+  options: {
+    labels?: readonly string[];
+    clockFormat?: ClockFormat;
+  } = {},
+) {
+  const label = options.labels?.[value - unit.min];
+  if (label) return label;
+
+  if (unit.id === "hours" && options.clockFormat === "12-hour-clock") {
+    const suffix = value >= 12 ? "PM" : "AM";
+    return `${value % 12 || 12}${suffix}`;
+  }
+
+  const shouldPad =
+    options.clockFormat === "24-hour-clock" &&
+    (unit.id === "hours" || unit.id === "minutes");
+
+  return shouldPad ? value.toString().padStart(2, "0") : value.toString();
 }
 
-/**
- * Find the period from cron parts
- */
-function getPeriodFromCronParts(cronParts: number[][]): PeriodType {
-  if (!cronParts[3]) return "minute";
-  if (!cronParts[2]) return "minute";
-  if (!cronParts[4]) return "minute";
-  if (!cronParts[1]) return "minute";
-  if (!cronParts[0]) return "minute";
+function normalizeExpression(expression: string) {
+  const trimmed = expression.trim();
+  if (!trimmed) return null;
 
-  if (cronParts[3].length > 0) {
-    return "year";
-  } else if (cronParts[2].length > 0) {
-    return "month";
-  } else if (cronParts[4].length > 0) {
-    return "week";
-  } else if (cronParts[1].length > 0) {
-    return "day";
-  } else if (cronParts[0].length > 0) {
-    return "hour";
+  const shortcut =
+    SHORTCUT_EXPRESSIONS[trimmed as keyof typeof SHORTCUT_EXPRESSIONS];
+
+  return (shortcut ?? trimmed).replace(/\s+/g, " ");
+}
+
+function parseCronPart(part: string, unit: CronUnit) {
+  if (part === "*" || part === "*/1") return [];
+
+  const values = replaceLabels(part, unit)
+    .split(",")
+    .flatMap((segment) => parseCronSegment(segment, unit));
+
+  const normalized = normalizeValues(values, unit);
+  return normalized.length === getUnitSize(unit) ? [] : normalized;
+}
+
+function parseCronSegment(segment: string, unit: CronUnit) {
+  const [rangePart, stepPart, extraPart] = segment.split("/");
+  if (!rangePart || extraPart !== undefined) {
+    throw new Error(`Invalid cron segment "${segment}"`);
   }
+
+  const rangeValues =
+    rangePart === "*" ? range(unit.min, unit.max) : parseRange(rangePart);
+  const step = parseStep(stepPart);
+
+  if (!step) return rangeValues;
+
+  const first = rangeValues[0];
+  if (first === undefined) return rangeValues;
+
+  return rangeValues.filter(
+    (value) => value === first || value % step === first % step,
+  );
+}
+
+function parseRange(part: string) {
+  const [startPart, endPart, extraPart] = part.split("-");
+  if (!startPart || extraPart !== undefined) {
+    throw new Error(`Invalid cron range "${part}"`);
+  }
+
+  const start = parseInteger(startPart);
+  if (endPart === undefined) return [start];
+
+  const end = parseInteger(endPart);
+  if (end < start) throw new Error(`Invalid cron range "${part}"`);
+
+  return range(start, end);
+}
+
+function parseStep(part: string | undefined) {
+  if (part === undefined) return undefined;
+
+  const step = parseInteger(part);
+  if (step < 1) throw new Error(`Invalid cron step "${part}"`);
+
+  return step;
+}
+
+function parseInteger(value: string) {
+  if (!/^\d+$/.test(value)) throw new Error(`Invalid cron value "${value}"`);
+
+  const number = Number(value);
+  if (!Number.isInteger(number))
+    throw new Error(`Invalid cron value "${value}"`);
+
+  return number;
+}
+
+function replaceLabels(value: string, unit: CronUnit) {
+  if (!unit.labels) return value;
+
+  return value.toUpperCase().replace(/[A-Z]{3}/g, (label) => {
+    const index = unit.labels?.indexOf(label) ?? -1;
+    return index >= 0 ? String(unit.min + index) : label;
+  });
+}
+
+function normalizeValues(values: number[], unit: CronUnit) {
+  const normalized = values.map((value) =>
+    unit.id === "week-days" && value === 7 ? 0 : value,
+  );
+
+  const outOfRange = normalized.find(
+    (value) => value < unit.min || value > unit.max,
+  );
+  if (outOfRange !== undefined) {
+    throw new Error(`Value "${outOfRange}" out of range for ${unit.id}`);
+  }
+
+  return [...new Set(normalized)].sort((left, right) => left - right);
+}
+
+function formatCronPart(values: number[], unit: CronUnit) {
+  const normalized = normalizeValues(values, unit);
+  if (normalized.length === 0 || normalized.length === getUnitSize(unit)) {
+    return "*";
+  }
+
+  const step = getStep(normalized);
+  if (step && isInterval(normalized, step)) {
+    const start = getFirst(normalized);
+    const end = getLast(normalized);
+    const spansToUnitEnd = end + step > unit.max;
+
+    if (start === unit.min && spansToUnitEnd) return `*/${step}`;
+
+    return `${start}-${end}/${step}`;
+  }
+
+  return toRanges(normalized)
+    .map((rangeValue) =>
+      Array.isArray(rangeValue)
+        ? `${rangeValue[0]}-${rangeValue[1]}`
+        : String(rangeValue),
+    )
+    .join(",");
+}
+
+function inferPeriod(schedule: Omit<CronSchedule, "period">): Period {
+  if (schedule.months.length > 0) return "year";
+  if (schedule.monthDays.length > 0) return "month";
+  if (schedule.weekDays.length > 0) return "week";
+  if (schedule.hours.length > 0) return "day";
+  if (schedule.minutes.length > 0) return "hour";
+
   return "minute";
 }
 
-/**
- * Parses a cron string to an array of parts
- */
-function parseCronString(str: string) {
-  if (typeof str !== "string") {
-    throw new Error("Invalid cron string");
-  }
-
-  const parts = str.replace(/\s+/g, " ").trim().split(" ");
-
-  if (parts.length === 5) {
-    return parts.map((partStr, idx) => {
-      const unit = UNITS[idx];
-      if (!unit) throw new Error(`Unit at index ${idx} is undefined`);
-      return parsePartString(partStr, unit);
-    });
-  }
-
-  throw new Error("Invalid cron string format");
+function isPeriodField(
+  period: Period,
+  field: keyof Omit<CronSchedule, "period">,
+) {
+  return FIELDS_BY_PERIOD[period].includes(field);
 }
 
-/**
- * Parses a string as a range of positive integers
- */
-function parsePartString(str: string, unit: Unit) {
-  if (str === "*" || str === "*/1") {
-    return [];
-  }
+function range(start: number, end: number) {
+  const values: number[] = [];
 
-  const values = sort(
-    dedup(
-      fixSunday(
-        replaceAlternatives(str, unit.min, unit.alt)
-          .split(",")
-          .flatMap((value) => {
-            const valueParts = value.split("/");
-
-            if (valueParts.length > 2) {
-              throw new Error(`Invalid value "${str} for "${unit.type}"`);
-            }
-
-            let parsedValues: number[];
-            const left = valueParts[0];
-            const right = valueParts[1];
-
-            if (left === "*") {
-              parsedValues = range(unit.min, unit.max);
-            } else if (left !== undefined) {
-              parsedValues = parseRange(left, str, unit);
-            } else {
-              throw new Error(`Invalid value "${str} for "${unit.type}"`);
-            }
-
-            const step = parseStep(right, unit);
-            const intervalValues = applyInterval(parsedValues, step);
-
-            return intervalValues;
-          }),
-        unit,
-      ),
-    ),
-  );
-
-  const value = outOfRange(values, unit);
-
-  if (typeof value !== "undefined") {
-    throw new Error(`Value "${value}" out of range for ${unit.type}`);
-  }
-
-  // Prevent to return full array
-  // If all values are selected we don't want any selection visible
-  if (values.length === unit.total) {
-    return [];
+  for (let value = start; value <= end; value += 1) {
+    values.push(value);
   }
 
   return values;
 }
 
-/**
- * Replaces the alternative representations of numbers in a string
- */
-function replaceAlternatives(str: string, min: number, alt?: string[]) {
-  if (alt) {
-    str = str.toUpperCase();
-
-    for (const [i, alternative] of alt.entries()) {
-      str = str.replace(alternative, `${i + min}`);
-    }
-  }
-  return str;
+function getUnitSize(unit: CronUnit) {
+  return unit.max - unit.min + 1;
 }
 
-/**
- * Replace all 7 with 0 as Sunday can be represented by both
- */
-function fixSunday(values: number[], unit: Unit) {
-  if (unit.type === "week-days") {
-    values = values.map((value) => {
-      if (value === 7) {
-        return 0;
-      }
-
-      return value;
-    });
-  }
-
-  return values;
-}
-
-/**
- * Parses a range string
- */
-function parseRange(rangeStr: string, context: string, unit: Unit) {
-  const subparts = rangeStr.split("-");
-
-  if (subparts.length === 1) {
-    const [part] = subparts;
-    if (part === undefined)
-      throw new Error(`Invalid value "${context}" for ${unit.type}`);
-
-    const value = convertStringToNumber(part);
-
-    if (Number.isNaN(value)) {
-      throw new Error(`Invalid value "${context}" for ${unit.type}`);
-    }
-
-    return [value];
-  } else if (subparts.length === 2) {
-    const [minPart, maxPart] = subparts;
-    if (minPart === undefined || maxPart === undefined)
-      throw new Error(`Invalid value "${context}" for ${unit.type}`);
-
-    const minValue = convertStringToNumber(minPart);
-    const maxValue = convertStringToNumber(maxPart);
-
-    if (Number.isNaN(minValue) || Number.isNaN(maxValue)) {
-      throw new Error(`Invalid value "${context}" for ${unit.type}`);
-    }
-
-    // Fix to allow equal min and max range values
-    // cf: https://github.com/roccivic/cron-converter/pull/15
-    if (maxValue < minValue) {
-      throw new Error(
-        `Max range is less than min range in "${rangeStr}" for ${unit.type}`,
-      );
-    }
-
-    return range(minValue, maxValue);
-  } else {
-    throw new Error(`Invalid value "${rangeStr}" for ${unit.type}`);
-  }
-}
-
-/**
- * Finds an element from values that is outside of the range of unit
- */
-function outOfRange(values: number[], unit: Unit) {
-  const first = values[0];
-  const last = values[values.length - 1];
-
-  if (first !== undefined && first < unit.min) {
-    return first;
-  } else if (last !== undefined && last > unit.max) {
-    return last;
-  }
-
-  return;
-}
-
-/**
- * Parses the step from a part string
- */
-function parseStep(step: string | undefined, unit: Unit) {
-  if (typeof step !== "undefined") {
-    const parsedStep = convertStringToNumber(step);
-
-    if (Number.isNaN(parsedStep) || parsedStep < 1) {
-      throw new Error(`Invalid interval step value "${step}" for ${unit.type}`);
-    }
-
-    return parsedStep;
-  }
-}
-
-/**
- * Applies an interval step to a collection of values
- */
-function applyInterval(values: number[], step?: number) {
-  if (step) {
-    const minVal = values[0];
-    if (minVal === undefined) return values;
-
-    values = values.filter((value) => {
-      return value % step === minVal % step || value === minVal;
-    });
-  }
-
-  return values;
-}
-
-/**
- * Returns true if range has all the values of the unit
- */
-function isFull(values: number[], unit: Unit) {
-  return values.length === unit.max - unit.min + 1;
-}
-
-/**
- * Returns the difference between first and second elements in the range
- */
 function getStep(values: number[]) {
-  if (values.length > 2) {
-    const first = values[0];
-    const second = values[1];
-    if (first === undefined || second === undefined) return;
+  const first = values[0];
+  const second = values[1];
+  if (first === undefined || second === undefined) return undefined;
 
-    const step = second - first;
-
-    if (step > 1) {
-      return step;
-    }
-  }
+  const step = second - first;
+  return step > 1 ? step : undefined;
 }
 
-/**
- * Returns true if the range can be represented as an interval
- */
 function isInterval(values: number[], step: number) {
-  for (let i = 1; i < values.length; i++) {
-    const prev = values[i - 1];
-    const value = values[i];
-    if (prev === undefined || value === undefined) return false;
-
-    if (value - prev !== step) {
-      return false;
-    }
+  for (let index = 1; index < values.length; index += 1) {
+    const previous = values[index - 1];
+    const current = values[index];
+    if (previous === undefined || current === undefined) return false;
+    if (current - previous !== step) return false;
   }
 
   return true;
 }
 
-/**
- * Returns true if the range contains all the interval values
- */
-function isFullInterval(values: number[], unit: Unit, step: number) {
-  const min = getMin(values);
-  const max = getMax(values);
-  const haveAllValues = values.length === (max - min) / step + 1;
-
-  if (min === unit.min && max + step > unit.max && haveAllValues) {
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * Returns the smallest value in the range
- */
-function getMin(values: number[]): number {
+function getFirst(values: number[]) {
   const value = values[0];
-  if (value === undefined) throw new Error("Cannot get min of empty array");
+  if (value === undefined) throw new Error("Cannot read an empty cron field");
+
   return value;
 }
 
-/**
- * Returns the largest value in the range
- */
-function getMax(values: number[]): number {
+function getLast(values: number[]) {
   const value = values[values.length - 1];
-  if (value === undefined) throw new Error("Cannot get max of empty array");
+  if (value === undefined) throw new Error("Cannot read an empty cron field");
+
   return value;
 }
 
-/**
- * Returns the range as an array of ranges
- * defined as arrays of positive integers
- */
 function toRanges(values: number[]) {
-  const retval: ([number, number] | number)[] = [];
-  let startPart: number | null = null;
+  const ranges: ([number, number] | number)[] = [];
+  let start: number | undefined;
 
-  values.forEach((value, index, self) => {
-    const nextValue = self[index + 1];
-    if (nextValue === undefined || value !== nextValue - 1) {
-      if (startPart !== null) {
-        retval.push([startPart, value]);
-        startPart = null;
-      } else {
-        retval.push(value);
-      }
-    } else if (startPart === null) {
-      startPart = value;
+  values.forEach((value, index) => {
+    const next = values[index + 1];
+
+    if (next === value + 1) {
+      start ??= value;
+      return;
     }
+
+    if (start !== undefined) {
+      ranges.push([start, value]);
+      start = undefined;
+      return;
+    }
+
+    ranges.push(value);
   });
 
-  return retval;
+  return ranges;
 }

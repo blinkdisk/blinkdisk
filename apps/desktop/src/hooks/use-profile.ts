@@ -1,6 +1,5 @@
 import { parseSourceId } from "@desktop/lib/source";
 import { useParams } from "@tanstack/react-router";
-import { useMemo } from "react";
 
 export type Profile = {
   deviceName: string;
@@ -14,17 +13,14 @@ export function useProfile() {
     strict: false,
   });
 
-  const sourceIdParts = useMemo(
-    () => (sourceId ? parseSourceId(sourceId) : null),
-    [sourceId],
-  );
+  const sourceIdParts = sourceId ? parseSourceId(sourceId) : null;
   const userName = sourceIdParts?.user;
   const hostName = sourceIdParts?.device;
 
-  const profile = useMemo<SelectedProfile>(() => {
+  const profile = (() => {
     if (userName === undefined || hostName === undefined) return null;
     return { deviceName: hostName, userName };
-  }, [userName, hostName]);
+  })();
 
   return {
     userName,

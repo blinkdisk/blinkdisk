@@ -1,7 +1,6 @@
 import type { StorageProviderType } from "@blinkdisk/constants/providers";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 export type CreateVaultStep = "VARIANT" | "PROVIDER" | "CONFIG" | "DETAILS";
 
@@ -24,48 +23,42 @@ const store = new Store<{
   options: defaultOptions,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openCreateVault(options: Partial<CreateVaultDialogOptions> = {}) {
+  store.setState(() => ({
+    isOpen: true,
+    options: {
+      ...defaultOptions,
+      ...options,
+    },
+  }));
+}
+
+function setOptions(options: Partial<CreateVaultDialogOptions>) {
+  store.setState((state) => ({
+    ...state,
+    options: {
+      ...state.options,
+      ...options,
+    },
+  }));
+}
+
+function resetOptions() {
+  store.setState((state) => ({
+    ...state,
+    options: defaultOptions,
+  }));
+}
+
 export function useCreateVaultDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  const openCreateVault = useCallback(
-    (options: Partial<CreateVaultDialogOptions> = {}) => {
-      store.setState(() => ({
-        isOpen: true,
-        options: {
-          ...defaultOptions,
-          ...options,
-        },
-      }));
-    },
-    [],
-  );
-
-  const setOptions = useCallback(
-    (options: Partial<CreateVaultDialogOptions>) => {
-      store.setState((state) => ({
-        ...state,
-        options: {
-          ...state.options,
-          ...options,
-        },
-      }));
-    },
-    [],
-  );
-
-  const resetOptions = useCallback(() => {
-    store.setState((state) => ({
-      ...state,
-      options: defaultOptions,
-    }));
-  }, []);
 
   return {
     isOpen,

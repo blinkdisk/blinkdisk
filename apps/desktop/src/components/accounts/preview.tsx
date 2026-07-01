@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback } from "@blinkdisk/ui/avatar";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { Email } from "@desktop/components/accounts/email";
 import { HatGlassesIcon } from "lucide-react";
-import { useMemo } from "react";
 
 type AccountPreviewProps = {
   account?: {
@@ -16,13 +15,11 @@ type AccountPreviewProps = {
 export function AccountPreview({ account, local }: AccountPreviewProps) {
   const { t } = useAppTranslation("auth.account");
 
-  const initials = useMemo(() => {
-    return (account?.name || "")
-      .split(" ")
-      .slice(0, 2)
-      .map((p) => p[0])
-      .join("");
-  }, [account]);
+  const initials = (account?.name || "")
+    .split(" ")
+    .slice(0, 2)
+    .map((p) => p[0])
+    .join("");
 
   return (
     <div className="flex items-center gap-2.5">

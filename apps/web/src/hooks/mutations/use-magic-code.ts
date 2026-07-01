@@ -6,7 +6,7 @@ import {
 import type { LanguageCode } from "@blinkdisk/constants/language";
 import type { ZMagicCodeType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { i18n } from "@web/i18n";
 import { authClient } from "@web/lib/auth";
@@ -16,6 +16,7 @@ export function useMagicCode() {
   const posthog = usePostHog();
   const search = useSearch({ strict: false });
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["auth", "magic"],
@@ -51,6 +52,7 @@ export function useMagicCode() {
       showErrorToast(error);
     },
     onSuccess: async (res) => {
+      await queryClient.invalidateQueries();
       // End the last session
       posthog.reset();
       // Start a new session

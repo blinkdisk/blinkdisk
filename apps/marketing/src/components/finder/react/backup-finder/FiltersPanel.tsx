@@ -130,23 +130,23 @@ export function FiltersPanel({
                   open={openGroups.includes(section.id)}
                   onToggle={() => onToggleGroup(section.id)}
                 >
-                  {Object.keys(section.labels)
-                    .filter((key) => GENERAL_FILTER_KEYS.has(key))
-                    .map((key) => {
-                      const label = section.labels[key];
-                      if (!label) return null;
+                  {Object.keys(section.labels).flatMap((key) => {
+                    if (!GENERAL_FILTER_KEYS.has(key)) return [];
 
-                      return (
-                        <FilterCheckboxRow
-                          key={key}
-                          id={`${section.id}-${key}`}
-                          label={label.text}
-                          description={label.description}
-                          checked={filters.byCategory[section.id].has(key)}
-                          onToggle={() => onToggleCategoryKey(section.id, key)}
-                        />
-                      );
-                    })}
+                    const label = section.labels[key];
+                    if (!label) return [];
+
+                    return [
+                      <FilterCheckboxRow
+                        key={key}
+                        id={`${section.id}-${key}`}
+                        label={label.text}
+                        description={label.description}
+                        checked={filters.byCategory[section.id].has(key)}
+                        onToggle={() => onToggleCategoryKey(section.id, key)}
+                      />,
+                    ];
+                  })}
 
                   <div className="flex flex-col gap-4 pt-1">
                     <ReleaseYearRangeFields

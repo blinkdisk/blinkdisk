@@ -18,13 +18,14 @@ export function DefaultErrorPage() {
                 key={0}
                 href="mailto:support@blinkdisk.com"
                 className="link-primary"
+                aria-label="support@blinkdisk.com"
               />,
             ]}
           />
         </p>
         <div>
           <Button
-            render={<Link to="/" />}
+            render={<Link to="/" aria-label={t("button")} />}
             nativeButton={false}
             className="mt-8"
           >

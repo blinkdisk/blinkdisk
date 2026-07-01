@@ -18,7 +18,6 @@
     "@blinkdisk/hooks": "workspace:*",
     "@blinkdisk/schemas": "workspace:*",
     "@blinkdisk/signaldb-electron": "catalog:",
-    "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
     "@lottiefiles/dotlottie-react": "catalog:",

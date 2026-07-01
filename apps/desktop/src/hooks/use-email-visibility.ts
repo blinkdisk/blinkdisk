@@ -1,5 +1,4 @@
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
-import { useCallback } from "react";
 
 export function useEmailVisibility() {
   const [hideEmail, setHideEmail] = useAppStorage(
@@ -9,16 +8,13 @@ export function useEmailVisibility() {
 
   const isEmailVisible = !hideEmail;
 
-  const setEmailVisible = useCallback(
-    async (to: boolean) => {
-      await setHideEmail(!to);
-    },
-    [setHideEmail],
-  );
+  const setEmailVisible = async (to: boolean) => {
+    await setHideEmail(!to);
+  };
 
-  const toggleEmailVisibility = useCallback(async () => {
+  const toggleEmailVisibility = async () => {
     await setEmailVisible(!isEmailVisible);
-  }, [isEmailVisible, setEmailVisible]);
+  };
 
   return {
     isEmailVisible,

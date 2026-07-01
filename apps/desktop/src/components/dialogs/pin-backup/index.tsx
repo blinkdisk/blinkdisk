@@ -14,32 +14,49 @@ import { PinBadge } from "@desktop/components/backups/pin-badge";
 import { useEditBackup } from "@desktop/hooks/mutations/core/use-edit-backup";
 import { usePinBackupDialog } from "@desktop/hooks/state/use-pin-backup-dialog";
 import { InfoIcon, PlusIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
+
+type PinDialogState<T> = {
+  key: string;
+  value: T;
+};
 
 export function PinBackupDialog() {
   const { t } = useAppTranslation("backup.pinDialog");
   const { isOpen, setIsOpen, options } = usePinBackupDialog();
-  const [newPin, setNewPin] = useState("");
+  const optionsKey = options?.backupId ?? "closed";
+  const initialPins = options?.currentPins ?? [];
+  const [newPinState, setNewPinState] = useState<PinDialogState<string> | null>(
+    null,
+  );
+  const [pinsState, setPinsState] = useState<PinDialogState<string[]> | null>(
+    null,
+  );
+  const newPin = newPinState?.key === optionsKey ? newPinState.value : "";
+  const pins = pinsState?.key === optionsKey ? pinsState.value : initialPins;
 
   const { mutateAsync, isPending } = useEditBackup({
     onSuccess: () => setIsOpen(false),
   });
 
-  const [pins, setPins] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (isOpen && options) {
-      setPins(options.currentPins);
-      setNewPin("");
-    }
-  }, [isOpen, options]);
-
   function handleOpen(open: boolean) {
     setIsOpen(open);
     if (!open) {
-      setNewPin("");
+      setNewPinState(null);
+      setPinsState(null);
     }
+  }
+
+  function setNewPin(value: string) {
+    setNewPinState({ key: optionsKey, value });
+  }
+
+  function updatePins(updater: (pins: string[]) => string[]) {
+    setPinsState((current) => ({
+      key: optionsKey,
+      value: updater(current?.key === optionsKey ? current.value : initialPins),
+    }));
   }
 
   function addPin() {
@@ -50,12 +67,12 @@ export function PinBackupDialog() {
       return;
     }
 
-    setPins((prev) => [...prev, trimmed]);
+    updatePins((prev) => [...prev, trimmed]);
     setNewPin("");
   }
 
   function removePin(pin: string) {
-    setPins((prev) => prev.filter((p) => p !== pin));
+    updatePins((prev) => prev.filter((p) => p !== pin));
   }
 
   async function save() {

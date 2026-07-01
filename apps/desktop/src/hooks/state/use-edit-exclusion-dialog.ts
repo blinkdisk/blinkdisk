@@ -1,5 +1,4 @@
 import { Store, useStore } from "@tanstack/react-store";
-import { useCallback } from "react";
 
 type EditExclusionDialogOptions = {
   initialValue: string;
@@ -14,22 +13,22 @@ const store = new Store<{
   options: null,
 });
 
+function setIsOpen(to: boolean) {
+  store.setState((state) => ({
+    ...state,
+    isOpen: to,
+  }));
+}
+
+function openEditExclusionDialog(options: EditExclusionDialogOptions) {
+  store.setState(() => ({
+    isOpen: true,
+    options,
+  }));
+}
+
 export function useEditExclusionDialog() {
   const { isOpen, options } = useStore(store);
-
-  const setIsOpen = useCallback((to: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isOpen: to,
-    }));
-  }, []);
-
-  function openEditExclusionDialog(options: EditExclusionDialogOptions) {
-    store.setState(() => ({
-      isOpen: true,
-      options,
-    }));
-  }
 
   return {
     isOpen,

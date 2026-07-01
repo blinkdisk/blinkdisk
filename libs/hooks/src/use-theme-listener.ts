@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export type Theme = "light" | "dark" | "system";
 
@@ -14,25 +14,30 @@ export function useThemeListener({
   useEffect(() => {
     document.body.classList.add("disable-transitions");
 
-    setTimeout(() => {
+    let transitionTimeout: ReturnType<typeof setTimeout> | undefined;
+    const themeTimeout = setTimeout(() => {
       if (dark) document.body.classList.add("dark");
       else document.body.classList.remove("dark");
 
-      setTimeout(() => {
+      transitionTimeout = setTimeout(() => {
         document.body.classList.remove("disable-transitions");
       }, 25);
     }, 25);
+
+    return () => {
+      clearTimeout(themeTimeout);
+      if (transitionTimeout) clearTimeout(transitionTimeout);
+      document.body.classList.remove("disable-transitions");
+    };
   }, [dark]);
 
-  const onKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "y" && e.ctrlKey) {
-        e.preventDefault();
-        setTheme(theme === "dark" ? "light" : "dark");
-      }
-    },
-    [theme, setTheme],
-  );
+  const handlerRef = useRef<(e: KeyboardEvent) => void>(() => {});
+  handlerRef.current = (e: KeyboardEvent) => {
+    if (e.key === "y" && e.ctrlKey) {
+      e.preventDefault();
+      setTheme(theme === "dark" ? "light" : "dark");
+    }
+  };
 
   useEffect(() => {
     if (
@@ -41,7 +46,9 @@ export function useThemeListener({
     )
       return;
 
+    const onKeyDown = (e: KeyboardEvent) => handlerRef.current(e);
+
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onKeyDown]);
+  }, []);
 }

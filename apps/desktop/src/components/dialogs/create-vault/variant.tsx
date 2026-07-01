@@ -16,7 +16,6 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useAuth } from "@desktop/hooks/use-auth";
 import { formatSize } from "@desktop/lib/number";
 import { CheckIcon, ExternalLinkIcon, XIcon } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
 
 export type CreateVaultVariantProps = {
   selectCloud: () => void;
@@ -33,23 +32,15 @@ export function CreateVaultVariant({
   const { openSelectAccountDialog } = useSelectAccountDialog();
   const { selectAccount } = useAuth();
   const { accounts } = useAccountList();
-  const waitingForAuth = useRef(false);
 
-  const handleSelectAccount = useCallback(() => {
+  const handleSelectAccount = () => {
     openSelectAccountDialog({
       onSelect: async (accountId) => {
         await selectAccount(accountId);
         selectCloud();
       },
     });
-  }, [openSelectAccountDialog, selectAccount, selectCloud]);
-
-  useEffect(() => {
-    if (waitingForAuth.current && isOnlineAccount) {
-      waitingForAuth.current = false;
-      selectCloud();
-    }
-  }, [isOnlineAccount, selectCloud]);
+  };
 
   return (
     <div className="mt-8 flex flex-col gap-5">
@@ -94,8 +85,9 @@ export function CreateVaultVariant({
               } else if (accounts.length > 0) {
                 handleSelectAccount();
               } else {
-                waitingForAuth.current = true;
-                openAuthDialog();
+                openAuthDialog({
+                  onAccountAdd: () => selectCloud(),
+                });
               }
             }}
           >

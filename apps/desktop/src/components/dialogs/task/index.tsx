@@ -17,7 +17,6 @@ import {
 } from "@desktop/hooks/queries/core/use-task-logs";
 import { useTaskDialog } from "@desktop/hooks/state/use-task-dialog";
 import { LoaderCircleIcon } from "lucide-react";
-import { memo } from "react";
 
 function formatTimestamp(ts: number) {
   const date = new Date(ts * 1000);
@@ -57,7 +56,7 @@ function formatValue(value: unknown): string {
   return String(value);
 }
 
-const LogEntry = memo(function LogEntry({ log }: { log: CoreTaskLogEntry }) {
+const LogEntry = function LogEntry({ log }: { log: CoreTaskLogEntry }) {
   const extras = getExtraFields(log);
 
   return (
@@ -78,7 +77,7 @@ const LogEntry = memo(function LogEntry({ log }: { log: CoreTaskLogEntry }) {
         ))}
     </p>
   );
-});
+};
 
 export function TaskDialog() {
   const { t } = useAppTranslation("task.dialog");
@@ -144,7 +143,9 @@ export function TaskDialog() {
               )}
             </div>
           ) : (
-            logs.map((log, i) => <LogEntry key={i} log={log} />)
+            logs.map((log) => (
+              <LogEntry key={`${log.ts}-${log.mod}-${log.msg}`} log={log} />
+            ))
           )}
         </div>
 

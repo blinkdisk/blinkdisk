@@ -5,16 +5,19 @@ import {
 import { Button } from "@blinkdisk/ui/button";
 import { Input, type InputProps } from "@blinkdisk/ui/input";
 import { cn } from "@blinkdisk/utils/class";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import React, { useContext } from "react";
+import type { ChangeEvent, Ref } from "react";
+import { use } from "react";
 
-const Counter = React.forwardRef<
-  HTMLInputElement,
-  InputProps & { label: DynamicFieldProps }
->(({ className, label, disabled, ...props }, ref) => {
+type CounterProps = InputProps & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLInputElement>;
+};
+
+function Counter({ className, label, disabled, ref, ...props }: CounterProps) {
   const field = useFieldContext<number>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <DynamicField
@@ -45,9 +48,7 @@ const Counter = React.forwardRef<
           value={field.state.value ?? ""}
           onBlur={() => field.handleBlur()}
           onChange={(
-            e:
-              | React.ChangeEvent<HTMLInputElement>
-              | React.ChangeEvent<HTMLTextAreaElement>,
+            e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
           ) =>
             field.handleChange(
               "valueAsNumber" in e.target
@@ -70,8 +71,6 @@ const Counter = React.forwardRef<
       </div>
     </DynamicField>
   );
-});
-
-Counter.displayName = "Counter";
+}
 
 export { Counter };

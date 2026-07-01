@@ -27,7 +27,7 @@ import {
   TrashIcon,
   ZapIcon,
 } from "lucide-react";
-import { useContext, useMemo } from "react";
+import { use } from "react";
 
 const PRESET_MAP = {
   "s2-default": "faster",
@@ -152,19 +152,17 @@ function getTabFromAlgorithm(algorithm: string): TabId {
 function AlgorithmSelector() {
   const { t } = useAppTranslation("policy.compression");
   const field = useFieldContext<string>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
   const value = useStore(field.store, (state) => state.value);
 
-  const activeTab = useMemo(() => getTabFromAlgorithm(value), [value]);
+  const activeTab = getTabFromAlgorithm(value);
 
   const activePreset = PRESET_MAP[value as keyof typeof PRESET_MAP] ?? null;
 
-  const algorithms = useMemo(() => {
-    return COMPRESSION_ALGORITHMS.map((alg) => ({
-      value: alg,
-      label: t(`algorithm.items.${alg}`),
-    }));
-  }, [t]);
+  const algorithms = COMPRESSION_ALGORITHMS.map((alg) => ({
+    value: alg,
+    label: t(`algorithm.items.${alg}`),
+  }));
 
   return (
     <DynamicField
@@ -267,15 +265,15 @@ function ExtensionListEditor({
   placeholder,
 }: ExtensionListEditorProps) {
   const field = useFieldContext<string[] | undefined>();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
   const value = useStore(field.store, (state) => state.value);
 
   return (
     <DynamicField title={label} description={description}>
       {value && value.length > 0 ? (
         <div className="mb-2 mt-1 flex flex-col gap-3">
-          {value.map((_, index) => (
-            <form.Field key={index} name={`${fieldName}[${index}]`}>
+          {value.map((extension, index) => (
+            <form.Field key={extension} name={`${fieldName}[${index}]`}>
               {(subField) => (
                 <div className="flex w-full items-start justify-between gap-2">
                   <Input

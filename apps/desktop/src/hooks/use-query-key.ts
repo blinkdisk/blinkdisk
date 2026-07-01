@@ -1,11 +1,10 @@
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
-import { useMemo } from "react";
 
 export function useQueryKey() {
   const { accountId } = useAccountId();
 
-  const queryKeys = useMemo(() => {
+  const queryKeys = (() => {
     const keys = {
       account: {
         all: ["account"],
@@ -113,7 +112,7 @@ export function useQueryKey() {
     };
 
     return keys;
-  }, [accountId]);
+  })();
 
   return {
     queryKeys,

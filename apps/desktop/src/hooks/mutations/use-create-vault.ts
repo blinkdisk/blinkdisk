@@ -24,7 +24,7 @@ export type CreateVaultResponse = {
   vaultId: string;
 };
 
-export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
+export function useCreateVault(onSuccess?: (res: CreateVaultResponse) => void) {
   const queryClient = useQueryClient();
   const posthog = usePostHog();
 

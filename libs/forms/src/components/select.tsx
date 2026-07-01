@@ -10,66 +10,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@blinkdisk/ui/select";
-import { FormDisabledContext, useFieldContext } from "@forms/use-app-form";
-import React, { type ReactNode, useContext } from "react";
+import { FormDisabledContext, useFieldContext } from "@forms/form-context";
+import type { ReactNode, Ref } from "react";
+import { use } from "react";
 
-const Select = React.forwardRef<
-  HTMLButtonElement,
-  SelectProps<{ value: string; label: ReactNode }> & {
-    label: DynamicFieldProps;
-  } & {
-    placeholder?: string;
-    items: { value: string; label: ReactNode }[];
-    triggerClassName?: string;
-    contentClassName?: string;
-  }
->(
-  (
-    {
-      triggerClassName,
-      contentClassName,
-      label,
-      placeholder,
-      items,
-      disabled,
-      ...props
-    },
-    ref,
-  ) => {
-    const field = useFieldContext<string | undefined>();
-    const disabledContext = useContext(FormDisabledContext);
+type SelectFieldProps = SelectProps<{ value: string; label: ReactNode }> & {
+  label: DynamicFieldProps;
+  ref?: Ref<HTMLButtonElement>;
+} & {
+  placeholder?: string;
+  items: { value: string; label: ReactNode }[];
+  triggerClassName?: string;
+  contentClassName?: string;
+};
 
-    return (
-      <DynamicField
-        {...label}
-        errors={field.state.meta.errors}
-        name={field.name}
+function Select({
+  triggerClassName,
+  contentClassName,
+  label,
+  placeholder,
+  items,
+  disabled,
+  ref,
+  ...props
+}: SelectFieldProps) {
+  const field = useFieldContext<string | undefined>();
+  const disabledContext = use(FormDisabledContext);
+
+  return (
+    <DynamicField {...label} errors={field.state.meta.errors} name={field.name}>
+      <SelectRoot
+        {...props}
+        onValueChange={(value) => {
+          field.setValue(value as unknown as string);
+        }}
+        value={items.find((item) => item.value === field.state.value) ?? null}
+        disabled={disabledContext || disabled}
+        items={items}
       >
-        <SelectRoot
-          {...props}
-          onValueChange={(value) => {
-            field.setValue(value as unknown as string);
-          }}
-          value={items.find((item) => item.value === field.state.value) ?? null}
-          disabled={disabledContext || disabled}
-          items={items}
-        >
-          <SelectTrigger ref={ref} className={triggerClassName}>
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-          <SelectContent className={contentClassName}>
-            {items.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </SelectRoot>
-      </DynamicField>
-    );
-  },
-);
-
-Select.displayName = "Select";
+        <SelectTrigger ref={ref} className={triggerClassName}>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent className={contentClassName}>
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </SelectRoot>
+    </DynamicField>
+  );
+}
 
 export { Select };

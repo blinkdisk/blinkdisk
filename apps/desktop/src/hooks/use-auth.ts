@@ -9,7 +9,6 @@ import { getVaultCollection } from "@desktop/lib/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
-import { useCallback } from "react";
 
 export function useAuth() {
   const navigate = useNavigate({ from: "/$accountId" });
@@ -27,64 +26,58 @@ export function useAuth() {
     false,
   );
 
-  const addAccount = useCallback(async () => {
+  const addAccount = async () => {
     openAuthDialog();
-  }, [openAuthDialog]);
+  };
 
-  const accountChanged = useCallback(
-    async (accountId: string) => {
-      const local = accountId === LOCAL_ACCOUNT_ID;
+  const accountChanged = async (accountId: string) => {
+    const local = accountId === LOCAL_ACCOUNT_ID;
 
-      if (!local) {
-        // End the last session
-        posthog.reset();
-        // Start a new session
-        posthog.identify(accountId);
-      }
+    if (!local) {
+      // End the last session
+      posthog.reset();
+      // Start a new session
+      posthog.identify(accountId);
+    }
 
-      await Promise.all([
-        window.electron.store.set("currentAccountId", accountId),
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.account.detail(),
-        }),
-      ]);
+    await Promise.all([
+      window.electron.store.set("currentAccountId", accountId),
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.account.detail(),
+      }),
+    ]);
 
-      const vaultCollection = getVaultCollection(accountId);
-      await vaultCollection.isReady();
+    const vaultCollection = getVaultCollection(accountId);
+    await vaultCollection.isReady();
 
-      const hasActiveVaults = vaultCollection
-        .find({ status: "ACTIVE" })
-        .fetch().length;
+    const hasActiveVaults = vaultCollection
+      .find({ status: "ACTIVE" })
+      .fetch().length;
 
-      if (!local && !hasActiveVaults) {
-        openCreateVault({
-          step: "DETAILS",
-          provider: "CLOUDBLINK",
-          autoSelectedProvider: true,
-        });
-      }
-    },
-    [queryClient, queryKeys, posthog, openCreateVault],
-  );
-
-  const selectAccount = useCallback(
-    async (accountId: string) => {
-      navigate({
-        to: "/$accountId/loading",
-        params: { accountId },
+    if (!local && !hasActiveVaults) {
+      openCreateVault({
+        step: "DETAILS",
+        provider: "CLOUDBLINK",
+        autoSelectedProvider: true,
       });
+    }
+  };
 
-      await accountChanged(accountId);
+  const selectAccount = async (accountId: string) => {
+    navigate({
+      to: "/$accountId/loading",
+      params: { accountId },
+    });
 
-      navigate({
-        to: "/$accountId",
-        params: { accountId },
-      });
-    },
-    [accountChanged, navigate],
-  );
+    await accountChanged(accountId);
 
-  const logout = useCallback(async () => {
+    navigate({
+      to: "/$accountId",
+      params: { accountId },
+    });
+  };
+
+  const logout = async () => {
     const nextAccountId = accountId || LOCAL_ACCOUNT_ID;
 
     await navigate({
@@ -109,7 +102,7 @@ export function useAuth() {
         params: { accountId: LOCAL_ACCOUNT_ID },
       });
     }
-  }, [navigate, accountId, accounts, selectAccount, setAuthenticated]);
+  };
 
   return {
     logout,

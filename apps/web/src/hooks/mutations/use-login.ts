@@ -1,7 +1,7 @@
 import { LANGUAGE_HEADER } from "@blinkdisk/constants/header";
 import type { ZLoginType } from "@blinkdisk/schemas/auth";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { i18n } from "@web/i18n";
 import { authClient } from "@web/lib/auth";
@@ -9,6 +9,7 @@ import { authClient } from "@web/lib/auth";
 export function useLogin() {
   const navigate = useNavigate();
   const search = useSearch({ strict: false });
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["auth", "login"],
@@ -41,6 +42,7 @@ export function useLogin() {
       showErrorToast(error);
     },
     onSuccess: async () => {
+      await queryClient.invalidateQueries();
       await navigate({
         to: "/auth/magic",
         search,

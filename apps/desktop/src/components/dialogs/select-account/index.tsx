@@ -15,7 +15,7 @@ import { AccountPreview } from "@desktop/components/accounts/preview";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useSelectAccountDialog } from "@desktop/hooks/state/use-select-account-dialog";
 import { UserRoundIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 export function SelectAccountDialog() {
   const { t } = useAppTranslation("auth.account.selectDialog");
@@ -25,15 +25,15 @@ export function SelectAccountDialog() {
 
   const [accountId, setAccountId] = useState<string>("");
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setAccountId("");
-  }, []);
+  };
 
-  const handleSelect = useCallback(() => {
+  const handleSelect = () => {
     if (!accountId || !options?.onSelect) return;
     options.onSelect(accountId);
     setIsOpen(false);
-  }, [accountId, options, setIsOpen]);
+  };
 
   const allAccounts = [
     ...(options?.showLocal

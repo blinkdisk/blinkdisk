@@ -2,12 +2,10 @@ import { getStorageProvider } from "@blinkdisk/constants/providers";
 import { STORAGE_USAGE_WARNING_THRESHOLD } from "@blinkdisk/constants/space";
 import {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@blinkdisk/ui/carousel";
+import { SidebarAlertsControls } from "@desktop/components/sidebar/alerts-controls";
 import { SidebarLocalOnlyAlert } from "@desktop/components/sidebar/local-only-alert";
 import { SidebarOfflineAlert } from "@desktop/components/sidebar/offline-alert";
 import { SidebarReviewAlert } from "@desktop/components/sidebar/review-alert";
@@ -19,9 +17,10 @@ import { useVault } from "@desktop/hooks/queries/use-vault";
 import { useVaultList } from "@desktop/hooks/queries/use-vault-list";
 import { useUpdateDialog } from "@desktop/hooks/state/use-update-dialog";
 import { useAppStorage } from "@desktop/hooks/use-app-storage";
+import { useNow } from "@desktop/hooks/use-now";
 import { useOffline } from "@desktop/hooks/use-offline";
 import AutoHeight from "embla-carousel-auto-height";
-import { type ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 const REVIEW_ALERT_VAULT_AGE_MS = 12 * 60 * 60 * 1000;
 
@@ -40,9 +39,7 @@ export function SidebarAlerts() {
   const [cloudBackupDismissedAt] = useAppStorage(
     "sidebarAlerts.dismissed.cloudBackup",
   );
-  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-  const [currentAlert, setCurrentAlert] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const now = useNow();
 
   const storagePercentage = space
     ? space.capacity === 0
@@ -60,8 +57,7 @@ export function SidebarAlerts() {
   const showReviewAlert =
     !reviewDismissedAt &&
     !!vault?.createdAt &&
-    Date.now() - new Date(vault.createdAt).getTime() >
-      REVIEW_ALERT_VAULT_AGE_MS;
+    now - new Date(vault.createdAt).getTime() > REVIEW_ALERT_VAULT_AGE_MS;
 
   const alerts: SidebarAlertSlide[] = [];
 
@@ -113,31 +109,12 @@ export function SidebarAlerts() {
     });
   }
 
-  useEffect(() => {
-    if (!carouselApi) return;
-
-    const updateCarouselState = () => {
-      setScrollSnaps(carouselApi.scrollSnapList());
-      setCurrentAlert(carouselApi.selectedScrollSnap());
-    };
-
-    updateCarouselState();
-    carouselApi.on("select", updateCarouselState);
-    carouselApi.on("reInit", updateCarouselState);
-
-    return () => {
-      carouselApi.off("select", updateCarouselState);
-      carouselApi.off("reInit", updateCarouselState);
-    };
-  }, [carouselApi]);
-
   if (!alerts.length) return null;
 
   return (
     <Carousel
       opts={{ align: "start", loop: true }}
       plugins={[AutoHeight()]}
-      setApi={setCarouselApi}
       className="group/alerts"
     >
       <CarouselContent className="-ml-2 items-start transition-[height]">
@@ -147,36 +124,7 @@ export function SidebarAlerts() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      {scrollSnaps.length > 1 ? (
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex gap-0.5">
-            <CarouselPrevious
-              variant="ghost"
-              className="text-muted-foreground static size-6 translate-y-0"
-            />
-            <CarouselNext
-              variant="ghost"
-              className="text-muted-foreground static size-6 translate-y-0"
-            />
-          </div>
-          <div className="flex gap-1.5">
-            {scrollSnaps.map((scrollSnap, index) => (
-              <button
-                key={scrollSnap}
-                type="button"
-                aria-label={`Go to alert ${index + 1}`}
-                aria-current={index === currentAlert ? "true" : undefined}
-                onClick={() => carouselApi?.scrollTo(index)}
-                className={
-                  index === currentAlert
-                    ? "bg-foreground/70 size-1.5 rounded-full"
-                    : "bg-foreground/20 hover:bg-foreground/40 size-1.5 rounded-full transition-colors"
-                }
-              />
-            ))}
-          </div>
-        </div>
-      ) : null}
+      <SidebarAlertsControls />
     </Carousel>
   );
 }

@@ -1,9 +1,9 @@
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZPolicy, type ZPolicyType } from "@blinkdisk/schemas/policy";
-import { PolicyContext } from "@desktop/components/policy/context";
+import { PolicyContext } from "@desktop/components/policy/policy-context";
 import { emptyPolicy, pickDefinedFields } from "@desktop/lib/policy";
 import type { AnyFieldApi, AnyFormApi } from "@tanstack/react-form";
-import { useContext } from "react";
+import { use } from "react";
 import { z } from "zod";
 
 const POLICY_FORM_SECTIONS = [
@@ -39,7 +39,7 @@ type PolicyQueryValue = {
 };
 
 export function usePolicyForm() {
-  const { inherited, mutate, policy } = useContext(PolicyContext);
+  const { inherited, mutate, policy } = use(PolicyContext);
 
   const form = useAppForm({
     defaultValues: getPolicyFormDefaultValues(policy),

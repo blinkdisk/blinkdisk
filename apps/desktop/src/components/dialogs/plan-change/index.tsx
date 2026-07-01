@@ -9,7 +9,6 @@ import {
 } from "@blinkdisk/ui/dialog";
 import { Trans } from "@blinkdisk/utils/i18n";
 import { useChangePlanForm } from "@desktop/hooks/forms/use-change-plan-form";
-import { useMemo } from "react";
 
 export type PlanChangeAction = "UPGRADE" | "DOWNGRADE" | "PERIOD_CHANGE";
 
@@ -30,17 +29,17 @@ export function PlanChangeDialog({
 
   const form = useChangePlanForm({ priceId });
 
-  const plan = useMemo(() => {
+  const plan = (() => {
     if (!priceId) return null;
     return SUBSCRIPTION_PLANS.find((plan) =>
       plan.prices.find((price) => price.id === priceId),
     );
-  }, [priceId]);
+  })();
 
-  const price = useMemo(() => {
+  const price = (() => {
     if (!plan) return null;
     return plan.prices.find((price) => price.id === priceId);
-  }, [plan, priceId]);
+  })();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

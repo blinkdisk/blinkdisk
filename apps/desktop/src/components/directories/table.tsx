@@ -1,3 +1,5 @@
+"use no memo";
+
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Button } from "@blinkdisk/ui/button";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
@@ -32,17 +34,29 @@ import { formatSize } from "@desktop/lib/number";
 import {
   type ColumnFiltersState,
   createColumnHelper,
+  createTable,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
   type Row,
+  type RowData,
+  type RowSelectionState,
   type SortingState,
+  type TableOptions,
+  type TableOptionsResolved,
   type Table as TableType,
-  useReactTable,
+  type Updater,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import {
+  elementScroll,
+  observeElementOffset,
+  observeElementRect,
+  type PartialKeys,
+  Virtualizer,
+  type VirtualizerOptions,
+} from "@tanstack/react-virtual";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -50,7 +64,13 @@ import {
   FileSearchIcon,
   SearchIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 
 export type Item = DirectoryItemType & {
   skeleton?: boolean;
@@ -66,6 +86,23 @@ type DirectoryTableProps = {
   }) => void;
 };
 
+function getSelectedFiles(
+  selection: RowSelectionState,
+  items: Item[] | undefined | null,
+) {
+  return Object.keys(selection).flatMap((key) => {
+    const item = items?.find((dir) => dir.id === key);
+    return item ? [item] : [];
+  });
+}
+
+function resolveSelectionUpdater(
+  updater: Updater<RowSelectionState>,
+  current: RowSelectionState,
+) {
+  return typeof updater === "function" ? updater(current) : updater;
+}
+
 export function DirectoryTable({
   items,
   onSelectionChange,
@@ -78,7 +115,7 @@ export function DirectoryTable({
   const hasBreadcrumb = !!breadcrumbPath?.length;
 
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [selection, setSelection] = useState({});
+  const [selection, setSelection] = useState<RowSelectionState>({});
   const [filters, setFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     mode: false,
@@ -88,112 +125,116 @@ export function DirectoryTable({
 
   const parent = useRef<HTMLTableElement>(null);
 
-  const columns = useMemo(() => {
-    return [
-      {
-        id: "select",
-        header: ({ table }: { table: TableType<Item> }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && false)
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-            className="size-4.5 mb-1"
-          />
+  const columns = [
+    {
+      id: "select",
+      header: ({ table }: { table: TableType<Item> }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && false)
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+          className="size-4.5 mb-1"
+        />
+      ),
+      cell: ({ row }: { row: Row<Item> }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          disabled={!row.getCanSelect()}
+          aria-label="Select row"
+          className="size-4.5 mb-1 ml-1"
+          preventPropagation
+        />
+      ),
+      size: 37,
+      enableSorting: false,
+      enableHiding: false,
+    },
+    columnHelper.accessor("name", {
+      header: () => t("name"),
+      size: 0,
+      minSize: 0,
+      cell: (info) => <DirectoryNameCell info={info} dark={dark} />,
+    }),
+    columnHelper.accessor("stats.size", {
+      id: "size",
+      header: () => t("size"),
+      cell: (info) =>
+        info.row.original?.skeleton ? (
+          <Skeleton width={80} />
+        ) : (
+          formatSize(info.getValue() || 0)
         ),
-        cell: ({ row }: { row: Row<Item> }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            disabled={!row.getCanSelect()}
-            aria-label="Select row"
-            className="size-4.5 mb-1 ml-1"
-            preventPropagation
-          />
+      size: 120,
+    }),
+    columnHelper.accessor("modifiedAt", {
+      id: "modified",
+      header: () => t("modified"),
+      cell: (info) =>
+        info.row.original?.skeleton ? (
+          <Skeleton width={100} />
+        ) : (
+          new Date(info.getValue() || 0).toLocaleString(undefined, {
+            timeStyle: "short",
+            dateStyle: "short",
+          })
         ),
-        size: 37,
-        enableSorting: false,
-        enableHiding: false,
-      },
-      columnHelper.accessor("name", {
-        header: () => t("name"),
-        size: 0,
-        minSize: 0,
-        cell: (info) => <DirectoryNameCell info={info} dark={dark} />,
-      }),
-      columnHelper.accessor("stats.size", {
-        id: "size",
-        header: () => t("size"),
-        cell: (info) =>
-          info.row.original?.skeleton ? (
-            <Skeleton width={80} />
-          ) : (
-            formatSize(info.getValue() || 0)
-          ),
-        size: 120,
-      }),
-      columnHelper.accessor("modifiedAt", {
-        id: "modified",
-        header: () => t("modified"),
-        cell: (info) =>
-          info.row.original?.skeleton ? (
-            <Skeleton width={100} />
-          ) : (
-            new Date(info.getValue() || 0).toLocaleString(undefined, {
-              timeStyle: "short",
-              dateStyle: "short",
-            })
-          ),
-        size: 150,
-      }),
-      columnHelper.accessor("meta.mode", {
-        id: "mode",
-        header: () => t("mode"),
-        cell: (info) =>
-          info.row.original?.skeleton ? (
-            <Skeleton width={70} />
-          ) : (
-            info.getValue()
-          ),
-        size: 100,
-      }),
-      columnHelper.accessor("meta.uid", {
-        id: "uid",
-        header: () => t("uid"),
-        cell: (info) =>
-          info.row.original?.skeleton ? (
-            <Skeleton width={50} />
-          ) : (
-            info.getValue()
-          ),
-        size: 80,
-      }),
-      columnHelper.accessor("meta.gid", {
-        id: "gid",
-        header: () => t("gid"),
-        cell: (info) =>
-          info.row.original?.skeleton ? (
-            <Skeleton width={50} />
-          ) : (
-            info.getValue()
-          ),
-        size: 80,
-      }),
-    ];
-  }, [t, dark]);
+      size: 150,
+    }),
+    columnHelper.accessor("meta.mode", {
+      id: "mode",
+      header: () => t("mode"),
+      cell: (info) =>
+        info.row.original?.skeleton ? <Skeleton width={70} /> : info.getValue(),
+      size: 100,
+    }),
+    columnHelper.accessor("meta.uid", {
+      id: "uid",
+      header: () => t("uid"),
+      cell: (info) =>
+        info.row.original?.skeleton ? <Skeleton width={50} /> : info.getValue(),
+      size: 80,
+    }),
+    columnHelper.accessor("meta.gid", {
+      id: "gid",
+      header: () => t("gid"),
+      cell: (info) =>
+        info.row.original?.skeleton ? <Skeleton width={50} /> : info.getValue(),
+      size: 80,
+    }),
+  ];
 
-  const table = useReactTable({
+  const notifySelectionChange = (nextSelection: RowSelectionState) => {
+    const selectedItems = getSelectedFiles(nextSelection, items);
+    onSelectionChange?.({
+      items: selectedItems,
+      allSelected: selectedItems.length === items?.length,
+    });
+  };
+
+  const updateSelection = (updater: Updater<RowSelectionState>) => {
+    const nextSelection = resolveSelectionUpdater(updater, selection);
+    setSelection(nextSelection);
+    notifySelectionChange(nextSelection);
+  };
+
+  const reset = () => {
+    setSelection({});
+    setFilters([]);
+    notifySelectionChange({});
+  };
+
+  const table = useDirectoryTable({
     data: items || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
-    onRowSelectionChange: setSelection,
+    onRowSelectionChange: updateSelection,
     onColumnFiltersChange: setFilters,
     onColumnVisibilityChange: setColumnVisibility,
     getRowId: (row) => row.id,
@@ -207,7 +248,7 @@ export function DirectoryTable({
 
   const { rows } = table.getRowModel();
 
-  const virtualizer = useVirtualizer({
+  const virtualizer = useDirectoryVirtualizer({
     count: rows?.length || 0,
     getScrollElement: () => parent.current,
     estimateSize: () => 50,
@@ -216,30 +257,14 @@ export function DirectoryTable({
 
   const virtualisedItems = virtualizer.getVirtualItems();
 
-  const selectedFiles = useMemo(() => {
-    return Object.keys(selection)
-      .map((key) => items?.find((dir) => dir.id === key))
-      .filter(Boolean) as Item[];
-  }, [selection, items]);
-
-  const columnLabels = useMemo<Record<string, string>>(
-    () => ({
-      name: t("name"),
-      size: t("size"),
-      modified: t("modified"),
-      mode: t("mode"),
-      uid: t("uid"),
-      gid: t("gid"),
-    }),
-    [t],
-  );
-
-  useEffect(() => {
-    onSelectionChange?.({
-      items: selectedFiles,
-      allSelected: selectedFiles.length === items?.length,
-    });
-  }, [items?.length, onSelectionChange, selectedFiles]);
+  const columnLabels: Record<string, string> = {
+    name: t("name"),
+    size: t("size"),
+    modified: t("modified"),
+    mode: t("mode"),
+    uid: t("uid"),
+    gid: t("gid"),
+  };
 
   return (
     <>
@@ -270,20 +295,21 @@ export function DirectoryTable({
               />
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuGroup>
-                  {table
-                    .getAllColumns()
-                    .filter((column) => column.getCanHide())
-                    .map((column) => (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {columnLabels[column.id] ?? column.id}
-                      </DropdownMenuCheckboxItem>
-                    ))}
+                  {table.getAllColumns().flatMap((column) =>
+                    column.getCanHide()
+                      ? [
+                          <DropdownMenuCheckboxItem
+                            key={column.id}
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) =>
+                              column.toggleVisibility(!!value)
+                            }
+                          >
+                            {columnLabels[column.id] ?? column.id}
+                          </DropdownMenuCheckboxItem>,
+                        ]
+                      : [],
+                  )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -366,10 +392,7 @@ export function DirectoryTable({
                 key={virtualRow.key}
                 row={rows[virtualRow.index]}
                 virtualRow={virtualRow}
-                reset={() => {
-                  setSelection({});
-                  setFilters([]);
-                }}
+                reset={reset}
               />
             ))}
           </TableBody>
@@ -377,4 +400,71 @@ export function DirectoryTable({
       )}
     </>
   );
+}
+
+const useIsomorphicLayoutEffect =
+  typeof document === "undefined" ? useEffect : useLayoutEffect;
+
+function useDirectoryVirtualizer<
+  TScrollElement extends Element,
+  TItemElement extends Element,
+>(
+  options: PartialKeys<
+    VirtualizerOptions<TScrollElement, TItemElement>,
+    "observeElementRect" | "observeElementOffset" | "scrollToFn"
+  >,
+) {
+  "use no memo";
+
+  const rerender = useReducer((x: number) => x + 1, 0)[1];
+  const resolvedOptions: VirtualizerOptions<TScrollElement, TItemElement> = {
+    observeElementRect,
+    observeElementOffset,
+    scrollToFn: elementScroll,
+    ...options,
+    onChange: (instance, sync) => {
+      rerender();
+      options.onChange?.(instance, sync);
+    },
+  };
+  const [instance] = useState(
+    () => new Virtualizer<TScrollElement, TItemElement>(resolvedOptions),
+  );
+
+  instance.setOptions(resolvedOptions);
+
+  useIsomorphicLayoutEffect(() => instance._didMount(), [instance]);
+  useIsomorphicLayoutEffect(() => instance._willUpdate());
+
+  return instance;
+}
+
+function useDirectoryTable<TData extends RowData>(
+  options: TableOptions<TData>,
+) {
+  "use no memo";
+
+  const resolvedOptions: TableOptionsResolved<TData> = {
+    state: {},
+    onStateChange: () => {},
+    renderFallbackValue: null,
+    ...options,
+  };
+  const [table] = useState(() => createTable<TData>(resolvedOptions));
+  const [state, setState] = useState(() => table.initialState);
+
+  table.setOptions((prev) => ({
+    ...prev,
+    ...options,
+    state: {
+      ...state,
+      ...options.state,
+    },
+    onStateChange: (updater) => {
+      setState(updater);
+      options.onStateChange?.(updater);
+    },
+  }));
+
+  return table;
 }

@@ -36,7 +36,7 @@ export default function CrashPlanPricingCalculator() {
           </label>
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              onClick={() => setQuantity((current) => Math.max(1, current - 1))}
               type="button"
               size="icon-sm"
               variant="secondary"
@@ -56,7 +56,7 @@ export default function CrashPlanPricingCalculator() {
               }}
             />
             <Button
-              onClick={() => setQuantity(quantity + 1)}
+              onClick={() => setQuantity((current) => current + 1)}
               type="button"
               size="icon-sm"
               variant="secondary"

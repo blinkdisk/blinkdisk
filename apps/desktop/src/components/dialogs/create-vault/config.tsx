@@ -1,7 +1,6 @@
 import type { StorageProviderType } from "@blinkdisk/constants/providers";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { providerForms } from "@desktop/components/forms/providers";
-import { useMemo } from "react";
 
 export type CreateVaultConfigProps = {
   config?: ProviderConfig;
@@ -14,10 +13,7 @@ export function CreateVaultConfig({
   provider,
   onSubmit,
 }: CreateVaultConfigProps) {
-  const Form = useMemo(
-    () => (provider ? providerForms[provider] : null),
-    [provider],
-  );
+  const Form = provider ? providerForms[provider] : null;
 
   return (
     <div className="mt-8 w-full">

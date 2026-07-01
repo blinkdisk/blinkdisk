@@ -2,14 +2,17 @@ import type { ZUpdateVaultFormType } from "@blinkdisk/schemas/vault";
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { useAccountId } from "@desktop/hooks/use-account-id";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { getVaultCollection } from "@desktop/lib/db";
 import { vaultApi } from "@desktop/lib/vault";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useUpdateVault(onSuccess: () => void) {
+export function useUpdateVault(onSuccess?: () => void) {
   const { vaultId } = useVaultId();
   const { accountId } = useAccountId();
+  const queryClient = useQueryClient();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["vault", vaultId, "name"],
@@ -33,6 +36,9 @@ export function useUpdateVault(onSuccess: () => void) {
     },
     onError: showErrorToast,
     onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.vault.all,
+      });
       onSuccess?.();
     },
   });

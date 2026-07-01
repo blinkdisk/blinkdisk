@@ -117,6 +117,7 @@ catalog:
   posthog-node: '^5.38.6'
   react: '^19.2.7'
   react-dom: '^19.2.7'
+  react-doctor: '^0.5.8'
   react-dropzone: '^15.0.0'
   react-email: '^6.6.5'
   react-i18next: '^17.0.8'

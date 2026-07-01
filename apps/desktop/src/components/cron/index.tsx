@@ -1,324 +1,378 @@
-// Modified from react-js-cron (MIT licensed)
-// Original copyright (c) 2021 Xavier Rutayisire
-// https://github.com/xrutayisire/react-js-cron
-
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { cn } from "@blinkdisk/utils/class";
 import {
-  getCronStringFromValues,
-  setValuesFromCronString,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@blinkdisk/ui/select";
+import { cn } from "@blinkdisk/utils/class";
+import { CRON_UNITS, PERIODS } from "@desktop/components/cron/constants";
+import {
+  formatCronExpression,
+  formatCronValue,
+  parseCronExpression,
 } from "@desktop/components/cron/converter";
-import { Hours } from "@desktop/components/cron/fields/hours";
-import { Minutes } from "@desktop/components/cron/fields/minutes";
-import { MonthDays } from "@desktop/components/cron/fields/month-days";
-import { Months } from "@desktop/components/cron/fields/months";
-import { Period } from "@desktop/components/cron/fields/period";
-import { WeekDays } from "@desktop/components/cron/fields/week-days";
+import { resolveCronLocale } from "@desktop/components/cron/locale";
 import type {
+  ClockFormat,
+  CronField,
+  CronLocale,
   CronProps,
-  Locale,
-  PeriodType,
+  CronSchedule,
+  CronUnit,
+  Period,
+  ResolvedCronLocale,
 } from "@desktop/components/cron/types";
-import { usePrevious } from "@desktop/components/cron/utils";
-import { useEffect, useMemo, useRef, useState } from "react";
 
-export function Cron(props: CronProps) {
+const CLOCK_FORMAT_SAMPLE_DATE = new Date(Date.UTC(2020, 0, 1, 13, 0, 0));
+const CLOCK_FORMAT = /AM|PM/i.test(
+  new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    hour12: undefined,
+  }).format(CLOCK_FORMAT_SAMPLE_DATE),
+)
+  ? "12-hour-clock"
+  : "24-hour-clock";
+
+const DEFAULT_SCHEDULE: CronSchedule = {
+  period: "day",
+  minutes: [0],
+  hours: [0],
+  monthDays: [],
+  months: [],
+  weekDays: [],
+};
+
+const PERIOD_DEFAULTS = {
+  year: {
+    months: [1],
+    monthDays: [1],
+    weekDays: [],
+    hours: [0],
+    minutes: [0],
+  },
+  month: {
+    months: [],
+    monthDays: [1],
+    weekDays: [],
+    hours: [0],
+    minutes: [0],
+  },
+  week: {
+    months: [],
+    monthDays: [],
+    weekDays: [0],
+    hours: [0],
+    minutes: [0],
+  },
+  day: {
+    months: [],
+    monthDays: [],
+    weekDays: [],
+    hours: [0],
+    minutes: [0],
+  },
+  hour: {
+    months: [],
+    monthDays: [],
+    weekDays: [],
+    hours: [],
+    minutes: [0],
+  },
+  minute: {
+    months: [],
+    monthDays: [],
+    weekDays: [],
+    hours: [],
+    minutes: [],
+  },
+} satisfies Record<Period, Omit<CronSchedule, "period">>;
+
+const PERIOD_LABELS = {
+  year: "yearOption",
+  month: "monthOption",
+  week: "weekOption",
+  day: "dayOption",
+  hour: "hourOption",
+  minute: "minuteOption",
+} as const satisfies Record<Period, keyof ResolvedCronLocale>;
+
+type CronFieldConfig = {
+  field: CronField;
+  unit: CronUnit;
+  prefix: string;
+  placeholder: string;
+  labels?: readonly string[];
+  suffix?: string;
+};
+
+type SelectOption = {
+  value: string;
+  label: string;
+};
+
+export function Cron({
+  value,
+  setValue,
+  disabled = false,
+  className,
+}: CronProps) {
   const { t } = useAppTranslation("cron");
+  const locale = resolveCronLocale(
+    t("component", { returnObjects: true }) as unknown as CronLocale,
+  );
+  const schedule = parseCronExpression(value) ?? DEFAULT_SCHEDULE;
 
-  const locale = t("component", {
-    returnObjects: true,
-  }) as unknown as Locale;
-
-  const {
-    value = "",
-    setValue,
-    onError,
-    className,
-    defaultPeriod = "day",
-    allowEmpty = "for-default-value",
-    humanizeLabels = true,
-    humanizeValue = false,
-    disabled = false,
-    readOnly = false,
-    leadingZero = false,
-    shortcuts = [
-      "@yearly",
-      "@annually",
-      "@monthly",
-      "@weekly",
-      "@daily",
-      "@midnight",
-      "@hourly",
-    ],
-    periodicityOnDoubleClick = true,
-    mode = "multiple",
-    allowedDropdowns = [
-      "period",
-      "months",
-      "month-days",
-      "week-days",
-      "hours",
-      "minutes",
-    ],
-    allowedPeriods = [
-      "year",
-      "month",
-      "week",
-      "day",
-      "hour",
-      "minute",
-      "reboot",
-    ],
-    allowClear,
-    dropdownsConfig,
-    getPopupContainer,
-  } = props;
-  const internalValueRef = useRef<string>(value);
-  const defaultPeriodRef = useRef<PeriodType>(defaultPeriod);
-  const [period, setPeriod] = useState<PeriodType | undefined>();
-  const [monthDays, setMonthDays] = useState<number[] | undefined>();
-  const [months, setMonths] = useState<number[] | undefined>();
-  const [weekDays, setWeekDays] = useState<number[] | undefined>();
-  const [hours, setHours] = useState<number[] | undefined>();
-  const [minutes, setMinutes] = useState<number[] | undefined>();
-  const [valueCleared, setValueCleared] = useState<boolean>(false);
-  const previousValueCleared = usePrevious(valueCleared);
-
-  useEffect(() => {
-    setValuesFromCronString(
-      value,
-      () => {},
-      onError,
-      allowEmpty,
-      internalValueRef,
-      true,
-      locale,
-      shortcuts,
-      setMinutes,
-      setHours,
-      setMonthDays,
-      setMonths,
-      setWeekDays,
-      setPeriod,
-    );
-  }, []);
-
-  useEffect(() => {
-    if (value !== internalValueRef.current) {
-      setValuesFromCronString(
-        value,
-        () => {},
-        onError,
-        allowEmpty,
-        internalValueRef,
-        false,
-        locale,
-        shortcuts,
-        setMinutes,
-        setHours,
-        setMonthDays,
-        setMonths,
-        setWeekDays,
-        setPeriod,
-      );
+  const commitSchedule = (nextSchedule: CronSchedule) => {
+    const nextValue = formatCronExpression(nextSchedule);
+    if (nextValue !== value) {
+      setValue(nextValue, { selectedPeriod: nextSchedule.period });
     }
-  }, [value, allowEmpty, shortcuts, locale]);
+  };
 
-  useEffect(() => {
-    // Only change the value if a user touched a field
-    // and if the user didn't use the clear button
-    if (
-      (period || minutes || months || monthDays || weekDays || hours) &&
-      !valueCleared &&
-      !previousValueCleared
-    ) {
-      const selectedPeriod = period || defaultPeriodRef.current;
-      const cron = getCronStringFromValues(
-        selectedPeriod,
-        months,
-        monthDays,
-        weekDays,
-        hours,
-        minutes,
-        humanizeValue,
-        dropdownsConfig,
-      );
+  const updatePeriod = (period: Period) => {
+    commitSchedule(applyPeriodDefaults(schedule, period));
+  };
 
-      setValue(cron, { selectedPeriod });
-      internalValueRef.current = cron;
+  const updateField = (field: CronField, unit: CronUnit, values: string[]) => {
+    const selectedValues =
+      values.length === getUnitSize(unit) ? [] : values.map(Number);
 
-      if (onError) onError(undefined);
-    } else if (valueCleared) {
-      setValueCleared(false);
-    }
-  }, [
-    period,
-    monthDays,
-    months,
-    weekDays,
-    hours,
-    minutes,
-    humanizeValue,
-    valueCleared,
-    dropdownsConfig,
-  ]);
+    commitSchedule({
+      ...schedule,
+      [field]: selectedValues,
+    });
+  };
 
-  const clockFormat = useMemo(() => {
-    const date = new Date(Date.UTC(2020, 0, 1, 13, 0, 0)); // 1:00 PM UTC
-    const formatted = new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      hour12: undefined, // Let the system decide
-    }).format(date);
-
-    const hasAMPM = /AM|PM/i.test(formatted);
-    return hasAMPM ? "12-hour-clock" : "24-hour-clock";
-  }, []);
-
-  const periodForRender = period || defaultPeriodRef.current;
+  const fields = getVisibleFields(schedule, locale);
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
-      {allowedDropdowns.includes("period") && (
-        <Period
-          value={periodForRender}
-          setValue={(to) => {
-            // This prevents the component from overriding
-            // the period on mount.
-            if (!to) return;
-            setPeriod(to as PeriodType);
-          }}
-          locale={locale}
-          disabled={dropdownsConfig?.period?.disabled ?? disabled}
-          readOnly={dropdownsConfig?.period?.readOnly ?? readOnly}
-          shortcuts={shortcuts}
-          allowedPeriods={allowedPeriods}
-          allowClear={dropdownsConfig?.period?.allowClear ?? allowClear}
-          getPopupContainer={getPopupContainer}
-        />
-      )}
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
+      {locale.prefixPeriod !== "" ? <span>{locale.prefixPeriod}</span> : null}
 
-      {periodForRender === "year" && allowedDropdowns.includes("months") && (
-        <Months
-          value={months}
-          setValue={setMonths}
-          locale={locale}
-          humanizeLabels={
-            dropdownsConfig?.months?.humanizeLabels ?? humanizeLabels
+      <PeriodSelect
+        value={schedule.period}
+        locale={locale}
+        disabled={disabled}
+        placeholder={t("placeholders.period")}
+        onChange={updatePeriod}
+      />
+
+      {fields.map((field) => (
+        <CronFieldSelect
+          key={field.field}
+          config={field}
+          value={schedule[field.field]}
+          disabled={disabled}
+          clockFormat={CLOCK_FORMAT}
+          onChange={(nextValue) =>
+            updateField(field.field, field.unit, nextValue)
           }
-          disabled={dropdownsConfig?.months?.disabled ?? disabled}
-          readOnly={dropdownsConfig?.months?.readOnly ?? readOnly}
-          period={periodForRender}
-          periodicityOnDoubleClick={
-            dropdownsConfig?.months?.periodicityOnDoubleClick ??
-            periodicityOnDoubleClick
-          }
-          mode={dropdownsConfig?.months?.mode ?? mode}
-          allowClear={dropdownsConfig?.months?.allowClear ?? allowClear}
-          filterOption={dropdownsConfig?.months?.filterOption}
-          getPopupContainer={getPopupContainer}
         />
-      )}
-
-      {(periodForRender === "year" || periodForRender === "month") &&
-        allowedDropdowns.includes("month-days") && (
-          <MonthDays
-            value={monthDays}
-            setValue={setMonthDays}
-            locale={locale}
-            weekDays={weekDays}
-            disabled={dropdownsConfig?.["month-days"]?.disabled ?? disabled}
-            readOnly={dropdownsConfig?.["month-days"]?.readOnly ?? readOnly}
-            leadingZero={
-              dropdownsConfig?.["month-days"]?.leadingZero ?? leadingZero
-            }
-            period={periodForRender}
-            periodicityOnDoubleClick={
-              dropdownsConfig?.["month-days"]?.periodicityOnDoubleClick ??
-              periodicityOnDoubleClick
-            }
-            mode={dropdownsConfig?.["month-days"]?.mode ?? mode}
-            allowClear={
-              dropdownsConfig?.["month-days"]?.allowClear ?? allowClear
-            }
-            filterOption={dropdownsConfig?.["month-days"]?.filterOption}
-            getPopupContainer={getPopupContainer}
-          />
-        )}
-
-      {(periodForRender === "year" ||
-        periodForRender === "month" ||
-        periodForRender === "week") &&
-        allowedDropdowns.includes("week-days") && (
-          <WeekDays
-            value={weekDays}
-            setValue={setWeekDays}
-            locale={locale}
-            humanizeLabels={
-              dropdownsConfig?.["week-days"]?.humanizeLabels ?? humanizeLabels
-            }
-            monthDays={monthDays}
-            disabled={dropdownsConfig?.["week-days"]?.disabled ?? disabled}
-            readOnly={dropdownsConfig?.["week-days"]?.readOnly ?? readOnly}
-            period={periodForRender}
-            periodicityOnDoubleClick={
-              dropdownsConfig?.["week-days"]?.periodicityOnDoubleClick ??
-              periodicityOnDoubleClick
-            }
-            mode={dropdownsConfig?.["week-days"]?.mode ?? mode}
-            allowClear={
-              dropdownsConfig?.["week-days"]?.allowClear ?? allowClear
-            }
-            filterOption={dropdownsConfig?.["week-days"]?.filterOption}
-            getPopupContainer={getPopupContainer}
-          />
-        )}
-
-      <div className="flex gap-2">
-        {periodForRender !== "minute" &&
-          periodForRender !== "hour" &&
-          allowedDropdowns.includes("hours") && (
-            <Hours
-              value={hours}
-              setValue={setHours}
-              locale={locale}
-              disabled={dropdownsConfig?.hours?.disabled ?? disabled}
-              readOnly={dropdownsConfig?.hours?.readOnly ?? readOnly}
-              leadingZero={dropdownsConfig?.hours?.leadingZero ?? leadingZero}
-              clockFormat={clockFormat}
-              period={periodForRender}
-              periodicityOnDoubleClick={
-                dropdownsConfig?.hours?.periodicityOnDoubleClick ??
-                periodicityOnDoubleClick
-              }
-              mode={dropdownsConfig?.hours?.mode ?? mode}
-              allowClear={dropdownsConfig?.hours?.allowClear ?? allowClear}
-              filterOption={dropdownsConfig?.hours?.filterOption}
-              getPopupContainer={getPopupContainer}
-            />
-          )}
-
-        {periodForRender !== "minute" &&
-          allowedDropdowns.includes("minutes") && (
-            <Minutes
-              value={minutes}
-              setValue={setMinutes}
-              locale={locale}
-              period={periodForRender}
-              disabled={dropdownsConfig?.minutes?.disabled ?? disabled}
-              readOnly={dropdownsConfig?.minutes?.readOnly ?? readOnly}
-              leadingZero={dropdownsConfig?.minutes?.leadingZero ?? leadingZero}
-              clockFormat={clockFormat}
-              periodicityOnDoubleClick={
-                dropdownsConfig?.minutes?.periodicityOnDoubleClick ??
-                periodicityOnDoubleClick
-              }
-              mode={dropdownsConfig?.minutes?.mode ?? mode}
-              allowClear={dropdownsConfig?.minutes?.allowClear ?? allowClear}
-              filterOption={dropdownsConfig?.minutes?.filterOption}
-              getPopupContainer={getPopupContainer}
-            />
-          )}
-      </div>
+      ))}
     </div>
   );
+}
+
+function PeriodSelect({
+  value,
+  locale,
+  disabled,
+  placeholder,
+  onChange,
+}: {
+  value: Period;
+  locale: ResolvedCronLocale;
+  disabled: boolean;
+  placeholder: string;
+  onChange: (period: Period) => void;
+}) {
+  const options = PERIODS.map((period) => ({
+    value: period,
+    label: locale[PERIOD_LABELS[period]],
+  }));
+
+  return (
+    <Select
+      items={options}
+      value={value}
+      onValueChange={(nextValue) => {
+        if (nextValue) onChange(nextValue);
+      }}
+      disabled={disabled}
+    >
+      <SelectTrigger className="h-10 w-auto min-w-28 gap-1 text-xs">
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+function CronFieldSelect({
+  config,
+  value,
+  disabled,
+  clockFormat,
+  onChange,
+}: {
+  config: CronFieldConfig;
+  value: number[];
+  disabled: boolean;
+  clockFormat: ClockFormat;
+  onChange: (value: string[]) => void;
+}) {
+  const options = getOptions(config.unit, config.labels, clockFormat);
+
+  return (
+    <div className="flex items-center gap-2">
+      {config.prefix !== "" ? <span>{config.prefix}</span> : null}
+      <Select
+        items={options}
+        value={value.map(String)}
+        onValueChange={onChange}
+        disabled={disabled}
+        multiple
+      >
+        <SelectTrigger className="h-10 w-auto min-w-28 gap-1 text-xs">
+          <SelectValue placeholder={config.placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {config.suffix ? <span>{config.suffix}</span> : null}
+    </div>
+  );
+}
+
+function getVisibleFields(
+  schedule: CronSchedule,
+  locale: ResolvedCronLocale,
+): CronFieldConfig[] {
+  const fields: CronFieldConfig[] = [];
+
+  if (schedule.period === "year") {
+    fields.push({
+      field: "months",
+      unit: CRON_UNITS.months,
+      prefix: locale.prefixMonths,
+      placeholder: locale.emptyMonths,
+      labels: locale.months,
+    });
+  }
+
+  if (schedule.period === "year" || schedule.period === "month") {
+    fields.push({
+      field: "monthDays",
+      unit: CRON_UNITS.monthDays,
+      prefix: locale.prefixMonthDays,
+      placeholder: locale.emptyMonthDays,
+    });
+  }
+
+  if (
+    schedule.period === "year" ||
+    schedule.period === "month" ||
+    schedule.period === "week"
+  ) {
+    fields.push({
+      field: "weekDays",
+      unit: CRON_UNITS.weekDays,
+      prefix:
+        schedule.period === "week"
+          ? locale.prefixWeekDays
+          : locale.prefixWeekDaysForMonthAndYearPeriod,
+      placeholder: locale.emptyWeekDays,
+      labels: locale.weekDays,
+    });
+  }
+
+  if (schedule.period !== "minute" && schedule.period !== "hour") {
+    fields.push({
+      field: "hours",
+      unit: CRON_UNITS.hours,
+      prefix: locale.prefixHours,
+      placeholder: locale.emptyHours,
+    });
+  }
+
+  if (schedule.period !== "minute") {
+    const isHourPeriod = schedule.period === "hour";
+
+    fields.push({
+      field: "minutes",
+      unit: CRON_UNITS.minutes,
+      prefix: isHourPeriod
+        ? locale.prefixMinutesForHourPeriod
+        : locale.prefixMinutes,
+      placeholder: isHourPeriod
+        ? locale.emptyMinutesForHourPeriod
+        : locale.emptyMinutes,
+      suffix: isHourPeriod ? locale.suffixMinutesForHourPeriod : undefined,
+    });
+  }
+
+  return fields;
+}
+
+function getOptions(
+  unit: CronUnit,
+  labels: readonly string[] | undefined,
+  clockFormat: ClockFormat,
+) {
+  const options: SelectOption[] = [];
+
+  for (let value = unit.min; value <= unit.max; value += 1) {
+    options.push({
+      value: String(value),
+      label: formatCronValue(value, unit, { labels, clockFormat }),
+    });
+  }
+
+  return options;
+}
+
+function applyPeriodDefaults(
+  currentSchedule: CronSchedule,
+  period: Period,
+): CronSchedule {
+  const defaults = PERIOD_DEFAULTS[period];
+
+  return {
+    period,
+    months:
+      currentSchedule.months.length > 0
+        ? currentSchedule.months
+        : defaults.months,
+    monthDays:
+      currentSchedule.monthDays.length > 0
+        ? currentSchedule.monthDays
+        : defaults.monthDays,
+    weekDays:
+      currentSchedule.weekDays.length > 0
+        ? currentSchedule.weekDays
+        : defaults.weekDays,
+    hours:
+      currentSchedule.hours.length > 0 ? currentSchedule.hours : defaults.hours,
+    minutes:
+      currentSchedule.minutes.length > 0
+        ? currentSchedule.minutes
+        : defaults.minutes,
+  };
+}
+
+function getUnitSize(unit: CronUnit) {
+  return unit.max - unit.min + 1;
 }

@@ -1,25 +1,25 @@
 import { STORAGE_PROVIDERS } from "@blinkdisk/constants/providers";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 export function useProviderSearch() {
   const { t } = useAppTranslation("vault");
   const [search, setSearch] = useState("");
 
-  const providersWithName = useMemo(() => {
-    return STORAGE_PROVIDERS.filter((provider) => !provider.hidden).map(
-      (provider) => ({
-        ...provider,
-        name: t(`providers.${provider.type}.name`),
-      }),
-    );
-  }, [t]);
+  const providersWithName = STORAGE_PROVIDERS.flatMap((provider) =>
+    provider.hidden
+      ? []
+      : [
+          {
+            ...provider,
+            name: t(`providers.${provider.type}.name`),
+          },
+        ],
+  );
 
-  const filteredProviders = useMemo(() => {
-    return providersWithName.filter((provider) =>
-      provider.name.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [providersWithName, search]);
+  const filteredProviders = providersWithName.filter((provider) =>
+    provider.name.toLowerCase().includes(search.toLowerCase()),
+  );
 
   return {
     search,

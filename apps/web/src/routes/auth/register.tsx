@@ -88,6 +88,7 @@ function RouteComponent() {
                         target="_blank"
                         className="link-primary"
                         rel="noreferrer"
+                        aria-label="Terms"
                       />,
                       <a
                         key={1}
@@ -95,6 +96,7 @@ function RouteComponent() {
                         target="_blank"
                         className="link-primary"
                         rel="noreferrer"
+                        aria-label="Privacy policy"
                       />,
                     ]}
                   />

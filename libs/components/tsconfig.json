@@ -8,7 +8,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "types": ["vite/client"],
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"],

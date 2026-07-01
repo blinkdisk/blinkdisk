@@ -14,7 +14,7 @@ import { useCreateSource } from "@desktop/hooks/mutations/core/use-create-source
 import { useCreateSourceDraftPolicy } from "@desktop/hooks/mutations/core/use-create-source-draft-policy";
 import { useCreateSourceDialog } from "@desktop/hooks/state/use-create-source-dialog";
 import { useLocalProfile } from "@desktop/hooks/use-local-profile";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 type CreateSourceAction = "CREATE" | "POLICY";
 
@@ -30,9 +30,9 @@ export function CreateSourceDialog() {
   const [pendingValues, setPendingValues] =
     useState<ZCreateSourceFormType | null>(null);
 
-  const onSuccess = useCallback(() => {
+  const onSuccess = () => {
     setIsOpen(false);
-  }, [setIsOpen]);
+  };
 
   const { mutateAsync: createSource, isPending: isCreatingSource } =
     useCreateSource({
@@ -73,13 +73,13 @@ export function CreateSourceDialog() {
 
   const values = useStore(form.store, (state) => state.values);
 
-  const reset = useCallback(() => {
+  const reset = () => {
     form.reset();
     clearDefaultValues();
     setAlertShown(false);
     setPendingValues(null);
     actionRef.current = "CREATE";
-  }, [form, clearDefaultValues]);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} onClosed={reset}>

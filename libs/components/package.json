@@ -13,8 +13,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:"
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@blinkdisk/utils": "workspace:*",

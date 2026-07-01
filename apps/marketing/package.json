@@ -11,7 +11,6 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/check": "catalog:",
     "@astrojs/cloudflare": "catalog:",
     "@astrojs/markdown-remark": "catalog:",
     "@astrojs/mdx": "catalog:",
@@ -20,14 +19,12 @@
     "@blinkdisk/components": "workspace:*",
     "@blinkdisk/constants": "workspace:*",
     "@blinkdisk/hooks": "workspace:*",
-    "@blinkdisk/styles": "workspace:*",
     "@blinkdisk/ui": "workspace:*",
     "@blinkdisk/utils": "workspace:*",
     "@fontsource/inter": "catalog:",
     "@fontsource/space-mono": "catalog:",
     "@lucide/astro": "catalog:",
     "@sentry/astro": "catalog:",
-    "@sentry/cloudflare": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "astro": "catalog:",
@@ -50,7 +47,6 @@
     "vite-plugin-static-copy": "catalog:"
   },
   "devDependencies": {
-    "@blinkdisk/assets": "workspace:*",
     "@blinkdisk/typescript": "workspace:*",
     "@types/dom-to-image": "catalog:",
     "@types/node": "catalog:",
@@ -59,5 +55,8 @@
     "@types/twemoji-parser": "catalog:",
     "typescript": "catalog:",
     "wrangler": "catalog:"
+  },
+  "optionalDependencies": {
+    "@astrojs/check": "catalog:"
   }
 }

@@ -1,8 +1,9 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZCreateCheckoutType } from "@blinkdisk/schemas/payment";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { trpc } from "@desktop/lib/trpc";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 type UseCheckoutOptions = {
@@ -11,6 +12,8 @@ type UseCheckoutOptions = {
 
 export function useCheckout({ onSuccess }: UseCheckoutOptions = {}) {
   const { t } = useAppTranslation("subscription.upgradeDialog.checkout.toast");
+  const queryClient = useQueryClient();
+  const { queryKeys } = useQueryKey();
 
   return useMutation({
     mutationKey: ["payment", "checkout"],
@@ -31,6 +34,15 @@ export function useCheckout({ onSuccess }: UseCheckoutOptions = {}) {
       toast.success(t("title"), {
         description: t("description"),
       });
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.subscription.all,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.billing.all,
+        }),
+      ]);
 
       onSuccess?.({ url: url.toString() });
     },

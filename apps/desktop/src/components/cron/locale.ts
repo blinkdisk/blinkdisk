@@ -1,16 +1,12 @@
-// Modified from react-js-cron (MIT licensed)
-// Original copyright (c) 2021 Xavier Rutayisire
-// https://github.com/xrutayisire/react-js-cron
+import type {
+  CronLocale,
+  ResolvedCronLocale,
+} from "@desktop/components/cron/types";
 
-import type { DefaultLocale } from "@desktop/components/cron/types";
-
-export const DEFAULT_LOCALE_EN: DefaultLocale = {
-  everyText: "every",
+const DEFAULT_LOCALE_EN = {
   emptyMonths: "every month",
   emptyMonthDays: "every day of the month",
-  emptyMonthDaysShort: "day of the month",
   emptyWeekDays: "every day of the week",
-  emptyWeekDaysShort: "day of the week",
   emptyHours: "every hour",
   emptyMinutes: "every minute",
   emptyMinutesForHourPeriod: "every",
@@ -20,7 +16,6 @@ export const DEFAULT_LOCALE_EN: DefaultLocale = {
   dayOption: "day",
   hourOption: "hour",
   minuteOption: "minute",
-  rebootOption: "reboot",
   prefixPeriod: "Every",
   prefixMonths: "in",
   prefixMonthDays: "on",
@@ -30,11 +25,8 @@ export const DEFAULT_LOCALE_EN: DefaultLocale = {
   prefixMinutes: ":",
   prefixMinutesForHourPeriod: "at",
   suffixMinutesForHourPeriod: "minute(s)",
-  errorInvalidCron: "Invalid cron expression",
-  clearButtonText: "Clear",
   weekDays: [
-    // Order is important, the index will be used as value
-    "Sunday", // Sunday must always be first, it's "0"
+    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -43,7 +35,6 @@ export const DEFAULT_LOCALE_EN: DefaultLocale = {
     "Saturday",
   ],
   months: [
-    // Order is important, the index will be used as value
     "January",
     "February",
     "March",
@@ -57,17 +48,7 @@ export const DEFAULT_LOCALE_EN: DefaultLocale = {
     "November",
     "December",
   ],
-  // Order is important, the index will be used as value
-  altWeekDays: [
-    "SUN", // Sunday must always be first, it's "0"
-    "MON",
-    "TUE",
-    "WED",
-    "THU",
-    "FRI",
-    "SAT",
-  ],
-  // Order is important, the index will be used as value
+  altWeekDays: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
   altMonths: [
     "JAN",
     "FEB",
@@ -82,4 +63,25 @@ export const DEFAULT_LOCALE_EN: DefaultLocale = {
     "NOV",
     "DEC",
   ],
-};
+} satisfies ResolvedCronLocale;
+
+export function resolveCronLocale(locale: CronLocale): ResolvedCronLocale {
+  return {
+    ...DEFAULT_LOCALE_EN,
+    ...locale,
+    weekDays:
+      locale.weekDays?.length === 7
+        ? locale.weekDays
+        : DEFAULT_LOCALE_EN.weekDays,
+    months:
+      locale.months?.length === 12 ? locale.months : DEFAULT_LOCALE_EN.months,
+    altWeekDays:
+      locale.altWeekDays?.length === 7
+        ? locale.altWeekDays
+        : DEFAULT_LOCALE_EN.altWeekDays,
+    altMonths:
+      locale.altMonths?.length === 12
+        ? locale.altMonths
+        : DEFAULT_LOCALE_EN.altMonths,
+  };
+}

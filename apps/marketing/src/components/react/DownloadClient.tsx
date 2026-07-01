@@ -158,240 +158,352 @@ export default function DownloadClient() {
     <div className="py-page flex min-h-screen flex-col items-center">
       <div className="mt-auto"></div>
       {autoDownloadFile ? (
-        <>
-          <h1 className="max-w-[80vw] text-4xl font-bold sm:text-5xl">
-            Download started
-          </h1>
-          <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
-            Your BlinkDisk installer download has started.{" "}
-            {platform === "windows"
-              ? "If you experience any issues during the installation, you can follow the tutorial below."
-              : "Once the download is complete, open the file and follow the installation instructions."}
-          </p>
-          {platform === "windows" ? (
-            <SmartScreen />
-          ) : (
-            <a
-              href={getDownloadUrl(autoDownloadFile)}
-              download
-              onClick={() => onDownloadStart(autoDownloadFile)}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 mt-12 inline-flex h-12 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium transition-colors"
-            >
-              <DownloadIcon className="size-4" />
-              Download again
-            </a>
-          )}
-          <h2 className="mt-20 text-center text-2xl font-bold">
-            Didn't get the right file?
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-80 text-center text-sm">
-            If the automatic download didn't match your device, you can pick the
-            correct file below.
-          </p>
-        </>
+        <DownloadStartedSection
+          autoDownloadFile={autoDownloadFile}
+          platform={platform}
+          onDownloadStart={onDownloadStart}
+        />
       ) : isMobile ? (
-        <>
-          <h1 className="max-w-[90vw] text-center text-4xl font-bold">
-            Download BlinkDisk on your desktop
-          </h1>
-          <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm">
-            We detected that you're on a mobile device, but BlinkDisk is
-            currently only available on desktop.
-          </p>
-
-          <div className="sm:w-sm mt-12 flex w-[80vw] flex-col items-center gap-4">
-            {"share" in navigator ? (
-              <button
-                type="button"
-                onClick={async () => {
-                  try {
-                    if (!navigator.share || !navigator.canShare)
-                      throw new Error("Share not supported");
-
-                    await navigator.share({
-                      url: window.location.href,
-                    });
-                  } catch (e: unknown) {
-                    const error = e instanceof Error ? e : null;
-                    if (error?.toString().includes("AbortError")) return;
-
-                    toast.error("Failed to share link", {
-                      description:
-                        "Please try to manually share this website instead.",
-                    });
-                  }
-                }}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
-              >
-                <ShareIcon className="size-4" />
-                Share
-              </button>
-            ) : null}
-            <div className="flex w-full items-center gap-2">
-              <div className="relative flex-1">
-                <button
-                  type="button"
-                  onClick={() => setCalendarOpen(!calendarOpen)}
-                  className="bg-secondary hover:bg-secondary/80 border-border inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors"
-                >
-                  <CalendarIcon className="size-4" />
-                  Remind me
-                  <ChevronDownIcon className="size-4" />
-                </button>
-                {calendarOpen && (
-                  <div className="bg-card absolute left-0 top-12 z-10 w-full rounded-md border p-1 shadow-lg">
-                    <button
-                      type="button"
-                      onClick={() => remind("google")}
-                      className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
-                    >
-                      Google Calendar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => remind("outlook")}
-                      className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
-                    >
-                      Outlook
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => remind("other")}
-                      className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
-                    >
-                      Other
-                    </button>
-                  </div>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={async () => {
-                  const success = await copy(window.location.href);
-
-                  if (success)
-                    toast.success("Copied link to clipboard", {
-                      description:
-                        "You can now share this link with your desktop device.",
-                    });
-                  else
-                    toast.error("Failed to copy link to clipboard", {
-                      description: "Please try to copy it manually instead.",
-                    });
-                }}
-                className="bg-secondary hover:bg-secondary/80 border-border inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors"
-              >
-                <CopyIcon className="size-4" />
-                Copy link
-              </button>
-            </div>
-          </div>
-
-          <h2 className="mt-30 text-center text-3xl font-bold sm:text-4xl">
-            Download anyway
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
-            If you want to download BlinkDisk anyway, please select the correct
-            file for your device below.
-          </p>
-        </>
+        <MobileDownloadSection
+          calendarOpen={calendarOpen}
+          copy={copy}
+          onCalendarOpenChange={setCalendarOpen}
+          onRemind={remind}
+        />
       ) : (
-        <>
-          <h1 className="text-center text-3xl font-bold sm:text-4xl">
-            Download BlinkDisk
-          </h1>
-          <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
-            Please select the correct file for your device below.
-          </p>
-        </>
+        <ManualDownloadIntro />
       )}
-      <div className="mt-8 flex flex-col items-center gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="text-muted-foreground text-sm">Operating System</p>
+      <DownloadPicker
+        architecture={architecture}
+        autoDownloadFile={autoDownloadFile}
+        extension={extension}
+        isMobile={isMobile}
+        platform={platform}
+        selectedFile={selectedFile}
+        onArchitectureChange={setArchitecture}
+        onDownloadStart={onDownloadStart}
+        onExtensionChange={setExtension}
+        onPlatformChange={(nextPlatform) => {
+          setPlatform(nextPlatform);
+          if (nextPlatform === "macos" && architecture === "armv7l")
+            setArchitecture("x86_64");
+        }}
+      />
+      <div className="mb-auto"></div>
+    </div>
+  );
+}
+
+type DownloadStartedSectionProps = {
+  autoDownloadFile: string;
+  platform: Platform | undefined;
+  onDownloadStart: (file: string) => void;
+};
+
+function DownloadStartedSection({
+  autoDownloadFile,
+  platform,
+  onDownloadStart,
+}: DownloadStartedSectionProps) {
+  return (
+    <>
+      <h1 className="max-w-[80vw] text-4xl font-bold sm:text-5xl">
+        Download started
+      </h1>
+      <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
+        Your BlinkDisk installer download has started.{" "}
+        {platform === "windows"
+          ? "If you experience any issues during the installation, you can follow the tutorial below."
+          : "Once the download is complete, open the file and follow the installation instructions."}
+      </p>
+      {platform === "windows" ? (
+        <SmartScreen />
+      ) : (
+        <a
+          href={getDownloadUrl(autoDownloadFile)}
+          download
+          onClick={() => onDownloadStart(autoDownloadFile)}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-12 inline-flex h-12 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium transition-colors"
+        >
+          <DownloadIcon className="size-4" />
+          Download again
+        </a>
+      )}
+      <h2 className="mt-20 text-center text-2xl font-bold">
+        Didn't get the right file?
+      </h2>
+      <p className="text-muted-foreground mt-2 max-w-80 text-center text-sm">
+        If the automatic download didn't match your device, you can pick the
+        correct file below.
+      </p>
+    </>
+  );
+}
+
+type MobileDownloadSectionProps = {
+  calendarOpen: boolean;
+  copy: (text: string) => Promise<boolean>;
+  onCalendarOpenChange: (open: boolean) => void;
+  onRemind: (type: "google" | "outlook" | "other") => void;
+};
+
+function MobileDownloadSection({
+  calendarOpen,
+  copy,
+  onCalendarOpenChange,
+  onRemind,
+}: MobileDownloadSectionProps) {
+  return (
+    <>
+      <h1 className="max-w-[90vw] text-center text-4xl font-bold">
+        Download BlinkDisk on your desktop
+      </h1>
+      <p className="text-muted-foreground mt-4 max-w-[90vw] text-center text-sm">
+        We detected that you're on a mobile device, but BlinkDisk is currently
+        only available on desktop.
+      </p>
+
+      <div className="sm:w-sm mt-12 flex w-[80vw] flex-col items-center gap-4">
+        {"share" in navigator ? <ShareButton /> : null}
+        <div className="flex w-full items-center gap-2">
+          <div className="relative flex-1">
+            <button
+              type="button"
+              onClick={() => onCalendarOpenChange(!calendarOpen)}
+              className="bg-secondary hover:bg-secondary/80 border-border inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors"
+            >
+              <CalendarIcon className="size-4" />
+              Remind me
+              <ChevronDownIcon className="size-4" />
+            </button>
+            {calendarOpen ? <CalendarMenu onRemind={onRemind} /> : null}
+          </div>
+          <CopyLinkButton copy={copy} />
+        </div>
+      </div>
+
+      <h2 className="mt-30 text-center text-3xl font-bold sm:text-4xl">
+        Download anyway
+      </h2>
+      <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
+        If you want to download BlinkDisk anyway, please select the correct file
+        for your device below.
+      </p>
+    </>
+  );
+}
+
+function ShareButton() {
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        try {
+          if (!navigator.share || !navigator.canShare)
+            throw new Error("Share not supported");
+
+          await navigator.share({
+            url: window.location.href,
+          });
+        } catch (e: unknown) {
+          const error = e instanceof Error ? e : null;
+          if (error?.toString().includes("AbortError")) return;
+
+          toast.error("Failed to share link", {
+            description: "Please try to manually share this website instead.",
+          });
+        }
+      }}
+      className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
+    >
+      <ShareIcon className="size-4" />
+      Share
+    </button>
+  );
+}
+
+function CalendarMenu({
+  onRemind,
+}: {
+  onRemind: (type: "google" | "outlook" | "other") => void;
+}) {
+  return (
+    <div className="bg-card absolute left-0 top-12 z-10 w-full rounded-md border p-1 shadow-lg">
+      <button
+        type="button"
+        onClick={() => onRemind("google")}
+        className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
+      >
+        Google Calendar
+      </button>
+      <button
+        type="button"
+        onClick={() => onRemind("outlook")}
+        className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
+      >
+        Outlook
+      </button>
+      <button
+        type="button"
+        onClick={() => onRemind("other")}
+        className="hover:bg-secondary w-full rounded px-3 py-2 text-left text-sm"
+      >
+        Other
+      </button>
+    </div>
+  );
+}
+
+function CopyLinkButton({
+  copy,
+}: {
+  copy: (text: string) => Promise<boolean>;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        const success = await copy(window.location.href);
+
+        if (success)
+          toast.success("Copied link to clipboard", {
+            description:
+              "You can now share this link with your desktop device.",
+          });
+        else
+          toast.error("Failed to copy link to clipboard", {
+            description: "Please try to copy it manually instead.",
+          });
+      }}
+      className="bg-secondary hover:bg-secondary/80 border-border inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors"
+    >
+      <CopyIcon className="size-4" />
+      Copy link
+    </button>
+  );
+}
+
+function ManualDownloadIntro() {
+  return (
+    <>
+      <h1 className="text-center text-3xl font-bold sm:text-4xl">
+        Download BlinkDisk
+      </h1>
+      <p className="text-muted-foreground mt-2 max-w-[80vw] text-center text-sm sm:max-w-md">
+        Please select the correct file for your device below.
+      </p>
+    </>
+  );
+}
+
+type DownloadPickerProps = {
+  architecture: Architecture | undefined;
+  autoDownloadFile: string | null;
+  extension: Extension | undefined;
+  isMobile: boolean | null;
+  platform: Platform | undefined;
+  selectedFile: string | null;
+  onArchitectureChange: (architecture: Architecture) => void;
+  onDownloadStart: (file: string) => void;
+  onExtensionChange: (extension: Extension) => void;
+  onPlatformChange: (platform: Platform) => void;
+};
+
+function DownloadPicker({
+  architecture,
+  autoDownloadFile,
+  extension,
+  isMobile,
+  platform,
+  selectedFile,
+  onArchitectureChange,
+  onDownloadStart,
+  onExtensionChange,
+  onPlatformChange,
+}: DownloadPickerProps) {
+  return (
+    <div className="mt-8 flex flex-col items-center gap-4">
+      <div className="flex flex-col gap-1">
+        <p className="text-muted-foreground text-sm">Operating System</p>
+        <Tabs
+          value={platform ?? null}
+          onValueChange={(value) => onPlatformChange(value as Platform)}
+        >
+          <TabsList>
+            <TabsTrigger value="windows" className="px-4">
+              <WindowsIcon />
+              Windows
+            </TabsTrigger>
+            <TabsTrigger value="macos" className="px-4">
+              <MacosIcon />
+              macOS
+            </TabsTrigger>
+            <TabsTrigger value="linux" className="px-4">
+              <LinuxIcon />
+              Linux
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+      {platform === "linux" ? (
+        <div className="flex w-full flex-col gap-1">
+          <p className="text-muted-foreground text-sm">Architecture</p>
           <Tabs
-            value={platform ?? null}
-            onValueChange={(value) => {
-              const p = value as Platform;
-              setPlatform(p);
-              if (p === "macos" && architecture === "armv7l")
-                setArchitecture("x86_64");
-            }}
+            value={architecture ?? null}
+            onValueChange={(value) =>
+              onArchitectureChange(value as Architecture)
+            }
           >
-            <TabsList>
-              <TabsTrigger value="windows" className="px-4">
-                <WindowsIcon />
-                Windows
+            <TabsList className="w-full">
+              <TabsTrigger value="x86_64" className="px-4">
+                x86_64
               </TabsTrigger>
-              <TabsTrigger value="macos" className="px-4">
-                <MacosIcon />
-                macOS
+              <TabsTrigger value="arm64" className="px-4">
+                arm64
               </TabsTrigger>
-              <TabsTrigger value="linux" className="px-4">
-                <LinuxIcon />
-                Linux
+              <TabsTrigger value="armv7l" className="px-4">
+                armv7l
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
-        {platform === "linux" ? (
-          <div className="flex w-full flex-col gap-1">
-            <p className="text-muted-foreground text-sm">Architecture</p>
-            <Tabs
-              value={architecture ?? null}
-              onValueChange={(value) => setArchitecture(value as Architecture)}
-            >
-              <TabsList className="w-full">
-                <TabsTrigger value="x86_64" className="px-4">
-                  x86_64
-                </TabsTrigger>
-                <TabsTrigger value="arm64" className="px-4">
-                  arm64
-                </TabsTrigger>
-                <TabsTrigger value="armv7l" className="px-4">
-                  armv7l
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-        ) : null}
-        {platform === "linux" ? (
-          <div className="flex w-full flex-col gap-1">
-            <p className="text-muted-foreground text-sm">File Type</p>
-            <Tabs
-              value={extension ?? null}
-              onValueChange={(value) => setExtension(value as Extension)}
-            >
-              <TabsList className="w-full">
-                <TabsTrigger value="AppImage" className="px-4">
-                  AppImage
-                </TabsTrigger>
-                <TabsTrigger value="deb" className="px-4">
-                  deb
-                </TabsTrigger>
-                <TabsTrigger value="rpm" className="px-4">
-                  rpm
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-        ) : null}
-        {selectedFile ? (
-          <a
-            href={getDownloadUrl(selectedFile)}
-            download
-            onClick={() => onDownloadStart(selectedFile)}
-            className={`mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors ${
-              autoDownloadFile || isMobile
-                ? "bg-secondary hover:bg-secondary/80 border-border border"
-                : "bg-primary text-primary-foreground hover:bg-primary/90"
-            }`}
+      ) : null}
+      {platform === "linux" ? (
+        <div className="flex w-full flex-col gap-1">
+          <p className="text-muted-foreground text-sm">File Type</p>
+          <Tabs
+            value={extension ?? null}
+            onValueChange={(value) => onExtensionChange(value as Extension)}
           >
-            <DownloadIcon className="size-4" />
-            Download
-          </a>
-        ) : null}
-      </div>
-      <div className="mb-auto"></div>
+            <TabsList className="w-full">
+              <TabsTrigger value="AppImage" className="px-4">
+                AppImage
+              </TabsTrigger>
+              <TabsTrigger value="deb" className="px-4">
+                deb
+              </TabsTrigger>
+              <TabsTrigger value="rpm" className="px-4">
+                rpm
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      ) : null}
+      {selectedFile ? (
+        <a
+          href={getDownloadUrl(selectedFile)}
+          download
+          onClick={() => onDownloadStart(selectedFile)}
+          className={`mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors ${
+            autoDownloadFile || isMobile
+              ? "bg-secondary hover:bg-secondary/80 border-border border"
+              : "bg-primary text-primary-foreground hover:bg-primary/90"
+          }`}
+        >
+          <DownloadIcon className="size-4" />
+          Download
+        </a>
+      ) : null}
     </div>
   );
 }

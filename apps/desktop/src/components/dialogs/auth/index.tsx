@@ -12,7 +12,11 @@ import {
 import { Loader } from "@blinkdisk/ui/loader";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { AlertCircleIcon, ClipboardPasteIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
+
+async function reopen() {
+  await window.electron.auth.open();
+}
 
 export function AuthDialog() {
   const { t } = useAppTranslation("auth.dialog");
@@ -23,13 +27,9 @@ export function AuthDialog() {
     null,
   );
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setError(null);
-  }, []);
-
-  async function reopen() {
-    await window.electron.auth.open();
-  }
+  };
 
   async function handlePasteCode() {
     setError(null);

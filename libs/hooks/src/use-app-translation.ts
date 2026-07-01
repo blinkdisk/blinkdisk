@@ -19,9 +19,7 @@ export function useAppTranslation(defaultNS?: string) {
         ...args.slice(1),
       );
     },
-    // i18n.language is required here to correctly update
-    // the translations if the language state changes.
-    [i18n.language, nested, t],
+    [nested, t],
   );
 
   return {

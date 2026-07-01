@@ -1,13 +1,15 @@
 import { Button } from "@blinkdisk/ui/button";
-import { FormDisabledContext, useFormContext } from "@forms/use-app-form";
-import React, { useContext } from "react";
+import { FormDisabledContext, useFormContext } from "@forms/form-context";
+import type { ComponentProps, Ref } from "react";
+import { use } from "react";
 
-const Submit = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentProps<typeof Button>
->(({ disabled, ...props }, ref) => {
+type SubmitProps = ComponentProps<typeof Button> & {
+  ref?: Ref<HTMLButtonElement>;
+};
+
+function Submit({ disabled, ref, ...props }: SubmitProps) {
   const form = useFormContext();
-  const disabledContext = useContext(FormDisabledContext);
+  const disabledContext = use(FormDisabledContext);
 
   return (
     <form.Subscribe selector={(state) => [state.isSubmitting, state.canSubmit]}>
@@ -23,8 +25,6 @@ const Submit = React.forwardRef<
       )}
     </form.Subscribe>
   );
-});
-
-Submit.displayName = "Submit";
+}
 
 export { Submit };

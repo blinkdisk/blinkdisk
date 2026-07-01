@@ -7,6 +7,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMagicCodeForm } from "@web/hooks/forms/use-magic-code-form";
 import { AlertTriangleIcon } from "lucide-react";
 
+const authorizationCodeSlotGroups = [
+  [0, 1, 2, 3, 4],
+  [5, 6, 7, 8, 9],
+] as const;
+
 export const Route = createFileRoute("/auth/magic")({
   component: RouteComponent,
 });
@@ -49,24 +54,34 @@ function RouteComponent() {
               render={({ slots }) => (
                 <div className="flex w-full items-center justify-between">
                   <div className="flex">
-                    {slots.slice(0, 5).map((slot, idx) => (
-                      <InputOTPSlot
-                        key={idx}
-                        index={idx}
-                        {...slot}
-                        char={slot.char ?? undefined}
-                      />
-                    ))}
+                    {authorizationCodeSlotGroups[0].map((slotIndex) => {
+                      const slot = slots[slotIndex];
+                      if (!slot) return null;
+
+                      return (
+                        <InputOTPSlot
+                          key={`authorization-code-slot-${slotIndex}`}
+                          index={slotIndex}
+                          {...slot}
+                          char={slot.char ?? undefined}
+                        />
+                      );
+                    })}
                   </div>
                   <div className="flex">
-                    {slots.slice(5).map((slot, idx) => (
-                      <InputOTPSlot
-                        key={idx + 5}
-                        index={idx + 5}
-                        {...slot}
-                        char={slot.char ?? undefined}
-                      />
-                    ))}
+                    {authorizationCodeSlotGroups[1].map((slotIndex) => {
+                      const slot = slots[slotIndex];
+                      if (!slot) return null;
+
+                      return (
+                        <InputOTPSlot
+                          key={`authorization-code-slot-${slotIndex}`}
+                          index={slotIndex}
+                          {...slot}
+                          char={slot.char ?? undefined}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               )}
