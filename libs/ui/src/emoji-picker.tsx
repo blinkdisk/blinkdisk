@@ -127,7 +127,6 @@ export function EmojiPicker({
                   const url = parsed[0]?.url;
                   return (
                     <button
-                      type="button"
                       className="flex items-start justify-center rounded-md p-1.5 text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
                       {...props}
                     >
