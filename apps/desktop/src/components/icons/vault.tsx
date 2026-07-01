@@ -376,9 +376,9 @@ const VAULT_ANIMATION_SVG = (
     height={1000}
     viewBox="0 0 1000 1000"
     fill="none"
-    className="absolute left-0 top-0 h-full w-full animate-spin duration-700"
+    className="absolute left-0 top-0 h-full w-full animate-spin duration-2000"
     style={{
-      animationDuration: "700ms",
+      animationDuration: "2000ms",
       animationDirection: "alternate",
     }}
   >
