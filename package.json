@@ -13,13 +13,14 @@
     "types": "turbo run types",
     "test": "turbo run test",
     "unused": "knip",
-    "lint": "biome check .",
+    "lint": "biome check . && react-doctor",
     "lint:ci": "biome ci . --error-on-warnings"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "dotenv-cli": "catalog:",
     "knip": "catalog:",
+    "react-doctor": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"
   },

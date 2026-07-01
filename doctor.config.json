@@ -1,5 +1,9 @@
 {
-  "$schema": "https://react.doctor/schema/config.json",
+  "verbose": true,
+  "noScore": true,
+  "blocking": "warning",
+  "projects": ["*"],
+  "scope": "full",
   "rules": {
     "react-doctor/no-long-transition-duration": "off"
   }
