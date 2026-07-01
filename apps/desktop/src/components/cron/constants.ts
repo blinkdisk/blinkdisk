@@ -1,67 +1,35 @@
-// Modified from react-js-cron (MIT licensed)
-// Original copyright (c) 2021 Xavier Rutayisire
-// https://github.com/xrutayisire/react-js-cron
+import type { CronUnit, Period } from "@desktop/components/cron/types";
 
-import type { ShortcutsValues, Unit } from "@desktop/components/cron/types";
+export const PERIODS = [
+  "year",
+  "month",
+  "week",
+  "day",
+  "hour",
+  "minute",
+] as const satisfies readonly Period[];
 
-export const SUPPORTED_SHORTCUTS: ShortcutsValues[] = [
-  {
-    name: "@yearly",
-    value: "0 0 1 1 *",
-  },
-  {
-    name: "@annually",
-    value: "0 0 1 1 *",
-  },
-  {
-    name: "@monthly",
-    value: "0 0 1 * *",
-  },
-  {
-    name: "@weekly",
-    value: "0 0 * * 0",
-  },
-  {
-    name: "@daily",
-    value: "0 0 * * *",
-  },
-  {
-    name: "@midnight",
-    value: "0 0 * * *",
-  },
-  {
-    name: "@hourly",
-    value: "0 * * * *",
-  },
-];
-export const UNITS: [Unit, Unit, Unit, Unit, Unit] = [
-  {
-    type: "minutes",
+export const CRON_UNITS = {
+  minutes: {
+    id: "minutes",
     min: 0,
     max: 59,
-    total: 60,
   },
-  {
-    type: "hours",
+  hours: {
+    id: "hours",
     min: 0,
     max: 23,
-    total: 24,
   },
-  {
-    type: "month-days",
+  monthDays: {
+    id: "month-days",
     min: 1,
     max: 31,
-    total: 31,
   },
-  {
-    type: "months",
+  months: {
+    id: "months",
     min: 1,
     max: 12,
-    total: 12,
-    // DO NO EDIT
-    // Only used internally for Cron syntax
-    // alt values used for labels are in ./locale.ts file
-    alt: [
+    labels: [
       "JAN",
       "FEB",
       "MAR",
@@ -76,14 +44,28 @@ export const UNITS: [Unit, Unit, Unit, Unit, Unit] = [
       "DEC",
     ],
   },
-  {
-    type: "week-days",
+  weekDays: {
+    id: "week-days",
     min: 0,
     max: 6,
-    total: 7,
-    // DO NO EDIT
-    // Only used internally for Cron syntax
-    // alt values used for labels are in ./locale.ts file
-    alt: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+    labels: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
   },
-];
+} as const satisfies Record<string, CronUnit>;
+
+export const CRON_PART_UNITS = [
+  CRON_UNITS.minutes,
+  CRON_UNITS.hours,
+  CRON_UNITS.monthDays,
+  CRON_UNITS.months,
+  CRON_UNITS.weekDays,
+] as const;
+
+export const SHORTCUT_EXPRESSIONS = {
+  "@yearly": "0 0 1 1 *",
+  "@annually": "0 0 1 1 *",
+  "@monthly": "0 0 1 * *",
+  "@weekly": "0 0 * * 0",
+  "@daily": "0 0 * * *",
+  "@midnight": "0 0 * * *",
+  "@hourly": "0 * * * *",
+} as const;
