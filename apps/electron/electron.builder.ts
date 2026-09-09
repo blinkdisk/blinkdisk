@@ -1,9 +1,12 @@
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: electron builder uses this syntax
 
+import { createRequire } from "node:module";
 import type { Configuration } from "electron-builder";
 
 // Path alias seems to break build in CI
 import { APP_ID, APP_SCHEME } from "../../libs/constants/src/app";
+
+const require = createRequire(import.meta.url);
 
 export default {
   productName: "BlinkDisk",
@@ -120,5 +123,9 @@ export default {
     name: "blinkdisk",
     homepage: "https://blinkdisk.com",
     version: process.env.GITHUB_REF_NAME?.replace("v", ""),
+    dependencies: {
+      // electron-builder validates this version without resolving pnpm catalogs.
+      "electron-updater": require("electron-updater/package.json").version,
+    },
   },
 } satisfies Configuration;
