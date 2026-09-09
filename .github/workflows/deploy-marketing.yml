@@ -41,6 +41,22 @@ jobs:
           SENTRY_MARKETING_DSN: ${{ vars.SENTRY_MARKETING_DSN }}
         run: pnpm --filter marketing build
 
+      - name: Resolve existing session namespace
+        working-directory: apps/marketing
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          pnpm exec wrangler kv namespace list > "$RUNNER_TEMP/marketing-kv.json"
+          if ! SESSION_NAMESPACE_ID=$(jq -er '.[] | select(.title == "marketing-session") | .id' "$RUNNER_TEMP/marketing-kv.json"); then
+            echo "The existing marketing-session KV namespace could not be found."
+            exit 1
+          fi
+          jq --arg id "$SESSION_NAMESPACE_ID" \
+            '(.kv_namespaces[] | select(.binding == "SESSION")).id = $id' \
+            dist/server/wrangler.json > "$RUNNER_TEMP/marketing-wrangler.json"
+          mv "$RUNNER_TEMP/marketing-wrangler.json" dist/server/wrangler.json
+
       - name: Deploy project
         run: pnpm --filter marketing run deploy
         env:
