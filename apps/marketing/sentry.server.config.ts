@@ -1,8 +1,12 @@
 import { SENTRY_MARKETING_DSN } from "astro:env/client";
-import * as Sentry from "@sentry/astro";
+import handler from "@astrojs/cloudflare/entrypoints/server";
+import * as Sentry from "@sentry/cloudflare";
 
-Sentry.init({
-  dsn: SENTRY_MARKETING_DSN,
-  sendDefaultPii: true,
-  enabled: !import.meta.env.DEV,
-});
+export default Sentry.withSentry(
+  () => ({
+    dsn: SENTRY_MARKETING_DSN,
+    sendDefaultPii: true,
+    enabled: !import.meta.env.DEV,
+  }),
+  handler,
+);

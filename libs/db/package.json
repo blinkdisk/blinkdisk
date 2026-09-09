@@ -5,7 +5,7 @@
   "scripts": {
     "types": "tsc --noEmit",
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate",
+    "migrate": "node migrate.mjs",
     "studio": "drizzle-kit studio"
   },
   "exports": {

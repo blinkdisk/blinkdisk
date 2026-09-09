@@ -88,6 +88,8 @@ export default defineConfig({
   server: { port: 3000 },
   adapter: cloudflare({
     imageService: "compile",
+    // Open Graph image generation uses native sharp during prerendering.
+    prerenderEnvironment: "node",
   }),
   redirects: {
     "/pricing": {
@@ -141,6 +143,8 @@ export default defineConfig({
       customPages: getComparisonSitemap(site),
     }),
     sentry({
+      // The Worker entrypoint initializes server monitoring with @sentry/cloudflare.
+      enabled: { client: true, server: false },
       project: process.env.SENTRY_MARKETING_PROJECT,
       org: process.env.SENTRY_ORGANIZATION,
       authToken: process.env.SENTRY_AUTH_TOKEN,
