@@ -72,25 +72,17 @@ export function extractErrorMessage(error: unknown): string {
   return "";
 }
 
-const CORE_ERROR_PATTERNS: { code: CustomErrorCode; markers: string[] }[] = [
-  {
-    code: "VAULT_SERVER_UNAVAILABLE",
-    markers: [VAULT_SERVER_UNAVAILABLE_MARKER.toLowerCase()],
-  },
-  {
-    code: "STORAGE_UNREACHABLE",
-    markers: [
-      VAULT_REQUEST_TIMEOUT_MARKER.toLowerCase(),
-      "cannot access storage path",
-      "getfileattributesex",
-      "no such host",
-      "connection refused",
-      "network is unreachable",
-      "i/o timeout",
-      "dial tcp",
-      "handshake failed",
-    ],
-  },
+const CORE_ERROR_MARKERS: readonly [marker: string, code: CustomErrorCode][] = [
+  [VAULT_SERVER_UNAVAILABLE_MARKER.toLowerCase(), "VAULT_SERVER_UNAVAILABLE"],
+  [VAULT_REQUEST_TIMEOUT_MARKER.toLowerCase(), "STORAGE_UNREACHABLE"],
+  ["cannot access storage path", "STORAGE_UNREACHABLE"],
+  ["getfileattributesex", "STORAGE_UNREACHABLE"],
+  ["no such host", "STORAGE_UNREACHABLE"],
+  ["connection refused", "STORAGE_UNREACHABLE"],
+  ["network is unreachable", "STORAGE_UNREACHABLE"],
+  ["i/o timeout", "STORAGE_UNREACHABLE"],
+  ["dial tcp", "STORAGE_UNREACHABLE"],
+  ["handshake failed", "STORAGE_UNREACHABLE"],
 ];
 
 // Maps a raw core backup engine error to a translated error code. The
@@ -100,9 +92,5 @@ export function mapCoreErrorCode(error: unknown): CustomErrorCode | undefined {
   const message = extractErrorMessage(error).toLowerCase();
   if (!message) return undefined;
 
-  for (const { code, markers } of CORE_ERROR_PATTERNS) {
-    if (markers.some((marker) => message.includes(marker))) return code;
-  }
-
-  return undefined;
+  return CORE_ERROR_MARKERS.find(([marker]) => message.includes(marker))?.[1];
 }

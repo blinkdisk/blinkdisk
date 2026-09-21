@@ -23,37 +23,11 @@ export function showErrorToast(
           ? (error as ErrorDataCode).data?.code
           : undefined
       : undefined;
-  if (code && typeof code === "string") {
-    const titleTranslation = i18n.t(`error:${code}.title`, "");
 
-    if (titleTranslation) {
-      const description = i18n.t(`error:${code}.description`, "");
-
-      toast.error(titleTranslation, {
-        ...(description ? { description } : {}),
-      });
-
-      return;
-    }
-
-    const directTranslation = i18n.t(`error:${code}`, "");
-    if (directTranslation) {
-      toast.error(directTranslation);
-      return;
-    }
-  }
+  if (code && toastForCode(code)) return;
 
   const coreCode = mapCoreErrorCode(error);
-  if (coreCode) {
-    const titleTranslation = i18n.t(`error:${coreCode}.title`, "");
-    if (titleTranslation) {
-      const description = i18n.t(`error:${coreCode}.description`, "");
-      toast.error(titleTranslation, {
-        ...(description ? { description } : {}),
-      });
-      return;
-    }
-  }
+  if (coreCode && toastForCode(coreCode)) return;
 
   if (error instanceof Error && error.message) {
     toast.error(error.message);
@@ -61,6 +35,23 @@ export function showErrorToast(
   }
 
   showDefaultErrorToast();
+}
+
+function toastForCode(code: string): boolean {
+  const title = i18n.t(`error:${code}.title`, "");
+  if (title) {
+    const description = i18n.t(`error:${code}.description`, "");
+    toast.error(title, description ? { description } : {});
+    return true;
+  }
+
+  const direct = i18n.t(`error:${code}`, "");
+  if (direct) {
+    toast.error(direct);
+    return true;
+  }
+
+  return false;
 }
 
 function showDefaultErrorToast() {

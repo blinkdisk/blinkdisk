@@ -15,7 +15,7 @@ import { validationVault } from "@electron/vault/validate";
 
 export const vaults: Record<string, VaultInstance> = {};
 
-function asError(error: unknown) {
+function asError(error: unknown): Error & { code?: string } {
   if (error instanceof Error) return error;
 
   if (error && typeof error === "object") {
@@ -153,7 +153,7 @@ export async function connectVault({
     return response as { error?: string; code?: string };
   } catch (e) {
     const error = asError(e);
-    return { error: error.message, code: (error as { code?: string }).code };
+    return { error: error.message, code: error.code };
   }
 }
 

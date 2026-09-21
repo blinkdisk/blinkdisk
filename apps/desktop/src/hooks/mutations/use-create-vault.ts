@@ -172,12 +172,14 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
       return { vaultId };
     },
     onError: (error, values) => {
+      const code = getErrorCode(error) || mapCoreErrorCode(error);
+
       posthog.capture("vault_create_failed", {
         provider: values.provider,
-        reason: getErrorCode(error) || mapCoreErrorCode(error) || "UNKNOWN",
+        reason: code || "UNKNOWN",
       });
 
-      if (getErrorCode(error) === "NO_STORAGE") {
+      if (code === "NO_STORAGE") {
         openUpgradeDialog();
         return;
       }

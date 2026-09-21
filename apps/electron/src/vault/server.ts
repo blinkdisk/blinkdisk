@@ -59,18 +59,23 @@ export function startVaultServer(id: string, pollStatus = true) {
 
     let settled = false;
 
-    const fail = (message: string) => {
+    const settle = (action: () => void) => {
       if (settled) return;
       settled = true;
       clearTimeout(startTimeout);
-      tryCatch(() => process.kill());
-      rej(
-        new CoreError({
-          code: "VAULT_SERVER_UNAVAILABLE",
-          message: `${VAULT_SERVER_UNAVAILABLE_MARKER}: ${message}`,
-        }),
-      );
+      action();
     };
+
+    const fail = (message: string) =>
+      settle(() => {
+        tryCatch(() => process.kill());
+        rej(
+          new CoreError({
+            code: "VAULT_SERVER_UNAVAILABLE",
+            message: `${VAULT_SERVER_UNAVAILABLE_MARKER}: ${message}`,
+          }),
+        );
+      });
 
     const startTimeout = setTimeout(
       () => fail("The backup engine did not start in time"),
@@ -143,7 +148,6 @@ export function startVaultServer(id: string, pollStatus = true) {
       }
 
       if (
-        !settled &&
         address &&
         password &&
         controlPassword &&
@@ -151,22 +155,21 @@ export function startVaultServer(id: string, pollStatus = true) {
         certificate &&
         certificateHash
       ) {
-        settled = true;
-        clearTimeout(startTimeout);
+        settle(() => {
+          res({
+            process,
+            cookies,
+            signingKey,
+            sessionCookie,
+            password,
+            controlPassword,
+            certificateHash,
+            certificate,
+            address,
+          });
 
-        res({
-          process,
-          cookies,
-          signingKey,
-          sessionCookie,
-          password,
-          controlPassword,
-          certificateHash,
-          certificate,
-          address,
+          if (pollStatus) startStatusPool(id);
         });
-
-        if (pollStatus) startStatusPool(id);
       }
     });
   });
