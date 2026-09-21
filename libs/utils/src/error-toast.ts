@@ -1,3 +1,4 @@
+import { mapCoreErrorCode } from "@utils/error";
 import { i18n } from "@utils/i18n";
 import { toast } from "sonner";
 
@@ -38,6 +39,18 @@ export function showErrorToast(
     const directTranslation = i18n.t(`error:${code}`, "");
     if (directTranslation) {
       toast.error(directTranslation);
+      return;
+    }
+  }
+
+  const coreCode = mapCoreErrorCode(error);
+  if (coreCode) {
+    const titleTranslation = i18n.t(`error:${coreCode}.title`, "");
+    if (titleTranslation) {
+      const description = i18n.t(`error:${coreCode}.description`, "");
+      toast.error(titleTranslation, {
+        ...(description ? { description } : {}),
+      });
       return;
     }
   }

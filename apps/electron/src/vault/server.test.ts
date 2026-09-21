@@ -9,13 +9,20 @@ vi.mock("@electron/vault/fetch", () => ({ fetchVault: vi.fn() }));
 vi.mock("@electron/vault/manage", () => ({ vaults: {} }));
 vi.mock("@electron/window", () => ({ sendWindow: vi.fn() }));
 vi.mock("child_process", () => ({ spawn: vi.fn() }));
+vi.mock("node:child_process", () => ({ spawn: vi.fn() }));
 vi.mock("electron", () => ({ app: { isPackaged: false } }));
 vi.mock("tough-cookie", () => ({ CookieJar: vi.fn() }));
 
+import { spawn } from "node:child_process";
+import { EventEmitter } from "node:events";
+import { VAULT_SERVER_START_TIMEOUT_MS } from "@blinkdisk/constants/vault";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import {
   calculateStatusPollDelay,
   parseServerLine,
+  startVaultServer,
 } from "@electron/vault/server";
+import { CookieJar } from "tough-cookie";
 
 describe("parseServerLine", () => {
   beforeEach(() => {
@@ -83,6 +90,104 @@ describe("parseServerLine", () => {
     const line = "SOME OTHER KEY: value";
     const result = parseServerLine(line);
     expect(result).toEqual({ key: "unknown", raw: line });
+  });
+});
+
+describe("startVaultServer", () => {
+  function createMockProcess() {
+    // biome-ignore lint/suspicious/noExplicitAny: minimal child process stub
+    const proc = new EventEmitter() as any;
+    proc.stdout = new EventEmitter();
+    proc.stderr = new EventEmitter();
+    proc.kill = vi.fn();
+    return proc;
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+    vi.mocked(tryCatch).mockImplementation(
+      // biome-ignore lint/suspicious/noExplicitAny: passthrough stub
+      (fn: any) => (typeof fn === "function" ? [fn(), undefined] : fn),
+    );
+    const cookieJarStub = function (this: Record<string, unknown>) {
+      this.setCookieSync = vi.fn();
+      this.getCookieStringSync = vi.fn();
+    };
+    vi.mocked(CookieJar).mockImplementation(
+      cookieJarStub as unknown as () => CookieJar,
+    );
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("rejects and kills the process when startup times out", async () => {
+    const proc = createMockProcess();
+    vi.mocked(spawn).mockReturnValue(proc);
+
+    const promise = startVaultServer("test", false);
+    const expectation = expect(promise).rejects.toMatchObject({
+      code: "VAULT_SERVER_UNAVAILABLE",
+    });
+
+    await vi.advanceTimersByTimeAsync(VAULT_SERVER_START_TIMEOUT_MS);
+    await expectation;
+    expect(proc.kill).toHaveBeenCalled();
+  });
+
+  it("rejects when the process fails to spawn", async () => {
+    const proc = createMockProcess();
+    vi.mocked(spawn).mockReturnValue(proc);
+
+    const promise = startVaultServer("test", false);
+    const expectation = expect(promise).rejects.toMatchObject({
+      code: "VAULT_SERVER_UNAVAILABLE",
+    });
+
+    proc.emit("error", new Error("spawn ENOENT"));
+    await expectation;
+  });
+
+  it("rejects when the process exits before it is ready", async () => {
+    const proc = createMockProcess();
+    vi.mocked(spawn).mockReturnValue(proc);
+
+    const promise = startVaultServer("test", false);
+    const expectation = expect(promise).rejects.toMatchObject({
+      code: "VAULT_SERVER_UNAVAILABLE",
+    });
+
+    proc.emit("exit", 1);
+    await expectation;
+  });
+
+  it("resolves once all startup lines are parsed and does not settle again", async () => {
+    const proc = createMockProcess();
+    vi.mocked(spawn).mockReturnValue(proc);
+
+    const promise = startVaultServer("test", false);
+
+    const cert = Buffer.from("certificate").toString("base64");
+    proc.stderr.emit(
+      "data",
+      [
+        "SERVER ADDRESS: https://127.0.0.1:12345",
+        "SERVER PASSWORD: pw",
+        "SERVER CONTROL PASSWORD: cpw",
+        "SERVER CERT SHA256: hash",
+        `SERVER CERTIFICATE: ${cert}`,
+      ].join("\n"),
+    );
+
+    const server = await promise;
+    expect(server.address).toBe("https://127.0.0.1:12345");
+    expect(server.password).toBe("pw");
+
+    await vi.advanceTimersByTimeAsync(VAULT_SERVER_START_TIMEOUT_MS);
+    proc.emit("exit", 0);
+    expect(proc.kill).not.toHaveBeenCalled();
   });
 });
 
