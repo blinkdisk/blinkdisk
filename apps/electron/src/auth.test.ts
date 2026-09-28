@@ -25,7 +25,7 @@ vi.mock("@sentry/electron/main", () => ({
   captureException: mocks.captureException,
 }));
 
-import { authenticateToken, authenticateTokenForIpc } from "@electron/auth";
+import { authenticateToken, tryAuthenticateToken } from "@electron/auth";
 
 beforeEach(() => {
   vi.resetAllMocks();
@@ -94,7 +94,7 @@ describe("authenticateToken", () => {
       data: null,
       error: { status: 401, message: "Rejected" },
     });
-    expect(await authenticateTokenForIpc({ token: "code" })).toEqual({
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({
       ok: false,
       reason: "invalidCode",
     });
@@ -103,7 +103,7 @@ describe("authenticateToken", () => {
       data: null,
       error: { status: 503, message: "Unavailable" },
     });
-    expect(await authenticateTokenForIpc({ token: "code" })).toEqual({
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({
       ok: false,
       reason: "networkError",
     });

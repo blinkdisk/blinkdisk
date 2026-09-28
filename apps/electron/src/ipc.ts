@@ -1,10 +1,10 @@
 import { platform } from "node:os";
 import { basename, dirname, join } from "node:path";
 import {
-  authenticateTokenForIpc,
   getAccount,
   logout,
   openAuth,
+  tryAuthenticateToken,
   updateAccount,
 } from "@electron/auth";
 import { readClipboard } from "@electron/clipboard";
@@ -98,7 +98,7 @@ ipcMain.handle("clipboard.read", () => readClipboard());
 
 ipcMain.handle("auth.open", () => openAuth());
 ipcMain.handle("auth.logout", (_, accountId) => logout(accountId));
-ipcMain.handle("auth.token", (_, payload) => authenticateTokenForIpc(payload));
+ipcMain.handle("auth.token", (_, payload) => tryAuthenticateToken(payload));
 ipcMain.handle("auth.account.update", (_, payload) => updateAccount(payload));
 ipcMain.handle("auth.account.get", (_, accountId) => getAccount(accountId));
 

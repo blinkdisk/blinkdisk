@@ -175,7 +175,7 @@ class AuthTokenError extends Error {
   }
 }
 
-export async function authenticateTokenForIpc(
+export async function tryAuthenticateToken(
   payload: Parameters<typeof authenticateToken>[0],
 ) {
   try {
