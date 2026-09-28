@@ -46,7 +46,8 @@
     "config": {
       "submit": "Continue",
       "validationError": {
-        "title": "Failed to create vault"
+        "title": "Couldn't verify storage settings",
+        "rcloneRemoteNotConfigured": "The rclone remote '{{remote}}' isn't configured on this computer. Check the remote name in your rclone config and try again."
       },
       "existsError": {
         "title": "Vault already exists",
@@ -364,7 +365,8 @@
       "fields": {
         "remotePath": {
           "label": "Remote path",
-          "placeholder": "Enter rclone remote path"
+          "placeholder": "myremote:backups",
+          "description": "Use a remote name from your rclone config, followed by : and an optional folder (for example, myremote:backups)."
         },
         "rclonePath": {
           "label": "Rclone executable path",

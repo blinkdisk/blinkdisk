@@ -1,7 +1,10 @@
 import type { StorageProviderType } from "@blinkdisk/constants/providers";
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import { useAccountId } from "@desktop/hooks/use-account-id";
 import { getVaultCollection } from "@desktop/lib/db";
+import { getMissingRcloneRemote } from "@desktop/lib/rclone-validation";
+import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
 export type VaultAction = "CREATE" | "SETUP" | "UPDATE";
@@ -11,6 +14,8 @@ export function useConfigValidation(
   action: VaultAction,
 ) {
   const { accountId } = useAccountId();
+  const { t } = useAppTranslation("vault.createDialog.config.validationError");
+  const posthog = usePostHog();
 
   const onSubmitAsync = useCallback(
     async ({ value }: { value: object }) => {
@@ -27,13 +32,31 @@ export function useConfigValidation(
 
       if (result.code === "NOT_INITIALIZED") return;
 
-      if (result.error)
+      if (result.error) {
+        const missingRemote =
+          providerType === "RCLONE"
+            ? getMissingRcloneRemote(
+                result.error,
+                (value as { remotePath: string }).remotePath,
+              )
+            : undefined;
+
+        posthog.capture("vault_config_validation_failed", {
+          provider: providerType,
+          reason: missingRemote
+            ? "RCLONE_REMOTE_NOT_CONFIGURED"
+            : result.code || "UNKNOWN",
+        });
+
         return {
           code: "VAULT_VALIDATION_FAILED",
-          message: result.code
-            ? `[${result.code}] ${result.error}`
-            : result.error,
+          message: missingRemote
+            ? t("rcloneRemoteNotConfigured", { remote: missingRemote })
+            : result.code
+              ? `[${result.code}] ${result.error}`
+              : result.error,
         };
+      }
 
       const storedId = atob(result.uniqueID || "");
 
@@ -48,7 +71,7 @@ export function useConfigValidation(
           name: existing.name,
         };
     },
-    [action, providerType, accountId],
+    [action, providerType, accountId, posthog, t],
   );
 
   return { onSubmitAsync };

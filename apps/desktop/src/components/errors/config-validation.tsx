@@ -16,14 +16,14 @@ export function ConfigValidationError({ message }: ConfigValidationErrorProps) {
         {t("title")}
       </AlertTitle>
       <AlertDescription className="mt-1">
-        <code
+        <p
           style={{
             overflowWrap: "anywhere",
           }}
-          className="bg-destructive/5 border-destructive/30 w-full whitespace-pre-wrap rounded border px-2.5 py-1.5 text-xs"
+          className="whitespace-pre-wrap text-sm"
         >
           {message}
-        </code>
+        </p>
       </AlertDescription>
     </Alert>
   );
