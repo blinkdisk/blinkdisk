@@ -34,6 +34,7 @@ beforeEach(() => {
     error: null,
   });
   mocks.initAccountCollections.mockResolvedValue(undefined);
+  mocks.sendWindow.mockReturnValue(true);
 });
 
 describe("authenticateToken", () => {
@@ -66,6 +67,11 @@ describe("authenticateToken", () => {
     expect(mocks.storeSet).toHaveBeenCalledWith("accounts.acct_1.active", true);
   });
 
+  it("returns a successful result and forwards the code to authentication", async () => {
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({ ok: true });
+    expect(mocks.authenticate).toHaveBeenCalledWith({ token: "code" });
+  });
+
   it("does not activate an account when collection initialization fails", async () => {
     const failure = new Error("initialization failed");
     mocks.initAccountCollections.mockRejectedValue(failure);
@@ -78,15 +84,17 @@ describe("authenticateToken", () => {
   });
 
   it("does not activate an account when the account-added event cannot be sent", async () => {
-    const failure = new Error("window unavailable");
-    mocks.sendWindow.mockImplementation(() => {
-      throw failure;
+    mocks.sendWindow.mockReturnValue(false);
+
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({
+      ok: false,
+      reason: "unexpectedError",
     });
 
-    await expect(authenticateToken({ token: "code" })).rejects.toBe(failure);
-
     expect(mocks.storeSet).not.toHaveBeenCalled();
-    expect(mocks.captureException).toHaveBeenCalledWith(failure);
+    expect(mocks.captureException).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Account window unavailable" }),
+    );
   });
 
   it("returns distinct token and connection failures to the paste dialog", async () => {
@@ -108,7 +116,34 @@ describe("authenticateToken", () => {
       reason: "networkError",
     });
 
+    mocks.authenticate.mockResolvedValueOnce({
+      data: null,
+      error: { status: 429, message: "Rate limited" },
+    });
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({
+      ok: false,
+      reason: "networkError",
+    });
+
     expect(mocks.storeSet).not.toHaveBeenCalled();
-    expect(mocks.captureException).toHaveBeenCalledTimes(2);
+    expect(mocks.captureException).not.toHaveBeenCalled();
+  });
+
+  it("distinguishes a failed fetch from a collection TypeError", async () => {
+    mocks.authenticate.mockRejectedValueOnce(new TypeError("fetch failed"));
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({
+      ok: false,
+      reason: "networkError",
+    });
+    expect(mocks.captureException).not.toHaveBeenCalled();
+
+    const failure = new TypeError("collection setup failed");
+    mocks.initAccountCollections.mockRejectedValueOnce(failure);
+    expect(await tryAuthenticateToken({ token: "code" })).toEqual({
+      ok: false,
+      reason: "unexpectedError",
+    });
+    expect(mocks.captureException).toHaveBeenCalledWith(failure);
+    expect(mocks.storeSet).not.toHaveBeenCalled();
   });
 });

@@ -141,12 +141,23 @@ export async function logout(accountId: string) {
 
 export async function authenticateToken({ token }: { token: string }) {
   try {
-    const { data, error } = await authClient.authenticate({ token });
+    let response: Awaited<ReturnType<typeof authClient.authenticate>>;
+    try {
+      response = await authClient.authenticate({ token });
+    } catch (error) {
+      if (error instanceof TypeError && /fetch|network/i.test(error.message))
+        throw new AuthTokenError("networkError", error.message);
+      throw error;
+    }
+
+    const { data, error } = response;
 
     if (error) {
       const status = error.status;
       throw new AuthTokenError(
-        status >= 400 && status < 500 ? "invalidCode" : "networkError",
+        status === 400 || status === 401 || status === 403 || status === 404
+          ? "invalidCode"
+          : "networkError",
         error.message ?? "Authentication failed",
       );
     }
@@ -156,12 +167,13 @@ export async function authenticateToken({ token }: { token: string }) {
 
     await initAccountCollections(accountId);
 
-    sendWindow("auth.onAccountAdd", { accountId });
+    if (!sendWindow("auth.onAccountAdd", { accountId }))
+      throw new Error("Account window unavailable");
     store.set(`accounts.${accountId}.active`, true);
 
     return data;
   } catch (error) {
-    captureException(error);
+    if (!(error instanceof AuthTokenError)) captureException(error);
     throw error;
   }
 }
@@ -185,11 +197,7 @@ export async function tryAuthenticateToken(
     return {
       ok: false,
       reason:
-        error instanceof AuthTokenError
-          ? error.reason
-          : error instanceof TypeError
-            ? "networkError"
-            : ("unexpectedError" as const),
+        error instanceof AuthTokenError ? error.reason : "unexpectedError",
     } as const;
   }
 }

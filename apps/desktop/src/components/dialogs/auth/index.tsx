@@ -67,7 +67,6 @@ export function AuthDialog() {
 
       if (!token) {
         reason = "clipboardEmpty";
-        failure = new Error("Clipboard is empty");
       } else if (!isAuthorizationCode(token)) {
         reason = "invalidClipboard";
         failure = new Error("Clipboard does not contain an authorization code");
@@ -89,7 +88,8 @@ export function AuthDialog() {
     if (reason) {
       setError(reason);
       posthog.capture("desktop_login_failed", { reason, method: "paste" });
-      posthog.captureException(failure, { reason, method: "paste" });
+      if (reason !== "clipboardEmpty")
+        posthog.captureException(failure, { reason, method: "paste" });
     }
   }
 

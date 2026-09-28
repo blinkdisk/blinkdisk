@@ -60,9 +60,10 @@ export function focusWindow() {
 }
 
 export function sendWindow(channel: string, payload?: object) {
-  if (!window || window.isDestroyed()) return;
+  if (!window || window.isDestroyed()) return false;
 
   window.webContents.send(channel, payload);
+  return true;
 }
 
 export function setProgressBar(progress: number) {

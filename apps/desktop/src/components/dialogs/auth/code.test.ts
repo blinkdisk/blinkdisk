@@ -19,5 +19,12 @@ describe("isAuthorizationCode", () => {
         ),
       ),
     ).toBe(false);
+    expect(
+      isAuthorizationCode(
+        Buffer.from(JSON.stringify({ state: "pkce-state" })).toString(
+          "base64url",
+        ),
+      ),
+    ).toBe(false);
   });
 });
