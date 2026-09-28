@@ -11,7 +11,7 @@ setupRenderer();
 setupSignalDBPreload(ipcRenderer, contextBridge);
 
 import type {
-  authenticateToken,
+  authenticateTokenForIpc,
   getAccount,
   logout,
   openAuth,
@@ -226,9 +226,9 @@ const api = {
       ipcRenderer.invoke("auth.logout", accountId) as Promise<
         ReturnType<typeof logout>
       >,
-    token: (payload: Parameters<typeof authenticateToken>[0]) =>
+    token: (payload: Parameters<typeof authenticateTokenForIpc>[0]) =>
       ipcRenderer.invoke("auth.token", payload) as Promise<
-        ReturnType<typeof authenticateToken>
+        ReturnType<typeof authenticateTokenForIpc>
       >,
     account: {
       update: (payload: Parameters<typeof updateAccount>[0]) =>

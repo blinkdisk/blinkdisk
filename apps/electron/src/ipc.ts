@@ -1,7 +1,7 @@
 import { platform } from "node:os";
 import { basename, dirname, join } from "node:path";
 import {
-  authenticateToken,
+  authenticateTokenForIpc,
   getAccount,
   logout,
   openAuth,
@@ -98,7 +98,7 @@ ipcMain.handle("clipboard.read", () => readClipboard());
 
 ipcMain.handle("auth.open", () => openAuth());
 ipcMain.handle("auth.logout", (_, accountId) => logout(accountId));
-ipcMain.handle("auth.token", (_, payload) => authenticateToken(payload));
+ipcMain.handle("auth.token", (_, payload) => authenticateTokenForIpc(payload));
 ipcMain.handle("auth.account.update", (_, payload) => updateAccount(payload));
 ipcMain.handle("auth.account.get", (_, accountId) => getAccount(accountId));
 

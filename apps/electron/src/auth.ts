@@ -15,6 +15,7 @@ import {
 } from "@electron/encryption";
 import { type AccountStorageType, store } from "@electron/store";
 import { sendWindow } from "@electron/window";
+import { captureException } from "@sentry/electron/main";
 import {
   inferAdditionalFields,
   magicLinkClient,
@@ -139,24 +140,58 @@ export async function logout(accountId: string) {
 }
 
 export async function authenticateToken({ token }: { token: string }) {
-  const { data, error } = await authClient.authenticate({
-    token,
-  });
+  try {
+    const { data, error } = await authClient.authenticate({ token });
 
-  if (error) throw new Error(error.message);
+    if (error) {
+      const status = error.status;
+      throw new AuthTokenError(
+        status >= 400 && status < 500 ? "invalidCode" : "networkError",
+        error.message ?? "Authentication failed",
+      );
+    }
 
-  const accountId = data?.user?.id;
-  if (!accountId) throw new Error("No account ID found");
+    const accountId = data?.user?.id;
+    if (!accountId) throw new Error("No account ID found");
 
-  store.set(`accounts.${accountId}.active`, true);
+    await initAccountCollections(accountId);
 
-  await initAccountCollections(accountId);
+    sendWindow("auth.onAccountAdd", { accountId });
+    store.set(`accounts.${accountId}.active`, true);
 
-  sendWindow("auth.onAccountAdd", {
-    accountId,
-  });
+    return data;
+  } catch (error) {
+    captureException(error);
+    throw error;
+  }
+}
 
-  return data;
+class AuthTokenError extends Error {
+  constructor(
+    readonly reason: "invalidCode" | "networkError",
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+export async function authenticateTokenForIpc(
+  payload: Parameters<typeof authenticateToken>[0],
+) {
+  try {
+    await authenticateToken(payload);
+    return { ok: true } as const;
+  } catch (error) {
+    return {
+      ok: false,
+      reason:
+        error instanceof AuthTokenError
+          ? error.reason
+          : error instanceof TypeError
+            ? "networkError"
+            : ("unexpectedError" as const),
+    } as const;
+  }
 }
 
 export function getAccountCookie(accountId: string) {
