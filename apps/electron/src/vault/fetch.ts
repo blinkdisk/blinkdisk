@@ -1,6 +1,8 @@
 import { createWriteStream } from "node:fs";
 import { rename } from "node:fs/promises";
 import https from "node:https";
+import { VAULT_REQUEST_TIMEOUT_MS } from "@blinkdisk/constants/vault";
+import { VAULT_REQUEST_TIMEOUT_MARKER } from "@blinkdisk/utils/error";
 import type { VaultInstance } from "@electron/vault/types";
 import { Cookie } from "tough-cookie";
 
@@ -147,6 +149,14 @@ export async function fetchVaultRaw(
         }
       },
     );
+
+    req.setTimeout(VAULT_REQUEST_TIMEOUT_MS, () => {
+      req.destroy(
+        new Error(
+          `${VAULT_REQUEST_TIMEOUT_MARKER}: The backup engine did not respond in time`,
+        ),
+      );
+    });
 
     if (data) req.write(data);
 

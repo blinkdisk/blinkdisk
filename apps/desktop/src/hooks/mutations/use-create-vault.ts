@@ -5,7 +5,7 @@ import {
 } from "@blinkdisk/constants/vault";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
 import type { ZCreateVaultType } from "@blinkdisk/schemas/vault";
-import { getErrorCode } from "@blinkdisk/utils/error";
+import { getErrorCode, mapCoreErrorCode } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { generateId } from "@blinkdisk/utils/id";
 import { removeEmptyStrings } from "@blinkdisk/utils/object";
@@ -171,8 +171,15 @@ export function useCreateVault(onSuccess: (res: CreateVaultResponse) => void) {
 
       return { vaultId };
     },
-    onError: (error) => {
-      if (getErrorCode(error) === "NO_STORAGE") {
+    onError: (error, values) => {
+      const code = getErrorCode(error) || mapCoreErrorCode(error);
+
+      posthog.capture("vault_create_failed", {
+        provider: values.provider,
+        reason: code || "UNKNOWN",
+      });
+
+      if (code === "NO_STORAGE") {
         openUpgradeDialog();
         return;
       }

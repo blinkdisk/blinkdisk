@@ -15,7 +15,7 @@ import { validationVault } from "@electron/vault/validate";
 
 export const vaults: Record<string, VaultInstance> = {};
 
-function asError(error: unknown) {
+function asError(error: unknown): Error & { code?: string } {
   if (error instanceof Error) return error;
 
   if (error && typeof error === "object") {
@@ -122,17 +122,17 @@ export async function connectVault({
   version?: number;
   token?: string | null;
 }) {
-  let vault: VaultInstance;
-  const existingVault = vaults[id];
-  if (existingVault) vault = existingVault;
-  else
-    vault = {
-      id,
-      status: "STARTING",
-      server: await startVaultServer(id),
-    };
-
   try {
+    let vault: VaultInstance;
+    const existingVault = vaults[id];
+    if (existingVault) vault = existingVault;
+    else
+      vault = {
+        id,
+        status: "STARTING",
+        server: await startVaultServer(id),
+      };
+
     const response = await fetchVault(vault, {
       method: "POST",
       path: "/api/v1/repo/connect",
@@ -152,7 +152,8 @@ export async function connectVault({
 
     return response as { error?: string; code?: string };
   } catch (e) {
-    return e as { code?: string; error?: string };
+    const error = asError(e);
+    return { error: error.message, code: error.code };
   }
 }
 

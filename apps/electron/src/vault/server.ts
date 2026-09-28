@@ -1,6 +1,11 @@
 import { spawn } from "node:child_process";
 import { existsSync, renameSync } from "node:fs";
 import { resolve } from "node:path";
+import { VAULT_SERVER_START_TIMEOUT_MS } from "@blinkdisk/constants/vault";
+import {
+  CoreError,
+  VAULT_SERVER_UNAVAILABLE_MARKER,
+} from "@blinkdisk/utils/error";
 import { generateId } from "@blinkdisk/utils/id";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
@@ -13,7 +18,7 @@ import { app } from "electron";
 import { CookieJar } from "tough-cookie";
 
 export function startVaultServer(id: string, pollStatus = true) {
-  return new Promise<VaultServer>((res) => {
+  return new Promise<VaultServer>((res, rej) => {
     const cookies = new CookieJar();
 
     const signingKey = generateId();
@@ -51,6 +56,39 @@ export function startVaultServer(id: string, pollStatus = true) {
     ];
 
     const process = spawn(corePath(), args, {});
+
+    let settled = false;
+
+    const settle = (action: () => void) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(startTimeout);
+      action();
+    };
+
+    const fail = (message: string) =>
+      settle(() => {
+        tryCatch(() => process.kill());
+        rej(
+          new CoreError({
+            code: "VAULT_SERVER_UNAVAILABLE",
+            message: `${VAULT_SERVER_UNAVAILABLE_MARKER}: ${message}`,
+          }),
+        );
+      });
+
+    const startTimeout = setTimeout(
+      () => fail("The backup engine did not start in time"),
+      VAULT_SERVER_START_TIMEOUT_MS,
+    );
+
+    process.on("error", (error) =>
+      fail(`Failed to start the backup engine: ${error.message}`),
+    );
+
+    process.on("exit", (code) =>
+      fail(`The backup engine stopped before it was ready (code ${code})`),
+    );
 
     process?.stdout.on("data", (data) => logFormatted(id, data));
 
@@ -117,19 +155,21 @@ export function startVaultServer(id: string, pollStatus = true) {
         certificate &&
         certificateHash
       ) {
-        res({
-          process,
-          cookies,
-          signingKey,
-          sessionCookie,
-          password,
-          controlPassword,
-          certificateHash,
-          certificate,
-          address,
-        });
+        settle(() => {
+          res({
+            process,
+            cookies,
+            signingKey,
+            sessionCookie,
+            password,
+            controlPassword,
+            certificateHash,
+            certificate,
+            address,
+          });
 
-        if (pollStatus) startStatusPool(id);
+          if (pollStatus) startStatusPool(id);
+        });
       }
     });
   });

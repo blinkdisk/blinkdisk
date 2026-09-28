@@ -66,5 +66,13 @@
   "INCORRECT_VAULT": {
     "title": "Different vault found",
     "description": "Your configuration resolved to a different vault. Please double check your settings."
+  },
+  "STORAGE_UNREACHABLE": {
+    "title": "Cannot reach your storage",
+    "description": "BlinkDisk could not reach the storage location. Please check that the path or server is available and that your settings are correct."
+  },
+  "VAULT_SERVER_UNAVAILABLE": {
+    "title": "Backup engine did not start",
+    "description": "The backup engine did not start in time. Please try again or restart the app."
   }
 }
