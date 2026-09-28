@@ -54,6 +54,7 @@ function Button({
   size = "default",
   children,
   loading,
+  disabled,
   innerClassName,
   ...props
 }: ButtonProps) {
@@ -62,6 +63,7 @@ function Button({
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
+      disabled={disabled || loading}
     >
       {loading && (
         <Loader className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />

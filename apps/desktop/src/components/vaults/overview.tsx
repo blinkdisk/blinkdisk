@@ -13,7 +13,7 @@ import { cn } from "@blinkdisk/utils/class";
 import { Empty } from "@desktop/components/empty";
 import { SourceList } from "@desktop/components/sources/list";
 import { VaultStatCard } from "@desktop/components/vaults/stat-card";
-import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
+import { useBackupStartFeedback } from "@desktop/hooks/mutations/core/use-backup-start-feedback";
 import { useBackupList } from "@desktop/hooks/queries/core/use-backup-list";
 import {
   type CoreSourceItem,
@@ -102,9 +102,6 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
     [navigate],
   );
 
-  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup({
-    profile: localProfile,
-  });
   const { data: currentSources } = useSourceList({
     profile: localProfile,
   });
@@ -146,6 +143,13 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
       ),
     [currentSources],
   );
+  const { startBackup, isStartingBackup } = useBackupStartFeedback({
+    profile: localProfile,
+    isRunning: isAnyBackupRunning,
+    latestSnapshotId: currentSources
+      ?.map((source) => source.lastSnapshot?.id || "")
+      .join("|"),
+  });
 
   const stats = useMemo(() => {
     if (!allSources) return null;
@@ -210,7 +214,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
               {currentSources && currentSources.length > 0 ? (
                 <Button
                   onClick={() => startBackup({})}
-                  loading={isStartingBackup || isAnyBackupRunning}
+                  loading={isStartingBackup}
                   disabled={!localProfile}
                   variant="secondary"
                 >

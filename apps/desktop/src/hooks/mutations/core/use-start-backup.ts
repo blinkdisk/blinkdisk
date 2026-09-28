@@ -6,9 +6,11 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { kopiaParamsFromProfile } from "@desktop/lib/profile";
 import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePostHog } from "posthog-js/react";
 
 export function useStartBackup(options: { profile?: SelectedProfile } = {}) {
   const queryClient = useQueryClient();
+  const posthog = usePostHog();
 
   const { vaultId } = useVaultId();
   const { profile: routeSelectedProfile } = useProfile();
@@ -20,6 +22,11 @@ export function useStartBackup(options: { profile?: SelectedProfile } = {}) {
     mutationKey: ["vault", vaultId, "backup"],
     mutationFn: async (options: { path?: string }) => {
       if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
+
+      posthog.capture("backup_start", {
+        vaultId,
+        scope: options.path ? "source" : "all",
+      });
 
       await vaultApi(vaultId).post(
         "/api/v1/sources/upload",
