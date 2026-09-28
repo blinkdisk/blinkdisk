@@ -7,5 +7,9 @@ import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
   title="Download"
   description="Download BlinkDisk for Windows, macOS, and Linux."
 >
-  <DownloadClient client:load />
+  <DownloadClient client:only="react">
+    <div slot="fallback" class="py-page flex min-h-screen items-center justify-center">
+      <p class="text-muted-foreground">Preparing downloads…</p>
+    </div>
+  </DownloadClient>
 </DefaultLayout>

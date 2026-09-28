@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 const currency = "USD";
 
 const formatStorage = (gb: number) => {
-  return `${gb.toLocaleString()} GB`;
+  return `${gb.toLocaleString("en-US")} GB`;
 };
 
 export default function ProPlanCard() {
@@ -92,7 +92,7 @@ export default function ProPlanCard() {
 
         <div className="flex items-baseline">
           <span className="text-4xl font-bold">
-            {monthlyAmount.toLocaleString(undefined, {
+            {monthlyAmount.toLocaleString("en-US", {
               style: "currency",
               currency,
               minimumFractionDigits: 0,

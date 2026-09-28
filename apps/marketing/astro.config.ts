@@ -148,14 +148,6 @@ export default defineConfig({
       project: process.env.SENTRY_MARKETING_PROJECT,
       org: process.env.SENTRY_ORGANIZATION,
       authToken: process.env.SENTRY_AUTH_TOKEN,
-      sourcemaps: {
-        // Remove to reduce bundle size
-        filesToDeleteAfterUpload: [
-          "./**/*.map",
-          ".*/**/public/**/*.map",
-          "./dist/**/client/**/*.map",
-        ],
-      },
     }),
   ],
   env: {
@@ -200,8 +192,7 @@ export default defineConfig({
   vite: {
     build: {
       target: "esnext",
-      // Set to hidden to reduce bundle size
-      sourcemap: "hidden",
+      sourcemap: true,
     },
     plugins: [
       tailwindcss(),
