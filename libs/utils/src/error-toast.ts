@@ -1,28 +1,9 @@
-import { mapCoreErrorCode } from "@utils/error";
+import { getErrorCode, mapCoreErrorCode } from "@utils/error";
 import { i18n } from "@utils/i18n";
 import { toast } from "sonner";
 
-type ErrorWithCode = {
-  code?: string;
-  data?: { code?: string };
-  message?: string;
-};
-
-type ErrorDataCode = {
-  data?: { code?: string };
-};
-
-export function showErrorToast(
-  error: ErrorWithCode | Error | ErrorDataCode | unknown,
-) {
-  const code =
-    error && typeof error === "object"
-      ? "code" in error && typeof error.code === "string"
-        ? error.code
-        : error && "data" in error
-          ? (error as ErrorDataCode).data?.code
-          : undefined
-      : undefined;
+export function showErrorToast(error: unknown) {
+  const code = getErrorCode(error);
 
   if (code && toastForCode(code)) return;
 

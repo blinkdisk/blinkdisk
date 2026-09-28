@@ -1,10 +1,22 @@
 import {
+  ACCOUNT_SYNC_FAILED_MARKER,
   CoreError,
   extractErrorMessage,
+  getErrorCode,
   mapCoreErrorCode,
   VAULT_REQUEST_TIMEOUT_MARKER,
   VAULT_SERVER_UNAVAILABLE_MARKER,
 } from "./error";
+
+describe("getErrorCode", () => {
+  it("recovers account sync codes from Electron IPC errors", () => {
+    const error = new Error(
+      `Error invoking remote method 'sync.account': Error: ${ACCOUNT_SYNC_FAILED_MARKER}`,
+    );
+
+    expect(getErrorCode(error)).toBe("ACCOUNT_SYNC_FAILED");
+  });
+});
 
 describe("extractErrorMessage", () => {
   it("reads a plain string", () => {

@@ -1,3 +1,5 @@
+import { CustomError } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
@@ -21,7 +23,10 @@ export function useAuthDialog() {
     store.setState(() => ({
       isOpen: true,
     }));
-    window.electron.auth.open();
+    void window.electron.auth.open().catch(() => {
+      setIsOpen(false);
+      showErrorToast(new CustomError("AUTH_OPEN_FAILED"));
+    });
   }
 
   return {
