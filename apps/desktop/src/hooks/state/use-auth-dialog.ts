@@ -33,7 +33,8 @@ export function useAuthDialog() {
 
     try {
       await window.electron.auth.open();
-    } catch {
+    } catch (error) {
+      console.error("Failed to open sign-in browser", error);
       if (attempt === authAttempt) {
         store.setState((state) =>
           state.isOpen ? { ...state, browserFailed: true } : state,

@@ -16,6 +16,12 @@ describe("getErrorCode", () => {
 
     expect(getErrorCode(error)).toBe("ACCOUNT_SYNC_FAILED");
   });
+
+  it("does not relabel unrelated messages that mention the sync marker", () => {
+    expect(
+      getErrorCode(new Error("Earlier ACCOUNT_SYNC_FAILED message was logged")),
+    ).toBeUndefined();
+  });
 });
 
 describe("extractErrorMessage", () => {

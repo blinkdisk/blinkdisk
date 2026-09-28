@@ -28,12 +28,15 @@ describe("useAuthDialog", () => {
     useAuthDialog().setIsOpen(false);
     vi.unstubAllGlobals();
     capture.mockClear();
+    vi.restoreAllMocks();
   });
 
   it("shows a browser launch failure and clears it when retrying", async () => {
+    const error = new Error("No browser is registered");
+    const logError = vi.spyOn(console, "error").mockImplementation(() => {});
     const open = vi
       .fn<() => Promise<void>>()
-      .mockRejectedValueOnce(new Error("No browser is registered"))
+      .mockRejectedValueOnce(error)
       .mockResolvedValueOnce(undefined);
     vi.stubGlobal("window", { electron: { auth: { open } } });
 
@@ -43,6 +46,10 @@ describe("useAuthDialog", () => {
       browserFailed: true,
     });
     expect(capture).toHaveBeenCalledWith("auth_open_failed");
+    expect(logError).toHaveBeenCalledWith(
+      "Failed to open sign-in browser",
+      error,
+    );
 
     await useAuthDialog().openAuthDialog();
     expect(useAuthDialog()).toMatchObject({
@@ -50,5 +57,29 @@ describe("useAuthDialog", () => {
       browserFailed: false,
     });
     expect(open).toHaveBeenCalledTimes(2);
+  });
+
+  it("ignores a stale launch failure after a later retry", async () => {
+    let rejectFirst: (error: Error) => void = () => {};
+    const first = new Promise<void>((_, reject) => {
+      rejectFirst = reject;
+    });
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const open = vi
+      .fn()
+      .mockReturnValueOnce(first)
+      .mockResolvedValueOnce(undefined);
+    vi.stubGlobal("window", { electron: { auth: { open } } });
+
+    const firstAttempt = useAuthDialog().openAuthDialog();
+    await useAuthDialog().openAuthDialog();
+    rejectFirst(new Error("Earlier launch failed"));
+    await firstAttempt;
+
+    expect(useAuthDialog()).toMatchObject({
+      isOpen: true,
+      browserFailed: false,
+    });
+    expect(capture).toHaveBeenCalledWith("auth_open_failed");
   });
 });

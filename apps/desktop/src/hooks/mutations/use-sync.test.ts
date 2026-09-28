@@ -26,7 +26,11 @@ vi.mock("posthog-js/react", () => ({
 
 import { useSync } from "@desktop/hooks/mutations/use-sync";
 
-it("shows a translated sync error and captures a handled manual failure", () => {
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+it("captures an unknown manual failure and forwards a safe code to the toast", () => {
   useSync();
   const options = mocks.useMutation.mock.calls[0]?.[0] as {
     onError: (error: Error) => void;
@@ -38,9 +42,26 @@ it("shows a translated sync error and captures a handled manual failure", () => 
 
   expect(mocks.capture).toHaveBeenCalledWith("account_sync_failed", {
     source: "manual",
-    reason: "ACCOUNT_SYNC_FAILED",
+    reason: "UNKNOWN",
   });
   expect(mocks.showErrorToast).toHaveBeenCalledWith({
     code: "ACCOUNT_SYNC_FAILED",
   });
+});
+
+it("preserves a specific error code in the failure event and toast", () => {
+  useSync();
+  const options = mocks.useMutation.mock.calls[0]?.[0] as {
+    onError: (error: Error) => void;
+  };
+
+  options.onError(
+    Object.assign(new Error("Unauthorized"), { code: "UNAUTHORIZED" }),
+  );
+
+  expect(mocks.capture).toHaveBeenCalledWith("account_sync_failed", {
+    source: "manual",
+    reason: "UNAUTHORIZED",
+  });
+  expect(mocks.showErrorToast).toHaveBeenCalledWith({ code: "UNAUTHORIZED" });
 });
