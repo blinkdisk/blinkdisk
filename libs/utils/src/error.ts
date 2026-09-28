@@ -17,13 +17,15 @@ export type CustomErrorCode =
   | "INCORRECT_CONFIG"
   | "CONFIG_NOT_FOUND"
   | "STORAGE_UNREACHABLE"
-  | "VAULT_SERVER_UNAVAILABLE";
+  | "VAULT_SERVER_UNAVAILABLE"
+  | "ACCOUNT_SYNC_FAILED"
+  | "AUTH_OPEN_FAILED";
 
-// Stable ASCII markers the core backup engine failures carry. The
-// renderer matches these to translated error codes, so they must survive
-// being wrapped in an Electron IPC error message.
+// Stable ASCII markers survive Electron IPC error wrapping so the renderer
+// can match them to translated error codes.
 export const VAULT_SERVER_UNAVAILABLE_MARKER = "VAULT_SERVER_UNAVAILABLE";
 export const VAULT_REQUEST_TIMEOUT_MARKER = "VAULT_REQUEST_TIMEOUT";
+export const ACCOUNT_SYNC_FAILED_MARKER = "ACCOUNT_SYNC_FAILED";
 
 export class CustomError extends Error {
   code: CustomErrorCode;
@@ -58,6 +60,8 @@ export function getErrorCode(error: unknown) {
   if ("code" in error && typeof error.code === "string") return error.code;
   const dataCode = "data" in error ? (error as ErrorDataCode).data?.code : null;
   if (typeof dataCode === "string") return dataCode;
+  if (extractErrorMessage(error).includes(ACCOUNT_SYNC_FAILED_MARKER))
+    return ACCOUNT_SYNC_FAILED_MARKER;
 }
 
 export function extractErrorMessage(error: unknown): string {
