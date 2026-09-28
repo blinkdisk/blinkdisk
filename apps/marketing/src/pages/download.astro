@@ -1,6 +1,37 @@
 ---
 import DownloadClient from "@marketing/components/react/DownloadClient";
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import {
+  getDownloadUrl,
+  linux,
+  mac,
+  windows,
+} from "@marketing/utils/downloads";
+
+const installers = [
+  {
+    platform: "Windows",
+    files: [{ label: "Windows installer", filename: windows.exe }],
+  },
+  {
+    platform: "macOS",
+    files: [{ label: "macOS installer", filename: mac.dmg }],
+  },
+  {
+    platform: "Linux",
+    files: [
+      { label: "AppImage (x86_64)", filename: linux.AppImage.x86_64 },
+      { label: "AppImage (arm64)", filename: linux.AppImage.arm64 },
+      { label: "AppImage (armv7l)", filename: linux.AppImage.armv7l },
+      { label: "deb (x86_64)", filename: linux.deb.x86_64 },
+      { label: "deb (arm64)", filename: linux.deb.arm64 },
+      { label: "deb (armv7l)", filename: linux.deb.armv7l },
+      { label: "rpm (x86_64)", filename: linux.rpm.x86_64 },
+      { label: "rpm (arm64)", filename: linux.rpm.arm64 },
+      { label: "rpm (armv7l)", filename: linux.rpm.armv7l },
+    ],
+  },
+];
 ---
 
 <DefaultLayout
@@ -8,8 +39,27 @@ import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
   description="Download BlinkDisk for Windows, macOS, and Linux."
 >
   <DownloadClient client:only="react">
-    <div slot="fallback" class="py-page flex min-h-screen items-center justify-center">
-      <p class="text-muted-foreground">Preparing downloads…</p>
+    <div slot="fallback" class="py-page w-content mx-auto min-h-screen">
+      <h1 class="text-center text-4xl font-bold">Download BlinkDisk</h1>
+      <p class="text-muted-foreground mt-4 text-center">
+        Choose the installer for your computer. BlinkDisk is available for Windows, macOS, and Linux.
+      </p>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {installers.map(({ platform, files }) => (
+          <section class="bg-card rounded-2xl border p-6">
+            <h2 class="text-xl font-semibold">{platform}</h2>
+            <ul class="mt-4 space-y-3">
+              {files.map(({ label, filename }) => (
+                <li>
+                  <a class="text-primary underline" href={getDownloadUrl(filename)}>
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
     </div>
   </DownloadClient>
 </DefaultLayout>

@@ -148,6 +148,13 @@ export default defineConfig({
       project: process.env.SENTRY_MARKETING_PROJECT,
       org: process.env.SENTRY_ORGANIZATION,
       authToken: process.env.SENTRY_AUTH_TOKEN,
+      sourcemaps: {
+        filesToDeleteAfterUpload: [
+          "./**/*.map",
+          ".*/**/public/**/*.map",
+          "./dist/**/client/**/*.map",
+        ],
+      },
     }),
   ],
   env: {
@@ -192,7 +199,7 @@ export default defineConfig({
   vite: {
     build: {
       target: "esnext",
-      sourcemap: true,
+      sourcemap: "hidden",
     },
     plugins: [
       tailwindcss(),
