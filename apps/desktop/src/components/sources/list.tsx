@@ -73,7 +73,7 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
   const { startBackup, isStartingBackup } = useBackupStartFeedback({
     profile,
     isRunning: source?.status === "PENDING" || source?.status === "UPLOADING",
-    latestSnapshotId: source ? source.lastSnapshot?.id || "" : undefined,
+    source,
   });
   const { mutate: cancelBackup } = useCancelBackup({ profile });
   const { openDeleteSourceDialog } = useDeleteSourceDialog();

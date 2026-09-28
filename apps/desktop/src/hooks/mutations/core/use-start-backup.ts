@@ -1,5 +1,6 @@
 import { CustomError } from "@blinkdisk/utils/error";
 import { showErrorToast } from "@blinkdisk/utils/error-toast";
+import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
@@ -8,7 +9,13 @@ import { vaultApi } from "@desktop/lib/vault";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostHog } from "posthog-js/react";
 
-export function useStartBackup(options: { profile?: SelectedProfile } = {}) {
+export function useStartBackup(
+  options: {
+    profile?: SelectedProfile;
+    onSuccess?: () => void;
+    onError?: () => void;
+  } = {},
+) {
   const queryClient = useQueryClient();
   const posthog = usePostHog();
 
@@ -23,11 +30,6 @@ export function useStartBackup(options: { profile?: SelectedProfile } = {}) {
     mutationFn: async (options: { path?: string }) => {
       if (!vaultId || !profile) throw new CustomError("MISSING_REQUIRED_VALUE");
 
-      posthog.capture("backup_start", {
-        vaultId,
-        scope: options.path ? "source" : "all",
-      });
-
       await vaultApi(vaultId).post(
         "/api/v1/sources/upload",
         {},
@@ -39,8 +41,19 @@ export function useStartBackup(options: { profile?: SelectedProfile } = {}) {
         },
       );
     },
-    onError: showErrorToast,
-    onSuccess: async () => {
+    onError: (error) => {
+      options.onError?.();
+      showErrorToast(error);
+    },
+    onSuccess: async (_, values) => {
+      options.onSuccess?.();
+      tryCatch(() =>
+        posthog?.capture("backup_start", {
+          vaultId,
+          scope: values.path ? "source" : "all",
+        }),
+      );
+
       await queryClient.invalidateQueries({
         queryKey: queryKeys.source.list(vaultId, profile),
       });

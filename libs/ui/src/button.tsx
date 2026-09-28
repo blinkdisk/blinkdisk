@@ -61,9 +61,13 @@ function Button({
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        loading && "disabled:opacity-100",
+      )}
       {...props}
       disabled={disabled || loading}
+      aria-busy={loading || props["aria-busy"]}
     >
       {loading && (
         <Loader className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />

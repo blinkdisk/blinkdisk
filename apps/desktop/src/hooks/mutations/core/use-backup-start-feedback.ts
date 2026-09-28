@@ -1,42 +1,53 @@
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
+import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
-import { createBackupStartLatch } from "@desktop/lib/backup-start-latch";
-import { useEffect, useRef, useState } from "react";
+import { useVaultId } from "@desktop/hooks/use-vault-id";
+import { getBackupStartCoordinator } from "@desktop/lib/backup-start-latch";
+import { useStore } from "@tanstack/react-store";
+import { useEffect, useMemo } from "react";
 
 type Options = {
   profile?: SelectedProfile;
   isRunning?: boolean;
-  latestSnapshotId?: string;
+  source?: CoreSourceItem;
+  sources?: CoreSourceItem[] | null;
 };
 
 export function useBackupStartFeedback({
   profile,
   isRunning = false,
-  latestSnapshotId,
+  source,
+  sources,
 }: Options) {
-  const { mutate, isPending } = useStartBackup({ profile });
-  const [awaitingStatus, setAwaitingStatus] = useState(false);
-  const latch = useRef(createBackupStartLatch());
+  const { vaultId } = useVaultId();
+  const coordinator = getBackupStartCoordinator(vaultId || "");
+  const isAwaitingStatus = useStore(coordinator.store);
+  const observedSources = useMemo(
+    () => sources ?? (source ? [source] : undefined),
+    [sources, source],
+  );
+  const { mutate, isPending } = useStartBackup({
+    profile,
+    onSuccess: coordinator.settle,
+    onError: coordinator.release,
+  });
 
   useEffect(() => {
-    if (latch.current.observe(isRunning, latestSnapshotId)) {
-      setAwaitingStatus(false);
-    }
-  }, [isRunning, latestSnapshotId]);
+    coordinator.observe(observedSources);
+  }, [coordinator, observedSources]);
 
-  const isStartingBackup = isPending || awaitingStatus || isRunning;
+  const isStartingBackup = isPending || isAwaitingStatus || isRunning;
 
   const startBackup = (options: { path?: string }) => {
-    if (isPending || isRunning || !latch.current.tryStart(latestSnapshotId))
+    if (
+      !vaultId ||
+      isPending ||
+      isRunning ||
+      !coordinator.begin(observedSources)
+    )
       return;
 
-    setAwaitingStatus(true);
-    mutate(options, {
-      onError: () => {
-        latch.current.release();
-        setAwaitingStatus(false);
-      },
-    });
+    mutate(options);
   };
 
   return { startBackup, isStartingBackup };

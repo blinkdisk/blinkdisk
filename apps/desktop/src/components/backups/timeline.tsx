@@ -192,7 +192,7 @@ function FakeBackup() {
 
   const { startBackup, isStartingBackup } = useBackupStartFeedback({
     isRunning: folder?.status === "PENDING" || folder?.status === "UPLOADING",
-    latestSnapshotId: folder ? folder.lastSnapshot?.id || "" : undefined,
+    source: folder,
   });
 
   return (

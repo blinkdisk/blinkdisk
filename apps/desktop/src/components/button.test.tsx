@@ -7,6 +7,9 @@ describe("Button loading state", () => {
     const markup = renderToStaticMarkup(<Button loading>Backup all</Button>);
 
     expect(markup).toMatch(/<button[^>]*disabled/);
+    expect(markup).toContain('aria-busy="true"');
+    expect(markup).toContain("disabled:opacity-100");
+    expect(markup).not.toContain("disabled:opacity-50");
     expect(markup).toContain("Backup all");
   });
 

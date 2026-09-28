@@ -39,7 +39,7 @@ function RouteComponent() {
 
   const { startBackup, isStartingBackup } = useBackupStartFeedback({
     isRunning: source?.status === "PENDING" || source?.status === "UPLOADING",
-    latestSnapshotId: source ? source.lastSnapshot?.id || "" : undefined,
+    source,
   });
   const { mutate: cancelBackup, isPending: isCancellingBackup } =
     useCancelBackup();

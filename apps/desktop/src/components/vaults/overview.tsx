@@ -146,9 +146,7 @@ export function VaultOverview({ vault }: VaultOverviewProps) {
   const { startBackup, isStartingBackup } = useBackupStartFeedback({
     profile: localProfile,
     isRunning: isAnyBackupRunning,
-    latestSnapshotId: currentSources
-      ?.map((source) => source.lastSnapshot?.id || "")
-      .join("|"),
+    sources: currentSources,
   });
 
   const stats = useMemo(() => {
