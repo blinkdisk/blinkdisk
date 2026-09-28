@@ -60,7 +60,7 @@ export function getErrorCode(error: unknown) {
   if ("code" in error && typeof error.code === "string") return error.code;
   const dataCode = "data" in error ? (error as ErrorDataCode).data?.code : null;
   if (typeof dataCode === "string") return dataCode;
-  if (extractErrorMessage(error).includes(ACCOUNT_SYNC_FAILED_MARKER))
+  if (extractErrorMessage(error).endsWith(ACCOUNT_SYNC_FAILED_MARKER))
     return ACCOUNT_SYNC_FAILED_MARKER;
 }
 

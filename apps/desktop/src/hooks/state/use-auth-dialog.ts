@@ -8,6 +8,7 @@ const store = new Store<{
 }>({
   isOpen: false,
 });
+let authOpenAttempt = 0;
 
 export function useAuthDialog() {
   const { isOpen } = useStore(store);
@@ -20,10 +21,13 @@ export function useAuthDialog() {
   }, []);
 
   function openAuthDialog() {
+    const attempt = ++authOpenAttempt;
     store.setState(() => ({
       isOpen: true,
     }));
-    void window.electron.auth.open().catch(() => {
+    void window.electron.auth.open().catch((error: unknown) => {
+      console.error("Failed to open sign-in browser", error);
+      if (attempt !== authOpenAttempt) return;
       setIsOpen(false);
       showErrorToast(new CustomError("AUTH_OPEN_FAILED"));
     });

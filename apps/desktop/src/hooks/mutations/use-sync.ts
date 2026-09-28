@@ -18,9 +18,12 @@ export function useSync() {
       await window.electron.sync.account(accountId);
     },
     onError: (error) => {
-      const reason = getErrorCode(error) ?? "ACCOUNT_SYNC_FAILED";
-      posthog.capture("account_sync_failed", { source: "manual", reason });
-      showErrorToast({ code: reason });
+      const code = getErrorCode(error);
+      posthog.capture("account_sync_failed", {
+        source: "manual",
+        reason: code ?? "UNKNOWN",
+      });
+      showErrorToast({ code: code ?? "ACCOUNT_SYNC_FAILED" });
     },
     onSuccess: () => {
       toast.success(t("title"), {

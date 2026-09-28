@@ -19,9 +19,20 @@ vi.mock("@blinkdisk/utils/error-toast", () => ({
 
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 
-it("handles browser-open failures and closes the sign-in dialog", async () => {
+beforeEach(() => {
+  vi.clearAllMocks();
   vi.stubGlobal("window", { electron: { auth: { open: mocks.open } } });
-  mocks.open.mockRejectedValueOnce(new Error("No default browser"));
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
+
+it("handles browser-open failures and closes the sign-in dialog", async () => {
+  const error = new Error("No default browser");
+  const logError = vi.spyOn(console, "error").mockImplementation(() => {});
+  mocks.open.mockRejectedValueOnce(error);
 
   useAuthDialog().openAuthDialog();
 
@@ -30,6 +41,26 @@ it("handles browser-open failures and closes the sign-in dialog", async () => {
     expect(mocks.showErrorToast).toHaveBeenCalledWith(
       expect.objectContaining({ code: "AUTH_OPEN_FAILED" }),
     );
+    expect(logError).toHaveBeenCalledWith(
+      "Failed to open sign-in browser",
+      error,
+    );
   });
-  vi.unstubAllGlobals();
+});
+
+it("ignores a stale launch failure after a later retry", async () => {
+  let rejectFirst: (error: Error) => void = () => {};
+  const first = new Promise<void>((_, reject) => {
+    rejectFirst = reject;
+  });
+  vi.spyOn(console, "error").mockImplementation(() => {});
+  mocks.open.mockReturnValueOnce(first).mockResolvedValueOnce(undefined);
+
+  useAuthDialog().openAuthDialog();
+  useAuthDialog().openAuthDialog();
+  rejectFirst(new Error("Earlier launch failed"));
+  await first.catch(() => undefined);
+
+  expect(useAuthDialog().isOpen).toBe(true);
+  expect(mocks.showErrorToast).not.toHaveBeenCalled();
 });
