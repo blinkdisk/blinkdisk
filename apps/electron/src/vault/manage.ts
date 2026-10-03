@@ -157,7 +157,14 @@ export async function connectVault({
   }
 }
 
-export async function initVaults() {
+let initPromise: Promise<void> = Promise.resolve();
+
+export function initVaults() {
+  initPromise = initPromise.catch(() => undefined).then(reconcileVaults);
+  return initPromise;
+}
+
+async function reconcileVaults() {
   const accounts = getAccountCache();
 
   const activeVaultIds: string[] = [];

@@ -77,6 +77,8 @@ export async function initAccountCollections(accountId: string) {
   const vault = await createVaultCollection(directory);
   const config = await createConfigCollection(directory);
 
+  collections[accountId] = { vault, config };
+
   const vaultName = `${accountId}/vault`;
   const configName = `${accountId}/config`;
 
@@ -84,7 +86,9 @@ export async function initAccountCollections(accountId: string) {
   bridge.addCollection(config, { name: configName });
 
   function onChange() {
-    initVaults();
+    initVaults().catch((error) =>
+      log.error("Failed to initialize vaults", error),
+    );
   }
 
   vault.on("added", onChange);
@@ -117,5 +121,5 @@ export async function initAccountCollections(accountId: string) {
     }
   }
 
-  collections[accountId] = { vault, config };
+  await initVaults();
 }

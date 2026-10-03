@@ -293,6 +293,34 @@ describe("vault management", () => {
     consoleError.mockRestore();
   });
 
+  it("starts each vault once when sync requests initialization during startup", async () => {
+    const ids = ["first"];
+    mocks.collections.local = vaultCollection(ids);
+    const server = {
+      address: "https://127.0.0.1/first",
+      password: "password-first",
+      controlPassword: "control-first",
+      process: { kill: vi.fn() },
+    };
+    let resolveStartup!: (value: typeof server) => void;
+    const startup = new Promise<typeof server>((resolve) => {
+      resolveStartup = resolve;
+    });
+    mocks.startVaultServer.mockReturnValueOnce(startup);
+
+    const firstInit = initVaults();
+    await Promise.resolve();
+    ids.push("second");
+    const secondInit = initVaults();
+
+    resolveStartup(server);
+    await Promise.all([firstInit, secondInit]);
+
+    expect(mocks.startVaultServer.mock.calls).toEqual([["first"], ["second"]]);
+    expect(Object.keys(vaults).sort()).toEqual(["first", "second"]);
+    expect(server.process.kill).not.toHaveBeenCalled();
+  });
+
   it("stops all running vaults and the validation vault", () => {
     const killA = vi.fn();
     const killB = vi.fn();
