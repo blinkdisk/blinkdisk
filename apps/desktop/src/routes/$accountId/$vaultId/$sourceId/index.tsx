@@ -9,8 +9,8 @@ import { Empty } from "@desktop/components/empty";
 import { SourcePreview } from "@desktop/components/sources/preview";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
+import { useBackupStartFeedback } from "@desktop/hooks/mutations/core/use-backup-start-feedback";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
-import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
 import { useSource } from "@desktop/hooks/use-source";
 import { policyTargetToSearch } from "@desktop/lib/policy-target";
@@ -37,7 +37,10 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
   const sourceTypeKey = isFileLikeSource(source?.type) ? "file" : "folder";
 
-  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
+  const { startBackup, isStartingBackup } = useBackupStartFeedback({
+    isRunning: source?.status === "PENDING" || source?.status === "UPLOADING",
+    source,
+  });
   const { mutate: cancelBackup, isPending: isCancellingBackup } =
     useCancelBackup();
 
@@ -94,7 +97,7 @@ function RouteComponent() {
                   onClick={() =>
                     source && startBackup({ path: source.source.path })
                   }
-                  loading={isStartingBackup || source?.status === "PENDING"}
+                  loading={isStartingBackup}
                 >
                   <CloudUploadIcon />
                   {t(`backup.${sourceTypeKey}`)}
@@ -132,7 +135,7 @@ function RouteComponent() {
             </div>
             <div className="mb-auto"></div>
           </div>
-        ) : source?.status === "PENDING" ? (
+        ) : isStartingBackup || source?.status === "PENDING" ? (
           <Empty
             icon={<ClockIcon />}
             title={t("empty.pending.title")}

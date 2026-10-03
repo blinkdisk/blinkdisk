@@ -12,7 +12,7 @@ import { cn } from "@blinkdisk/utils/class";
 import { PinBadge } from "@desktop/components/backups/pin-badge";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { LocalButton } from "@desktop/components/vaults/local-button";
-import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
+import { useBackupStartFeedback } from "@desktop/hooks/mutations/core/use-backup-start-feedback";
 import { useStartRestore } from "@desktop/hooks/mutations/core/use-start-restore";
 import type { DirectoryItem } from "@desktop/hooks/queries/core/use-directory";
 import { useDeleteBackupDialog } from "@desktop/hooks/state/use-delete-backup-dialog";
@@ -190,7 +190,10 @@ function FakeBackup() {
   const { t } = useAppTranslation("backup.list");
   const { data: folder } = useSource();
 
-  const { mutate: startBackup, isPending: isStartingBackup } = useStartBackup();
+  const { startBackup, isStartingBackup } = useBackupStartFeedback({
+    isRunning: folder?.status === "PENDING" || folder?.status === "UPLOADING",
+    source: folder,
+  });
 
   return (
     <div
@@ -234,10 +237,7 @@ function FakeBackup() {
           <LocalButton
             variant="secondary"
             onClick={() => folder && startBackup({ path: folder.source.path })}
-            loading={
-              isStartingBackup ||
-              ["UPLOADING", "PENDING"].includes(folder?.status || "")
-            }
+            loading={isStartingBackup}
           >
             <PlayIcon />
             {t("paused.button")}

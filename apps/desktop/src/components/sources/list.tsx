@@ -12,8 +12,8 @@ import {
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { SourcePreview } from "@desktop/components/sources/preview";
+import { useBackupStartFeedback } from "@desktop/hooks/mutations/core/use-backup-start-feedback";
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
-import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { useDeleteSourceDialog } from "@desktop/hooks/state/use-delete-source-dialog";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
@@ -70,7 +70,11 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
   const formattedTime = useRelativeTime(source?.lastSnapshot?.startTime);
   const sourceTypeKey = isFileLikeSource(source?.type) ? "file" : "folder";
 
-  const { mutate: startBackup } = useStartBackup({ profile });
+  const { startBackup, isStartingBackup } = useBackupStartFeedback({
+    profile,
+    isRunning: source?.status === "PENDING" || source?.status === "UPLOADING",
+    source,
+  });
   const { mutate: cancelBackup } = useCancelBackup({ profile });
   const { openDeleteSourceDialog } = useDeleteSourceDialog();
   const navigate = useNavigate({ from: "/$accountId/$vaultId" });
@@ -183,6 +187,7 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
                   ["IDLE", "REMOTE"].includes(source.status) ? (
                   <DropdownMenuItem
                     onClick={() => startBackup({ path: source.source.path })}
+                    disabled={isStartingBackup}
                   >
                     <CloudUploadIcon />
                     {t(`dropdown.backup.${sourceTypeKey}`)}
