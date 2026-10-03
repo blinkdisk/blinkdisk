@@ -16,7 +16,7 @@ import { useCallback, useState } from "react";
 
 export function AuthDialog() {
   const { t } = useAppTranslation("auth.dialog");
-  const { isOpen, setIsOpen } = useAuthDialog();
+  const { isOpen, setIsOpen, openAuthDialog } = useAuthDialog();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<"clipboardEmpty" | "invalidCode" | null>(
@@ -26,10 +26,6 @@ export function AuthDialog() {
   const reset = useCallback(() => {
     setError(null);
   }, []);
-
-  async function reopen() {
-    await window.electron.auth.open();
-  }
 
   async function handlePasteCode() {
     setError(null);
@@ -85,7 +81,7 @@ export function AuthDialog() {
         )}
 
         <DialogFooter className="mt-8">
-          <Button onClick={() => reopen()} variant="secondary">
+          <Button onClick={openAuthDialog} variant="secondary">
             {t("reopen")}
           </Button>
           <Button onClick={handlePasteCode} loading={loading}>

@@ -1,3 +1,5 @@
+import { CustomError } from "@blinkdisk/utils/error";
+import { showErrorToast } from "@blinkdisk/utils/error-toast";
 import { Store, useStore } from "@tanstack/react-store";
 import { useCallback } from "react";
 
@@ -6,6 +8,7 @@ const store = new Store<{
 }>({
   isOpen: false,
 });
+let authOpenAttempt = 0;
 
 export function useAuthDialog() {
   const { isOpen } = useStore(store);
@@ -18,10 +21,16 @@ export function useAuthDialog() {
   }, []);
 
   function openAuthDialog() {
+    const attempt = ++authOpenAttempt;
     store.setState(() => ({
       isOpen: true,
     }));
-    window.electron.auth.open();
+    void window.electron.auth.open().catch((error: unknown) => {
+      console.error("Failed to open sign-in browser", error);
+      if (attempt !== authOpenAttempt) return;
+      setIsOpen(false);
+      showErrorToast(new CustomError("AUTH_OPEN_FAILED"));
+    });
   }
 
   return {
