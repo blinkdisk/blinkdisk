@@ -28,6 +28,7 @@ import {
   connectVault,
   createVault,
   getVaultStatus,
+  retryVault,
 } from "@electron/vault/manage";
 import { validateVaultConfig } from "@electron/vault/validate";
 import { setProgressBar, window } from "@electron/window";
@@ -66,6 +67,7 @@ ipcMain.handle("vault.validate", (_, config) => validateVaultConfig(config));
 ipcMain.handle("vault.create", (_, config) => createVault(config));
 ipcMain.handle("vault.connect", (_, config) => connectVault(config));
 ipcMain.handle("vault.status", (_, payload) => getVaultStatus(payload));
+ipcMain.handle("vault.retry", (_, id: string) => retryVault(id));
 ipcMain.handle("vault.restore.single", (_, payload) => restoreSingle(payload));
 ipcMain.handle("vault.restore.multiple", (_, payload) =>
   restoreMultiple(payload),

@@ -91,10 +91,14 @@
     "title": "Starting vault",
     "description": "Your vault is being initialized. This usually takes a few seconds."
   },
+  "failed": {
+    "retry": "Retry"
+  },
   "status": {
     "RUNNING": "Active",
     "SETUP": "Setup required",
-    "STARTING": "Starting"
+    "STARTING": "Starting",
+    "FAILED": "Failed to start"
   },
   "providers": {
     "CLOUDBLINK": {
