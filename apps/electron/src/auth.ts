@@ -15,6 +15,7 @@ import {
 } from "@electron/encryption";
 import { type AccountStorageType, store } from "@electron/store";
 import { sendWindow } from "@electron/window";
+import { captureException } from "@sentry/electron/main";
 import {
   inferAdditionalFields,
   magicLinkClient,
@@ -139,24 +140,66 @@ export async function logout(accountId: string) {
 }
 
 export async function authenticateToken({ token }: { token: string }) {
-  const { data, error } = await authClient.authenticate({
-    token,
-  });
+  try {
+    let response: Awaited<ReturnType<typeof authClient.authenticate>>;
+    try {
+      response = await authClient.authenticate({ token });
+    } catch (error) {
+      if (error instanceof TypeError && /fetch|network/i.test(error.message))
+        throw new AuthTokenError("networkError", error.message);
+      throw error;
+    }
 
-  if (error) throw new Error(error.message);
+    const { data, error } = response;
 
-  const accountId = data?.user?.id;
-  if (!accountId) throw new Error("No account ID found");
+    if (error) {
+      const status = error.status;
+      throw new AuthTokenError(
+        status === 400 || status === 401 || status === 403 || status === 404
+          ? "invalidCode"
+          : "networkError",
+        error.message ?? "Authentication failed",
+      );
+    }
 
-  store.set(`accounts.${accountId}.active`, true);
+    const accountId = data?.user?.id;
+    if (!accountId) throw new Error("No account ID found");
 
-  await initAccountCollections(accountId);
+    await initAccountCollections(accountId);
 
-  sendWindow("auth.onAccountAdd", {
-    accountId,
-  });
+    if (!sendWindow("auth.onAccountAdd", { accountId }))
+      throw new Error("Account window unavailable");
+    store.set(`accounts.${accountId}.active`, true);
 
-  return data;
+    return data;
+  } catch (error) {
+    if (!(error instanceof AuthTokenError)) captureException(error);
+    throw error;
+  }
+}
+
+class AuthTokenError extends Error {
+  constructor(
+    readonly reason: "invalidCode" | "networkError",
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+export async function tryAuthenticateToken(
+  payload: Parameters<typeof authenticateToken>[0],
+) {
+  try {
+    await authenticateToken(payload);
+    return { ok: true } as const;
+  } catch (error) {
+    return {
+      ok: false,
+      reason:
+        error instanceof AuthTokenError ? error.reason : "unexpectedError",
+    } as const;
+  }
 }
 
 export function getAccountCookie(accountId: string) {
