@@ -90,13 +90,10 @@ import {
   createVault,
   getVaultStatus,
   initVaults,
+  retryVault,
   stopAllVaults,
   vaults,
 } from "@electron/vault/manage";
-
-function resetVaults() {
-  for (const id of Object.keys(vaults)) delete vaults[id];
-}
 
 function vaultCollection(ids: string[]) {
   return {
@@ -115,8 +112,8 @@ function vaultCollection(ids: string[]) {
 
 describe("vault management", () => {
   beforeEach(() => {
+    stopAllVaults();
     vi.clearAllMocks();
-    resetVaults();
     for (const key of Object.keys(mocks.collections))
       delete mocks.collections[key];
     mocks.fetchVault.mockResolvedValue({ success: true });
@@ -293,7 +290,7 @@ describe("vault management", () => {
     consoleError.mockRestore();
   });
 
-  it("logs a failed vault startup, continues other vaults, and retries later", async () => {
+  it("exposes a failed vault startup, continues other vaults, and retries on request", async () => {
     const error = new Error("Backup engine failed to start");
     const staleKill = vi.fn();
     vaults.stale = {
@@ -311,19 +308,96 @@ describe("vault management", () => {
       error,
     );
     expect(vaults.failed).toBeUndefined();
+    expect(getVaultStatus("failed")).toEqual({
+      status: "FAILED",
+      initTask: undefined,
+    });
     expect(vaults.healthy).toMatchObject({ id: "healthy", status: "STARTING" });
     expect(staleKill).toHaveBeenCalledOnce();
     expect(vaults.stale).toBeUndefined();
 
-    await expect(initVaults()).resolves.toBeUndefined();
+    await expect(retryVault("failed")).resolves.toBeUndefined();
 
     expect(vaults.failed).toMatchObject({ id: "failed", status: "STARTING" });
+    expect(getVaultStatus("failed")?.status).toBe("STARTING");
     expect(mocks.startVaultServer.mock.calls).toEqual([
       ["failed"],
       ["healthy"],
       ["failed"],
     ]);
     expect(mocks.logError).toHaveBeenCalledOnce();
+  });
+
+  it("shows retry progress and keeps another failed attempt recoverable", async () => {
+    mocks.collections.local = vaultCollection(["failed"]);
+    mocks.startVaultServer.mockRejectedValueOnce(
+      new Error("Engine unavailable"),
+    );
+    await initVaults();
+
+    let rejectStartup!: (error: Error) => void;
+    const startup = new Promise<
+      Awaited<ReturnType<typeof mocks.startVaultServer>>
+    >((_, reject) => {
+      rejectStartup = reject;
+    });
+    mocks.startVaultServer.mockReturnValueOnce(startup);
+
+    const retry = retryVault("failed");
+    await Promise.resolve();
+    expect(getVaultStatus("failed")?.status).toBe("STARTING");
+
+    rejectStartup(new Error("Engine still unavailable"));
+    await retry;
+    expect(getVaultStatus("failed")?.status).toBe("FAILED");
+
+    await retryVault("failed");
+    expect(vaults.failed).toMatchObject({ id: "failed", status: "STARTING" });
+    expect(mocks.startVaultServer).toHaveBeenCalledTimes(3);
+  });
+
+  it("retries only the requested failed vault", async () => {
+    mocks.collections.local = vaultCollection(["first", "second"]);
+    mocks.startVaultServer
+      .mockRejectedValueOnce(new Error("Engine unavailable"))
+      .mockRejectedValueOnce(new Error("Engine unavailable"));
+    await initVaults();
+
+    await retryVault("first");
+
+    expect(getVaultStatus("first")?.status).toBe("STARTING");
+    expect(getVaultStatus("second")?.status).toBe("FAILED");
+    expect(mocks.startVaultServer.mock.calls).toEqual([
+      ["first"],
+      ["second"],
+      ["first"],
+    ]);
+  });
+
+  it("clears failure states for removed vaults and during shutdown", async () => {
+    const ids = ["removed", "remaining"];
+    mocks.collections.local = vaultCollection(ids);
+    mocks.startVaultServer
+      .mockRejectedValueOnce(new Error("Engine unavailable"))
+      .mockRejectedValueOnce(new Error("Engine unavailable"));
+    await initVaults();
+    expect(getVaultStatus("removed")?.status).toBe("FAILED");
+    expect(getVaultStatus("remaining")?.status).toBe("FAILED");
+
+    ids.shift();
+    mocks.startVaultServer.mockRejectedValueOnce(
+      new Error("Engine unavailable"),
+    );
+    await initVaults();
+
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    expect(getVaultStatus("removed")).toBeNull();
+    expect(getVaultStatus("remaining")?.status).toBe("FAILED");
+    stopAllVaults();
+    expect(getVaultStatus("remaining")).toBeNull();
+    consoleError.mockRestore();
   });
 
   it("logs unexpected reconciliation errors and keeps the startup queue usable", async () => {

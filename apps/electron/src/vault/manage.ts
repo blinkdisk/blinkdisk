@@ -14,6 +14,7 @@ import type { VaultInstance } from "@electron/vault/types";
 import { validationVault } from "@electron/vault/validate";
 
 export const vaults: Record<string, VaultInstance> = {};
+const vaultStartupStates = new Map<string, "STARTING" | "FAILED">();
 
 function asError(error: unknown): Error & { code?: string } {
   if (error instanceof Error) return error;
@@ -159,14 +160,19 @@ export async function connectVault({
 
 let initPromise: Promise<void> = Promise.resolve();
 
-export function initVaults() {
+export function initVaults(vaultId?: string) {
   initPromise = initPromise
-    .then(reconcileVaults)
+    .then(() => reconcileVaults(vaultId))
     .catch((error) => log.error("Failed to initialize vaults", error));
   return initPromise;
 }
 
-async function reconcileVaults() {
+export function retryVault(id: string) {
+  if (vaultStartupStates.get(id) !== "FAILED") return Promise.resolve();
+  return initVaults(id);
+}
+
+async function reconcileVaults(vaultId?: string) {
   const accounts = getAccountCache();
 
   const activeVaultIds: string[] = [];
@@ -182,17 +188,24 @@ async function reconcileVaults() {
 
     for (const vault of vaultCache) {
       activeVaultIds.push(vault.id);
+      if (vaultId && vault.id !== vaultId) continue;
 
       // Already running
-      if (vaults[vault.id]) continue;
+      if (vaults[vault.id]) {
+        vaultStartupStates.delete(vault.id);
+        continue;
+      }
 
+      vaultStartupStates.set(vault.id, "STARTING");
       try {
         vaults[vault.id] = {
           id: vault.id,
           status: "STARTING",
           server: await startVaultServer(vault.id),
         };
+        vaultStartupStates.delete(vault.id);
       } catch (error) {
+        vaultStartupStates.set(vault.id, "FAILED");
         log.error(`Failed to start vault ${vault.id}`, error);
       }
     }
@@ -202,10 +215,15 @@ async function reconcileVaults() {
     if (activeVaultIds.includes(vaultId)) continue;
     stopVault(vaultId);
   }
+
+  for (const vaultId of vaultStartupStates.keys()) {
+    if (!activeVaultIds.includes(vaultId)) vaultStartupStates.delete(vaultId);
+  }
 }
 
 export function stopAllVaults() {
   Object.keys(vaults).forEach(stopVault);
+  vaultStartupStates.clear();
   if (validationVault) validationVault.server.process.kill();
 }
 
@@ -224,6 +242,10 @@ export function getVault(id: string) {
 }
 
 export function getVaultStatus(id: string) {
+  const startupStatus = vaultStartupStates.get(id);
+  if (!vaults[id] && startupStatus)
+    return { status: startupStatus, initTask: undefined };
+
   try {
     const vault = getVault(id);
     return { status: vault.status, initTask: vault.initTask };

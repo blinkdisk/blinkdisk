@@ -4,6 +4,7 @@ import { DeleteVaultDialog } from "@desktop/components/dialogs/delete-vault";
 import { EditExclusionDialog } from "@desktop/components/dialogs/edit-exclusion";
 import { TaskDialog } from "@desktop/components/dialogs/task";
 import { SourceDropzone } from "@desktop/components/sources/dropzone";
+import { VaultFailed } from "@desktop/components/vaults/failed";
 import { Setup } from "@desktop/components/vaults/setup";
 import { VaultStarting } from "@desktop/components/vaults/starting";
 import { useVault } from "@desktop/hooks/queries/use-vault";
@@ -44,6 +45,8 @@ function RouteComponent() {
 
       {status === "STARTING" ? (
         <VaultStarting />
+      ) : status === "FAILED" ? (
+        <VaultFailed />
       ) : vault && status === "SETUP" ? (
         <Setup />
       ) : (
