@@ -293,6 +293,56 @@ describe("vault management", () => {
     consoleError.mockRestore();
   });
 
+  it("logs a failed vault startup, continues other vaults, and retries later", async () => {
+    const error = new Error("Backup engine failed to start");
+    const staleKill = vi.fn();
+    vaults.stale = {
+      id: "stale",
+      status: "RUNNING",
+      server: { process: { kill: staleKill } },
+    } as never;
+    mocks.collections.local = vaultCollection(["failed", "healthy"]);
+    mocks.startVaultServer.mockRejectedValueOnce(error);
+
+    await expect(initVaults()).resolves.toBeUndefined();
+
+    expect(mocks.logError).toHaveBeenCalledWith(
+      "Failed to start vault failed",
+      error,
+    );
+    expect(vaults.failed).toBeUndefined();
+    expect(vaults.healthy).toMatchObject({ id: "healthy", status: "STARTING" });
+    expect(staleKill).toHaveBeenCalledOnce();
+    expect(vaults.stale).toBeUndefined();
+
+    await expect(initVaults()).resolves.toBeUndefined();
+
+    expect(vaults.failed).toMatchObject({ id: "failed", status: "STARTING" });
+    expect(mocks.startVaultServer.mock.calls).toEqual([
+      ["failed"],
+      ["healthy"],
+      ["failed"],
+    ]);
+    expect(mocks.logError).toHaveBeenCalledOnce();
+  });
+
+  it("logs unexpected reconciliation errors and keeps the startup queue usable", async () => {
+    const error = new Error("Collection lookup failed");
+    mocks.collections.local = vaultCollection(["healthy"]);
+    mocks.collections.local.vault.find.mockImplementationOnce(() => {
+      throw error;
+    });
+
+    await expect(initVaults()).resolves.toBeUndefined();
+    expect(mocks.logError).toHaveBeenCalledWith(
+      "Failed to initialize vaults",
+      error,
+    );
+
+    await expect(initVaults()).resolves.toBeUndefined();
+    expect(vaults.healthy).toMatchObject({ id: "healthy", status: "STARTING" });
+  });
+
   it("starts each vault once when sync requests initialization during startup", async () => {
     const ids = ["first"];
     mocks.collections.local = vaultCollection(ids);

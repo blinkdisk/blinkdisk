@@ -33,7 +33,7 @@ const mocks = vi.hoisted(() => {
       collection.items.push({ id: "synced-vault" });
       collection.listeners.get("added")?.();
     }),
-    initVaults: vi.fn(async () => undefined),
+    initVaults: vi.fn(async (): Promise<void> => undefined),
     getAccountCache: vi.fn(() => []),
     getLastSync: vi.fn((): string | null => null),
     addBridgeCollection: vi.fn(),
@@ -60,17 +60,32 @@ vi.mock("@electron/vault/manage", () => ({ initVaults: mocks.initVaults }));
 vi.mock("@signaldb/fs", () => ({ default: vi.fn() }));
 vi.mock("electron", () => ({ ipcMain: {} }));
 
-import { collections, initAccountCollections } from "@electron/db";
+let collections: typeof import("@electron/db").collections;
+let initAccountCollections: typeof import("@electron/db").initAccountCollections;
+
+function deferred() {
+  let resolve!: () => void;
+  const promise = new Promise<void>((res) => {
+    resolve = res;
+  });
+  return { promise, resolve };
+}
 
 describe("account collection initialization", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    vi.resetModules();
     vi.clearAllMocks();
     mocks.initialVaults.length = 0;
     mocks.syncCollections.clear();
     mocks.getLastSync.mockReturnValue(null);
     mocks.initVaults.mockResolvedValue(undefined);
-    for (const accountId of Object.keys(collections))
-      delete collections[accountId];
+    mocks.sync.mockImplementation(async (name: string) => {
+      const collection = mocks.syncCollections.get(name);
+      if (collection?.name !== "vault") return;
+      collection.items.push({ id: "synced-vault" });
+      collection.listeners.get("added")?.();
+    });
+    ({ collections, initAccountCollections } = await import("@electron/db"));
   });
 
   it("makes first-login vaults available to initialization during sync events", async () => {
@@ -86,19 +101,25 @@ describe("account collection initialization", () => {
 
     await initAccountCollections("acct_1");
 
-    expect(initializedVaults).toContainEqual(["synced-vault"]);
-    expect(initializedVaults.every((ids) => ids.includes("synced-vault"))).toBe(
-      true,
-    );
+    expect(initializedVaults).toEqual([["synced-vault"], ["synced-vault"]]);
   });
 
   it("initializes cached vaults without requiring a collection change", async () => {
     mocks.initialVaults.push({ id: "cached-vault" });
     mocks.getLastSync.mockReturnValue("2026-01-01T00:00:00.000Z");
+    const initializedVaults: string[][] = [];
+    mocks.initVaults.mockImplementation(async () => {
+      initializedVaults.push(
+        collections.acct_1?.vault
+          .find()
+          .fetch()
+          .map((vault) => vault.id) ?? [],
+      );
+    });
 
     await initAccountCollections("acct_1");
 
-    expect(mocks.initVaults).toHaveBeenCalled();
+    expect(initializedVaults).toEqual([["cached-vault"]]);
     expect(mocks.sync).not.toHaveBeenCalled();
   });
 
@@ -108,5 +129,76 @@ describe("account collection initialization", () => {
 
     expect(mocks.addBridgeCollection).toHaveBeenCalledTimes(2);
     expect(mocks.addCollection).not.toHaveBeenCalled();
+  });
+
+  it("waits for shared sync and reconciliation when account setup overlaps", async () => {
+    const sync = deferred();
+    const reconciliation = deferred();
+    mocks.sync.mockImplementation(async () => sync.promise);
+    mocks.initVaults.mockReturnValue(reconciliation.promise);
+
+    const first = initAccountCollections("acct_1");
+    const second = initAccountCollections("acct_1");
+    await vi.waitFor(() => expect(mocks.sync).toHaveBeenCalledTimes(2));
+
+    const third = initAccountCollections("acct_1");
+    const completed = vi.fn();
+    const callers = [first, second, third].map((promise) =>
+      promise.then(completed),
+    );
+    await Promise.resolve();
+    expect(completed).not.toHaveBeenCalled();
+
+    sync.resolve();
+    await vi.waitFor(() => expect(mocks.initVaults).toHaveBeenCalledOnce());
+    expect(completed).not.toHaveBeenCalled();
+
+    reconciliation.resolve();
+    await Promise.all(callers);
+
+    expect(completed).toHaveBeenCalledTimes(3);
+    expect(mocks.addBridgeCollection).toHaveBeenCalledTimes(2);
+    expect(mocks.addCollection).toHaveBeenCalledTimes(2);
+    expect(mocks.sync).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries a failed initial sync without duplicating registered collections", async () => {
+    const error = new Error("Initial vault sync failed");
+    mocks.sync.mockRejectedValueOnce(error);
+
+    await expect(initAccountCollections("acct_1")).rejects.toThrow(error);
+    const registered = collections.acct_1;
+    mocks.getLastSync.mockReturnValue("2026-01-01T00:00:00.000Z");
+
+    await expect(initAccountCollections("acct_1")).resolves.toBeUndefined();
+
+    expect(collections.acct_1).toBe(registered);
+    expect(mocks.addBridgeCollection).toHaveBeenCalledTimes(2);
+    expect(mocks.addCollection).toHaveBeenCalledTimes(2);
+    expect(mocks.sync.mock.calls).toEqual([
+      ["acct_1/vault"],
+      ["acct_1/config"],
+      ["acct_1/vault"],
+      ["acct_1/config"],
+    ]);
+    expect(mocks.initVaults).toHaveBeenCalledTimes(2);
+  });
+
+  it("waits for both syncs to settle before allowing a failed setup to retry", async () => {
+    const sync = deferred();
+    const error = new Error("Initial vault sync failed");
+    mocks.sync.mockRejectedValueOnce(error).mockReturnValueOnce(sync.promise);
+    const first = initAccountCollections("acct_1");
+    const expectation = expect(first).rejects.toThrow(error);
+    await vi.waitFor(() => expect(mocks.sync).toHaveBeenCalledTimes(2));
+
+    const second = initAccountCollections("acct_1");
+    const secondExpectation = expect(second).rejects.toThrow(error);
+    expect(mocks.sync).toHaveBeenCalledTimes(2);
+
+    sync.resolve();
+    await Promise.all([expectation, secondExpectation]);
+    await expect(initAccountCollections("acct_1")).resolves.toBeUndefined();
+    expect(mocks.sync).toHaveBeenCalledTimes(4);
   });
 });

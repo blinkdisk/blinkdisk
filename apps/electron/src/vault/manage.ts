@@ -160,7 +160,9 @@ export async function connectVault({
 let initPromise: Promise<void> = Promise.resolve();
 
 export function initVaults() {
-  initPromise = initPromise.catch(() => undefined).then(reconcileVaults);
+  initPromise = initPromise
+    .then(reconcileVaults)
+    .catch((error) => log.error("Failed to initialize vaults", error));
   return initPromise;
 }
 
@@ -184,11 +186,15 @@ async function reconcileVaults() {
       // Already running
       if (vaults[vault.id]) continue;
 
-      vaults[vault.id] = {
-        id: vault.id,
-        status: "STARTING",
-        server: await startVaultServer(vault.id),
-      };
+      try {
+        vaults[vault.id] = {
+          id: vault.id,
+          status: "STARTING",
+          server: await startVaultServer(vault.id),
+        };
+      } catch (error) {
+        log.error(`Failed to start vault ${vault.id}`, error);
+      }
     }
   }
 
