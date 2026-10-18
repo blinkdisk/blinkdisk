@@ -166,6 +166,9 @@ describe("toExclusionPath", () => {
     ["C:\\Users\\other\\Temp", windowsRoot, "OUTSIDE_ROOT"],
     ["C:\\Users\\you\\", windowsRoot, "IS_ROOT"],
     ["AppData\\..\\..\\Temp", windowsRoot, "INVALID"],
+    ["C:Users\\foo", windowsRoot, "INVALID"],
+    ["C:foo", windowsRoot, "INVALID"],
+    ["AppData\\a:b", windowsRoot, "INVALID"],
     ["/etc/hosts", "/home/you", "OUTSIDE_ROOT"],
     ["/home/youtube/x", "/home/you", "OUTSIDE_ROOT"],
     ["C:\\Users\\you\\Temp", undefined, "NEEDS_ROOT"],
@@ -236,6 +239,13 @@ describe("getBrokenExclusionRule", () => {
     expect(
       getBrokenExclusionRule("C:\\Users\\you\\..\\x", "C:\\Users\\you"),
     ).toEqual({ input: "C:\\Users\\you\\..\\x", error: "INVALID" });
+  });
+
+  it("does not fix drive-relative Windows paths", () => {
+    expect(getBrokenExclusionRule("C:Users\\foo", "C:\\Users\\you")).toEqual({
+      input: "C:Users\\foo",
+      error: "INVALID",
+    });
   });
 
   it("does not convert Windows-style rules on POSIX roots", () => {

@@ -148,6 +148,12 @@ export function toExclusionPath(
 
   if (relative.length === 0) return { error: "EMPTY" };
 
+  // Windows names can't contain ":", so this is a drive-relative path like
+  // `C:Users\foo`, which can't be resolved against the backed-up folder.
+  if (windows && relative.some((segment) => segment.includes(":"))) {
+    return { error: "INVALID" };
+  }
+
   return { path: `/${relative.join("/")}` };
 }
 

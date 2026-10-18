@@ -140,7 +140,7 @@
           "preview": "Excludes {{path}} in this folder.",
           "errors": {
             "EMPTY": "Enter a path.",
-            "INVALID": "Enter a path without \"..\".",
+            "INVALID": "This path can't be used. Paths with \"..\" or drive-relative paths like C:folder aren't supported.",
             "IS_ROOT": "This is the backed-up folder itself. Choose something inside it.",
             "OUTSIDE_ROOT": "This path isn't inside {{root}}.",
             "NEEDS_ROOT": "Full paths only work on a folder's own policy. Enter a path relative to the backed-up folder instead."
