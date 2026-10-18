@@ -10,19 +10,42 @@ import {
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
 import { Loader } from "@blinkdisk/ui/loader";
+import { isAuthorizationCode } from "@desktop/components/dialogs/auth/code";
+import { useAccountList } from "@desktop/hooks/queries/use-account-list";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { AlertCircleIcon, ClipboardPasteIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { usePostHog } from "posthog-js/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+type AuthError =
+  | "clipboardEmpty"
+  | "invalidClipboard"
+  | "invalidCode"
+  | "networkError"
+  | "unexpectedError";
 
 export function AuthDialog() {
   const { t } = useAppTranslation("auth.dialog");
   const { isOpen, browserFailed, setIsOpen, openAuthDialog } = useAuthDialog();
+  const { accounts } = useAccountList();
+  const posthog = usePostHog();
+  const previousAccountIds = useRef(
+    new Set(accounts.map((account) => account.id)),
+  );
 
   const [loading, setLoading] = useState(false);
-  const [codeError, setCodeError] = useState<
-    "clipboardEmpty" | "invalidCode" | null
-  >(null);
+  const [codeError, setCodeError] = useState<AuthError | null>(null);
   const error = codeError ?? (browserFailed ? "browserFailed" : null);
+
+  useEffect(() => {
+    if (
+      isOpen &&
+      accounts.some((account) => !previousAccountIds.current.has(account.id))
+    )
+      setIsOpen(false);
+
+    previousAccountIds.current = new Set(accounts.map((account) => account.id));
+  }, [accounts, isOpen, setIsOpen]);
 
   const reset = useCallback(() => {
     setCodeError(null);
@@ -37,22 +60,38 @@ export function AuthDialog() {
     setCodeError(null);
     setLoading(true);
 
+    let reason: AuthError | null = null;
+    let failure: unknown;
+
     try {
       const text = await window.electron.clipboard.read();
       const token = text.trim();
 
       if (!token) {
-        setCodeError("clipboardEmpty");
-        setLoading(false);
-        return;
+        reason = "clipboardEmpty";
+      } else if (!isAuthorizationCode(token)) {
+        reason = "invalidClipboard";
+        failure = new Error("Clipboard does not contain an authorization code");
+      } else {
+        const result = await window.electron.auth.token({ token });
+        if (result.ok) setIsOpen(false);
+        else {
+          reason = result.reason;
+          failure = new Error(`Desktop sign-in failed: ${reason}`);
+        }
       }
+    } catch (error) {
+      failure = error;
+      reason = "unexpectedError";
+    } finally {
+      setLoading(false);
+    }
 
-      await window.electron.auth.token({ token });
-      setIsOpen(false);
-      setLoading(false);
-    } catch {
-      setCodeError("invalidCode");
-      setLoading(false);
+    if (reason) {
+      setCodeError(reason);
+      posthog.capture("desktop_login_failed", { reason, method: "paste" });
+      if (reason === "unexpectedError")
+        posthog.captureException(failure, { reason, method: "paste" });
     }
   }
 
