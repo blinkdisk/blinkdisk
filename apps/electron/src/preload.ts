@@ -75,6 +75,9 @@ function listener<Payload>(event: string) {
 }
 
 const api = {
+  app: {
+    version: () => ipcRenderer.invoke("app.version") as Promise<string>,
+  },
   window: {
     reload: () => ipcRenderer.send("window.reload"),
     console: () => ipcRenderer.send("window.console"),

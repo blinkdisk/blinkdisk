@@ -34,6 +34,8 @@ import { validateVaultConfig } from "@electron/vault/validate";
 import { setProgressBar, window } from "@electron/window";
 import { app, dialog, ipcMain, shell } from "electron";
 
+ipcMain.handle("app.version", () => app.getVersion());
+
 ipcMain.on("window.console", () => window?.webContents.toggleDevTools());
 ipcMain.on("window.reload", () => window?.reload());
 ipcMain.on("window.setProgressBar", (_, progress: number) =>
