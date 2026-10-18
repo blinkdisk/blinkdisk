@@ -26,7 +26,7 @@ export default function DeduplicationAnimation() {
           <div className="flex flex-col">
             <p className="text-base font-semibold">Backup</p>
             <p className="text-muted-foreground text-xs">
-              {files.toLocaleString()} Files
+              {files.toLocaleString("en-US")} Files
             </p>
           </div>
         </div>

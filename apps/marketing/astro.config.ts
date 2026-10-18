@@ -149,7 +149,6 @@ export default defineConfig({
       org: process.env.SENTRY_ORGANIZATION,
       authToken: process.env.SENTRY_AUTH_TOKEN,
       sourcemaps: {
-        // Remove to reduce bundle size
         filesToDeleteAfterUpload: [
           "./**/*.map",
           ".*/**/public/**/*.map",
@@ -200,7 +199,6 @@ export default defineConfig({
   vite: {
     build: {
       target: "esnext",
-      // Set to hidden to reduce bundle size
       sourcemap: "hidden",
     },
     plugins: [

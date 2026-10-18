@@ -41,6 +41,9 @@ jobs:
           SENTRY_MARKETING_DSN: ${{ vars.SENTRY_MARKETING_DSN }}
         run: pnpm --filter marketing build
 
+      - name: Remove client source maps from deploy assets
+        run: find apps/marketing/dist/client -type f -name '*.map' -delete
+
       - name: Resolve existing session namespace
         working-directory: apps/marketing
         env:
