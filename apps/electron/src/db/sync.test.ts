@@ -22,6 +22,9 @@ const mocks = vi.hoisted(() => {
     createFilesystemAdapter: vi.fn((path: string) => ({ path })),
     globalAccountDirectory: vi.fn(() => "/accounts"),
     logWarn: vi.fn((_message: unknown) => undefined),
+    logError: vi.fn(
+      (_message: unknown, _error: unknown, _details: unknown) => undefined,
+    ),
     trpc: {
       vault: {
         pull: { query: vi.fn() },
@@ -52,6 +55,8 @@ vi.mock("@electron/path", () => ({
 vi.mock("@electron/log", () => ({
   log: {
     warn: (message: unknown) => mocks.logWarn(message),
+    error: (message: unknown, error: unknown, details: unknown) =>
+      mocks.logError(message, error, details),
   },
 }));
 
@@ -167,6 +172,26 @@ describe("electron sync manager", () => {
 
     expect(syncManager.sync).toHaveBeenCalledWith("acct_1/vault");
     expect(syncManager.sync).toHaveBeenCalledWith("acct_1/config");
+  });
+
+  it("logs the real cause but returns only a safe code across IPC", async () => {
+    const networkCause = new Error("fetch failed");
+    const cause = Object.assign(
+      new Error("TRPCClientError", { cause: networkCause }),
+      {
+        data: { code: "INTERNAL_SERVER_ERROR" },
+      },
+    );
+    syncManager.sync = vi
+      .fn()
+      .mockRejectedValueOnce(cause)
+      .mockResolvedValueOnce([]);
+
+    await expect(syncAccount("acct_1")).rejects.toThrow("ACCOUNT_SYNC_FAILED");
+    expect(mocks.logError).toHaveBeenCalledWith("Account sync failed", cause, {
+      code: "INTERNAL_SERVER_ERROR",
+      cause: networkCause,
+    });
   });
 
   it("returns the latest matching sync operation time", () => {
