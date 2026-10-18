@@ -56,8 +56,7 @@ jobs:
           CERTUM_USERNAME: ${{ secrets.CERTUM_USERNAME }}
         run: |
           echo "Installing SimplySign desktop"
-          chmod +x ./.github/scripts/install-simplysign.sh
-          ./.github/scripts/install-simplysign.sh
+          powershell -NoProfile -ExecutionPolicy Bypass -File "./.github/scripts/install-simplysign.ps1"
 
           echo "Configuring SimplySign desktop"
           powershell -ExecutionPolicy Bypass -File "./.github/scripts/configure-simplysign.ps1"
