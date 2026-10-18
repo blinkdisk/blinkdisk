@@ -2,6 +2,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ZConfigType } from "@blinkdisk/schemas/config";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
+import {
+  ACCOUNT_SYNC_FAILED_MARKER,
+  getErrorCode,
+} from "@blinkdisk/utils/error";
 import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
 import { globalAccountDirectory } from "@electron/path";
@@ -92,10 +96,18 @@ export const syncManager = new SyncManager({
 });
 
 export async function syncAccount(accountId: string) {
-  return await Promise.all([
-    syncManager.sync(`${accountId}/vault`),
-    syncManager.sync(`${accountId}/config`),
-  ]);
+  try {
+    return await Promise.all([
+      syncManager.sync(`${accountId}/vault`),
+      syncManager.sync(`${accountId}/config`),
+    ]);
+  } catch (error) {
+    log.error("Account sync failed", error, {
+      code: getErrorCode(error),
+      cause: error instanceof Error ? error.cause : undefined,
+    });
+    throw new Error(ACCOUNT_SYNC_FAILED_MARKER);
+  }
 }
 
 export function getLastSync(collectionName: string) {

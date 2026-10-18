@@ -12,6 +12,7 @@ import {
 import { useUpdateAccountForm } from "@desktop/hooks/forms/use-update-account-form";
 import { useUpdatePreferencesForm } from "@desktop/hooks/forms/use-update-preferences-form";
 import { useAccountList } from "@desktop/hooks/queries/use-account-list";
+import { useAppVersion } from "@desktop/hooks/queries/use-app-version";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useSignOutDialog } from "@desktop/hooks/state/use-sign-out-dialog";
 import { useAccountId } from "@desktop/hooks/use-account-id";
@@ -40,6 +41,7 @@ function RouteComponent() {
   const { t } = useAppTranslation("settings.account");
   const { isOnlineAccount } = useAccountId();
   const { accounts } = useAccountList();
+  const { data: version } = useAppVersion();
   const hasAccounts = accounts.length > 0;
 
   return (
@@ -55,6 +57,11 @@ function RouteComponent() {
         {!isOnlineAccount && !hasAccounts ? <LocalAccountSection /> : null}
         <PreferencesSettingsSection />
       </div>
+      {version ? (
+        <footer className="text-muted-foreground/70 mt-auto pt-12 text-center text-xs tabular-nums">
+          {t("version", { version })}
+        </footer>
+      ) : null}
     </div>
   );
 }

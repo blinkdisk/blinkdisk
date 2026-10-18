@@ -76,11 +76,13 @@ export function VaultCard({ vault }: VaultCardProps) {
 
 type VaultStatusIndicatorProps = {
   loading: boolean;
-  status?: "SETUP" | "STARTING" | "RUNNING";
+  status?: "SETUP" | "STARTING" | "RUNNING" | "FAILED";
   label: string;
 };
 
-function getVaultStatusTextClass(status?: "SETUP" | "STARTING" | "RUNNING") {
+function getVaultStatusTextClass(
+  status?: "SETUP" | "STARTING" | "RUNNING" | "FAILED",
+) {
   switch (status) {
     case "RUNNING":
       return "text-green-700 dark:text-green-500/85";
@@ -88,6 +90,8 @@ function getVaultStatusTextClass(status?: "SETUP" | "STARTING" | "RUNNING") {
       return "text-neutral-500 dark:text-neutral-400";
     case "SETUP":
       return "text-amber-600 dark:text-amber-300";
+    case "FAILED":
+      return "text-destructive";
     default:
       return "text-neutral-500 dark:text-neutral-400";
   }
@@ -113,6 +117,7 @@ function VaultStatusIndicator({
           "bg-neutral-400/90 shadow-[0_0_5px_rgb(115_115_115_/_0.55)] dark:bg-neutral-400/90",
         status === "SETUP" &&
           "bg-amber-400/90 shadow-[0_0_5px_rgb(245_158_11_/_0.55)] dark:bg-amber-300/90",
+        status === "FAILED" && "bg-destructive",
         !status && "bg-neutral-400/80 dark:bg-neutral-500/80",
         pending && "animate-pulse",
       )}

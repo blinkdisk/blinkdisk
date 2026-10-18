@@ -43,6 +43,7 @@ import type {
   createVault,
   getVault,
   getVaultStatus,
+  retryVault,
 } from "@electron/vault/manage";
 import type { validateVaultConfig } from "@electron/vault/validate";
 import {
@@ -74,6 +75,9 @@ function listener<Payload>(event: string) {
 }
 
 const api = {
+  app: {
+    version: () => ipcRenderer.invoke("app.version") as Promise<string>,
+  },
   window: {
     reload: () => ipcRenderer.send("window.reload"),
     console: () => ipcRenderer.send("window.console"),
@@ -161,6 +165,8 @@ const api = {
       ipcRenderer.invoke("vault.status", payload) as Promise<
         ReturnType<typeof getVaultStatus>
       >,
+    retry: (id: Parameters<typeof retryVault>[0]) =>
+      ipcRenderer.invoke("vault.retry", id) as ReturnType<typeof retryVault>,
     config: {
       encrypt: (payload: Parameters<typeof encryptVaultConfig>[0]) =>
         ipcRenderer.invoke("vault.config.encrypt", payload),

@@ -74,5 +74,9 @@
   "VAULT_SERVER_UNAVAILABLE": {
     "title": "Backup engine did not start",
     "description": "The backup engine did not start in time. Please try again or restart the app."
+  },
+  "ACCOUNT_SYNC_FAILED": {
+    "title": "Could not sync your account",
+    "description": "Please try again. If this keeps happening, contact support@blinkdisk.com."
   }
 }

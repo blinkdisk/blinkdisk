@@ -1,6 +1,7 @@
 {
   "account": {
     "title": "Account",
+    "version": "BlinkDisk v{{version}}",
     "profile": {
       "fullName": "Full name",
       "firstName": {

@@ -26,7 +26,7 @@ type AuthError =
 
 export function AuthDialog() {
   const { t } = useAppTranslation("auth.dialog");
-  const { isOpen, setIsOpen } = useAuthDialog();
+  const { isOpen, browserFailed, setIsOpen, openAuthDialog } = useAuthDialog();
   const { accounts } = useAccountList();
   const posthog = usePostHog();
   const previousAccountIds = useRef(
@@ -34,7 +34,8 @@ export function AuthDialog() {
   );
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<AuthError | null>(null);
+  const [codeError, setCodeError] = useState<AuthError | null>(null);
+  const error = codeError ?? (browserFailed ? "browserFailed" : null);
 
   useEffect(() => {
     if (
@@ -47,15 +48,16 @@ export function AuthDialog() {
   }, [accounts, isOpen, setIsOpen]);
 
   const reset = useCallback(() => {
-    setError(null);
+    setCodeError(null);
   }, []);
 
-  async function reopen() {
-    await window.electron.auth.open();
+  function reopen() {
+    setCodeError(null);
+    void openAuthDialog();
   }
 
   async function handlePasteCode() {
-    setError(null);
+    setCodeError(null);
     setLoading(true);
 
     let reason: AuthError | null = null;
@@ -86,7 +88,7 @@ export function AuthDialog() {
     }
 
     if (reason) {
-      setError(reason);
+      setCodeError(reason);
       posthog.capture("desktop_login_failed", { reason, method: "paste" });
       if (reason === "unexpectedError")
         posthog.captureException(failure, { reason, method: "paste" });
@@ -103,15 +105,17 @@ export function AuthDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-8 flex gap-4">
-          <Loader size={1.75} className="min-w-5" />
-          <div className="space-y-1">
-            <p className="text-base font-medium">{t("waiting.title")}</p>
-            <p className="text-muted-foreground text-xs">
-              {t("waiting.description")}
-            </p>
+        {!browserFailed && (
+          <div className="mt-8 flex gap-4">
+            <Loader size={1.75} className="min-w-5" />
+            <div className="space-y-1">
+              <p className="text-base font-medium">{t("waiting.title")}</p>
+              <p className="text-muted-foreground text-xs">
+                {t("waiting.description")}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         {error && (
           <Alert variant="destructive" className="mt-6">
@@ -124,7 +128,7 @@ export function AuthDialog() {
         )}
 
         <DialogFooter className="mt-8">
-          <Button onClick={() => reopen()} variant="secondary">
+          <Button onClick={reopen} variant="secondary">
             {t("reopen")}
           </Button>
           <Button onClick={handlePasteCode} loading={loading}>

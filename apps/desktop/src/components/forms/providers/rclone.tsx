@@ -31,7 +31,11 @@ export function RcloneForm({ action, config, onSubmit }: RcloneFormProps) {
       <form.AppField name="remotePath">
         {(field) => (
           <field.Text
-            label={{ title: t("remotePath.label"), required: true }}
+            label={{
+              title: t("remotePath.label"),
+              description: t("remotePath.description"),
+              required: true,
+            }}
             placeholder={t("remotePath.placeholder")}
           />
         )}

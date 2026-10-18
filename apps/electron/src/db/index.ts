@@ -68,14 +68,53 @@ export const collections: Record<
   }
 > = {};
 
-export async function initAccountCollections(accountId: string) {
-  if (collections[accountId]) return;
+const accountInitializations = new Map<string, Promise<void>>();
+const accountsPendingSync = new Set<string>();
 
+export function initAccountCollections(accountId: string) {
+  const existing = accountInitializations.get(accountId);
+  if (existing) return existing;
+
+  const initialization = initializeAccountCollections(accountId).catch(
+    (error) => {
+      accountInitializations.delete(accountId);
+      throw error;
+    },
+  );
+  accountInitializations.set(accountId, initialization);
+  return initialization;
+}
+
+async function initializeAccountCollections(accountId: string) {
+  const vaultName = `${accountId}/vault`;
+  const configName = `${accountId}/config`;
+
+  if (!collections[accountId]) await registerAccountCollections(accountId);
+
+  if (accountsPendingSync.has(accountId)) {
+    log.info(accountId, "not synced yet, syncing...");
+
+    const results = await Promise.allSettled([
+      syncManager.sync(vaultName),
+      syncManager.sync(configName),
+    ]);
+    const failure = results.find((result) => result.status === "rejected");
+    if (failure?.status === "rejected") throw failure.reason;
+
+    accountsPendingSync.delete(accountId);
+  }
+
+  await initVaults();
+}
+
+async function registerAccountCollections(accountId: string) {
   const directory = join(globalAccountDirectory(), accountId);
   if (!existsSync(directory)) mkdirSync(directory, { recursive: true });
 
   const vault = await createVaultCollection(directory);
   const config = await createConfigCollection(directory);
+
+  collections[accountId] = { vault, config };
 
   const vaultName = `${accountId}/vault`;
   const configName = `${accountId}/config`;
@@ -93,6 +132,8 @@ export async function initAccountCollections(accountId: string) {
   vault.on("removed", onChange);
 
   if (accountId !== LOCAL_ACCOUNT_ID) {
+    if (!getLastSync(vaultName)) accountsPendingSync.add(accountId);
+
     syncManager.addCollection(vault, {
       name: vaultName,
       type: "VAULT",
@@ -104,18 +145,5 @@ export async function initAccountCollections(accountId: string) {
       type: "CONFIG",
       accountId,
     });
-
-    const lastSync = getLastSync(vaultName);
-
-    if (!lastSync) {
-      log.info(accountId, "not synced yet, syncing...");
-
-      await Promise.all([
-        syncManager.sync(vaultName),
-        syncManager.sync(configName),
-      ]);
-    }
   }
-
-  collections[accountId] = { vault, config };
 }

@@ -153,6 +153,11 @@ export const ZExclusionForm = z.discriminatedUnion("type", [
     type: z.literal("EXTENSION"),
     extension: z.string().min(1),
   }),
+  z.object({
+    type: z.literal("PATH"),
+    path: z.string().min(1),
+    foldersOnly: z.boolean().optional(),
+  }),
 ]);
 
 export type ZExclusionFormType = z.infer<typeof ZExclusionForm>;
