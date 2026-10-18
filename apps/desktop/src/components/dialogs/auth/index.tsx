@@ -88,7 +88,7 @@ export function AuthDialog() {
     if (reason) {
       setError(reason);
       posthog.capture("desktop_login_failed", { reason, method: "paste" });
-      if (reason !== "clipboardEmpty")
+      if (reason === "unexpectedError")
         posthog.captureException(failure, { reason, method: "paste" });
     }
   }
