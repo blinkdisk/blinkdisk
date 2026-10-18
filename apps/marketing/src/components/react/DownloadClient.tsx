@@ -1,7 +1,6 @@
 import { useClipboard } from "@blinkdisk/hooks/use-clipboard";
 import { Tabs, TabsList, TabsTrigger } from "@blinkdisk/ui/tabs";
 import { useCalendar } from "@marketing/hooks/use-calendar";
-import { useLogsnag } from "@marketing/hooks/use-logsnag";
 import { usePlatform } from "@marketing/hooks/use-platform";
 import type { Architecture } from "@marketing/utils/architecture";
 import { getArchitectureFromCpu } from "@marketing/utils/architecture";
@@ -35,7 +34,6 @@ declare global {
 type Extension = "AppImage" | "deb" | "rpm";
 
 export default function DownloadClient() {
-  const { logsnag } = useLogsnag();
   const { copy } = useClipboard();
   const { addToCalendar } = useCalendar();
   const { platform: detectedPlatform, cpu, isMobile } = usePlatform();
@@ -80,37 +78,26 @@ export default function DownloadClient() {
 
   const onDownloadStart = useCallback(
     (file: string) => {
+      document.getElementById("download-page")?.dispatchEvent(
+        new CustomEvent("download-started", {
+          detail: { file, properties: { platform, architecture, extension } },
+        }),
+      );
+
       const confetti = new Confetti();
 
       confetti.addConfetti({
         confettiNumber: 100,
       });
-
-      const logged = window.localStorage.getItem("download.logged");
-      if (!logged) {
-        localStorage.setItem("download.logged", "true");
-
-        logsnag({
-          channel: "downloads",
-          title: "Download started",
-          description: `${file} just got downloaded.`,
-          icon: "⬇️",
-        });
-
-        if (window.posthog)
-          window.posthog.capture("download_started", {
-            file,
-            platform,
-            architecture,
-            extension,
-          });
-      }
     },
-    [logsnag, platform, architecture, extension],
+    [platform, architecture, extension],
   );
 
   useEffect(() => {
     if (autoDownloadFile === null) return;
+    const page = document.getElementById("download-page");
+    if (!page || page.dataset.downloadStarted) return;
+    page.dataset.downloadStarted = "true";
 
     const a = document.createElement("a");
 
@@ -120,6 +107,7 @@ export default function DownloadClient() {
 
     document.body.appendChild(a);
     a.click();
+    a.remove();
 
     onDownloadStart(autoDownloadFile);
   }, [onDownloadStart, autoDownloadFile]);
