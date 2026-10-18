@@ -19,10 +19,10 @@ export function createBackupStartLatch() {
 
   return {
     tryStart(sources?: BackupStartSource[]) {
-      if (targets !== null) return false;
+      if (targets !== null || !sources?.length) return false;
 
       targets = new Map(
-        sources?.map((source) => [
+        sources.map((source) => [
           source.id,
           { snapshotId: source.lastSnapshot?.id, confirmed: false },
         ]),
@@ -61,7 +61,7 @@ export function createBackupStartLatch() {
   };
 }
 
-export function createBackupStartCoordinator() {
+export function createBackupStartCoordinator(onRelease?: () => void) {
   const latch = createBackupStartLatch();
   const store = new Store(false);
   let watchdog: ReturnType<typeof setTimeout> | undefined;
@@ -71,6 +71,7 @@ export function createBackupStartCoordinator() {
     watchdog = undefined;
     latch.release();
     store.setState(() => false);
+    onRelease?.();
   };
 
   return {
@@ -84,6 +85,7 @@ export function createBackupStartCoordinator() {
       if (latch.observe(sources)) release();
     },
     settle() {
+      if (!store.state) return;
       if (latch.settle()) {
         release();
       } else {
@@ -96,14 +98,58 @@ export function createBackupStartCoordinator() {
 
 const coordinators = new Map<
   string,
-  ReturnType<typeof createBackupStartCoordinator>
+  {
+    coordinator: ReturnType<typeof createBackupStartCoordinator>;
+    subscribers: number;
+  }
 >();
 
 export function getBackupStartCoordinator(vaultId: string) {
-  let coordinator = coordinators.get(vaultId);
-  if (!coordinator) {
-    coordinator = createBackupStartCoordinator();
-    coordinators.set(vaultId, coordinator);
-  }
-  return coordinator;
+  const evictIfUnused = () => {
+    const entry = coordinators.get(vaultId);
+    if (entry && !entry.subscribers && !entry.coordinator.store.state)
+      coordinators.delete(vaultId);
+  };
+
+  const getEntry = () => {
+    let entry = coordinators.get(vaultId);
+    if (!entry) {
+      entry = {
+        coordinator: createBackupStartCoordinator(evictIfUnused),
+        subscribers: 0,
+      };
+      coordinators.set(vaultId, entry);
+    }
+    return entry;
+  };
+
+  return {
+    get: () => coordinators.get(vaultId)?.coordinator.store.state ?? false,
+    subscribe(listener: (value: boolean) => void) {
+      const entry = getEntry();
+      entry.subscribers++;
+      const subscription = entry.coordinator.store.subscribe(listener);
+
+      return {
+        unsubscribe() {
+          subscription.unsubscribe();
+          entry.subscribers--;
+          evictIfUnused();
+        },
+      };
+    },
+    begin(sources?: BackupStartSource[]) {
+      if (!sources?.length) return false;
+      return getEntry().coordinator.begin(sources);
+    },
+    observe(sources?: BackupStartSource[]) {
+      coordinators.get(vaultId)?.coordinator.observe(sources);
+    },
+    settle() {
+      coordinators.get(vaultId)?.coordinator.settle();
+    },
+    release() {
+      coordinators.get(vaultId)?.coordinator.release();
+    },
+  };
 }

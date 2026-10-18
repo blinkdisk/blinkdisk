@@ -20,8 +20,11 @@ export function useBackupStartFeedback({
   sources,
 }: Options) {
   const { vaultId } = useVaultId();
-  const coordinator = getBackupStartCoordinator(vaultId || "");
-  const isAwaitingStatus = useStore(coordinator.store);
+  const coordinator = useMemo(
+    () => getBackupStartCoordinator(vaultId || ""),
+    [vaultId],
+  );
+  const isAwaitingStatus = useStore(coordinator);
   const observedSources = useMemo(
     () => sources ?? (source ? [source] : undefined),
     [sources, source],
@@ -43,6 +46,7 @@ export function useBackupStartFeedback({
       !vaultId ||
       isPending ||
       isRunning ||
+      !observedSources?.length ||
       !coordinator.begin(observedSources)
     )
       return;
