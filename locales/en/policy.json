@@ -103,15 +103,26 @@
     "exclusions": {
       "label": "Excluded files and directories",
       "description": "Files, directories and extensions to exclude from backups.",
+      "descriptionWithRoot": "Files, folders and extensions to exclude from this folder's backups.",
       "add": "Add exclusion",
       "example": "ignored-file.txt",
+      "broken": {
+        "title_one": "{{count}} exclusion rule isn't working",
+        "title_other": "{{count}} exclusion rules aren't working",
+        "description": "Rules entered as full paths never match anything. Rules must be relative to the backed-up folder.",
+        "descriptionOutside": "Paths outside {{root}} can't be excluded from this folder's backups. Edit or remove these rules.",
+        "descriptionWithoutRoot": "Rules entered as full paths never match anything. To exclude a specific folder, add the rule to that folder's own policy.",
+        "fix_one": "Fix {{count}} rule",
+        "fix_other": "Fix {{count}} rules"
+      },
       "dialog": {
         "title": "Edit exclusion rule",
         "description": "Configure the exclusion rule pattern.",
         "type": {
-          "label": "Exclude",
-          "name": "Files and folders",
-          "extension": "File extension"
+          "label": "Exclude by",
+          "path": "Path",
+          "name": "Name",
+          "extension": "Extension"
         },
         "matchType": {
           "exact": "is exactly",
@@ -119,9 +130,34 @@
           "endsWith": "ends with",
           "contains": "contains"
         },
+        "path": {
+          "label": "Folder or file",
+          "description": "Must be inside {{root}}.",
+          "descriptionWithoutRoot": "Relative to each backed-up folder, e.g. /AppData/Local/Temp.",
+          "placeholderWithoutRoot": "/path/to/folder",
+          "chooseFolder": "Choose folder",
+          "chooseFile": "Choose file",
+          "preview": "Excludes {{path}} in this folder.",
+          "errors": {
+            "EMPTY": "Enter a path.",
+            "INVALID": "This path can't be used. Paths with \"..\" or drive-relative paths like C:folder aren't supported.",
+            "IS_ROOT": "This is the backed-up folder itself. Choose something inside it.",
+            "OUTSIDE_ROOT": "This path isn't inside {{root}}.",
+            "NEEDS_ROOT": "Full paths only work on a folder's own policy. Enter a path relative to the backed-up folder instead."
+          }
+        },
         "pattern": {
           "label": "where name",
-          "placeholder": "Name match pattern"
+          "description": "Matches files and folders with this name anywhere in the backup.",
+          "placeholder": "Name match pattern",
+          "errors": {
+            "path": "Names can't contain \\ or drive letters."
+          },
+          "pathHint": {
+            "withRoot": "This looks like a path. To exclude one specific folder or file, use a path rule instead.",
+            "withoutRoot": "This looks like a path. To exclude one specific folder or file, add the rule to that folder's own policy.",
+            "action": "Exclude this path instead"
+          }
         },
         "extension": {
           "label": "where file extension is",
@@ -131,6 +167,13 @@
         "save": "Save"
       },
       "preview": {
+        "path": "Folder or file",
+        "broken": {
+          "fullPath": "Not working: entered as a full path",
+          "outside": "Not working: path is outside this folder",
+          "isRoot": "Not working: points to the backed-up folder itself",
+          "invalid": "Not working: edit this rule to fix it"
+        },
         "extension": "File extension",
         "name": {
           "both": "Name",
