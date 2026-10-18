@@ -11,7 +11,7 @@ export type ParsedExclusionRule = {
 
 export function parseExclusionRule(rule: string): ParsedExclusionRule {
   if (isWindowsPathRule(rule)) {
-    return { type: "PATH", path: rule };
+    return { type: "PATH", path: rule, foldersOnly: /[\\/]$/.test(rule) };
   }
 
   const extensionMatch = rule.match(/^\*\.(.+)$/);
@@ -29,6 +29,7 @@ export function parseExclusionRule(rule: string): ParsedExclusionRule {
     return {
       type: "PATH",
       path: `/${unescapePattern(input).replace(/^\/+/, "")}`,
+      foldersOnly: isFoldersOnly,
     };
   }
 
@@ -68,7 +69,7 @@ export function buildExclusionRule(values: ZExclusionFormType, root?: string) {
       throw new Error(`Invalid exclusion path: ${result.error}`);
     }
 
-    return buildPathRule(result.path);
+    return buildPathRule(result.path, values.foldersOnly);
   }
 
   if (values.type === "EXTENSION") {
@@ -112,6 +113,9 @@ export function toExclusionPath(
 ): { path: string } | { error: ExclusionPathError } {
   const value = stripQuotes(input.trim());
   if (!value) return { error: "EMPTY" };
+  if (root && !isWindowsPath(root) && isWindowsPath(value)) {
+    return { error: "OUTSIDE_ROOT" };
+  }
 
   const windows = root
     ? isWindowsPath(root)
@@ -147,12 +151,14 @@ export function toExclusionPath(
   return { path: `/${relative.join("/")}` };
 }
 
-function buildPathRule(path: string) {
-  return `/${path
+function buildPathRule(path: string, foldersOnly?: boolean) {
+  const rule = `/${path
     .replace(/^\/+/, "")
     .split("/")
     .map((segment) => segment.replace(/[\\*?[]/g, (char) => `\\${char}`))
     .join("/")}`;
+
+  return foldersOnly ? `${rule}/` : rule;
 }
 
 /** Turns a root-relative path like `/AppData/Local/Temp` into a full path. */
@@ -179,6 +185,8 @@ export type BrokenExclusionRule = {
   input: string;
   /** A working replacement rule, if the path is inside the backed-up folder. */
   fixed?: string;
+  /** Why no replacement rule could be created. */
+  error?: ExclusionPathError;
 };
 
 /**
@@ -191,9 +199,11 @@ export function getBrokenExclusionRule(
   root?: string,
 ): BrokenExclusionRule | null {
   let input: string | undefined;
+  let foldersOnly = false;
 
   if (isWindowsPathRule(rule)) {
     input = rule;
+    foldersOnly = /[\\/]$/.test(rule);
   } else if (root && !isWindowsPath(root)) {
     const parsed = parseExclusionRule(rule);
     const rootSegments = splitPath(root, false);
@@ -204,17 +214,25 @@ export function getBrokenExclusionRule(
         segments.length > rootSegments.length &&
         rootSegments.every((segment, index) => segment === segments[index]);
 
-      if (repeatsRoot) input = parsed.path;
+      if (repeatsRoot) {
+        input = parsed.path;
+        foldersOnly = !!parsed.foldersOnly;
+      }
     }
   }
 
   if (!input) return null;
 
   const result = toExclusionPath(input, root);
-  return {
-    input,
-    fixed: "path" in result ? buildPathRule(result.path) : undefined,
-  };
+  if ("error" in result) return { input, error: result.error };
+
+  // On POSIX, "\" is a valid filename character, so a Windows-style rule
+  // can't be converted safely.
+  if (root && !isWindowsPath(root) && input.includes("\\")) {
+    return { input, error: "INVALID" };
+  }
+
+  return { input, fixed: buildPathRule(result.path, foldersOnly) };
 }
 
 /** Whether a name pattern looks like the user typed a path instead. */
@@ -228,7 +246,7 @@ export function isInvalidNamePattern(value: string) {
 }
 
 function isWindowsPath(path: string) {
-  return /^[a-zA-Z]:/.test(path) || path.startsWith("\\\\");
+  return /^[a-zA-Z]:(?:[\\/]|$)/.test(path) || path.startsWith("\\\\");
 }
 
 function isWindowsPathRule(rule: string) {

@@ -126,6 +126,9 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
   );
   const brokenCount = brokenRules.filter(Boolean).length;
   const fixableCount = brokenRules.filter((broken) => broken?.fixed).length;
+  const allOutsideRoot = brokenRules.every(
+    (broken) => !broken || broken.error === "OUTSIDE_ROOT",
+  );
 
   return (
     <DynamicField
@@ -142,9 +145,9 @@ function ExclusionsEditor({ label, description, form }: ExclusionsEditorProps) {
             <p>
               {!root
                 ? t("exclusions.broken.descriptionWithoutRoot")
-                : fixableCount > 0
-                  ? t("exclusions.broken.description")
-                  : t("exclusions.broken.descriptionOutside", { root })}
+                : allOutsideRoot
+                  ? t("exclusions.broken.descriptionOutside", { root })
+                  : t("exclusions.broken.description")}
             </p>
             {fixableCount > 0 ? (
               <Button
@@ -276,7 +279,13 @@ function ExclusionPreview({ rule, root }: ExclusionPreviewProps) {
         <>
           <p className="m-0! flex items-center gap-1 text-xs text-amber-600 dark:text-amber-500">
             <TriangleAlertIcon className="size-3" />
-            {broken.fixed || !root ? t("broken.fullPath") : t("broken.outside")}
+            {broken.fixed || !root
+              ? t("broken.fullPath")
+              : broken.error === "OUTSIDE_ROOT"
+                ? t("broken.outside")
+                : broken.error === "IS_ROOT"
+                  ? t("broken.isRoot")
+                  : t("broken.invalid")}
           </p>
           <p className="truncate font-medium">{rule}</p>
         </>

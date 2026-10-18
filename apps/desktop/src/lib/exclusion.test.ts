@@ -90,6 +90,7 @@ describe("parseExclusionRule", () => {
       expect(parseExclusionRule("/AppData/Local/Temp/")).toEqual({
         type: "PATH",
         path: "/AppData/Local/Temp",
+        foldersOnly: true,
       });
     });
 
@@ -97,6 +98,7 @@ describe("parseExclusionRule", () => {
       expect(parseExclusionRule("node/cache")).toEqual({
         type: "PATH",
         path: "/node/cache",
+        foldersOnly: false,
       });
     });
 
@@ -104,6 +106,16 @@ describe("parseExclusionRule", () => {
       expect(parseExclusionRule("/Games/\\[old\\]")).toEqual({
         type: "PATH",
         path: "/Games/[old]",
+        foldersOnly: false,
+      });
+    });
+
+    it("keeps names with a colon as name patterns", () => {
+      expect(parseExclusionRule("a:b")).toEqual({
+        type: "NAME",
+        matchType: "EXACT",
+        pattern: "a:b",
+        foldersOnly: false,
       });
     });
 
@@ -120,6 +132,7 @@ describe("parseExclusionRule", () => {
       expect(parseExclusionRule("C:\\Users\\you\\Temp\\")).toEqual({
         type: "PATH",
         path: "C:\\Users\\you\\Temp\\",
+        foldersOnly: true,
       });
     });
   });
@@ -198,21 +211,40 @@ describe("getBrokenExclusionRule", () => {
       ),
     ).toEqual({
       input: "c:\\Users\\you\\AppData\\Local\\Temp\\",
-      fixed: "/AppData/Local/Temp",
+      fixed: "/AppData/Local/Temp/",
     });
   });
 
   it("detects Windows paths outside the root without a fix", () => {
     expect(getBrokenExclusionRule("D:\\Games\\", "C:\\Users\\you")).toEqual({
       input: "D:\\Games\\",
-      fixed: undefined,
+      error: "OUTSIDE_ROOT",
     });
   });
 
   it("detects Windows paths without a root", () => {
     expect(getBrokenExclusionRule("C:\\Temp")).toEqual({
       input: "C:\\Temp",
-      fixed: undefined,
+      error: "NEEDS_ROOT",
+    });
+  });
+
+  it("reports the backed-up folder itself and parent segments", () => {
+    expect(
+      getBrokenExclusionRule("C:\\Users\\you\\", "C:\\Users\\you"),
+    ).toEqual({ input: "C:\\Users\\you\\", error: "IS_ROOT" });
+    expect(
+      getBrokenExclusionRule("C:\\Users\\you\\..\\x", "C:\\Users\\you"),
+    ).toEqual({ input: "C:\\Users\\you\\..\\x", error: "INVALID" });
+  });
+
+  it("does not convert Windows-style rules on POSIX roots", () => {
+    expect(
+      getBrokenExclusionRule("C:\\Users\\you\\Temp\\", "/home/you"),
+    ).toEqual({ input: "C:\\Users\\you\\Temp\\", error: "OUTSIDE_ROOT" });
+    expect(getBrokenExclusionRule("Library\\Caches", "/home/you")).toEqual({
+      input: "Library\\Caches",
+      error: "INVALID",
     });
   });
 
@@ -228,7 +260,7 @@ describe("getBrokenExclusionRule", () => {
   it("fixes POSIX rules that repeat the root", () => {
     expect(getBrokenExclusionRule("/home/you/.cache/", "/home/you")).toEqual({
       input: "/home/you/.cache",
-      fixed: "/.cache",
+      fixed: "/.cache/",
     });
   });
 
@@ -238,6 +270,7 @@ describe("getBrokenExclusionRule", () => {
     "node_modules/",
     "\\*important\\*",
     "trailing\\ ",
+    "a:b",
   ])("ignores working rule %j", (rule) => {
     expect(getBrokenExclusionRule(rule, "C:\\Users\\you")).toBeNull();
     expect(getBrokenExclusionRule(rule, "/home/you")).toBeNull();
@@ -249,13 +282,14 @@ describe("path detection", () => {
     expect(looksLikePath(value)).toBe(true);
   });
 
-  it("does not flag plain names", () => {
-    expect(looksLikePath("node_modules")).toBe(false);
+  it.each(["node_modules", "a:b"])("does not flag %j as a path", (value) => {
+    expect(looksLikePath(value)).toBe(false);
   });
 
   it("only rejects backslashes and drive letters in names", () => {
     expect(isInvalidNamePattern("a\\b")).toBe(true);
-    expect(isInvalidNamePattern("C:foo")).toBe(true);
+    expect(isInvalidNamePattern("C:/foo")).toBe(true);
+    expect(isInvalidNamePattern("a:b")).toBe(false);
     expect(isInvalidNamePattern("a/b")).toBe(false);
   });
 });
@@ -268,6 +302,16 @@ describe("buildExclusionRule", () => {
         "C:\\Users\\you",
       ),
     ).toBe("/AppData/Local/Temp");
+  });
+
+  it("keeps folders-only path rules", () => {
+    expect(
+      buildExclusionRule({
+        type: "PATH",
+        path: "/AppData/Local",
+        foldersOnly: true,
+      }),
+    ).toBe("/AppData/Local/");
   });
 
   it("escapes special characters in path rules", () => {
@@ -354,6 +398,7 @@ describe("roundtrip", () => {
     "logs/",
     "*cache*/",
     "/AppData/Local/Temp",
+    "/AppData/Local/Temp/",
     "/Games/\\[old]",
   ])("build(parse(%j)) === %j", (rule) => {
     const parsed = parseExclusionRule(rule);

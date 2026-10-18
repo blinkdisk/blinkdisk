@@ -156,6 +156,7 @@ export const ZExclusionForm = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("PATH"),
     path: z.string().min(1),
+    foldersOnly: z.boolean().optional(),
   }),
 ]);
 

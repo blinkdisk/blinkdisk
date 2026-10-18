@@ -170,7 +170,9 @@
         "path": "Folder or file",
         "broken": {
           "fullPath": "Not working: entered as a full path",
-          "outside": "Not working: path is outside this folder"
+          "outside": "Not working: path is outside this folder",
+          "isRoot": "Not working: points to the backed-up folder itself",
+          "invalid": "Not working: edit this rule to fix it"
         },
         "extension": "File extension",
         "name": {

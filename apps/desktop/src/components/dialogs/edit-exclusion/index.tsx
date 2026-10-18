@@ -59,6 +59,7 @@ export function EditExclusionDialog() {
     const selected = result.filePaths[0];
     if (result.canceled || !selected) return;
 
+    form.setFieldValue("foldersOnly", kind === "folder");
     setPathAndValidate(selected);
   };
 
