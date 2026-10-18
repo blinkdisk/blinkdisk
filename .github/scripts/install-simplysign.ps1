@@ -47,7 +47,11 @@ if ($installer.ExitCode -notin @(0, 3010)) {
 if (-not (Test-Path -LiteralPath $exePath)) {
     throw "SimplySign installation completed but the executable was not found: $exePath"
 }
-Write-Host "SimplySign Desktop installed: $((Get-Item -LiteralPath $exePath).VersionInfo.FileVersion)"
+$installedVersion = [version](Get-Item -LiteralPath $exePath).VersionInfo.FileVersion
+if ($installedVersion -ne [version]$installerVersion) {
+    throw "SimplySign installation completed but the executable version is $installedVersion, expected $installerVersion"
+}
+Write-Host "SimplySign Desktop installed: $installedVersion"
 
 if ($env:GITHUB_OUTPUT) {
     "SIMPLYSIGN_PATH=$(Split-Path -Parent $exePath)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
