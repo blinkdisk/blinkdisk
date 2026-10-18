@@ -33,6 +33,23 @@ if ($publisher -ne 'Asseco Data Systems S.A.') {
 Write-Host "Verified installer signature from $publisher"
 Write-Host "Installer SHA-256: $((Get-FileHash -LiteralPath $installerPath -Algorithm SHA256).Hash)"
 
+# Certum's executable FileVersion differs from its MSI product version.
+$windowsInstaller = New-Object -ComObject WindowsInstaller.Installer
+$database = $windowsInstaller.OpenDatabase($installerPath, 0)
+$view = $database.OpenView("SELECT Property, Value FROM Property WHERE Property = 'ProductCode' OR Property = 'ProductVersion'")
+$view.Execute()
+$packageProperties = @{}
+while ($record = $view.Fetch()) {
+    $packageProperties[$record.StringData(1)] = $record.StringData(2)
+    [void][System.Runtime.InteropServices.Marshal]::ReleaseComObject($record)
+}
+$view.Close()
+[void][System.Runtime.InteropServices.Marshal]::ReleaseComObject($view)
+[void][System.Runtime.InteropServices.Marshal]::ReleaseComObject($database)
+if (-not $packageProperties.ProductCode -or -not $packageProperties.ProductVersion) {
+    throw 'SimplySign installer is missing its product code or version'
+}
+
 Remove-Item -LiteralPath $logPath -Force -ErrorAction SilentlyContinue
 Write-Host "Installing SimplySign Desktop $installerVersion"
 $arguments = "/i `"$installerPath`" /quiet /norestart /l*v `"$logPath`" ALLUSERS=1 REBOOT=ReallySuppress"
@@ -47,9 +64,9 @@ if ($installer.ExitCode -notin @(0, 3010)) {
 if (-not (Test-Path -LiteralPath $exePath)) {
     throw "SimplySign installation completed but the executable was not found: $exePath"
 }
-$installedVersion = [version](Get-Item -LiteralPath $exePath).VersionInfo.FileVersion
-if ($installedVersion -ne [version]$installerVersion) {
-    throw "SimplySign installation completed but the executable version is $installedVersion, expected $installerVersion"
+$installedVersion = $windowsInstaller.GetType().InvokeMember('ProductInfo', 'GetProperty', $null, $windowsInstaller, @($packageProperties.ProductCode, 'VersionString'))
+if ([version]$installedVersion -ne [version]$packageProperties.ProductVersion) {
+    throw "SimplySign installation completed but the installed product version is $installedVersion, expected $($packageProperties.ProductVersion)"
 }
 Write-Host "SimplySign Desktop installed: $installedVersion"
 
