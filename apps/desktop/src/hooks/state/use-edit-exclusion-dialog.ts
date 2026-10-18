@@ -4,6 +4,8 @@ import { useCallback } from "react";
 type EditExclusionDialogOptions = {
   initialValue: string;
   onSave: (update: string) => void;
+  root?: string;
+  canBrowse?: boolean;
 };
 
 const store = new Store<{
