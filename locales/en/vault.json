@@ -456,10 +456,14 @@
         "category": "No cloud backup",
         "description": "Add a cloud vault to protect against drive failure or loss."
       },
+      "unavailable": {
+        "category": "Status unavailable",
+        "description": "Some backup statuses couldn't be checked. Make sure your vaults are connected and try again."
+      },
       "backupErrors": {
         "category": "Needs attention",
-        "description_one": "{{count}} backup ran into problems. Open the vault to see what went wrong.",
-        "description_other": "{{count}} backups ran into problems. Open your vaults to see what went wrong."
+        "description_one": "{{count}} backup ran into problems. Open your vault list to see what went wrong.",
+        "description_other": "{{count}} backups ran into problems. Open your vault list to see what went wrong."
       }
     },
     "usedStorage": {

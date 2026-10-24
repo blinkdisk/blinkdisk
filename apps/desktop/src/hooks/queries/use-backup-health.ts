@@ -1,6 +1,7 @@
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
+import { summarizeBackupHealth } from "@desktop/lib/backup-health";
 import { getBackupIssue } from "@desktop/lib/backup-issue";
 import { isDraftPolicyUserName } from "@desktop/lib/policy-target";
 import { vaultApi } from "@desktop/lib/vault";
@@ -28,11 +29,5 @@ export function useBackupHealth(vaults?: ZVaultType[]) {
     })),
   });
 
-  return {
-    failedSources: queries.reduce(
-      (count, query) => count + (query.data || 0),
-      0,
-    ),
-    isLoading: queries.some((query) => query.isPending),
-  };
+  return summarizeBackupHealth(queries);
 }

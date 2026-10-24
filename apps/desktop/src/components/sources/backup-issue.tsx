@@ -81,7 +81,6 @@ export function BackupIssueAlert({ source }: { source?: CoreSourceItem }) {
 
   return (
     <div
-      role="alert"
       className={cn(
         "mb-6 flex gap-4 rounded-2xl border p-4",
         warning

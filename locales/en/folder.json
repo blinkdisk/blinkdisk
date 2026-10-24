@@ -138,6 +138,9 @@
       }
     },
     "details": "Details",
-    "toast": "Backup of “{{name}}” failed"
+    "toast": {
+      "failed": "Backup of “{{name}}” failed",
+      "partial": "Backup of “{{name}}” finished with errors"
+    }
   }
 }

@@ -100,7 +100,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
           strokeWidth={strokeWidth}
         />
       ))}
-      {score !== null && (
+      {score !== null ? (
         <>
           <path d={needlePath} fill={pointerColor} />
           <circle
@@ -110,7 +110,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
             r={needleRadius}
           />
         </>
-      )}
+      ) : null}
     </svg>
   );
 }
@@ -118,8 +118,12 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
 export function HealthCard({ isLoading, vaults }: HealthCardProps) {
   const { t } = useAppTranslation("vault.overview");
   const { dark } = useTheme();
+  const {
+    sourcesWithIssues,
+    isLoading: isHealthLoading,
+    isUnavailable,
+  } = useBackupHealth(vaults);
   const hasNoVaults = vaults?.length === 0;
-  const { failedSources, isLoading: isHealthLoading } = useBackupHealth(vaults);
   const loading = isLoading || isHealthLoading;
   const onlyLocalVaults =
     !!vaults?.length &&
@@ -128,14 +132,24 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
 
       return provider?.local;
     });
-  const score = hasNoVaults ? null : failedSources ? 15 : onlyLocalVaults ? 40 : 100;
+  const score = hasNoVaults
+    ? null
+    : sourcesWithIssues
+      ? 15
+      : isUnavailable
+        ? null
+        : onlyLocalVaults
+          ? 40
+          : 100;
   const scoreKey = hasNoVaults
     ? "empty"
-    : failedSources
+    : sourcesWithIssues
       ? "backupErrors"
-      : onlyLocalVaults
-        ? "localOnly"
-        : "excellent";
+      : isUnavailable
+        ? "unavailable"
+        : onlyLocalVaults
+          ? "localOnly"
+          : "excellent";
 
   return (
     <Card className="grow">
@@ -155,7 +169,7 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
           </p>
           <p className="text-muted-foreground text-sm">
             {!loading ? (
-              t(`score.${scoreKey}.description`, { count: failedSources })
+              t(`score.${scoreKey}.description`, { count: sourcesWithIssues })
             ) : (
               <Skeleton width={200} count={2} />
             )}

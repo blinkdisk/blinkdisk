@@ -3,13 +3,14 @@ import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list
 export type BackupIssueReason = "missing" | "permission" | "failed" | "partial";
 
 const missingPattern =
-  /no such file or directory|cannot find the (path|file)|does not exist|not found/i;
+  /no such file or directory|cannot find the (path|file)|does not exist/i;
 const permissionPattern =
-  /permission denied|access is denied|operation not permitted/i;
+  /permission denied|access(?: is)? denied|operation not permitted/i;
 
 function getFailureReason(message?: string): BackupIssueReason {
-  if (message && missingPattern.test(message)) return "missing";
-  if (message && permissionPattern.test(message)) return "permission";
+  if (!message?.includes("unable to create local filesystem:")) return "failed";
+  if (missingPattern.test(message)) return "missing";
+  if (permissionPattern.test(message)) return "permission";
   return "failed";
 }
 

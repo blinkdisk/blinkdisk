@@ -53,9 +53,13 @@ export function useBackupStartFeedback({
     for (const source of resultTracker.observe(observedSources)) {
       const issue = getBackupIssue(source);
       if (!issue) continue;
-      toast.error(t("toast", { name: source.name || source.source.path }), {
-        description: getIssueText(source, issue.reason).description,
-      });
+      const notify = issue.kind === "partial" ? toast.warning : toast.error;
+      notify(
+        t(`toast.${issue.kind}`, { name: source.name || source.source.path }),
+        {
+          description: getIssueText(source, issue.reason).description,
+        },
+      );
     }
   }, [coordinator, observedSources, resultTracker, t, getIssueText]);
 

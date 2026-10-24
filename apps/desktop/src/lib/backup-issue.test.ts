@@ -62,12 +62,48 @@ describe("backup issues", () => {
     ).toBe("missing");
     expect(
       reason(
-        "CreateFile D:\\Photos: The system cannot find the path specified.",
+        "unable to create local filesystem: CreateFile D:\\Photos: The system cannot find the path specified.",
       ),
     ).toBe("missing");
-    expect(reason("open /photos: permission denied")).toBe("permission");
-    expect(reason("open D:\\Photos: Access is denied.")).toBe("permission");
+    expect(
+      reason(
+        "unable to create local filesystem: open /photos: permission denied",
+      ),
+    ).toBe("permission");
+    expect(
+      reason(
+        "unable to create local filesystem: open D:\\Photos: Access is denied.",
+      ),
+    ).toBe("permission");
+    expect(reason("unable to create local filesystem: Access denied")).toBe(
+      "permission",
+    );
     expect(reason("upload error: unexpected EOF")).toBe("failed");
+  });
+
+  it("does not mistake repository errors for missing or unreadable sources", () => {
+    for (const errorMessage of [
+      "repository not found",
+      "bucket does not exist",
+      "upload error: open /backup/storage: permission denied",
+      "upload error: no such file or directory",
+      "unable to create local filesystem: unexpected backend not found",
+    ]) {
+      expect(
+        getBackupIssue(source({ status: "FAILED", errorMessage }))?.reason,
+      ).toBe("failed");
+    }
+  });
+
+  it("detects partial backups from directory summaries alone", () => {
+    const partial = {
+      ...source(),
+      lastSnapshot: {
+        stats: { errorCount: 0 },
+        rootEntry: { summ: { numFailed: 2 } },
+      },
+    } as CoreSourceItem;
+    expect(getBackupIssue(partial)?.kind).toBe("partial");
   });
 
   it("does not infer failure from idle, canceled, or running tasks", () => {
@@ -102,7 +138,7 @@ describe("backup issues", () => {
   it("retains failures during retries and after task history is lost", () => {
     const failed = source({
       status: "FAILED",
-      errorMessage: "permission denied",
+      errorMessage: "unable to create local filesystem: permission denied",
     });
     for (const status of ["IDLE", "PENDING", "UPLOADING"] as const) {
       expect(
