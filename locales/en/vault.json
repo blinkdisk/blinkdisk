@@ -455,6 +455,10 @@
       "localOnly": {
         "category": "No cloud backup",
         "description": "Add a cloud vault to protect against drive failure or loss."
+      },
+      "backupErrors": {
+        "category": "Needs attention",
+        "description": "Some backups have failed. Open your vaults to review the errors and retry."
       }
     },
     "usedStorage": {

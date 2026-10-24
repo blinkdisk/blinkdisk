@@ -99,5 +99,14 @@
       "folder": "Delete folder",
       "file": "Delete file"
     }
+  },
+  "backupError": {
+    "label": {
+      "failed": "Failed",
+      "partial": "Backup has errors"
+    },
+    "failed": "The backup failed. Check that the source is available and try again.",
+    "partial": "Some files could not be backed up. Check the source and try again.",
+    "toast": "Backup of “{{name}}” failed"
   }
 }

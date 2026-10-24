@@ -18,6 +18,7 @@ import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list
 import { useDeleteSourceDialog } from "@desktop/hooks/state/use-delete-source-dialog";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useRelativeTime } from "@desktop/hooks/use-relative-time";
+import { getBackupIssue } from "@desktop/lib/backup-issue";
 import { formatInt, formatSize } from "@desktop/lib/number";
 import { policyTargetToSearch } from "@desktop/lib/policy-target";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -88,7 +89,10 @@ function Source({ source, profile, allowBackupActions }: SourceProps) {
   );
 
   const showStartTime = useMemo(
-    () => source?.lastSnapshot && !source.lastSnapshot.incomplete,
+    () =>
+      source?.lastSnapshot &&
+      !source.lastSnapshot.incomplete &&
+      !getBackupIssue(source),
     [source],
   );
 

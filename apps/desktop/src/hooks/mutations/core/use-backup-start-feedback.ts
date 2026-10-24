@@ -1,10 +1,16 @@
+import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
+import {
+  createBackupResultTracker,
+  getBackupIssue,
+} from "@desktop/lib/backup-issue";
 import { getBackupStartCoordinator } from "@desktop/lib/backup-start-latch";
 import { useStore } from "@tanstack/react-store";
 import { useEffect, useMemo } from "react";
+import { toast } from "sonner";
 
 type Options = {
   profile?: SelectedProfile;
@@ -19,7 +25,9 @@ export function useBackupStartFeedback({
   source,
   sources,
 }: Options) {
+  const { t } = useAppTranslation("folder.backupError");
   const { vaultId } = useVaultId();
+  const resultTracker = useMemo(() => createBackupResultTracker(), [vaultId]);
   const coordinator = useMemo(
     () => getBackupStartCoordinator(vaultId || ""),
     [vaultId],
@@ -32,25 +40,39 @@ export function useBackupStartFeedback({
   const { mutate, isPending } = useStartBackup({
     profile,
     onSuccess: coordinator.settle,
-    onError: coordinator.release,
+    onError: () => {
+      coordinator.release();
+      resultTracker.clear();
+    },
   });
 
   useEffect(() => {
     coordinator.observe(observedSources);
-  }, [coordinator, observedSources]);
+    for (const source of resultTracker.observe(observedSources)) {
+      const issue = getBackupIssue(source);
+      if (!issue) continue;
+      toast.error(t("toast", { name: source.name || source.source.path }), {
+        description: issue.message || t(issue.kind),
+      });
+    }
+  }, [coordinator, observedSources, resultTracker, t]);
 
   const isStartingBackup = isPending || isAwaitingStatus || isRunning;
 
   const startBackup = (options: { path?: string }) => {
+    const targets = observedSources?.filter(
+      (source) => !options.path || source.source.path === options.path,
+    );
     if (
       !vaultId ||
       isPending ||
       isRunning ||
-      !observedSources?.length ||
-      !coordinator.begin(observedSources)
+      !targets?.length ||
+      !coordinator.begin(targets)
     )
       return;
 
+    resultTracker.start(targets);
     mutate(options);
   };
 
