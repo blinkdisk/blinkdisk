@@ -30,6 +30,14 @@ export type CoreSourceItem = {
   };
   status: SourceStatus;
   lastSnapshotTask?: CoreTask;
+  lastBackupOutcome?: {
+    id: string;
+    status: "SUCCESS" | "FAILED" | "PARTIAL";
+    startTime: string;
+    endTime: string;
+    errorMessage?: string;
+    errorCount?: number;
+  };
   schedule: {
     runMissed: boolean;
   };

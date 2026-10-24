@@ -14,19 +14,30 @@ function getFailureReason(message?: string): BackupIssueReason {
 }
 
 export function getBackupIssue(source?: CoreSourceItem) {
-  if (!source || source.status === "PENDING" || source.status === "UPLOADING")
-    return null;
+  if (!source) return null;
 
-  const task = source.lastSnapshotTask;
-  if (task?.status === "FAILED") {
+  const outcome = source.lastBackupOutcome;
+  const snapshotIsNewer =
+    source.lastSnapshot &&
+    !source.lastSnapshot.incomplete &&
+    outcome &&
+    Date.parse(source.lastSnapshot.startTime) > Date.parse(outcome.endTime);
+
+  if (outcome && !snapshotIsNewer) {
+    if (outcome.status === "FAILED") {
+      return {
+        kind: "failed" as const,
+        reason: getFailureReason(outcome.errorMessage),
+        message: outcome.errorMessage,
+      };
+    }
+    if (outcome.status === "SUCCESS") return null;
     return {
-      kind: "failed" as const,
-      reason: getFailureReason(task.errorMessage),
-      message: task.errorMessage,
+      kind: "partial" as const,
+      reason: "partial" as const,
+      message: undefined,
     };
   }
-
-  if (task && task.status !== "SUCCESS") return null;
 
   if (
     (source.lastSnapshot?.stats.errorCount || 0) > 0 ||
@@ -43,13 +54,16 @@ export function getBackupIssue(source?: CoreSourceItem) {
 }
 
 export function createBackupResultTracker() {
-  const pending = new Map<string, string | undefined>();
+  const pending = new Map<string, { taskId?: string; outcomeId?: string }>();
 
   return {
     start(sources: CoreSourceItem[]) {
       pending.clear();
       for (const source of sources) {
-        pending.set(source.id, source.lastSnapshotTask?.id);
+        pending.set(source.id, {
+          taskId: source.lastSnapshotTask?.id,
+          outcomeId: source.lastBackupOutcome?.id,
+        });
       }
     },
     clear() {
@@ -65,14 +79,17 @@ export function createBackupResultTracker() {
           source.status === "PENDING" ||
           source.status === "UPLOADING" ||
           !task ||
-          task.id === pending.get(source.id) ||
+          (task.id === pending.get(source.id)?.taskId &&
+            source.lastBackupOutcome?.id ===
+              pending.get(source.id)?.outcomeId) ||
           task.status === "RUNNING" ||
           task.status === "CANCELING"
         )
           continue;
 
         pending.delete(source.id);
-        if (getBackupIssue(source)) failed.push(source);
+        if (task.status !== "CANCELED" && getBackupIssue(source))
+          failed.push(source);
       }
 
       return failed;

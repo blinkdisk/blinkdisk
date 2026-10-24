@@ -65,6 +65,20 @@ describe("backup start latch", () => {
     ).toBe(true);
   });
 
+  it("unlocks for a new persisted outcome even if task IDs are reused", () => {
+    const latch = createBackupStartLatch();
+    const initial = {
+      ...source("a", "IDLE"),
+      lastSnapshotTask: { id: "1" },
+      lastBackupOutcome: { id: "old" },
+    };
+    latch.tryStart([initial]);
+    latch.settle();
+    expect(
+      latch.observe([{ ...initial, lastBackupOutcome: { id: "new" } }]),
+    ).toBe(true);
+  });
+
   it("ignores missing source data and permits retry after failure", () => {
     const latch = createBackupStartLatch();
 

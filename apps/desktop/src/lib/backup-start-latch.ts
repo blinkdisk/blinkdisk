@@ -6,12 +6,18 @@ const BACKUP_START_TIMEOUT_MS = 30_000;
 type BackupStartSource = Pick<CoreSourceItem, "id" | "status"> & {
   lastSnapshot?: { id: string };
   lastSnapshotTask?: { id: string };
+  lastBackupOutcome?: { id: string };
 };
 
 export function createBackupStartLatch() {
   let targets: Map<
     string,
-    { snapshotId?: string; taskId?: string; confirmed: boolean }
+    {
+      snapshotId?: string;
+      taskId?: string;
+      outcomeId?: string;
+      confirmed: boolean;
+    }
   > | null = null;
   let settled = false;
 
@@ -30,6 +36,7 @@ export function createBackupStartLatch() {
           {
             snapshotId: source.lastSnapshot?.id,
             taskId: source.lastSnapshotTask?.id,
+            outcomeId: source.lastBackupOutcome?.id,
             confirmed: false,
           },
         ]),
@@ -47,6 +54,8 @@ export function createBackupStartLatch() {
         if (
           source.status === "PENDING" ||
           source.status === "UPLOADING" ||
+          (source.lastBackupOutcome?.id !== undefined &&
+            source.lastBackupOutcome.id !== target.outcomeId) ||
           (source.lastSnapshotTask?.id !== undefined &&
             source.lastSnapshotTask.id !== target.taskId) ||
           (source.lastSnapshot?.id !== undefined &&

@@ -14,6 +14,16 @@ function source(task?: Partial<CoreTask>, id = "photos"): CoreSourceItem {
     schedule: { runMissed: false },
     currentTask: "",
     currentTaskStatus: "SUCCESS",
+    lastBackupOutcome:
+      task && (task.status === "FAILED" || task.status === "SUCCESS")
+        ? {
+            id: task.id || "1",
+            status: task.status,
+            startTime: "2026-10-24T10:00:00Z",
+            endTime: "2026-10-24T10:01:00Z",
+            errorMessage: task.errorMessage,
+          }
+        : undefined,
     lastSnapshotTask: task
       ? {
           id: "1",
@@ -85,8 +95,32 @@ describe("backup issues", () => {
       getBackupIssue({
         ...partial,
         lastSnapshotTask: source({ status: "CANCELED" }).lastSnapshotTask,
-      }),
-    ).toBeNull();
+      })?.kind,
+    ).toBe("partial");
+  });
+
+  it("retains failures during retries and after task history is lost", () => {
+    const failed = source({
+      status: "FAILED",
+      errorMessage: "permission denied",
+    });
+    for (const status of ["IDLE", "PENDING", "UPLOADING"] as const) {
+      expect(
+        getBackupIssue({ ...failed, status, lastSnapshotTask: undefined })
+          ?.reason,
+      ).toBe("permission");
+    }
+  });
+
+  it("uses a newer snapshot when a backup was created outside the server", () => {
+    const failed = source({ status: "FAILED" });
+    failed.lastSnapshot = {
+      startTime: "2026-10-24T11:00:00Z",
+      stats: { errorCount: 0 },
+    } as NonNullable<CoreSourceItem["lastSnapshot"]>;
+    expect(getBackupIssue(failed)).toBeNull();
+    if (failed.lastSnapshot) failed.lastSnapshot.incomplete = "canceled";
+    expect(getBackupIssue(failed)?.kind).toBe("failed");
   });
 });
 
@@ -105,11 +139,28 @@ describe("manual backup feedback", () => {
     expect(tracker.observe([failed])).toEqual([]);
   });
 
+  it("recognizes a new outcome when task IDs are reused after restart", () => {
+    const tracker = createBackupResultTracker();
+    const old = source({ id: "1", status: "FAILED" });
+    tracker.start([old]);
+    if (!old.lastBackupOutcome) throw new Error("Missing test outcome");
+    const next = {
+      ...old,
+      lastBackupOutcome: { ...old.lastBackupOutcome, id: "new-outcome" },
+    };
+    expect(tracker.observe([next])).toEqual([next]);
+  });
+
   it("waits for completion and ignores successful and canceled backups", () => {
     const tracker = createBackupResultTracker();
     tracker.start([source()]);
     expect(tracker.observe([source({ status: "RUNNING" })])).toEqual([]);
-    expect(tracker.observe([source({ status: "CANCELED" })])).toEqual([]);
+    const canceled = {
+      ...source({ status: "FAILED" }),
+      lastSnapshotTask: source({ status: "CANCELED" }).lastSnapshotTask,
+    };
+    expect(getBackupIssue(canceled)?.kind).toBe("failed");
+    expect(tracker.observe([canceled])).toEqual([]);
     expect(tracker.observe([source({ status: "FAILED" })])).toEqual([]);
     tracker.start([source({ id: "1" })]);
     expect(tracker.observe([source({ id: "2", status: "SUCCESS" })])).toEqual(
@@ -134,7 +185,7 @@ describe("manual backup feedback", () => {
     tracker.start([source()]);
     const failed = source({ status: "FAILED" });
     const finishing = { ...failed, status: "UPLOADING" as const };
-    expect(getBackupIssue(finishing)).toBeNull();
+    expect(getBackupIssue(finishing)?.kind).toBe("failed");
     expect(tracker.observe([finishing])).toEqual([]);
     expect(tracker.observe([failed])).toEqual([failed]);
   });
