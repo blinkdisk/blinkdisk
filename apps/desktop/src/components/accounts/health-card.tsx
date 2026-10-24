@@ -155,7 +155,7 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
           </p>
           <p className="text-muted-foreground text-sm">
             {!loading ? (
-              t(`score.${scoreKey}.description`)
+              t(`score.${scoreKey}.description`, { count: failedSources })
             ) : (
               <Skeleton width={200} count={2} />
             )}

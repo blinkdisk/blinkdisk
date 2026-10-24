@@ -37,8 +37,27 @@ describe("backup issues", () => {
     });
     expect(getBackupIssue(failed)).toEqual({
       kind: "failed",
+      reason: "failed",
       message: "lstat: source missing",
     });
+  });
+
+  it("explains missing sources and permission errors in plain language", () => {
+    const reason = (errorMessage: string) =>
+      getBackupIssue(source({ status: "FAILED", errorMessage }))?.reason;
+    expect(
+      reason(
+        "unable to create local filesystem: lstat /photos: no such file or directory",
+      ),
+    ).toBe("missing");
+    expect(
+      reason(
+        "CreateFile D:\\Photos: The system cannot find the path specified.",
+      ),
+    ).toBe("missing");
+    expect(reason("open /photos: permission denied")).toBe("permission");
+    expect(reason("open D:\\Photos: Access is denied.")).toBe("permission");
+    expect(reason("upload error: unexpected EOF")).toBe("failed");
   });
 
   it("does not infer failure from idle, canceled, or running tasks", () => {

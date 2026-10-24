@@ -458,7 +458,8 @@
       },
       "backupErrors": {
         "category": "Needs attention",
-        "description": "Some backups have failed. Open your vaults to review the errors and retry."
+        "description_one": "{{count}} backup ran into problems. Open the vault to see what went wrong.",
+        "description_other": "{{count}} backups ran into problems. Open your vaults to see what went wrong."
       }
     },
     "usedStorage": {

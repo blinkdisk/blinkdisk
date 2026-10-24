@@ -1,11 +1,10 @@
 import { SourceCard } from "@blinkdisk/components/source-card";
-import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
+import { BackupIssueBadge } from "@desktop/components/sources/backup-issue";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { useTheme } from "@desktop/hooks/use-theme";
-import { getBackupIssue } from "@desktop/lib/backup-issue";
-import { CircleAlertIcon, MonitorIcon, UserIcon } from "lucide-react";
+import { MonitorIcon, UserIcon } from "lucide-react";
 
 type SourcePreviewProps = {
   source?: CoreSourceItem;
@@ -14,8 +13,6 @@ type SourcePreviewProps = {
 
 export function SourcePreview({ source, size }: SourcePreviewProps) {
   const { dark } = useTheme();
-  const { t } = useAppTranslation("folder.backupError");
-  const issue = getBackupIssue(source);
 
   return (
     <div
@@ -39,7 +36,7 @@ export function SourcePreview({ source, size }: SourcePreviewProps) {
         />
       )}
       <div className="flex min-w-0 w-full flex-col">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <h2
             className={cn(
               "ph-no-capture max-w-full truncate text-lg font-semibold",
@@ -52,23 +49,13 @@ export function SourcePreview({ source, size }: SourcePreviewProps) {
               <Skeleton width={100} />
             )}
           </h2>
-          {issue ? (
-            <span className="text-destructive flex shrink-0 items-center gap-1 text-xs font-medium">
-              <CircleAlertIcon className="size-3.5" />
-              {t(`label.${issue.kind}`)}
-            </span>
-          ) : null}
+          <BackupIssueBadge source={source} />
         </div>
         {source ? (
           <SourceProfile source={source} size={size} />
         ) : (
           <Skeleton width={120} />
         )}
-        {issue ? (
-          <p className="text-destructive ph-no-capture mt-1 truncate text-xs">
-            {issue.message || t(issue.kind)}
-          </p>
-        ) : null}
       </div>
     </div>
   );

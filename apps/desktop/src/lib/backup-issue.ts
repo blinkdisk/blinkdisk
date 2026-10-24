@@ -1,12 +1,29 @@
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 
+export type BackupIssueReason = "missing" | "permission" | "failed" | "partial";
+
+const missingPattern =
+  /no such file or directory|cannot find the (path|file)|does not exist|not found/i;
+const permissionPattern =
+  /permission denied|access is denied|operation not permitted/i;
+
+function getFailureReason(message?: string): BackupIssueReason {
+  if (message && missingPattern.test(message)) return "missing";
+  if (message && permissionPattern.test(message)) return "permission";
+  return "failed";
+}
+
 export function getBackupIssue(source?: CoreSourceItem) {
   if (!source || source.status === "PENDING" || source.status === "UPLOADING")
     return null;
 
   const task = source.lastSnapshotTask;
   if (task?.status === "FAILED") {
-    return { kind: "failed" as const, message: task.errorMessage };
+    return {
+      kind: "failed" as const,
+      reason: getFailureReason(task.errorMessage),
+      message: task.errorMessage,
+    };
   }
 
   if (task && task.status !== "SUCCESS") return null;
@@ -15,7 +32,11 @@ export function getBackupIssue(source?: CoreSourceItem) {
     (source.lastSnapshot?.stats.errorCount || 0) > 0 ||
     (source.lastSnapshot?.rootEntry?.summ?.numFailed || 0) > 0
   ) {
-    return { kind: "partial" as const, message: undefined };
+    return {
+      kind: "partial" as const,
+      reason: "partial" as const,
+      message: undefined,
+    };
   }
 
   return null;

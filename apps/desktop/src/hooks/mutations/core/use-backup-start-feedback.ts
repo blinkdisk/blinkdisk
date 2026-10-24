@@ -1,4 +1,5 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { useBackupIssueText } from "@desktop/components/sources/backup-issue";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
@@ -26,6 +27,7 @@ export function useBackupStartFeedback({
   sources,
 }: Options) {
   const { t } = useAppTranslation("folder.backupError");
+  const getIssueText = useBackupIssueText();
   const { vaultId } = useVaultId();
   const resultTracker = useMemo(() => createBackupResultTracker(), [vaultId]);
   const coordinator = useMemo(
@@ -52,10 +54,10 @@ export function useBackupStartFeedback({
       const issue = getBackupIssue(source);
       if (!issue) continue;
       toast.error(t("toast", { name: source.name || source.source.path }), {
-        description: issue.message || t(issue.kind),
+        description: getIssueText(source, issue.reason).description,
       });
     }
-  }, [coordinator, observedSources, resultTracker, t]);
+  }, [coordinator, observedSources, resultTracker, t, getIssueText]);
 
   const isStartingBackup = isPending || isAwaitingStatus || isRunning;
 

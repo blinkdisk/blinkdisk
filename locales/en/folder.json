@@ -102,11 +102,42 @@
   },
   "backupError": {
     "label": {
-      "failed": "Failed",
-      "partial": "Backup has errors"
+      "missing": {
+        "folder": "Folder not found",
+        "file": "File not found"
+      },
+      "permission": {
+        "folder": "No access",
+        "file": "No access"
+      },
+      "failed": {
+        "folder": "Backup failed",
+        "file": "Backup failed"
+      },
+      "partial": {
+        "folder": "Some files skipped",
+        "file": "Backup incomplete"
+      }
     },
-    "failed": "The backup failed. Check that the source is available and try again.",
-    "partial": "Some files could not be backed up. Check the source and try again.",
+    "description": {
+      "missing": {
+        "folder": "This folder couldn't be found. It may have been moved, renamed, or be on a drive that isn't connected.",
+        "file": "This file couldn't be found. It may have been moved, renamed, or be on a drive that isn't connected."
+      },
+      "permission": {
+        "folder": "BlinkDisk isn't allowed to read this folder. Check its permissions and try again.",
+        "file": "BlinkDisk isn't allowed to read this file. Check its permissions and try again."
+      },
+      "failed": {
+        "folder": "The last backup couldn't be completed. Try again, and check the details if it keeps failing.",
+        "file": "The last backup couldn't be completed. Try again, and check the details if it keeps failing."
+      },
+      "partial": {
+        "folder": "The last backup finished, but some files couldn't be read and were skipped.",
+        "file": "The last backup finished, but the file couldn't be read completely."
+      }
+    },
+    "details": "Details",
     "toast": "Backup of “{{name}}” failed"
   }
 }

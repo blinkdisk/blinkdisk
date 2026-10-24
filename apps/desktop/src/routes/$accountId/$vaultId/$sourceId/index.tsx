@@ -1,12 +1,12 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { isFileLikeSource } from "@blinkdisk/schemas/source";
-import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { BackupTimeline } from "@desktop/components/backups/timeline";
 import { Empty } from "@desktop/components/empty";
+import { BackupIssueAlert } from "@desktop/components/sources/backup-issue";
 import { SourcePreview } from "@desktop/components/sources/preview";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
@@ -14,12 +14,10 @@ import { useBackupStartFeedback } from "@desktop/hooks/mutations/core/use-backup
 import { useCancelBackup } from "@desktop/hooks/mutations/core/use-cancel-backup";
 import { useCompletedBackupList } from "@desktop/hooks/queries/use-completed-backup-list";
 import { useSource } from "@desktop/hooks/use-source";
-import { getBackupIssue } from "@desktop/lib/backup-issue";
 import { policyTargetToSearch } from "@desktop/lib/policy-target";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  CircleAlertIcon,
   ClockIcon,
   CloudUploadIcon,
   FileCogIcon,
@@ -34,13 +32,11 @@ export const Route = createFileRoute("/$accountId/$vaultId/$sourceId/")({
 
 function RouteComponent() {
   const { t } = useAppTranslation("backup.list");
-  const { t: errorT } = useAppTranslation("folder.backupError");
 
   const { data: source } = useSource();
   const { data: backups } = useCompletedBackupList();
   const navigate = Route.useNavigate();
   const sourceTypeKey = isFileLikeSource(source?.type) ? "file" : "folder";
-  const issue = getBackupIssue(source);
 
   const { startBackup, isStartingBackup } = useBackupStartFeedback({
     isRunning: source?.status === "PENDING" || source?.status === "UPLOADING",
@@ -117,15 +113,7 @@ function RouteComponent() {
           )}
         </div>
       </div>
-      {issue ? (
-        <Alert variant="destructive" className="mb-6">
-          <CircleAlertIcon />
-          <AlertTitle>{errorT(`label.${issue.kind}`)}</AlertTitle>
-          <AlertDescription className="ph-no-capture break-all whitespace-pre-wrap">
-            {issue.message || errorT(issue.kind)}
-          </AlertDescription>
-        </Alert>
-      ) : null}
+      <BackupIssueAlert source={source} />
       {backups !== null && backups !== undefined && backups.length === 0 ? (
         source?.status === "UPLOADING" &&
         source.currentTaskStatus === "CANCELING" ? (
