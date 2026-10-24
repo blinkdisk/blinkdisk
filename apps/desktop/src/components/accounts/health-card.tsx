@@ -38,7 +38,7 @@ function getNeedleDegrees(score: number) {
   return HEALTH_GAUGE_SEGMENTS.at(-1)?.endDegrees ?? 348;
 }
 
-function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
+function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
   const centerX = 90;
   const centerY = 82;
   const radius = 52;
@@ -46,7 +46,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
   const needleLength = 45;
   const needleRadius = 5;
   const needleCenterY = centerY - needleRadius / 2;
-  const angle = (getNeedleDegrees(score) * Math.PI) / 180;
+  const angle = (getNeedleDegrees(score ?? 0) * Math.PI) / 180;
   const needleTipX = centerX + Math.cos(angle) * needleLength;
   const needleTipY = needleCenterY + Math.sin(angle) * needleLength;
   const needleLeftX = centerX + Math.cos(angle + Math.PI / 2) * needleRadius;
@@ -94,18 +94,22 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
           d={segment.path}
           fill="none"
           key={segment.color}
-          stroke={segment.color}
+          stroke={score === null ? "var(--border)" : segment.color}
           strokeLinecap="round"
           strokeWidth={strokeWidth}
         />
       ))}
-      <path d={needlePath} fill={pointerColor} />
-      <circle
-        cx={centerX}
-        cy={needleCenterY}
-        fill={pointerColor}
-        r={needleRadius}
-      />
+      {score !== null && (
+        <>
+          <path d={needlePath} fill={pointerColor} />
+          <circle
+            cx={centerX}
+            cy={needleCenterY}
+            fill={pointerColor}
+            r={needleRadius}
+          />
+        </>
+      )}
     </svg>
   );
 }
@@ -113,6 +117,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number }) {
 export function HealthCard({ isLoading, vaults }: HealthCardProps) {
   const { t } = useAppTranslation("vault.overview");
   const { dark } = useTheme();
+  const hasNoVaults = vaults?.length === 0;
   const onlyLocalVaults =
     !!vaults?.length &&
     vaults.every((vault) => {
@@ -120,8 +125,12 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
 
       return provider?.local;
     });
-  const score = onlyLocalVaults ? 40 : 100;
-  const scoreKey = onlyLocalVaults ? "localOnly" : "excellent";
+  const score = hasNoVaults ? null : onlyLocalVaults ? 40 : 100;
+  const scoreKey = hasNoVaults
+    ? "empty"
+    : onlyLocalVaults
+      ? "localOnly"
+      : "excellent";
 
   return (
     <Card className="grow">

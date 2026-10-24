@@ -444,6 +444,10 @@
       "directories": "Protected directories"
     },
     "score": {
+      "empty": {
+        "category": "No vaults yet",
+        "description": "Create your first vault to start backing up your files."
+      },
       "excellent": {
         "category": "Excellent",
         "description": "Your backup setup is configured correctly."
