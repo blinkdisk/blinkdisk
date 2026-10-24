@@ -6,6 +6,7 @@ import { cn } from "@blinkdisk/utils/class";
 import { BackupProgress } from "@desktop/components/backups/progress";
 import { BackupTimeline } from "@desktop/components/backups/timeline";
 import { Empty } from "@desktop/components/empty";
+import { BackupIssueAlert } from "@desktop/components/sources/backup-issue";
 import { SourcePreview } from "@desktop/components/sources/preview";
 import { LocalButton } from "@desktop/components/vaults/local-button";
 import { VaultRestores } from "@desktop/components/vaults/restores";
@@ -112,6 +113,7 @@ function RouteComponent() {
           )}
         </div>
       </div>
+      <BackupIssueAlert source={source} />
       {backups !== null && backups !== undefined && backups.length === 0 ? (
         source?.status === "UPLOADING" &&
         source.currentTaskStatus === "CANCELING" ? (

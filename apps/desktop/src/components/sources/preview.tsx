@@ -1,6 +1,7 @@
 import { SourceCard } from "@blinkdisk/components/source-card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
 import { cn } from "@blinkdisk/utils/class";
+import { BackupIssueBadge } from "@desktop/components/sources/backup-issue";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { MonitorIcon, UserIcon } from "lucide-react";
@@ -34,8 +35,8 @@ export function SourcePreview({ source, size }: SourcePreviewProps) {
           className="rounded-md"
         />
       )}
-      <div className="flex w-full flex-col">
-        <div className="flex items-center gap-1.5">
+      <div className="flex min-w-0 w-full flex-col">
+        <div className="flex items-center gap-2">
           <h2
             className={cn(
               "ph-no-capture max-w-full truncate text-lg font-semibold",
@@ -48,6 +49,7 @@ export function SourcePreview({ source, size }: SourcePreviewProps) {
               <Skeleton width={100} />
             )}
           </h2>
+          <BackupIssueBadge source={source} />
         </div>
         {source ? (
           <SourceProfile source={source} size={size} />

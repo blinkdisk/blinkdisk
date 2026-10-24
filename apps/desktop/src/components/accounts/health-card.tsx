@@ -3,6 +3,7 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ZVaultType } from "@blinkdisk/schemas/vault";
 import { Card, CardContent } from "@blinkdisk/ui/card";
 import { Skeleton } from "@blinkdisk/ui/skeleton";
+import { useBackupHealth } from "@desktop/hooks/queries/use-backup-health";
 import { useTheme } from "@desktop/hooks/use-theme";
 
 type HealthCardProps = {
@@ -99,7 +100,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
           strokeWidth={strokeWidth}
         />
       ))}
-      {score !== null && (
+      {score !== null ? (
         <>
           <path d={needlePath} fill={pointerColor} />
           <circle
@@ -109,7 +110,7 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
             r={needleRadius}
           />
         </>
-      )}
+      ) : null}
     </svg>
   );
 }
@@ -117,7 +118,13 @@ function HealthGauge({ dark, score }: { dark: boolean; score: number | null }) {
 export function HealthCard({ isLoading, vaults }: HealthCardProps) {
   const { t } = useAppTranslation("vault.overview");
   const { dark } = useTheme();
+  const {
+    sourcesWithIssues,
+    isLoading: isHealthLoading,
+    isUnavailable,
+  } = useBackupHealth(vaults);
   const hasNoVaults = vaults?.length === 0;
+  const loading = isLoading || isHealthLoading;
   const onlyLocalVaults =
     !!vaults?.length &&
     vaults.every((vault) => {
@@ -125,32 +132,44 @@ export function HealthCard({ isLoading, vaults }: HealthCardProps) {
 
       return provider?.local;
     });
-  const score = hasNoVaults ? null : onlyLocalVaults ? 40 : 100;
+  const score = hasNoVaults
+    ? null
+    : sourcesWithIssues
+      ? 15
+      : isUnavailable
+        ? null
+        : onlyLocalVaults
+          ? 40
+          : 100;
   const scoreKey = hasNoVaults
     ? "empty"
-    : onlyLocalVaults
-      ? "localOnly"
-      : "excellent";
+    : sourcesWithIssues
+      ? "backupErrors"
+      : isUnavailable
+        ? "unavailable"
+        : onlyLocalVaults
+          ? "localOnly"
+          : "excellent";
 
   return (
     <Card className="grow">
       <CardContent className="flex h-full items-center gap-7 px-6 py-2">
-        {!isLoading ? (
+        {!loading ? (
           <HealthGauge dark={dark} score={score} />
         ) : (
           <Skeleton width="8rem" height="5rem" />
         )}
         <div className="flex flex-col gap-1">
           <p className="text-2xl font-bold">
-            {!isLoading ? (
+            {!loading ? (
               t(`score.${scoreKey}.category`)
             ) : (
               <Skeleton width={100} />
             )}
           </p>
           <p className="text-muted-foreground text-sm">
-            {!isLoading ? (
-              t(`score.${scoreKey}.description`)
+            {!loading ? (
+              t(`score.${scoreKey}.description`, { count: sourcesWithIssues })
             ) : (
               <Skeleton width={200} count={2} />
             )}

@@ -13,10 +13,11 @@ type CoreTaskStatus =
 export type CoreTask = {
   id: string;
   startTime: string;
-  endTime: string;
+  endTime?: string;
   kind: string;
   description: string;
   status: CoreTaskStatus;
+  errorMessage?: string;
   progressInfo: string;
   counters: Record<string, number> | null;
 };

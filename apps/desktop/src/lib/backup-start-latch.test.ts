@@ -54,6 +54,31 @@ describe("backup start latch", () => {
     expect(latch.observe([source("a", "IDLE", "new")])).toBe(true);
   });
 
+  it("unlocks when a backup fails before creating a snapshot between polls", () => {
+    const latch = createBackupStartLatch();
+    latch.tryStart([{ ...source("a", "IDLE"), lastSnapshotTask: { id: "1" } }]);
+    latch.settle();
+    expect(
+      latch.observe([
+        { ...source("a", "IDLE"), lastSnapshotTask: { id: "2" } },
+      ]),
+    ).toBe(true);
+  });
+
+  it("unlocks for a new persisted outcome even if task IDs are reused", () => {
+    const latch = createBackupStartLatch();
+    const initial = {
+      ...source("a", "IDLE"),
+      lastSnapshotTask: { id: "1" },
+      lastBackupOutcome: { id: "old" },
+    };
+    latch.tryStart([initial]);
+    latch.settle();
+    expect(
+      latch.observe([{ ...initial, lastBackupOutcome: { id: "new" } }]),
+    ).toBe(true);
+  });
+
   it("ignores missing source data and permits retry after failure", () => {
     const latch = createBackupStartLatch();
 
