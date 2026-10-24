@@ -12,7 +12,6 @@
   "devDependencies": {
     "@blinkdisk/typescript": "workspace:*",
     "@types/node": "catalog:",
-    "@types/nodemailer": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "vite-tsconfig-paths": "catalog:"
