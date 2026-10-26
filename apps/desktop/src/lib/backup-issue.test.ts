@@ -3,6 +3,8 @@ import type { CoreTask } from "@desktop/hooks/queries/core/use-task";
 import {
   createBackupResultTracker,
   getBackupIssue,
+  getBackupIssueDetails,
+  getEntryErrorReason,
 } from "@desktop/lib/backup-issue";
 
 function source(task?: Partial<CoreTask>, id = "photos"): CoreSourceItem {
@@ -157,6 +159,227 @@ describe("backup issues", () => {
     expect(getBackupIssue(failed)).toBeNull();
     if (failed.lastSnapshot) failed.lastSnapshot.incomplete = "canceled";
     expect(getBackupIssue(failed)?.kind).toBe("failed");
+  });
+});
+
+describe("backup issue details", () => {
+  function partialSource() {
+    return {
+      ...source(),
+      lastSnapshot: {
+        id: "snapshot-1",
+        folder: { host: "laptop", userName: "paul", path: "/photos" },
+        description: "",
+        startTime: "2026-10-24T10:00:01Z",
+        endTime: "2026-10-24T10:00:59Z",
+        stats: {
+          totalSize: 0,
+          excludedTotalSize: 0,
+          fileCount: 0,
+          cachedFiles: 0,
+          nonCachedFiles: 0,
+          dirCount: 1,
+          excludedFileCount: 0,
+          excludedDirCount: 0,
+          ignoredErrorCount: 0,
+          errorCount: 12,
+        },
+        rootEntry: {
+          name: "photos",
+          mode: "0755",
+          mtime: "2026-10-24T10:00:00Z",
+          uid: 1000,
+          gid: 1000,
+          obj: "root-object",
+          summ: {
+            size: 0,
+            files: 0,
+            symlinks: 0,
+            dirs: 1,
+            maxTime: "2026-10-24T10:00:00Z",
+            numFailed: 12,
+            numIgnoredErrors: 0,
+            errors: [
+              { path: "photos/private.jpg", error: "permission denied" },
+              { path: "photos/locked.jpg", error: "file is in use" },
+            ],
+          },
+        },
+      },
+    } satisfies CoreSourceItem;
+  }
+
+  it("reads saved paths and reasons after task history has been lost", () => {
+    const partial = partialSource();
+    expect(getBackupIssueDetails(partial)).toEqual({
+      entries: partial.lastSnapshot?.rootEntry?.summ?.errors,
+      totalCount: 12,
+      ignoredErrorCount: 0,
+      startTime: partial.lastSnapshot?.startTime,
+      taskId: undefined,
+      isTruncated: true,
+    });
+  });
+
+  it("matches the snapshot to the persisted partial outcome", () => {
+    const partial = partialSource();
+    partial.lastBackupOutcome = {
+      id: "partial-outcome",
+      status: "PARTIAL",
+      startTime: "2026-10-24T10:00:00Z",
+      endTime: "2026-10-24T10:01:00Z",
+      errorCount: 12,
+    };
+    expect(getBackupIssueDetails(partial)?.entries).toHaveLength(2);
+    expect(getBackupIssueDetails(partial)?.startTime).toBe(
+      partial.lastBackupOutcome.startTime,
+    );
+  });
+
+  it("does not show older file errors for a later failed backup", () => {
+    const failed = {
+      ...partialSource(),
+      lastBackupOutcome: {
+        id: "later-failure",
+        status: "FAILED" as const,
+        startTime: "2026-10-24T11:00:00Z",
+        endTime: "2026-10-24T11:01:00Z",
+        errorMessage: "repository unavailable",
+      },
+    };
+    expect(getBackupIssueDetails(failed)?.entries).toEqual([]);
+    expect(getBackupIssueDetails(failed)?.totalCount).toBe(0);
+  });
+
+  it("does not attach older or incomplete snapshots to a partial outcome", () => {
+    const partial = partialSource();
+    partial.lastBackupOutcome = {
+      id: "new-partial",
+      status: "PARTIAL",
+      startTime: "2026-10-24T11:00:00Z",
+      endTime: "2026-10-24T11:01:00Z",
+      errorCount: 3,
+    };
+    expect(getBackupIssueDetails(partial)?.entries).toEqual([]);
+    expect(getBackupIssueDetails(partial)?.totalCount).toBe(3);
+    partial.lastBackupOutcome.startTime = "2026-10-24T10:00:00Z";
+    partial.lastBackupOutcome.endTime = "2026-10-24T10:01:00Z";
+    expect(
+      getBackupIssueDetails({
+        ...partial,
+        lastSnapshot: { ...partial.lastSnapshot, incomplete: "canceled" },
+      })?.entries,
+    ).toEqual([]);
+  });
+
+  it("uses errors from a newer externally created snapshot", () => {
+    const partial = partialSource();
+    partial.lastBackupOutcome = {
+      id: "old-failure",
+      status: "FAILED",
+      startTime: "2026-10-23T10:00:00Z",
+      endTime: "2026-10-23T10:01:00Z",
+      errorMessage: "old error",
+    };
+    expect(getBackupIssueDetails(partial)?.entries).toHaveLength(2);
+    expect(getBackupIssueDetails(partial)?.startTime).toBe(
+      partial.lastSnapshot?.startTime,
+    );
+  });
+
+  it("accounts for ignored errors included in the saved sample", () => {
+    const partial = partialSource();
+    const summary = partial.lastSnapshot.rootEntry.summ;
+    summary.numIgnoredErrors = 2;
+    expect(getBackupIssueDetails(partial)?.totalCount).toBe(14);
+    expect(getBackupIssueDetails(partial)?.ignoredErrorCount).toBe(2);
+    summary.numFailed = 0;
+    partial.lastSnapshot.stats.errorCount = 0;
+    expect(getBackupIssueDetails(partial)).toBeNull();
+  });
+
+  it.each([
+    undefined,
+    0,
+    2,
+    5,
+  ])("uses ignored-error stats when the summary reports %s", (summaryCount) => {
+    const partial = partialSource();
+    partial.lastSnapshot.stats.errorCount = 2;
+    partial.lastSnapshot.stats.ignoredErrorCount = 3;
+    const withOptionalSummary: CoreSourceItem = {
+      ...partial,
+      lastSnapshot: {
+        ...partial.lastSnapshot,
+        rootEntry: {
+          ...partial.lastSnapshot.rootEntry,
+          summ: {
+            ...partial.lastSnapshot.rootEntry.summ,
+            numFailed: 2,
+            numIgnoredErrors: summaryCount,
+          },
+        },
+      },
+    };
+
+    expect(getBackupIssueDetails(withOptionalSummary)).toMatchObject({
+      ignoredErrorCount: summaryCount === 5 ? 5 : 3,
+      totalCount: summaryCount === 5 ? 7 : 5,
+      isTruncated: true,
+    });
+  });
+
+  it("handles backups with a complete list or no saved file details", () => {
+    const partial = partialSource();
+    partial.lastSnapshot.stats.errorCount = 2;
+    partial.lastSnapshot.rootEntry.summ.numFailed = 2;
+    expect(getBackupIssueDetails(partial)?.isTruncated).toBe(false);
+    partial.lastSnapshot.rootEntry.summ.errors = [];
+    expect(getBackupIssueDetails(partial)?.entries).toEqual([]);
+    expect(getBackupIssueDetails(partial)?.isTruncated).toBe(true);
+  });
+
+  it("only links logs from the same completed backup attempt", () => {
+    const partial = partialSource();
+    partial.lastSnapshotTask = source({
+      id: "matching-task",
+      endTime: "2026-10-24T10:01:00Z",
+    }).lastSnapshotTask;
+    if (!partial.lastSnapshotTask) throw new Error("Missing test task");
+    expect(getBackupIssueDetails(partial)?.taskId).toBe("matching-task");
+    partial.lastSnapshotTask.startTime = "2026-10-24T11:00:00Z";
+    expect(getBackupIssueDetails(partial)?.taskId).toBeUndefined();
+    partial.lastSnapshotTask.startTime = "2026-10-24T10:00:00Z";
+    partial.lastSnapshotTask.status = "RUNNING";
+    expect(getBackupIssueDetails(partial)?.taskId).toBeUndefined();
+  });
+
+  it("matches task timestamps against the persisted outcome", () => {
+    const failed = source({
+      status: "FAILED",
+      endTime: "2026-10-24T10:01:00Z",
+      errorMessage: "permission denied",
+    });
+    expect(getBackupIssueDetails(failed)?.taskId).toBe("1");
+    if (!failed.lastSnapshotTask) throw new Error("Missing test task");
+    failed.lastSnapshotTask.endTime = "2026-10-24T10:02:00Z";
+    expect(getBackupIssueDetails(failed)?.taskId).toBeUndefined();
+  });
+});
+
+describe("entry error reasons", () => {
+  it("strips wrapped context and paths from core errors", () => {
+    expect(
+      getEntryErrorReason(
+        "unable to open file: open /Users/alex/tax-return.pdf: permission denied",
+      ),
+    ).toBe("Permission denied");
+    expect(
+      getEntryErrorReason("open C:\\Users\\alex\\file.lock: Access is denied."),
+    ).toBe("Access is denied.");
+    expect(getEntryErrorReason("The file is in use.")).toBe(
+      "The file is in use.",
+    );
   });
 });
 
