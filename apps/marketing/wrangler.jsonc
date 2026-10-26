@@ -2,11 +2,17 @@
   "name": "marketing",
   "main": "./sentry.server.config.ts",
   "compatibility_date": "2026-02-03",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public",
+    // Astro can stream HTML as an async iterable when Node.js compatibility is enabled.
+    "fetch_iterable_type_support",
+  ],
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist",
     "html_handling": "drop-trailing-slash",
+    "run_worker_first": ["/compare/*"],
   },
   "observability": {
     "enabled": false,
