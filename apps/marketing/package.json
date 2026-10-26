@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cp ../../.env .env && astro dev",
     "build": "astro build",
+    "check:compare": "node scripts/check-compare.mjs",
     "preview": "astro preview",
     "types": "astro check",
     "deploy": "wrangler deploy"
