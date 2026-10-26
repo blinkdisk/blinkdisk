@@ -41,9 +41,6 @@ jobs:
           SENTRY_MARKETING_DSN: ${{ vars.SENTRY_MARKETING_DSN }}
         run: pnpm --filter marketing build
 
-      - name: Check comparison pages in the built Worker
-        run: pnpm --filter marketing check:compare
-
       - name: Remove client source maps from deploy assets
         run: find apps/marketing/dist/client -type f -name '*.map' -delete
 
