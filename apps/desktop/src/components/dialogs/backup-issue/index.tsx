@@ -1,12 +1,11 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { useClipboard } from "@blinkdisk/hooks/use-clipboard";
-import { Badge } from "@blinkdisk/ui/badge";
+import { isFileLikeSource } from "@blinkdisk/schemas/source";
 import { Button } from "@blinkdisk/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@blinkdisk/ui/dialog";
@@ -17,17 +16,29 @@ import { formatBackupDate } from "@desktop/lib/backup";
 import {
   getBackupIssue,
   getBackupIssueDetails,
+  getEntryErrorReason,
 } from "@desktop/lib/backup-issue";
 import {
   CheckIcon,
   CircleAlertIcon,
+  ClockIcon,
   CopyIcon,
-  FileXIcon,
+  FileIcon,
+  FileQuestionIcon,
+  FolderIcon,
   InfoIcon,
   ScrollTextIcon,
   TriangleAlertIcon,
 } from "lucide-react";
-import { type RefObject, useState } from "react";
+import { type RefObject, useRef, useState } from "react";
+
+function splitPath(path: string) {
+  const index = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
+  return {
+    name: path.slice(index + 1) || path,
+    folder: index > 0 ? path.slice(0, index) : undefined,
+  };
+}
 
 export function BackupIssueDialog({
   source,
@@ -43,6 +54,7 @@ export function BackupIssueDialog({
   const { t } = useAppTranslation("folder.backupError.dialog");
   const getText = useBackupIssueText();
   const { copy } = useClipboard();
+  const doneRef = useRef<HTMLButtonElement>(null);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
     "idle",
   );
@@ -53,19 +65,18 @@ export function BackupIssueDialog({
   const { label, description } = getText(source, issue.reason);
   const partial = issue.kind === "partial";
   const Icon = partial ? TriangleAlertIcon : CircleAlertIcon;
+  const SourceIcon = isFileLikeSource(source.type) ? FileIcon : FolderIcon;
   const date = details.startTime
     ? formatBackupDate({ startTime: details.startTime })
     : undefined;
   const unavailable =
     details.entries.length === 0 && (partial || details.totalCount > 0);
-  const limitation = unavailable
-    ? t("unavailable")
-    : details.isTruncated
-      ? t("limited", {
-          shown: details.entries.length,
-          total: details.totalCount,
-        })
-      : undefined;
+  const limitation = details.isTruncated
+    ? t("limited", {
+        shown: details.entries.length,
+        total: details.totalCount,
+      })
+    : undefined;
 
   async function copyDetails() {
     if (!details) return;
@@ -82,7 +93,7 @@ export function BackupIssueDialog({
       details.ignoredErrorCount
         ? t("ignored", { count: details.ignoredErrorCount })
         : undefined,
-      limitation,
+      unavailable ? t("unavailable") : limitation,
     ]
       .filter(Boolean)
       .join("\n\n");
@@ -92,105 +103,139 @@ export function BackupIssueDialog({
   return (
     <Dialog open onOpenChange={onOpenChange}>
       <DialogContent
+        initialFocus={doneRef}
         finalFocus={finalFocus}
         className="flex max-h-[85vh] w-152 flex-col gap-0 overflow-hidden p-0"
       >
-        <DialogHeader className="shrink-0 gap-5 p-6 pb-5">
-          <div className="flex items-center gap-3.5 pr-8">
-            <div
-              className={cn(
-                "flex size-11 shrink-0 items-center justify-center rounded-xl",
-                partial
-                  ? "bg-amber-500/15 text-amber-600 dark:text-amber-500"
-                  : "bg-destructive/10 text-destructive",
-              )}
-            >
-              <Icon className="size-5" />
-            </div>
-            <div className="flex min-w-0 flex-col gap-1.5">
-              <DialogTitle>{t("title")}</DialogTitle>
-              <p className="text-muted-foreground text-sm">{label}</p>
-            </div>
-          </div>
-          <DialogDescription>{description}</DialogDescription>
-          <div className="bg-muted/60 flex flex-wrap justify-between gap-x-6 gap-y-3 rounded-xl border px-4 py-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-muted-foreground mb-1 text-xs">
-                {t("source")}
-              </p>
-              <p className="ph-no-capture font-mono text-xs break-all select-text">
-                {source.source.path}
-              </p>
-            </div>
-            {date && (
-              <div>
-                <p className="text-muted-foreground mb-1 text-xs">
-                  {t("backup")}
-                </p>
-                <p className="text-xs">{date}</p>
-              </div>
+        <DialogHeader className="shrink-0 flex-row gap-4 p-6 pr-14">
+          <div
+            className={cn(
+              "flex size-10 shrink-0 items-center justify-center rounded-xl",
+              partial
+                ? "bg-amber-500/15 text-amber-600 dark:text-amber-500"
+                : "bg-destructive/10 text-destructive",
             )}
+          >
+            <Icon className="size-5" />
+          </div>
+          <div className="flex min-w-0 flex-col gap-2">
+            <DialogTitle className="text-lg leading-tight">{label}</DialogTitle>
+            <DialogDescription className="leading-relaxed">
+              {description}
+            </DialogDescription>
+            <div className="text-muted-foreground mt-1 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
+              <span className="flex min-w-0 items-center gap-1.5">
+                <SourceIcon className="size-3.5 shrink-0" />
+                <span
+                  className="ph-no-capture truncate select-text"
+                  title={source.source.path}
+                >
+                  {source.source.path}
+                </span>
+              </span>
+              {date && (
+                <span className="flex shrink-0 items-center gap-1.5">
+                  <ClockIcon className="size-3.5" />
+                  {date}
+                </span>
+              )}
+            </div>
           </div>
         </DialogHeader>
 
-        <div className="min-h-0 overflow-y-auto px-6 pb-6">
+        <div className="flex min-h-0 flex-col gap-3 overflow-y-auto px-6 pb-6">
           {issue.message && (
-            <div className="mb-4 last:mb-0">
-              <h3 className="mb-2 text-sm font-medium">{t("error")}</h3>
-              <pre className="ph-no-capture bg-destructive/5 border-destructive/15 rounded-xl border p-4 font-mono text-xs leading-relaxed break-all whitespace-pre-wrap select-text">
+            <section className="flex flex-col gap-2">
+              <h3 className="text-muted-foreground text-xs font-medium">
+                {t("error")}
+              </h3>
+              <pre className="ph-no-capture bg-muted/60 rounded-lg border p-3.5 font-mono text-xs leading-relaxed break-all whitespace-pre-wrap select-text">
                 {issue.message}
               </pre>
-            </div>
+            </section>
           )}
 
           {details.entries.length > 0 && (
-            <>
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <h3 className="text-sm font-medium">{t("errors")}</h3>
-                <Badge variant="muted">
+            <section className="flex flex-col gap-2">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="text-muted-foreground text-xs font-medium">
+                  {t("errors")}
+                </h3>
+                <span className="text-muted-foreground text-xs tabular-nums">
                   {t("count", { count: details.totalCount })}
-                </Badge>
+                </span>
               </div>
-              <ul className="ph-no-capture bg-card divide-border divide-y overflow-hidden rounded-xl border select-text">
-                {details.entries.map((entry, index) => (
-                  <li
-                    key={`${entry.path}:${index}`}
-                    className="flex items-start gap-3 px-4 py-3.5"
-                  >
-                    <FileXIcon className="text-muted-foreground mt-0.5 size-4 shrink-0" />
-                    <div className="min-w-0 space-y-1.5">
-                      <p className="font-mono text-xs leading-relaxed break-all whitespace-pre-wrap">
-                        {entry.path}
-                      </p>
-                      <p className="text-muted-foreground text-xs leading-relaxed break-words whitespace-pre-wrap">
-                        {entry.error}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </>
+              <div className="bg-card overflow-hidden rounded-xl border">
+                <ul className="ph-no-capture divide-border divide-y select-text">
+                  {details.entries.map((entry, index) => {
+                    const { name, folder } = splitPath(entry.path);
+                    return (
+                      <li
+                        key={`${entry.path}:${index}`}
+                        className="flex items-center gap-3 px-3.5 py-3"
+                      >
+                        <div className="bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-lg">
+                          <FileIcon className="size-4" />
+                        </div>
+                        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                          <p
+                            className="flex min-w-0 items-baseline gap-2"
+                            title={entry.path}
+                          >
+                            <span className="truncate font-medium">{name}</span>
+                            {folder && (
+                              <span className="text-muted-foreground min-w-0 truncate text-xs">
+                                {folder}
+                              </span>
+                            )}
+                          </p>
+                          <p
+                            className={cn(
+                              "text-xs leading-relaxed break-words",
+                              partial
+                                ? "text-amber-700 dark:text-amber-500"
+                                : "text-destructive",
+                            )}
+                            title={entry.error}
+                          >
+                            {getEntryErrorReason(entry.error)}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                {limitation && (
+                  <p className="bg-muted/50 text-muted-foreground flex items-center gap-2 border-t px-3.5 py-2.5 text-xs">
+                    <InfoIcon className="size-3.5 shrink-0" />
+                    {limitation}
+                  </p>
+                )}
+              </div>
+            </section>
           )}
 
-          {limitation && (
-            <div className="text-muted-foreground mt-3 flex items-start gap-2.5 rounded-lg bg-amber-500/5 p-3 text-xs leading-relaxed">
-              <InfoIcon className="mt-0.5 size-3.5 shrink-0" />
-              <p>{limitation}</p>
+          {unavailable && (
+            <div className="text-muted-foreground flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-8 text-center text-xs">
+              <FileQuestionIcon className="size-5" />
+              <p className="max-w-80 leading-relaxed">{t("unavailable")}</p>
             </div>
           )}
+
           {details.ignoredErrorCount > 0 && (
-            <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
+            <p className="text-muted-foreground text-xs leading-relaxed">
               {t("ignored", { count: details.ignoredErrorCount })}
             </p>
           )}
         </div>
 
-        <div className="shrink-0 border-t p-6 pt-4">
-          <DialogFooter className="m-0 flex-wrap items-center p-0">
+        <div className="bg-muted/30 shrink-0 border-t px-6 py-4">
+          <div className="flex flex-wrap items-center gap-2">
             {details.taskId && (
               <Button
                 variant="ghost"
-                className="sm:mr-auto"
+                size="sm"
+                className="-ml-2"
                 onClick={() => {
                   if (details.taskId) onViewLogs(details.taskId);
                 }}
@@ -199,14 +244,20 @@ export function BackupIssueDialog({
                 {t("logs")}
               </Button>
             )}
-            <Button variant="secondary" onClick={() => onOpenChange(false)}>
-              {t("close")}
-            </Button>
-            <Button onClick={copyDetails}>
-              {copyStatus === "copied" ? <CheckIcon /> : <CopyIcon />}
-              {copyStatus === "copied" ? t("copied") : t("copy")}
-            </Button>
-          </DialogFooter>
+            <div className="ml-auto flex gap-2">
+              <Button variant="secondary" size="sm" onClick={copyDetails}>
+                {copyStatus === "copied" ? <CheckIcon /> : <CopyIcon />}
+                {copyStatus === "copied" ? t("copied") : t("copy")}
+              </Button>
+              <Button
+                ref={doneRef}
+                size="sm"
+                onClick={() => onOpenChange(false)}
+              >
+                {t("close")}
+              </Button>
+            </div>
+          </div>
           <p role="status" className="sr-only">
             {copyStatus === "copied" ? t("copied") : ""}
           </p>

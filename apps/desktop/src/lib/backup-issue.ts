@@ -107,6 +107,11 @@ export function getBackupIssueDetails(source: CoreSourceItem) {
   };
 }
 
+export function getEntryErrorReason(error: string) {
+  const reason = error.split(": ").at(-1)?.trim() || error;
+  return reason.charAt(0).toUpperCase() + reason.slice(1);
+}
+
 export function createBackupResultTracker() {
   const pending = new Map<string, { taskId?: string; outcomeId?: string }>();
 

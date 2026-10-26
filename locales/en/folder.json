@@ -144,14 +144,11 @@
     },
     "viewDetails": "View details",
     "dialog": {
-      "title": "Backup details",
-      "source": "Source",
-      "backup": "Backup started",
       "error": "Error details",
       "errors": "Files with errors",
       "count_one": "{{count}} error",
       "count_other": "{{count}} errors",
-      "limited": "Showing {{shown}} of {{total}} errors. Only some error details were saved with this backup.",
+      "limited": "Showing {{shown}} of {{total}}. Details for the rest weren’t saved with this backup.",
       "unavailable": "File-level error details weren’t saved with this backup.",
       "ignored_one": "{{count}} error was ignored according to your backup policy.",
       "ignored_other": "{{count}} errors were ignored according to your backup policy.",
@@ -159,7 +156,7 @@
       "copy": "Copy details",
       "copied": "Copied",
       "copyFailed": "Couldn’t copy the details. You can select and copy the text above.",
-      "close": "Close"
+      "close": "Done"
     }
   }
 }

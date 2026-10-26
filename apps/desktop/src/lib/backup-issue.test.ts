@@ -4,6 +4,7 @@ import {
   createBackupResultTracker,
   getBackupIssue,
   getBackupIssueDetails,
+  getEntryErrorReason,
 } from "@desktop/lib/backup-issue";
 
 function source(task?: Partial<CoreTask>, id = "photos"): CoreSourceItem {
@@ -332,6 +333,22 @@ describe("backup issue details", () => {
     if (!failed.lastSnapshotTask) throw new Error("Missing test task");
     failed.lastSnapshotTask.endTime = "2026-10-24T10:02:00Z";
     expect(getBackupIssueDetails(failed)?.taskId).toBeUndefined();
+  });
+});
+
+describe("entry error reasons", () => {
+  it("strips wrapped context and paths from core errors", () => {
+    expect(
+      getEntryErrorReason(
+        "unable to open file: open /Users/alex/tax-return.pdf: permission denied",
+      ),
+    ).toBe("Permission denied");
+    expect(
+      getEntryErrorReason("open C:\\Users\\alex\\file.lock: Access is denied."),
+    ).toBe("Access is denied.");
+    expect(getEntryErrorReason("The file is in use.")).toBe(
+      "The file is in use.",
+    );
   });
 });
 
