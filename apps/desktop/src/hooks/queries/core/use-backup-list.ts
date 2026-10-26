@@ -1,4 +1,5 @@
 import type { KopiaEntryType } from "@blinkdisk/schemas/source";
+import type { CoreDirectorySummary } from "@desktop/hooks/queries/core/use-directory";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { useProfile } from "@desktop/hooks/use-profile";
 import { useQueryKey } from "@desktop/hooks/use-query-key";
@@ -19,14 +20,7 @@ export type CoreBackupItem = {
   startTime: string;
   endTime: string;
   incomplete?: CoreBackupIncompleteReason;
-  summary: {
-    size: number;
-    files: number;
-    symlinks: number;
-    dirs: number;
-    maxTime: string;
-    numFailed: number;
-  };
+  summary: CoreDirectorySummary;
   rootID: string;
   rootEntryType: KopiaEntryType;
   retention: string[];

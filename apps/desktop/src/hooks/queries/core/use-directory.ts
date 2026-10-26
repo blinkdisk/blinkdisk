@@ -5,6 +5,17 @@ import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { vaultApi } from "@desktop/lib/vault";
 import { useQuery } from "@tanstack/react-query";
 
+export type CoreDirectorySummary = {
+  size: number;
+  files: number;
+  symlinks: number;
+  dirs: number;
+  maxTime: string;
+  numFailed: number;
+  numIgnoredErrors?: number;
+  errors?: { path: string; error: string }[];
+};
+
 export type CoreDirectoryItem = {
   name: string;
   type: "d" | "f" | "s";
@@ -14,14 +25,7 @@ export type CoreDirectoryItem = {
   gid: number;
   obj: string;
   size?: number;
-  summ?: {
-    size: number;
-    files: number;
-    symlinks: number;
-    dirs: number;
-    maxTime: string;
-    numFailed: number;
-  };
+  summ?: CoreDirectorySummary;
 };
 
 export type DirectoryItem = {
@@ -57,14 +61,7 @@ export function useDirectory() {
     queryFn: async () => {
       const res = await vaultApi(vaultId).get<{
         stream: string;
-        summary: {
-          size: number;
-          files: number;
-          symlinks: number;
-          dirs: number;
-          maxTime: string;
-          numFailed: number;
-        };
+        summary: CoreDirectorySummary;
         entries: CoreDirectoryItem[];
         error?: string;
       }>(`/api/v1/objects/${directoryId}`);

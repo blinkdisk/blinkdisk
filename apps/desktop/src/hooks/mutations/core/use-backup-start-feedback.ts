@@ -1,7 +1,7 @@
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
-import { useBackupIssueText } from "@desktop/components/sources/backup-issue";
 import { useStartBackup } from "@desktop/hooks/mutations/core/use-start-backup";
 import type { CoreSourceItem } from "@desktop/hooks/queries/core/use-source-list";
+import { useBackupIssueText } from "@desktop/hooks/use-backup-issue-text";
 import type { SelectedProfile } from "@desktop/hooks/use-profile";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import {

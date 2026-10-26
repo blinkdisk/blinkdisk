@@ -4,6 +4,7 @@ import {
   sourceTypeWithFallback,
 } from "@blinkdisk/schemas/source";
 import type { CoreBackupIncompleteReason } from "@desktop/hooks/queries/core/use-backup-list";
+import type { CoreDirectorySummary } from "@desktop/hooks/queries/core/use-directory";
 import type { CoreTask } from "@desktop/hooks/queries/core/use-task";
 import { useVaultStatus } from "@desktop/hooks/queries/use-vault-status";
 import { type SelectedProfile, useProfile } from "@desktop/hooks/use-profile";
@@ -72,14 +73,7 @@ export type CoreSourceItem = {
       uid: number;
       gid: number;
       obj: string;
-      summ?: {
-        size: number;
-        files: number;
-        symlinks: number;
-        dirs: number;
-        maxTime: string;
-        numFailed: number;
-      };
+      summ?: CoreDirectorySummary;
     };
   };
   upload?: {

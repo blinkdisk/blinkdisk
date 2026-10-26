@@ -14,9 +14,7 @@ function getFailureReason(message?: string): BackupIssueReason {
   return "failed";
 }
 
-export function getBackupIssue(source?: CoreSourceItem) {
-  if (!source) return null;
-
+function getCurrentBackupOutcome(source: CoreSourceItem) {
   const outcome = source.lastBackupOutcome;
   const snapshotIsNewer =
     source.lastSnapshot &&
@@ -24,7 +22,14 @@ export function getBackupIssue(source?: CoreSourceItem) {
     outcome &&
     Date.parse(source.lastSnapshot.startTime) > Date.parse(outcome.endTime);
 
-  if (outcome && !snapshotIsNewer) {
+  return snapshotIsNewer ? undefined : outcome;
+}
+
+export function getBackupIssue(source?: CoreSourceItem) {
+  if (!source) return null;
+
+  const outcome = getCurrentBackupOutcome(source);
+  if (outcome) {
     if (outcome.status === "FAILED") {
       return {
         kind: "failed" as const,
@@ -52,6 +57,54 @@ export function getBackupIssue(source?: CoreSourceItem) {
   }
 
   return null;
+}
+
+export function getBackupIssueDetails(source: CoreSourceItem) {
+  const issue = getBackupIssue(source);
+  if (!issue) return null;
+
+  const outcome = getCurrentBackupOutcome(source);
+  const latestSnapshot = source.lastSnapshot;
+  const snapshot =
+    latestSnapshot &&
+    !latestSnapshot.incomplete &&
+    (!outcome ||
+      (outcome.status === "PARTIAL" &&
+        Date.parse(latestSnapshot.startTime) >= Date.parse(outcome.startTime) &&
+        Date.parse(latestSnapshot.endTime) <= Date.parse(outcome.endTime)))
+      ? latestSnapshot
+      : undefined;
+  const summary = snapshot?.rootEntry?.summ;
+  const entries = summary?.errors || [];
+  const ignoredErrorCount = summary?.numIgnoredErrors || 0;
+  const errorCount = Math.max(
+    outcome?.errorCount || 0,
+    snapshot?.stats.errorCount || 0,
+    summary?.numFailed || 0,
+  );
+  const totalCount = Math.max(errorCount + ignoredErrorCount, entries.length);
+  const startTime = outcome?.startTime || latestSnapshot?.startTime;
+  const endTime = outcome?.endTime || latestSnapshot?.endTime;
+  const task = source.lastSnapshotTask;
+  const taskMatches =
+    task &&
+    (task.status === "FAILED" || task.status === "SUCCESS") &&
+    task.endTime &&
+    startTime &&
+    endTime &&
+    (outcome
+      ? task.startTime === outcome.startTime && task.endTime === outcome.endTime
+      : Date.parse(task.startTime) <= Date.parse(startTime) &&
+        Date.parse(task.endTime) >= Date.parse(endTime));
+
+  return {
+    entries,
+    totalCount,
+    ignoredErrorCount,
+    startTime,
+    taskId: taskMatches ? task.id : undefined,
+    isTruncated: totalCount > entries.length,
+  };
 }
 
 export function createBackupResultTracker() {
