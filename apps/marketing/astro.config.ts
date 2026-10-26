@@ -207,7 +207,8 @@ export default defineConfig({
         targets: [
           {
             src: ["../../libs/assets/favicon/"],
-            dest: ".",
+            dest: "favicon",
+            rename: { stripBase: true },
           },
         ],
       }),
