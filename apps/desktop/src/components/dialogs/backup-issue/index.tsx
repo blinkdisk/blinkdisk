@@ -70,7 +70,8 @@ export function BackupIssueDialog({
     ? formatBackupDate({ startTime: details.startTime })
     : undefined;
   const unavailable =
-    details.entries.length === 0 && (partial || details.totalCount > 0);
+    details.entries.length === 0 &&
+    (partial || details.totalCount > 0 || !issue.message);
   const limitation = details.isTruncated
     ? t("limited", {
         shown: details.entries.length,

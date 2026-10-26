@@ -88,7 +88,10 @@ export function TaskDialog() {
     isLoading: isTaskLoading,
     isError: isTaskError,
   } = useTask(options?.taskId, isOpen);
-  const { data: logs } = useTaskLogs(options?.taskId, isOpen);
+  const { data: logs, isError: isLogsError } = useTaskLogs(
+    options?.taskId,
+    isOpen,
+  );
   const { mutate: cancelTask, isPending: isCancelPending } = useCancelTask();
 
   const isActive = task?.status === "RUNNING" || task?.status === "CANCELING";
@@ -135,7 +138,7 @@ export function TaskDialog() {
         <div className="bg-muted/40 border-border mt-4 flex min-h-0 flex-col gap-2 overflow-y-auto rounded-lg border p-4">
           {!logs || logs.length === 0 ? (
             <div className="text-muted-foreground flex items-center justify-center p-8 text-sm">
-              {isTaskError ? (
+              {isTaskError || isLogsError ? (
                 t("logs.unavailable")
               ) : isActive ? (
                 <span className="flex items-center gap-2">

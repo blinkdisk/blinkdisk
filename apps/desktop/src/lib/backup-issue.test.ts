@@ -298,6 +298,37 @@ describe("backup issue details", () => {
     expect(getBackupIssueDetails(partial)).toBeNull();
   });
 
+  it.each([
+    undefined,
+    0,
+    2,
+    5,
+  ])("uses ignored-error stats when the summary reports %s", (summaryCount) => {
+    const partial = partialSource();
+    partial.lastSnapshot.stats.errorCount = 2;
+    partial.lastSnapshot.stats.ignoredErrorCount = 3;
+    const withOptionalSummary: CoreSourceItem = {
+      ...partial,
+      lastSnapshot: {
+        ...partial.lastSnapshot,
+        rootEntry: {
+          ...partial.lastSnapshot.rootEntry,
+          summ: {
+            ...partial.lastSnapshot.rootEntry.summ,
+            numFailed: 2,
+            numIgnoredErrors: summaryCount,
+          },
+        },
+      },
+    };
+
+    expect(getBackupIssueDetails(withOptionalSummary)).toMatchObject({
+      ignoredErrorCount: summaryCount === 5 ? 5 : 3,
+      totalCount: summaryCount === 5 ? 7 : 5,
+      isTruncated: true,
+    });
+  });
+
   it("handles backups with a complete list or no saved file details", () => {
     const partial = partialSource();
     partial.lastSnapshot.stats.errorCount = 2;

@@ -76,7 +76,10 @@ export function getBackupIssueDetails(source: CoreSourceItem) {
       : undefined;
   const summary = snapshot?.rootEntry?.summ;
   const entries = summary?.errors || [];
-  const ignoredErrorCount = summary?.numIgnoredErrors || 0;
+  const ignoredErrorCount = Math.max(
+    summary?.numIgnoredErrors || 0,
+    snapshot?.stats.ignoredErrorCount || 0,
+  );
   const errorCount = Math.max(
     outcome?.errorCount || 0,
     snapshot?.stats.errorCount || 0,
