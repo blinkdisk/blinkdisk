@@ -8,7 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "types": "astro check",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "cms:setup": "node scripts/directus/setup.mjs",
+    "cms:migrate": "node scripts/directus/migrate.mjs"
   },
   "dependencies": {
     "@astrojs/check": "catalog:",
@@ -42,11 +45,16 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-dropzone": "catalog:",
+    "remark-gfm": "catalog:",
+    "remark-mdx": "catalog:",
+    "remark-parse": "catalog:",
     "satori": "catalog:",
     "sharp": "catalog:",
+    "shiki": "catalog:",
     "sonner": "catalog:",
     "twemoji-parser": "catalog:",
     "ua-parser-js": "catalog:",
+    "unified": "catalog:",
     "vite-plugin-static-copy": "catalog:"
   },
   "devDependencies": {
@@ -58,6 +66,7 @@
     "@types/react-dom": "catalog:",
     "@types/twemoji-parser": "catalog:",
     "typescript": "catalog:",
+    "vitest": "catalog:",
     "wrangler": "catalog:"
   }
 }

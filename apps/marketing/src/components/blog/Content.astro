@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import type { ContentNode } from "@marketing/blog/content";
+import { highlight } from "@marketing/blog/highlight";
+import BlogFaq from "@marketing/components/BlogFaq.astro";
+import Checklist from "@marketing/components/blog/Checklist.astro";
+import Mermaid from "@marketing/components/blog/Mermaid.astro";
+import Callout from "@marketing/components/Callout.astro";
+import Summary from "@marketing/components/Summary.astro";
+
+type Props = {
+  nodes: ContentNode[];
+  faqs: { question: string; answer: string }[];
+};
+const { nodes, faqs } = Astro.props;
+const code = await Promise.all(
+  nodes.map((node) =>
+    node.tag === "Code"
+      ? highlight(node.text ?? "", String(node.props.language))
+      : Promise.resolve(""),
+  ),
+);
+---
+{nodes.map((node, index) => {
+  const Element = node.tag;
+  return node.text !== undefined && !["Code", "Mermaid"].includes(node.tag) ? node.text :
+    node.tag === "" ? <Astro.self nodes={node.children} faqs={faqs} /> :
+    node.tag === "Summary" ? <Summary class={String(node.props.class ?? "")}><Astro.self nodes={node.children} faqs={faqs} /></Summary> :
+    node.tag === "Callout" ? <Callout variant={node.props.variant === "info" ? "info" : "warning"} title={node.props.title ? String(node.props.title) : undefined} class={String(node.props.class ?? "")}><Astro.self nodes={node.children} faqs={faqs} /></Callout> :
+    node.tag === "BlogFaq" ? <BlogFaq faqs={faqs} /> :
+    node.tag === "Image" ? <Image src={String(node.props.src)} alt={String(node.props.alt)} width={Number(node.props.width ?? 1200)} height={Number(node.props.height ?? 675)} class={String(node.props.class ?? "")} loading="lazy" /> :
+    node.tag === "Checklist" ? <Checklist title={node.props.title ? String(node.props.title) : undefined}><Astro.self nodes={node.children} faqs={faqs} /></Checklist> :
+    node.tag === "ChecklistItem" ? <label class="group flex cursor-pointer items-start gap-3 rounded-md border border-transparent px-3 py-2.5 transition-colors hover:border-primary/20 hover:bg-primary/5"><input type="checkbox" class="mt-1 size-4 shrink-0 accent-primary" /><span class="min-w-0 flex-1"><Astro.self nodes={node.children} faqs={faqs} /></span></label> :
+    node.tag === "Task" ? <input type="checkbox" checked={Boolean(node.props.checked)} disabled aria-label="Task status" /> :
+    node.tag === "Mermaid" ? <Mermaid code={node.text ?? ""} /> :
+    node.tag === "Code" ? <Fragment set:html={code[index]} /> :
+    ["img", "br", "hr", "col"].includes(node.tag) ? <Element {...node.props} /> :
+    <Element {...node.props}><Astro.self nodes={node.children} faqs={faqs} /></Element>;
+})}

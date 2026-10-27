@@ -15,59 +15,6 @@ import { viteStaticCopy as copy } from "vite-plugin-static-copy";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const site = "https://blinkdisk.com";
-const siteHostname = new URL(site).hostname;
-
-type HastNode = {
-  type?: string;
-  tagName?: string;
-  properties?: Record<string, unknown>;
-  children?: HastNode[];
-};
-
-type VFile = {
-  path?: string;
-  history?: string[];
-};
-
-function isExternalBlogHref(href: unknown) {
-  if (typeof href !== "string" || !/^https?:\/\//i.test(href)) {
-    return false;
-  }
-
-  try {
-    return new URL(href).hostname !== siteHostname;
-  } catch {
-    return false;
-  }
-}
-
-function openExternalBlogLinksInNewTab() {
-  return (tree: HastNode, file: VFile) => {
-    const filePath = file.path ?? file.history?.[0] ?? "";
-
-    if (!filePath.includes("src/content/blog/")) {
-      return;
-    }
-
-    const visit = (node: HastNode) => {
-      if (node.type === "element" && node.tagName === "a") {
-        const properties = node.properties ?? {};
-
-        if (isExternalBlogHref(properties.href)) {
-          node.properties = {
-            ...properties,
-            target: "_blank",
-            rel: "noopener noreferrer",
-          };
-        }
-      }
-
-      node.children?.forEach(visit);
-    };
-
-    visit(tree);
-  };
-}
 
 export default defineConfig({
   site,
@@ -75,9 +22,7 @@ export default defineConfig({
   prefetch: true,
   trailingSlash: "never",
   markdown: {
-    processor: unified({
-      rehypePlugins: [openExternalBlogLinksInNewTab],
-    }),
+    processor: unified({}),
     shikiConfig: {
       themes: {
         light: "github-light",
@@ -140,7 +85,8 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap({
-      customPages: getComparisonSitemap(site),
+      customPages: [...getComparisonSitemap(site), `${site}/blog`],
+      customSitemaps: [`${site}/blog/sitemap.xml`],
     }),
     sentry({
       // The Worker entrypoint initializes server monitoring with @sentry/cloudflare.
@@ -159,6 +105,21 @@ export default defineConfig({
   ],
   env: {
     schema: {
+      DIRECTUS_URL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      DIRECTUS_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      BLOG_PREVIEW_SECRET: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       MARKETING_URL: envField.string({
         context: "server",
         access: "public",

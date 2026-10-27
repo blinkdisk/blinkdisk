@@ -1,0 +1,28 @@
+---
+import { imageUrl } from "@marketing/blog/schema";
+import type { PreparedPost } from "@marketing/blog/service";
+import Content from "@marketing/components/blog/Content.astro";
+import BlogPostLayout from "@marketing/layouts/BlogPostLayout.astro";
+
+type Props = { article: PreparedPost; cmsUrl: string; preview?: boolean };
+const {
+  article: { post, content },
+  cmsUrl,
+  preview = false,
+} = Astro.props;
+const faqStructuredData = post.faqs?.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: post.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    }
+  : undefined;
+---
+<BlogPostLayout title={post.title} description={post.description} publicationDate={new Date(post.publication_date)} lastUpdated={post.last_updated || post.date_updated ? new Date(post.last_updated ?? post.date_updated ?? post.publication_date) : undefined} author={post.author} image={{ src: imageUrl(cmsUrl, post.cover_image.id, 1200), alt: post.image_alt }} headings={content.headings} ctaHeadline={post.cta_headline ?? undefined} readingTime={content.readingTime} structuredData={faqStructuredData} preview={preview} canonicalPath={"/blog/" + post.slug}>
+  {preview && <aside class="not-prose mb-8 rounded-lg border border-amber-500/50 p-4">Private preview — this may contain unpublished content. Refresh after saving in Directus.</aside>}
+  <Content nodes={content.nodes} faqs={post.faqs ?? []} />
+</BlogPostLayout>

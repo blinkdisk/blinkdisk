@@ -13,6 +13,8 @@ type Heading = {
 };
 
 type Props = {
+  preview?: boolean;
+  canonicalPath?: string;
   title: string;
   description: string;
   publicationDate: Date;
@@ -29,6 +31,8 @@ type Props = {
 };
 
 const {
+  preview = false,
+  canonicalPath,
   title,
   description,
   publicationDate,
@@ -99,6 +103,8 @@ const pageStructuredData = [
 ---
 
 <DefaultLayout
+  preview={preview}
+  canonicalPath={canonicalPath}
   title={title}
   description={description}
   image={absoluteImageSource}

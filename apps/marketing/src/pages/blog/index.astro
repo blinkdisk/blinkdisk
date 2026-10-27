@@ -1,17 +1,27 @@
 ---
 import { Image } from "astro:assets";
-import { getCollection } from "astro:content";
 import ArrowRightIcon from "@lucide/astro/icons/arrow-right";
+import { blogService, directusUrl } from "@marketing/blog/runtime";
+import type { BlogPost } from "@marketing/blog/schema";
+import { imageUrl } from "@marketing/blog/schema";
 import BlogCard from "@marketing/components/BlogCard.astro";
 import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import * as Sentry from "@sentry/astro";
 
-const posts = await getCollection("blog", ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-
-const sortedPosts = posts.sort(
-  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
-);
+export const prerender = false;
+Astro.response.headers.set("Cache-Control", "private, no-store");
+let sortedPosts: BlogPost[] = [];
+let unavailable = false;
+try {
+  sortedPosts = await blogService().list();
+} catch (error) {
+  unavailable = true;
+  Astro.response.status = 503;
+  Astro.response.headers.set("Retry-After", "60");
+  console.error("Unable to load blog content", error);
+  Sentry.captureException(error);
+}
+const cmsUrl = directusUrl();
 
 const [featuredPost, ...restPosts] = sortedPosts;
 
@@ -48,16 +58,16 @@ const formatDate = (date: Date) =>
         <>
           {featuredPost && (
             <a
-              href={`/blog/${featuredPost.id}`}
+              href={`/blog/${featuredPost.slug}`}
               class="group mb-16 grid gap-8 md:grid-cols-2 md:items-center"
               data-astro-prefetch
             >
               <div class="aspect-video overflow-hidden rounded-2xl">
                 <Image
-                  src={featuredPost.data.image.src}
-                  alt={featuredPost.data.image.alt}
-                  width={featuredPost.data.image.src.width ?? 1200}
-                  height={featuredPost.data.image.src.height ?? 630}
+                  src={imageUrl(cmsUrl, featuredPost.cover_image.id, 1200)}
+                  alt={featuredPost.image_alt}
+                  width={1200}
+                  height={630}
                   class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
@@ -66,13 +76,13 @@ const formatDate = (date: Date) =>
                   Latest Post
                 </span>
                 <span class="text-muted-foreground mb-3 text-sm">
-                  {formatDate(featuredPost.data.publicationDate)}
+                  {formatDate(new Date(featuredPost.publication_date))}
                 </span>
                 <h2 class="text-foreground mb-3 text-2xl font-bold md:text-3xl">
-                  {featuredPost.data.title}
+                  {featuredPost.title}
                 </h2>
                 <p class="text-muted-foreground mb-6 line-clamp-3 text-base">
-                  {featuredPost.data.description}
+                  {featuredPost.description}
                 </p>
                 <span class="text-primary inline-flex items-center gap-2 font-medium transition-colors">
                   Read article
@@ -93,12 +103,12 @@ const formatDate = (date: Date) =>
               <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {restPosts.map((post) => (
                   <BlogCard
-                    title={post.data.title}
-                    description={post.data.description}
-                    publicationDate={post.data.publicationDate}
-                    author={post.data.author}
-                    image={post.data.image}
-                    slug={post.id}
+                    title={post.title}
+                    description={post.description}
+                    publicationDate={new Date(post.publication_date)}
+                    author={post.author}
+                    image={{ src: imageUrl(cmsUrl, post.cover_image.id, 800), alt: post.image_alt }}
+                    slug={post.slug}
                   />
                 ))}
               </div>
@@ -108,7 +118,7 @@ const formatDate = (date: Date) =>
       ) : (
         <div class="py-16 text-center">
           <p class="text-muted-foreground text-lg">
-            No blog posts yet. Check back soon!
+            {unavailable ? "The blog is temporarily unavailable. Please try again shortly." : "No blog posts yet. Check back soon!"}
           </p>
         </div>
       )
