@@ -6,11 +6,14 @@ const { code } = Astro.props;
 <script>
   const diagrams = document.querySelectorAll<HTMLElement>("[data-blog-mermaid]");
   if (diagrams.length) {
+    try {
     const { default: mermaid } = await import("mermaid");
     mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: "base", themeVariables: { fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif", fontSize: "20px", primaryColor: "#2d2d32", primaryTextColor: "#fafafa", lineColor: "#a1a1aa", mainBkg: "#2d2d32", clusterBkg: "#18181b", clusterBorder: "#3f3f46" }, flowchart: { htmlLabels: true, curve: "basis", nodeSpacing: 50, rankSpacing: 50, padding: 20, useMaxWidth: true } });
-    try { await mermaid.run({ nodes: Array.from(diagrams) }); }
+    await mermaid.run({ nodes: Array.from(diagrams) });
+    }
     catch {
       for (const diagram of diagrams) {
+        if (diagram.querySelector("svg")) continue;
         diagram.style.visibility = "visible";
         diagram.textContent = "This diagram could not be rendered.";
       }

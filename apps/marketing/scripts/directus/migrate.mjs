@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
-import { api, find, local, query, root } from "./client.mjs";
+import { api, cmsUrl, find, local, query, root } from "./client.mjs";
+import { mediaExtension } from "./config.mjs";
 
 const folder = local.DIRECTUS_BLOG_FOLDER;
 if (!folder) throw new Error("Run cms:setup first.");
@@ -18,12 +19,12 @@ async function media(source) {
     if (!response.ok)
       throw new Error(`Image download failed: ${response.status}`);
     bytes = new Uint8Array(await response.arrayBuffer());
-    type = response.headers.get("content-type")?.split(";")[0] ?? "image/jpeg";
+    type = response.headers.get("content-type")?.split(";")[0] ?? "";
   }
   const filename =
     "blog-" +
     createHash("sha256").update(bytes).digest("hex") +
-    (type === "image/png" ? ".png" : type === "image/webp" ? ".webp" : ".jpg");
+    mediaExtension(type);
   const existing = await find("files", {
     folder: { _eq: folder },
     filename_download: { _eq: filename },
@@ -73,7 +74,7 @@ for (const filename of readdirSync(
     const id = await media(source);
     content = content.replaceAll(
       `src="${source}"`,
-      `src="${local.DIRECTUS_URL}/assets/${id}"`,
+      `src="${cmsUrl}/assets/${id}"`,
     );
   }
   await api("/items/blog_posts", {

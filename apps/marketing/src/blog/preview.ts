@@ -22,7 +22,7 @@ export async function previewSession(secret: string, now = Date.now()) {
       await crypto.subtle.sign(
         "HMAC",
         await key(secret),
-        encoder.encode(expires),
+        encoder.encode(`blinkdisk:blog-preview:session:v1:${expires}`),
       ),
     )
   );
@@ -53,21 +53,18 @@ export async function validPreviewSession(
     "HMAC",
     await key(secret),
     bytes,
-    encoder.encode(expires),
+    encoder.encode(`blinkdisk:blog-preview:session:v1:${expires}`),
   );
 }
 export async function validPreviewKey(value: string, secret: string) {
-  if (!value || !secret) return false;
-  const signingKey = await key(secret);
-  const signature = await crypto.subtle.sign(
-    "HMAC",
-    signingKey,
-    encoder.encode(secret),
+  if (!secret || !/^[a-f0-9]{64}$/.test(value)) return false;
+  const bytes = new Uint8Array(
+    value.match(/../g)?.map((part) => Number.parseInt(part, 16)) ?? [],
   );
   return crypto.subtle.verify(
     "HMAC",
-    signingKey,
-    signature,
-    encoder.encode(value),
+    await key(secret),
+    bytes,
+    encoder.encode("blinkdisk:blog-preview:link:v1"),
   );
 }

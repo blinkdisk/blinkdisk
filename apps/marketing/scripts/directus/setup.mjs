@@ -1,10 +1,19 @@
 import { randomBytes } from "node:crypto";
 import { api, cmsUrl, find, local, query, saveLocal } from "./client.mjs";
+import {
+  previewLinkKey,
+  serializeEnvironment,
+  setupPreviewSecret,
+} from "./config.mjs";
 
-const secret =
-  process.env.BLOG_PREVIEW_SECRET ??
-  local.BLOG_PREVIEW_SECRET ??
-  randomBytes(32).toString("hex");
+const collections = await api("/collections");
+const secret = setupPreviewSecret(
+  process.env.BLOG_PREVIEW_SECRET,
+  local.BLOG_PREVIEW_SECRET,
+  collections.find((entry) => entry.collection === "blog_posts")?.meta
+    ?.preview_url,
+);
+serializeEnvironment({ BLOG_PREVIEW_SECRET: secret });
 const websiteUrl = process.env.MARKETING_URL ?? "https://blinkdisk.com";
 const folder =
   (await find("folders", { name: { _eq: "Blog" }, parent: { _null: true } })) ??
@@ -156,9 +165,8 @@ const meta = {
   archive_value: "archived",
   unarchive_value: "draft",
   versioning: true,
-  preview_url: `${websiteUrl}/blog/preview/{{id}}?key=${encodeURIComponent(secret)}`,
+  preview_url: `${websiteUrl}/blog/preview/{{id}}?key=${previewLinkKey(secret)}`,
 };
-const collections = await api("/collections");
 if (!collections.some((entry) => entry.collection === "blog_posts")) {
   await api("/collections", {
     method: "POST",

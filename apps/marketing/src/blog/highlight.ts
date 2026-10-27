@@ -13,6 +13,9 @@ export async function highlight(code: string, language: string) {
     themes: [dark, light],
     langs: [bash, javascript, json, typescript],
     engine: createJavaScriptRegexEngine(),
+  }).catch((error) => {
+    highlighter = undefined;
+    throw error;
   });
   const instance = await highlighter;
   const aliases: Record<string, string> = {

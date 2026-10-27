@@ -74,7 +74,7 @@ const cssProperties = new Set(
   ),
 );
 
-export function safeUrl(value: string, image = false): string {
+function safeUrl(value: string, image = false): string {
   const normalized = value.trim();
   if (
     Array.from(normalized).some(
@@ -149,7 +149,7 @@ export function parseContent(source: string): ParsedContent {
   }
   const headings: ParsedContent["headings"] = [];
   const definitions = new Map<string, SourceNode>();
-  const slugs = new Map<string, number>();
+  const slugs = new Set<string>();
   function collect(node: SourceNode) {
     if (node.type === "definition" && node.identifier)
       definitions.set(node.identifier.toLowerCase(), node);
@@ -170,6 +170,11 @@ export function parseContent(source: string): ParsedContent {
       fail(node, "Imports and JavaScript expressions are not supported.");
     if (node.type === "text") return { ...result, text: node.value ?? "" };
     if (node.type === "definition") return result;
+    if (["footnoteDefinition", "footnoteReference"].includes(node.type))
+      fail(
+        node,
+        "Footnotes are not supported; use ordinary links or a references section.",
+      );
     result.children = (node.children ?? []).map((child) =>
       convert(child, depth + 1),
     );
@@ -183,9 +188,9 @@ export function parseContent(source: string): ParsedContent {
           .replace(/[^\p{L}\p{N}\s-]/gu, "")
           .trim()
           .replace(/\s+/g, "-") || "heading";
-      const count = slugs.get(base) ?? 0;
-      slugs.set(base, count + 1);
-      const slug = count ? `${base}-${count}` : base;
+      let slug = base;
+      for (let count = 1; slugs.has(slug); count++) slug = `${base}-${count}`;
+      slugs.add(slug);
       result.props.id = slug;
       headings.push({ depth: node.depth ?? 2, slug, text });
     } else if (node.type === "list") {
@@ -252,7 +257,12 @@ export function parseContent(source: string): ParsedContent {
         !["warning", "info"].includes(String(result.props.variant))
       )
         fail(node, "Callout variant must be warning or info.");
-      if (name === "Image" && (!result.props.src || !result.props.alt))
+      if (
+        name === "Image" &&
+        (!result.props.src ||
+          typeof result.props.alt !== "string" ||
+          !result.props.alt.trim())
+      )
         fail(node, "Image requires src and alt attributes.");
       if (
         name === "Checklist" &&
@@ -310,6 +320,20 @@ export function parseContent(source: string): ParsedContent {
     return result;
   }
   const nodes = convert(root).children;
-  const words = textOf(root).trim().split(/\s+/).filter(Boolean).length;
+  function readingText(node: SourceNode): string {
+    if (node.value !== undefined) return node.value;
+    const inline = [
+      "paragraph",
+      "heading",
+      "strong",
+      "emphasis",
+      "delete",
+      "link",
+      "linkReference",
+      "mdxJsxTextElement",
+    ].includes(node.type);
+    return (node.children ?? []).map(readingText).join(inline ? "" : " ");
+  }
+  const words = readingText(root).trim().split(/\s+/).filter(Boolean).length;
   return { nodes, headings, readingTime: Math.max(1, Math.ceil(words / 200)) };
 }

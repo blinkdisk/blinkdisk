@@ -1,5 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { parseContent, safeStyle } from "@marketing/blog/content";
+import {
+  BlogContentError,
+  parseContent,
+  safeStyle,
+} from "@marketing/blog/content";
 import { serializeStructuredData } from "@marketing/utils/structured-data";
 import { describe, expect, it } from "vitest";
 
@@ -32,8 +36,9 @@ describe("CMS content", () => {
     '<Callout variant="unknown" />',
     '<Image src="https://example.com/a.png" />',
     "<Checklist><div>Invalid child</div></Checklist>",
+    '<Image src="https://example.com/a.png" alt />',
   ])("rejects executable or unsupported input: %s", (source) =>
-    expect(() => parseContent(source)).toThrow());
+    expect(() => parseContent(source)).toThrow(BlogContentError));
   it.each([
     "color: e\\78pression(alert(1))",
     "background-color: u/**/rl(x)",
@@ -41,7 +46,26 @@ describe("CMS content", () => {
     'color: red; @import "x"',
     'background-color: image-set("x")',
   ])("rejects unsafe CSS: %s", (style) =>
-    expect(() => safeStyle(style)).toThrow());
+    expect(() => safeStyle(style)).toThrow(BlogContentError));
+  it("avoids collisions between duplicate headings and suffixed heading text", () => {
+    expect(
+      parseContent("## Foo\n\n## Foo\n\n## Foo 1\n\n## Foo").headings.map(
+        (heading) => heading.slug,
+      ),
+    ).toEqual(["foo", "foo-1", "foo-1-1", "foo-2"]);
+  });
+  it("counts words across blocks without splitting inline words", () => {
+    expect(
+      parseContent(Array.from({ length: 201 }, () => "Word").join("\n\n"))
+        .readingTime,
+    ).toBe(2);
+    expect(parseContent("one**two**three").readingTime).toBe(1);
+  });
+  it("reports unsupported footnotes with an authoring alternative", () => {
+    expect(() => parseContent("Example[^1].\n\n[^1]: Footnote")).toThrow(
+      "Footnotes are not supported; use ordinary links or a references section.",
+    );
+  });
   it("preserves both migration fixtures and their interactive components", () => {
     const directory = new URL(
       "../../scripts/directus/fixtures/",

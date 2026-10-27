@@ -80,7 +80,7 @@ const config: KnipConfig = {
     "libs/db/src/schema.ts": ["exports", "types"],
     "apps/marketing/src/components/react/**": ["exports"],
   },
-  ignoreDependencies: ["@blinkdisk/.+", "cloudflare", "@sentry/cloudflare"],
+  ignoreDependencies: ["@blinkdisk/.+", "cloudflare"],
   paths: tsconfig.compilerOptions.paths,
 };
 

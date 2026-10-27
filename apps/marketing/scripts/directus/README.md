@@ -4,7 +4,7 @@ Directus is the source of truth for blog posts and images. The website renders t
 
 ## Setup and migration
 
-From `apps/marketing`, provide `DIRECTUS_URL` and `DIRECTUS_ADMIN_TOKEN` in the shell, then run:
+From `apps/marketing`, provide `DIRECTUS_URL` (an origin URL without a path prefix) and `DIRECTUS_ADMIN_TOKEN` in the shell, then run:
 
 ```sh
 pnpm cms:setup
@@ -30,11 +30,11 @@ Required fields are `slug`, `title`, `description`, `author`, `content`, `cover_
 
 Keep published slugs stable: changing one changes its URL; automatic redirects are not implemented. Saving the main version of a published post changes the live page after cache expiry. To prepare changes privately, use Directus content versions and promote a version when ready. The preview supports a `version` query parameter containing a Directus version key; without it, it shows the saved main item.
 
-Click/open the preview URL from Directus in a separate tab. It exchanges a dedicated preview key for a one-hour HTTP-only session, then removes the key from the URL. Refresh after saving. Previews are not cached, are marked noindex, and do not load site analytics or chat integrations. The preview key grants access to saved drafts, so treat preview links as private. Rotating the preview secret requires updating the Directus preview URL and the website secret together.
+Click/open the preview URL from Directus in a separate tab. It exchanges a dedicated, derived preview key for a one-hour HTTP-only session, then removes the key from the URL. Refresh after saving. Previews are not cached, are marked noindex, and do not load site analytics or chat integrations. The link key is derived from the server secret with a separate HMAC context; it does not reveal the session-signing secret. The preview key grants access to saved drafts, so treat preview links as private. Setup refuses to replace an existing preview configuration if the current secret is unavailable. Empty environment values fall back to the stored secret. Secrets must not contain quotes, backslashes, or control characters. Rotating the preview secret requires updating the Directus preview URL and the website secret together.
 
 ## Content syntax
 
-Use Markdown with GFM tables, fenced code blocks, links, and self-closing image tags. Components are available without imports:
+GFM footnotes are not supported; use ordinary links or a references section. Use Markdown with GFM tables, fenced code blocks, links, and self-closing image tags. Components are available without imports:
 
 ```md
 <Summary>
@@ -67,7 +67,7 @@ Imports, exports, JavaScript expressions, spread attributes, scripts, iframes, e
 
 ## Media and access
 
-Upload JPEG, PNG, WebP, GIF, or AVIF images into the Blog folder using the agent token and the `folder` ID from `.env.local`. Reference `/assets/FILE_UUID` URLs in the content, and use a file UUID for `cover_image`. Add meaningful alt text. Public image access is limited to this folder, including files used by drafts; article bodies and drafts remain private. Do not upload confidential images into this public folder.
+Upload JPEG, PNG, WebP, GIF, or AVIF images into the Blog folder using the agent token and the `folder` ID from `.env.local`. Reference `/assets/FILE_UUID` URLs (resolved against Directus) in the content, and use a file UUID for `cover_image`. Add meaningful alt text. Inline images preserve their natural aspect ratio when dimensions are omitted; dimensions may also be provided explicitly. Public image access is limited to this folder, including files used by drafts; article bodies and drafts remain private. Do not upload confidential images into this public folder.
 
 The website account can read blog posts, their versions, and blog files. It cannot write. The marketing-agent account can create/edit posts and blog files, publish/schedule/archive posts, and prepare content versions. It cannot delete records, manage users, or change the schema. The existing administrator account is unchanged.
 

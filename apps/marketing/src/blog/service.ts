@@ -14,7 +14,7 @@ export type BlogCache = {
   put(key: string, response: Response): Promise<unknown>;
   delete(key: string): Promise<unknown>;
 };
-export class CmsUnavailableError extends Error {
+class CmsUnavailableError extends Error {
   constructor(
     public staleAllowed = true,
     public diagnostic = "CMS availability error",
@@ -119,9 +119,7 @@ export function createBlogService(
           error instanceof BlogContentError)
       )
         return previous.value;
-      throw error instanceof CmsUnavailableError
-        ? error
-        : new CmsUnavailableError();
+      throw error;
     }
   }
   function parsePosts(value: unknown) {

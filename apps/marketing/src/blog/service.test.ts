@@ -1,3 +1,4 @@
+import { BlogContentError } from "@marketing/blog/content";
 import { type BlogCache, createBlogService } from "@marketing/blog/service";
 import { describe, expect, it, vi } from "vitest";
 
@@ -60,6 +61,13 @@ describe("Directus blog service", () => {
       expect.arrayContaining([
         { status: { _eq: "published" } },
         { publication_date: { _lte: "2026-10-27T00:00:00.000Z" } },
+      ]),
+    );
+    expect(url.searchParams.get("fields")?.split(",")).toEqual(
+      expect.arrayContaining([
+        "cover_image.id",
+        "cover_image.width",
+        "cover_image.height",
       ]),
     );
     expect(h.fetcher.mock.calls[0]?.[1]?.headers).toMatchObject({
@@ -162,7 +170,7 @@ describe("Directus blog service", () => {
     h.fetcher.mockResolvedValue(
       Response.json({ data: [{ ...post, content: "{dangerous()}" }] }),
     );
-    await expect(h.service.post("test-post")).rejects.toThrow();
+    await expect(h.service.post("test-post")).rejects.toThrow(BlogContentError);
     expect(h.records.size).toBe(0);
   });
   it("loads an explicit content version through the single-item endpoint", async () => {

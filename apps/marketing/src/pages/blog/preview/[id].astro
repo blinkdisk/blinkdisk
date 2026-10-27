@@ -26,7 +26,7 @@ if (suppliedKey !== null) {
   Astro.cookies.set("blog-preview", await previewSession(secret), {
     httpOnly: true,
     secure: Astro.url.protocol === "https:",
-    sameSite: "strict",
+    sameSite: "lax",
     path: "/blog/preview",
     maxAge: 3600,
   });
