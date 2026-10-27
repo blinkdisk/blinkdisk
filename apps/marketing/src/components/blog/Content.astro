@@ -5,6 +5,7 @@ import { contentImageUrl } from "@marketing/blog/media";
 import BlogFaq from "@marketing/components/BlogFaq.astro";
 import Checklist from "@marketing/components/blog/Checklist.astro";
 import Mermaid from "@marketing/components/blog/Mermaid.astro";
+import StackedBar from "@marketing/components/blog/StackedBar.astro";
 import Callout from "@marketing/components/Callout.astro";
 import Summary from "@marketing/components/Summary.astro";
 
@@ -32,6 +33,7 @@ const code = await Promise.all(
     node.tag === "Image" ? <img {...node.props} src={contentImageUrl(String(node.props.src), cmsUrl)} alt={String(node.props.alt)} loading="lazy" decoding="async" /> :
     node.tag === "Checklist" ? <Checklist title={node.props.title ? String(node.props.title) : undefined}><Astro.self nodes={node.children} faqs={faqs} cmsUrl={cmsUrl} /></Checklist> :
     node.tag === "ChecklistItem" ? <label class="group flex cursor-pointer items-start gap-3 rounded-md border border-transparent px-3 py-2.5 transition-colors hover:border-primary/20 hover:bg-primary/5"><input type="checkbox" class="mt-1 size-4 shrink-0 accent-primary" /><span class="min-w-0 flex-1"><Astro.self nodes={node.children} faqs={faqs} cmsUrl={cmsUrl} /></span></label> :
+    node.tag === "StackedBar" ? <StackedBar title={String(node.props.title)} unit={String(node.props.unit)} segments={node.children} /> :
     node.tag === "Task" ? <input type="checkbox" checked={Boolean(node.props.checked)} disabled aria-label="Task status" /> :
     node.tag === "Mermaid" ? <Mermaid code={node.text ?? ""} /> :
     node.tag === "Code" ? <Fragment set:html={code[index]} /> :

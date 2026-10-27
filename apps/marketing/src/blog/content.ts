@@ -1,3 +1,4 @@
+import { capacityUnits } from "@marketing/blog/chart";
 import remarkGfm from "remark-gfm";
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
@@ -48,6 +49,8 @@ const components: Record<string, string[]> = {
   BlogFaq: [],
   Checklist: ["title"],
   ChecklistItem: [],
+  StackedBar: ["title", "unit"],
+  BarSegment: ["label", "value"],
 };
 const htmlAttributes = new Set(
   "id class title style href src alt width height loading decoding colspan rowspan scope start open type".split(
@@ -161,8 +164,26 @@ export function parseContent(source: string): ParsedContent {
       message + (node.position ? ` (line ${node.position.start.line})` : ""),
     );
   }
-  function convert(node: SourceNode, depth = 0): ContentNode {
+  function convert(
+    node: SourceNode,
+    depth = 0,
+    parentName?: string,
+  ): ContentNode {
     if (depth > 64) fail(node, "Content nesting is too deep.");
+    if (node.name === "BarSegment" && node.children?.length)
+      fail(
+        node,
+        "BarSegment cannot contain children; use label and value attributes.",
+      );
+    if (node.name === "BarSegment" && parentName !== "StackedBar")
+      fail(node, "BarSegment must be a direct child of StackedBar.");
+    if (node.name === "StackedBar" && parentName === "StackedBar")
+      fail(node, "StackedBar accepts only BarSegment elements and whitespace.");
+    if (node.name === "StackedBar" && node.type !== "mdxJsxFlowElement")
+      fail(
+        node,
+        "StackedBar must be a block, separated from prose by blank lines.",
+      );
     const result: ContentNode = { tag: "", props: {}, children: [] };
     if (
       ["mdxjsEsm", "mdxFlowExpression", "mdxTextExpression"].includes(node.type)
@@ -176,7 +197,7 @@ export function parseContent(source: string): ParsedContent {
         "Footnotes are not supported; use ordinary links or a references section.",
       );
     result.children = (node.children ?? []).map((child) =>
-      convert(child, depth + 1),
+      convert(child, depth + 1, node.name),
     );
     if (node.type === "root") return result;
     if (node.type === "heading") {
@@ -238,6 +259,11 @@ export function parseContent(source: string): ParsedContent {
             /^data-[a-z-]+$/.test(key);
         if (!allowed || /^on/i.test(key))
           fail(node, `Unsupported attribute: ${key}`);
+        if (
+          ["StackedBar", "BarSegment"].includes(name) &&
+          Object.hasOwn(result.props, key)
+        )
+          fail(node, `Duplicate attribute: ${key}`);
         let value: string | boolean | number =
           attribute.value === null ? true : String(attribute.value);
         if (["src", "href"].includes(key))
@@ -249,7 +275,69 @@ export function parseContent(source: string): ParsedContent {
             fail(node, `Invalid numeric attribute: ${key}`);
           value = number;
         }
+        if (name === "BarSegment" && key === "value") {
+          const number = Number(value);
+          if (
+            typeof value !== "string" ||
+            !/^\d+(?:\.\d{1,6})?$/.test(value) ||
+            !Number.isFinite(number) ||
+            number < 0.000001 ||
+            number > 1_000_000_000_000 ||
+            capacityUnits(value) > 1_000_000_000_000_000_000n
+          )
+            fail(
+              node,
+              "BarSegment value must be a decimal from 0.000001 to 1,000,000,000,000 with at most six decimal places.",
+            );
+        }
         result.props[key] = value;
+      }
+      if (name === "StackedBar" || name === "BarSegment") {
+        const fields =
+          name === "StackedBar"
+            ? ([
+                ["title", 160],
+                ["unit", 24],
+              ] as const)
+            : ([["label", 120]] as const);
+        for (const [key, limit] of fields) {
+          const value = result.props[key];
+          if (
+            typeof value !== "string" ||
+            !value.trim() ||
+            value.length > limit
+          )
+            fail(
+              node,
+              `${name} ${key} must be non-empty text of at most ${limit} characters.`,
+            );
+          result.props[key] = value.trim();
+        }
+        if (name === "BarSegment" && typeof result.props.value !== "string")
+          fail(node, "BarSegment requires value.");
+      }
+      if (name === "StackedBar") {
+        for (const child of node.children ?? []) {
+          if (
+            child.name !== "BarSegment" &&
+            !(child.type === "text" && !child.value?.trim())
+          )
+            fail(
+              child,
+              "StackedBar accepts only BarSegment elements and whitespace.",
+            );
+        }
+        result.children = result.children.filter(
+          (child) => child.tag === "BarSegment",
+        );
+        if (result.children.length < 1 || result.children.length > 8)
+          fail(node, "StackedBar requires 1 to 8 BarSegment elements.");
+        const total = result.children.reduce(
+          (sum, child) => sum + capacityUnits(String(child.props.value)),
+          0n,
+        );
+        if (total > 1_000_000_000_000_000_000n)
+          fail(node, "StackedBar total must not exceed 1,000,000,000,000.");
       }
       if (
         name === "Callout" &&
