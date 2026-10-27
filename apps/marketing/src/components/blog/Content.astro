@@ -35,7 +35,7 @@ const code = await Promise.all(
     node.tag === "Task" ? <input type="checkbox" checked={Boolean(node.props.checked)} disabled aria-label="Task status" /> :
     node.tag === "Mermaid" ? <Mermaid code={node.text ?? ""} /> :
     node.tag === "Code" ? <Fragment set:html={code[index]} /> :
-    node.tag === "img" ? <img {...node.props} src={contentImageUrl(String(node.props.src), cmsUrl)} /> :
+    node.tag === "img" ? <img {...node.props} src={contentImageUrl(typeof node.props.src === "string" ? node.props.src : undefined, cmsUrl)} /> :
     ["br", "hr", "col"].includes(node.tag) ? <Element {...node.props} /> :
     <Element {...node.props}><Astro.self nodes={node.children} faqs={faqs} cmsUrl={cmsUrl} /></Element>;
 })}

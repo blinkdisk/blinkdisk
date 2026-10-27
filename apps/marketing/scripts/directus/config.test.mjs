@@ -8,6 +8,8 @@ import {
   setupPreviewSecret,
 } from "./config.mjs";
 
+const stored = "stored-secret-".repeat(4);
+const configured = "configured-secret-".repeat(4);
 describe("Directus setup configuration", () => {
   it("accepts origin URLs and rejects path prefixes and embedded credentials", () => {
     expect(resolveCmsUrl("https://cms.example.com/")).toBe(
@@ -26,21 +28,24 @@ describe("Directus setup configuration", () => {
       expect(() => resolveCmsUrl(url)).toThrow();
   });
   it("preserves secrets, falls back from empty settings, and refuses silent rotation", () => {
+    expect(setupPreviewSecret("", stored, "https://site.example/preview")).toBe(
+      stored,
+    );
     expect(
-      setupPreviewSecret("", "stored", "https://site.example/preview"),
-    ).toBe("stored");
-    expect(
-      setupPreviewSecret(
-        "configured",
-        "stored",
-        "https://site.example/preview",
-      ),
-    ).toBe("configured");
+      setupPreviewSecret(configured, stored, "https://site.example/preview"),
+    ).toBe(configured);
     expect(() =>
       setupPreviewSecret("", "", "https://site.example/preview"),
     ).toThrow("will not silently rotate");
     expect(setupPreviewSecret("", "", null)).toMatch(/^[a-f0-9]{64}$/);
-    expect(previewLinkKey("secret")).toMatch(/^[a-f0-9]{64}$/);
+    expect(previewLinkKey(stored)).toMatch(/^[a-f0-9]{64}$/);
+    expect(previewLinkKey(stored)).not.toBe(previewLinkKey(configured));
+    expect(() => setupPreviewSecret("short", stored, null)).toThrow(
+      "at least 32 characters",
+    );
+    expect(() => setupPreviewSecret("", "short", null)).toThrow(
+      "at least 32 characters",
+    );
   });
   it("round-trips supported environment values and rejects corrupting input", () => {
     const values = {
@@ -62,6 +67,8 @@ describe("Directus setup configuration", () => {
     for (const [mime, extension] of [
       ["image/png", ".png"],
       ["image/jpeg", ".jpg"],
+      ["IMAGE/JPEG", ".jpg"],
+      [" Image/PNG ; charset=binary", ".png"],
       ["image/gif", ".gif"],
       ["image/avif", ".avif"],
       ["image/webp", ".webp"],

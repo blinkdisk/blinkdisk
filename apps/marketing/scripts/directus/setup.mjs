@@ -1,10 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { api, cmsUrl, find, local, query, saveLocal } from "./client.mjs";
-import {
-  previewLinkKey,
-  serializeEnvironment,
-  setupPreviewSecret,
-} from "./config.mjs";
+import { previewLinkKey, setupPreviewSecret } from "./config.mjs";
 
 const collections = await api("/collections");
 const secret = setupPreviewSecret(
@@ -13,7 +9,7 @@ const secret = setupPreviewSecret(
   collections.find((entry) => entry.collection === "blog_posts")?.meta
     ?.preview_url,
 );
-serializeEnvironment({ BLOG_PREVIEW_SECRET: secret });
+saveLocal({ DIRECTUS_URL: cmsUrl, BLOG_PREVIEW_SECRET: secret });
 const websiteUrl = process.env.MARKETING_URL ?? "https://blinkdisk.com";
 const folder =
   (await find("folders", { name: { _eq: "Blog" }, parent: { _null: true } })) ??

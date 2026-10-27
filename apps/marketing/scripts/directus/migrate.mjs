@@ -19,7 +19,12 @@ async function media(source) {
     if (!response.ok)
       throw new Error(`Image download failed: ${response.status}`);
     bytes = new Uint8Array(await response.arrayBuffer());
-    type = response.headers.get("content-type")?.split(";")[0] ?? "";
+    type =
+      response.headers
+        .get("content-type")
+        ?.split(";")[0]
+        ?.trim()
+        .toLowerCase() ?? "";
   }
   const filename =
     "blog-" +

@@ -22,7 +22,13 @@ export function resolveCmsUrl(value) {
 }
 export function setupPreviewSecret(environment, stored, existingPreviewUrl) {
   const secret = environment || stored;
-  if (secret) return secret;
+  if (secret) {
+    if (secret.length < 32)
+      throw new Error(
+        "BLOG_PREVIEW_SECRET must contain at least 32 characters; use a randomly generated secret.",
+      );
+    return secret;
+  }
   if (existingPreviewUrl)
     throw new Error(
       "An existing preview is configured. Provide the current BLOG_PREVIEW_SECRET explicitly; setup will not silently rotate it.",
@@ -53,8 +59,9 @@ export function mediaExtension(type) {
     "image/gif": ".gif",
     "image/avif": ".avif",
   };
-  const extension = Object.hasOwn(extensions, type)
-    ? extensions[type]
+  const normalized = type.split(";")[0].trim().toLowerCase();
+  const extension = Object.hasOwn(extensions, normalized)
+    ? extensions[normalized]
     : undefined;
   if (!extension)
     throw new Error("Unsupported downloaded blog image MIME type.");

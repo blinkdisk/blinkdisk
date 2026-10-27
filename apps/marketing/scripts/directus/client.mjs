@@ -75,7 +75,7 @@ export function saveLocal(values) {
     ? parseEnv(readFileSync(runtimePath, "utf8"))
     : {};
   for (const name of ["DIRECTUS_URL", "DIRECTUS_TOKEN", "BLOG_PREVIEW_SECRET"])
-    runtime[name] = combined[name];
+    if (combined[name] !== undefined) runtime[name] = combined[name];
   const localContents = serializeEnvironment(combined);
   const runtimeContents = serializeEnvironment(runtime);
   writeFileSync(localPath, localContents, { mode: 0o600 });

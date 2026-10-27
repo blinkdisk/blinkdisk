@@ -52,6 +52,54 @@ function harness() {
   };
 }
 describe("Directus blog service", () => {
+  it.each([
+    "http://cms.example.com",
+    "http://localhost:8055",
+    "https://user:password@cms.example.com",
+    "https://cms.example.com/path",
+    "https://cms.example.com?token=x",
+    "not-a-url",
+    "ftp://cms.example.com",
+  ])("rejects unsafe runtime origins before sending credentials: %s", async (url) => {
+    const fetcher = vi.fn<typeof fetch>();
+    const service = createBlogService(
+      { url, token: "private-token" },
+      undefined,
+      fetcher,
+    );
+    await expect(service.list()).rejects.toThrow("temporarily unavailable");
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+  it("allows HTTP localhost only with an explicit development flag", async () => {
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(Response.json({ data: [] }));
+    await expect(
+      createBlogService(
+        {
+          url: "http://localhost:8055",
+          token: "local-token",
+          allowHttpLocal: true,
+        },
+        undefined,
+        fetcher,
+      ).list(),
+    ).resolves.toEqual([]);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    fetcher.mockClear();
+    await expect(
+      createBlogService(
+        {
+          url: "http://cms.example.com",
+          token: "private-token",
+          allowHttpLocal: true,
+        },
+        undefined,
+        fetcher,
+      ).list(),
+    ).rejects.toThrow();
+    expect(fetcher).not.toHaveBeenCalled();
+  });
   it("filters every public query, expands media, and caches successful data for five minutes", async () => {
     const h = harness();
     const result = await h.service.post("test-post");

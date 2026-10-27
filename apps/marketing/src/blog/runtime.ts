@@ -9,7 +9,11 @@ export function blogService() {
     globalThis as typeof globalThis & { caches?: { default?: BlogCache } }
   ).caches?.default;
   return createBlogService(
-    { url: directusUrl(), token: getSecret("DIRECTUS_TOKEN") ?? "" },
+    {
+      url: directusUrl(),
+      token: getSecret("DIRECTUS_TOKEN") ?? "",
+      allowHttpLocal: import.meta.env.DEV,
+    },
     cache,
   );
 }

@@ -2,6 +2,11 @@ import { contentImageUrl } from "@marketing/blog/media";
 import { describe, expect, it } from "vitest";
 
 describe("CMS inline images", () => {
+  it("omits a missing src instead of inventing an undefined URL", () => {
+    expect(
+      contentImageUrl(undefined, "https://cms.example.com"),
+    ).toBeUndefined();
+  });
   it("resolves CMS assets for Markdown and component images without redirecting site-local images", () => {
     expect(
       contentImageUrl("/assets/file-id?width=900", "https://cms.example.com"),

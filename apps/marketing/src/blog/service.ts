@@ -29,7 +29,7 @@ const fields =
   "id,slug,status,title,description,author,content,publication_date,last_updated,date_updated,cover_image.id,cover_image.width,cover_image.height,image_alt,tags,faqs,cta_headline";
 
 export function createBlogService(
-  config: { url: string; token: string },
+  config: { url: string; token: string; allowHttpLocal?: boolean },
   cache?: BlogCache,
   fetcher: typeof fetch = fetch,
   now: () => number = Date.now,
@@ -37,7 +37,30 @@ export function createBlogService(
   async function request(path: string, params: Record<string, string> = {}) {
     if (!config.url || !config.token)
       throw new CmsUnavailableError(false, "Missing runtime configuration");
-    const url = new URL(path, config.url);
+    let origin: URL;
+    try {
+      origin = new URL(config.url);
+    } catch {
+      throw new CmsUnavailableError(false, "Invalid Directus origin");
+    }
+    const localHttp =
+      config.allowHttpLocal &&
+      origin.protocol === "http:" &&
+      ["localhost", "127.0.0.1"].includes(origin.hostname);
+    if (
+      (origin.protocol !== "https:" && !localHttp) ||
+      origin.username ||
+      origin.password ||
+      origin.pathname !== "/" ||
+      origin.search ||
+      origin.hash
+    )
+      throw new CmsUnavailableError(
+        false,
+        "Directus must use an HTTPS origin without credentials, a path, query, or fragment",
+      );
+    const url = new URL(path, origin);
+
     for (const [key, value] of Object.entries(params))
       url.searchParams.set(key, value);
     let response: Response;

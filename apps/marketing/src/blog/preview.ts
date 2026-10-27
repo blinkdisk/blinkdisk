@@ -1,5 +1,7 @@
 const encoder = new TextEncoder();
 async function key(secret: string) {
+  if (secret.length < 32)
+    throw new Error("BLOG_PREVIEW_SECRET must contain at least 32 characters.");
   return crypto.subtle.importKey(
     "raw",
     encoder.encode(secret),
@@ -32,7 +34,7 @@ export async function validPreviewSession(
   secret: string,
   now = Date.now(),
 ) {
-  if (!value || !secret) return false;
+  if (!value || secret.length < 32) return false;
   const parts = value.split(".");
   if (parts.length !== 2) return false;
   const [expires, signature] = parts;
@@ -57,7 +59,7 @@ export async function validPreviewSession(
   );
 }
 export async function validPreviewKey(value: string, secret: string) {
-  if (!secret || !/^[a-f0-9]{64}$/.test(value)) return false;
+  if (secret.length < 32 || !/^[a-f0-9]{64}$/.test(value)) return false;
   const bytes = new Uint8Array(
     value.match(/../g)?.map((part) => Number.parseInt(part, 16)) ?? [],
   );

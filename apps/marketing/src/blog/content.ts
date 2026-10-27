@@ -321,6 +321,11 @@ export function parseContent(source: string): ParsedContent {
   }
   const nodes = convert(root).children;
   function readingText(node: SourceNode): string {
+    if (
+      node.type === "break" ||
+      (node.type === "mdxJsxTextElement" && node.name === "br")
+    )
+      return " ";
     if (node.value !== undefined) return node.value;
     const inline = [
       "paragraph",

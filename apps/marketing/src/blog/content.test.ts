@@ -61,6 +61,15 @@ describe("CMS content", () => {
     ).toBe(2);
     expect(parseContent("one**two**three").readingTime).toBe(1);
   });
+  it.each([
+    "  \n",
+    "<br />",
+  ])("counts hard breaks as word separators: %s", (separator) => {
+    expect(
+      parseContent(Array.from({ length: 201 }, () => "Word").join(separator))
+        .readingTime,
+    ).toBe(2);
+  });
   it("reports unsupported footnotes with an authoring alternative", () => {
     expect(() => parseContent("Example[^1].\n\n[^1]: Footnote")).toThrow(
       "Footnotes are not supported; use ordinary links or a references section.",
