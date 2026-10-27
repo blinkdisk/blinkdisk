@@ -1,0 +1,20 @@
+---
+import ListChecksIcon from "@lucide/astro/icons/list-checks";
+
+type Props = { title?: string };
+const { title = "Before you export" } = Astro.props;
+---
+<div class="not-prose relative my-6 overflow-hidden rounded-xl border border-primary/20 bg-card shadow-sm">
+  <div class="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-primary to-accent"></div>
+  <div class="px-5 pb-4 pt-5 sm:px-6">
+    <div class="flex items-start gap-3">
+      <div class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary"><ListChecksIcon class="size-5" /></div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-primary">{title}</p>
+        <p class="mt-1 text-base font-semibold leading-6 text-foreground">Pre-flight checklist</p>
+        <p class="mt-1 text-sm leading-6 text-muted-foreground">Tick these off before you start the export.</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid border-t border-border/80 p-3"><slot /></div>
+</div>

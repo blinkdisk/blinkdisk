@@ -1,52 +1,22 @@
 ---
-import { getCollection, render } from "astro:content";
-import BlogPostLayout from "@marketing/layouts/BlogPostLayout.astro";
+import { blogService, directusUrl } from "@marketing/blog/runtime";
+import type { PreparedPost } from "@marketing/blog/service";
+import Article from "@marketing/components/blog/Article.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+import * as Sentry from "@sentry/astro";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+export const prerender = false;
+Astro.response.headers.set("Cache-Control", "private, no-store");
+let article: PreparedPost | null = null;
+let unavailable = false;
+try {
+  article = await blogService().post(Astro.params.slug ?? "");
+} catch (error) {
+  unavailable = true;
+  console.error("Unable to load blog content", error);
+  Sentry.captureException(error);
 }
-
-const { post } = Astro.props;
-const { Content, headings } = await render(post);
-
-const wordsPerMinute = 200;
-const wordCount = post.body?.split(/\s+/).length ?? 0;
-const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
-
-const faqStructuredData = post.data.faqs?.length
-  ? {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: post.data.faqs.map((faq) => ({
-        "@type": "Question",
-        name: faq.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.answer,
-        },
-      })),
-    }
-  : undefined;
+if (!article) Astro.response.status = unavailable ? 503 : 404;
+if (unavailable) Astro.response.headers.set("Retry-After", "60");
 ---
-
-<BlogPostLayout
-  title={post.data.title}
-  description={post.data.description}
-  publicationDate={post.data.publicationDate}
-  lastUpdated={post.data.lastUpdated}
-  author={post.data.author}
-  image={post.data.image}
-  headings={headings}
-  ctaHeadline={post.data.ctaHeadline}
-  readingTime={readingTime}
-  structuredData={faqStructuredData}
->
-  <Content />
-</BlogPostLayout>
+{article ? <Article article={article} cmsUrl={directusUrl()} /> : <DefaultLayout title={unavailable ? "Blog temporarily unavailable" : "Post not found"}><section class="pt-page pb-page w-content mx-auto"><h1>{unavailable ? "The blog is temporarily unavailable" : "Post not found"}</h1><p>{unavailable ? "Please try again shortly." : "This post is not available."}</p><a href="/blog">Back to the blog</a></section></DefaultLayout>}

@@ -12,8 +12,11 @@ import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
 import inter700 from "@fontsource/inter/files/inter-latin-700-normal.woff2";
 import ThemeScript from "@marketing/components/ThemeScript.astro";
+import { serializeStructuredData } from "@marketing/utils/structured-data";
 
 export type Props = {
+  preview?: boolean;
+  canonicalPath?: string;
   title?: string;
   description?: string;
   image?: string;
@@ -33,6 +36,8 @@ const defaultImage = `${MARKETING_URL ?? "https://blinkdisk.com"}/brand/social.j
 const siteUrl = MARKETING_URL ?? "https://blinkdisk.com";
 
 const {
+  preview = false,
+  canonicalPath,
   title,
   description,
   image,
@@ -49,7 +54,7 @@ const pageImage = image || defaultImage;
 const ogTitle = og?.title || pageTitle;
 const ogImage = og?.image ? `${siteUrl}${og.image}` : pageImage;
 
-const canonicalUrl = `${siteUrl}${Astro.url.pathname}`;
+const canonicalUrl = `${siteUrl}${canonicalPath ?? Astro.url.pathname}`;
 
 const posthogKey = POSTHOG_KEY ?? "";
 const posthogHost = POSTHOG_HOST ?? "";
@@ -106,6 +111,7 @@ const allStructuredData = [
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
+    {preview && <meta name="robots" content="noindex,nofollow,noarchive" />}
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
@@ -133,7 +139,7 @@ const allStructuredData = [
 
     <!-- Structured Data (JSON-LD) -->
     {allStructuredData.map((data) => (
-      <script is:inline type="application/ld+json" set:html={JSON.stringify(data)} />
+      <script is:inline type="application/ld+json" set:html={serializeStructuredData(data)} />
     ))}
 
     <ThemeScript />
@@ -145,7 +151,7 @@ const allStructuredData = [
     </script>
 
     <!-- Endorsely -->
-    {endorselyKey && (
+    {!preview && endorselyKey && (
       <script is:inline src="https://assets.endorsely.com/endorsely.js" data-endorsely={endorselyKey} async></script>
     )}
   </head>
@@ -153,7 +159,7 @@ const allStructuredData = [
     <slot />
 
     <!-- PostHog -->
-    {posthogKey && (
+    {!preview && posthogKey && (
       <script is:inline define:vars={{ posthogKey, posthogHost }}>
         !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init rs ls yi ns us ts ss capture calculateEventProperties vs register register_once register_for_session unregister unregister_for_session gs getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty fs ds createPersonProfile setInternalOrTestUser ps Qr opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing hs debug M cs getPageViewId captureTraceFeedback captureTraceMetric Kr".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
         posthog.init(posthogKey, {
@@ -173,7 +179,7 @@ const allStructuredData = [
     )}
 
     <!-- Crisp Chat -->
-    {crispKey && (
+    {!preview && crispKey && (
       <script is:inline define:vars={{ crispKey }}>
         window.$crisp=[];
         window.CRISP_WEBSITE_ID=crispKey;

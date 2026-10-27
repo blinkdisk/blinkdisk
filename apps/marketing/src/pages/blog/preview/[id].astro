@@ -1,0 +1,61 @@
+---
+import { getSecret } from "astro:env/server";
+import { BlogContentError } from "@marketing/blog/content";
+import {
+  previewSession,
+  validPreviewKey,
+  validPreviewSession,
+} from "@marketing/blog/preview";
+import { blogService, directusUrl } from "@marketing/blog/runtime";
+import type { PreparedPost } from "@marketing/blog/service";
+import Article from "@marketing/components/blog/Article.astro";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+
+export const prerender = false;
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+Astro.response.headers.set("Referrer-Policy", "no-referrer");
+const secret = getSecret("BLOG_PREVIEW_SECRET") ?? "";
+const suppliedKey = Astro.url.searchParams.get("key");
+if (suppliedKey !== null) {
+  if (!(await validPreviewKey(suppliedKey, secret)))
+    return new Response("Preview access denied.", {
+      status: 403,
+      headers: Astro.response.headers,
+    });
+  Astro.cookies.set("blog-preview", await previewSession(secret), {
+    httpOnly: true,
+    secure: Astro.url.protocol === "https:",
+    sameSite: "lax",
+    path: "/blog/preview",
+    maxAge: 3600,
+  });
+  const clean = new URL(Astro.url);
+  clean.searchParams.delete("key");
+  Astro.response.headers.set("Location", clean.pathname + clean.search);
+  return new Response(null, { status: 303, headers: Astro.response.headers });
+}
+if (
+  !(await validPreviewSession(Astro.cookies.get("blog-preview")?.value, secret))
+)
+  return new Response("Open this preview from Directus to sign in.", {
+    status: 403,
+    headers: Astro.response.headers,
+  });
+let article: PreparedPost | null = null;
+let message = "Post not found.";
+try {
+  article = await blogService().preview(
+    Astro.params.id ?? "",
+    Astro.url.searchParams.get("version") ?? undefined,
+  );
+  if (!article) Astro.response.status = 404;
+} catch (error) {
+  Astro.response.status = error instanceof BlogContentError ? 422 : 503;
+  message =
+    error instanceof BlogContentError
+      ? error.message
+      : "Directus is temporarily unavailable. Please try again.";
+}
+---
+{article ? <Article article={article} cmsUrl={directusUrl()} preview /> : <DefaultLayout title="Blog preview" preview><section class="pt-page pb-page w-content mx-auto"><h1>Preview unavailable</h1><p>{message}</p></section></DefaultLayout>}

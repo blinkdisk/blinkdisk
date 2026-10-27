@@ -1,0 +1,87 @@
+import {
+  BlogContentError,
+  parseContent,
+  safeStyle,
+} from "@marketing/blog/content";
+import { serializeStructuredData } from "@marketing/utils/structured-data";
+import { describe, expect, it } from "vitest";
+
+describe("CMS content", () => {
+  it("renders Markdown, components, tables, duplicate headings, HTML, and code without evaluation", () => {
+    const content = parseContent(
+      '# Hello\n\n## Same\n\n## Same\n\n<Summary>\n**Bold** and [link](https://example.com).\n</Summary>\n\n<div style="color: red; padding: 12px">HTML</div>\n\n| A | B |\n|---|---|\n| C | D |\n\n```bash\necho hello\n```\n\n```mermaid\nflowchart LR\n A --> B\n```',
+    );
+    expect(content.headings.map((heading) => heading.slug)).toEqual([
+      "hello",
+      "same",
+      "same-1",
+    ]);
+    expect(content.nodes.map((node) => node.tag)).toContain("table");
+    expect(content.nodes.map((node) => node.tag)).toContain("Mermaid");
+    expect(content.readingTime).toBeGreaterThanOrEqual(1);
+  });
+  it.each([
+    'import X from "x";\n\n# Post',
+    '{globalThis.fetch("https://evil.example")}',
+    "<Summary {...props} />",
+    "<Image src={url} />",
+    "<script>alert(1)</script>",
+    '<div onclick="alert(1)">x</div>',
+    '<iframe src="https://example.com" />',
+    '<a href="javascript:alert(1)">x</a>',
+    '<a href="//evil.example">x</a>',
+    '<div style="background-color: url(https://evil.example)">x</div>',
+    "<Unknown />",
+    '<Callout variant="unknown" />',
+    '<Image src="https://example.com/a.png" />',
+    "<Checklist><div>Invalid child</div></Checklist>",
+    '<Image src="https://example.com/a.png" alt />',
+  ])("rejects executable or unsupported input: %s", (source) =>
+    expect(() => parseContent(source)).toThrow(BlogContentError));
+  it.each([
+    "color: e\\78pression(alert(1))",
+    "background-color: u/**/rl(x)",
+    "behavior: x",
+    'color: red; @import "x"',
+    'background-color: image-set("x")',
+  ])("rejects unsafe CSS: %s", (style) =>
+    expect(() => safeStyle(style)).toThrow(BlogContentError));
+  it("avoids collisions between duplicate headings and suffixed heading text", () => {
+    expect(
+      parseContent("## Foo\n\n## Foo\n\n## Foo 1\n\n## Foo").headings.map(
+        (heading) => heading.slug,
+      ),
+    ).toEqual(["foo", "foo-1", "foo-1-1", "foo-2"]);
+  });
+  it("counts words across blocks without splitting inline words", () => {
+    expect(
+      parseContent(Array.from({ length: 201 }, () => "Word").join("\n\n"))
+        .readingTime,
+    ).toBe(2);
+    expect(parseContent("one**two**three").readingTime).toBe(1);
+  });
+  it.each([
+    "  \n",
+    "<br />",
+  ])("counts hard breaks as word separators: %s", (separator) => {
+    expect(
+      parseContent(Array.from({ length: 201 }, () => "Word").join(separator))
+        .readingTime,
+    ).toBe(2);
+  });
+  it("reports unsupported footnotes with an authoring alternative", () => {
+    expect(() => parseContent("Example[^1].\n\n[^1]: Footnote")).toThrow(
+      "Footnotes are not supported; use ordinary links or a references section.",
+    );
+  });
+  it("keeps CMS metadata inside JSON-LD scripts while preserving the original data", () => {
+    const metadata = {
+      headline: '</script><script>alert("metadata")</script>',
+      description: "<!-- untrusted description -->",
+      author: { name: "A < B" },
+    };
+    const serialized = serializeStructuredData(metadata);
+    expect(serialized).not.toContain("<");
+    expect(JSON.parse(serialized)).toEqual(metadata);
+  });
+});

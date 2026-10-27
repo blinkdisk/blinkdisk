@@ -354,6 +354,15 @@ catalogs:
     react-loading-skeleton:
       specifier: ^3.5.0
       version: 3.5.0
+    remark-gfm:
+      specifier: ^4.0.1
+      version: 4.0.1
+    remark-mdx:
+      specifier: ^3.1.1
+      version: 3.1.1
+    remark-parse:
+      specifier: ^11.0.0
+      version: 11.0.0
     satori:
       specifier: ^0.26.0
       version: 0.26.0
@@ -363,6 +372,9 @@ catalogs:
     sharp:
       specifier: 0.35.5
       version: 0.35.5
+    shiki:
+      specifier: ^4.3.0
+      version: 4.3.0
     sonner:
       specifier: ^2.0.7
       version: 2.0.7
@@ -387,6 +399,9 @@ catalogs:
     ua-parser-js:
       specifier: ^2.0.10
       version: 2.0.10
+    unified:
+      specifier: ^11.0.5
+      version: 11.0.5
     vite:
       specifier: 8.1.6
       version: 8.1.6
@@ -967,12 +982,24 @@ importers:
       react-dropzone:
         specifier: 'catalog:'
         version: 15.0.0(react@19.2.7)
+      remark-gfm:
+        specifier: 'catalog:'
+        version: 4.0.1
+      remark-mdx:
+        specifier: 'catalog:'
+        version: 3.1.1
+      remark-parse:
+        specifier: 'catalog:'
+        version: 11.0.0
       satori:
         specifier: 'catalog:'
         version: 0.26.0
       sharp:
         specifier: 'catalog:'
         version: 0.35.5(@types/node@24.13.2)
+      shiki:
+        specifier: 'catalog:'
+        version: 4.3.0
       sonner:
         specifier: 'catalog:'
         version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -982,6 +1009,9 @@ importers:
       ua-parser-js:
         specifier: 'catalog:'
         version: 2.0.10
+      unified:
+        specifier: 'catalog:'
+        version: 11.0.5
       vite-plugin-static-copy:
         specifier: 'catalog:'
         version: 4.1.1(vite@8.1.6(@types/node@24.13.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -1010,6 +1040,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.12(@opentelemetry/api@1.9.1)(@types/node@24.13.2)(vite@8.1.6(@types/node@24.13.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
       wrangler:
         specifier: 'catalog:'
         version: 4.105.0(@cloudflare/workers-types@4.20260627.1)(@types/node@24.13.2)
@@ -4674,9 +4707,6 @@ packages:
 
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
-
-  '@types/hast@3.0.4':
-    resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
   '@types/hast@3.0.5':
     resolution: {integrity: sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g==}
@@ -8931,7 +8961,7 @@ snapshots:
 
   '@astrojs/internal-helpers@0.10.0':
     dependencies:
-      '@types/hast': 3.0.4
+      '@types/hast': 3.0.5
       '@types/mdast': 4.0.4
       js-yaml: 4.3.2
       picomatch: 4.0.7
@@ -12047,10 +12077,6 @@ snapshots:
   '@types/gensync@1.0.5': {}
 
   '@types/geojson@7946.0.16': {}
-
-  '@types/hast@3.0.4':
-    dependencies:
-      '@types/unist': 3.0.3
 
   '@types/hast@3.0.5':
     dependencies:
