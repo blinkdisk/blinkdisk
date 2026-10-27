@@ -1,4 +1,3 @@
-import { readdirSync, readFileSync } from "node:fs";
 import {
   BlogContentError,
   parseContent,
@@ -74,31 +73,6 @@ describe("CMS content", () => {
     expect(() => parseContent("Example[^1].\n\n[^1]: Footnote")).toThrow(
       "Footnotes are not supported; use ordinary links or a references section.",
     );
-  });
-  it("preserves both migration fixtures and their interactive components", () => {
-    const directory = new URL(
-      "../../scripts/directus/fixtures/",
-      import.meta.url,
-    );
-    for (const filename of readdirSync(directory)) {
-      const fixture = JSON.parse(
-        readFileSync(new URL(filename, directory), "utf8"),
-      );
-      const source = fixture.content.replace(
-        'src="local:src/assets/screenshots/light.png"',
-        'src="https://example.com/screenshot.png"',
-      );
-      const parsed = parseContent(source);
-      expect(parsed.headings.length).toBeGreaterThan(5);
-      expect(parsed.nodes.some((node) => node.tag === "Summary")).toBe(true);
-      if (fixture.slug.startsWith("backup-photos")) {
-        expect(parsed.nodes.some((node) => node.tag === "Checklist")).toBe(
-          true,
-        );
-        expect(parsed.nodes.some((node) => node.tag === "BlogFaq")).toBe(true);
-        expect(parsed.nodes.some((node) => node.tag === "Mermaid")).toBe(true);
-      }
-    }
   });
   it("keeps CMS metadata inside JSON-LD scripts while preserving the original data", () => {
     const metadata = {

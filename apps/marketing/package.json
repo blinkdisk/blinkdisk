@@ -9,9 +9,7 @@
     "preview": "astro preview",
     "types": "astro check",
     "deploy": "wrangler deploy",
-    "test": "vitest run",
-    "cms:setup": "node scripts/directus/setup.mjs",
-    "cms:migrate": "node scripts/directus/migrate.mjs"
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/check": "catalog:",
