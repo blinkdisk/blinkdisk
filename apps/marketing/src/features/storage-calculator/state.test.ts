@@ -1,4 +1,6 @@
 import {
+  amountLimits,
+  convertStorageAmount,
   defaultState,
   readState,
   writeState,
@@ -10,6 +12,41 @@ import type {
 import { describe, expect, it } from "vitest";
 
 describe("shareable calculator state", () => {
+  it.each([
+    "storage",
+    "downloads",
+  ] as const)("preserves %s when switching units, including shared URLs at input bounds", (field) => {
+    const unitField = field === "storage" ? "storageUnit" : "downloadUnit";
+    for (const [from, to] of [
+      ["GB", "TB"],
+      ["TB", "GB"],
+    ] as const) {
+      for (const amount of [
+        amountLimits(from).min,
+        amountLimits(from).max,
+        3,
+      ]) {
+        const converted = convertStorageAmount(amount, from, to);
+        expect(convertStorageAmount(converted, to, from)).toBeCloseTo(amount);
+        const state = {
+          ...defaultState("backup"),
+          [field]: converted,
+          [unitField]: to,
+        };
+        expect(
+          readState(
+            writeState(new URLSearchParams(), state, "backup"),
+            "backup",
+            [],
+          ),
+        ).toEqual(state);
+        expect(converted).toBeGreaterThanOrEqual(amountLimits(to).min);
+        expect(converted).toBeLessThanOrEqual(amountLimits(to).max);
+      }
+    }
+    expect(convertStorageAmount(0, "TB", "GB")).toBe(0);
+    expect(convertStorageAmount(3, "TB", "GB")).toBe(3000);
+  });
   it.each([
     "backup",
     "s3",

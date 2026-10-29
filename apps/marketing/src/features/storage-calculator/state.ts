@@ -1,6 +1,7 @@
 import type {
   CalculatorPage,
   CalculatorState,
+  StorageUnit,
 } from "@marketing/features/storage-calculator/types";
 
 export const MAX_STORAGE = 1_000_000;
@@ -46,24 +47,26 @@ export function readState(
   offerIds: string[],
 ): CalculatorState {
   const defaults = defaultState(page);
+  const storageUnit = params.get("storageUnit") === "GB" ? "GB" : "TB";
+  const downloadUnit = params.get("downloadUnit") === "GB" ? "GB" : "TB";
   return {
     storage: numberParam(
       params,
       "storage",
       defaults.storage,
-      0.001,
-      MAX_STORAGE,
+      amountLimits(storageUnit).min,
+      amountLimits(storageUnit).max,
     ),
-    storageUnit: params.get("storageUnit") === "GB" ? "GB" : "TB",
+    storageUnit,
     months: numberParam(params, "months", defaults.months, 1, MAX_MONTHS, true),
     downloads: numberParam(
       params,
       "downloads",
       defaults.downloads,
       0,
-      MAX_STORAGE,
+      amountLimits(downloadUnit).max,
     ),
-    downloadUnit: params.get("downloadUnit") === "GB" ? "GB" : "TB",
+    downloadUnit,
     objectSize: numberParam(
       params,
       "objectSize",
@@ -103,6 +106,21 @@ export function writeState(
   return params;
 }
 
-export function toGB(value: number, unit: "GB" | "TB") {
+export function toGB(value: number, unit: StorageUnit) {
   return value * (unit === "TB" ? 1000 : 1);
+}
+
+export function convertStorageAmount(
+  value: number,
+  from: StorageUnit,
+  to: StorageUnit,
+) {
+  return toGB(value, from) / (to === "TB" ? 1000 : 1);
+}
+
+export function amountLimits(unit: StorageUnit) {
+  return {
+    min: unit === "GB" ? 0.001 : 0.000001,
+    max: unit === "GB" ? MAX_STORAGE * 1000 : MAX_STORAGE,
+  };
 }

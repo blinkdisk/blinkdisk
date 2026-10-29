@@ -78,8 +78,8 @@ const azureSources: StorageOffer["sources"] = [
     url: "https://prices.azure.com/api/retail/prices?$filter=serviceName%20eq%20%27Storage%27%20and%20armRegionName%20eq%20%27eastus%27%20and%20priceType%20eq%20%27Consumption%27",
   },
   {
-    label: "Bandwidth rate card",
-    url: "https://prices.azure.com/api/retail/prices?$filter=serviceName%20eq%20%27Bandwidth%27%20and%20armRegionName%20eq%20%27eastus%27",
+    label: "Bandwidth pricing and units",
+    url: "https://azure.microsoft.com/en-us/pricing/details/bandwidth/",
   },
   {
     label: "Transaction billing",
@@ -89,15 +89,15 @@ const azureSources: StorageOffer["sources"] = [
 const azureDownload: UsagePrice = {
   free: 100,
   tiers: [
-    { upTo: 10335, rate: 0.087 },
-    { upTo: 51295, rate: 0.083 },
-    { upTo: 153695, rate: 0.07 },
+    { upTo: 10100, rate: 0.087 },
+    { upTo: 50100, rate: 0.083 },
+    { upTo: 150100, rate: 0.07 },
     { upTo: null, rate: 0.05 },
   ],
 };
 const azureNotes = [
   "East US, locally redundant storage (LRS), flat namespace and Blob REST API. ADLS Gen2, geo-replication, reserved capacity and optional features are excluded.",
-  "Binary billing units; internet egress uses Microsoft Global Network routing. Assumes the shared 100 GB monthly outbound allowance is unused.",
+  "Storage is billed in GiB; internet egress is billed in decimal GB using Microsoft Global Network routing. Assumes the shared 100 GB monthly outbound allowance is unused.",
 ];
 
 export const STORAGE_OFFERS: StorageOffer[] = [
@@ -148,7 +148,7 @@ export const STORAGE_OFFERS: StorageOffer[] = [
     },
     notes: [
       "Assumes the account-wide 100 GB monthly internet transfer allowance is unused. Temporary AWS signup credits are excluded.",
-      "AWS labels binary storage units as GB; inputs are converted from decimal GB.",
+      "AWS storage and transfer use binary GiB, labeled GB on its pricing page; inputs are converted from decimal GB.",
     ],
   }),
   offer({
@@ -184,6 +184,7 @@ export const STORAGE_OFFERS: StorageOffer[] = [
     pricing: {
       ...metered(0),
       unit: "GiB",
+      downloadUnit: "GB",
       storage: {
         tiers: [
           { upTo: 51200, rate: 0.0208 },
@@ -744,6 +745,7 @@ export const STORAGE_OFFERS: StorageOffer[] = [
     pricing: {
       ...metered(0.15),
       unit: "GiB",
+      downloadUnit: "GB",
       download: azureDownload,
       writes: { per: 10000, price: 0.0175 },
       reads: { per: 10000, price: 0.0014 },

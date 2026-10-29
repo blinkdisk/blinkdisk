@@ -62,7 +62,7 @@ export const CALCULATOR_PAGES = {
     sections: [
       {
         title: "Small objects mean more requests",
-        text: "The same terabyte costs more in requests when it’s split into many small objects. The calculator counts one write per object on upload and one read per object downloaded. For example, 1 TB of 20 MB objects is about 50,000 writes. Listing, HEAD requests, retries and multipart overhead aren’t counted.",
+        text: "The same terabyte needs more requests when it’s split into many small objects. That can raise the bill if the provider charges for those requests; some include them for free. The calculator counts one write per object on upload and one read per object downloaded. For example, 1 TB of 20 MB objects is about 50,000 writes. Listing, HEAD requests, retries and multipart overhead aren’t counted.",
       },
       {
         title: "Egress and retrieval are two different fees",
@@ -81,7 +81,7 @@ export const CALCULATOR_PAGES = {
       {
         question: "What costs does this S3 calculator include?",
         answer:
-          "Storage, the initial upload (transfer and write requests), monthly downloads (egress and read requests), retrieval fees, minimum bills and required storage commitments. Each offer’s details show the reference region and billing rules we used. Taxes, replication, optional services and negotiated discounts aren’t included.",
+          "Storage, the initial upload (processing fees and write requests), monthly downloads (egress and read requests), retrieval fees, minimum bills and required storage commitments. Each offer’s details show the reference region and billing rules we used. Taxes, replication, optional services and negotiated discounts aren’t included.",
       },
       {
         question: "Why does average object size matter?",

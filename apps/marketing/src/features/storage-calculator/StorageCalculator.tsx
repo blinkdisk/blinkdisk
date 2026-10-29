@@ -2,9 +2,10 @@ import { cn } from "@blinkdisk/utils/class";
 import { CloudBlinkIcon } from "@marketing/components/icons/providers/cloudblink";
 import { calculateOffers } from "@marketing/features/storage-calculator/calculate";
 import {
+  amountLimits,
+  convertStorageAmount,
   defaultState,
   MAX_MONTHS,
-  MAX_STORAGE,
   readState,
   writeState,
 } from "@marketing/features/storage-calculator/state";
@@ -41,12 +42,12 @@ const money = (amount: number) =>
       }).format(amount);
 const costLabels: Record<keyof CostBreakdown, string> = {
   storage: "Storage",
-  upload: "Upload transfer",
+  upload: "Upload processing",
   download: "Downloads (egress)",
   retrieval: "Retrieval fees",
   requests: "API requests",
   minimum: "Top-up to minimum bill",
-  commitment: "Committed but unused storage",
+  commitment: "Retention or unused commitment",
 };
 const alwaysShownCosts: (keyof CostBreakdown)[] = ["storage", "download"];
 const HIGHLIGHTED_OFFER = "cloudblink";
@@ -348,6 +349,16 @@ function OfferDetails({
             {offer.pricing.unit === "GiB"
               ? "GiB (1,073,741,824 bytes)"
               : "GB (1,000,000,000 bytes)"}
+            {offer.pricing.downloadUnit &&
+              offer.pricing.downloadUnit !== offer.pricing.unit && (
+                <>
+                  {" "}
+                  for storage; downloads use{" "}
+                  {offer.pricing.downloadUnit === "GiB"
+                    ? "GiB (1,073,741,824 bytes)"
+                    : "GB (1,000,000,000 bytes)"}
+                </>
+              )}
             .{" "}
             {offer.currency === "EUR" && (
               <>
@@ -497,12 +508,21 @@ export default function StorageCalculator({
           <NumberField
             label="Data stored"
             icon={DatabaseIcon}
-            min={0.001}
-            max={MAX_STORAGE}
+            min={amountLimits(state.storageUnit).min}
+            max={amountLimits(state.storageUnit).max}
             value={state.storage}
             unit={state.storageUnit}
             onChange={(storage) => update({ storage })}
-            onUnitChange={(storageUnit) => update({ storageUnit })}
+            onUnitChange={(storageUnit) =>
+              update({
+                storage: convertStorageAmount(
+                  state.storage,
+                  state.storageUnit,
+                  storageUnit,
+                ),
+                storageUnit,
+              })
+            }
           />
           <NumberField
             label="Storage duration"
@@ -518,11 +538,20 @@ export default function StorageCalculator({
             label="Downloads per month"
             icon={DownloadIcon}
             min={0}
-            max={MAX_STORAGE}
+            max={amountLimits(state.downloadUnit).max}
             value={state.downloads}
             unit={state.downloadUnit}
             onChange={(downloads) => update({ downloads })}
-            onUnitChange={(downloadUnit) => update({ downloadUnit })}
+            onUnitChange={(downloadUnit) =>
+              update({
+                downloads: convertStorageAmount(
+                  state.downloads,
+                  state.downloadUnit,
+                  downloadUnit,
+                ),
+                downloadUnit,
+              })
+            }
           />
           {page === "s3" && objectField}
         </div>

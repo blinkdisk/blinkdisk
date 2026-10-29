@@ -64,6 +64,8 @@ export function calculateOffer(
     objects,
   };
   const pricing = offer.pricing;
+  const format = (value: number) =>
+    value.toLocaleString("en-US", { maximumFractionDigits: 6 });
   const unavailable = (reason: string) => ({ ...result, reason });
   if (
     ![storedGB, downloadGB, state.objectSize, state.months].every(
@@ -79,19 +81,28 @@ export function calculateOffer(
       "Enter a valid amount of data, duration and object size.",
     );
   }
-  if (pricing.maximumStorageGB && storedGB > pricing.maximumStorageGB) {
+  if (
+    pricing.maximumStorageGB !== undefined &&
+    storedGB > pricing.maximumStorageGB
+  ) {
     return unavailable(
-      "This is more data than the provider’s published plans cover.",
+      `This estimate covers up to ${format(pricing.maximumStorageGB)} GB of stored data.`,
     );
   }
-  if (pricing.maximumObjects && objects > pricing.maximumObjects) {
+  if (
+    pricing.maximumObjects !== undefined &&
+    objects > pricing.maximumObjects
+  ) {
     return unavailable(
-      "Your estimated object count is above the provider’s standard account limit.",
+      `Your estimated object count is ${format(objects)}; the provider’s standard account limit is ${format(pricing.maximumObjects)}.`,
     );
   }
-  if (pricing.maximumDownloadGB && downloadGB > pricing.maximumDownloadGB) {
+  if (
+    pricing.maximumDownloadGB !== undefined &&
+    downloadGB > pricing.maximumDownloadGB
+  ) {
     return unavailable(
-      "Your monthly downloads go beyond the public rate card. The provider only quotes this on request.",
+      `The public rate card covers up to ${format(pricing.maximumDownloadGB)} GB of downloads per month. Ask the provider for a quote above that amount.`,
     );
   }
   if (
@@ -103,7 +114,7 @@ export function calculateOffer(
       )
   ) {
     return unavailable(
-      "Your monthly downloads are above the limit in this offer’s usage policy.",
+      `This offer’s usage policy allows up to ${format(Math.max(storedGB * pricing.downloadLimitMultiple, pricing.minimumDownloadLimitGB ?? 0))} GB of downloads per month with ${format(storedGB)} GB stored.`,
     );
   }
 
@@ -117,7 +128,9 @@ export function calculateOffer(
       Math.max(lastObjectBytes, minimumObjectBytes) +
       objects * (pricing.objectOverheadBytes ?? 0)) /
     (unitGB * 1e9);
-  const downloadedUnits = downloadGB / unitGB;
+  const downloadUnitGB =
+    (pricing.downloadUnit ?? pricing.unit) === "GiB" ? 2 ** 30 / 1e9 : 1;
+  const downloadedUnits = downloadGB / downloadUnitGB;
   const reads = Math.ceil((downloadGB * 1000) / state.objectSize);
   const storageMonthly =
     (pricing.baseMonthly ?? 0) +
@@ -128,12 +141,13 @@ export function calculateOffer(
   const downloadMonthly = usageCost(
     Math.max(
       0,
-      downloadedUnits - rawUnits * (pricing.freeDownloadMultiple ?? 0),
+      downloadedUnits -
+        (storedGB / downloadUnitGB) * (pricing.freeDownloadMultiple ?? 0),
     ),
     pricing.download,
   );
   const retrievalMonthly = pricing.retrieval
-    ? usageCost(downloadedUnits, pricing.retrieval)
+    ? usageCost(downloadGB / unitGB, pricing.retrieval)
     : 0;
   const readMonthly =
     requestCost(reads, pricing.reads) + requestCost(reads, pricing.requests);

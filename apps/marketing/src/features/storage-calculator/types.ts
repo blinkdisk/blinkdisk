@@ -32,6 +32,7 @@ export type StoragePackage = {
 };
 export type StoragePricing = {
   unit: "GB" | "GiB";
+  downloadUnit?: "GB" | "GiB";
   storage: UsagePrice;
   download: UsagePrice;
   upload?: UsagePrice;

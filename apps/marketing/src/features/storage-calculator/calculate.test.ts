@@ -212,6 +212,59 @@ describe("storage cost calculations", () => {
       calculateOffer(fixture({ maximumStorageGB: 999 }), scenario()).total,
     ).toBeNull();
   });
+  it("honors zero limits and reports the actual threshold", () => {
+    const noDownloads = fixture({ maximumDownloadGB: 0 });
+    expect(calculateOffer(noDownloads, scenario()).total).not.toBeNull();
+    expect(
+      calculateOffer(noDownloads, scenario({ downloads: 0.001 })).reason,
+    ).toContain("0 GB of downloads per month");
+    expect(
+      calculateOffer(fixture({ maximumStorageGB: 999 }), scenario()).reason,
+    ).toContain("999 GB");
+    expect(
+      calculateOffer(fixture({ maximumObjects: 49999 }), scenario()).reason,
+    ).toContain("49,999");
+    expect(
+      calculateOffer(fixture({ maximumStorageGB: 0 }), scenario()).total,
+    ).toBeNull();
+    expect(
+      calculateOffer(fixture({ maximumObjects: 0 }), scenario()).total,
+    ).toBeNull();
+    expect(
+      calculateOffer(
+        fixture({ downloadLimitMultiple: 5 }),
+        scenario({ downloads: 6 }),
+      ).reason,
+    ).toContain("5,000 GB of downloads per month with 1,000 GB stored");
+    expect(
+      calculateOffer(
+        fixture({ downloadLimitMultiple: 5, minimumDownloadLimitGB: 1 }),
+        scenario({
+          storage: 0.1,
+          storageUnit: "GB",
+          downloads: 2,
+          downloadUnit: "GB",
+        }),
+      ).reason,
+    ).toContain("1 GB of downloads per month with 0.1 GB stored");
+  });
+  it("keeps storage and retrieval units separate from internet transfer units", () => {
+    const result = calculateOffer(
+      fixture({
+        unit: "GiB",
+        downloadUnit: "GB",
+        download: { tiers: [{ upTo: null, rate: 0.03 }] },
+        retrieval: { tiers: [{ upTo: null, rate: 0.04 }] },
+        upload: { tiers: [{ upTo: null, rate: 0.02 }] },
+        freeDownloadMultiple: 1,
+      }),
+      scenario({ storage: 1, downloads: 2, months: 1 }),
+    );
+    expect(result.costs.storage).toBeCloseTo((1000 / (2 ** 30 / 1e9)) * 0.01);
+    expect(result.costs.upload).toBeCloseTo((1000 / (2 ** 30 / 1e9)) * 0.02);
+    expect(result.costs.download).toBeCloseTo(1000 * 0.03);
+    expect(result.costs.retrieval).toBeCloseTo((2000 / (2 ** 30 / 1e9)) * 0.04);
+  });
 });
 
 describe("verified provider examples", () => {
@@ -230,7 +283,9 @@ describe("verified provider examples", () => {
       }),
     );
     expect(result.costs.storage).toBeCloseTo(100 * storage);
-    expect(result.costs.download).toBeCloseTo(100 * 0.087);
+    expect(result.costs.download).toBeCloseTo(
+      (200 * (2 ** 30 / 1e9) - 100) * 0.087,
+    );
     expect(result.costs.requests).toBeCloseTo(
       (5369 * write + 10738 * read) / 10000,
     );
@@ -243,12 +298,57 @@ describe("verified provider examples", () => {
         months: 1,
         storage: 51201 * (2 ** 30 / 1e9),
         storageUnit: "GB",
-        downloads: 10336 * (2 ** 30 / 1e9),
+        downloads: 10101,
         downloadUnit: "GB",
       }),
     );
     expect(result.costs.storage).toBeCloseTo(51200 * 0.0208 + 0.019968);
-    expect(result.costs.download).toBeCloseTo((10335 - 100) * 0.087 + 0.083);
+    expect(result.costs.download).toBeCloseTo(10000 * 0.087 + 0.083);
+  });
+  it.each([
+    "azure-hot",
+    "azure-premium",
+  ])("uses decimal GB for every %s egress tier and the free allowance", (id) => {
+    for (const [downloads, expected] of [
+      [100, 0],
+      [101, 0.087],
+      [10100, 10000 * 0.087],
+      [10101, 10000 * 0.087 + 0.083],
+      [50101, 10000 * 0.087 + 40000 * 0.083 + 0.07],
+      [150101, 10000 * 0.087 + 40000 * 0.083 + 100000 * 0.07 + 0.05],
+    ]) {
+      const result = calculateOffer(
+        actual(id),
+        scenario({ months: 1, downloads, downloadUnit: "GB" }),
+      );
+      expect(result.costs.download).toBeCloseTo(expected);
+    }
+  });
+  it.each([
+    "aws-standard",
+    "aws-glacier-instant",
+    "aws-express",
+  ])("uses binary GiB for %s transfer and its allowance", (id) => {
+    expect(
+      calculateOffer(
+        actual(id),
+        scenario({
+          months: 1,
+          downloads: 100 * (2 ** 30 / 1e9),
+          downloadUnit: "GB",
+        }),
+      ).costs.download,
+    ).toBeCloseTo(0);
+    expect(
+      calculateOffer(
+        actual(id),
+        scenario({
+          months: 1,
+          downloads: 101 * (2 ** 30 / 1e9),
+          downloadUnit: "GB",
+        }),
+      ).costs.download,
+    ).toBeCloseTo(0.09);
   });
   it("includes Vultr’s Standard bundle before charging overages", () => {
     expect(calculateOffer(actual("vultr"), scenario({ months: 1 })).total).toBe(
