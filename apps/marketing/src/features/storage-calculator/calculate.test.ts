@@ -18,8 +18,11 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-const scenario = (changes: Partial<CalculatorState> = {}) => ({
+const scenario = (changes: Partial<CalculatorState> = {}): CalculatorState => ({
   ...defaultState("backup"),
+  storage: 1,
+  downloads: 0,
+  billing: "monthly",
   ...changes,
 });
 const fixture = (pricing: Partial<StoragePricing> = {}): StorageOffer => ({
@@ -554,7 +557,10 @@ describe("page eligibility and complete offer selection", () => {
     "yearly",
   ] as const)("prices every offer in the default %s scenario", (billing) => {
     for (const offer of STORAGE_OFFERS) {
-      const result = calculateOffer(offer, scenario({ billing }));
+      const result = calculateOffer(offer, {
+        ...defaultState("backup"),
+        billing,
+      });
       expect(result.total, offer.id).not.toBeNull();
       expect(Number.isFinite(result.total), offer.id).toBe(true);
       expect(result.reason, offer.id).toBeUndefined();

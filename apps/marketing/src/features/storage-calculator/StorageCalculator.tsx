@@ -404,8 +404,9 @@ export default function StorageCalculator({
         )}
         <noscript>
           <p className="mt-3 text-sm">
-            These are the default 1 TB, 12-month estimates. Enable JavaScript to
-            change the scenario.
+            These are the default 12-month estimates for 3 TB stored, 2 TB
+            downloaded per month and yearly billing. Enable JavaScript to change
+            the scenario.
           </p>
         </noscript>
       </section>

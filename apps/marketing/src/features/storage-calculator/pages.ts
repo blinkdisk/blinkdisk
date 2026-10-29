@@ -23,8 +23,8 @@ export const CALCULATOR_PAGES = {
         text: "These estimates cover immediately accessible storage, including storage used for infrequently read backups and archives. Glacier Instant Retrieval is included because it provides immediate access, with additional retrieval charges. Delayed-retrieval classes such as Glacier Deep Archive are outside this comparison.",
       },
       {
-        title: "What does 1 TB of backup storage cost?",
-        text: "The default scenario keeps 1 TB in storage for 12 months after one upload, without downloads. Change the storage amount to match your repository and add a realistic download allowance. For a restore-heavy period, enter the volume you expect to download each month; the same volume is repeated across the selected period.",
+        title: "What does 3 TB of backup storage cost?",
+        text: "The default scenario keeps 3 TB in storage for 12 months after one upload, with 2 TB downloaded each month and yearly billing where available. Change the storage amount to match your repository and set a realistic download allowance. For a restore-heavy period, enter the volume you expect to download each month; the same volume is repeated across the selected period.",
       },
     ],
     faqs: [

@@ -13,6 +13,20 @@ describe("shareable calculator state", () => {
   it.each([
     "backup",
     "s3",
+  ] as const)("uses 3 TB stored, 2 TB monthly downloads and yearly billing by default on %s", (page) => {
+    const defaults = defaultState(page);
+    expect(defaults).toMatchObject({
+      storage: 3,
+      storageUnit: "TB",
+      downloads: 2,
+      downloadUnit: "TB",
+      billing: "yearly",
+    });
+    expect(readState(new URLSearchParams(), page, [])).toEqual(defaults);
+  });
+  it.each([
+    "backup",
+    "s3",
   ] as CalculatorPage[])("round-trips all changed fields on %s", (page) => {
     const state: CalculatorState = {
       storage: 250.5,
@@ -21,7 +35,7 @@ describe("shareable calculator state", () => {
       downloads: 10.1,
       downloadUnit: "GB",
       objectSize: 0.5,
-      billing: "yearly",
+      billing: "monthly",
       advanced: true,
       sort: "provider",
       details: ["one", "two"],

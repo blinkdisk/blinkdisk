@@ -8,13 +8,13 @@ export const MAX_MONTHS = 120;
 
 export function defaultState(page: CalculatorPage): CalculatorState {
   return {
-    storage: 1,
+    storage: 3,
     storageUnit: "TB",
     months: 12,
-    downloads: 0,
+    downloads: 2,
     downloadUnit: "TB",
     objectSize: 20,
-    billing: "monthly",
+    billing: "yearly",
     advanced: page === "s3",
     sort: "cost",
     details: [],
@@ -71,7 +71,12 @@ export function readState(
       0.001,
       5_000_000,
     ),
-    billing: params.get("billing") === "yearly" ? "yearly" : "monthly",
+    billing:
+      params.get("billing") === "monthly"
+        ? "monthly"
+        : params.get("billing") === "yearly"
+          ? "yearly"
+          : defaults.billing,
     advanced: page === "s3" || params.get("advanced") === "true",
     sort: params.get("sort") === "provider" ? "provider" : "cost",
     details: [...new Set(params.get("details")?.split(",") ?? [])].filter(
