@@ -37,6 +37,10 @@ export default defineConfig({
     prerenderEnvironment: "node",
   }),
   redirects: {
+    "/code": {
+      status: 301,
+      destination: "/tool/code",
+    },
     "/pricing": {
       status: 302,
       destination: "/",
