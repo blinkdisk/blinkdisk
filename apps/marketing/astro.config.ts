@@ -37,6 +37,10 @@ export default defineConfig({
     prerenderEnvironment: "node",
   }),
   redirects: {
+    "/finder": {
+      status: 301,
+      destination: "/tool/backup-tool-finder",
+    },
     "/code": {
       status: 301,
       destination: "/tool/code",
