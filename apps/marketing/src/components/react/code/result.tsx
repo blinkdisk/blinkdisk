@@ -132,7 +132,7 @@ export function CodeStatsResult({
       const file = new File([blob], "stats.jpg", { type: "image/jpeg" });
 
       await navigator.share({
-        url: "https://blinkdisk.com/code",
+        url: "https://blinkdisk.com/tool/code",
         files: [file],
       });
     } catch (e: unknown) {
@@ -307,7 +307,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           )}
         >
           <p className="opacity-70">Your codebase, by the numbers.</p>
-          <p>blinkdisk.com/code</p>
+          <p>blinkdisk.com/tool/code</p>
         </div>
       </div>
     );
