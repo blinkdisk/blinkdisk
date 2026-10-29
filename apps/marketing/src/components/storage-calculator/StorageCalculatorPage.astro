@@ -1,0 +1,97 @@
+---
+import { TRIAL_DAYS, TRIAL_STORAGE } from "@blinkdisk/constants/space";
+import Button from "@marketing/components/Button.astro";
+import FaqList from "@marketing/components/FaqList.astro";
+import {
+  offersForPage,
+  REVIEWED_AT,
+  UPSTREAM_SOURCE,
+} from "@marketing/features/storage-calculator/offers";
+import { CALCULATOR_PAGES } from "@marketing/features/storage-calculator/pages";
+import StorageCalculator from "@marketing/features/storage-calculator/StorageCalculator";
+import type { CalculatorPage } from "@marketing/features/storage-calculator/types";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+
+type Props = { page: CalculatorPage };
+const { page } = Astro.props;
+const config = CALCULATOR_PAGES[page];
+const offers = offersForPage(page);
+const canonical = new URL(config.path, Astro.site ?? "https://blinkdisk.com")
+  .href;
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: config.title,
+    description: config.description,
+    url: canonical,
+    dateModified: REVIEWED_AT,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "BlinkDisk",
+        item: new URL("/", canonical).href,
+      },
+      { "@type": "ListItem", position: 2, name: config.title, item: canonical },
+    ],
+  },
+];
+---
+
+<DefaultLayout title={config.title} description={config.description} canonicalPath={config.path} structuredData={structuredData}>
+  <article class="w-content mx-auto pb-20 pt-36 sm:pb-28 sm:pt-44">
+    <header class="mx-auto mb-12 max-w-3xl text-center sm:mb-14">
+      <span class="text-primary bg-primary/10 mb-5 inline-flex rounded-full px-3 py-1.5 text-xs font-medium">Free calculator · No account needed</span>
+      <h1 class="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl">{config.heading}</h1>
+      <p class="text-muted-foreground mx-auto mt-6 max-w-2xl text-base leading-relaxed sm:text-lg">{config.introduction}</p>
+      <a class="text-muted-foreground hover:text-foreground mt-5 inline-block text-sm underline underline-offset-4" href={config.otherPath}>{config.otherLabel} →</a>
+    </header>
+
+    <StorageCalculator page={page} offers={offers} client:load />
+
+    <aside class="bg-secondary/50 my-14 rounded-2xl border p-6 sm:my-20 sm:p-9" aria-labelledby="blinkdisk-heading">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+        <div class="max-w-2xl">
+          <p class="text-muted-foreground mb-2 text-xs font-medium uppercase tracking-widest">Built by BlinkDisk</p>
+          <h2 id="blinkdisk-heading" class="text-xl font-semibold tracking-tight sm:text-2xl">{page === "backup" ? "Your storage. Your backups. One simple app." : "Put your storage to work for your backups."}</h2>
+          <p class="text-muted-foreground mt-3 text-sm leading-relaxed">BlinkDisk is a free, open-source desktop backup app for Windows, macOS and Linux. {page === "backup" ? "Bring your own cloud storage, or use CloudBlink, our optional managed storage available exclusively through BlinkDisk." : "Connect your own cloud storage and keep encrypted backups with a simple desktop interface."}</p>
+          {page === "backup" && <p class="text-muted-foreground mt-2 text-sm">Try CloudBlink with {TRIAL_STORAGE / 1e9} GB for {TRIAL_DAYS} days. The trial is separate from the regular prices above.</p>}
+        </div>
+        <div class="shrink-0" data-storage-calculator-cta={page}>
+          <Button href={`/download?calculator=${page}`}>Download BlinkDisk →</Button>
+          {page === "backup" && <a class="text-muted-foreground mt-3 block text-center text-xs underline underline-offset-4" href="/cloudblink">Learn about CloudBlink</a>}
+        </div>
+      </div>
+    </aside>
+
+    <section class="mx-auto grid max-w-5xl gap-8 sm:gap-10 md:grid-cols-2" aria-label="How to compare storage costs">
+      {config.sections.map((section) => <section><h2 class="text-xl font-semibold tracking-tight">{section.title}</h2><p class="text-muted-foreground mt-3 text-sm leading-7">{section.text}</p></section>)}
+    </section>
+
+    <section class="bg-card mx-auto my-14 max-w-5xl rounded-2xl border p-6 sm:my-20 sm:p-8" aria-labelledby="method-heading">
+      <h2 id="method-heading" class="text-xl font-semibold">Prices you can inspect</h2>
+      <p class="text-muted-foreground mt-3 text-sm leading-7">Provider selection started with the public <a class="text-foreground underline underline-offset-4" href={UPSTREAM_SOURCE} target="_blank" rel="noopener noreferrer">S3Compare dataset</a>. We maintain our own pricing snapshot and check official provider sources. Sources were reviewed on <time datetime={REVIEWED_AT}>{REVIEWED_AT}</time>; incomplete rate cards are shown without an estimate. Open any offer for its sources, reference region and assumptions.</p>
+      <p class="text-muted-foreground mt-3 text-sm leading-7">Prices are compared in USD before tax. EUR offers use a documented fixed ECB exchange rate. A monthly period is an estimate: providers using hourly pricing use the hour count stated in their details. Free allowances are treated as unused by other workloads; introductory offers and free trials are excluded. We do not assign star ratings or give our own storage a preferred ranking.</p>
+    </section>
+
+    <FaqList faqs={config.faqs} />
+    <p class="text-muted-foreground mt-10 text-center text-sm"><a class="underline underline-offset-4" href={config.otherPath}>{config.otherLabel} →</a></p>
+  </article>
+</DefaultLayout>
+
+<script>
+  for (const container of document.querySelectorAll<HTMLElement>("[data-storage-calculator-cta]")) {
+    const calculator = container.dataset.storageCalculatorCta;
+    for (const link of container.querySelectorAll("a")) {
+      link.addEventListener("click", () => {
+        try { sessionStorage.setItem("blinkdisk.storage-calculator", calculator ?? ""); } catch {}
+        window.posthog?.capture("storage_calculator_cta_clicked", { calculator, destination: link.getAttribute("href") });
+      });
+    }
+  }
+</script>

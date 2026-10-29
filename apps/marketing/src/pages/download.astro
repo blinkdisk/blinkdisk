@@ -50,6 +50,16 @@ const installers = [
           if (logged) return;
           logged = true;
 
+          let calculator = new URLSearchParams(window.location.search).get("calculator");
+          if (calculator !== "backup" && calculator !== "s3") {
+            try { calculator = sessionStorage.getItem("blinkdisk.storage-calculator"); } catch {}
+          }
+          window.posthog?.capture("download_started", {
+            file,
+            ...properties,
+            ...(calculator === "backup" || calculator === "s3" ? { storage_calculator: calculator } : {}),
+          });
+
           try {
             if (localStorage.getItem("download.logged")) return;
             localStorage.setItem("download.logged", "true");
@@ -76,7 +86,6 @@ const installers = [
             }).catch((error) => console.warn("Failed to notify logsnag", error));
           }
 
-          window.posthog?.capture("download_started", { file, ...properties });
         };
 
         page.addEventListener("click", (event) => {
