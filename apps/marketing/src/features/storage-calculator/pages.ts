@@ -9,8 +9,6 @@ export const CALCULATOR_PAGES = {
       "Compare cloud backup storage costs across providers. Estimate storage, downloads and request fees with transparent pricing for backups and immediately accessible archives.",
     introduction:
       "A small price per terabyte doesn’t always mean a small bill. Compare storage, downloads and request costs for your backup or archive, all in one place.",
-    otherLabel: "Compare S3-compatible storage instead",
-    otherPath: "/tool/s3-storage-calculator",
     sections: [
       {
         title: "Start with the size of your backup, not your computer",
@@ -61,8 +59,6 @@ export const CALCULATOR_PAGES = {
       "Compare S3-compatible object storage pricing. Calculate storage, egress, retrieval and request costs using data volume, duration and average object size.",
     introduction:
       "Put storage, egress and API requests on the same bill. Estimate what your workload costs across S3-compatible providers, with the assumptions out in the open.",
-    otherLabel: "Compare cloud storage for backups instead",
-    otherPath: "/tool/backup-storage-calculator",
     sections: [
       {
         title: "Object size changes the request bill",
@@ -112,8 +108,6 @@ export const CALCULATOR_PAGES = {
     heading: string;
     description: string;
     introduction: string;
-    otherLabel: string;
-    otherPath: string;
     sections: { title: string; text: string }[];
     faqs: { question: string; answer: string }[];
   }

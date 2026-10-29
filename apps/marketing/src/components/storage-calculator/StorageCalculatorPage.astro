@@ -49,7 +49,6 @@ const structuredData = [
       <span class="text-primary bg-primary/10 mb-5 inline-flex rounded-full px-3 py-1.5 text-xs font-medium">Free calculator · No account needed</span>
       <h1 class="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl">{config.heading}</h1>
       <p class="text-muted-foreground mx-auto mt-6 max-w-2xl text-base leading-relaxed sm:text-lg">{config.introduction}</p>
-      <a class="text-muted-foreground hover:text-foreground mt-5 inline-block text-sm underline underline-offset-4" href={config.otherPath}>{config.otherLabel} →</a>
     </header>
 
     <StorageCalculator page={page} offers={offers} client:load />
@@ -80,7 +79,6 @@ const structuredData = [
     </section>
 
     <FaqList faqs={config.faqs} />
-    <p class="text-muted-foreground mt-10 text-center text-sm"><a class="underline underline-offset-4" href={config.otherPath}>{config.otherLabel} →</a></p>
   </article>
 </DefaultLayout>
 
