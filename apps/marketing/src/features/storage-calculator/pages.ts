@@ -94,9 +94,9 @@ export const CALCULATOR_PAGES = {
           "Your inputs use decimal GB and TB: 1 TB equals 1,000 GB. When a provider bills in binary GiB, the calculation converts bytes before applying its rate. The billing unit is listed in each priced offer’s details.",
       },
       {
-        question: "Why are some providers not estimated?",
+        question: "Why can an offer be outside this scenario?",
         answer:
-          "A trustworthy total needs more than a storage rate. Offers with incomplete verified pricing, configuration-dependent fees or workloads outside their standard usage policy remain visible without a price. Open their details for the reason and official sources.",
+          "All listed offers have a reference tariff. An offer cannot provide a valid price when your storage, object count or downloads exceed its published plans, standard usage policy or public rate card. It stays visible below the estimates with the specific limit and official sources in its details.",
       },
     ],
   },

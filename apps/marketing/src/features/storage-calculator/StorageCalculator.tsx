@@ -420,8 +420,10 @@ export default function StorageCalculator({
               Compare the real cost
             </h2>
             <p className="text-muted-foreground mt-2 text-sm" role="status">
-              {available} estimates · {offers.length - available} not estimated
-              · USD, before tax
+              {available} estimates
+              {available < offers.length &&
+                ` · ${offers.length - available} outside this scenario`}
+              {" · USD, before tax"}
             </p>
           </div>
           <label className="text-muted-foreground flex items-center gap-2 text-sm">
@@ -502,7 +504,7 @@ export default function StorageCalculator({
                     <td className="px-2 py-5 text-right sm:px-4">
                       {result.total === null ? (
                         <span className="text-muted-foreground text-xs">
-                          Not estimated
+                          Outside limits
                         </span>
                       ) : (
                         <>
@@ -558,9 +560,9 @@ export default function StorageCalculator({
         </div>
         <p className="text-muted-foreground mt-4 text-xs leading-relaxed">
           Totals include modeled mandatory commitments and assume published
-          recurring free allowances are unused. Offers without verified complete
-          pricing or outside their standard limits appear after valid estimates.
-          These are planning estimates, not provider quotes.
+          recurring free allowances are unused. Offers outside their published
+          limits appear after valid estimates; open their details for the
+          reason. These are planning estimates, not provider quotes.
         </p>
       </section>
     </div>

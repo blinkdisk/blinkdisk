@@ -4,7 +4,7 @@ import Button from "@marketing/components/Button.astro";
 import FaqList from "@marketing/components/FaqList.astro";
 import {
   offersForPage,
-  REVIEWED_AT,
+  UPDATED_AT,
   UPSTREAM_SOURCE,
 } from "@marketing/features/storage-calculator/offers";
 import { CALCULATOR_PAGES } from "@marketing/features/storage-calculator/pages";
@@ -25,7 +25,7 @@ const structuredData = [
     name: config.title,
     description: config.description,
     url: canonical,
-    dateModified: REVIEWED_AT,
+    dateModified: UPDATED_AT,
   },
   {
     "@context": "https://schema.org",
@@ -74,7 +74,7 @@ const structuredData = [
 
     <section class="bg-card mx-auto my-14 max-w-5xl rounded-2xl border p-6 sm:my-20 sm:p-8" aria-labelledby="method-heading">
       <h2 id="method-heading" class="text-xl font-semibold">Prices you can inspect</h2>
-      <p class="text-muted-foreground mt-3 text-sm leading-7">Provider selection started with the public <a class="text-foreground underline underline-offset-4" href={UPSTREAM_SOURCE} target="_blank" rel="noopener noreferrer">S3Compare dataset</a>. We maintain our own pricing snapshot and check official provider sources. Sources were reviewed on <time datetime={REVIEWED_AT}>{REVIEWED_AT}</time>; incomplete rate cards are shown without an estimate. Open any offer for its sources, reference region and assumptions.</p>
+      <p class="text-muted-foreground mt-3 text-sm leading-7">Provider selection started with the public <a class="text-foreground underline underline-offset-4" href={UPSTREAM_SOURCE} target="_blank" rel="noopener noreferrer">S3Compare dataset</a>. We maintain our own pricing snapshot and check official provider sources. Last updated <time datetime={UPDATED_AT}>{UPDATED_AT}</time>. Every offer includes a reference tariff; open its details for the sources, individual review date, reference region and assumptions.</p>
       <p class="text-muted-foreground mt-3 text-sm leading-7">Prices are compared in USD before tax. EUR offers use a documented fixed ECB exchange rate. A monthly period is an estimate: providers using hourly pricing use the hour count stated in their details. Free allowances are treated as unused by other workloads; introductory offers and free trials are excluded. We do not assign star ratings or give our own storage a preferred ranking.</p>
     </section>
 

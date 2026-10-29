@@ -65,10 +65,6 @@ export function calculateOffer(
   };
   const pricing = offer.pricing;
   const unavailable = (reason: string) => ({ ...result, reason });
-  if (!pricing)
-    return unavailable(
-      offer.unavailableReason ?? "Pricing is not yet verified.",
-    );
   if (
     ![storedGB, downloadGB, state.objectSize, state.months].every(
       Number.isFinite,
@@ -91,6 +87,11 @@ export function calculateOffer(
   if (pricing.maximumObjects && objects > pricing.maximumObjects) {
     return unavailable(
       "The estimated object count exceeds the standard account limit.",
+    );
+  }
+  if (pricing.maximumDownloadGB && downloadGB > pricing.maximumDownloadGB) {
+    return unavailable(
+      "Monthly downloads exceed the public rate card. Contact the provider for a quote.",
     );
   }
   if (
@@ -134,8 +135,12 @@ export function calculateOffer(
   const retrievalMonthly = pricing.retrieval
     ? usageCost(downloadedUnits, pricing.retrieval)
     : 0;
-  const writeTotal = requestCost(objects, pricing.writes);
-  const readMonthly = requestCost(reads, pricing.reads);
+  const readMonthly =
+    requestCost(reads, pricing.reads) + requestCost(reads, pricing.requests);
+  const writeTotal =
+    requestCost(objects, pricing.writes) +
+    requestCost(objects + reads, pricing.requests) -
+    requestCost(reads, pricing.requests);
   const uploadTotal = pricing.upload ? usageCost(rawUnits, pricing.upload) : 0;
 
   result.costs.storage = storageMonthly * state.months;
@@ -201,7 +206,10 @@ export function calculateOffer(
       (pricing.minimumMonthly ?? 0) - recurring - uploadTotal - writeTotal,
     ) +
     Math.max(0, (pricing.minimumMonthly ?? 0) - recurring) * (state.months - 1);
-  if (storedUnits > rawUnits)
+  if (
+    minimumObjectBytes > Math.min(objectBytes, lastObjectBytes) ||
+    (pricing.objectOverheadBytes ?? 0) > 0
+  )
     result.notes.push(
       "Billable storage includes the minimum object size or per-object overhead.",
     );

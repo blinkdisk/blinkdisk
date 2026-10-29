@@ -38,6 +38,7 @@ export type StoragePricing = {
   retrieval?: UsagePrice;
   writes?: RequestPrice;
   reads?: RequestPrice;
+  requests?: RequestPrice;
   baseMonthly?: number;
   minimumStorage?: number;
   minimumMonthly?: number;
@@ -49,6 +50,7 @@ export type StoragePricing = {
   minimumDownloadLimitGB?: number;
   maximumObjects?: number;
   maximumStorageGB?: number;
+  maximumDownloadGB?: number;
   packages?: StoragePackage[];
 };
 
@@ -64,8 +66,7 @@ export type StorageOffer = {
   reviewedAt: string;
   sources: { label: string; url: string }[];
   s3Evidence?: string;
-  pricing?: StoragePricing;
-  unavailableReason?: string;
+  pricing: StoragePricing;
   notes: string[];
 };
 
