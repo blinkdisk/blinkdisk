@@ -4,99 +4,99 @@ export const CALCULATOR_PAGES = {
   backup: {
     path: "/tool/backup-storage-calculator",
     title: "Cloud Backup Storage Cost Calculator",
-    heading: "Find the right cloud storage for your backups",
+    heading: "Compare cloud storage costs for your backups",
     description:
-      "Compare cloud backup storage costs across providers. Estimate storage, downloads and request fees with transparent pricing for backups and immediately accessible archives.",
+      "Free cloud backup storage calculator. Enter how much data you store and download, and compare what each provider would charge, including download and request fees.",
     introduction:
-      "A small price per terabyte doesn’t always mean a small bill. Compare storage, downloads and request costs for your backup or archive, all in one place.",
+      "The price per terabyte is only part of the bill. Download fees, request charges and minimums add up. Enter your numbers to see what each provider would actually charge.",
     sections: [
       {
-        title: "Start with the size of your backup, not your computer",
-        text: "The data stored field means the space your backup repository occupies in the cloud. It is not necessarily the size of the files you want to protect. Compression and deduplication may reduce it, while retained versions and changed files may increase it. Enter your repository’s actual or estimated stored size; this calculator does not predict it for you.",
+        title: "Enter the size of your backup, not your drive",
+        text: "Data stored is the space your backup takes up in the cloud, which is rarely the same as the files on your computer. Compression and deduplication shrink it, and keeping old versions makes it grow. If you already have a backup, use its current size. If not, make a rough guess. The calculator won’t estimate it for you.",
       },
       {
-        title: "Cheap to keep. What does it cost to get back?",
-        text: "Set monthly downloads to see the impact of restores and verification reads. Download traffic can carry both an internet transfer charge and a separate retrieval fee. Some services include an allowance; others limit how much you can download under their standard policy. Open a provider’s details to see what applies.",
+        title: "Storing is cheap. Getting it back might not be.",
+        text: "Restores and backup checks both download data. Some providers charge for the transfer, some add a separate retrieval fee, and some cap how much you can download. Set downloads per month to match how often you expect to restore, then open a provider’s details to see which rules apply.",
       },
       {
-        title: "An archive you can access immediately",
-        text: "These estimates cover immediately accessible storage, including storage used for infrequently read backups and archives. Glacier Instant Retrieval is included because it provides immediate access, with additional retrieval charges. Delayed-retrieval classes such as Glacier Deep Archive are outside this comparison.",
+        title: "Only storage you can access right away",
+        text: "Every offer here lets you read your data immediately. That includes cheaper tiers for rarely used data, like Glacier Instant Retrieval, which charges extra when you read from it. Tiers that make you wait hours for a restore, like Glacier Deep Archive, aren’t included.",
       },
       {
         title: "What does 3 TB of backup storage cost?",
-        text: "The default scenario keeps 3 TB in storage for 12 months after one upload, with 2 TB downloaded each month and yearly billing where available. Change the storage amount to match your repository and set a realistic download allowance. For a restore-heavy period, enter the volume you expect to download each month; the same volume is repeated across the selected period.",
+        text: "The default numbers assume you upload 3 TB once, keep it for 12 months and download 2 TB each month, with yearly billing where a provider offers it. Change them to match your setup. If you’re planning a big restore, enter the amount you expect to download per month. The calculator repeats it for every month in the period.",
       },
     ],
     faqs: [
       {
         question: "Does this compare backup apps or cloud storage?",
         answer:
-          "It compares cloud storage offers. Most require separate backup software and your own provider account. CloudBlink is managed storage used exclusively with BlinkDisk. Software subscriptions, gateway infrastructure and administration costs are not added to other providers’ storage estimates.",
+          "Cloud storage. For most providers you need your own account plus separate backup software. CloudBlink is the exception: it’s managed storage that only works with BlinkDisk. The estimates for other providers don’t include software subscriptions, gateways or admin time.",
       },
       {
         question:
-          "Why is the cheapest price per TB not always the cheapest total?",
+          "Why isn’t the cheapest price per TB always the cheapest total?",
         answer:
-          "Minimum charges, capacity bundles, download fees, retrieval charges and request prices can change the total. A small repository can still incur a full minimum monthly charge. Annual packages may require paying for more months than you plan to use.",
+          "Because the per-TB price leaves a lot out. Minimum monthly charges, fixed plan sizes, download and retrieval fees and request charges all change the total. A small backup can still hit a provider’s minimum bill, and an annual plan can charge you for months you don’t use.",
       },
       {
         question: "Can I use this for restic, Kopia or other backup tools?",
         answer:
-          "Yes. The cost model does not assume a particular backup app. Enter the stored repository size and downloads for your workflow, and check the provider’s API and feature support with your chosen software. Object size refers to cloud objects written by the app, not necessarily your original files.",
+          "Yes. The calculator doesn’t assume a specific backup app. Enter the size of your repository and how much you download, then check that your backup tool supports the provider. Object size, under Advanced, means the size of the files your backup tool writes to the cloud, not the files on your computer.",
       },
       {
         question: "Does this include the cost of keeping old backup versions?",
         answer:
-          "Only if their storage is included in the amount you enter. The model keeps that total constant and uploads it once. It does not simulate incremental backups, retention schedules, daily changes or deduplication.",
+          "Only if you include them in the amount you enter. The calculator uploads that amount once and keeps it the same for the whole period. It doesn’t simulate daily changes, retention schedules or deduplication.",
       },
     ],
   },
   s3: {
     path: "/tool/s3-storage-calculator",
     title: "S3-Compatible Storage Cost Calculator",
-    heading: "Compare S3 storage beyond the price per TB",
+    heading: "Compare S3 storage costs beyond the price per TB",
     description:
-      "Compare S3-compatible object storage pricing. Calculate storage, egress, retrieval and request costs using data volume, duration and average object size.",
+      "Compare S3-compatible object storage pricing. Enter your data volume, downloads and object size to see storage, egress, retrieval and request costs for each provider.",
     introduction:
-      "Put storage, egress and API requests on the same bill. Estimate what your workload costs across S3-compatible providers, with the assumptions out in the open.",
+      "Storage, egress and API requests all end up on the same invoice. Enter your workload to see the total for each S3-compatible provider, then open any row to see how we got there.",
     sections: [
       {
-        title: "Object size changes the request bill",
-        text: "One terabyte split into small objects requires many more operations than the same volume in large objects. This calculator estimates one write per initial object and one read per downloaded object. For example, 1 TB in 20 MB objects is about 50,000 initial writes. Listing, HEAD requests, retries and multipart overhead are not included.",
+        title: "Small objects mean more requests",
+        text: "The same terabyte costs more in requests when it’s split into many small objects. The calculator counts one write per object on upload and one read per object downloaded. For example, 1 TB of 20 MB objects is about 50,000 writes. Listing, HEAD requests, retries and multipart overhead aren’t counted.",
       },
       {
-        title: "Egress and retrieval are different charges",
-        text: "Egress is data transferred out of the provider to the internet. Retrieval is a separate charge for reading data from certain storage classes. A download can incur both, plus read-request charges. Allowances are applied monthly and are assumed not to be consumed by your other workloads.",
+        title: "Egress and retrieval are two different fees",
+        text: "Egress is what you pay to send data out to the internet. Retrieval is an extra charge some storage classes add for reading data at all. One download can trigger both, plus read requests. Free allowances are applied monthly, assuming nothing else on your account uses them.",
       },
       {
-        title: "S3-compatible does not mean feature-identical",
-        text: "This page includes only offers with provider documentation establishing S3 API support or documented interoperability. Check the linked API documentation for features such as Object Lock, versioning, checksums and authentication. Google Cloud uses its documented XML API interoperability mode. Native Azure Blob storage and CloudBlink are not included.",
+        title: "S3-compatible doesn’t mean identical",
+        text: "We only list providers whose documentation confirms S3 API support or compatibility. Features like Object Lock, versioning, checksums and authentication still vary, so check the linked docs before you commit. Google Cloud is included through its XML API compatibility mode. Native Azure Blob storage and CloudBlink aren’t on this page.",
       },
       {
-        title: "Compare a workload, not a headline rate",
-        text: "Start with the amount of data kept in storage, then set downloads and average object size. Keep the duration at 12 months for an annual budget, or shorten it to explore minimum retention and annual commitments. This model is for one initial upload and a constant volume; it does not model a continuously changing application.",
+        title: "Price your workload, not the headline rate",
+        text: "Start with how much data you keep, then add monthly downloads and average object size. Leave the duration at 12 months for a yearly budget, or shorten it to see how minimum retention periods and annual commitments affect short-term use. The calculator assumes one upload and a constant amount of data, so it’s not a good fit for apps whose data changes all the time.",
       },
     ],
     faqs: [
       {
         question: "What costs does this S3 calculator include?",
         answer:
-          "For priced offers it models storage, initial upload transfer and write requests, recurring internet downloads and read requests, retrieval charges, minimum bills and required storage commitments. Details show the selected reference region and billing rules. Taxes, replication, optional services and negotiated discounts are excluded.",
+          "Storage, the initial upload (transfer and write requests), monthly downloads (egress and read requests), retrieval fees, minimum bills and required storage commitments. Each offer’s details show the reference region and billing rules we used. Taxes, replication, optional services and negotiated discounts aren’t included.",
       },
       {
         question: "Why does average object size matter?",
         answer:
-          "It determines estimated object and request counts. Providers may also bill tiny objects at a minimum size, increasing billable storage. The estimate treats the average size as representative; a real distribution of mixed object sizes can produce different costs.",
+          "It decides how many objects and requests the estimate assumes. Some providers also bill very small objects as if they were larger, which raises the storage bill. The calculator treats every object as average-sized, so a real mix of sizes can cost more or less.",
       },
       {
         question: "Does the calculator use GB or GiB?",
         answer:
-          "Your inputs use decimal GB and TB: 1 TB equals 1,000 GB. When a provider bills in binary GiB, the calculation converts bytes before applying its rate. The billing unit is listed in each priced offer’s details.",
+          "You enter decimal units, so 1 TB is 1,000 GB. If a provider bills in binary GiB, we convert before applying their price. Each offer’s details list its billing unit.",
       },
       {
-        question: "Why can an offer be outside this scenario?",
+        question: "Why are some offers outside this scenario?",
         answer:
-          "All listed offers have a reference tariff. An offer cannot provide a valid price when your storage, object count or downloads exceed its published plans, standard usage policy or public rate card. It stays visible below the estimates with the specific limit and official sources in its details.",
+          "Every offer has a published price, but not every price covers every workload. If your storage, object count or downloads go past a provider’s plans, usage policy or public rate card, we can’t give an honest estimate. Those offers move to the bottom of the list, and their details explain which limit you hit.",
       },
     ],
   },

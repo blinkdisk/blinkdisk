@@ -40,13 +40,13 @@ const money = (amount: number) =>
         currency: "USD",
       }).format(amount);
 const costLabels: Record<keyof CostBreakdown, string> = {
-  storage: "Storage during your period",
-  upload: "Initial upload transfer",
-  download: "Internet downloads",
-  retrieval: "Data retrieval",
-  requests: "Upload + download requests",
-  minimum: "Minimum invoice adjustment",
-  commitment: "Additional committed storage",
+  storage: "Storage",
+  upload: "Upload transfer",
+  download: "Downloads (egress)",
+  retrieval: "Retrieval fees",
+  requests: "API requests",
+  minimum: "Top-up to minimum bill",
+  commitment: "Committed but unused storage",
 };
 const alwaysShownCosts: (keyof CostBreakdown)[] = ["storage", "download"];
 const HIGHLIGHTED_OFFER = "cloudblink";
@@ -201,8 +201,8 @@ function NumberField({
       </div>
       {!valid && (
         <p id={`${id}-error`} className="text-destructive text-xs">
-          Enter {integer ? "a whole number" : "a number"} from {min} to {max}.
-          Results use the last valid value.
+          Enter {integer ? "a whole number" : "a number"} between {min} and{" "}
+          {max}. Until then, results use your last valid entry.
         </p>
       )}
     </div>
@@ -273,7 +273,7 @@ function OfferDetails({
       <div className="p-5 sm:p-6">
         <h3 className={cn(eyebrowClass, "mb-4")}>
           {result.total === null
-            ? "Why there is no estimate"
+            ? "Why there’s no estimate"
             : "Where the cost comes from"}
         </h3>
         {result.reason ? (
@@ -303,13 +303,13 @@ function OfferDetails({
               </div>
             ))}
             <div className="flex justify-between border-t pt-3 font-semibold">
-              <dt>Total, including commitments</dt>
+              <dt>Total</dt>
               <dd className="tabular-nums">{money(result.total ?? 0)}</dd>
             </div>
           </dl>
         )}
         <p className="text-muted-foreground mt-4 text-xs">
-          Estimated initial objects: {result.objects.toLocaleString("en-US")}.
+          About {result.objects.toLocaleString("en-US")} objects uploaded.
         </p>
         {offer.id === HIGHLIGHTED_OFFER && (
           <div className="mt-5 flex flex-wrap items-center gap-2">
@@ -332,9 +332,7 @@ function OfferDetails({
         )}
       </div>
       <div className="border-t p-5 sm:p-6 md:border-l md:border-t-0">
-        <h3 className={cn(eyebrowClass, "mb-4")}>
-          Region & pricing assumptions
-        </h3>
+        <h3 className={cn(eyebrowClass, "mb-4")}>Region and assumptions</h3>
         <p className="mb-3 flex items-start gap-2">
           <MapPinIcon className="text-muted-foreground mt-0.5 size-4 shrink-0" />
           {offer.region}
@@ -369,8 +367,8 @@ function OfferDetails({
         )}
         <div className="mt-5 border-t pt-4">
           <p className="text-muted-foreground mb-3 text-xs">
-            Sources reviewed {offer.reviewedAt}. Check the provider before
-            purchasing.
+            Sources reviewed {offer.reviewedAt}. Prices change, so check with
+            the provider before you buy.
           </p>
           <div className="flex flex-wrap gap-2">
             {offer.sources.map((source) => (
@@ -537,8 +535,9 @@ export default function StorageCalculator({
             <div className="bg-border grid gap-px md:grid-cols-3">
               {objectField}
               <p className="bg-card text-muted-foreground flex items-center p-5 text-sm leading-relaxed sm:p-6 md:col-span-2">
-                The average stored object size estimates request counts, rather
-                than the size of each original file.
+                The average size of the objects your backup app uploads. It’s
+                used to estimate request fees and isn’t the size of your
+                original files.
               </p>
             </div>
           </div>
@@ -583,9 +582,9 @@ export default function StorageCalculator({
         </div>
         <noscript>
           <p className="border-t px-5 py-3 text-sm">
-            These are the default 12-month estimates for 3 TB stored, 2 TB
-            downloaded per month and yearly billing. Enable JavaScript to change
-            the scenario.
+            These are the default estimates: 3 TB stored for 12 months, 2 TB
+            downloaded per month and yearly billing. Turn on JavaScript to enter
+            your own numbers.
           </p>
         </noscript>
       </section>
@@ -597,7 +596,7 @@ export default function StorageCalculator({
               id="results-heading"
               className="text-2xl font-semibold tracking-tight sm:text-3xl"
             >
-              Compare the real cost
+              Total cost by provider
             </h2>
             <p className="text-muted-foreground mt-2 text-sm" role="status">
               {available} estimates
@@ -773,24 +772,23 @@ export default function StorageCalculator({
           <InfoIcon className="mt-0.5 size-4 shrink-0" />
           <div className="space-y-2">
             <p>
-              One initial upload, a constant stored volume and the same
-              downloads each month. 1 TB = 1,000 GB. No ongoing changes, growth,
-              compression or backup versioning are simulated. Request counts
-              exclude listing, metadata checks, retries and multipart-upload
-              overhead.
+              The estimate assumes you upload everything once, the amount stored
+              stays the same, and you download the same amount every month. 1 TB
+              is 1,000 GB. Changes, growth, compression and backup versions
+              aren’t simulated. Request counts leave out listing, metadata
+              checks, retries and multipart overhead.
             </p>
             {state.billing === "yearly" && (
               <p>
-                Published annual packages are charged in whole years, including
-                unused committed months. Other offers keep their monthly usage
-                rates.
+                Annual plans are charged in whole years, even for months you
+                don’t use. Providers without an annual plan are billed monthly.
               </p>
             )}
             <p>
-              Totals include modeled mandatory commitments and assume published
-              recurring free allowances are unused. Offers outside their
-              published limits appear after valid estimates; open their details
-              for the reason. These are planning estimates, not provider quotes.
+              Totals include required commitments and assume free allowances
+              aren’t already used by something else on your account. Offers that
+              can’t handle your numbers are listed last; open them to see why.
+              These are estimates to help you plan, not quotes.
             </p>
           </div>
         </div>

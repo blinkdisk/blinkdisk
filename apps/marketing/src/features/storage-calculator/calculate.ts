@@ -76,22 +76,22 @@ export function calculateOffer(
     state.months < 1
   ) {
     return unavailable(
-      "Enter a valid storage amount, duration and object size.",
+      "Enter a valid amount of data, duration and object size.",
     );
   }
   if (pricing.maximumStorageGB && storedGB > pricing.maximumStorageGB) {
     return unavailable(
-      "This amount exceeds the published capacity covered by this estimate.",
+      "This is more data than the provider’s published plans cover.",
     );
   }
   if (pricing.maximumObjects && objects > pricing.maximumObjects) {
     return unavailable(
-      "The estimated object count exceeds the standard account limit.",
+      "Your estimated object count is above the provider’s standard account limit.",
     );
   }
   if (pricing.maximumDownloadGB && downloadGB > pricing.maximumDownloadGB) {
     return unavailable(
-      "Monthly downloads exceed the public rate card. Contact the provider for a quote.",
+      "Your monthly downloads go beyond the public rate card. The provider only quotes this on request.",
     );
   }
   if (
@@ -103,7 +103,7 @@ export function calculateOffer(
       )
   ) {
     return unavailable(
-      "Monthly downloads exceed this offer’s standard usage policy. Contact the provider.",
+      "Your monthly downloads are above the limit in this offer’s usage policy.",
     );
   }
 
@@ -160,7 +160,7 @@ export function calculateOffer(
       .find((p) => p.capacityGB >= storedGB);
     if (!plan)
       return unavailable(
-        "No published plan covers this storage amount and billing option.",
+        "No published plan fits this amount of data with the billing option you picked.",
       );
     const annual = state.billing === "yearly" && plan.yearly !== undefined;
     const monthly = annual ? (plan.yearly ?? 0) / 12 : (plan.monthly ?? 0);
@@ -173,11 +173,11 @@ export function calculateOffer(
         )
       : 0;
     result.notes.push(
-      `Selected capacity: ${plan.capacityGB.toLocaleString("en-US")} GB.`,
+      `Uses the ${plan.capacityGB.toLocaleString("en-US")} GB plan.`,
     );
     if (annual)
       result.notes.push(
-        `Storage is paid ${Math.ceil(state.months / 12)} year(s) in advance; unused committed months are included in the total.`,
+        `Paid ${Math.ceil(state.months / 12) === 1 ? "one year" : `${Math.ceil(state.months / 12)} years`} upfront. Months you don’t use are still in the total.`,
       );
   } else {
     const extraMonths = Math.max(
@@ -188,11 +188,11 @@ export function calculateOffer(
       usageCost(storedUnits, { ...pricing.storage, free: 0 }) * extraMonths;
     if (extraMonths)
       result.notes.push(
-        `Includes ${extraMonths} additional month(s) of minimum storage retention after deletion.`,
+        `Includes ${extraMonths} extra month${extraMonths === 1 ? "" : "s"} of storage, because the provider bills deleted data until its minimum retention period ends.`,
       );
     if (state.billing === "yearly")
       result.notes.push(
-        "No public annual discount is modeled; usage is billed monthly.",
+        "No public annual discount, so this is billed monthly.",
       );
   }
   const recurring =
@@ -211,7 +211,7 @@ export function calculateOffer(
     (pricing.objectOverheadBytes ?? 0) > 0
   )
     result.notes.push(
-      "Billable storage includes the minimum object size or per-object overhead.",
+      "Small objects are billed at a minimum size or with per-object overhead, which adds to billable storage.",
     );
   for (const key of Object.keys(
     result.costs,

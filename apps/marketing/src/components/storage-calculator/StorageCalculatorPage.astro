@@ -53,7 +53,7 @@ const structuredData = [
     <header class="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
       <div class="mb-6 flex items-center justify-center gap-4">
         <div class="bg-foreground/20 h-px w-8"></div>
-        <span class="text-foreground/50 text-xs font-medium uppercase tracking-wider">Free calculator · No account needed</span>
+        <span class="text-foreground/50 text-xs font-medium uppercase tracking-wider">Free · No sign-up needed</span>
         <div class="bg-foreground/20 h-px w-8"></div>
       </div>
       <h1 class="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl">{config.heading}</h1>
@@ -65,8 +65,8 @@ const structuredData = [
     <aside class="bg-card my-16 grid overflow-hidden rounded-2xl border sm:my-24 md:grid-cols-[3fr_2fr]" aria-labelledby="blinkdisk-heading">
       <div class="p-7 sm:p-10">
         <p class="text-primary mb-3 text-xs font-medium uppercase tracking-wider">Built by BlinkDisk</p>
-        <h2 id="blinkdisk-heading" class="text-2xl font-bold tracking-tight sm:text-3xl">{page === "backup" ? "Your storage. Your backups. One simple app." : "Put your storage to work for your backups."}</h2>
-        <p class="text-muted-foreground mt-4 text-sm leading-relaxed sm:text-base">BlinkDisk is a free, open-source desktop backup app for Windows, macOS and Linux. {page === "backup" ? "Bring your own cloud storage, or use CloudBlink, our optional managed storage available exclusively through BlinkDisk." : "Connect your own cloud storage and keep encrypted backups with a simple desktop interface."}</p>
+        <h2 id="blinkdisk-heading" class="text-2xl font-bold tracking-tight sm:text-3xl">{page === "backup" ? "Pick your storage. BlinkDisk handles the backups." : "Already have S3 storage? Back up to it with BlinkDisk."}</h2>
+        <p class="text-muted-foreground mt-4 text-sm leading-relaxed sm:text-base">{page === "backup" ? "BlinkDisk is a free, open-source backup app for Windows, macOS and Linux. Connect your own storage account, or use CloudBlink, our managed storage, and skip the setup." : "BlinkDisk is a free, open-source backup app for Windows, macOS and Linux. Connect your bucket, pick your folders, and your files are backed up with end-to-end encryption."}</p>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center" data-storage-calculator-cta={page}>
           <Button href={`/download?calculator=${page}`} size="lg"><DownloadIcon />Download BlinkDisk</Button>
           {page === "backup" && <Button href="/cloudblink" size="lg" variant="secondary">Learn about CloudBlink</Button>}
@@ -76,11 +76,11 @@ const structuredData = [
         {page === "backup" ? <CloudBlinkLogo class="text-primary relative h-4 w-48" /> : <Logo class="relative h-6 w-40" />}
         <ul class="relative space-y-3 text-sm">
           {(page === "backup"
-            ? [`${TRIAL_STORAGE / 1e9} GB free for ${TRIAL_DAYS} days`, "No setup, no API keys", "End-to-end encrypted"]
+            ? [`${TRIAL_STORAGE / 1e9} GB free for ${TRIAL_DAYS} days`, "No setup or API keys", "End-to-end encrypted"]
             : ["Works with S3-compatible storage", "End-to-end encrypted", "Free and open source"]
           ).map((item) => <li class="flex items-center gap-2.5"><span class="bg-primary/10 text-primary flex size-5 items-center justify-center rounded-full"><CheckIcon class="size-3" /></span>{item}</li>)}
         </ul>
-        {page === "backup" && <p class="text-muted-foreground relative text-xs">The trial is separate from the regular prices above.</p>}
+        {page === "backup" && <p class="text-muted-foreground relative text-xs">The free trial isn’t included in the prices above.</p>}
       </div>
     </aside>
 
@@ -97,9 +97,9 @@ const structuredData = [
     <section class="bg-card mx-auto my-16 flex max-w-5xl flex-col gap-5 rounded-2xl border p-7 sm:my-24 sm:flex-row sm:p-9" aria-labelledby="method-heading">
       <div class="bg-primary/10 text-primary flex size-11 shrink-0 items-center justify-center rounded-xl"><ScaleIcon class="size-5" /></div>
       <div>
-        <h2 id="method-heading" class="text-xl font-semibold tracking-tight">Prices you can inspect</h2>
-        <p class="text-muted-foreground mt-3 text-sm leading-7">Provider selection started with the public <a class="text-foreground underline underline-offset-4" href={UPSTREAM_SOURCE} target="_blank" rel="noopener noreferrer">S3Compare dataset</a>. We maintain our own pricing snapshot and check official provider sources. Last updated <time datetime={UPDATED_AT}>{UPDATED_AT}</time>. Every offer includes a reference tariff; open its details for the sources, individual review date, reference region and assumptions.</p>
-        <p class="text-muted-foreground mt-3 text-sm leading-7">Prices are compared in USD before tax. EUR offers use a documented fixed ECB exchange rate. A monthly period is an estimate: providers using hourly pricing use the hour count stated in their details. Free allowances are treated as unused by other workloads; introductory offers and free trials are excluded. We do not assign star ratings or give our own storage a preferred ranking.</p>
+        <h2 id="method-heading" class="text-xl font-semibold tracking-tight">Where the prices come from</h2>
+        <p class="text-muted-foreground mt-3 text-sm leading-7">We started with the providers in the public <a class="text-foreground underline underline-offset-4" href={UPSTREAM_SOURCE} target="_blank" rel="noopener noreferrer">S3Compare dataset</a> and now keep our own price list, checked against each provider’s official pricing pages. Last updated <time datetime={UPDATED_AT}>{UPDATED_AT}</time>. Open any offer to see its sources, when we last checked them, the reference region and what we assumed.</p>
+        <p class="text-muted-foreground mt-3 text-sm leading-7">All prices are in USD before tax. Offers priced in euros are converted at a fixed ECB exchange rate, noted in their details. For providers that bill by the hour, the details show how many hours we count as a month. We assume free allowances aren’t used by anything else on your account, and we leave out introductory offers and free trials. We don’t rate providers, and CloudBlink is sorted by price like every other offer.</p>
       </div>
     </section>
 
