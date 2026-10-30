@@ -6,10 +6,10 @@ import type {
   UsagePrice,
 } from "@marketing/features/storage-calculator/types";
 
-export const REVIEWED_AT = "2026-10-29";
+const REVIEWED_AT = "2026-10-29";
 export const UPSTREAM_SOURCE =
   "https://github.com/zeroservices/s3compare.io_data";
-export const EUR_USD = {
+const EUR_USD = {
   rate: 1.113,
   date: "2026-10-29",
   source:

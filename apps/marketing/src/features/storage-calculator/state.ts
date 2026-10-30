@@ -4,7 +4,7 @@ import type {
   StorageUnit,
 } from "@marketing/features/storage-calculator/types";
 
-export const MAX_STORAGE = 1_000_000;
+const MAX_STORAGE = 1_000_000;
 export const MAX_MONTHS = 120;
 
 export function defaultState(page: CalculatorPage): CalculatorState {

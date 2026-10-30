@@ -13,7 +13,7 @@ export type CalculatorState = {
   details: string[];
 };
 
-export type PriceTier = { upTo: number | null; rate: number };
+type PriceTier = { upTo: number | null; rate: number };
 export type UsagePrice = {
   tiers: PriceTier[];
   free?: number;
@@ -25,7 +25,7 @@ export type RequestPrice = {
   free?: number;
   roundTo?: number;
 };
-export type StoragePackage = {
+type StoragePackage = {
   capacityGB: number;
   monthly?: number;
   yearly?: number;
