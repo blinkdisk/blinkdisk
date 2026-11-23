@@ -1,0 +1,106 @@
+---
+import { capacityUnits } from "@marketing/blog/chart";
+import type { ContentNode } from "@marketing/blog/content";
+
+type Props = {
+  title: string;
+  unit: string;
+  segments: ContentNode[];
+};
+const { title, unit, segments } = Astro.props;
+const values = segments.map((segment) => capacityUnits(String(segment.props.value)));
+const total = values.reduce((sum, value) => sum + value, 0n);
+const numbers = new Intl.NumberFormat("en-US");
+const capacity = (value: bigint) => {
+  const fraction = (value % 1_000_000n).toString().padStart(6, "0").replace(/0+$/, "");
+  return `${numbers.format(value / 1_000_000n)}${fraction ? `.${fraction}` : ""} ${unit}`;
+};
+---
+<figure class="stacked-bar not-prose" aria-label={title}>
+  <figcaption>{title}</figcaption>
+  <div class="stacked-bar__track" aria-hidden="true">
+    {values.map((value) => <span style={`width:${Number(value) / Number(total) * 100}%`}></span>)}
+  </div>
+  <table>
+    <thead>
+      <tr><th scope="col">Segment</th><th scope="col">Capacity ({unit})</th></tr>
+    </thead>
+    <tbody>
+      {segments.map((segment) => (
+        <tr>
+          <th scope="row"><span class="stacked-bar__swatch" aria-hidden="true"></span>{segment.props.label}</th>
+          <td>{capacity(capacityUnits(String(segment.props.value)))}</td>
+        </tr>
+      ))}
+    </tbody>
+    <tfoot><tr><th scope="row">Total</th><td>{capacity(total)}</td></tr></tfoot>
+  </table>
+</figure>
+<style>
+  .stacked-bar {
+    --segment-color: var(--primary);
+    margin: 2rem 0;
+    min-width: 0;
+    padding: clamp(1rem, 4vw, 1.5rem);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--card);
+    color: var(--foreground);
+    font-family: inherit;
+  }
+  figcaption {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .stacked-bar__track {
+    display: flex;
+    height: 2.5rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+  .stacked-bar__track > span {
+    flex: none;
+    background: var(--segment-color);
+    box-shadow: inset -1px 0 var(--card);
+  }
+  .stacked-bar__track > :nth-child(2), tbody > :nth-child(2) { --segment-color: color-mix(in oklch, var(--primary), white 25%); }
+  .stacked-bar__track > :nth-child(3), tbody > :nth-child(3) { --segment-color: color-mix(in oklch, var(--primary), black 25%); }
+  .stacked-bar__track > :nth-child(4), tbody > :nth-child(4) { --segment-color: color-mix(in oklch, var(--primary), white 45%); }
+  .stacked-bar__track > :nth-child(5), tbody > :nth-child(5) { --segment-color: color-mix(in oklch, var(--primary), black 45%); }
+  .stacked-bar__track > :nth-child(6), tbody > :nth-child(6) { --segment-color: color-mix(in oklch, var(--primary), white 65%); }
+  .stacked-bar__track > :nth-child(7), tbody > :nth-child(7) { --segment-color: color-mix(in oklch, var(--primary), black 65%); }
+  .stacked-bar__track > :nth-child(8), tbody > :nth-child(8) { --segment-color: color-mix(in oklch, var(--primary), white 80%); }
+  table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 0.875rem;
+  }
+  th, td {
+    padding: 0.625rem 0;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+  }
+  th { font-weight: 500; }
+  th:first-child { padding-right: 1rem; }
+  th:last-child, td { text-align: right; font-variant-numeric: tabular-nums; }
+  thead th { font-size: 0.75rem; }
+  tfoot { border-top: 1px solid var(--border); }
+  tfoot th, tfoot td { font-weight: 600; }
+  .stacked-bar__swatch {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.125rem;
+    background: var(--segment-color);
+  }
+  @media (forced-colors: active) {
+    .stacked-bar__track > span { outline: 1px solid CanvasText; outline-offset: -1px; }
+  }
+</style>
