@@ -32,7 +32,7 @@ export function useAuth() {
   }, [openAuthDialog]);
 
   const accountChanged = useCallback(
-    async (accountId: string) => {
+    async (accountId: string, options: { promptVault?: boolean } = {}) => {
       const local = accountId === LOCAL_ACCOUNT_ID;
 
       if (!local) {
@@ -56,7 +56,7 @@ export function useAuth() {
         .find({ status: "ACTIVE" })
         .fetch().length;
 
-      if (!local && !hasActiveVaults) {
+      if (!local && !hasActiveVaults && options.promptVault !== false) {
         openCreateVault({
           step: "DETAILS",
           provider: "CLOUDBLINK",

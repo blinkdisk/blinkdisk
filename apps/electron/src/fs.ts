@@ -1,6 +1,23 @@
 import { access, constants, lstat, stat } from "node:fs/promises";
 import type { SourceType } from "@blinkdisk/schemas/source";
+import { app } from "electron";
 import getFolderSize from "get-folder-size";
+
+const SUGGESTED_FOLDER_KINDS = [
+  "documents",
+  "pictures",
+  "desktop",
+  "videos",
+  "music",
+  "downloads",
+] as const;
+
+export type SuggestedFolderKind = (typeof SUGGESTED_FOLDER_KINDS)[number];
+
+export type SuggestedFolder = {
+  kind: SuggestedFolderKind;
+  path: string;
+};
 
 export async function fileExists(path: string) {
   try {
@@ -37,4 +54,28 @@ export async function isDirectory(path: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+export async function suggestedFolders() {
+  const home = app.getPath("home");
+  const folders: SuggestedFolder[] = [];
+
+  for (const kind of SUGGESTED_FOLDER_KINDS) {
+    let path: string;
+
+    try {
+      path = app.getPath(kind);
+    } catch {
+      // Not every platform defines every user folder.
+      continue;
+    }
+
+    // Unconfigured XDG user dirs fall back to the home directory.
+    if (path === home || folders.some((folder) => folder.path === path))
+      continue;
+
+    if (await isDirectory(path)) folders.push({ kind, path });
+  }
+
+  return folders;
 }

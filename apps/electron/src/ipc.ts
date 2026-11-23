@@ -10,7 +10,13 @@ import {
 import { readClipboard } from "@electron/clipboard";
 import { syncAccount } from "@electron/db/sync";
 import { decryptVaultConfig, encryptVaultConfig } from "@electron/encryption";
-import { folderSize, isDirectory, sourceSize, sourceType } from "@electron/fs";
+import {
+  folderSize,
+  isDirectory,
+  sourceSize,
+  sourceType,
+  suggestedFolders,
+} from "@electron/fs";
 import { getPasswordCache, setPasswordCache } from "@electron/password";
 import { getHostName, getUserName } from "@electron/profile";
 import {
@@ -94,6 +100,7 @@ ipcMain.handle("fs.folderSize", (_, path) => folderSize(path));
 ipcMain.handle("fs.isDirectory", (_, path) => isDirectory(path));
 ipcMain.handle("fs.sourceType", (_, path) => sourceType(path));
 ipcMain.handle("fs.sourceSize", (_, path) => sourceSize(path));
+ipcMain.handle("fs.suggestedFolders", () => suggestedFolders());
 ipcMain.handle("ssh.keyscan", (_, form) => sshKeyscan(form));
 ipcMain.handle("update.status", () => getUpdateStatus());
 ipcMain.handle("update.install", () => installUpdate());

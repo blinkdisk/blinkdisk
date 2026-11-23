@@ -1,7 +1,12 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import type { AccountStorageType } from "@blinkdisk/electron/store";
 import { getVaultCollection } from "@desktop/lib/db";
+import {
+  type OnboardingRecord,
+  shouldShowOnboarding,
+} from "@desktop/lib/onboarding";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { usePostHog } from "posthog-js/react";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
@@ -10,47 +15,90 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const navigate = useNavigate({ from: "/" });
+  const posthog = usePostHog();
 
   useEffect(() => {
-    const hasSkippedAuth = window.electron.store.get("hasSkippedAuth") as
-      | boolean
-      | undefined;
+    async function redirect() {
+      const hasSkippedAuth = window.electron.store.get("hasSkippedAuth") as
+        | boolean
+        | undefined;
 
-    const accounts = window.electron.store.get(
-      // @ts-expect-error accounts key does not exist
-      "accounts",
-    ) as Record<string, AccountStorageType>;
+      const accounts = window.electron.store.get(
+        // @ts-expect-error accounts key does not exist
+        "accounts",
+      ) as Record<string, AccountStorageType>;
 
-    const hasOnlineAccount = Object.entries(accounts || {}).some(
-      ([accountId, account]) =>
-        accountId !== LOCAL_ACCOUNT_ID &&
-        (account as unknown as AccountStorageType)?.active,
-    );
+      const hasOnlineAccount = Object.entries(accounts || {}).some(
+        ([accountId, account]) =>
+          accountId !== LOCAL_ACCOUNT_ID &&
+          (account as unknown as AccountStorageType)?.active,
+      );
 
-    const hasLocalVaults = getVaultCollection(LOCAL_ACCOUNT_ID)
-      .find()
-      .fetch().length;
+      const hasLocalVaults =
+        getVaultCollection(LOCAL_ACCOUNT_ID).find().fetch().length > 0;
 
-    if (!hasOnlineAccount && !hasLocalVaults && !hasSkippedAuth) {
-      navigate({
-        to: "/welcome",
+      const accountId =
+        (window.electron.store.get("currentAccountId") as
+          | string
+          | undefined
+          | null) || LOCAL_ACCOUNT_ID;
+
+      const onboarding = window.electron.store.get("onboarding") as
+        | OnboardingRecord
+        | undefined;
+
+      if (
+        shouldShowOnboarding({
+          record: onboarding,
+          hasOnlineAccount,
+          hasLocalVaults,
+          hasSkippedAuth: !!hasSkippedAuth,
+        })
+      ) {
+        if (!onboarding?.startedAt) {
+          await window.electron.store.set(
+            "onboarding.startedAt",
+            new Date().toISOString(),
+          );
+          posthog.capture("onboarding_started");
+        }
+
+        const vaults = getVaultCollection(accountId);
+        await vaults.isReady();
+
+        const vaultId = onboarding?.vaultId;
+        const hasVault =
+          !!vaultId && !!vaults.findOne({ id: vaultId, status: "ACTIVE" });
+
+        if (vaultId && hasVault)
+          return navigate({
+            to: "/onboarding/$accountId/$vaultId",
+            params: { accountId, vaultId },
+            replace: true,
+          });
+
+        return navigate({
+          to: "/onboarding/$accountId",
+          params: { accountId },
+          replace: true,
+        });
+      }
+
+      if (!hasOnlineAccount && !hasLocalVaults && !hasSkippedAuth)
+        return navigate({
+          to: "/welcome",
+          replace: true,
+        });
+
+      return navigate({
+        to: "/$accountId",
+        params: { accountId },
         replace: true,
       });
-
-      return;
     }
 
-    const accountId = window.electron.store.get("currentAccountId") as
-      | string
-      | undefined
-      | null;
-
-    navigate({
-      to: "/$accountId",
-      params: { accountId: accountId || LOCAL_ACCOUNT_ID },
-      replace: true,
-    });
-  }, [navigate]);
+    void redirect();
+  }, [navigate, posthog]);
 
   return null;
 }
