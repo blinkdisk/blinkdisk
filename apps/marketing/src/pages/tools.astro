@@ -1,0 +1,92 @@
+---
+import ArrowUpRightIcon from "@lucide/astro/icons/arrow-up-right";
+import CalculatorIcon from "@lucide/astro/icons/calculator";
+import CodeIcon from "@lucide/astro/icons/code";
+import DatabaseIcon from "@lucide/astro/icons/database";
+import SearchIcon from "@lucide/astro/icons/search";
+import DefaultLayout from "@marketing/layouts/DefaultLayout.astro";
+
+const tools = [
+  {
+    title: "Backup Tool Finder",
+    description:
+      "Find backup software that fits your devices, storage and budget.",
+    href: "/tool/backup-tool-finder",
+    icon: SearchIcon,
+  },
+  {
+    title: "Backup Storage Calculator",
+    description:
+      "See what your backups would cost with each cloud storage provider, including download and request fees.",
+    href: "/tool/backup-storage-calculator",
+    icon: CalculatorIcon,
+  },
+  {
+    title: "S3 Storage Calculator",
+    description:
+      "Compare S3-compatible providers on the full bill, with storage, egress and API requests included.",
+    href: "/tool/s3-storage-calculator",
+    icon: DatabaseIcon,
+  },
+  {
+    title: "Codebase Statistics Calculator",
+    description:
+      "Explore your codebase right in your browser. Count lines of code, files, characters and more.",
+    href: "/tool/code",
+    icon: CodeIcon,
+  },
+];
+
+const title = "Free Tools";
+const description =
+  "Free tools from BlinkDisk to compare cloud storage costs, estimate S3 pricing and explore your codebase.";
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: new URL("/tools", Astro.site ?? "https://blinkdisk.com").href,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: tools.map((tool, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: tool.title,
+      url: new URL(tool.href, Astro.site ?? "https://blinkdisk.com").href,
+    })),
+  },
+};
+---
+
+<DefaultLayout title={title} description={description} structuredData={structuredData}>
+  <article class="pt-page pb-page w-content mx-auto min-h-[75vh]">
+    <header class="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
+      <h1 class="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Free tools</h1>
+      <p class="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
+        Compare cloud storage costs and explore your codebase with free tools
+        from BlinkDisk.
+      </p>
+    </header>
+
+    <ul class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {tools.map(({ title, description, href, icon: Icon }) => (
+        <li>
+          <a
+            href={href}
+            class="bg-card hover:border-primary/50 focus-visible:outline-primary group flex h-full flex-col rounded-2xl border p-6 outline-offset-4 transition-colors sm:p-7"
+            data-astro-prefetch
+          >
+            <span class="bg-primary/10 text-primary mb-6 inline-flex size-11 items-center justify-center rounded-xl">
+              <Icon class="size-5" aria-hidden="true" />
+            </span>
+            <h2 class="text-xl font-semibold tracking-tight">{title}</h2>
+            <p class="text-muted-foreground mt-3 flex-1 text-sm leading-relaxed">{description}</p>
+            <span class="text-primary mt-6 inline-flex items-center gap-2 text-sm font-medium">
+              Open tool <ArrowUpRightIcon class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </article>
+</DefaultLayout>

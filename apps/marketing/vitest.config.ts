@@ -2,6 +2,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   resolve: { tsconfigPaths: true },
   test: {
-    include: ["src/blog/**/*.test.ts"],
+    include: [
+      "src/blog/**/*.test.ts",
+      "src/features/storage-calculator/**/*.test.ts",
+    ],
   },
 });
