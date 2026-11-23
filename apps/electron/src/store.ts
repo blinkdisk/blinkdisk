@@ -16,6 +16,12 @@ export type GlobalStorageType = {
     };
   };
   hasSkippedAuth: boolean;
+  onboarding: {
+    startedAt?: string | null;
+    completedAt?: string | null;
+    vaultId?: string | null;
+    failedPaths?: string[] | null;
+  };
   preferences: {
     theme: "system" | "dark" | "light";
     mode?: "basic" | "advanced";

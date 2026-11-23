@@ -1,0 +1,180 @@
+{
+  "shell": {
+    "step": "Step {{current}} of {{total}}",
+    "steps": {
+      "folders": "Folders",
+      "storage": "Storage",
+      "password": "Encryption",
+      "backup": "First backup"
+    },
+    "back": "Back",
+    "skip": "Skip setup"
+  },
+  "welcome": {
+    "eyebrow": "Welcome to BlinkDisk",
+    "title": "Let's protect your files.",
+    "description": "Pick what matters, choose where it's stored, and lock it with a password. Your first backup starts in about two minutes.",
+    "start": "Get started",
+    "signIn": "I already have an account",
+    "facts": {
+      "encrypted": "End-to-end encrypted",
+      "openSource": "Open source"
+    }
+  },
+  "folders": {
+    "title": "What should we protect?",
+    "description": "We've ticked the folders people can least afford to lose. Change the selection to fit you.",
+    "empty": "We couldn't find your usual folders. Add the ones you want to protect.",
+    "add": "Add folder",
+    "dialogTitle": "Choose a folder to back up",
+    "calculating": "Measuring…",
+    "summary_one": "{{count}} folder",
+    "summary_other": "{{count}} folders",
+    "summarySize": "{{summary}} · {{size}}",
+    "summaryCalculating": "{{summary}} · measuring…",
+    "none": "Select at least one folder",
+    "continue": "Continue"
+  },
+  "storage": {
+    "title": "Where should your backups live?",
+    "description": "A backup only helps if it survives whatever happens to this computer.",
+    "recommended": "Recommended",
+    "cloudblink": {
+      "points": {
+        "trial": "{{storage}} free for {{days}} days",
+        "offsite": "Safe even if this computer is lost or broken",
+        "noSetup": "Nothing to set up"
+      },
+      "fits": "Your {{size}} fits with room to spare.",
+      "exceeds": "Your selection ({{size}}) is larger than the {{storage}} available. You can pick fewer folders or upgrade later."
+    },
+    "custom": {
+      "title": "My own storage",
+      "description": "An external drive, a NAS, S3, Backblaze, SFTP and more. Free forever, with a few extra steps to connect it.",
+      "note": "No account needed. You can add one later for email alerts and syncing your setup."
+    },
+    "continue": {
+      "signIn": "Continue with CloudBlink",
+      "cloudblink": "Continue",
+      "custom": "Choose storage"
+    },
+    "signInHint": "You'll sign in or create a free account in your browser."
+  },
+  "provider": {
+    "title": "Choose your storage",
+    "description": "Pick where BlinkDisk should send your encrypted backups."
+  },
+  "config": {
+    "title": "Connect {{provider}}",
+    "description": "These details are encrypted with your password before they're saved."
+  },
+  "password": {
+    "title": "Create your encryption password",
+    "description": "Your files are locked on this computer before they go anywhere. Only this password opens them, so nobody else can read your backups. Not even us.",
+    "password": {
+      "label": "Encryption password",
+      "placeholder": "Choose a strong password"
+    },
+    "confirmPassword": {
+      "label": "Confirm password",
+      "placeholder": "Type it again"
+    },
+    "warning": {
+      "title": "There is no password reset",
+      "description": "We never see this password, so we can't recover it. Save it in a password manager or write it down now.",
+      "confirm": "I've saved my password somewhere safe"
+    },
+    "submit": "Start my first backup"
+  },
+  "backup": {
+    "starting": {
+      "title": "Setting up your backup",
+      "description": "This only takes a moment.",
+      "steps": {
+        "VAULT": "Creating your encrypted vault",
+        "FOLDERS": "Adding your folders",
+        "UPLOAD": "Starting the first backup"
+      }
+    },
+    "running": {
+      "title": "Your first backup is running",
+      "description": "The first backup is the big one. After this, BlinkDisk only uploads what changed, so backups take moments.",
+      "background": "No need to wait. BlinkDisk keeps working in the background, even if you close this window."
+    },
+    "done": {
+      "title": "Your files are protected",
+      "description": "Everything is encrypted and stored safely. You don't have to remember to back up again.",
+      "files_one": "file encrypted",
+      "files_other": "files encrypted",
+      "size": "protected",
+      "next": "Backs up your changes every day, automatically",
+      "restore": "Open any folder to browse its backups and restore files"
+    },
+    "issue": {
+      "title": "Your backup needs attention",
+      "description": "Part of your selection couldn't be backed up. Open BlinkDisk to see what happened and try again."
+    },
+    "paused": {
+      "title": "Your backup was interrupted",
+      "description": "BlinkDisk closed before your first backup finished. Nothing was lost. It picks up where it left off.",
+      "resume": "Resume backup"
+    },
+    "error": {
+      "title": "We couldn't start your backup",
+      "description": "Nothing was lost. Try again, or open BlinkDisk and add your folders from there.",
+      "retry": "Try again"
+    },
+    "stats": {
+      "files_one": "{{formatted}} file",
+      "files_other": "{{formatted}} files",
+      "progress": "{{files}} · {{size}} so far"
+    },
+    "folder": {
+      "WAITING": "Waiting",
+      "DONE": "Protected",
+      "ISSUE": "Needs attention",
+      "FAILED": "Couldn't be added"
+    },
+    "open": "Open BlinkDisk",
+    "continue": "Continue to BlinkDisk",
+    "account": {
+      "description": "Want an email if a backup ever fails?",
+      "button": "Create free account"
+    }
+  },
+  "plan": {
+    "title": "Your backup plan",
+    "ready": "{{done}} of {{total}} ready",
+    "status": {
+      "starting": "Starting",
+      "running": "Backing up",
+      "protected": "Protected",
+      "attention": "Needs attention",
+      "paused": "Paused"
+    },
+    "files": {
+      "label": "This computer",
+      "pending": "The folders you choose",
+      "value_one": "{{count}} folder",
+      "value_other": "{{count}} folders",
+      "valueSize": "{{value}} · {{size}}"
+    },
+    "encryption": {
+      "label": "Encryption",
+      "pending": "A password only you know",
+      "value": "End-to-end encrypted",
+      "detail": "Only your password can open it"
+    },
+    "storage": {
+      "label": "Storage",
+      "pending": "CloudBlink or your own storage",
+      "cloudblink": "{{storage}} free for {{days}} days",
+      "available": "{{storage}} available",
+      "custom": "Your own storage"
+    },
+    "presets": {
+      "schedule": "Backs up every day, automatically",
+      "history": "Keeps older versions of your files"
+    }
+  }
+}

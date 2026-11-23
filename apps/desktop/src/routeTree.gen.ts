@@ -16,8 +16,11 @@ import { Route as AccountIdIndexRouteImport } from './routes/$accountId/index'
 import { Route as AccountIdLoadingRouteImport } from './routes/$accountId/loading'
 import { Route as AccountIdCloudblinkRouteImport } from './routes/$accountId/cloudblink'
 import { Route as AccountIdAccountRouteImport } from './routes/$accountId/account'
+import { Route as OnboardingAccountIdRouteRouteImport } from './routes/onboarding/$accountId/route'
 import { Route as AccountIdVaultIdRouteRouteImport } from './routes/$accountId/$vaultId/route'
+import { Route as OnboardingAccountIdIndexRouteImport } from './routes/onboarding/$accountId/index'
 import { Route as AccountIdVaultIdIndexRouteImport } from './routes/$accountId/$vaultId/index'
+import { Route as OnboardingAccountIdVaultIdRouteImport } from './routes/onboarding/$accountId/$vaultId'
 import { Route as AccountIdVaultIdPoliciesRouteImport } from './routes/$accountId/$vaultId/policies'
 import { Route as AccountIdVaultIdSettingsRouteRouteImport } from './routes/$accountId/$vaultId/settings/route'
 import { Route as AccountIdVaultIdSourceIdRouteRouteImport } from './routes/$accountId/$vaultId/$sourceId/route'
@@ -60,16 +63,34 @@ const AccountIdAccountRoute = AccountIdAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AccountIdRouteRoute,
 } as any)
+const OnboardingAccountIdRouteRoute =
+  OnboardingAccountIdRouteRouteImport.update({
+    id: '/onboarding/$accountId',
+    path: '/onboarding/$accountId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AccountIdVaultIdRouteRoute = AccountIdVaultIdRouteRouteImport.update({
   id: '/$vaultId',
   path: '/$vaultId',
   getParentRoute: () => AccountIdRouteRoute,
 } as any)
+const OnboardingAccountIdIndexRoute =
+  OnboardingAccountIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => OnboardingAccountIdRouteRoute,
+  } as any)
 const AccountIdVaultIdIndexRoute = AccountIdVaultIdIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AccountIdVaultIdRouteRoute,
 } as any)
+const OnboardingAccountIdVaultIdRoute =
+  OnboardingAccountIdVaultIdRouteImport.update({
+    id: '/$vaultId',
+    path: '/$vaultId',
+    getParentRoute: () => OnboardingAccountIdRouteRoute,
+  } as any)
 const AccountIdVaultIdPoliciesRoute =
   AccountIdVaultIdPoliciesRouteImport.update({
     id: '/policies',
@@ -112,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/$accountId': typeof AccountIdRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/$accountId/$vaultId': typeof AccountIdVaultIdRouteRouteWithChildren
+  '/onboarding/$accountId': typeof OnboardingAccountIdRouteRouteWithChildren
   '/$accountId/account': typeof AccountIdAccountRoute
   '/$accountId/cloudblink': typeof AccountIdCloudblinkRoute
   '/$accountId/loading': typeof AccountIdLoadingRoute
@@ -119,7 +141,9 @@ export interface FileRoutesByFullPath {
   '/$accountId/$vaultId/$sourceId': typeof AccountIdVaultIdSourceIdRouteRouteWithChildren
   '/$accountId/$vaultId/settings': typeof AccountIdVaultIdSettingsRouteRoute
   '/$accountId/$vaultId/policies': typeof AccountIdVaultIdPoliciesRoute
+  '/onboarding/$accountId/$vaultId': typeof OnboardingAccountIdVaultIdRoute
   '/$accountId/$vaultId/': typeof AccountIdVaultIdIndexRoute
+  '/onboarding/$accountId/': typeof OnboardingAccountIdIndexRoute
   '/$accountId/$vaultId/$sourceId/': typeof AccountIdVaultIdSourceIdIndexRoute
   '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren
   '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
@@ -133,7 +157,9 @@ export interface FileRoutesByTo {
   '/$accountId': typeof AccountIdIndexRoute
   '/$accountId/$vaultId/settings': typeof AccountIdVaultIdSettingsRouteRoute
   '/$accountId/$vaultId/policies': typeof AccountIdVaultIdPoliciesRoute
+  '/onboarding/$accountId/$vaultId': typeof OnboardingAccountIdVaultIdRoute
   '/$accountId/$vaultId': typeof AccountIdVaultIdIndexRoute
+  '/onboarding/$accountId': typeof OnboardingAccountIdIndexRoute
   '/$accountId/$vaultId/$sourceId': typeof AccountIdVaultIdSourceIdIndexRoute
   '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
 }
@@ -143,6 +169,7 @@ export interface FileRoutesById {
   '/$accountId': typeof AccountIdRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/$accountId/$vaultId': typeof AccountIdVaultIdRouteRouteWithChildren
+  '/onboarding/$accountId': typeof OnboardingAccountIdRouteRouteWithChildren
   '/$accountId/account': typeof AccountIdAccountRoute
   '/$accountId/cloudblink': typeof AccountIdCloudblinkRoute
   '/$accountId/loading': typeof AccountIdLoadingRoute
@@ -150,7 +177,9 @@ export interface FileRoutesById {
   '/$accountId/$vaultId/$sourceId': typeof AccountIdVaultIdSourceIdRouteRouteWithChildren
   '/$accountId/$vaultId/settings': typeof AccountIdVaultIdSettingsRouteRoute
   '/$accountId/$vaultId/policies': typeof AccountIdVaultIdPoliciesRoute
+  '/onboarding/$accountId/$vaultId': typeof OnboardingAccountIdVaultIdRoute
   '/$accountId/$vaultId/': typeof AccountIdVaultIdIndexRoute
+  '/onboarding/$accountId/': typeof OnboardingAccountIdIndexRoute
   '/$accountId/$vaultId/$sourceId/': typeof AccountIdVaultIdSourceIdIndexRoute
   '/$accountId/$vaultId/$sourceId/$backupId/$directoryId': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdRouteRouteWithChildren
   '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/': typeof AccountIdVaultIdSourceIdBackupIdDirectoryIdIndexRoute
@@ -162,6 +191,7 @@ export interface FileRouteTypes {
     | '/$accountId'
     | '/welcome'
     | '/$accountId/$vaultId'
+    | '/onboarding/$accountId'
     | '/$accountId/account'
     | '/$accountId/cloudblink'
     | '/$accountId/loading'
@@ -169,7 +199,9 @@ export interface FileRouteTypes {
     | '/$accountId/$vaultId/$sourceId'
     | '/$accountId/$vaultId/settings'
     | '/$accountId/$vaultId/policies'
+    | '/onboarding/$accountId/$vaultId'
     | '/$accountId/$vaultId/'
+    | '/onboarding/$accountId/'
     | '/$accountId/$vaultId/$sourceId/'
     | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
     | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/'
@@ -183,7 +215,9 @@ export interface FileRouteTypes {
     | '/$accountId'
     | '/$accountId/$vaultId/settings'
     | '/$accountId/$vaultId/policies'
+    | '/onboarding/$accountId/$vaultId'
     | '/$accountId/$vaultId'
+    | '/onboarding/$accountId'
     | '/$accountId/$vaultId/$sourceId'
     | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
   id:
@@ -192,6 +226,7 @@ export interface FileRouteTypes {
     | '/$accountId'
     | '/welcome'
     | '/$accountId/$vaultId'
+    | '/onboarding/$accountId'
     | '/$accountId/account'
     | '/$accountId/cloudblink'
     | '/$accountId/loading'
@@ -199,7 +234,9 @@ export interface FileRouteTypes {
     | '/$accountId/$vaultId/$sourceId'
     | '/$accountId/$vaultId/settings'
     | '/$accountId/$vaultId/policies'
+    | '/onboarding/$accountId/$vaultId'
     | '/$accountId/$vaultId/'
+    | '/onboarding/$accountId/'
     | '/$accountId/$vaultId/$sourceId/'
     | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId'
     | '/$accountId/$vaultId/$sourceId/$backupId/$directoryId/'
@@ -209,6 +246,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountIdRouteRoute: typeof AccountIdRouteRouteWithChildren
   WelcomeRoute: typeof WelcomeRoute
+  OnboardingAccountIdRouteRoute: typeof OnboardingAccountIdRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -262,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIdAccountRouteImport
       parentRoute: typeof AccountIdRouteRoute
     }
+    '/onboarding/$accountId': {
+      id: '/onboarding/$accountId'
+      path: '/onboarding/$accountId'
+      fullPath: '/onboarding/$accountId'
+      preLoaderRoute: typeof OnboardingAccountIdRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$accountId/$vaultId': {
       id: '/$accountId/$vaultId'
       path: '/$vaultId'
@@ -269,12 +314,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIdVaultIdRouteRouteImport
       parentRoute: typeof AccountIdRouteRoute
     }
+    '/onboarding/$accountId/': {
+      id: '/onboarding/$accountId/'
+      path: '/'
+      fullPath: '/onboarding/$accountId/'
+      preLoaderRoute: typeof OnboardingAccountIdIndexRouteImport
+      parentRoute: typeof OnboardingAccountIdRouteRoute
+    }
     '/$accountId/$vaultId/': {
       id: '/$accountId/$vaultId/'
       path: '/'
       fullPath: '/$accountId/$vaultId/'
       preLoaderRoute: typeof AccountIdVaultIdIndexRouteImport
       parentRoute: typeof AccountIdVaultIdRouteRoute
+    }
+    '/onboarding/$accountId/$vaultId': {
+      id: '/onboarding/$accountId/$vaultId'
+      path: '/$vaultId'
+      fullPath: '/onboarding/$accountId/$vaultId'
+      preLoaderRoute: typeof OnboardingAccountIdVaultIdRouteImport
+      parentRoute: typeof OnboardingAccountIdRouteRoute
     }
     '/$accountId/$vaultId/policies': {
       id: '/$accountId/$vaultId/policies'
@@ -393,10 +452,27 @@ const AccountIdRouteRouteWithChildren = AccountIdRouteRoute._addFileChildren(
   AccountIdRouteRouteChildren,
 )
 
+interface OnboardingAccountIdRouteRouteChildren {
+  OnboardingAccountIdVaultIdRoute: typeof OnboardingAccountIdVaultIdRoute
+  OnboardingAccountIdIndexRoute: typeof OnboardingAccountIdIndexRoute
+}
+
+const OnboardingAccountIdRouteRouteChildren: OnboardingAccountIdRouteRouteChildren =
+  {
+    OnboardingAccountIdVaultIdRoute: OnboardingAccountIdVaultIdRoute,
+    OnboardingAccountIdIndexRoute: OnboardingAccountIdIndexRoute,
+  }
+
+const OnboardingAccountIdRouteRouteWithChildren =
+  OnboardingAccountIdRouteRoute._addFileChildren(
+    OnboardingAccountIdRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountIdRouteRoute: AccountIdRouteRouteWithChildren,
   WelcomeRoute: WelcomeRoute,
+  OnboardingAccountIdRouteRoute: OnboardingAccountIdRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

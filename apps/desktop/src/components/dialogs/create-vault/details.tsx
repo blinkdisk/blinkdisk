@@ -31,7 +31,7 @@ function getPasswordScore(password: string) {
   return Math.min(score, 4);
 }
 
-function PasswordStrengthMeter({
+export function PasswordStrengthMeter({
   dark,
   password,
 }: {

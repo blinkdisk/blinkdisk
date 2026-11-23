@@ -16,6 +16,7 @@ i18n.loadNamespaces([
   "cloudblink",
   "update",
   "task",
+  "onboarding",
 ]);
 
 export { i18n };

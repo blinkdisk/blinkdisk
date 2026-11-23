@@ -38,3 +38,57 @@ a {
     ),
     radial-gradient(oklch(0.5 0 0 / 0.2) 1.5px, transparent 1.5px);
 }
+
+.onboarding-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      ellipse 70% 55% at 50% 45%,
+      color-mix(in oklch, var(--primary) 18%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(oklch(0.6 0 0 / 0.35) 1.5px, transparent 1.5px);
+  background-size:
+    100% 100%,
+    28px 28px;
+  mask-image: radial-gradient(ellipse at center, black 35%, transparent 85%);
+  pointer-events: none;
+}
+
+.dark .onboarding-stage::before {
+  background-image:
+    radial-gradient(
+      ellipse 70% 55% at 50% 45%,
+      color-mix(in oklch, var(--primary) 20%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(oklch(0.5 0 0 / 0.25) 1.5px, transparent 1.5px);
+}
+
+@keyframes onboarding-packet {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes onboarding-ring {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
