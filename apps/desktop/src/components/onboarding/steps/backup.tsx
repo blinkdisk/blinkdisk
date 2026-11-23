@@ -46,7 +46,7 @@ export function OnboardingBackup() {
   const { isLocalAccount } = useAccountId();
   const { firstBackup } = useOnboarding();
   const { selected } = useOnboardingFolders();
-  const { view, backup, profile } = useBackupProgress();
+  const { view, backup, profile, failedPaths } = useBackupProgress();
   const { startFirstBackup } = useFirstBackup();
   const { exitOnboarding } = useOnboardingExit();
   const { openAuthDialog } = useAuthDialog();
@@ -178,7 +178,11 @@ export function OnboardingBackup() {
                 style={{ width: `${Math.max(backup.progress * 100, 2)}%` }}
               />
             </div>
-            <FolderList backup={backup} className="mt-5 border-t pt-4" />
+            <FolderList
+              backup={backup}
+              failedPaths={failedPaths}
+              className="mt-5 border-t pt-4"
+            />
           </div>
         </OnboardingSection>
         <OnboardingSection order={2} className="mt-6">
@@ -207,6 +211,7 @@ export function OnboardingBackup() {
         <OnboardingSection className="mt-8">
           <FolderList
             backup={backup}
+            failedPaths={failedPaths}
             className="bg-card rounded-xl border px-5 py-4"
           />
           <Button size="lg" className="mt-6" onClick={exit}>
@@ -302,9 +307,11 @@ const folderStateStyles: Record<FolderBackupState, string> = {
 
 function FolderList({
   backup,
+  failedPaths,
   className,
 }: {
   backup: Backup;
+  failedPaths: string[];
   className?: string;
 }) {
   const { t } = useAppTranslation("onboarding.backup.folder");
@@ -344,6 +351,23 @@ function FolderList({
             ) : state === "ISSUE" ? (
               <TriangleAlertIcon className="size-3.5" />
             ) : null}
+          </div>
+        </li>
+      ))}
+      {failedPaths.map((path) => (
+        <li key={path} className="flex items-center gap-3">
+          <SourceCard size={1.75} theme={dark ? "dark" : "light"} />
+          <p className="ph-no-capture min-w-0 flex-1 truncate text-sm font-medium">
+            {getPathName(path)}
+          </p>
+          <div
+            className={cn(
+              "flex items-center gap-2 text-xs font-medium",
+              folderStateStyles.ISSUE,
+            )}
+          >
+            {t("FAILED")}
+            <TriangleAlertIcon className="size-3.5" />
           </div>
         </li>
       ))}

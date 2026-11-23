@@ -1,7 +1,10 @@
 import { LOCAL_ACCOUNT_ID } from "@blinkdisk/constants/account";
 import { useAuthDialog } from "@desktop/hooks/state/use-auth-dialog";
 import { useMoveVaultsDialog } from "@desktop/hooks/state/use-move-vaults-dialog";
-import { resumeOnboardingAfterAuth } from "@desktop/hooks/state/use-onboarding";
+import {
+  resetOnboarding,
+  resumeOnboardingAfterAuth,
+} from "@desktop/hooks/state/use-onboarding";
 import { useAuth } from "@desktop/hooks/use-auth";
 import { completeOnboarding } from "@desktop/hooks/use-onboarding-exit";
 import { getVaultCollection } from "@desktop/lib/db";
@@ -10,6 +13,7 @@ import {
   type OnboardingRecord,
 } from "@desktop/lib/onboarding";
 import { useNavigate } from "@tanstack/react-router";
+import { usePostHog } from "posthog-js/react";
 import { useCallback, useEffect } from "react";
 
 export function AuthListener() {
@@ -17,6 +21,7 @@ export function AuthListener() {
   const { openMoveVaultsDialog } = useMoveVaultsDialog();
   const { setAuthenticated, accountChanged } = useAuth();
   const navigate = useNavigate({ from: "/" });
+  const posthog = usePostHog();
 
   const onAccountAdd = useCallback(
     async ({ accountId }: { accountId: string }) => {
@@ -46,6 +51,7 @@ export function AuthListener() {
         }
 
         // Signing in to an account that is already set up ends the setup.
+        posthog.capture("onboarding_skipped", { reason: "existing_account" });
         await completeOnboarding();
       } else {
         await navigate({
@@ -56,7 +62,11 @@ export function AuthListener() {
         await accountChanged(accountId);
       }
 
-      navigate({ to: "/$accountId", params: { accountId } });
+      const navigation = navigate({
+        to: "/$accountId",
+        params: { accountId },
+      });
+      if (isOnboarding) void navigation.then(resetOnboarding);
 
       const localVaults = getVaultCollection(LOCAL_ACCOUNT_ID)
         .find({ status: "ACTIVE" })
@@ -75,6 +85,7 @@ export function AuthListener() {
       accountChanged,
       navigate,
       openMoveVaultsDialog,
+      posthog,
     ],
   );
 

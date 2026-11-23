@@ -220,6 +220,24 @@ describe("summarizeBackup", () => {
     expect(summary.progress).toBe(0.01);
   });
 
+  it("keeps weighting by size when a folder is empty", () => {
+    const summary = summarizeBackup(
+      [source("/empty", snapshot(0, 0)), source("/big", uploading(0.5, 5, 1))],
+      { "/empty": 0, "/big": 100 },
+    );
+
+    expect(summary.progress).toBe(0.5);
+  });
+
+  it("weights folders equally when none of them has any content", () => {
+    const summary = summarizeBackup(
+      [source("/a", snapshot(0, 0)), source("/b", { status: "PENDING" })],
+      { "/a": 0, "/b": 0 },
+    );
+
+    expect(summary.progress).toBe(0.5);
+  });
+
   it("is done once every folder has a complete backup", () => {
     const summary = summarizeBackup([
       source("/a", snapshot(100, 4)),
@@ -305,6 +323,42 @@ describe("getBackupView", () => {
     expect(getBackupView({ ...reopened, sources: [source("/a")] })).toBe(
       "PAUSED",
     );
+  });
+
+  it("lets a pending start wait out a vault that still needs setup", () => {
+    expect(
+      getBackupView({
+        vaultStatus: "SETUP",
+        firstBackupStatus: "PENDING",
+        sources: undefined,
+      }),
+    ).toBe("STARTING");
+    expect(
+      getBackupView({
+        vaultStatus: "SETUP",
+        firstBackupStatus: "IDLE",
+        sources: undefined,
+      }),
+    ).toBe("ERROR");
+  });
+
+  it("never reports success while a chosen folder is missing from the backup", () => {
+    const hasFailedFolders = true;
+
+    expect(
+      getBackupView({
+        ...started,
+        sources: [source("/a", snapshot(10, 1))],
+        hasFailedFolders,
+      }),
+    ).toBe("ISSUE");
+    expect(
+      getBackupView({
+        ...started,
+        sources: [source("/a", uploading(0.2, 1, 1))],
+        hasFailedFolders,
+      }),
+    ).toBe("RUNNING");
   });
 
   it("fails loudly instead of waiting forever", () => {

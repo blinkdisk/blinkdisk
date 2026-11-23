@@ -15,6 +15,7 @@ vi.mock("electron", () => ({
 }));
 
 import { suggestedFolders } from "@electron/fs";
+import { app } from "electron";
 
 describe("suggestedFolders", () => {
   let home: string;
@@ -46,7 +47,16 @@ describe("suggestedFolders", () => {
     ]);
   });
 
-  it("skips folders that are missing or unknown to the system", async () => {
+  it("skips folders the system doesn't define", async () => {
+    addFolder("documents", "Documents");
+
+    expect(() => app.getPath("music")).toThrow();
+    expect(await suggestedFolders()).toEqual([
+      { kind: "documents", path: join(home, "Documents") },
+    ]);
+  });
+
+  it("skips folders that don't exist on disk", async () => {
     addFolder("documents", "Documents");
     paths.music = join(home, "Music");
 

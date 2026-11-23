@@ -24,7 +24,7 @@ async function waitForVault(vaultId: string) {
 }
 
 async function addFolders(vaultId: string, folders: OnboardingFolder[]) {
-  let added = 0;
+  const failedPaths: string[] = [];
   let failure: unknown;
 
   for (const folder of folders) {
@@ -38,16 +38,16 @@ async function addFolders(vaultId: string, folders: OnboardingFolder[]) {
           initialSourceType: "directory",
         },
       });
-      added++;
     } catch (error) {
       failure = error;
+      failedPaths.push(folder.path);
     }
   }
 
   // One unreadable folder shouldn't keep the rest from being protected.
-  if (!added) throw failure;
+  if (failedPaths.length === folders.length) throw failure;
 
-  return added;
+  return failedPaths;
 }
 
 export function useFirstBackup() {
@@ -67,7 +67,8 @@ export function useFirstBackup() {
         await waitForVault(vaultId);
 
         setFirstBackup({ status: "PENDING", stage: "FOLDERS" });
-        const added = await addFolders(vaultId, folders);
+        const failedPaths = await addFolders(vaultId, folders);
+        await window.electron.store.set("onboarding.failedPaths", failedPaths);
 
         setFirstBackup({ status: "PENDING", stage: "UPLOAD" });
         await vaultApi(vaultId).post(
@@ -78,8 +79,8 @@ export function useFirstBackup() {
 
         posthog.capture("onboarding_backup_start", {
           vaultId,
-          folders: added,
-          skipped: folders.length - added,
+          folders: folders.length - failedPaths.length,
+          failed: failedPaths.length,
         });
         setFirstBackup({ status: "STARTED", stage: "UPLOAD" });
       } catch (error) {

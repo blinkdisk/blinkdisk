@@ -13,6 +13,7 @@ import { useTheme } from "@desktop/hooks/use-theme";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { formatSize } from "@desktop/lib/number";
 import {
+  type BackupView,
   getPathName,
   getViewStep,
   ONBOARDING_STEPS,
@@ -24,7 +25,9 @@ import {
   LaptopIcon,
   LockIcon,
   LockOpenIcon,
+  PauseIcon,
   ShieldCheckIcon,
+  TriangleAlertIcon,
 } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
 
@@ -84,7 +87,6 @@ export function OnboardingPlan() {
     : HardDriveIcon;
 
   const isRunning = backupView === "RUNNING";
-  const isProtected = backupView === "DONE";
   const doneCount =
     PRESETS.length +
     [filesState, storageState, encryptionState].filter(
@@ -103,19 +105,8 @@ export function OnboardingPlan() {
       <div className="bg-card relative z-10 w-full max-w-sm rounded-2xl border p-6 shadow-xl shadow-black/5 dark:shadow-black/20">
         <div className="mb-6 flex h-6 items-center justify-between gap-4">
           <h2 className="text-sm font-semibold">{t("title")}</h2>
-          {isProtected ? (
-            <span className="animate-in fade-in zoom-in-90 flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-              <ShieldCheckIcon className="size-3.5" />
-              {t("status.protected")}
-            </span>
-          ) : isRunning ? (
-            <span className="bg-primary/10 text-primary flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-medium">
-              <span className="relative flex size-1.5">
-                <span className="bg-primary absolute inline-flex size-full animate-ping rounded-full opacity-75 motion-reduce:animate-none" />
-                <span className="bg-primary relative inline-flex size-1.5 rounded-full" />
-              </span>
-              {t("status.running")}
-            </span>
+          {vaultId ? (
+            <PlanStatus view={backupView} />
           ) : (
             <span className="text-muted-foreground text-xs tabular-nums">
               {t("ready", {
@@ -207,7 +198,9 @@ export function OnboardingPlan() {
                     : undefined
                   : space
                     ? t("storage.available", {
-                        storage: formatSize(space.capacity - space.used),
+                        storage: formatSize(
+                          Math.max(0, space.capacity - space.used),
+                        ),
                       })
                     : t("storage.cloudblink", {
                         storage: formatSize(TRIAL_STORAGE),
@@ -228,6 +221,52 @@ export function OnboardingPlan() {
         </ul>
       </div>
     </div>
+  );
+}
+
+const viewStatuses = {
+  STARTING: "starting",
+  RUNNING: "running",
+  DONE: "protected",
+  ISSUE: "attention",
+  ERROR: "attention",
+  PAUSED: "paused",
+} as const satisfies Record<BackupView, string>;
+
+const statusStyles = {
+  starting: "bg-primary/10 text-primary",
+  running: "bg-primary/10 text-primary",
+  protected: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  attention: "bg-amber-500/10 text-amber-600 dark:text-amber-500",
+  paused: "bg-foreground/5 text-muted-foreground",
+};
+
+function PlanStatus({ view }: { view: BackupView }) {
+  const { t } = useAppTranslation("onboarding.plan.status");
+  const status = viewStatuses[view];
+
+  return (
+    <span
+      key={status}
+      className={cn(
+        "animate-in fade-in zoom-in-90 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+        statusStyles[status],
+      )}
+    >
+      {status === "protected" ? (
+        <ShieldCheckIcon className="size-3.5" />
+      ) : status === "attention" ? (
+        <TriangleAlertIcon className="size-3.5" />
+      ) : status === "paused" ? (
+        <PauseIcon className="size-3.5" />
+      ) : (
+        <span className="relative mx-0.5 flex size-1.5">
+          <span className="bg-primary absolute inline-flex size-full animate-ping rounded-full opacity-75 motion-reduce:animate-none" />
+          <span className="bg-primary relative inline-flex size-1.5 rounded-full" />
+        </span>
+      )}
+      {t(status)}
+    </span>
   );
 }
 

@@ -20,6 +20,7 @@ export type GlobalStorageType = {
     startedAt?: string | null;
     completedAt?: string | null;
     vaultId?: string | null;
+    failedPaths?: string[] | null;
   };
   preferences: {
     theme: "system" | "dark" | "light";

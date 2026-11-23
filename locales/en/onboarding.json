@@ -112,7 +112,7 @@
     },
     "issue": {
       "title": "Your backup needs attention",
-      "description": "Some files couldn't be backed up. Open BlinkDisk to see what happened and run the backup again."
+      "description": "Part of your selection couldn't be backed up. Open BlinkDisk to see what happened and try again."
     },
     "paused": {
       "title": "Your backup was interrupted",
@@ -132,7 +132,8 @@
     "folder": {
       "WAITING": "Waiting",
       "DONE": "Protected",
-      "ISSUE": "Needs attention"
+      "ISSUE": "Needs attention",
+      "FAILED": "Couldn't be added"
     },
     "open": "Open BlinkDisk",
     "continue": "Continue to BlinkDisk",
@@ -145,8 +146,11 @@
     "title": "Your backup plan",
     "ready": "{{done}} of {{total}} ready",
     "status": {
+      "starting": "Starting",
       "running": "Backing up",
-      "protected": "Protected"
+      "protected": "Protected",
+      "attention": "Needs attention",
+      "paused": "Paused"
     },
     "files": {
       "label": "This computer",

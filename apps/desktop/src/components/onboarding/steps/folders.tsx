@@ -30,6 +30,7 @@ export function OnboardingFolders() {
   }
 
   const count = t("summary", { count: summary.count });
+  const isEmptySelection = !!folders && !summary.count;
 
   return (
     <>
@@ -69,19 +70,21 @@ export function OnboardingFolders() {
         <p
           className={cn(
             "text-sm tabular-nums",
-            summary.count ? "text-muted-foreground" : "text-destructive",
+            isEmptySelection ? "text-destructive" : "text-muted-foreground",
           )}
         >
-          {!summary.count
-            ? t("none")
-            : !isMeasuring
-              ? count
-              : summary.isCalculating
-                ? t("summaryCalculating", { summary: count })
-                : t("summarySize", {
-                    summary: count,
-                    size: formatSize(summary.bytes, { round: 1 }),
-                  })}
+          {!folders
+            ? null
+            : isEmptySelection
+              ? t("none")
+              : !isMeasuring
+                ? count
+                : summary.isCalculating
+                  ? t("summaryCalculating", { summary: count })
+                  : t("summarySize", {
+                      summary: count,
+                      size: formatSize(summary.bytes, { round: 1 }),
+                    })}
         </p>
         <Button
           size="lg"

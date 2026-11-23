@@ -1,5 +1,6 @@
 import { useStore } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
+import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Checkbox } from "@blinkdisk/ui/checkbox";
 import { PasswordStrengthMeter } from "@desktop/components/dialogs/create-vault/details";
 import {
@@ -14,6 +15,7 @@ import { useFirstBackup } from "@desktop/hooks/use-first-backup";
 import { useTheme } from "@desktop/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
 import { TriangleAlertIcon } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 
 export function OnboardingPassword() {
@@ -24,6 +26,7 @@ export function OnboardingPassword() {
   const { selected } = useOnboardingFolders();
   const { startFirstBackup } = useFirstBackup();
   const navigate = useNavigate();
+  const posthog = usePostHog();
 
   const [hasSavedPassword, setHasSavedPassword] = useState(false);
 
@@ -33,8 +36,12 @@ export function OnboardingPassword() {
     onSuccess: async ({ vaultId }) => {
       if (!accountId) return;
 
-      await window.electron.store.set("onboarding.vaultId", vaultId);
       void startFirstBackup(vaultId, selected);
+
+      // Only read when reopening the app, so it must not hold up the backup.
+      void window.electron.store
+        .set("onboarding.vaultId", vaultId)
+        .catch((error: unknown) => posthog.captureException(error));
 
       await navigate({
         to: "/onboarding/$accountId/$vaultId",
@@ -86,21 +93,15 @@ export function OnboardingPassword() {
               />
             )}
           </form.AppField>
-          <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
-            <div className="flex gap-3">
-              <TriangleAlertIcon className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-500" />
-              <div>
-                <p className="text-sm font-medium text-amber-700 dark:text-amber-500">
-                  {t("warning.title")}
-                </p>
-                <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-                  {t("warning.description")}
-                </p>
-              </div>
-            </div>
+          <Alert variant="warn">
+            <TriangleAlertIcon />
+            <AlertTitle>{t("warning.title")}</AlertTitle>
+            <AlertDescription className="text-xs">
+              {t("warning.description")}
+            </AlertDescription>
             <label
               htmlFor="has-saved-password"
-              className="mt-4 flex items-center gap-3 border-t border-amber-500/20 pt-4 text-sm font-medium"
+              className="text-foreground col-span-full mt-3 flex items-center gap-3 border-t border-amber-500/20 pt-3 font-medium"
             >
               <Checkbox
                 id="has-saved-password"
@@ -109,7 +110,7 @@ export function OnboardingPassword() {
               />
               {t("warning.confirm")}
             </label>
-          </div>
+          </Alert>
           <form.AppForm>
             <form.Submit size="lg" disabled={!hasSavedPassword}>
               {t("submit")}

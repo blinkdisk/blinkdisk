@@ -188,8 +188,9 @@ export function summarizeBackup(
   });
 
   // Weighting by size keeps a tiny folder from reading as a third of the work.
-  const hasAllSizes =
-    items.length > 0 && items.every(({ source }) => sizes[source.source.path]);
+  const isWeighted =
+    items.every(({ source }) => sizes[source.source.path] !== undefined) &&
+    items.some(({ source }) => sizes[source.source.path]);
 
   let totalWeight = 0;
   let completedWeight = 0;
@@ -197,7 +198,7 @@ export function summarizeBackup(
   let protectedFiles = 0;
 
   for (const { source, state, progress } of items) {
-    const weight = hasAllSizes ? sizes[source.source.path] || 0 : 1;
+    const weight = isWeighted ? sizes[source.source.path] || 0 : 1;
 
     totalWeight += weight;
     completedWeight += weight * progress;
@@ -242,21 +243,22 @@ export function getBackupView({
   vaultStatus,
   firstBackupStatus,
   sources,
+  hasFailedFolders = false,
 }: {
   vaultStatus: string | undefined;
   firstBackupStatus: FirstBackupStatus;
   sources: CoreSourceItem[] | null | undefined;
+  hasFailedFolders?: boolean;
 }): BackupView {
-  if (
-    vaultStatus === "FAILED" ||
-    vaultStatus === "SETUP" ||
-    firstBackupStatus === "ERROR"
-  )
-    return "ERROR";
+  if (vaultStatus === "FAILED" || firstBackupStatus === "ERROR") return "ERROR";
 
-  if (firstBackupStatus === "PENDING" || !sources) return "STARTING";
+  // While the first backup is being started, its own vault wait decides.
+  if (firstBackupStatus === "PENDING") return "STARTING";
+  if (vaultStatus === "SETUP") return "ERROR";
+  if (!sources) return "STARTING";
 
   const { phase } = summarizeBackup(sources);
+  if (phase === "DONE" && hasFailedFolders) return "ISSUE";
   if (phase !== "STARTING") return phase;
   if (firstBackupStatus === "STARTED") return "STARTING";
 

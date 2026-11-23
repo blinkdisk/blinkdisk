@@ -4,7 +4,7 @@ import { useAccountId } from "@desktop/hooks/use-account-id";
 import { useVaultId } from "@desktop/hooks/use-vault-id";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostHog } from "posthog-js/react";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 export async function completeOnboarding() {
   await window.electron.store.set(
@@ -18,35 +18,43 @@ export function useOnboardingExit() {
   const posthog = usePostHog();
   const { accountId, isLocalAccount } = useAccountId();
   const { vaultId } = useVaultId();
+  const isExiting = useRef(false);
 
   const exitOnboarding = useCallback(
     async (outcome: "completed" | "skipped", properties?: object) => {
-      const targetAccountId = accountId || LOCAL_ACCOUNT_ID;
+      if (isExiting.current) return;
+      isExiting.current = true;
 
-      posthog.capture(`onboarding_${outcome}`, properties);
+      try {
+        const targetAccountId = accountId || LOCAL_ACCOUNT_ID;
 
-      await completeOnboarding();
+        posthog.capture(`onboarding_${outcome}`, properties);
 
-      if (isLocalAccount !== false) {
-        await window.electron.store.set("hasSkippedAuth", true);
-        await window.electron.store.set("currentAccountId", LOCAL_ACCOUNT_ID);
+        await completeOnboarding();
+
+        if (isLocalAccount !== false) {
+          await window.electron.store.set("hasSkippedAuth", true);
+          await window.electron.store.set("currentAccountId", LOCAL_ACCOUNT_ID);
+        }
+
+        await navigate(
+          vaultId
+            ? {
+                to: "/$accountId/$vaultId",
+                params: { accountId: targetAccountId, vaultId },
+                replace: true,
+              }
+            : {
+                to: "/$accountId",
+                params: { accountId: targetAccountId },
+                replace: true,
+              },
+        );
+
+        resetOnboarding();
+      } finally {
+        isExiting.current = false;
       }
-
-      await navigate(
-        vaultId
-          ? {
-              to: "/$accountId/$vaultId",
-              params: { accountId: targetAccountId, vaultId },
-              replace: true,
-            }
-          : {
-              to: "/$accountId",
-              params: { accountId: targetAccountId },
-              replace: true,
-            },
-      );
-
-      resetOnboarding();
     },
     [accountId, isLocalAccount, vaultId, navigate, posthog],
   );

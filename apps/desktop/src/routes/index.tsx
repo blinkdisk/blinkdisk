@@ -18,6 +18,12 @@ function RouteComponent() {
   const posthog = usePostHog();
 
   useEffect(() => {
+    const accountId =
+      (window.electron.store.get("currentAccountId") as
+        | string
+        | undefined
+        | null) || LOCAL_ACCOUNT_ID;
+
     async function redirect() {
       const hasSkippedAuth = window.electron.store.get("hasSkippedAuth") as
         | boolean
@@ -36,12 +42,6 @@ function RouteComponent() {
 
       const hasLocalVaults =
         getVaultCollection(LOCAL_ACCOUNT_ID).find().fetch().length > 0;
-
-      const accountId =
-        (window.electron.store.get("currentAccountId") as
-          | string
-          | undefined
-          | null) || LOCAL_ACCOUNT_ID;
 
       const onboarding = window.electron.store.get("onboarding") as
         | OnboardingRecord
@@ -97,7 +97,15 @@ function RouteComponent() {
       });
     }
 
-    void redirect();
+    // A failed lookup must not leave the window blank; the app still works.
+    void redirect().catch((error: unknown) => {
+      posthog.captureException(error);
+      return navigate({
+        to: "/$accountId",
+        params: { accountId },
+        replace: true,
+      });
+    });
   }, [navigate, posthog]);
 
   return null;

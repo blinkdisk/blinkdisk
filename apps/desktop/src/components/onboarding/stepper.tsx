@@ -24,6 +24,7 @@ export function OnboardingStepper({ step, complete }: OnboardingStepperProps) {
             aria-current={index === current ? "step" : undefined}
             className="bg-foreground/10 h-1.5 w-7 overflow-hidden rounded-full"
           >
+            <span className="sr-only">{t(`steps.${id}`)}</span>
             <span
               className={cn(
                 "bg-primary block h-full rounded-full transition-[width] duration-700 ease-out",
