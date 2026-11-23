@@ -8,6 +8,7 @@ import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import { Alert, AlertDescription, AlertTitle } from "@blinkdisk/ui/alert";
 import { Button } from "@blinkdisk/ui/button";
 import { Input } from "@blinkdisk/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@blinkdisk/ui/popover";
 import { SettingsCategory } from "@desktop/components/policy/category";
 import { PolicyContext } from "@desktop/components/policy/context";
 import { PolicyField } from "@desktop/components/policy/field";
@@ -50,7 +51,22 @@ export function FilesSettings({
               <field.Switch
                 label={{
                   title: t("excludeCacheDirs.label"),
-                  description: t("excludeCacheDirs.description"),
+                  description: (
+                    <>
+                      {t("excludeCacheDirs.description")}
+                      <Popover>
+                        <PopoverTrigger
+                          openOnHover
+                          className="text-primary ml-1 cursor-pointer underline underline-offset-4 hover:opacity-90"
+                        >
+                          {t("excludeCacheDirs.learnMore")}
+                        </PopoverTrigger>
+                        <PopoverContent className="text-muted-foreground w-64 text-xs">
+                          {t("excludeCacheDirs.details")}
+                        </PopoverContent>
+                      </Popover>
+                    </>
+                  ),
                 }}
               />
             </PolicyField>
