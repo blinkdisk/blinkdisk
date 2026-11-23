@@ -200,7 +200,9 @@
     },
     "excludeCacheDirs": {
       "label": "Exclude cache directories",
-      "description": "Exclude common cache directories in backups."
+      "description": "Only excludes directories that apps marked as cache.",
+      "learnMore": "Learn more",
+      "details": "Apps can mark a directory as cache by placing a CACHEDIR.TAG file in it. Directories without this file aren't excluded, even if they're named \"cache\"."
     }
   },
   "compression": {
