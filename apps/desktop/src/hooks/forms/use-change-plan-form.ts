@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZChangePlanForm } from "@blinkdisk/schemas/payment";
 import { useChangePlan } from "@desktop/hooks/mutations/use-change-plan";
@@ -16,10 +17,10 @@ export function useChangePlanForm({ priceId }: UseChangePlan) {
     validators: {
       onSubmit: ZChangePlanForm,
     },
-    onSubmit: async () =>
-      priceId &&
-      (await mutateAsync({
-        priceId,
-      })),
+    onSubmit: async () => {
+      if (!priceId) return;
+
+      await settleMutation(mutateAsync({ priceId }));
+    },
   });
 }

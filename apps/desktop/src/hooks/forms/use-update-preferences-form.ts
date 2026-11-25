@@ -1,4 +1,5 @@
 import type { LanguageCode } from "@blinkdisk/constants/language";
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZUpdatePreferences } from "@blinkdisk/schemas/settings";
 import { useUpdatePreferences } from "@desktop/hooks/mutations/use-update-preferences";
@@ -22,7 +23,7 @@ export function useUpdatePreferencesForm() {
         if (formApi.state.isValid) formApi.handleSubmit();
       },
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: ({ value }) => settleMutation(mutateAsync(value)),
   });
 
   return form;

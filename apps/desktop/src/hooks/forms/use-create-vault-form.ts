@@ -2,6 +2,7 @@ import {
   resolveStorageProviderType,
   type StorageProviderType,
 } from "@blinkdisk/constants/providers";
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { useAppTranslation } from "@blinkdisk/hooks/use-app-translation";
 import type { ProviderConfig } from "@blinkdisk/schemas/providers";
@@ -39,14 +40,18 @@ export function useCreateVaultForm({
     validators: {
       onSubmit: ZCreateVaultDetails,
     },
-    onSubmit: async ({ value }) =>
-      providerType &&
-      (await mutateAsync({
-        name: value.name,
-        provider: providerType,
-        config: config || {},
-        password: value.password,
-      })),
+    onSubmit: async ({ value }) => {
+      if (!providerType) return;
+
+      await settleMutation(
+        mutateAsync({
+          name: value.name,
+          provider: providerType,
+          config: config || {},
+          password: value.password,
+        }),
+      );
+    },
   });
 
   return form;

@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZRestoreDirectory,
@@ -42,9 +43,13 @@ export function useRestoreDirectoryForm({
         }
       },
     },
-    onSubmit: ({ value }) =>
-      objectId &&
-      startRestore({ variant: "directory", values: value, objectId }),
+    onSubmit: async ({ value }) => {
+      if (!objectId) return;
+
+      await settleMutation(
+        startRestore({ variant: "directory", values: value, objectId }),
+      );
+    },
   });
 
   return form;
