@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZUpdateAccount } from "@blinkdisk/schemas/accounts";
 import { useUpdateAccount } from "@desktop/hooks/mutations/use-update-account";
@@ -27,7 +28,7 @@ export function useUpdateAccountForm() {
     validators: {
       onSubmit: ZUpdateAccount,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: ({ value }) => settleMutation(mutateAsync(value)),
   });
 
   return form;

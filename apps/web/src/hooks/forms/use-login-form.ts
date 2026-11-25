@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZLogin } from "@blinkdisk/schemas/auth";
 import { useLogin } from "@web/hooks/mutations/use-login";
@@ -12,6 +13,6 @@ export function useLoginForm() {
     validators: {
       onSubmit: ZLogin,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: ({ value }) => settleMutation(mutateAsync(value)),
   });
 }

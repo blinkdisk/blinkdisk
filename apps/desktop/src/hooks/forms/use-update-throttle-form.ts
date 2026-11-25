@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import {
   ZVaultThrottle,
@@ -25,7 +26,7 @@ export function useUpdateThrottleForm() {
     validators: {
       onSubmit: ZVaultThrottle,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: ({ value }) => settleMutation(mutateAsync(value)),
   });
 
   return form;

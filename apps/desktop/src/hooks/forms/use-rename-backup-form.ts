@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { useEditBackup } from "@desktop/hooks/mutations/core/use-edit-backup";
 import { z } from "zod";
@@ -26,10 +27,12 @@ export function useRenameBackupForm({
     },
     onSubmit: async ({ value }) => {
       if (!backupId) return;
-      await mutateAsync({
-        backupId,
-        description: value.name,
-      });
+      await settleMutation(
+        mutateAsync({
+          backupId,
+          description: value.name,
+        }),
+      );
     },
   });
 

@@ -1,3 +1,4 @@
+import { settleMutation } from "@blinkdisk/forms/settle-mutation";
 import { useAppForm } from "@blinkdisk/forms/use-app-form";
 import { ZRegisterForm, type ZRegisterFormType } from "@blinkdisk/schemas/auth";
 import { useRegister } from "@web/hooks/mutations/use-register";
@@ -20,6 +21,6 @@ export function useRegisterForm({ defaultValues }: RegisterFormProps = {}) {
     validators: {
       onSubmit: ZRegisterForm,
     },
-    onSubmit: async ({ value }) => await mutateAsync(value),
+    onSubmit: ({ value }) => settleMutation(mutateAsync(value)),
   });
 }
