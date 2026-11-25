@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => {
   class MockSyncManager {
     options: Record<string, unknown>;
     sync = vi.fn(async (name: string) => name);
+    pushChanges = vi.fn(async (_name: string) => undefined);
     addCollection = vi.fn();
 
     constructor(options: Record<string, unknown>) {
@@ -21,7 +22,6 @@ const mocks = vi.hoisted(() => {
     writeFileSync: vi.fn((_path: unknown, _data: unknown) => undefined),
     createFilesystemAdapter: vi.fn((path: string) => ({ path })),
     globalAccountDirectory: vi.fn(() => "/accounts"),
-    logWarn: vi.fn((_message: unknown) => undefined),
     logError: vi.fn(
       (_message: unknown, _error: unknown, _details: unknown) => undefined,
     ),
@@ -54,7 +54,6 @@ vi.mock("@electron/path", () => ({
 
 vi.mock("@electron/log", () => ({
   log: {
-    warn: (message: unknown) => mocks.logWarn(message),
     error: (message: unknown, error: unknown, details: unknown) =>
       mocks.logError(message, error, details),
   },
@@ -143,25 +142,65 @@ describe("electron sync manager", () => {
     ).rejects.toThrow("Failed to pull items");
   });
 
-  it("retries config pushes once when remote vaults are not synced yet", async () => {
-    vi.useFakeTimers();
+  it("waits for pending vault changes before pushing configs", async () => {
     const options = getSyncOptions();
-    mocks.trpc.config.push.mutate
-      .mockRejectedValueOnce({ data: { code: "VAULT_NOT_FOUND" } })
-      .mockResolvedValueOnce(undefined);
+    let finishVaultPush: () => void = () => {};
+    vi.mocked(syncManager.pushChanges).mockReturnValueOnce(
+      new Promise<void>((resolve) => {
+        finishVaultPush = resolve;
+      }),
+    );
+    mocks.trpc.config.push.mutate.mockResolvedValueOnce(undefined);
 
-    const promise = options.push(
+    const push = options.push(
       { name: "acct_1/config", accountId: "acct_1", type: "CONFIG" },
       { changes: { added: [{ id: "cfg_1" }], modified: [] } },
     );
 
-    await vi.runAllTimersAsync();
-    await expect(promise).resolves.toBeUndefined();
-
-    expect(mocks.logWarn).toHaveBeenCalledWith(
-      "Config push failed due to missing vaults, retrying in 10 seconds...",
+    await vi.waitFor(() =>
+      expect(syncManager.pushChanges).toHaveBeenCalledWith("acct_1/vault"),
     );
-    expect(mocks.trpc.config.push.mutate).toHaveBeenCalledTimes(2);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(mocks.trpc.config.push.mutate).not.toHaveBeenCalled();
+
+    finishVaultPush();
+    await push;
+
+    expect(mocks.trpc.config.push.mutate).toHaveBeenCalledWith(
+      { added: [{ id: "cfg_1" }], modified: [] },
+      { context: { accountId: "acct_1" } },
+    );
+  });
+
+  it("still pushes configs when the vault push fails", async () => {
+    const options = getSyncOptions();
+    vi.mocked(syncManager.pushChanges).mockRejectedValueOnce(
+      new Error("vault push failed"),
+    );
+    mocks.trpc.config.push.mutate.mockResolvedValueOnce(undefined);
+
+    await expect(
+      options.push(
+        { name: "acct_1/config", accountId: "acct_1", type: "CONFIG" },
+        { changes: { added: [{ id: "cfg_1" }], modified: [] } },
+      ),
+    ).resolves.toBeUndefined();
+
+    expect(syncManager.pushChanges).toHaveBeenCalledWith("acct_1/vault");
+    expect(mocks.trpc.config.push.mutate).toHaveBeenCalledOnce();
+  });
+
+  it("fails the config push when the server rejects it", async () => {
+    const options = getSyncOptions();
+    const failure = { data: { code: "INTERNAL_SERVER_ERROR" } };
+    mocks.trpc.config.push.mutate.mockRejectedValueOnce(failure);
+
+    await expect(
+      options.push(
+        { name: "acct_1/config", accountId: "acct_1", type: "CONFIG" },
+        { changes: { added: [{ id: "cfg_1" }], modified: [] } },
+      ),
+    ).rejects.toBe(failure);
   });
 
   it("syncs vault and config collections for an account", async () => {

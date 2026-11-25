@@ -6,7 +6,6 @@ import {
   ACCOUNT_SYNC_FAILED_MARKER,
   getErrorCode,
 } from "@blinkdisk/utils/error";
-import { tryCatch } from "@blinkdisk/utils/try-catch";
 import { log } from "@electron/log";
 import { globalAccountDirectory } from "@electron/path";
 import { trpc } from "@electron/trpc";
@@ -68,29 +67,22 @@ export const syncManager = new SyncManager({
     }
 
     if (options.type === "CONFIG") {
-      async function pushConfigs() {
-        return await trpc.config.push.mutate(
-          {
-            added: changes.added as unknown as ZConfigType[],
-            modified: changes.modified as unknown as ZConfigType[],
-          },
-          {
-            context: { accountId: options.accountId },
-          },
-        );
-      }
+      // The server rejects configs for vaults it doesn't know yet, so pending
+      // vault changes go first. A failed vault push is reported by the vault
+      // sync and must not block configs of other vaults.
+      await syncManager
+        .pushChanges(`${options.accountId}/vault`)
+        .catch(() => undefined);
 
-      const [, error] = await tryCatch(pushConfigs);
-      if (
-        error &&
-        (error as { data?: { code: string } }).data?.code === "VAULT_NOT_FOUND"
-      ) {
-        log.warn(
-          "Config push failed due to missing vaults, retrying in 10 seconds...",
-        );
-        await new Promise((res) => setTimeout(res, 10000));
-        await pushConfigs();
-      }
+      await trpc.config.push.mutate(
+        {
+          added: changes.added as unknown as ZConfigType[],
+          modified: changes.modified as unknown as ZConfigType[],
+        },
+        {
+          context: { accountId: options.accountId },
+        },
+      );
     }
   },
 });
