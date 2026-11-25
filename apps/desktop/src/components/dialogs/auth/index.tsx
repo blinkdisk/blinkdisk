@@ -26,7 +26,8 @@ type AuthError =
 
 export function AuthDialog() {
   const { t } = useAppTranslation("auth.dialog");
-  const { isOpen, browserFailed, setIsOpen, openAuthDialog } = useAuthDialog();
+  const { isOpen, browserFailed, page, setIsOpen, openAuthDialog } =
+    useAuthDialog();
   const { accounts } = useAccountList();
   const posthog = usePostHog();
   const previousAccountIds = useRef(
@@ -53,7 +54,7 @@ export function AuthDialog() {
 
   function reopen() {
     setCodeError(null);
-    void openAuthDialog();
+    void openAuthDialog(page);
   }
 
   async function handlePasteCode() {

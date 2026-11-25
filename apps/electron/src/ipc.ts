@@ -107,7 +107,7 @@ ipcMain.handle("update.install", () => installUpdate());
 
 ipcMain.handle("clipboard.read", () => readClipboard());
 
-ipcMain.handle("auth.open", () => openAuth());
+ipcMain.handle("auth.open", (_, page) => openAuth(page));
 ipcMain.handle("auth.logout", (_, accountId) => logout(accountId));
 ipcMain.handle("auth.token", (_, payload) => tryAuthenticateToken(payload));
 ipcMain.handle("auth.account.update", (_, payload) => updateAccount(payload));

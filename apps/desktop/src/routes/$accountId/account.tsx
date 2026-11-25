@@ -280,7 +280,11 @@ function LocalAccountSection() {
   return (
     <SettingsPanel>
       <SettingsRow title={t("title")} titleClassName="text-lg font-semibold">
-        <Button onClick={openAuthDialog} size="lg" className="w-fit px-6">
+        <Button
+          onClick={() => openAuthDialog()}
+          size="lg"
+          className="w-fit px-6"
+        >
           <LogInIcon />
           {t("button")}
         </Button>
