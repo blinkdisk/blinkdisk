@@ -82,4 +82,17 @@ describe("useAuthDialog", () => {
     });
     expect(capture).toHaveBeenCalledWith("auth_open_failed");
   });
+
+  it("opens the requested page and remembers it", async () => {
+    const open = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("window", { electron: { auth: { open } } });
+
+    await useAuthDialog().openAuthDialog("login");
+    expect(open).toHaveBeenCalledWith("login");
+    expect(useAuthDialog()).toMatchObject({ isOpen: true, page: "login" });
+
+    await useAuthDialog().openAuthDialog();
+    expect(open).toHaveBeenLastCalledWith("register");
+    expect(useAuthDialog()).toMatchObject({ page: "register" });
+  });
 });
