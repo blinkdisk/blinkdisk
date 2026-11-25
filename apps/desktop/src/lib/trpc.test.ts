@@ -20,5 +20,7 @@ describe("getAccountIdFromHash", () => {
     expect(getAccountIdFromHash("")).toBeUndefined();
     expect(getAccountIdFromHash("#/")).toBeUndefined();
     expect(getAccountIdFromHash("#/onboarding")).toBeUndefined();
+    expect(getAccountIdFromHash("#/onboarding?step=2")).toBeUndefined();
+    expect(getAccountIdFromHash("#/?step=2")).toBeUndefined();
   });
 });

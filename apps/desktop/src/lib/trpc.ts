@@ -6,7 +6,8 @@ import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 // The router has no reactive context here, so the account is read from the
 // hash: "#/<accountId>/..." or "#/onboarding/<accountId>/...".
 export function getAccountIdFromHash(hash: string) {
-  const [first, second] = hash.replace(/^#\/?/, "").split(/[/?]/);
+  const [path = ""] = hash.replace(/^#\/?/, "").split("?");
+  const [first, second] = path.split("/");
   return (first === "onboarding" ? second : first) || undefined;
 }
 
