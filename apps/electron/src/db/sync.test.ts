@@ -142,25 +142,51 @@ describe("electron sync manager", () => {
     ).rejects.toThrow("Failed to pull items");
   });
 
-  it("pushes pending vault changes before configs", async () => {
+  it("waits for pending vault changes before pushing configs", async () => {
     const options = getSyncOptions();
+    let finishVaultPush: () => void = () => {};
+    vi.mocked(syncManager.pushChanges).mockReturnValueOnce(
+      new Promise<void>((resolve) => {
+        finishVaultPush = resolve;
+      }),
+    );
     mocks.trpc.config.push.mutate.mockResolvedValueOnce(undefined);
 
-    await options.push(
+    const push = options.push(
       { name: "acct_1/config", accountId: "acct_1", type: "CONFIG" },
       { changes: { added: [{ id: "cfg_1" }], modified: [] } },
     );
 
-    expect(syncManager.pushChanges).toHaveBeenCalledWith("acct_1/vault");
-    expect(
-      vi.mocked(syncManager.pushChanges).mock.invocationCallOrder[0],
-    ).toBeLessThan(
-      mocks.trpc.config.push.mutate.mock.invocationCallOrder[0] as number,
+    await vi.waitFor(() =>
+      expect(syncManager.pushChanges).toHaveBeenCalledWith("acct_1/vault"),
     );
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(mocks.trpc.config.push.mutate).not.toHaveBeenCalled();
+
+    finishVaultPush();
+    await push;
+
     expect(mocks.trpc.config.push.mutate).toHaveBeenCalledWith(
       { added: [{ id: "cfg_1" }], modified: [] },
       { context: { accountId: "acct_1" } },
     );
+  });
+
+  it("still pushes configs when the vault push fails", async () => {
+    const options = getSyncOptions();
+    vi.mocked(syncManager.pushChanges).mockRejectedValueOnce(
+      new Error("vault push failed"),
+    );
+    mocks.trpc.config.push.mutate.mockResolvedValueOnce(undefined);
+
+    await expect(
+      options.push(
+        { name: "acct_1/config", accountId: "acct_1", type: "CONFIG" },
+        { changes: { added: [{ id: "cfg_1" }], modified: [] } },
+      ),
+    ).resolves.toBeUndefined();
+
+    expect(mocks.trpc.config.push.mutate).toHaveBeenCalledOnce();
   });
 
   it("fails the config push when the server rejects it", async () => {

@@ -67,9 +67,12 @@ export const syncManager = new SyncManager({
     }
 
     if (options.type === "CONFIG") {
-      // The server rejects configs for vaults it doesn't know yet, so a new
-      // vault has to be pushed before its config.
-      await syncManager.pushChanges(`${options.accountId}/vault`);
+      // The server rejects configs for vaults it doesn't know yet, so pending
+      // vault changes go first. A failed vault push is reported by the vault
+      // sync and must not block configs of other vaults.
+      await syncManager
+        .pushChanges(`${options.accountId}/vault`)
+        .catch(() => undefined);
 
       await trpc.config.push.mutate(
         {
