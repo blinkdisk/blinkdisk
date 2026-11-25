@@ -25,18 +25,21 @@ function InputOTPSlot({
   index,
   className,
   char: charProp,
+  placeholderChar: placeholderCharProp,
   hasFakeCaret: hasFakeCaretProp,
   isActive: isActiveProp,
   ...props
 }: React.ComponentProps<"div"> & {
   index: number;
   char?: string;
+  placeholderChar?: string | null;
   hasFakeCaret?: boolean;
   isActive?: boolean;
 }) {
   const inputOTPContext = React.useContext(OTPInputContext);
   const slot = inputOTPContext?.slots?.[index];
   const char = charProp ?? slot?.char;
+  const placeholderChar = placeholderCharProp ?? slot?.placeholderChar;
   const hasFakeCaret = hasFakeCaretProp ?? slot?.hasFakeCaret;
   const isActive = isActiveProp ?? slot?.isActive;
 
@@ -50,7 +53,10 @@ function InputOTPSlot({
       )}
       {...props}
     >
-      {char}
+      {char ??
+        (placeholderChar && (
+          <span className="text-muted-foreground">{placeholderChar}</span>
+        ))}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
