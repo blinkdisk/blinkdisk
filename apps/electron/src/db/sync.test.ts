@@ -186,6 +186,7 @@ describe("electron sync manager", () => {
       ),
     ).resolves.toBeUndefined();
 
+    expect(syncManager.pushChanges).toHaveBeenCalledWith("acct_1/vault");
     expect(mocks.trpc.config.push.mutate).toHaveBeenCalledOnce();
   });
 
