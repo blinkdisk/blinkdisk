@@ -230,8 +230,10 @@ const api = {
     install: () => ipcRenderer.invoke("update.install") as Promise<void>,
   },
   auth: {
-    open: () =>
-      ipcRenderer.invoke("auth.open") as Promise<ReturnType<typeof openAuth>>,
+    open: (page?: Parameters<typeof openAuth>[0]) =>
+      ipcRenderer.invoke("auth.open", page) as Promise<
+        ReturnType<typeof openAuth>
+      >,
     logout: (accountId: string) =>
       ipcRenderer.invoke("auth.logout", accountId) as Promise<
         ReturnType<typeof logout>

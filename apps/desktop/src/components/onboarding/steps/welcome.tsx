@@ -40,7 +40,7 @@ export function OnboardingWelcome() {
             className="text-muted-foreground px-5 text-sm"
             onClick={() => {
               setAwaitingAuth(false);
-              openAuthDialog();
+              openAuthDialog("login");
             }}
           >
             {t("signIn")}

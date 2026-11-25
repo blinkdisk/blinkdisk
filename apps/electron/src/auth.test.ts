@@ -2,17 +2,23 @@ const mocks = vi.hoisted(() => ({
   authenticate: vi.fn(),
   captureException: vi.fn(),
   initAccountCollections: vi.fn(),
+  requestAuth: vi.fn(),
   sendWindow: vi.fn(),
   storeSet: vi.fn(),
 }));
 
-vi.mock("@better-auth/electron/client", () => ({ electronClient: vi.fn() }));
+vi.mock("@better-auth/electron/client", () => ({
+  electronClient: (options: unknown) => options,
+}));
 vi.mock("better-auth/client/plugins", () => ({
   inferAdditionalFields: vi.fn(),
   magicLinkClient: vi.fn(),
 }));
 vi.mock("better-auth/react", () => ({
-  createAuthClient: () => ({ authenticate: mocks.authenticate }),
+  createAuthClient: ({ plugins }: { plugins: { signInURL?: string }[] }) => ({
+    authenticate: mocks.authenticate,
+    requestAuth: () => mocks.requestAuth(plugins[0]?.signInURL),
+  }),
 }));
 vi.mock("@electron/db", () => ({
   initAccountCollections: mocks.initAccountCollections,
@@ -25,7 +31,11 @@ vi.mock("@sentry/electron/main", () => ({
   captureException: mocks.captureException,
 }));
 
-import { authenticateToken, tryAuthenticateToken } from "@electron/auth";
+import {
+  authenticateToken,
+  openAuth,
+  tryAuthenticateToken,
+} from "@electron/auth";
 
 beforeEach(() => {
   vi.resetAllMocks();
@@ -145,5 +155,23 @@ describe("authenticateToken", () => {
     });
     expect(mocks.captureException).toHaveBeenCalledWith(failure);
     expect(mocks.storeSet).not.toHaveBeenCalled();
+  });
+});
+
+describe("openAuth", () => {
+  it("opens the sign-up page by default", async () => {
+    await openAuth();
+
+    expect(mocks.requestAuth).toHaveBeenCalledWith(
+      expect.stringMatching(/\/auth\/register$/),
+    );
+  });
+
+  it("opens the sign-in page for existing accounts", async () => {
+    await openAuth("login");
+
+    expect(mocks.requestAuth).toHaveBeenCalledWith(
+      expect.stringMatching(/\/auth\/login$/),
+    );
   });
 });

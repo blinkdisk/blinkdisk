@@ -28,6 +28,31 @@ type AuthSuccessData = {
   session?: AccountStorageType["session"];
 };
 
+export type AuthPage = "register" | "login";
+
+function electronPlugin(page: AuthPage) {
+  return electronClient({
+    signInURL: `${process.env.WEB_URL}/auth/${page}`,
+    protocol: {
+      scheme: APP_ID,
+    },
+    cookiePrefix: ELECTRON_COOKIE_PREFIX,
+    clientID: ELECTRON_CLIENT_ID,
+    storagePrefix: "auth",
+    storage: {
+      getItem: (key: string) => {
+        return store.get(key);
+      },
+      setItem: (key: string, value: unknown) => {
+        return store.set(key, value);
+      },
+    },
+    userImageProxy: {
+      enabled: false,
+    },
+  });
+}
+
 export const authClient = createAuthClient({
   baseURL: process.env.API_URL,
   basePath: "/api/auth",
@@ -41,26 +66,7 @@ export const authClient = createAuthClient({
     },
   },
   plugins: [
-    electronClient({
-      signInURL: `${process.env.WEB_URL}/auth/register`,
-      protocol: {
-        scheme: APP_ID,
-      },
-      cookiePrefix: ELECTRON_COOKIE_PREFIX,
-      clientID: ELECTRON_CLIENT_ID,
-      storagePrefix: "auth",
-      storage: {
-        getItem: (key: string) => {
-          return store.get(key);
-        },
-        setItem: (key: string, value: unknown) => {
-          return store.set(key, value);
-        },
-      },
-      userImageProxy: {
-        enabled: false,
-      },
-    }),
+    electronPlugin("register"),
     magicLinkClient(),
     inferAdditionalFields({
       user: {
@@ -118,8 +124,17 @@ export async function getAccount(accountId: string) {
   return null;
 }
 
-export async function openAuth() {
-  return await authClient.requestAuth();
+// requestAuth always opens the plugin's signInURL, so the login page needs its
+// own client. It only opens the browser; authClient completes the sign-in.
+const loginClient = createAuthClient({
+  baseURL: process.env.API_URL,
+  basePath: "/api/auth",
+  plugins: [electronPlugin("login")],
+});
+
+export async function openAuth(page: AuthPage = "register") {
+  const client = page === "login" ? loginClient : authClient;
+  return await client.requestAuth();
 }
 
 export async function logout(accountId: string) {
